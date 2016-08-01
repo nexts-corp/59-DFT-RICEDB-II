@@ -1,49 +1,36 @@
-<!-- call by my-dashboard -->
-<link rel="import" href="my-listitem.html">
-<dom-module id="my-listmenu">
-<style>
-  .flex-horizontal {
-   @apply(--layout-horizontal);
- }
- .flex-vertical {
-  @apply(--layout-vertical);
-}
- .flexchild-1 {
-   @apply(--layout-flex);
- }
- .flexchild-2 {
-   @apply(--layout-flex-2);
- }
- .bd {
-   border: 1px solid #000;
- }
- .menuHead{
-  padding-left: 17px;
- }
- paper-item.menu{
-   --paper-item:{
-     height: 60px;
-     border: 1px solid #000;
-     margin-bottom: 10px;
-   };
- }
-</style>
+<dom-module id="my-listitem">
+  <style>
+  .flexchild-1 {
+    @apply(--layout-flex);
+  }
+  .flexchild-2 {
+    @apply(--layout-flex-2);
+  }
+  paper-item.menu{
+    --paper-item:{
+      height: 60px;
+      border: 1px solid #000;
+      margin-bottom: 10px;
+    };
+  }
+  [item-selected]{
+      background-color:#3399FF;
+  }
+  </style>
   <template>
-    <div class="flex-vertical">
-      <div class="flex-horizontal">
-        <div class="flexchild-2 menuHead">ชื่อสัญญา</div>
-        <div class="flexchild-1">ปี</div>
+      <!-- <span item-selected$="{{onSelect}}">[[getLabel(label,data.*)]]<br> -->
+    <paper-item class="menu" item-selected$="{{onSelect}}">
+      <div class="flexchild-2">
+        [[getLabel(label,data.*)]]
       </div>
-      <div class="flex-vertical">
-        <template is="dom-repeat" items="[[data]]">
-          <my-listitem label="[[label]]" data="[[item]]" seleted="{{seleted}}" index="[[index]]" index-select="{{indexSelect}}" state-click="{{stateClick}}"></my-listitem>
-        </template>
+      <div class="flexchild-1">
+
       </div>
-    </div>
+    </paper-item>
   </template>
   <script>
     Polymer({
-      is: "my-listmenu",
+      is: "my-listitem",
       listeners:{
           'tap': 'selectData',
       },

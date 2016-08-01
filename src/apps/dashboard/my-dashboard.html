@@ -1,4 +1,5 @@
 <link rel="import" href="components/my-listmenu.html">
+<!-- <link rel="import" href="components/nx-datalist.html"> -->
 <dom-module id="dashboard-my-dashboard">
   <style media="screen">
   .container{
@@ -19,7 +20,7 @@
   </style>
   <template>
     <div class="container flex-horizontal">
-      <my-listmenu class="flexchild-1"></my-listmenu>
+      <my-listmenu class="flexchild-1" label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu>
       <div class="flexchild-1 rightdata">
         ด้านขวา
       </div>
@@ -34,10 +35,39 @@
         nxCoreBehavior,
         nxLocalesBehavior
       ],
+      properties:{
+          data:{
+              type:Object,
+              value:function(){
+                return [
+                  {
+                    id:1 , name:'BEE', detail:[
+                       {id:11 , name:'COFCO ประเทศจีน',year:'2558'},
+                       {id:12 , name:'BULOG ประเทศอินโดนีเซีย',year:'2558'},
+                       {id:13 , name:'NFA ประเทศฟิลิปินส',year:'2558'}
+                    ]
+                  },
+                  {
+                    id:2 , name:'nk', detail:[
+                       {id:21 , name:'n1',year:'2558'},{id:22 , name:'n2',year:'2558'}
+                    ]
+                  }
+                ]
+              }
+          }
+      },
       created:function(){
         this.nxSetTitle('page 1');
         this.nxSetLayout('layout-main');
-      }
+      },
+      observers:['obdata(dataSelected)','obDataChange(data.*)'],
+      obdata:function(select){
+          console.log(select);
+      },
+      obDataChange:function(x){
+        console.log('sss');
+      },
+
     });
   </script>
 </dom-module>
