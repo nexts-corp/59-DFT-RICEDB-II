@@ -1,0 +1,33 @@
+<link rel="import" href="components/my-data.html">
+
+<dom-module id="app1-page1">
+
+  <template>
+      <my-data></my-data>
+      <nx-param params="{{getParam}}" pattern="param1/param2"></nx-param>
+      My name is : {{name}}<br>
+      {{localize('parameter')}} 1 : [[getParam.param1]]<br>
+      {{localize('parameter')}} 2 : [[getParam.param2]]<br>
+      {{localize('app')}}<br>
+      <a href="/app1/page2">to page 2</a>
+
+  </template>
+
+  <script>
+    Polymer({
+      is:'app1-page1',
+      behaviors: [
+        nxCoreBehavior,
+        nxLocalesBehavior
+      ],
+      created:function(){
+        this.nxSetTitle('page 1');
+        this.nxSetLayout('layout-main');
+      },
+      ready:function(){
+        this.name = this.nxGetGlobalElement('myData').dataObj.name;
+      }
+    });
+
+  </script>
+</dom-module>
