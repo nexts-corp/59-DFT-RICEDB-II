@@ -1,9 +1,35 @@
+<link rel="import" href="components/my-drawer.html">
 <dom-module id="layout-main">
+  <style >
+  paper-drawer-panel {
+    --paper-drawer-panel-drawer-container: {
+      background-color: gray;
+    };
+  }
+  </style>
   <template>
-      layout-main {{localize('layout')}} 
-      <button on-tap="changeLanguage">Change</button>
-      <hr>
-      <tag-page-load></tag-page-load>
+    <paper-drawer-panel>
+      <paper-header-panel drawer>
+        <paper-toolbar class="medium-tall white">
+          <div class="title">Dash Board </div>
+          <div class="middle">
+            ชั้นที้่ 2
+          </div>
+        </paper-toolbar>
+        <div><my-drawer></my-drawer> fd</div>
+      </paper-header-panel>
+      <paper-header-panel main>
+        <paper-toolbar class="medium-tall white">
+          <!-- <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> -->
+          <div>Title</div>
+          <div class="middle">
+            ชั้นที้่ 2
+          </div>
+        </paper-toolbar>
+        <tag-page-load></tag-page-load>
+      </paper-header-panel>
+    </paper-drawer-panel>
+
     </html>
   </template>
   <script>
