@@ -1,0 +1,23 @@
+<dom-module id="layout-error">
+  <template>
+      layout-error
+      <button on-tap="changeLanguage">Change</button>
+      <hr>
+      <tag-page-load></tag-page-load>
+    </html>
+  </template>
+  <script>
+    Polymer({
+      is:'layout-error',
+      behaviors:[nxTemplateBehavior,nxLocalesBehavior],
+      changeLanguage:function(){
+        if(this.language == 'th'){
+          this.nxSwitchLanguage('en');
+        }else{
+          this.nxSwitchLanguage('th');
+        }
+      }
+    });
+  </script>
+
+</dom-module>
