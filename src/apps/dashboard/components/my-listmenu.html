@@ -2,6 +2,9 @@
 <link rel="import" href="my-listitem.html">
 <dom-module id="my-listmenu">
 <style>
+.container{
+  padding: 10px;
+}
   .flex-horizontal {
    @apply(--layout-horizontal);
  }
@@ -15,24 +18,22 @@
    @apply(--layout-flex-2);
  }
  .bd {
-   border: 1px solid #000;
+   /*border: 1px solid #000;*/
  }
  .menuHead{
   padding-left: 17px;
  }
- paper-item.menu{
-   --paper-item:{
-     height: 60px;
-     border: 1px solid #000;
-     margin-bottom: 10px;
-   };
+ .listmenu{
+   padding: 17px 0px 17px 0px;
+   font-size: 1.1em;
+   background-color: var(--paper-grey-200);
  }
 </style>
   <template>
     <div class="flex-vertical">
-      <div class="flex-horizontal">
-        <div class="flexchild-2 menuHead">ชื่อสัญญา</div>
-        <div class="flexchild-1">ปี</div>
+      <div class="flex-horizontal listmenu bd">
+        <div class="flexchild-2 menuHead bd">ชื่อสัญญา</div>
+        <div class="flexchild-1 bd">ปี</div>
       </div>
       <div class="flex-vertical">
         <template is="dom-repeat" items="[[data]]">
