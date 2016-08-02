@@ -1,36 +1,66 @@
 <link rel="import" href="components/my-drawer.html">
 <dom-module id="layout-main">
   <style media="screen">
-    .drawerMain{
+  .flex-vertical {
+   @apply(--layout-vertical);
+   }
+   .flexchild-1 {
+     @apply(--layout-flex);
+     border: 1px solid #000;
+   }
+    span.drawerMainhead{
       display: block;
+      color: red;
+      background-color: blue;
     }
-    paper-toolbar.orange {
+    paper-toolbar.toolbarHead {
      --paper-toolbar-background: var(--paper-orange-300);
+     --paper-toolbar-height:57px;
      --paper-toolbar-title: {
-       font-style: italic;
-       font-weight: bold;
+       font-size: 1.1em;
+       height: 40px;
+       /*color: blue;*/
+       margin-left: 1px;
      };
    }
+
+   paper-toolbar.toolbarMid {
+    --paper-toolbar-background: var(--paper-grey-50);
+    --paper-toolbar-height:57px;
+    --paper-toolbar-title: {
+        font-weight: bold;
+    };
+  }
+   paper-drawer-panel {
+    --paper-drawer-panel-drawer-container: {
+        background-color: var(--paper-grey-100);
+        border-right: 1px solid var(--paper-grey-300);
+    };
+  }
   </style>
   <template>
     <paper-drawer-panel>
       <paper-header-panel drawer>
-        <paper-toolbar class="orange medium-tall white">
-          <div class="title">Dash Board </div>
-          <div class="middle">  </div>
+        <paper-toolbar class="toolbarHead">
+          <div class="title"></div>
         </paper-toolbar>
-        <div>
+        <paper-toolbar class="toolbarMid">
+          <div class="title"></div>
+        </paper-toolbar>
+        <div >
           <my-drawer></my-drawer>
         </div>
       </paper-header-panel>
       <paper-header-panel main>
-        <paper-toolbar class="orange medium-tall white">
-          <!-- <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> -->
-          <div class="drawerMain">ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
-          <div class="drawerMain">COCFCO ประเทศจีน</div>
-          <div class="middle">
-            <paper-button raised>raised</paper-button>
-          </div>
+        <paper-toolbar class="toolbarHead">
+          <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+          <div class="title">  COCCO ประเทศจีน</div>
+
+        </paper-toolbar>
+        <paper-toolbar class="toolbarMid">
+
+
+
         </paper-toolbar>
         <tag-page-load></tag-page-load>
       </paper-header-panel>
