@@ -19,29 +19,28 @@
     <div class="vertical layout">
       <div class="horizontal layout top">
         <div class="flex">
-          <div class="box"><paper-input label="ชื่อสัญญา" value="{{data.name}}"></paper-input></div>
+          <div class="box"><paper-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.name}}"></paper-input></div>
         </div>
         <div class="flex">
-          <div>วันที่</div>
-          <div><input class="box" type="date" name="name"></div>
+          <div class="box"><vaadin-date-picker label="วันที่"></vaadin-date-picker></div>
         </div>
         <div class="flex">
-          <div class="box"><paper-input label="ราคา" value=""></paper-input></div>
+          <div class="box"><paper-input auto-validate error-message="กรุณาใส่ราคา" required  label="ราคา" value=""></paper-input></div>
         </div>
       </div>
 
       <div class="horizontal layout top">
         <div class="flex">
-          <div class="box"><paper-input label="ชนิดข้าว" value=""></paper-input></div>
+          <div class="box"><paper-input auto-validate error-message="กรุณาใส่ชนิดข้าว" required  label="ชนิดข้าว" value=""></paper-input></div>
         </div>
         <div class="flex">
-          <div class="box1"><paper-input label="ขนาดบรรจุ / กก." value=""></paper-input></div>
+          <div class="box1"><paper-input auto-validate error-message="กรุณาใส่ขนาดบรรจุ" required  label="ขนาดบรรจุ / กก." value=""></paper-input></div>
         </div>
         <div class="flex">
-          <div class="box1"><paper-input label="จำนวน (ตัน)" value=""></paper-input></div>
+          <div class="box1"><paper-input auto-validate error-message="กรุณาใส่จำนวน" required  label="จำนวน (ตัน)" value=""></paper-input></div>
         </div>
         <div align="right">
-          <div class="box1"><paper-input label="ราคาตันละ / USD" value=""></paper-input></div>
+          <div class="box1"><paper-input auto-validate error-message="กรุณาใส่ราคา" required  label="ราคาตันละ / USD" value=""></paper-input></div>
         </div>
       </div>
 
@@ -69,7 +68,37 @@
   <script>
     Polymer({
       is: "rice-detail",
+      properties: {
+        data: {
+          type: Object,
+          value: { name:''}
+        },
+        error:{
+          type:Object,
+          value:{ name:false }
+        }
+      },
+      validate: function(){
 
+        if(
+            (
+              this.data.name != ""
+              // this.data.id != "" &&
+              // this.data.etd != "" &&
+              // this.data.eta != ""
+            )
+            &&
+            (
+              this.error.vessel == false
+              // this.error.id == false &&
+              // this.error.etd == false &&
+              // this.error.eta == false
+            )
+        ){
+          var queryELement = document.querySelector('dashboard-my-dashboard');
+          queryELement.save(this.data,this.index);
+        }
+      }
     });
   </script>
 </dom-module>
