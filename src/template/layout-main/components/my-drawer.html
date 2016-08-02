@@ -1,15 +1,43 @@
 <dom-module id="my-drawer">
-  <style>
-    .icon_drawer{
-      
-    }
-  </style>
+  <style is="custom-style">
+  .icon_drawer {
+    --iron-icon-height: 20px;
+    --iron-icon-width: 20px;
+    --iron-icon-fill-color:var(--paper-grey-600);
+    padding-right: 7px;
+  }
+  .iron-selected > iron-icon.icon_drawer{
+    --iron-icon-fill-color:var(--paper-deep-orange-700);
+  }
+  paper-menu{
+    --paper-menu-background-color:var(--paper-grey-100);
+  }
+  paper-item.drawerMenu{
+    --paper-item:{
+      font-size:0.9em;
+      color: var(--paper-grey-700);
+    };
+  /*เลือกแล้วออกมาคลิกที่จุดอื่น*/
+    --paper-item-selected:{
+        color: var(--paper-deep-orange-700);
+        font-weight:normal;
+    };
+    /*กดเลือกแต่เมายังอยู่*/
+    --paper-item-focused: {
+      color: var(--paper-deep-orange-700);
+      font-weight: bold;
+    };
+    --paper-item-focused-before: {
+      opacity: 0;
+    };
+  }
+</style>
   <template>
     <paper-menu>
-      <paper-item><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon> เมนูที่ 1</paper-item>
-      <paper-item><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 2</paper-item>
-      <paper-item><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 3</paper-item>
-      <paper-item><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 4</paper-item>
+      <paper-item class="drawerMenu"><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 1</paper-item>
+      <paper-item class="drawerMenu"><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 2</paper-item>
+      <paper-item class="drawerMenu"><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 3</paper-item>
+      <paper-item class="drawerMenu"><iron-icon icon="icons:folder" class="icon_drawer"></iron-icon>เมนูที่ 4</paper-item>
     </paper-menu>
   </template>
   <script>
