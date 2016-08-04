@@ -1,0 +1,79 @@
+<link rel="import" href="nx-grid-list-item.html">
+<dom-module id="nx-grid-list">
+<style media="screen">
+  paper-item.buttomItem {
+    border-bottom: 1px solid var(--paper-grey-200);
+  }
+  .sublist paper-item {
+    padding-left: 30px;
+  }
+  .sublist2 paper-item {
+    padding-left: 50px;
+  }
+</style>
+
+    <template>
+      <!-- <paper-menu class="menu-content"> -->
+      <!-- <paper-submenu> -->
+        <!-- <template is="dom-repeat" items="{{data}}">
+          <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
+          <template is="dom-repeat" as="subItem" items="{{getSubData(item)}}"> -->
+                <!--<nx-grid-list-item data="{{subItem}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>-->
+            <!-- </template>
+            <paper-menu class="menu-content">
+              <paper-item>Topic 1</paper-item>
+              <paper-item>Topic 2</paper-item>
+              <paper-item>Topic 3</paper-item>
+            </paper-menu>
+        </template> -->
+      <!-- </paper-submenu> -->
+      <!-- </paper-menu> -->
+      <paper-menu>
+        <template is="dom-repeat" items="{{data}}">
+        <paper-submenu label="paper-submenu">
+        <paper-item class="menu-trigger buttomItem">
+            <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
+        </paper-item>
+          <paper-menu class="menu-content sublist">
+            <paper-submenu label="Properties">
+              <paper-item class="menu-trigger">Properties</paper-item>
+              <paper-menu class="menu-content sublist2">
+                 <paper-item>opened</paper-item>
+              </paper-menu>
+              </paper-submenu>
+              <paper-submenu label="Methods">
+                <paper-item class="menu-trigger">Methods</paper-item>
+                <paper-menu class="menu-content sublist2">
+                  <paper-item>open()</paper-item>
+                  <paper-item>close()</paper-item>
+                  <paper-item>toggle()</paper-item>
+                </paper-menu>
+            </paper-submenu>
+          </paper-menu>
+         </paper-submenu>
+        </template>
+     </paper-menu>
+    </template>
+
+    <script>
+        Polymer({
+            is:'nx-grid-list',
+            properties:{
+                seleted:{
+                    type:Object,
+                    notify:true
+                }
+            },
+            ready:function(){
+                //console.log(this.content);
+            },
+            observers:['obConfig(config,data)'],
+            obConfig:function(config,data){
+                // /console.log(config);
+            },
+            getSubData:function(subData){
+                return subData.sub;
+            }
+        });
+    </script>
+</dom-module>

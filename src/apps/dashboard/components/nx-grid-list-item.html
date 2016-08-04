@@ -1,0 +1,46 @@
+<dom-module id="nx-grid-list-item">
+    <style is="custom-style">
+        .row{
+            @apply(--layout-horizontal);
+            /*background-color:#ccc;*/
+        }
+        .flexchild-1 {
+         @apply(--layout-flex);
+        }
+        
+    </style>
+
+    <template>
+        <!-- <div class="row "> -->
+          <!-- <paper-item class="buttomItem menu-trigger"> -->
+          <div class="row ">
+            <template is="dom-repeat" items="{{config}}">
+                <div class="flexchild-1">data:{{getItem(item,data)}} width:{{item.width}} /// <div>
+            </template>
+          </div>
+          <!-- </paper-item> -->
+        <!-- </div> -->
+    </template>
+
+    <script>
+        Polymer({
+            is:'nx-grid-list-item',
+            properties:{
+                seleted:{
+                    type:Object,
+                    notify:true
+                }
+            },
+            listeners: {
+                'tap': 'getData'
+            },
+            getItem:function(item,data){
+                //console.log(item,data);
+                return data[item.item];
+            },
+            getData:function(){
+                this.seleted = this.data;
+            }
+        });
+    </script>
+</dom-module>
