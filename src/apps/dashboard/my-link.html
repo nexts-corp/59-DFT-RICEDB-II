@@ -5,7 +5,7 @@
 <link rel="import" href="components/rice-fileup.html">
 <link rel="import" href="components/rice-file.html">
 
-<dom-module id="dashboard-my-dashboard">
+<dom-module id="dashboard-my-link">
   <style media="screen">
     .flex-horizontal {
    @apply(--layout-horizontal);
@@ -25,45 +25,13 @@
    }
   </style>
   <template>
-    <div class=" flex-horizontal">
-      <div class="flexchild-1 bd ">
-        <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
-        <nx-grid data="{{data}}" seleted="{{dataSelected}}" seletedMenu="{{numSelect}}">
-            <items type="primary">
-                <list item="id" label="รหัส" width="20%"></list>
-                <list item="name" label="ชื่อ" width="50%"></list>
-                <list item="detail" label="รายละเอียด" width="30%"></list>
-            </items>
-            <items type="secondary" item="sub">
-                <list item="id" label="รหัส" width="50%"></list>
-                <list item="name" label="ชื่อ" width="50%"></list>
-            </items>
-        </nx-grid>
-      </div>
-
-      <div class="flexchild-1 rightdata bd ">
-
-        <panel-seleted>
-          <section-content name="detail">
-            <rice-detail data="{{dataSelected}}"></rice-detail>
-          </section-content>
-          <section-content name="print">
-
-          </section-content>
-          <section-content name="file">
-            <!-- <rice-file></rice-file> -->
-            <rice-fileup></rice-fileup>
-          </section-content>
-        </panel-seleted>
-
-      </div>
-    </div>
+    dashboard-my-link
 
 
   </template>
   <script>
     Polymer({
-      is: "dashboard-my-dashboard",
+      is: "dashboard-my-link",
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
@@ -110,11 +78,10 @@
       },
       observers:['obdata(dataSelected)','obDataChange(data.*)'],
       obdata:function(select){
-          // console.log(select);
-          // console.log(this.numSelect);
+          console.log(select);
       },
       obDataChange:function(x){
-        // console.log('sss');
+        console.log('sss');
       },
 
     });
