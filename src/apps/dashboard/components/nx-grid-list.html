@@ -26,11 +26,11 @@
         </template> -->
       <!-- </paper-submenu> -->
       <!-- </paper-menu> -->
-      <paper-menu selected="{{seletedMenu}}">
+      <paper-menu selected="{{seletedmenu}}">
         <template is="dom-repeat" items="{{data}}">
         <paper-submenu label="paper-submenu">
         <paper-item class="menu-trigger buttomItem" on-dblclick="dbclickChange">
-          <span>เลขเมนู : {{seletedMenu}}</span>  <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
+          <span>เลขเมนู : {{seletedmenu}}</span>  <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
         </paper-item>
           <paper-menu class="menu-content sublist" selected="{{seletedSubMenu}}">
             <!-- <template is="dom-repeat" as="subItem" items="{{getSubData(item)}}">
@@ -60,24 +60,24 @@
             properties:{
                 seleted:{
                     type:Object,
-                    notify:true
+                    notify:true,
+                    value:5
                 },
-                seletedMenu:{
-                  type:Number,
-                  notify:true,
-                  value:0
+                seletedmenu:{
+                    type:Number,
+                    notify:true,
+                    value:5
                 },
                 seletedSubMenu:{
-                  type:Number,
-                  notify:true,
-                  value:0
+                    type:Number,
+                    notify:true
                 },
                 selectedMenu:{
-                  type: Object,
-                  notify:true,
-                  value: {  menu:1 ,
-                            subMenu:0 ,
-                            subMenu2:0 }
+                    type: Object,
+                    notify:true,
+                    value: {  menu:1 ,
+                              subMenu:0 ,
+                              subMenu2:0 }
                 }
             },
             ready:function(){
