@@ -17,9 +17,7 @@
       <!-- <paper-submenu> -->
         <!-- <template is="dom-repeat" items="{{data}}">
           <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
-          <template is="dom-repeat" as="subItem" items="{{getSubData(item)}}"> -->
-                <!--<nx-grid-list-item data="{{subItem}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>-->
-            <!-- </template>
+
             <paper-menu class="menu-content">
               <paper-item>Topic 1</paper-item>
               <paper-item>Topic 2</paper-item>
@@ -28,26 +26,24 @@
         </template> -->
       <!-- </paper-submenu> -->
       <!-- </paper-menu> -->
-      <paper-menu>
+      <paper-menu selected="{{seletedMenu}}">
         <template is="dom-repeat" items="{{data}}">
         <paper-submenu label="paper-submenu">
-        <paper-item class="menu-trigger buttomItem">
-            <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
+        <paper-item class="menu-trigger buttomItem" on-dblclick="dbclickChange">
+          <span>เลขเมนู : {{seletedMenu}}</span>  <nx-grid-list-item data="{{item}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
         </paper-item>
-          <paper-menu class="menu-content sublist">
-            <paper-submenu label="Properties">
-              <paper-item class="menu-trigger">Properties</paper-item>
+          <paper-menu class="menu-content sublist" selected="{{seletedSubMenu}}">
+            <!-- <template is="dom-repeat" as="subItem" items="{{getSubData(item)}}">
+                  <nx-grid-list-item data="{{subItem}}" config="{{config.primary}}" seleted="{{seleted}}"></nx-grid-list-item>
+              </template>  -->
+            <paper-submenu label="ConfirmationLetter">
+              <paper-item class="menu-trigger"><span>เลขเมนู : {{seletedSubMenu}}</span> Confirmation Letter</paper-item>
               <paper-menu class="menu-content sublist2">
-                 <paper-item>opened</paper-item>
+                 <paper-item>Confirmation Letter No.11</paper-item>
               </paper-menu>
               </paper-submenu>
-              <paper-submenu label="Methods">
-                <paper-item class="menu-trigger">Methods</paper-item>
-                <paper-menu class="menu-content sublist2">
-                  <paper-item>open()</paper-item>
-                  <paper-item>close()</paper-item>
-                  <paper-item>toggle()</paper-item>
-                </paper-menu>
+              <paper-submenu label="plusConfirmationLetter">
+                <paper-item class="menu-trigger">+ เพิ่ม confirmation Letter</paper-item>
             </paper-submenu>
           </paper-menu>
          </paper-submenu>
@@ -58,21 +54,52 @@
     <script>
         Polymer({
             is:'nx-grid-list',
+            behaviors: [
+              nxCoreBehavior
+            ],
             properties:{
                 seleted:{
                     type:Object,
                     notify:true
+                },
+                seletedMenu:{
+                  type:Number,
+                  notify:true,
+                  value:0
+                },
+                seletedSubMenu:{
+                  type:Number,
+                  notify:true,
+                  value:0
+                },
+                selectedMenu:{
+                  type: Object,
+                  notify:true,
+                  value: {  menu:1 ,
+                            subMenu:0 ,
+                            subMenu2:0 }
                 }
             },
             ready:function(){
                 //console.log(this.content);
             },
-            observers:['obConfig(config,data)'],
+            attached: function() {
+              console.log('Object : '+this.selectedMenu.menu);
+            },
+            observers:['obConfig(config,data)','getdata(seletedMenu,seletedSubMenu)'],
             obConfig:function(config,data){
                 // /console.log(config);
             },
+            getdata:function(seletedMenu,seletedSubMenu){
+                console.log('seletedMenu : '+seletedMenu);
+                console.log('seletedSubMenu : '+seletedSubMenu);
+                // console.log('Object : '+this.selectedMenu);
+            },
             getSubData:function(subData){
                 return subData.sub;
+            },
+            dbclickChange:function(){
+              this.nxChangePath('dashboard/my-link');
             }
         });
     </script>
