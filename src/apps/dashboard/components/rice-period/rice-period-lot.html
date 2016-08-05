@@ -1,0 +1,69 @@
+<dom-module id="rice-period-lot">
+  <style include="iron-flex iron-flex-alignment">
+    .flexchild {
+      @apply(--layout-flex);
+    }
+    .flex2child {
+      @apply(--layout-flex-2);
+    }
+  .box{
+    width:230px;
+  }
+  .box2{
+    width: 150px;
+  }
+  .bd{
+    /*border: 1px solid #000;*/
+  }
+  paper-textarea{
+    word-wrap: break-word;
+    max-width: 535px;
+  }
+  paper-button{
+    width: 20px;
+    height: 30px;
+    margin-top: 10px;
+  }
+  </style>
+  <template>
+
+    <div class="vertical layout">
+
+      <div><paper-input class="box2" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ระบุงวด" value=""></paper-input></div>
+
+      <div class="horizontal layout top">
+        <div class="flex2child">
+          <paper-dropdown-menu label="Confirmation Letter No." error-message="กรุณาใส่เลขที่สัญญา" placeholder="เลือกเลขที่สัญญา">
+            <paper-listbox class="dropdown-content">
+              <paper-item>11</paper-item>
+              <paper-item>12</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+        <div class="flex2child"><paper-input class="box2" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" placeholder="ใส่จำนวน" value=""></paper-input></div>
+      </div>
+
+      <div class="horizontal end-justified layout">
+        <paper-button raised>เพิ่ม</paper-button>
+      </div>
+
+      <div>
+        <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด"></paper-textarea>
+      </div>
+
+      <div class="horizontal end-justified layout">
+        <paper-button class="button" raised>ยกเลิก</paper-button>
+        <paper-button class="button" raised>บันทึก</paper-button>
+      </div>
+
+
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "rice-period-lot",
+
+    });
+  </script>
+</dom-module>

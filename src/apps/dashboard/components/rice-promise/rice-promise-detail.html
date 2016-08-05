@@ -1,0 +1,116 @@
+<dom-module id="rice-promise-detail">
+  <style include="iron-flex iron-flex-alignment">
+.box{
+  width:230px;
+}
+.top{
+  margin-top: 15px;
+}
+.button{
+  width: 20px;
+  height: 30px;
+  margin-top: 10px;
+}
+paper-textarea{
+  word-wrap: break-word;
+  max-width: 535px;
+}
+paper-button{
+  width: 20px;
+  height: 30px;
+  margin-top: 10px;
+}
+  </style>
+  <template>
+    <div class="vertical layout">
+      <div class="horizontal layout top">
+        <div class="flex">
+          <div class="box"><paper-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.name}}" placeholder="ใส่รายละเอียด"></paper-input></div>
+        </div>
+        <div class="flex">
+          <div class="box"><paper-input auto-validate error-message="กรุณาใส่เลขที่สัญญา" required  label="เลขที่สัญญา" value="" placeholder="ใส่รายละเอียด"></paper-input></div>
+        </div>
+      </div>
+
+      <div class="horizontal layout">
+        <div class="flex">
+          <div class="box"><vaadin-date-picker label="วันที่"></vaadin-date-picker></div>
+        </div>
+        <div class="flex">
+          <paper-dropdown-menu label="ราคา" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท">
+            <paper-listbox class="dropdown-content">
+              <paper-item>FOB CY</paper-item>
+              <paper-item>ฯลฯ</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+      </div>
+
+      <div class="horizontal layout">
+        <div class="flex">
+          <paper-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท">
+            <paper-listbox class="dropdown-content">
+              <paper-item>ข้าวขาว</paper-item>
+              <paper-item>ข้าวหอมมะลิ</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </div>
+        <div class="flex">
+          <div class="box"><paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" value="" placeholder="ใส่รายละเอียด"></paper-input></div>
+        </div>
+      </div>
+
+        <div class="flex">
+          <paper-textarea rows="3" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด"></paper-textarea>
+        </div>
+
+        <div class="flex">
+          <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด"></paper-textarea>
+        </div>
+
+      <div class="horizontal end-justified layout">
+        <paper-button class="button" raised>ยกเลิก</paper-button>
+        <paper-button class="button" raised>บันทึก</paper-button>
+      </div>
+
+
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: "rice-promise-detail",
+      properties: {
+        data: {
+          type: Object,
+          value: { name:''}
+        },
+        error:{
+          type:Object,
+          value:{ name:false }
+        }
+      },
+      validate: function(){
+
+        if(
+            (
+              this.data.name != ""
+              // this.data.id != "" &&
+              // this.data.etd != "" &&
+              // this.data.eta != ""
+            )
+            &&
+            (
+              this.error.vessel == false
+              // this.error.id == false &&
+              // this.error.etd == false &&
+              // this.error.eta == false
+            )
+        ){
+          var queryELement = document.querySelector('dashboard-my-dashboard');
+          queryELement.save(this.data,this.index);
+        }
+      }
+    });
+  </script>
+</dom-module>
