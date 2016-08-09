@@ -1,11 +1,7 @@
-<link rel="import" href="components/my-listmenu.html">
+<link rel="import" href="components/rice-period/rice-period-lot.html">
+<link rel="import" href="components/rice-period/rice-period-city.html">
 <link rel="import" href="components/nx-grid.html">
-<link rel="import" href="panel-seleted.html">
-<link rel="import" href="components/rice-detail.html">
-<link rel="import" href="components/rice-fileup.html">
-<link rel="import" href="components/rice-file.html">
-
-<dom-module id="dashboard-my-link">
+<dom-module id="dashboard-my-period-lot">
   <style media="screen">
     .flex-horizontal {
    @apply(--layout-horizontal);
@@ -25,13 +21,32 @@
    }
   </style>
   <template>
-    dashboard-my-link
+    <div class=" flex-horizontal">
+      <div class="flexchild-1 bd ">
+        <nx-grid data="{{data}}" seleted="{{dataSelected}}" seleted-menu="{{numSelect}}">
+            <items type="primary">
+                <list item="id" label="รหัส" width="20%"></list>
+                <list item="name" label="ชื่อ" width="50%"></list>
+                <list item="detail" label="รายละเอียด" width="30%"></list>
+            </items>
+            <items type="secondary" item="sub">
+                <list item="id" label="รหัส" width="50%"></list>
+                <list item="name" label="ชื่อ" width="50%"></list>
+            </items>
+        </nx-grid>
+
+      </div>
+
+      <div class="flexchild-1 rightdata bd ">
+        <rice-period-lot></rice-period-lot>
+      </div>
+    </div>
 
 
   </template>
   <script>
     Polymer({
-      is: "dashboard-my-link",
+      is: "dashboard-my-period-lot",
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
