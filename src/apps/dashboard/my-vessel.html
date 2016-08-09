@@ -1,8 +1,6 @@
-<link rel="import" href="components/my-listmenu.html">
+<link rel="import" href="components/rice-vessel/rice-vessel-detail.html">
 <link rel="import" href="components/nx-grid.html">
-<link rel="import" href="components/my-panel.html">
-
-<dom-module id="dashboard-my-dashboard">
+<dom-module id="dashboard-my-vessel">
   <style media="screen">
     .flex-horizontal {
    @apply(--layout-horizontal);
@@ -11,7 +9,7 @@
      @apply(--layout-flex);
    }
    .flexchild-2 {
-     @apply(--layout-flex-2);
+     @apply(--layout-flex-3);
    }
    .rightdata{
      border-left: 1px solid var(--paper-grey-300);
@@ -20,12 +18,17 @@
    .bd {
      /*border: 1px solid #000;*/
    }
+   #changeDivcss{
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+   }
+
   </style>
   <template>
     <div class=" flex-horizontal">
       <div class="flexchild-1 bd ">
-      <span>numSelect<span>  {{numSelect}}
-        <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
         <nx-grid data="{{data}}" seleted="{{dataSelected}}" seleted-menu="{{numSelect}}">
             <items type="primary">
                 <list item="id" label="รหัส" width="20%"></list>
@@ -37,21 +40,17 @@
                 <list item="name" label="ชื่อ" width="50%"></list>
             </items>
         </nx-grid>
+      <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
       </div>
 
-      <div class="flexchild-1 rightdata bd ">
-        <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
-          <my-panel dataselected="{{dataSelected}}"></my-panel>
-
-
+      <div class="rightdata bd " id="changeDivcss">
+        <rice-vessel-detail></rice-vessel-detail>
       </div>
     </div>
-
-
   </template>
   <script>
     Polymer({
-      is: "dashboard-my-dashboard",
+      is: "dashboard-my-vessel",
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
@@ -92,6 +91,18 @@
               }
           }
       },
+      changeDiv:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+        // console.log(css);
+        // console.log(css.classList.contains('flexchild-2'));
+        if (css.classList.contains('flexchild-2') == false){
+          css.className += " flexchild-2";
+        }else{
+          css.classList.remove("flexchild-2");
+        }
+
+      },
       created:function(){
         this.nxSetTitle('ทำสัญญา');
         this.nxSetLayout('layout-main');
@@ -99,10 +110,9 @@
       observers:['obdata(dataSelected)','obDataChange(data.*)'],
       obdata:function(select){
           console.log(select);
-          // console.log(this.numSelect);
       },
       obDataChange:function(x){
-        // console.log('sss');
+        console.log('sss');
       },
 
     });

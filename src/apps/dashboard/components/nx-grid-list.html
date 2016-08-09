@@ -60,8 +60,7 @@
             properties:{
                 seleted:{
                     type:Object,
-                    notify:true,
-                    value:5
+                    notify:true
                 },
                 seletedmenu:{
                     type:Number,
@@ -84,7 +83,8 @@
                 //console.log(this.content);
             },
             attached: function() {
-              console.log('Object : '+this.selectedMenu.menu);
+              // console.log('Object : '+this.selectedMenu.menu);
+              console.log(this.seletedmenu);
             },
             observers:['obConfig(config,data)','getdata(seletedMenu,seletedSubMenu)'],
             obConfig:function(config,data){
@@ -99,7 +99,7 @@
                 return subData.sub;
             },
             dbclickChange:function(){
-              this.nxChangePath('dashboard/my-link');
+              this.nxChangePath('dashboard/my-period-lot');
             }
         });
     </script>
