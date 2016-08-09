@@ -19,25 +19,30 @@
 
     <panel-seleted>
       <section-content name="detail">
-        <!-- <promise-detail data="{{dataSelected}}"></promise-detail> -->
-        <!-- <promise-confirm></promise-confirm> -->
-        <!-- <promise-fileup></promise-fileup> -->
-        <!-- <period-lot></period-lot> -->
-        <!-- <period-city></period-city> -->
-        <!-- <vessel-detail></vessel-detail> -->
-        <!-- <vessel-draf></vessel-draf> -->
-        <!-- <invoice-detail></invoice-detail> -->
-        <payment-detail></payment-detail>
-
+        <iron-pages attr-for-selected="name-page-detail" selected="{{pageSeletedDetail}}">
+          <promise-detail data="{{dataSelected}}" name-page-detail="promiseDetail"></promise-detail>
+          <promise-confirm name-page-detail="promiseConfirm"></promise-confirm>
+          <promise-fileup name-page-detail="promiseFileup"></promise-fileup>
+          <period-lot name-page-detail="periodLot"></period-lot>
+          <period-city name-page-detail="periodCity"></period-city>
+          <vessel-detail name-page-detail="vesselDetail"></vessel-detail>
+          <vessel-draf name-page-detail="vesselDraf"></vessel-draf>
+          <invoice-detail name-page-detail="invoiceDetail"></invoice-detail>
+          <payment-detail name-page-detail="paymentDetail"></payment-detail>
+        </iron-pages>
       </section-content>
       <section-content name="print">
-        <!-- <vessel-print></vessel-print> -->
-        <!-- <invoice-print></invoice-print> -->
-        <payment-print></payment-print>
+        <iron-pages attr-for-selected="name-page-print" selected="{{pageSeletedPrint}}">
+          <vessel-print name-page-print="vesselPrint"></vessel-print>
+          <invoice-print name-page-print="invoicePrint"></invoice-print>
+          <payment-print name-page-print="paymentPrint"></payment-print>
+        </iron-pages>
       </section-content>
       <section-content name="file">
-        <!-- <promisefile></promisefile> -->
-        <promise-fileup></promise-fileup>
+
+          <!-- <promisefile name="promiseFile"></promisefile> -->
+          <promise-fileup ></promise-fileup>
+
       </section-content>
     </panel-seleted>
 
@@ -46,7 +51,16 @@
   <script>
     Polymer({
       is: "my-panel",
-
+      properties: {
+        pageSeletedDetail: {
+          type: String,
+          value:'invoiceDetail'
+        },
+        pageSeletedPrint:{
+          type: String,
+          value:'vesselPrint'
+        }
+      }
     });
   </script>
 </dom-module>
