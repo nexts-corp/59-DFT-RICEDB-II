@@ -14,17 +14,26 @@
      @apply(--layout-flex-2);
    }
    .rightdata{
+     height:100%;
+     /*display: none;*/
      border-left: 1px solid var(--paper-grey-300);
      padding: 5px 10px 0px 10px;
    }
    .bd {
      /*border: 1px solid #000;*/
    }
+   #changeDivcss{
+      -webkit-transition: all 1s ease;
+      -moz-transition: all 1s ease;
+      -o-transition: all 1s ease;
+      transition: all 1s ease;
+
+   }
   </style>
   <template>
     <div class=" flex-horizontal">
-      <div class="flexchild-1 bd ">
-      <span>numSelect<span>  {{numSelect}}
+      <div class="flexchild-1 ">
+      <!-- <span>numSelect<span>  {{numSelect}} -->
         <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
         <nx-grid data="{{data}}" seleted="{{dataSelected}}" seleted-menu="{{numSelect}}">
             <items type="primary">
@@ -37,13 +46,12 @@
                 <list item="name" label="ชื่อ" width="50%"></list>
             </items>
         </nx-grid>
+        <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
       </div>
 
-      <div class="flexchild-1 rightdata bd ">
+      <div class=" rightdata flexchild-1"id="changeDivcss">
         <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
           <my-panel dataselected="{{dataSelected}}"></my-panel>
-
-
       </div>
     </div>
 
@@ -91,6 +99,20 @@
                 // ]
               }
           }
+      },
+      changeDiv:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+        // console.log(css);
+        console.log(css.classList.contains('flexchild-2'));
+        if (css.classList.contains('flexchild-2') == false){
+          // css.style.display = "inline";
+          css.className += " flexchild-2";
+        }else{
+          // css.style.display = "none";
+          css.classList.remove("flexchild-2");
+        }
+
       },
       created:function(){
         this.nxSetTitle('ทำสัญญา');
