@@ -1,86 +1,166 @@
 <dom-module id="payment-detail">
-  <style include="iron-flex iron-flex-alignment">
-  .flexchild-1 {
-    @apply(--layout-flex);
-  }
-  .flexchild-2 {
-    @apply(--layout-flex-2);
-  }
-  .flexchild-5 {
-    @apply(--layout-flex-5);
-  }
-  .top{
-    margin-top: 10px;
-  }
-  .box{
-    width: 40%;
-  }
-  .bd {
-    /*border: 1px solid #000;*/
-  }
-  .bg{
-    background-color:var(--paper-grey-200);
-    border: 1px solid var(--paper-grey-300);
-  }
-  table, td{
-    border: 1px solid black;
-    border-collapse: collapse;
-    text-align: center;
-  }
-  paper-button{
-    width: 20px;
-    height: 30px;
-    margin-top: 10px;
-  }
-  </style>
-  <template>
+<style include="iron-flex iron-flex-alignment">
+.flexchild-1 {
+  @apply(--layout-flex);
+}
+.flexchild-2 {
+  @apply(--layout-flex-2);
+}
+.flexchild-5 {
+  @apply(--layout-flex-5);
+}
+.top{
+  margin-top: 10px;
+}
+.top2{
+  margin-top: 20px;
+}
+.box{
+  width: 40%;
+}
+.box2{
+  width: 90%;
+}
+.box3{
+  width: 50%;
+}
+.bd {
+  border: 1px solid #000;
+}
+.bg{
+  background-color:var(--paper-grey-200);
+  border: 1px solid var(--paper-grey-300);
+}
+table, td{
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+paper-button{
+  width: 20px;
+  height: 30px;
+  margin-top: 10px;
+}
+</style>
+<template>
 
-    <div class="vertical layout">
+  <div class="vertical layout">
 
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="ครั้งที่" value="1"></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="งวดที่" value="10" disabled></paper-input></div>
-        <div class="flexchild-5"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="วันที่ได้รับเงิน" value="16/03/2558"></paper-input></div>
-      </div>
-
-      <div class="vertical layout bg">
-          <table>
-            <tr>
-              <td>เลขที่ใบกำกับสินค้า</td>
-              <td>จำนวน (ตัน)</td>
-              <td>มูลค่าUSD</td>
-              <td>จัดการ</td>
-            </tr>
-            <tr>
-              <td>
-                <paper-dropdown-menu error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                  <paper-listbox class="dropdown-content">
-                    <paper-item>C277/2558</paper-item>
-                    <paper-item>C278/2558</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-              </td>
-              <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
-              <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
-              <td><paper-button raised>ลบ</paper-button></td>
-            </tr>
-          </table>
-
-          <div class="horizontal end-justified layout">
-            <paper-button raised>เพิ่ม</paper-button>
-          </div>
-
-
-      </div>
-
+    <div class="horizontal layout top">
+      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="ครั้งที่" value="1"></paper-input></div>
+      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="งวดที่" value="10" disabled></paper-input></div>
+      <div class="flexchild-5"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="วันที่ได้รับเงิน" value="16/03/2558"></paper-input></div>
     </div>
 
-  </template>
+    <div class="vertical layout bg">
 
-  <script>
-    Polymer({
-      is: "payment-detail",
+      <table>
+        <tr>
+          <td>เลขที่ใบกำกับสินค้า</td>
+          <td>จำนวน (ตัน)</td>
+          <td>มูลค่าUSD</td>
+          <td>จัดการ</td>
+        </tr>
+        <tr>
+          <td>
+            <paper-dropdown-menu error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+              <paper-listbox class="dropdown-content">
+                <paper-item>C277/2558</paper-item>
+                <paper-item>C278/2558</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </td>
+          <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
+          <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
+          <td><paper-button raised>ลบ</paper-button></td>
+        </tr>
+      </table>
 
-    });
-  </script>
+      <div class="horizontal end-justified layout">
+        <paper-button raised>เพิ่ม</paper-button>
+      </div>
+
+      <div class="horizontal layout top">
+        <div class="flexchild-2"><paper-input class="box3" placeholder="กรุณาใส่รายละเอียด"  label="รวมจำนวน (ตัน)" value=""></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="มูลค่ารวม (USD)" value=""></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียมธนาคารต่างประเทศ" value=""></paper-input></div>
+      </div>
+
+      <div class="horizontal layout top">
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงินที่ได้รับ (USD)" value=""></paper-input></div>
+        <div class="flexchild-2">
+        </div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียมธนาคารต่างประเทศ" value=""></paper-input></div>
+      </div>
+
+      <div class="horizontal layout top">
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงิน (บาท)" value=""></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียม (บาท)" value=""></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ได้รับเงิน (บาท)" value=""></paper-input></div>
+      </div>
+
+      <div class="horizontal end-justified layout">
+        <paper-button raised>ลบ</paper-button>
+      </div>
+    </div>
+
+    <div class="horizontal end-justified layout">
+      <paper-button raised>เพิ่ม</paper-button>
+    </div>
+
+    <div class="horizontal layout top">
+      <div class="horizontal layout flexchild-2">
+        <div class="flexchild-2">รวมจำนวนตันทั้งสิ้น</div>
+        <div class="flexchild-2"> 4,000 ตัน </div>
+      </div>
+      <div class="horizontal layout flexchild-2">
+        <div class="flexchild-2">มูลค่ารวม (USD)</div>
+        <div class="flexchild-2">xxxxxx</div>
+      </div>
+    </div>
+
+      <div class="vertical layout top">
+        <div class="horizontal layout">
+          <div class="flexchild-2">รวมค่าธรรมเนียมต่างประเทศ (USD)</div>
+          <div class="flexchild-2"> xxxxx </div>
+        </div>
+        <div class="horizontal layout top">
+          <div class="flexchild-2">จำนวนเงินที่ได้รับ (USD)</div>
+          <div class="flexchild-2"> xxxxx </div>
+        </div>
+        <div class="horizontal layout top">
+          <div class="flexchild-2">จำนวนเงินที่ได้รับ (บาท)</div>
+          <div class="flexchild-2"> xxxxx </div>
+        </div>
+        <div class="horizontal layout top">
+          <div class="flexchild-2">ค่าธรรมเนียม (บาท)</div>
+          <div class="flexchild-2"> xxxxx </div>
+        </div>
+        <div class="horizontal layout top">
+          <div class="flexchild-2">ได้รับเงิน (บาท)</div>
+          <div class="flexchild-2"> xxxxx </div>
+        </div>
+      </div>
+
+
+    <div>
+      <paper-textarea class="box2" rows="2" label="หมายเหตุ" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+    </div>
+
+    <div class="horizontal end-justified layout">
+      <paper-button raised>ยกเลิก</paper-button>
+      <paper-button raised>บันทึก</paper-button>
+    </div>
+
+
+  </div>
+
+</template>
+
+<script>
+Polymer({
+  is: "payment-detail",
+
+});
+</script>
 </dom-module>
