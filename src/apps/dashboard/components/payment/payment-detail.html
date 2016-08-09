@@ -1,0 +1,86 @@
+<dom-module id="payment-detail">
+  <style include="iron-flex iron-flex-alignment">
+  .flexchild-1 {
+    @apply(--layout-flex);
+  }
+  .flexchild-2 {
+    @apply(--layout-flex-2);
+  }
+  .flexchild-5 {
+    @apply(--layout-flex-5);
+  }
+  .top{
+    margin-top: 10px;
+  }
+  .box{
+    width: 40%;
+  }
+  .bd {
+    /*border: 1px solid #000;*/
+  }
+  .bg{
+    background-color:var(--paper-grey-200);
+    border: 1px solid var(--paper-grey-300);
+  }
+  table, td{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  paper-button{
+    width: 20px;
+    height: 30px;
+    margin-top: 10px;
+  }
+  </style>
+  <template>
+
+    <div class="vertical layout">
+
+      <div class="horizontal layout top">
+        <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="ครั้งที่" value="1"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="งวดที่" value="10" disabled></paper-input></div>
+        <div class="flexchild-5"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="วันที่ได้รับเงิน" value="16/03/2558"></paper-input></div>
+      </div>
+
+      <div class="vertical layout bg">
+          <table>
+            <tr>
+              <td>เลขที่ใบกำกับสินค้า</td>
+              <td>จำนวน (ตัน)</td>
+              <td>มูลค่าUSD</td>
+              <td>จัดการ</td>
+            </tr>
+            <tr>
+              <td>
+                <paper-dropdown-menu error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+                  <paper-listbox class="dropdown-content">
+                    <paper-item>C277/2558</paper-item>
+                    <paper-item>C278/2558</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </td>
+              <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
+              <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
+              <td><paper-button raised>ลบ</paper-button></td>
+            </tr>
+          </table>
+
+          <div class="horizontal end-justified layout">
+            <paper-button raised>เพิ่ม</paper-button>
+          </div>
+
+
+      </div>
+
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "payment-detail",
+
+    });
+  </script>
+</dom-module>
