@@ -1,3 +1,6 @@
+<link rel="import" href="/bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="panel-seleted-animated.html">
+
 <dom-module id="panel-seleted">
 
   <style>
@@ -16,11 +19,23 @@
         <paper-tab>ไฟล์</paper-tab>
       </paper-tabs>
 
-      <iron-pages selected="{{selected}}">
+      <!--<iron-pages selected="{{selected}}">
         <div><content select="section-content[name=detail]"></content></div>
         <div><content select="section-content[name=print]"></content></div>
         <div><content select="section-content[name=file]"></content></div>
-      </iron-pages>
+      </iron-pages>-->
+
+      <neon-animated-pages selected="{{selected}}">
+        <panel-seleted-animated>
+          <content select="section-content[name=detail]"></content>
+        </panel-seleted-animated>
+        <panel-seleted-animated>
+          <content select="section-content[name=print]"></content>
+        </panel-seleted-animated>
+        <panel-seleted-animated>
+          <content select="section-content[name=print]"></content>
+        </panel-seleted-animated>     
+      </neon-animated-pages>
 
     </template>
     <script>
