@@ -1,7 +1,6 @@
-<link rel="import" href="components/my-listmenu.html">
-<link rel="import" href="components/nx-grid.html">
+<!-- <link rel="import" href="components/my-listmenu.html"> -->
+<link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/my-panel.html">
-
 <dom-module id="dashboard-my-dashboard">
   <style media="screen">
     .flex-horizontal {
@@ -35,23 +34,29 @@
       <div class="flexchild-1 ">
       <!-- <span>numSelect<span>  {{numSelect}} -->
         <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
-        <nx-grid data="{{data}}" seleted="{{dataSelected}}" seleted-menu="{{numSelect}}">
-            <items type="primary">
-                <list item="id" label="รหัส" width="20%"></list>
-                <list item="name" label="ชื่อ" width="50%"></list>
-                <list item="detail" label="รายละเอียด" width="30%"></list>
-            </items>
-            <items type="secondary" item="sub">
-                <list item="id" label="รหัส" width="50%"></list>
-                <list item="name" label="ชื่อ" width="50%"></list>
-            </items>
+        <nx-grid data="{{data}}" seleted="{{dataSelected}}" secondary="secondary-component">
+          <items type="primary">
+            <list item="id" label="รหัส" width="20%"></list>
+            <list item="name" label="ชื่อ" width="50%"></list>
+            <list item="detail" label="รายละเอียด" width="30%"></list>
+          </items>
+          <items type="secondary" item="sub">
+            <list item="id" label="รหัส" width="50%"></list>
+            <list item="name" label="ชื่อ" width="50%"></list>
+          </items>
+          <template type="primary">
+            <input placeholder="text" value="primary">
+          </template>
+          <template type="secondary">
+            <input placeholder="text" value="secondary">
+          </template>
         </nx-grid>
         <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
       </div>
 
       <div class=" rightdata flexchild-1"id="changeDivcss">
         <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
-          <my-panel dataselected="{{dataSelected}}"></my-panel>
+          <my-panel dataselected="{{dataSelected}}" page-seleted-detail="{{pageSeletedDetail}}"></my-panel>
       </div>
     </div>
 
@@ -65,39 +70,26 @@
         nxLocalesBehavior
       ],
       properties:{
+          // pageSeletedDetail:{
+          //   type:String,
+          //   value:'periodLot'
+          // },
           data:{
-              type:Object,
-              value:function(){
-                return [
-                  {
-                    id:1 , name:'BEE', detail:'บี', sub:[
-                      {id:11 , name:'COFCO ประเทศจีน',year:'2558'},
-                      {id:12 , name:'BULOG ประเทศอินโดนีเซีย',year:'2558'},
-                      {id:13 , name:'NFA ประเทศฟิลิปินส',year:'2558'}
-                    ]
-                  },
-                  {
-                    id:2 , name:'nk', detail:'น้ำแข็ง', sub:[
-                      {id:21 , name:'n1',year:'2558'},
-                      {id:22 , name:'n2',year:'2558'}
-                    ]
-                  }
-                ]
-                // return [
-                //   {
-                //     id:1 , name:'BEE', detail:[
-                //        {id:11 , name:'COFCO ประเทศจีน',year:'2558'},
-                //        {id:12 , name:'BULOG ประเทศอินโดนีเซีย',year:'2558'},
-                //        {id:13 , name:'NFA ประเทศฟิลิปินส',year:'2558'}
-                //     ]
-                //   },
-                //   {
-                //     id:2 , name:'nk', detail:[
-                //        {id:21 , name:'n1',year:'2558'},{id:22 , name:'n2',year:'2558'}
-                //     ]
-                //   }
-                // ]
-              }
+            type:Object,
+            value:function(){
+              return [
+                {
+                  id:1 , name:'COFCO ประเทศจีน 8', detail:'ทดสอบข้อความ', sub:[
+                    {id:1,name:'sum1'},{id:1,name:'sum2'}
+                  ]
+                },
+                {
+                  id:2 , name:'BULOG ประเทศxx', detail:'ทดสอบข้อความ', sub:[
+                    {id:1,name:'sum1'},{id:1,name:'sum2'}
+                  ]
+                }
+              ]
+            }
           }
       },
       changeDiv:function(){
@@ -117,6 +109,14 @@
       created:function(){
         this.nxSetTitle('ทำสัญญา');
         this.nxSetLayout('layout-main');
+      },
+      ready:function(){
+        this.$$('nx-grid').addEventListener('nx-grid-tap', (e) => {
+          console.log('click',e.detail.data);
+        }),
+        this.$$('nx-grid').addEventListener('nx-grid-dblclick', (e) => {
+          console.log('dblclick',e.detail.data);
+        })
       },
       observers:['obdata(dataSelected)','obDataChange(data.*)'],
       obdata:function(select){
