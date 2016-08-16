@@ -38,35 +38,35 @@ paper-button{
         </div>
         <div class="flex">
           <paper-dropdown-menu label="ราคา" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท">
-            <paper-listbox class="dropdown-content">
-              <paper-item>FOB</paper-item>
-              <paper-item>CY</paper-item>
-              <paper-item>ฯลฯ</paper-item>
+            <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
+              <paper-item price-type="fob">FOB</paper-item>
+              <paper-item price-type="cy">CY</paper-item>
+              <paper-item price-type="other">ฯลฯ</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
         </div>
       </div>
-
-      <div class="horizontal layout">
-        <div class="flex">
-          <paper-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท">
-            <paper-listbox class="dropdown-content">
-              <paper-item>ข้าวขาว</paper-item>
-              <paper-item>ข้าวหอมมะลิ</paper-item>
-            </paper-listbox>
-          </paper-dropdown-menu>
+      <template is="dom-repeat" items="{{data.rice}}">
+        <div class="horizontal layout">
+          <div class="flex">
+            <paper-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท">
+              <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
+                <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
+                <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="flex">
+            <div class="box"><paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input></div>
+          </div>
         </div>
+      </template>
         <div class="flex">
-          <div class="box"><paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" value="" placeholder="ใส่รายละเอียด"></paper-input></div>
-        </div>
-      </div>
-
-        <div class="flex">
-          <paper-textarea rows="3" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+          <paper-textarea rows="3" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></paper-textarea>
         </div>
 
         <div class="flex">
-          <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+          <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}""></paper-textarea>
         </div>
 
       <div class="horizontal end-justified layout">
