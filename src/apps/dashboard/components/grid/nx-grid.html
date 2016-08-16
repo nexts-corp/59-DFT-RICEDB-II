@@ -14,6 +14,7 @@
     }
     .ss{
       color: red;
+      border: 1px solid #000;
     }
     .sublist paper-item {
       padding-left: 30px;
@@ -31,7 +32,7 @@
             <div class="header layout horizontal">
               <!-- Head primary Level 1 -->
                 <template is="dom-repeat" as="itemConfigPrimary" items="{{config.primary}}">
-                    <div class="flex">{{itemConfigPrimary.label}}
+                    <div class$="{{itemConfigPrimary.width}}">{{itemConfigPrimary.label}}
                       <!-- width:{{itemConfigPrimary.width}} -->
                     </div>
                 </template>
@@ -41,23 +42,29 @@
                     <paper-submenu label$="{{index}}">
                         <paper-item on-tap="_getBind" on-dblclick="_getBind" data="{{itemPrimary}}" class="menu-trigger">
                             <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+                                <div data="{{itemPrimary}}" class$="{{configPrimary.width}}">
                                 {{_getItemPrimary(itemPrimary,configPrimary)}}
                                  <!-- width:{{configPrimary.width}} -->
+                                </div>
                             </template>
                         </paper-item>
                         <paper-menu class="menu-content sublist">
                             <paper-item>
-                                Head secondary
+                                <!-- Head secondary -->
                                 <template is="dom-repeat" as="itemConfigSecondary" items="{{config.secondary}}">
+                                  <div class$="{{itemConfigSecondary.width}}">
                                     {{itemConfigSecondary.label}}
                                     <!-- width:{{itemConfigSecondary.width}} -->
+                                  </div>
                                 </template>
                             </paper-item>
                             <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
                                 <paper-item on-tap="_getBind" on-dblclick="_getBind" data="{{itemSecondary}}">
                                     <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
+                                      <div class$="{{configSecondary.width}}" data="{{itemSecondary}}">
                                         {{_getItemSecondary(itemSecondary,configSecondary)}}
                                         <!-- width:{{configSecondary.width}} -->
+                                      </div>
                                     </template>
                                 <paper-item>
                             </template>
@@ -141,6 +148,9 @@
                 return item[config.item];
             },
             _getBind:function(e){
+                // console.log(e.currentTarget);
+                // var data = e.currentTarget;
+                // console.log(e.currentTarget);
                 this.fire('nx-grid-'+e.type, {data: e.target.data});
             }
         });
