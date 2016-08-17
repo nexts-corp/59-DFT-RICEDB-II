@@ -19,7 +19,9 @@
     .sublist paper-item {
       padding-left: 30px;
     }
-
+    .cml{
+      padding-left: 15px;
+    }
     </style>
 
     <template>
@@ -43,6 +45,7 @@
                         <paper-item on-tap="_getBind" on-dblclick="_getBind" data="{{itemPrimary}}" class="menu-trigger">
                             <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
                                 <div data="{{itemPrimary}}" class$="{{configPrimary.width}}">
+
                                 {{_getItemPrimary(itemPrimary,configPrimary)}}
                                  <!-- width:{{configPrimary.width}} -->
                                 </div>
@@ -61,8 +64,8 @@
                             <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
                                 <paper-item on-tap="_getBind" on-dblclick="_getBind" data="{{itemSecondary}}">
                                     <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
-                                      <div class$="{{configSecondary.width}}" data="{{itemSecondary}}">
-                                        {{_getItemSecondary(itemSecondary,configSecondary)}}
+                                      <div class$="{{configSecondary.width}} cml" data="{{itemSecondary}}">
+                                       {{_getItemSecondary(itemSecondary,configSecondary)}}
                                         <!-- width:{{configSecondary.width}} -->
                                       </div>
                                     </template>

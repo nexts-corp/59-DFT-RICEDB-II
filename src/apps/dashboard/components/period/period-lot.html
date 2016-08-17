@@ -29,26 +29,28 @@
 
     <div class="vertical layout">
 
-      <div><paper-input class="box2" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ระบุงวด" value=""></paper-input></div>
+      <div><paper-input class="box2" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ระบุงวด" value$="[[data.periodNo]]"></paper-input></div>
 
-      <div class="horizontal layout top">
-        <div class="flex2child">
-          <paper-dropdown-menu label="Confirmation Letter No." error-message="กรุณาใส่เลขที่สัญญา" placeholder="เลือกเลขที่สัญญา">
-            <paper-listbox class="dropdown-content">
-              <paper-item>11</paper-item>
-              <paper-item>12</paper-item>
-            </paper-listbox>
-          </paper-dropdown-menu>
+      <template is="dom-repeat" items="[[data.confirmLetter]]">
+        <div class="horizontal layout top">
+          <div class="flex2child">
+            <paper-dropdown-menu label="Confirmation Letter No." error-message="กรุณาใส่เลขที่สัญญา" placeholder="เลือกเลขที่สัญญา">
+              <paper-listbox class="dropdown-content" attr-for-selected="confirm-letter-no" selected="{{item.confirmLetterNo}}">
+                <paper-item confirm-letter-no="11">11</paper-item>
+                <paper-item confirm-letter-no="12">12</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="flex2child"><paper-input class="box2" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" placeholder="ใส่จำนวน" value="[[item.cfQuantity]]"></paper-input></div>
         </div>
-        <div class="flex2child"><paper-input class="box2" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" placeholder="ใส่จำนวน" value=""></paper-input></div>
-      </div>
+      </template>
 
       <div class="horizontal end-justified layout">
         <paper-button raised>เพิ่ม</paper-button>
       </div>
 
       <div>
-        <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+        <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
       </div>
 
       <div class="horizontal end-justified layout">
