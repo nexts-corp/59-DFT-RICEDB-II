@@ -1,7 +1,8 @@
-<link rel="import" href="components/rice-vessel/rice-vessel-detail.html">
-<link rel="import" href="components/nx-grid.html">
+<!-- <link rel="import" href="components/my-listmenu.html"> -->
+<link rel="import" href="components/grid/nx-grid.html">
+<link rel="import" href="components/my-panel.html">
 <dom-module id="dashboard-my-invoice">
-  <style media="screen">
+  <style include="iron-flex iron-flex-factors">
     .flex-horizontal {
    @apply(--layout-horizontal);
    }
@@ -9,11 +10,11 @@
      @apply(--layout-flex);
    }
    .flexchild-2 {
-     @apply(--layout-flex-3);
+     @apply(--layout-flex-2);
    }
    .rightdata{
      height:100%;
-     display: none;
+     /*display: none;*/
      border-left: 1px solid var(--paper-grey-300);
      padding: 5px 10px 0px 10px;
    }
@@ -25,30 +26,41 @@
       -moz-transition: all 1s ease;
       -o-transition: all 1s ease;
       transition: all 1s ease;
-   }
 
+   }
   </style>
   <template>
     <div class=" flex-horizontal">
-      <div class="flexchild-1 bd ">
-        <nx-grid data="{{data}}" seleted="{{dataSelected}}" seleted-menu="{{numSelect}}">
-            <items type="primary">
-                <list item="id" label="รหัส" width="20%"></list>
-                <list item="name" label="ชื่อ" width="50%"></list>
-                <list item="detail" label="รายละเอียด" width="30%"></list>
-            </items>
-            <items type="secondary" item="sub">
-                <list item="id" label="รหัส" width="50%"></list>
-                <list item="name" label="ชื่อ" width="50%"></list>
-            </items>
+      <div class="flexchild-1 ">
+      <!-- <span>numSelect<span>  {{numSelect}} -->
+        <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
+        <nx-grid data="{{data}}" >
+          <items type="primary">
+            <list item="periodNo" label="งวดที่" width="flex"></list>
+            <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
+            <!-- <list item="date" label="ปี" width="flex"></list> -->
+          </items>
+          <items type="secondary" item="sub">
+            <list item="" label="" width="flex"></list>
+            <list item="detailMoney" label="+ เพิ่ม รายละเอียดการรับเงิน" width="flex-9"></list>
+          </items>
+          <template type="primary">
+            <input placeholder="text" value="primary">
+          </template>
+          <template type="secondary">
+            <input placeholder="text" value="secondary">
+          </template>
         </nx-grid>
-      <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
+        <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
       </div>
 
-      <div class="rightdata bd " id="changeDivcss">
-        <rice-vessel-detail></rice-vessel-detail>
+      <div class=" rightdata flexchild-1"id="changeDivcss">
+        <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
+          <my-panel dataselected="{{promise}}" page-seleted-detail="{{pageSeletedDetail}}"></my-panel>
       </div>
     </div>
+
+
   </template>
   <script>
     Polymer({
@@ -58,63 +70,67 @@
         nxLocalesBehavior
       ],
       properties:{
+          pageSeletedDetail:{
+            type:String,
+            value:''
+          },
           data:{
-              type:Object,
-              value:function(){
-                return [
-                  {
-                    id:1 , name:'BEE', detail:'บี', sub:[
-                      {id:11 , name:'COFCO ประเทศจีน',year:'2558'},
-                      {id:12 , name:'BULOG ประเทศอินโดนีเซีย',year:'2558'},
-                      {id:13 , name:'NFA ประเทศฟิลิปินส',year:'2558'}
-                    ]
-                  },
-                  {
-                    id:2 , name:'nk', detail:'น้ำแข็ง', sub:[
-                      {id:21 , name:'n1',year:'2558'},
-                      {id:22 , name:'n2',year:'2558'}
-                    ]
-                  }
-                ]
-                // return [
-                //   {
-                //     id:1 , name:'BEE', detail:[
-                //        {id:11 , name:'COFCO ประเทศจีน',year:'2558'},
-                //        {id:12 , name:'BULOG ประเทศอินโดนีเซีย',year:'2558'},
-                //        {id:13 , name:'NFA ประเทศฟิลิปินส',year:'2558'}
-                //     ]
-                //   },
-                //   {
-                //     id:2 , name:'nk', detail:[
-                //        {id:21 , name:'n1',year:'2558'},{id:22 , name:'n2',year:'2558'}
-                //     ]
-                //   }
-                // ]
-              }
-          }
+            type:Object,
+            value:function(){
+              return [
+                {
+                  id:1 ,
+                  periodNo:11,
+                  quantity:100000,
+                },
+                {
+                  id:2 ,
+                  periodNo:12,
+                  quantity:200000,
+                },
+                {
+                  id:3 ,
+                  periodNo:13,
+                  quantity:300000,
+                }
+              ]}
+        }
       },
       changeDiv:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
         // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
         // console.log(css);
-        // console.log(css.classList.contains('flexchild-2'));
+        console.log(css.classList.contains('flexchild-2'));
         if (css.classList.contains('flexchild-2') == false){
+          // css.style.display = "inline";
           css.className += " flexchild-2";
         }else{
+          // css.style.display = "none";
           css.classList.remove("flexchild-2");
         }
 
       },
       created:function(){
-        this.nxSetTitle('ใบสั่งซื่อ');
+        this.nxSetTitle('สร้างงวด');
         this.nxSetLayout('layout-main');
+      },
+      ready:function(){
+        this.$$('nx-grid').addEventListener('nx-grid-tap', (e) => {
+          console.log('click',e.detail.data);
+          this.promise= e.detail.data;
+          // console.log(this.promise);
+        }),
+        this.$$('nx-grid').addEventListener('nx-grid-dblclick', (e) => {
+          console.log('dblclick',e.detail.data);
+        })
       },
       observers:['obdata(dataSelected)','obDataChange(data.*)'],
       obdata:function(select){
           console.log(select);
+          // console.log(this.numSelect);
       },
       obDataChange:function(x){
-        console.log('sss');
+        // console.log('sss');
       },
 
     });

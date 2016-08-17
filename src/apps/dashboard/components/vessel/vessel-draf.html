@@ -38,28 +38,31 @@
     <div class="vertical layout">
 
       <div>
-        <paper-textarea rows="2" label="SHIPPER" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+        <paper-textarea rows="2" label="SHIPPER" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.actualShipper]]"></paper-textarea>
       </div>
       <div>
-        <paper-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+        <paper-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></paper-textarea>
       </div>
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box" label="VESSEL" placeholder="ใส่รายละเอียด" value=""></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box" label="B/L No." placeholder="ใส่รายละเอียด" value=""></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="VESSEL" placeholder="ใส่รายละเอียด" value="[[data.vesselName]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="B/L No." placeholder="ใส่รายละเอียด" value="[[data.bookIngNo]]"></paper-input></div>
       </div>
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box" label="POL (PORT OF LOADING)" placeholder="ใส่รายละเอียด" value=""></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box" label="POD (PORT OF DISCHAR)" placeholder="ใส่รายละเอียด" value=""></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="POL (PORT OF LOADING)" placeholder="ใส่รายละเอียด" value="[[data.pol]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="POD (PORT OF DISCHAR)" placeholder="ใส่รายละเอียด" value="[[data.pod]]"></paper-input></div>
       </div>
+      <template is="dom-repeat" items="[[data.actual]]">
+
+
       <div class="horizontal layout top">
         <div class="flexchild-2">MARK</div>
-        <div class="flexchild-2">40 BAGS</div>
+        <div class="flexchild-2">[[item.quantity]] Bag</div>
       </div>
       <div>
-        <paper-textarea rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+        <paper-textarea rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
       </div>
       <div>
-        <paper-textarea rows="2" label="PACKING :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+        <paper-textarea rows="2" label="PACKING :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
       </div>
 
       <div class="top">WEIGHT</div>
@@ -67,22 +70,22 @@
       <div class="horizontal center-justified layout top">
         <div class="horizontal center-justified layout flexchild-2">
           <div class="padR">G.W.</div>
-          <div> 1,001.6 </div>
+          <div>[[item.gw]]</div>
           <div class="padL">M/T</div>
         </div>
         <div class="horizontal layout flexchild-2">
           <div class="padR">N.W.</div>
-          <div> 1,000 </div>
+          <div>[[item.nw]]</div>
           <div class="padL">M/T</div>
         </div>
       </div>
-
+      </template>
 
       <div class="horizontal center-justified layout top2">
         <div class="padR">ORIGINALS</div>
-        <div> 3 </div>
+        <div>[[data.ori]] </div>
         <div class="padR padL">/</div>
-        <div> 12 </div>
+        <div>[[data.nn]] </div>
         <div class="padL">N/N</div>
       </div>
 
