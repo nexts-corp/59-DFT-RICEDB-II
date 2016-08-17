@@ -1,7 +1,7 @@
 <!-- <link rel="import" href="components/my-listmenu.html"> -->
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/my-panel.html">
-<dom-module id="dashboard-my-invoice">
+<dom-module id="dashboard-my-invoice-period">
   <style include="iron-flex iron-flex-factors">
     .flex-horizontal {
    @apply(--layout-horizontal);
@@ -36,7 +36,7 @@
         <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
         <nx-grid data="{{data}}" >
           <items type="primary">
-            <list item="periodNo" label="งวดที่" width="flex"></list>
+            <list item="invoiceNo" label="Invoice" width="flex"></list>
             <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
             <!-- <list item="date" label="ปี" width="flex"></list> -->
           </items>
@@ -64,7 +64,7 @@
   </template>
   <script>
     Polymer({
-      is: "dashboard-my-invoice",
+      is: "dashboard-my-invoice-period",
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
@@ -72,7 +72,7 @@
       properties:{
           pageSeletedDetail:{
             type:String,
-            value:''
+            value:'invoiceDetail'
           },
           data:{
             type:Object,
@@ -80,17 +80,17 @@
               return [
                 {
                   id:1 ,
-                  periodNo:11,
+                  invoiceNo:'c277/2558',
                   quantity:100000,
                 },
                 {
                   id:2 ,
-                  periodNo:12,
+                  invoiceNo:'c300/2558',
                   quantity:200000,
                 },
                 {
                   id:3 ,
-                  periodNo:13,
+                  invoiceNo:'c350/2558',
                   quantity:300000,
                 }
               ]}
