@@ -1,7 +1,7 @@
 <!-- <link rel="import" href="components/my-listmenu.html"> -->
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/my-panel.html">
-<dom-module id="dashboard-my-period">
+<dom-module id="dashboard-my-payment">
   <style include="iron-flex iron-flex-factors">
     .flex-horizontal {
    @apply(--layout-horizontal);
@@ -37,12 +37,12 @@
         <nx-grid data="{{data}}" >
           <items type="primary">
             <list item="periodNo" label="งวดที่" width="flex"></list>
-            <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
+            <list item="quantity" label="จำนวน (ตัน)" width="flex"></list>
             <!-- <list item="date" label="ปี" width="flex"></list> -->
           </items>
           <items type="secondary" item="sub">
             <list item="" label="" width="flex"></list>
-            <list item="cityDestination" label="เมืองท่าปลายท่า" width="flex-9"></list>
+            <list item="order" label="รายละเอียดการรับเงิน" width="flex-9"></list>
           </items>
           <template type="primary">
             <input placeholder="text" value="primary">
@@ -64,7 +64,7 @@
   </template>
   <script>
     Polymer({
-      is: "dashboard-my-period",
+      is: "dashboard-my-payment",
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
@@ -72,7 +72,7 @@
       properties:{
           pageSeletedDetail:{
             type:String,
-            value:'periodLot'
+            value:'paymentDetail'
           },
           data:{
             type:Object,
@@ -80,90 +80,53 @@
               return [
                 {
                   id:1 ,
-                  periodNo:1,
-                  quantity:50000,
-                  confirmLetter:[
-                    {
-                      id:1,
-                      confirmLetterNo:11,
-                      cfQuantity:25000
-                    },
-                    {
-                      id:2,
-                      confirmLetterNo:12,
-                      cfQuantity:25000
-                    }
-                  ],
-                  detail:'lorem',
+                  order:10,
+                  periodNo:11,
+                  quantity:300000,
+                  date:'16/03/2558',
                   sub:[
                     {
-                      id:1,
-                      cityDestination:'Husngpu'
-                    },
-                    {
-                      id:2,
-                      cityDestination:'Guangzhou'
-                    }
-                  ]
-                },
-                {
-                  id:2 ,
-                  periodNo:12,
-                  quantity:70000,
-                  confirmLetter:[
-                    {
-                      id:1,
-                      confirmLetterNo:11,
-                      cfQuantity:35000
-                    },
-                    {
-                      id:2,
-                      confirmLetterNo:12,
-                      cfQuantity:35000
+                      id:'1',
+                      order:'1',
                     }
                   ],
-                  detail:'lorem',
-                  sub:[
-                    {
-                      id:1,
-                      cityDestination:'Hangzhou'
-                    },
-                    {
-                      id:2,
-                      cityDestination:'Beijing'
-                    }
-                  ]
-                },
-                {
-                  id:3 ,
-                  periodNo:13,
-                  quantity:800000,
-                  confirmLetter:[
-                    {
-                      id:1,
-                      confirmLetterNo:11,
-                      cfQuantity:400000
-                    },
-                    {
-                      id:2,
-                      confirmLetterNo:12,
-                      cfQuantity:400000
-                    }
-                  ],
-                  detail:'lorem',
-                  sub:[
-                    {
-                      id:1,
-                      cityDestination:'Chongqing'
-                    },
-                    {
-                      id:2,
-                      cityDestination:'Shanghai'
-                    }
-                  ]
-                }
+                  paymentProduct:[{
+                    product:[
+                      {
+                        id:1,
+                        productNo:'C277/2558',
+                        quantity:1000,
+                        value:'392,000.00'
+                      },
+                      {
+                        id:2,
+                        productNo:'C278/2558',
+                        quantity:2000,
+                        value:'400,000.00'
+                      }
+                    ],
+                    totalton:2000,
+                    totalValue:'784,000.00',
+                    feeusd:38.83,
+                    amountReceived:'500,000',
+                    t:'xx',
+                    ktb:'xx',
+                    bath:'500,000',
+                    feethb:'30',
+                    receivedBath:900000
+                  }],
+                totalton:4000,
+                valueUsd:40000,
+                feeusd:38,
+                receivedUsd:50000,
+                receivedBath:1000000,
+                feethb:30,
+                receivedMoney:100000,
+                detail:'รายละเอียดเพิ่มเติมเพิ่มตรงนี้ได้'
+              },
 
-              ]}
+            ]
+          }
         }
       },
       changeDiv:function(){
@@ -181,7 +144,7 @@
 
       },
       created:function(){
-        this.nxSetTitle('สร้างงวด');
+        this.nxSetTitle('สร้างการจ่ายเงิน');
         this.nxSetLayout('layout-main');
       },
       ready:function(){
@@ -192,7 +155,6 @@
         }),
         this.$$('nx-grid').addEventListener('nx-grid-dblclick', (e) => {
           console.log('dblclick',e.detail.data);
-          this.nxChangePath('dashboard/my-vessel');
         })
       },
       observers:['obdata(dataSelected)','obDataChange(data.*)'],

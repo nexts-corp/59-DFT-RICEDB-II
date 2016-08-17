@@ -56,13 +56,13 @@ paper-button{
   <div class="vertical layout">
 
     <div class="horizontal layout top">
-      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="ครั้งที่" value="1"></paper-input></div>
-      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="งวดที่" value="10" disabled></paper-input></div>
-      <div class="flexchild-5"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="วันที่ได้รับเงิน" value="16/03/2558"></paper-input></div>
+      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="ครั้งที่" value="[[data.order]]"></paper-input></div>
+      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="งวดที่" value="[[data.periodNo]]" disabled></paper-input></div>
+      <div class="flexchild-5"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="วันที่ได้รับเงิน" value="[[data.date]]"></paper-input></div>
     </div>
 
+    <template is="dom-repeat" items="[[data.paymentProduct]]">
     <div class="vertical layout bg">
-
       <table>
         <tr>
           <td>เลขที่ใบกำกับสินค้า</td>
@@ -70,19 +70,21 @@ paper-button{
           <td>มูลค่าUSD</td>
           <td>จัดการ</td>
         </tr>
-        <tr>
-          <td>
-            <paper-dropdown-menu error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-              <paper-listbox class="dropdown-content">
-                <paper-item>C277/2558</paper-item>
-                <paper-item>C278/2558</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </td>
-          <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
-          <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]*></paper-input></td>
-          <td><paper-button raised>ลบ</paper-button></td>
-        </tr>
+        <template is="dom-repeat" items="[[item.product]]">
+          <tr>
+            <td>
+              <paper-dropdown-menu error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+                <paper-listbox class="dropdown-content" attr-for-selected="product-no" selected="{{item.productNo}}">
+                  <paper-item product-no="C277/2558">C277/2558</paper-item>
+                  <paper-item product-no="C278/2558">C278/2558</paper-item>
+                </paper-listbox>
+              </paper-dropdown-menu>
+            </td>
+            <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]* value="[[item.quantity]]"></paper-input></td>
+            <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]* value="[[item.value]]"></paper-input></td>
+            <td><paper-button raised>ลบ</paper-button></td>
+          </tr>
+        </template>
       </table>
 
       <div class="horizontal end-justified layout">
@@ -91,37 +93,37 @@ paper-button{
 
 
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box3" placeholder="กรุณาใส่รายละเอียด"  label="รวมจำนวน (ตัน)" value="" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="มูลค่ารวม (USD)" value="" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียมธนาคารต่างประเทศ" value="" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box3" placeholder="กรุณาใส่รายละเอียด"  label="รวมจำนวน (ตัน)" value="[[item.totalton]]" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="มูลค่ารวม (USD)" value="[[item.totalValue]]" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียมธนาคารต่างประเทศ" value="[[item.feeusd]]" disabled></paper-input></div>
       </div>
 
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงินที่ได้รับ (USD)" value="" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงินที่ได้รับ (USD)" value="[[item.amountReceived]]" disabled></paper-input></div>
         <div class="horizontal layout flexchild-2 r text">
           <div style="padding-left:65%;">T/T</div>
-          <div><input style="width:20px; margin-left:5px;"is="iron-input"></div>
+          <div><input style="width:20px; margin-left:5px;"is="iron-input" value="[[item.t]]"></div>
         </div>
         <div class=" flexchild-2 text">
           <div>อัตราแลกเปลี่ยน</div>
           <div class="horizontal layout">
             <div>ธนาคารกรุงไทยเสนอ</div>
-            <input style="width:25px; margin-left:5px;"is="iron-input">
+            <input style="width:25px; margin-left:5px;"is="iron-input" value="[[item.ktb]]">
           </div>
         </div>
       </div>
 
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงิน (บาท)" value="" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียม (บาท)" value="" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ได้รับเงิน (บาท)" value="" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงิน (บาท)" value="[[item.bath]]" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียม (บาท)" value="[[item.feethb]]" disabled></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ได้รับเงิน (บาท)" value="[[item.receivedBath]]" disabled></paper-input></div>
       </div>
 
       <div class="horizontal end-justified layout">
         <paper-button raised>ลบ</paper-button>
       </div>
     </div>
-
+   </template>
     <div class="horizontal end-justified layout">
       <paper-button raised>เพิ่ม</paper-button>
     </div>
@@ -129,40 +131,40 @@ paper-button{
     <div class="horizontal layout top">
       <div class="horizontal layout flexchild-2">
         <div class="flexchild-2">รวมจำนวนตันทั้งสิ้น</div>
-        <div class="flexchild-2"> 4,000 ตัน </div>
+        <div class="flexchild-2"> [[data.totalton]]ตัน </div>
       </div>
       <div class="horizontal layout flexchild-2">
         <div class="flexchild-2">มูลค่ารวม (USD)</div>
-        <div class="flexchild-2">xxxxxx</div>
+        <div class="flexchild-2">[[data.valueUsd]]</div>
       </div>
     </div>
 
       <div class="vertical layout top">
         <div class="horizontal layout">
           <div class="flexchild-2">รวมค่าธรรมเนียมต่างประเทศ (USD)</div>
-          <div class="flexchild-2"> xxxxx </div>
+          <div class="flexchild-2"> [[data.feeusd]]</div>
         </div>
         <div class="horizontal layout top">
           <div class="flexchild-2">จำนวนเงินที่ได้รับ (USD)</div>
-          <div class="flexchild-2"> xxxxx </div>
+          <div class="flexchild-2"> [[data.receivedUsd]] </div>
         </div>
         <div class="horizontal layout top">
           <div class="flexchild-2">จำนวนเงินที่ได้รับ (บาท)</div>
-          <div class="flexchild-2"> xxxxx </div>
+          <div class="flexchild-2"> [[data.receivedBath]] </div>
         </div>
         <div class="horizontal layout top">
           <div class="flexchild-2">ค่าธรรมเนียม (บาท)</div>
-          <div class="flexchild-2"> xxxxx </div>
+          <div class="flexchild-2"> [[data.feethb]] </div>
         </div>
         <div class="horizontal layout top">
           <div class="flexchild-2">ได้รับเงิน (บาท)</div>
-          <div class="flexchild-2"> xxxxx </div>
+          <div class="flexchild-2"> [[data.receivedMoney]] </div>
         </div>
       </div>
 
 
     <div>
-      <paper-textarea class="box2" rows="2" label="หมายเหตุ" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></paper-textarea>
+      <paper-textarea class="box2" rows="2" label="หมายเหตุ" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
     </div>
 
     <div class="horizontal end-justified layout">
