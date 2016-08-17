@@ -1,7 +1,7 @@
 <!-- <link rel="import" href="components/my-listmenu.html"> -->
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/my-panel.html">
-<dom-module id="dashboard-my-dashboard">
+<dom-module id="dashboard-my-period">
   <style include="iron-flex iron-flex-factors">
     .flex-horizontal {
    @apply(--layout-horizontal);
@@ -36,13 +36,13 @@
         <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
         <nx-grid data="{{data}}" >
           <items type="primary">
-            <list item="id" label="รหัส" width="flex"></list>
-            <list item="promiseName" label="ชื่อ" width="flex-3"></list>
-            <list item="date" label="ปี" width="flex"></list>
+            <list item="periodNo" label="งวดที่" width="flex"></list>
+            <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
+            <!-- <list item="date" label="ปี" width="flex"></list> -->
           </items>
           <items type="secondary" item="sub">
             <list item="" label="" width="flex"></list>
-            <list item="confirmLetter" label="Confirmation Letter" width="flex-9"></list>
+            <list item="cityDestination" label="เมืองท่าปลายท่า" width="flex-9"></list>
           </items>
           <template type="primary">
             <input placeholder="text" value="primary">
@@ -64,7 +64,7 @@
   </template>
   <script>
     Polymer({
-      is: "dashboard-my-dashboard",
+      is: "dashboard-my-period",
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
@@ -72,7 +72,7 @@
       properties:{
           pageSeletedDetail:{
             type:String,
-            value:'promiseDetail'
+            value:'periodLot'
           },
           data:{
             type:Object,
@@ -80,107 +80,89 @@
               return [
                 {
                   id:1 ,
-                  promiseName:'COFCO ประเทศจีน ',
-                  promiseNo:'COFCO ประเทศจีน ',
-                  date:'21/9/58',
-                  price:'fob',
-                  rice:[{
-                    riceType:'jasmineRice',
-                    volume:500000
-                  }],
-                  customerDetail:'นาย ก นามกสุล น อยู่ประเทศ ......',
-                  detail:'ทดสอบข้อความ',
+                  periodNo:1,
+                  quantity:50000,
+                  confirmLetter:[
+                    {
+                      id:1,
+                      confirmLetterNo:11,
+                      cfQuantity:25000
+                    },
+                    {
+                      id:2,
+                      confirmLetterNo:12,
+                      cfQuantity:25000
+                    }
+                  ],
+                  detail:'lorem',
                   sub:[
                     {
                       id:1,
-                      confirmLetter:'1',
-                      dateconfirm:'25/09/58',
-                      confirmItem:[{
-                        id:1,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'50kg PP bags',
-                        price:'USD392/MT'
-                      }
-                     ]
-                   },
-                   {
-                     id:2,
-                     confirmLetter:'2',
-                     dateconfirm:'25/11/58',
-                     confirmItem:[{
-                       id:1,
-                       item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                       package:'25kg PP bags',
-                       price:'USD392/MT'
-                     }
-                    ]
-                   }
+                      cityDestination:'Husngpu'
+                    },
+                    {
+                      id:2,
+                      cityDestination:'Guangzhou'
+                    }
                   ]
                 },
                 {
                   id:2 ,
-                  promiseName:'BULOG  ประเทศอินโดนีเซีย',
-                  promiseNo:'BULOG  ประเทศอินโดนีเซีย',
-                  date:'21/9/58',
-                  price:'fob',
-                  rice:[{
-                    riceType:'jasmineRice',
-                    volume:900000
-                  }],
-                  customerDetail:'นาย ก นามกสุล น อยู่ประเทศ ......',
-                  detail:'ทดสอบข้อความ',
+                  periodNo:12,
+                  quantity:70000,
+                  confirmLetter:[
+                    {
+                      id:1,
+                      confirmLetterNo:11,
+                      cfQuantity:35000
+                    },
+                    {
+                      id:2,
+                      confirmLetterNo:12,
+                      cfQuantity:35000
+                    }
+                  ],
+                  detail:'lorem',
                   sub:[
                     {
                       id:1,
-                      confirmLetter:'1',
-                      dateconfirm:'25/09/58',
-                      confirmItem:[{
-                        id:1,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'50kg PP bags',
-                        price:'USD392/MT'
-                      },{
-                        id:2,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'25kg PP bags',
-                        price:'USD392/MT'
-                      }
-                     ]
+                      cityDestination:'Hangzhou'
+                    },
+                    {
+                      id:2,
+                      cityDestination:'Beijing'
                     }
                   ]
                 },
                 {
                   id:3 ,
-                  promiseName:'NFA ประเทศฟิลิปินส์',
-                  promiseNo:'NFA ประเทศฟิลิปินส์',
-                  date:'21/9/58',
-                  price:'fob',
-                  rice:[{
-                    riceType:'jasmineRice',
-                    volume:500000
-                  }],
-                  customerDetail:'นาย ก นามกสุล น อยู่ประเทศ ......',
-                  detail:'ทดสอบข้อความ',
+                  periodNo:13,
+                  quantity:800000,
+                  confirmLetter:[
+                    {
+                      id:1,
+                      confirmLetterNo:11,
+                      cfQuantity:400000
+                    },
+                    {
+                      id:2,
+                      confirmLetterNo:12,
+                      cfQuantity:400000
+                    }
+                  ],
+                  detail:'lorem',
                   sub:[
                     {
                       id:1,
-                      confirmLetter:'1',
-                      dateconfirm:'25/09/58',
-                      confirmItem:[{
-                        id:1,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'50kg PP bags',
-                        price:'USD392/MT'
-                      },{
-                        id:2,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'25kg PP bags',
-                        price:'USD392/MT'
-                      }
-                     ]
+                      cityDestination:'Chongqing'
+                    },
+                    {
+                      id:2,
+                      cityDestination:'Shanghai'
                     }
                   ]
                 }
+
               ]}
         }
       },

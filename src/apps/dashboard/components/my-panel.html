@@ -20,16 +20,16 @@
     <panel-seleted>
       <section-content name="detail">
         <iron-pages attr-for-selected="name-page-detail" selected="{{pageSeletedDetail}}">
-          <promise-detail data="{{dataSelected}}" name-page-detail="promiseDetail"></promise-detail>
-          <promise-confirm name-page-detail="promiseConfirm"></promise-confirm>
-          <promise-fileup name-page-detail="promiseFileup"></promise-fileup>
-          <period-lot name-page-detail="periodLot"></period-lot>
-          <period-city name-page-detail="periodCity"></period-city>
-          <vessel-detail name-page-detail="vesselDetail"></vessel-detail>
-          <vessel-draf name-page-detail="vesselDraf"></vessel-draf>
-          <invoice-detail name-page-detail="invoiceDetail"></invoice-detail>
-          <payment-detail name-page-detail="paymentDetail"></payment-detail>
+          <promise-detail data="{{dataselected}}" name-page-detail="promiseDetail"></promise-detail>
+          <promise-confirm data="{{dataselected}}" name-page-detail="promiseConfirm"></promise-confirm>
+          <period-lot data="{{dataselected}}" name-page-detail="periodLot"></period-lot>
+          <period-city data="{{dataselected}}" name-page-detail="periodCity"></period-city>
+          <vessel-detail data="{{dataselected}}" name-page-detail="vesselDetail"></vessel-detail>
+          <vessel-draf data="{{dataselected}}" name-page-detail="vesselDraf"></vessel-draf>
+          <invoice-detail data="{{dataselected}}" name-page-detail="invoiceDetail"></invoice-detail>
+          <payment-detail data="{{dataselected}}" name-page-detail="paymentDetail"></payment-detail>
         </iron-pages>
+
       </section-content>
       <section-content name="print">
         <iron-pages attr-for-selected="name-page-print" selected="{{pageSeletedPrint}}">
@@ -39,10 +39,8 @@
         </iron-pages>
       </section-content>
       <section-content name="file">
-
           <!-- <promisefile name="promiseFile"></promisefile> -->
           <promise-fileup ></promise-fileup>
-
       </section-content>
     </panel-seleted>
 
@@ -52,9 +50,16 @@
     Polymer({
       is: "my-panel",
       properties: {
-        pageSeletedDetail: {
+        pageSeletedDetail:{
           type: String,
-          value:'invoiceDetail'
+          value:'promiseDetail'
+          // value:'promiseConfirm'
+          // value:'periodLot'
+          // value:'periodCity'
+          // value:'vesselDetail'
+          // value:'vesselDraf'
+          // value:'invoiceDetail'
+          // value:'paymentDetail'
         },
         pageSeletedPrint:{
           type: String,
