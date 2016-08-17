@@ -39,7 +39,6 @@
   .dropzone{
     @apply(--layout-vertical);
     @apply(--layout-wrap);
-    padding:20px;
   }
   .zone{
     /*background-color:#ccc;*/
@@ -57,17 +56,29 @@
         <div id="dropzone" class="dropzone">
             <!-- dropfile -->
 
-            <iron-icon icon="icons:description"></iron-icon>
-            <div class="zone">
-              <div class="text">ไม่มีไฟล์</div>
-              <div class="text">ลากไฟล์มาวางหรือกดเพิ่ม</div>
-              <div class="text">ไฟล์</div>
-              <paper-menu multi>
-                 <template is="dom-repeat" items="{{files}}">
-                    <paper-item>{{item.name}}</paper-item>
-                 </template>
-             </paper-menu>
-            </div>
+
+            <template is="dom-if" if="{{!seleted}}">
+              <div class="zone">
+                <div class="text" style="margin-top:50px;"><iron-icon icon="icons:description"></iron-icon></div>
+                <div class="text">ไม่มีไฟล์</div>
+                <div class="text">ลากไฟล์มาวางหรือกดเพิ่ม</div>
+                <div class="text">ไฟล์</div>
+              </div>
+            </template>
+
+
+            <paper-menu multi>
+               <template is="dom-repeat" items="{{files}}">
+                  <!-- <paper-item>{{item.name}}</paper-item> -->
+                  <paper-item class="flex-horizontal bd">
+                        <div class="flexchild-1">{{item.name}}</div>
+                        <div class="flexchild-1">
+                          <div class="content2">29/01/2558</div>
+                        </div>
+                        <paper-icon-button icon="icons:delete" style="color: gray;"></paper-icon-button>
+                  </paper-item>
+               </template>
+            </paper-menu>
 
         </div>
       </div>
@@ -83,6 +94,10 @@
   <script>
   Polymer({
     properties:{
+      seleted:{
+        type:Boolean,
+        value:false
+      },
       files:{
         type:Object,
         value:function(){
@@ -91,6 +106,7 @@
         notify:true
       }
     },
+    observers:['checkSeleted(files.*)'],
     ready:function(){
       this.testza = this;
       var dropzone = this.$.dropzone;
@@ -105,16 +121,21 @@
 
         var files = event.dataTransfer.files;
         for (var i=0; i<files.length; i++) {
-          console.log(files[i]);
+          //console.log(files[i]);
           rootDom.push('files',files[i]);
         }
       }
       this.$.dropSelect.onchange = function(){
         var files = this.files;
         for (var i = 0; i < files.length; i++) {
-          console.log(files[i]);
+          //console.log(files[i]);
           rootDom.push('files',files[i]);
         }
+      }
+    },
+    checkSeleted:function(arr){
+      if(this.files.length!=0){
+        this.seleted = true;
       }
     }
   });
