@@ -25,29 +25,57 @@
   iron-icon{
     width: 3em;
     height: 3em;
-    align-self: center;
     color: gray;
+    align-self: center;
+  }
+	.upload input {
+		visibility: hidden;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+	}
+  .dropzone{
+    @apply(--layout-vertical);
+    @apply(--layout-wrap);
+    padding:20px;
+  }
+  .zone{
+    /*background-color:#ccc;*/
+    height:300px;
   }
   </style>
+
   <template>
     <div class="layout vertical">
       <div class="layout horizontal top">
         <div class="flex headfile">ชื่อไฟล์</div>
         <div class="flex headfile">วันที่</div>
       </div>
-
       <div class="content">
         <div id="dropzone" class="dropzone">
             <!-- dropfile -->
-            <paper-menu multi>
-               <template is="dom-repeat" items="{{files}}">
-                  <paper-item>{{item.name}}</paper-item>
-               </template>
-           </paper-menu>
+
+            <iron-icon icon="icons:description"></iron-icon>
+            <div class="zone">
+              <div class="text">ไม่มีไฟล์</div>
+              <div class="text">ลากไฟล์มาวางหรือกดเพิ่ม</div>
+              <div class="text">ไฟล์</div>
+              <paper-menu multi>
+                 <template is="dom-repeat" items="{{files}}">
+                    <paper-item>{{item.name}}</paper-item>
+                 </template>
+             </paper-menu>
+            </div>
+
         </div>
       </div>
-      <input id="dropSelect" type="file" id="input" multiple>
-      <paper-button class="button" raised>เพิ่มไฟล์</paper-button>
+
+      <label class="upload">
+        <paper-button raised>เพิ่มไฟล์</paper-button>
+        <input id="dropSelect" type="file" id="input" multiple>
+      </label>
 
     </div>
 
