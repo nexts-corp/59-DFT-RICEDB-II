@@ -1,7 +1,110 @@
+<link rel="import" href="components/grid/nx-grid.html">
+<link rel="import" href="components/my-panel.html">
+<link rel="import" href="/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="/src/components/flexboxgrid.html">
+
+
 
 <dom-module id="dashboard-pay">
+  <style include="iron-flex iron-flex-factors flexboxgrid">
+      .flex-horizontal {
+    @apply(--layout-horizontal);
+    }
+    .flexchild-1 {
+      @apply(--layout-flex);
+    }
+    .flexchild-2 {
+      @apply(--layout-flex-2);
+    }
+    .rightdata{
+      height:100%;
+      /*display: none;*/
+      border-left: 1px solid var(--paper-grey-300);
+      padding: 5px 10px 0px 10px;
+    }
+    .bd {
+      /*border: 1px solid #000;*/
+    }
+    #changeDivcss{
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        transition: all 1s ease;
+
+    }
+
+    </style>
+
   <template>
-    1234
+    <div class=" flex-horizontal">
+      <div class="flexchild-1 ">
+      <!-- <span>numSelect<span>  {{numSelect}} -->
+        <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
+        <nx-grid data="{{data}}" >
+          <items type="primary">
+            <list item="id" label="รหัส" width="flex"></list>
+            <list item="promiseName" label="ชื่อ" width="flex-3"></list>
+            <list item="date" label="ปี" width="flex"></list>
+          </items>
+          <items type="secondary" item="sub">
+            <list item="" label="" width="flex"></list>
+            <list item="confirmLetter" label="Confirmation Letter" width="flex-9"></list>
+          </items>
+          <template type="primary">
+            <input placeholder="text" value="primary">
+          </template>
+          <template type="secondary">
+            <input placeholder="text" value="secondary">
+          </template>
+        </nx-grid>
+        <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
+      </div>
+
+      <div class=" rightdata flexchild-1"id="changeDivcss">
+        <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
+        <panel-seleted>
+          <section-content name="detail">
+
+
+
+
+            <!--<div class="col-xs-12 col-sm-3 col-md-2 col-lg-1">
+                  <paper-input label="disabled input" disabled></paper-input>
+                </div>-->
+
+            <paper-material style="margin-top:10px;" elevation="1">
+              <div class="row" style="margin:10px;">
+                
+                <div class="col-xs-12  col-md-4 col-lg-4">
+                  <paper-input  label="Invoice No." value="C277/2558" always-float-label></paper-input>
+                </div>
+                <div class="col-xs-12  col-md-6 col-lg-4">
+                  <paper-input label="ชื่อเรือ" value="HANJIN BELAWAN" always-float-label></paper-input>
+                </div>
+                <div class="col-xs-12  col-md-4 col-lg-4">
+                  <paper-input label="ลำที่" value="2" always-float-label></paper-input>
+                </div>
+                <div class="col-xs-12  col-md-4 col-lg-4">
+                  <paper-textarea label="Textarea label"></paper-textarea>
+                </div>
+                <div class="col-xs-12  col-md-4 col-lg-4">
+                  <paper-textarea label="Textarea label"></paper-textarea>
+                </div>
+              </div>
+
+            </paper-material>
+
+
+
+
+
+
+
+          </section-content>
+        </panel-seleted>
+      </div>
+    </div>
   </template>
   <script>
     Polymer({
@@ -11,6 +114,20 @@
       ],
       created:function(){
         this.nxSetLayout('layout-main');
+      },
+      changeDiv:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+        // console.log(css);
+        console.log(css.classList.contains('flexchild-2'));
+        if (css.classList.contains('flexchild-2') == false){
+          // css.style.display = "inline";
+          css.className += " flexchild-2";
+        }else{
+          // css.style.display = "none";
+          css.classList.remove("flexchild-2");
+        }
+
       }
     });
   </script>
