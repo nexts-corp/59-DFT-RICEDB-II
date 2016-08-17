@@ -1,0 +1,221 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+
+
+<dom-module id="re-port">
+    <template>
+      <style is="custom-style" include="demo-pages-shared-styles">
+        demo-snippet {
+            --demo-snippet-demo:{
+                padding: 0;
+            }
+        }
+        .container{
+            padding: 5px;
+            margin: 0;
+        }
+        .container > div{
+            padding: 15px;
+            margin: 5px;
+            min-height: 20px;
+            text-align: left;
+        }
+        .vertical-section-container{
+            max-width: 700px;
+        }
+        .flex-vertical {
+            @apply(--layout-vertical);
+        }
+        .flexchild-vertical {
+            @apply(--layout-flex);
+        }
+        .flex-horizontal {
+            @apply(--layout-horizontal);
+            
+        }
+        .flexchild {
+            @apply(--layout-flex);
+        }
+        
+        div{
+            padding: 8px;
+        }
+        table{
+           padding: 8px;
+           border-collapse: collapse;
+           border-spacing: 0;
+           width: 100%;
+           border: 1px solid #ddd;
+        }
+        tr,th,td{
+            border: 1;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even){background-color: white}
+        h3{
+            text-align: center;
+        }
+
+        #dataCenter{
+            margin: auto;
+            width: 80%;
+            padding: 10px;
+        }
+        input .data{
+            width : 50px;
+        }
+        .responsive{
+           border: 1px solid red;
+           float: left;
+           margin: 10px;
+           padding: 10px;
+           max-width: 300px;
+           height: 300px;
+        }
+        .center{
+            text-align: center;
+            margin: auto;
+            width: 100%;
+            padding: 10px;
+          }
+        .checkbox{
+            height: 100%;
+            padding-top: 150px;
+            padding-right: 30px;
+            padding-left: 10px;
+          }
+      </style>
+    <div style="background-color: white">
+        <div class="container flex-vertical">
+      <div> <h3>รายละเอียดการรับเงินค่าข้าว ครั้งที่ 1 จำนวนเงินxxxxxxบาท</h3></div>
+    </div>
+    <div class="container" id="dataCenter">
+      <div class="responsive">
+          <div class="flex-horizontal">
+              <div class="flex-vertical">
+                  <div>Invoice No.</div>
+                  <div>C277/2558</div>
+              </div>
+              <div class="flex-vertical">
+                  <div>ชื่อเรือ</div>
+                  <div>HANJIN BELAWAN V.1609N</div>
+              </div>
+          </div>
+          <div class="flex-vertical">
+              <div>ค่าธรรมเนียมธนาคารต่างประเทศ USD</div>
+              <div>37</div>
+              <div>ค่าธรรมเนียมลำละ</div>
+              <div><input type="text" id="" name=""> <span>บาท</span></div>
+          </div> 
+       </div>           
+      </div>
+      <div class="flex-vertical responsive">
+          <div class="flex-horizontal">
+              <div class="flex-vertical">
+                <div>ลำดับที่</div>
+                <div>21</div>              
+              </div>
+              <div class="flex-vertical">
+                  <div>จำนวน(ตัน)</div>
+                  <div>1,000</div>
+              </div>
+          </div>
+          <div class="flex-vertical">
+              <div>เป็นเงินบาท</div>
+              <div>xxxxxx</div>
+              <div>จำนวนผู้ส่งสอบ</div>
+              <div><input type="text" id="" name=""> <span>บริษัท</span></div>
+          </div>
+          
+      </div>
+        <div class="responsive">
+           <div class="flex-horizontal">
+              <div class="flex-vertical">
+                   <div>ตัวละ USD</div>
+                   <div>392</div>
+                   <div>ค่าธรรมเนี่ยม บาท</div>
+                   <div>500</div>
+              </div>
+              <div class="flex-vertical">
+                   <div>มูลค่า USD</div>
+                   <div>xxxxxx</div>
+                   <div>รวมค่าธรรมเนี่ยม</div>
+                   <div>xxxxxx</div>
+              </div>
+              <div class="flex-vertical">
+                   <div>อัตราแลกเปลี่ยน</div>
+                   <div>34.96 บาท</div>
+                   <div>จำนวนเรือทั้งหมด</div>
+                   <div>2 (ลำ)</div> 
+              </div>
+           </div>
+        </div>
+    </div>
+     <div class="flex-horizontal center">
+      <div class="flexchild " style="overflow-x:auto;  border: 2px solid black;">
+          <table border="1">
+              <tr>
+                  <th>ผู้ส่งมอบ</th>
+                  <th>จำนวน(ต้น)</th>
+                  <th>จำนวน(USD)</th>
+                  <th>จำนวน(บาท)</th>
+                  <th>ค่าธรรมเนียม(บาท)</th>
+                  <th>หักค่าธรรมเนียมคงเหลือ(บาท)</th>
+                  <th>หัก ภาษี ณ ที่จ่าย</th>
+                  <th>จำนวนเงินคงเหลือ (บาท)</th>
+                  <th>เลขที่เช็ค</th>
+                  <th>รับเช็คแล้ว</th>
+              </tr>
+              <tr>
+                  <td>บริษัทแคปปิตัลซีเรียล จำกัด</td>
+                  <td>500</td>
+                  <td>164,500</td>
+                  <td>5,706,50</td>
+                  <td><input type="text" value="228.708"></td>
+                  <td><input type="text" value="5,706,276.292"></td>
+                  <td><input type="text" value="57,062.762"></td>
+                  <td><input type="text" value="5,649,213.53"></td>
+                  <td><input type="text" value="...."></td>
+                  <td><input type="checkbox"><p>รับเช็คแล้ว วันที่ ......</p></td>
+                  
+              </tr>
+               <tr>
+                  <td>บริษัทไขยพรไรซ จำกัด</td>
+                  <td>500</td>
+                  <td>164,500</td>
+                  <td>5,706,50</td>
+                  <td><input type="text" value="228.708"></td>
+                  <td><input type="text" value="5,706,276.292"></td>
+                  <td><input type="text" value="57,062.762"></td>
+                  <td><input type="text" value="5,649,213.53"></td>
+                  <td><input type="text" value="...."></td>
+                  <td><input type="checkbox"><p>รับเช็คแล้ว วันที่ ......</p></td>
+              </tr>
+          </table>
+      </div>
+<!--
+      <div class="responsive">
+         <div class="checkbox">
+             <input type="checkbox"><p>รับเช็คแล้ว วันที่ ......</p>
+             <input type="checkbox"><p>รับเช็คแล้ว วันที่ ......</p>
+         </div>
+      </div>
+-->
+    </div>
+    <div class="container flex-horizontal">
+      <div class="flexchild"></div>
+      <div>
+          <paper-button raised>ยกเลิก</paper-button>
+          <paper-button raised>บันทึก</paper-button>
+      </div>
+    </div>
+    </div>  
+    
+      
+    </template>
+    <script>
+        Polymer({
+           is: 're-port' 
+        });
+    </script>
+</dom-module>
