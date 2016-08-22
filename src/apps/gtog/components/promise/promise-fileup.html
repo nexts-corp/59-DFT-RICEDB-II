@@ -1,0 +1,122 @@
+<dom-module id="promise-fileup">
+  <style include="iron-flex iron-flex-factors">
+  .top{
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .content2{
+    padding-left: 15px;
+  }
+  .headfile{
+    text-align: center;
+  }
+  paper-button{
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+  .text{
+    text-align: center;
+    color: gray;
+    margin-top: 10px;
+  }
+  iron-icon{
+    width: 3em;
+    height: 3em;
+    color: gray;
+    align-self: center;
+  }
+	.upload input {
+		visibility: hidden;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+	}
+  .dropzone{
+    @apply(--layout-vertical);
+    @apply(--layout-wrap);
+    padding:20px;
+  }
+  .zone{
+    /*background-color:#ccc;*/
+    height:300px;
+  }
+  </style>
+
+  <template>
+    <div class="layout vertical">
+      <div class="layout horizontal top">
+        <div class="flex headfile">ชื่อไฟล์</div>
+        <div class="flex headfile">วันที่</div>
+      </div>
+      <div class="content">
+        <div id="dropzone" class="dropzone">
+            <!-- dropfile -->
+
+            <iron-icon icon="icons:description"></iron-icon>
+            <div class="zone">
+              <div class="text">ไม่มีไฟล์</div>
+              <div class="text">ลากไฟล์มาวางหรือกดเพิ่ม</div>
+              <div class="text">ไฟล์</div>
+              <paper-menu multi>
+                 <template is="dom-repeat" items="{{files}}">
+                    <paper-item>{{item.name}}</paper-item>
+                 </template>
+             </paper-menu>
+            </div>
+
+        </div>
+      </div>
+
+      <label class="upload">
+        <paper-button raised>เพิ่มไฟล์</paper-button>
+        <input id="dropSelect" type="file" id="input" multiple>
+      </label>
+
+    </div>
+
+  </template>
+  <script>
+  Polymer({
+    properties:{
+      files:{
+        type:Object,
+        value:function(){
+          return [];
+        },
+        notify:true
+      }
+    },
+    ready:function(){
+      this.testza = this;
+      var dropzone = this.$.dropzone;
+      dropzone.ondragover = dropzone.ondragenter = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      var rootDom = this;
+      dropzone.ondrop = function(event){
+        event.stopPropagation();
+        event.preventDefault();
+
+        var files = event.dataTransfer.files;
+        for (var i=0; i<files.length; i++) {
+          console.log(files[i]);
+          rootDom.push('files',files[i]);
+        }
+      }
+      this.$.dropSelect.onchange = function(){
+        var files = this.files;
+        for (var i = 0; i < files.length; i++) {
+          console.log(files[i]);
+          rootDom.push('files',files[i]);
+        }
+      }
+    }
+  });
+  </script>
+</dom-module>

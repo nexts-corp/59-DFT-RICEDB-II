@@ -1,0 +1,64 @@
+<dom-module id="main-card">
+  <style is="custom-style" include="iron-flex iron-flex-alignment">
+    .card{
+      width: 300px;
+      height: auto;
+      margin: 10px;
+    }
+    .heading{
+      padding-left: 20px;
+      padding-top: 15px;
+    }
+    .container {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
+    }
+    .title{
+      padding-top: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+  <template>
+    <div class="container">
+
+    <div class="horizontal layout wrap" style="width: 960px">
+      <template is="dom-repeat" items="[[cardName]]">
+      <div class="card" >
+        <div class="flex">
+          <paper-card class="card" on-tap="clickChange" url$="[[item.path]]">
+            <div class="heading">
+              <div class="layout horizontal">
+                <div class="flex title">[[item.nameMenu]]</div>
+                </div>
+            </div>
+            <div class="card-content">
+              [[item.detail]]
+            </div>
+          </paper-card>
+        </div>
+      </div>
+
+      </template>
+    </div>
+  </div>
+  </template>
+  <script>
+    Polymer({
+      is: "main-card",
+      behaviors: [
+        nxCoreBehavior
+      ],
+      properties: {
+        cardname: {
+          type: Object
+        }
+      },
+      clickChange:function(e){
+        // console.log(e.currentTarget.getAttribute('url'));
+        var url = e.currentTarget.getAttribute('url')
+        this.nxChangePath(url);
+      }
+    });
+  </script>
+</dom-module>

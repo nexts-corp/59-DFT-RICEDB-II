@@ -1,0 +1,42 @@
+<link rel="import" href="components/my-drawer.html">
+<dom-module id="layout-dashboard">
+  <style media="screen">
+  paper-toolbar.toolbarHead {
+  box-shadow: 0px 3px 9px #888888;
+  /*border-right: 1px solid var(--paper-grey-300);*/
+   --paper-toolbar-background: var(--paper-orange-300);
+   --paper-toolbar-height:70px;
+   --paper-toolbar-title: {
+     font-size: 1em;
+     height: 20px;
+     margin-left: 1px;
+   };
+ }
+  </style>
+  <template>
+    <paper-toolbar class="toolbarHead">
+      <div>
+        <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+      </div>
+    </paper-toolbar>
+    <div id="main-content">
+      <tag-page-load></tag-page-load>
+    </div>
+
+
+  </template>
+  <script>
+    Polymer({
+      is:'layout-dashboard',
+      behaviors:[nxTemplateBehavior,nxLocalesBehavior],
+      changeLanguage:function(){
+        if(this.language == 'th'){
+          this.nxSwitchLanguage('en');
+        }else{
+          this.nxSwitchLanguage('th');
+        }
+      }
+    });
+  </script>
+
+</dom-module>
