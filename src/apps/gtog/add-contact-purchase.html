@@ -1,0 +1,227 @@
+<!-- <link rel="import" href="components/my-listmenu.html"> -->
+<link rel="import" href="components/grid/nx-grid.html">
+<link rel="import" href="components/my-panel.html">
+<dom-module id="gtog-add-contact-purchase">
+  <style include="iron-flex iron-flex-factors">
+    .flex-horizontal {
+   @apply(--layout-horizontal);
+   }
+   .flexchild-1 {
+     @apply(--layout-flex);
+   }
+   .flexchild-2 {
+     @apply(--layout-flex-2);
+   }
+   .rightdata{
+     height:100%;
+     /*display: none;*/
+     border-left: 1px solid var(--paper-grey-300);
+     padding: 5px 10px 0px 10px;
+   }
+   .bd {
+     /*border: 1px solid #000;*/
+   }
+   #changeDivcss{
+      -webkit-transition: all 1s ease;
+      -moz-transition: all 1s ease;
+      -o-transition: all 1s ease;
+      transition: all 1s ease;
+
+   }
+  </style>
+  <template>
+    <div class=" flex-horizontal">
+      <div class="flexchild-1 ">
+      <!-- <span>numSelect<span>  {{numSelect}} -->
+        <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
+        <nx-grid data="{{data}}" >
+          <items type="primary">
+            <list item="id" label="รหัส" width="flex"></list>
+            <list item="promiseName" label="ชื่อ" width="flex-3"></list>
+            <list item="date" label="ปี" width="flex"></list>
+          </items>
+          <items type="secondary" item="sub">
+            <list item="" label="" width="flex"></list>
+            <list item="confirmLetter" label="Confirmation Letter" width="flex-9"></list>
+          </items>
+          <template type="primary">
+            <input placeholder="text" value="primary">
+          </template>
+          <template type="secondary">
+            <input placeholder="text" value="secondary">
+          </template>
+        </nx-grid>
+        <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
+      </div>
+
+      <div class=" rightdata flexchild-1"id="changeDivcss">
+        <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
+          <my-panel dataselected="{{promise}}" page-seleted-detail="{{pageSeletedDetail}}"></my-panel>
+      </div>
+    </div>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "gtog-add-contact-purchase",
+      behaviors: [
+        nxCoreBehavior,
+        nxLocalesBehavior
+      ],
+      properties:{
+          pageSeletedDetail:{
+            type:String,
+            value:'promiseDetail'
+          },
+          data:{
+            type:Object,
+            value:function(){
+              return [
+                {
+                  id:1 ,
+                  promiseName:'COFCO ประเทศจีน ',
+                  promiseNo:'COFCO ประเทศจีน ',
+                  date:'21/9/58',
+                  price:'fob',
+                  rice:[{
+                    riceType:'jasmineRice',
+                    volume:500000
+                  }],
+                  customerDetail:'นาย ก นามกสุล น อยู่ประเทศ ......',
+                  detail:'ทดสอบข้อความ',
+                  sub:[
+                    {
+                      id:1,
+                      confirmLetter:'1',
+                      dateconfirm:'25/09/58',
+                      confirmItem:[{
+                        id:1,
+                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        package:'50kg PP bags',
+                        price:'USD392/MT'
+                      }
+                     ]
+                   },
+                   {
+                     id:2,
+                     confirmLetter:'2',
+                     dateconfirm:'25/11/58',
+                     confirmItem:[{
+                       id:1,
+                       item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                       package:'25kg PP bags',
+                       price:'USD392/MT'
+                     }
+                    ]
+                   }
+                  ]
+                },
+                {
+                  id:2 ,
+                  promiseName:'BULOG  ประเทศอินโดนีเซีย',
+                  promiseNo:'BULOG  ประเทศอินโดนีเซีย',
+                  date:'21/9/58',
+                  price:'fob',
+                  rice:[{
+                    riceType:'jasmineRice',
+                    volume:900000
+                  }],
+                  customerDetail:'นาย ก นามกสุล น อยู่ประเทศ ......',
+                  detail:'ทดสอบข้อความ',
+                  sub:[
+                    {
+                      id:1,
+                      confirmLetter:'1',
+                      dateconfirm:'25/09/58',
+                      confirmItem:[{
+                        id:1,
+                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        package:'50kg PP bags',
+                        price:'USD392/MT'
+                      },{
+                        id:2,
+                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        package:'25kg PP bags',
+                        price:'USD392/MT'
+                      }
+                     ]
+                    }
+                  ]
+                },
+                {
+                  id:3 ,
+                  promiseName:'NFA ประเทศฟิลิปินส์',
+                  promiseNo:'NFA ประเทศฟิลิปินส์',
+                  date:'21/9/58',
+                  price:'fob',
+                  rice:[{
+                    riceType:'jasmineRice',
+                    volume:500000
+                  }],
+                  customerDetail:'นาย ก นามกสุล น อยู่ประเทศ ......',
+                  detail:'ทดสอบข้อความ',
+                  sub:[
+                    {
+                      id:1,
+                      confirmLetter:'1',
+                      dateconfirm:'25/09/58',
+                      confirmItem:[{
+                        id:1,
+                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        package:'50kg PP bags',
+                        price:'USD392/MT'
+                      },{
+                        id:2,
+                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        package:'25kg PP bags',
+                        price:'USD392/MT'
+                      }
+                     ]
+                    }
+                  ]
+                }
+              ]}
+        }
+      },
+      changeDiv:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+        // console.log(css);
+        console.log(css.classList.contains('flexchild-2'));
+        if (css.classList.contains('flexchild-2') == false){
+          // css.style.display = "inline";
+          css.className += " flexchild-2";
+        }else{
+          // css.style.display = "none";
+          css.classList.remove("flexchild-2");
+        }
+
+      },
+      created:function(){
+        this.nxSetTitle('ทำสัญญา');
+        this.nxSetLayout('layout-main');
+      },
+      ready:function(){
+        this.$$('nx-grid').addEventListener('nx-grid-tap', (e) => {
+          console.log('click',e.detail.data);
+          this.promise= e.detail.data;
+          // console.log(this.promise);
+        }),
+        this.$$('nx-grid').addEventListener('nx-grid-dblclick', (e) => {
+          console.log('dblclick',e.detail.data);
+          this.nxChangePath('gtog/add-period');
+        })
+      },
+      observers:['obdata(dataSelected)','obDataChange(data.*)'],
+      obdata:function(select){
+          console.log(select);
+          // console.log(this.numSelect);
+      },
+      obDataChange:function(x){
+        // console.log('sss');
+      },
+
+    });
+  </script>
+</dom-module>

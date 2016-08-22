@@ -1,0 +1,51 @@
+<link rel="import" href="panel-seleted-animated.html">
+
+<dom-module id="panel-seleted">
+
+  <style>
+    paper-tabs{
+      /*width: 300px;*/
+      /*margin-left: 100px;*/
+      background-color: var(--paper-orange-300);
+      color: #fff;
+    }
+  </style>
+
+    <template>
+      <paper-tabs selected="{{selected}}" align-bottom>
+        <paper-tab>รายละเอียด</paper-tab>
+        <paper-tab>พิมพ์</paper-tab>
+        <paper-tab>ไฟล์</paper-tab>
+      </paper-tabs>
+
+      <!--<iron-pages selected="{{selected}}">
+        <div><content select="section-content[name=detail]"></content></div>
+        <div><content select="section-content[name=print]"></content></div>
+        <div><content select="section-content[name=file]"></content></div>
+      </iron-pages>-->
+
+      <neon-animated-pages selected="{{selected}}">
+        <panel-seleted-animated>
+          <content select="section-content[name=detail]"></content>
+        </panel-seleted-animated>
+        <panel-seleted-animated>
+          <content select="section-content[name=print]"></content>
+        </panel-seleted-animated>
+        <panel-seleted-animated>
+          <content select="section-content[name=file]"></content>
+        </panel-seleted-animated>
+      </neon-animated-pages>
+
+    </template>
+    <script>
+        Polymer({
+            is:'panel-seleted',
+            properties: {
+              selected: {
+                type: String,
+                value: 0
+              }
+            }
+        });
+    </script>
+</dom-module>
