@@ -12,7 +12,7 @@
 
 
 <dom-module id="dashboard-pay">
-  <style include="iron-flex iron-flex-factors">
+  <style is="custom-style" include="iron-flex iron-flex-factors">
       .flex-horizontal {
     @apply(--layout-horizontal);
     }
@@ -50,11 +50,16 @@
 
     }
       .button{
-          position: fixed;
-          bottom : 0px;
-          right : 0px;
+          position: relative;
+          top : 10px;
+          left : 55%;
           background-color: white;
-      }  
+      } 
+      .content1{
+          overflow-x:auto; 
+          border: 2px solid black; 
+          width: 650px;
+      }
 /*
       .right{
           padding-right: 100%;
@@ -63,7 +68,7 @@
     </style>
 
   <template>
-    <div class=" flex-horizontal" style="overflow-x:auto;">
+    <div class=" flex-horizontal">
       <div class="flexchild-1 ">
       <!-- <span>numSelect<span>  {{numSelect}} -->
         <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
@@ -141,8 +146,11 @@
                     
                   </gl-grid-row>
                   <gl-grid-row>
-                    <gl-grid-col width="[[getWidth]]" xs="12" sm="12" md="12" lg="12" style="padding-top:10px">
-                         <re-port></re-port>
+                    <gl-grid-col width="[[getWidth]]" xs="12" sm="12" md="12" lg="12" style="padding-top:10px;">
+                         <div id="tableReport" class="content1">
+                             <re-port></re-port>
+                         </div>
+                         
                     </gl-grid-col>
                   </gl-grid-row>
                   <gl-grid-row>
@@ -171,7 +179,7 @@
       ],
       created:function(){
         this.nxSetLayout('layout-main');
-      },
+      },    
       changeDiv:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
         // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
@@ -180,9 +188,10 @@
         if (css.classList.contains('flexchild-2') == false){
           // css.style.display = "inline";
           css.className += " flexchild-2";
-        }else{
+        }
+          else{
           // css.style.display = "none";
-          css.classList.remove("flexchild-2");
+          css.classList.remove("flexchild-2");  
         }
 
       }
