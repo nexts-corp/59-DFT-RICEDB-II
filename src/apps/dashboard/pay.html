@@ -50,8 +50,10 @@
 
     }
       .button{
-          padding-top: 10px;
-          padding-left: 50%;
+          position: fixed;
+          bottom : 0px;
+          right : 0px;
+          background-color: white;
       }  
 /*
       .right{
@@ -61,11 +63,11 @@
     </style>
 
   <template>
-    <div class=" flex-horizontal">
+    <div class=" flex-horizontal" style="overflow-x:auto;">
       <div class="flexchild-1 ">
       <!-- <span>numSelect<span>  {{numSelect}} -->
         <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
-        <nx-grid data="{{data}}" >
+        <nx-grid data="{{data}}">
           <items type="primary">
             <list item="id" label="รหัส" width="flex"></list>
             <list item="promiseName" label="ชื่อ" width="flex-3"></list>
@@ -93,7 +95,7 @@
                   <paper-input label="disabled input" disabled></paper-input>
                 </div>-->
        
-            <paper-material style="margin-top:10px;" elevation="1" >
+            <paper-material style="margin-top:10px;" elevation="1">
               
                  <gl-form-panel label="รายละเอียดการรับเงินค่าข้าว ครั้งที่ 1 จำนวนเงิน xxxxxxx บาท">
                   <gl-grid-row width="{{getWidth}}">
@@ -140,9 +142,7 @@
                   </gl-grid-row>
                   <gl-grid-row>
                     <gl-grid-col width="[[getWidth]]" xs="12" sm="12" md="12" lg="12" style="padding-top:10px">
-                      <!--<div style="overflow-x:auto; width: 100%; border: 2px solid black;">
                          <re-port></re-port>
-                      </div>-->
                     </gl-grid-col>
                   </gl-grid-row>
                   <gl-grid-row>
@@ -153,13 +153,15 @@
                         </div>
                     </div>
                   </gl-grid-row>
+                  
             </paper-material>
-
+              
           </section-content>
         </panel-seleted>
       </div>
-      
+     
     </div>
+    
   </template>
   <script>
     Polymer({
