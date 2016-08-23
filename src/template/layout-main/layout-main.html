@@ -5,7 +5,7 @@
 
     /*border-right: 1px solid var(--paper-grey-300);*/
      --paper-toolbar-background: var(--paper-orange-300);
-     --paper-toolbar-height:70px;
+     --paper-toolbar-height:15px;
      --paper-toolbar-title: {
        font-size: 1em;
        height: 20px;
@@ -13,11 +13,12 @@
      };
 
    }
-
-   paper-toolbar.toolbarMid {
+  paper-toolbar.toolbarMid {
     --paper-toolbar-background: var(--paper-grey-50);
-    --paper-toolbar-height:57px;
+    --paper-toolbar-height:50px;
     --paper-toolbar-title: {
+        font-size: 1em;
+        color: black;
         font-weight: bold;
     };
   }
@@ -33,31 +34,61 @@
     height:100%;
     border-right: 1px solid var(--paper-grey-300);
   }
+    paper-button.custom {
+      --paper-button:{
+        height: 33px;
+        width: 90px;
+      }
+     --paper-button-ink-color: var(--paper-green-a200);
+     --paper-button-flat-keyboard-focus: {
+       background-color: var(--paper-green-a200);
+       color: white !important;
+     };
+     --paper-button-raised-keyboard-focus: {
+       background-color: var(--paper-green-a200) !important;
+       color: white !important;
+     };
+   }
+     paper-button.custom:hover {
+      background-color: var(--paper-green-100);
+    }
+    paper-button.green {
+      background-color: var(--paper-green-500);
+      color: white;
+      --paper-button-raised-keyboard-focus: {
+        background-color: var(--paper-pink-a200) !important;
+        color: white !important;
+      };
+    }
   </style>
   <template>
-    <paper-drawer-panel>
+    <paper-drawer-panel drawer-width="235px">
       <paper-header-panel drawer>
-        <paper-toolbar class="toolbarHead">
-          <div class="title"></div>
-        </paper-toolbar>
-        <paper-toolbar class="toolbarMid">
-          <div class="title"></div>
-        </paper-toolbar>
+        <paper-toolbar class="toolbarHead"></paper-toolbar>
+        <paper-toolbar class="toolbarMid"></paper-toolbar>
+        <paper-toolbar class="toolbarMid"></paper-toolbar>
         <div class="drawerss">
           <my-drawer ></my-drawer>
         </div>
       </paper-header-panel>
       <paper-header-panel main>
         <paper-toolbar class="toolbarHead">
-          <div>
+          <!-- <div>
             <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
             <div class="title">  COCCO ประเทศจีน</div>
+          </div> -->
+        </paper-toolbar>
+        <paper-toolbar class="toolbarMid">
+          <!-- <div class="">
+            <paper-button raised>เพิ่ม</paper-button>
+          </div> -->
+          <div>
+            <div class="title">ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+            <!-- <div class="title">  COCCO ประเทศจีน</div> -->
           </div>
         </paper-toolbar>
         <paper-toolbar class="toolbarMid">
-          <div class="">
-            <paper-button raised>เพิ่ม</paper-button>
-          </div>
+          <paper-button raised class="custom green">เพิ่ม</paper-button>
         </paper-toolbar>
         <tag-page-load></tag-page-load>
       </paper-header-panel>
