@@ -20,13 +20,13 @@
       @apply(--layout-flex);
     }
     .flexchild-2 {
-      @apply(--layout-flex-3); 
-          
+      @apply(--layout-flex-3);
+
     }
     .container {
       @apply(--layout-horizontal);
-      @apply(--layout-wrap); 
-    }  
+      @apply(--layout-wrap);
+    }
     .rightdata{
       height:100%;
       /*display: none;*/
@@ -40,8 +40,8 @@
            --paper-input-container-label:{
                font-size: 18px;
                color: red;
-          }   
-      }  
+          }
+      }
     #changeDivcss{
         -webkit-transition: all 1s ease;
         -moz-transition: all 1s ease;
@@ -54,10 +54,10 @@
           top : 10px;
           left : 55%;
           background-color: white;
-      } 
+      }
       .content1{
-          overflow-x:auto; 
-          border: 2px solid black; 
+          overflow-x:auto;
+          border: 2px solid black;
           width: 650px;
       }
 /*
@@ -99,16 +99,16 @@
     <!--<div class="col-xs-12 col-sm-3 col-md-2 col-lg-1">
                   <paper-input label="disabled input" disabled></paper-input>
                 </div>-->
-       
+
             <paper-material style="margin-top:10px;" elevation="1">
-              
+
                  <gl-form-panel label="รายละเอียดการรับเงินค่าข้าว ครั้งที่ 1 จำนวนเงิน xxxxxxx บาท">
                   <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
                         <gl-form-label label="Invoice No" value="C277/2558"></gl-form-label>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
-                        <gl-form-label label="ชื่อเรือ" value="HANJIN BELAWAN V.1609N"></gl-form-label> 
+                        <gl-form-label label="ชื่อเรือ" value="HANJIN BELAWAN V.1609N"></gl-form-label>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
                         <gl-form-label label="ค่าธรรมเนี่ยมธนาคารต่างประเทศ USD" value="37"></gl-form-label>
@@ -143,14 +143,14 @@
                     <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
                       <paper-textarea label="จำนวนผู้เข้าสอบ" value="2 บริษัท"></paper-textarea>
                     </gl-grid-col>
-                    
+
                   </gl-grid-row>
                   <gl-grid-row>
                     <gl-grid-col width="[[getWidth]]" xs="12" sm="12" md="12" lg="12" style="padding-top:10px;">
                          <div id="tableReport" class="content1">
                              <re-port></re-port>
                          </div>
-                         
+
                     </gl-grid-col>
                   </gl-grid-row>
                   <gl-grid-row>
@@ -161,15 +161,15 @@
                         </div>
                     </div>
                   </gl-grid-row>
-                  
+
             </paper-material>
-              
+
           </section-content>
         </panel-seleted>
       </div>
-     
+
     </div>
-    
+
   </template>
   <script>
     Polymer({
@@ -177,9 +177,53 @@
       behaviors: [
         nxCoreBehavior
       ],
+      properties: {
+        data:{
+          type:Object,
+          value:function(){
+            return [
+              {
+                id:1 ,
+                invoiceNo:'c277/2558',
+                quantity:100000,
+                date:'22/05/2558',
+                bill:'COAU7130202710',
+                invoiceOf:'Bejin',
+                shippedPer:'ZHONG XING 898',
+                portOfLoading:'THBKK',
+                portOfDischarge:'YueyYang(Cheng Ling Ji)',
+                portOFDelivery:'YueyYang(Cheng Ling Ji)',
+                orderAndAcc:'คำสั่งที่ 12',
+                madeOutTo:'ส่งออก',
+                lot:[
+                  {
+                    id:1,
+                    Marks:'makes',
+                    descriptionOfGood:'Thai White Rice 5% Brokens, 2014 Current New Crop, Double-Polished And Sortexed Quality.',
+                    packing:'In Strong Export Seaworthy New Single PP bags Of 50 Kilograms Net, Minimum Tare Weight to be at 80 Gram/Bag',
+                    quantity:40,
+                    price:400,
+                    tonPerusd:397,
+                    gw:500,
+                    tare:5.6,
+                    nw:1500,
+                    amount:'200,000.00'
+                  }
+                ],
+                total:60,
+                totalGross:2007.2,
+                tare:7.2,
+                netWeight:2000,
+                Amount:'402,250.00',
+                detail:'รายละเอียดเพิ่มเติม'
+              },
+            
+            ]}
+      }
+      }
       created:function(){
         this.nxSetLayout('layout-main');
-      },    
+      },
       changeDiv:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
         // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
@@ -191,7 +235,7 @@
         }
           else{
           // css.style.display = "none";
-          css.classList.remove("flexchild-2");  
+          css.classList.remove("flexchild-2");
         }
 
       }
