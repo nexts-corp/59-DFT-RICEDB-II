@@ -38,18 +38,18 @@
     <div class="vertical layout">
 
       <div>
-        <paper-textarea rows="2" label="SHIPPER" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.actualShipper]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="SHIPPER" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.actualShipper]]"></paper-textarea>
       </div>
       <div>
-        <paper-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></paper-textarea>
       </div>
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box" label="VESSEL" placeholder="ใส่รายละเอียด" value="[[data.vesselName]]"></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box" label="B/L No." placeholder="ใส่รายละเอียด" value="[[data.bookIngNo]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="VESSEL" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.vesselName]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="B/L No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.bookIngNo]]"></paper-input></div>
       </div>
       <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box" label="POL (PORT OF LOADING)" placeholder="ใส่รายละเอียด" value="[[data.pol]]"></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box" label="POD (PORT OF DISCHAR)" placeholder="ใส่รายละเอียด" value="[[data.pod]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="POL (PORT OF LOADING)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.pol]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="POD (PORT OF DISCHAR)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.pod]]"></paper-input></div>
       </div>
       <template is="dom-repeat" items="[[data.actual]]">
 
@@ -59,10 +59,10 @@
         <div class="flexchild-2">[[item.quantity]] Bag</div>
       </div>
       <div>
-        <paper-textarea rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
       </div>
       <div>
-        <paper-textarea rows="2" label="PACKING :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="PACKING :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
       </div>
 
       <div class="top">WEIGHT</div>
@@ -102,6 +102,9 @@
   <script>
     Polymer({
       is: "vessel-draf",
+      requiredTextArea:function(e){
+        e.target.validate();
+      }
 
     });
   </script>

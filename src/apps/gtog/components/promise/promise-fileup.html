@@ -75,19 +75,20 @@
               </div>
             </template>
 
-
-            <paper-menu multi style="height: 200px;">
-               <template is="dom-repeat" items="{{files}}">
-                  <!-- <paper-item>{{item.name}}</paper-item> -->
-                  <paper-item class="flex-horizontal bd">
-                        <div class="flexchild-1">{{item.name}}</div>
-                        <div class="flexchild-1">
-                          <div class="content2">29/01/2558</div>
-                        </div>
-                        <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="del"></paper-icon-button>
-                  </paper-item>
-               </template>
-            </paper-menu>
+            <template is="dom-if" if="{{seleted}}">
+              <paper-menu multi>
+                 <template is="dom-repeat" items="{{files}}">
+                    <!-- <paper-item>{{item.name}}</paper-item> -->
+                    <paper-item class="flex-horizontal bd">
+                          <div class="flexchild-1">{{item.name}}</div>
+                          <div class="flexchild-1">
+                            <div class="content2">29/01/2558</div>
+                          </div>
+                          <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="del"></paper-icon-button>
+                    </paper-item>
+                 </template>
+              </paper-menu>
+            </template>
 
         </div>
       </div>
@@ -150,7 +151,9 @@
     del:function(e){
       var dele = this.files;
       this.splice('files',dele, 1);
-      console.log(dele);
+      if(dele.length==0){
+        this.seleted = false;
+      }
     }
   });
   </script>

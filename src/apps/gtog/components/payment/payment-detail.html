@@ -164,7 +164,7 @@ paper-button{
 
 
     <div>
-      <paper-textarea class="box2" rows="2" label="หมายเหตุ" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
+      <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box2" rows="2" label="หมายเหตุ" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
     </div>
 
     <div class="horizontal end-justified layout">
@@ -180,6 +180,9 @@ paper-button{
 <script>
 Polymer({
   is: "payment-detail",
+  requiredTextArea:function(e){
+    e.target.validate();
+  }
 
 });
 </script>
