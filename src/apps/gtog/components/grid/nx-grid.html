@@ -61,7 +61,7 @@
             </div>
             <paper-menu attr-for-item-title="label" multi style="padding-top:0px" class="paper-menu-lv1">
                 <template is="dom-repeat" as="itemPrimary" items="{{data}}">
-                    <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" data="{{itemPrimary}}">
+                    <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
                         <paper-icon-button on-tap="_toggleSub" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
                         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
                             <div class$="{{configPrimary.width}}">
@@ -92,7 +92,7 @@
                                 </template>
                             </paper-item>
                             <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
-                                <paper-item on-tap="_getBind" on-dblclick="_getBind" data="{{itemSecondary}}">
+                                <paper-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
                                     <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
                                       <div class$="{{configSecondary.width}} cml" data="{{itemSecondary}}">
                                        {{_getItemSecondary(itemSecondary,configSecondary)}}
@@ -191,8 +191,7 @@
             },
             _getBind:function(e){
                 if(e.target.is!="paper-icon-button"){
-                    console.log(e.type);
-                    this.fire('nx-grid-'+e.type, {data: e.currentTarget.data});
+                    this.fire('nx-grid-'+e.type, {data: e.currentTarget.data,level: e.currentTarget.getAttribute('level')});
                 }
             }
         });
