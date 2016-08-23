@@ -75,8 +75,8 @@
         <nx-grid data="{{data}}">
           <items type="primary">
             <list item="id" label="รหัส" width="flex"></list>
-            <list item="promiseName" label="ชื่อ" width="flex-3"></list>
-            <list item="date" label="ปี" width="flex"></list>
+            <list item="invoiceNo" label="Invoice No" width="flex-3"></list>
+            <list item="series" label="ชุดที่" width="flex"></list>
           </items>
           <items type="secondary" item="sub">
             <list item="" label="" width="flex"></list>
@@ -163,7 +163,6 @@
                     </div>
                   </gl-grid-row>
                 </gl-form-panel>
-
             </paper-material>
 
           </section-content>
@@ -179,6 +178,20 @@
       behaviors: [
         nxCoreBehavior
       ],
+      properties: {
+        data:{
+          type:Object,
+          value:function(){
+            return [
+              {
+                id:1 ,
+                invoiceNo:'c277/2558',
+                series:2
+              },
+
+            ]}
+      }
+    },
       created:function(){
         this.nxSetLayout('layout-main');
       },
