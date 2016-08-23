@@ -37,8 +37,8 @@ paper-button{
           <div class="box"><vaadin-date-picker label="วันที่"></vaadin-date-picker></div>
         </div>
         <div class="flex">
-          <paper-dropdown-menu label="ราคา" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท">
-            <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
+          <paper-dropdown-menu id="valid" on-tap="requiredDropdown" label="ราคา" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+            <paper-listbox  class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
               <paper-item price-type="fob">FOB</paper-item>
               <paper-item price-type="cy">CY</paper-item>
               <paper-item price-type="other">ฯลฯ</paper-item>
@@ -57,21 +57,21 @@ paper-button{
             </paper-dropdown-menu>
           </div>
           <div class="flex">
-            <div class="box"><paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input></div>
+            <div class="box"><paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input></div>
           </div>
         </div>
       </template>
         <div class="flex">
-          <paper-textarea rows="3" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></paper-textarea>
+          <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="3" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></paper-textarea>
         </div>
 
         <div class="flex">
-          <paper-textarea rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}""></paper-textarea>
+          <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}"></paper-textarea>
         </div>
 
       <div class="horizontal end-justified layout">
         <paper-button class="button" raised>ยกเลิก</paper-button>
-        <paper-button class="button" raised>บันทึก</paper-button>
+        <paper-button class="button" on-tap="validate" raised>บันทึก</paper-button>
       </div>
 
 
@@ -90,6 +90,20 @@ paper-button{
           type:Object,
           value:{ name:false }
         }
+      },
+      ready:function(){
+        this.listen(this.$.valid,'iron-select','requiredDropdown');
+      },
+      requiredDropdown:function(e){
+        if((e.target.is)=="paper-dropdown-menu"){
+          e.target.validate();
+        }else{
+          e.target.parentNode.validate();
+        }
+      },
+      requiredTextArea:function(e){
+        // console.log(e.target);
+        e.target.validate();
       },
       validate: function(){
 
