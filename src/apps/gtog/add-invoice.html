@@ -1,48 +1,26 @@
-<!-- <link rel="import" href="components/my-listmenu.html"> -->
 <link rel="import" href="components/grid/nx-grid.html">
+<link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/my-panel.html">
-<dom-module id="gtog-add-invoice">
-  <style include="iron-flex iron-flex-factors">
-    .flex-horizontal {
-   @apply(--layout-horizontal);
-   }
-   .flexchild-1 {
-     @apply(--layout-flex);
-   }
-   .flexchild-2 {
-     @apply(--layout-flex-2);
-   }
-   .rightdata{
-     height:100%;
-     /*display: none;*/
-     border-left: 1px solid var(--paper-grey-300);
-     padding: 5px 10px 0px 10px;
-   }
-   .bd {
-     /*border: 1px solid #000;*/
-   }
-   #changeDivcss{
-      -webkit-transition: all 1s ease;
-      -moz-transition: all 1s ease;
-      -o-transition: all 1s ease;
-      transition: all 1s ease;
 
-   }
-  </style>
+<link rel="import" href="components/invoice/invoice-detail.html">
+<link rel="import" href="components/invoice/invoice-print.html">
+<link rel="import" href="components/promise/promise-fileup.html">
+<link rel="import" href="components/vessel/vessel-print.html">
+<dom-module id="gtog-add-invoice">
+
   <template>
-    <div class=" flex-horizontal">
-      <div class="flexchild-1 ">
-      <!-- <span>numSelect<span>  {{numSelect}} -->
-        <!-- <my-listmenu label="name" data="[[data.0.detail]]" seleted="{{dataSelected}}"></my-listmenu> -->
-        <nx-grid data="{{data}}" >
+
+
+    <content-panel>
+      <grid>
+        <nx-grid data="{{data}}">
           <items type="primary">
             <list item="invoiceNo" label="Invoice" width="flex"></list>
             <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
-            <!-- <list item="date" label="ปี" width="flex"></list> -->
           </items>
           <items type="secondary" item="sub">
-            <list item="" label="" width="flex"></list>
-            <list item="detailMoney" label="+ เพิ่ม รายละเอียดการรับเงิน" width="flex-9"></list>
+            <!-- <list item="" label="" width="flex"></list> -->
+            <!-- <list item="detailMoney" label="+ เพิ่ม รายละเอียดการรับเงิน" width="flex-9"></list> -->
           </items>
           <template type="primary">
             <input placeholder="text" value="primary">
@@ -51,25 +29,43 @@
             <input placeholder="text" value="secondary">
           </template>
         </nx-grid>
-        <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
-      </div>
+      </grid>
+      <panel>
+        <panel-seleted>
+          <section-content name="detail">
 
-      <div class=" rightdata flexchild-1"id="changeDivcss">
-        <!-- <rice-promise-detail data="{{dataSelected}}"></rice-promise-detail> -->
-          <my-panel dataselected="{{promise}}" page-seleted-detail="{{pageSeletedDetail}}"></my-panel>
-      </div>
-    </div>
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <invoice-detail name="primary" data="{{dataSelect}}"></invoice-detail>
+            </iron-pages>
 
+          </section-content>
+          <section-content name="print">
+            <vessel-print></vessel-print>
+          </section-content>
+          <section-content name="file">
+            <promise-fileup></promise-fileup>
+          </section-content>
+        </panel-seleted>
 
+      </panel>
+    </content-panel>
   </template>
   <script>
     Polymer({
       is: "gtog-add-invoice",
+      listeners:{
+        'nx-grid-tap':'nxGridTap',
+        'nx-grid-dblclick':'nxGridDblclick'
+      },
       behaviors: [
         nxCoreBehavior,
         nxLocalesBehavior
       ],
       properties:{
+          layerContent:{
+            type:String,
+            value:"primary"
+          },
           pageSeletedDetail:{
             type:String,
             value:'invoiceDetail'
@@ -186,42 +182,20 @@
               ]}
         }
       },
-      changeDiv:function(){
-        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
-        // console.log(css);
-        console.log(css.classList.contains('flexchild-2'));
-        if (css.classList.contains('flexchild-2') == false){
-          // css.style.display = "inline";
-          css.className += " flexchild-2";
-        }else{
-          // css.style.display = "none";
-          css.classList.remove("flexchild-2");
-        }
-
-      },
       created:function(){
-        this.nxSetTitle('สร้างงวด');
+        this.nxSetTitle('ทำสัญญา');
         this.nxSetLayout('layout-main');
       },
-      ready:function(){
-        this.$$('nx-grid').addEventListener('nx-grid-tap', (e) => {
-          console.log('click',e.detail.data);
-          this.promise= e.detail.data;
-          // console.log(this.promise);
-        }),
-        this.$$('nx-grid').addEventListener('nx-grid-dblclick', (e) => {
-          console.log('dblclick',e.detail.data);
-        })
+      nxGridTap:function(e){
+        this.layerContent = e.detail.level;
+        this.dataSelect = e.detail.data;
+        console.log(this.dataSelect);
       },
-      observers:['obdata(dataSelected)','obDataChange(data.*)'],
-      obdata:function(select){
-          console.log(select);
-          // console.log(this.numSelect);
-      },
-      obDataChange:function(x){
-        // console.log('sss');
-      },
+      nxGridDblclick:function(e){
+        if (e.detail.level == 'primary') {
+          this.nxChangePath('/gtog/add-invoice');
+        }
+      }
 
     });
   </script>

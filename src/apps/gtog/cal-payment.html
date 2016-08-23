@@ -1,0 +1,97 @@
+<link rel="import" href="components/grid/nx-grid.html">
+<link rel="import" href="components/content-panel.html">
+<link rel="import" href="components/my-panel.html">
+
+<link rel="import" href="components/trader/payment-trader.html">
+
+
+<dom-module id="gtog-cal-payment">
+
+
+  <template>
+    <content-panel>
+      <grid>
+        <nx-grid data="{{data}}">
+          <items type="primary">
+            <list item="id" label="รหัส" width="flex"></list>
+            <list item="invoiceNo" label="Invoice No" width="flex-3"></list>
+            <list item="series" label="ชุดที่" width="flex"></list>
+          </items>
+          <items type="secondary" item="sub">
+            <!-- <list item="" label="" width="flex"></list>
+            <list item="order" label="+ เพิ่ม รายละเอียดการรับเงิน" width="flex-9"></list> -->
+          </items>
+          <template type="primary">
+            <input placeholder="text" value="primary">
+          </template>
+          <template type="secondary">
+            <input placeholder="text" value="secondary">
+          </template>
+        </nx-grid>
+      </grid>
+      <panel>
+        <panel-seleted>
+          <section-content name="detail">
+
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <payment-trader name="primary" data="{{dataSelect}}"></payment-trader>
+            </iron-pages>
+
+          </section-content>
+          <section-content name="print">
+            <!-- <vessel-print></vessel-print> -->
+          </section-content>
+          <section-content name="file">
+            <!-- <promise-fileup></promise-fileup> -->
+          </section-content>
+        </panel-seleted>
+
+      </panel>
+    </content-panel>
+
+  </template>
+  <script>
+    Polymer({
+      listeners:{
+        'nx-grid-tap':'nxGridTap',
+        'nx-grid-dblclick':'nxGridDblclick'
+      },
+      behaviors: [
+        nxCoreBehavior,
+        nxLocalesBehavior
+      ],
+      properties:{
+          layerContent:{
+            type:String,
+            value:"primary"
+          },
+          data:{
+          type:Object,
+          value:function(){
+            return [
+              {
+                id:1 ,
+                invoiceNo:'c277/2558',
+                series:2
+              },
+
+            ]}
+      }
+    },
+    created:function(){
+      this.nxSetTitle('ทำสัญญา');
+      this.nxSetLayout('layout-main');
+    },
+    nxGridTap:function(e){
+      this.layerContent = e.detail.level;
+      this.dataSelect = e.detail.data;
+      console.log(this.dataSelect);
+    },
+    nxGridDblclick:function(e){
+      if (e.detail.level == 'primary') {
+        this.nxChangePath('/gtog/add-invoice');
+      }
+    }
+    });
+  </script>
+</dom-module>

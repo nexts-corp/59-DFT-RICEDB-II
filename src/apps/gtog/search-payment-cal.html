@@ -2,22 +2,21 @@
 <link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/my-panel.html">
 
-<link rel="import" href="components/promise/promise-fileup.html">
-<link rel="import" href="components/vessel/vessel-print.html">
-<dom-module id="gtog-search-invoice">
+<link rel="import" href="components/payment/payment-detail.html">
+<link rel="import" href="components/payment/payment-print.html">
+<dom-module id="gtog-search-payment-cal">
 
   <template>
-
     <content-panel>
       <grid>
         <nx-grid data="{{data}}">
           <items type="primary">
             <list item="periodNo" label="งวดที่" width="flex"></list>
-            <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
+            <list item="quantity" label="จำนวน (ตัน)" width="flex"></list>
           </items>
           <items type="secondary" item="sub">
-            <!-- <list item="" label="" width="flex"></list> -->
-            <!-- <list item="detailMoney" label="+ เพิ่ม รายละเอียดการรับเงิน" width="flex-9"></list> -->
+            <list item="" label="" width="flex"></list>
+            <list item="order" label="+ เพิ่ม รายละเอียดการรับเงิน" width="flex-9"></list>
           </items>
           <template type="primary">
             <input placeholder="text" value="primary">
@@ -31,10 +30,9 @@
         <panel-seleted>
           <section-content name="detail">
 
-            <!-- <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-              <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-            </iron-pages> -->
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <!-- <invoice-detail name="primary" data="{{dataSelect}}"></invoice-detail> -->
+            </iron-pages>
 
           </section-content>
           <section-content name="print">
@@ -51,7 +49,7 @@
   </template>
   <script>
     Polymer({
-      is: "gtog-search-invoice",
+      is: "gtog-search-payment-cal",
       listeners:{
         'nx-grid-tap':'nxGridTap',
         'nx-grid-dblclick':'nxGridDblclick'
@@ -67,7 +65,7 @@
           },
           pageSeletedDetail:{
             type:String,
-            value:''
+            value:'paymentDetail'
           },
           data:{
             type:Object,
@@ -75,34 +73,34 @@
               return [
                 {
                   id:1 ,
+                  order:10,
                   periodNo:11,
-                  quantity:100000,
-                },
-                {
-                  id:2 ,
-                  periodNo:12,
-                  quantity:200000,
-                },
-                {
-                  id:3 ,
-                  periodNo:13,
                   quantity:300000,
-                }
-              ]}
+                  date:'16/03/2558',
+                  sub:[
+                    {
+                      id:'1',
+                      order:'1',
+                    }
+                  ]
+              }
+
+            ]
+          }
         }
       },
       created:function(){
-        this.nxSetTitle('ทำสัญญา');
+        this.nxSetTitle('คำนวนจ่ายเงินผู้ประกอบการ');
         this.nxSetLayout('layout-main');
       },
       nxGridTap:function(e){
         this.layerContent = e.detail.level;
         this.dataSelect = e.detail.data;
-        console.log(this.dataSelect);
+        // console.log(this.dataSelect);
       },
       nxGridDblclick:function(e){
-        if (e.detail.level == 'primary') {
-          this.nxChangePath('/gtog/add-invoice');
+        if (e.detail.level != 'primary') {
+          this.nxChangePath('/gtog/cal-payment');
         }
       }
 

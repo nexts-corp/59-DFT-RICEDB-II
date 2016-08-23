@@ -33,12 +33,12 @@
       <panel>
         <panel-seleted>
           <section-content name="detail">
-            
+
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <promise-detail name="primary" data="{{promise}}"></promise-detail>
-              <promise-confirm name="secondary" data="{{promise}}"></promise-confirm>
+              <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+              <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
             </iron-pages>
-            
+
           </section-content>
           <section-content name="print">
             <vessel-print></vessel-print>
@@ -92,10 +92,17 @@
                       id:1,
                       confirmLetter:'1',
                       dateconfirm:'25/09/58',
+                      detail:'มีข้าวมาเพิ้มอีกรึเปล่า',
                       confirmItem:[{
                         id:1,
                         item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
                         package:'50kg PP bags',
+                        price:'USD392/MT'
+                      },
+                      {
+                        id:2,
+                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        package:'25kg PP bags',
                         price:'USD392/MT'
                       }
                      ]
@@ -104,6 +111,7 @@
                      id:2,
                      confirmLetter:'2',
                      dateconfirm:'25/11/58',
+                     detail:'รายละเอียดเพิ่มเติม',
                      confirmItem:[{
                        id:1,
                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
@@ -131,10 +139,11 @@
                       id:1,
                       confirmLetter:'1',
                       dateconfirm:'25/09/58',
+                      detail:'มีข้าวมาเพิ้มอีกรึเปล่า',
                       confirmItem:[{
                         id:1,
                         item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'50kg PP bags',
+                        package:'40kg PP bags',
                         price:'USD392/MT'
                       },{
                         id:2,
@@ -163,6 +172,7 @@
                       id:1,
                       confirmLetter:'1',
                       dateconfirm:'25/09/58',
+                      detail:'มีข้าวมาเพิ้มอีกรึเปล่า',
                       confirmItem:[{
                         id:1,
                         item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
@@ -187,10 +197,13 @@
       },
       nxGridTap:function(e){
         this.layerContent = e.detail.level;
-        this.promise = e.detail.data;
+        this.dataSelect = e.detail.data;
+        console.log(this.dataSelect);
       },
       nxGridDblclick:function(e){
-        this.nxChangePath('/gtog/add-period');
+        if (e.detail.level == 'primary') {
+          this.nxChangePath('/gtog/add-period');
+        }
       }
     });
   </script>
