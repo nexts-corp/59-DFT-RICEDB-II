@@ -96,7 +96,7 @@ paper-button{
 
           <div class="horizontal layout top">
             <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใสจำนวนกระสอบ" placeholder="ใส่รายละเอียด" required label="จำนวนกระสอบ / BAGS" value="[[item.quantitySack]]"></paper-input></div>
-            <div class="flexchild-2"><paper-textarea class="box3" label="MARKS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.Marks]]"></paper-textarea></div>
+            <div class="flexchild-2"><paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box3" label="MARKS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.Marks]]"></paper-textarea></div>
           </div>
 
           <div class="horizontal layout top">
@@ -104,7 +104,7 @@ paper-button{
           </div>
 
           <div class="horizontal layout top">
-            <div class="flexchild-2"><paper-textarea class="box4" label="PACKING :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea></div>
+            <div class="flexchild-2"><paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box4" label="PACKING :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea></div>
           </div>
 
           <div>WEIGHT</div>
@@ -130,15 +130,15 @@ paper-button{
       </div>
 
       <div class="top">
-        <paper-textarea rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.consigned]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.consigned]]"></paper-textarea>
       </div>
 
       <div class="top">
-        <paper-textarea rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notify]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.notify]]"></paper-textarea>
       </div>
 
       <div class="top">
-        <paper-textarea rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
       </div>
 
       <div class="horizontal center-justified layout top">
@@ -160,6 +160,9 @@ paper-button{
   <script>
     Polymer({
       is: "vessel-detail",
+      requiredTextArea:function(e){
+        e.target.validate();
+      }
 
     });
   </script>

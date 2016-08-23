@@ -51,7 +51,7 @@
       </div>
 
       <div class="horizontal layout">
-        <paper-textarea class="box" rows="2" label="Invoice of :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.invoiceOf]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box" rows="2" label="Invoice of :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.invoiceOf]]"></paper-textarea>
       </div>
 
       <div class="horizontal layout">
@@ -73,11 +73,11 @@
       </div>
 
       <div class="horizontal layout">
-        <paper-textarea class="box" label="By order and Account of" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.orderAndAcc]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box" label="By order and Account of" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.orderAndAcc]]"></paper-textarea>
       </div>
 
       <div class="horizontal layout">
-        <paper-textarea class="box" rows="2" label="MADE OUT TO :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.madeOutTo]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box" rows="2" label="MADE OUT TO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.madeOutTo]]"></paper-textarea>
       </div>
 
       <template is="dom-repeat" items="[[data.lot]]">
@@ -91,11 +91,11 @@
         </div>
 
         <div class="horizontal layout">
-          <paper-textarea class="box" rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
+          <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box" rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
         </div>
 
         <div class="horizontal layout">
-          <paper-textarea class="box" rows="2" label="PACKING : " placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
+          <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box" rows="2" label="PACKING : " placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
         </div>
 
         <div class="horizontal layout">
@@ -167,7 +167,7 @@
       <div style="text-align:center; margin-top:30px;">(USD DOLLARS TWO HUNDRED TWENTY THOUSAND ONLY)</div>
 
       <div class="horizontal layout">
-        <paper-textarea class="box" rows="3" value="[[data.detail]]"></paper-textarea>
+        <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" required error-message="กรุณาใส่รายละเอียด" class="box" rows="3" value="[[data.detail]]"></paper-textarea>
       </div>
 
       <div class="horizontal end-justified layout">
@@ -182,6 +182,9 @@
   <script>
     Polymer({
       is: "invoice-detail",
+      requiredTextArea:function(e){
+        e.target.validate();
+      }
 
     });
   </script>
