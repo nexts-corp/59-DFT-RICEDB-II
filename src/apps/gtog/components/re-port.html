@@ -3,7 +3,7 @@
 
 <dom-module id="re-port">
     <template>
-      <style is="custom-style">      
+      <style is="custom-style">
           table {
                 border-collapse: collapse;
                 font-size: 16px;
@@ -37,36 +37,26 @@
                   <th>เลขที่เช็ค</th>
                   <th>รับเช็คแล้ว</th>
               </tr>
-              <tr>
-                  <td>บริษัทแคปปิตัลซีเรียล จำกัด</td>
-                  <td>500</td>
-                  <td>164,500</td>
-                  <td>5,706,50</td>
-                  <td><input type="text" value="228.708"></td>
-                  <td><input type="text" value="5,706,276.292"></td>
-                  <td><input type="text" value="57,062.762"></td>
-                  <td><input type="text" value="5,649,213.53"></td>
-                  <td><input type="text" value="...."></td>
-                  <td><input type="checkbox"> รับเช็คแล้ว วันที่ ......</td>
-                  
-              </tr>
-               <tr>
-                  <td>บริษัทไขยพรไรซ จำกัด</td>
-                  <td>500</td>
-                  <td>164,500</td>
-                  <td>5,706,50</td>
-                  <td><input type="text" value="228.708"></td>
-                  <td><input type="text" value="5,706,276.292"></td>
-                  <td><input type="text" value="57,062.762"></td>
-                  <td><input type="text" value="5,649,213.53"></td>
-                  <td><input type="text" value="...."></td>
-                  <td><input type="checkbox"> รับเช็คแล้ว วันที่ ......</td>
-              </tr>
-          </table>    
+              <template is="dom-repeat" items="[[data]]">
+                <tr>
+                    <td>[[item.nameCompany]]</td>
+                    <td>[[item.sumTon]]</td>
+                    <td>[[item.sumUsd]]</td>
+                    <td>[[item.sumBath]]</td>
+                    <td><input type="text" value="[[item.feeBath]]"></td>
+                    <td><input type="text" value="[[item.feeBalanceBath]]"></td>
+                    <td><input type="text" value="[[item.deductionOfTax]]"></td>
+                    <td><input type="text" value="[[item.BalanceBath]]"></td>
+                    <td><input type="text" value="[[item.checkNo]]"></td>
+                    <td><input type="checkbox" checked="[[item.gotCheck]]"> รับเช็คแล้ว วันที่ [[item.date]]</td>
+
+                </tr>
+              </template>
+          </table>
     </template>
     <script>
         Polymer({
-           is: 're-port' 
+           is: 're-port'
         });
     </script>
 </dom-module>
