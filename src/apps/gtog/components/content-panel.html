@@ -19,10 +19,7 @@
       border-left: 1px solid var(--paper-grey-300);
       padding: 5px 10px 0px 10px;
     }
-
-    .bd {
-      /*border: 1px solid #000;*/
-    }
+  
 
     #changeDivcss {
       -webkit-transition: all 1s ease;
@@ -43,15 +40,6 @@
       </div>
 
       <div class="rightdata flexchild-1" id="changeDivcss">
-        <div class="layout horizontal head-button">
-          <div class="flex-3"></div>
-          <div class="flex">
-            <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
-          </div>
-          <div class="flex">
-            <button type="button" name="button" on-tap="changeDiv">เปลี่ยนขนาด</button>
-          </div>
-        </div>
         <content select="panel"></content>
       </div>
     </div>
@@ -60,19 +48,37 @@
   <script>
     Polymer({
       is:'content-panel',
+      behaviors:[nxCoreBehavior],
+      created:function(){
+        this.nxSetGlobalElement('contentPanel');
+      },
+      ready:function(){
+        this.changeDiv();
+      },
       changeDiv:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
-        // console.log(css);
-        console.log(css.classList.contains('flexchild-2'));
-        if (css.classList.contains('flexchild-2') == false){
-          // css.style.display = "inline";
-          css.className += " flexchild-2";
-        }else{
-          // css.style.display = "none";
-          css.classList.remove("flexchild-2");
-        }
 
+        if(!this.fristPanel){
+          if(localStorage.getItem("togglePanel")=="true"
+          && localStorage.getItem("togglePanel")!=null){
+            // l('s');
+            css.className += " flexchild-2";
+          }
+          this.fristPanel = true;
+        }else{
+
+          // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+          // console.log(css);
+          if (css.classList.contains('flexchild-2') == false){
+            // css.style.display = "inline";
+            css.className += " flexchild-2";
+            localStorage.setItem("togglePanel", true);
+          }else{
+            // css.style.display = "none";
+            css.classList.remove("flexchild-2");
+            localStorage.setItem("togglePanel", false);
+          }
+        }
       },
     });
   </script>
