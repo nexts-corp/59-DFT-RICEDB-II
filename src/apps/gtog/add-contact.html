@@ -193,15 +193,20 @@
       created:function(){
         this.nxSetTitle('ทำสัญญา');
         this.nxSetLayout('layout-main');
+
+      },
+      attached: function() {
+        this.layoutMain = this.nxGetGlobalElement('layoutMain');
       },
       nxGridTap:function(e){
         this.layerContent = e.detail.level;
         this.dataSelect = e.detail.data;
-        console.log(this.dataSelect);
+        // console.log(this.dataSelect);
       },
       nxGridDblclick:function(e){
         if (e.detail.level == 'primary') {
           this.nxChangePath('/gtog/add-period');
+          //this.layoutMain.changePath('/gtog/add-period');
         }
       }
     });
