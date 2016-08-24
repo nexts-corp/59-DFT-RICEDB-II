@@ -60,19 +60,37 @@
   <script>
     Polymer({
       is:'content-panel',
+      behaviors:[nxCoreBehavior],
+      created:function(){
+        this.nxSetGlobalElement('contentPanel');
+      },
+      ready:function(){
+        this.changeDiv();
+      },
       changeDiv:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-        // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
-        // console.log(css);
-        console.log(css.classList.contains('flexchild-2'));
-        if (css.classList.contains('flexchild-2') == false){
-          // css.style.display = "inline";
-          css.className += " flexchild-2";
-        }else{
-          // css.style.display = "none";
-          css.classList.remove("flexchild-2");
-        }
 
+        if(!this.fristPanel){
+          if(localStorage.getItem("togglePanel")=="true"
+          && localStorage.getItem("togglePanel")!=null){
+            // l('s');
+            css.className += " flexchild-2";
+          }
+          this.fristPanel = true;
+        }else{
+
+          // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+          // console.log(css);
+          if (css.classList.contains('flexchild-2') == false){
+            // css.style.display = "inline";
+            css.className += " flexchild-2";
+            localStorage.setItem("togglePanel", true);
+          }else{
+            // css.style.display = "none";
+            css.classList.remove("flexchild-2");
+            localStorage.setItem("togglePanel", false);
+          }
+        }
       },
     });
   </script>
