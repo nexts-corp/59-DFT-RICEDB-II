@@ -1,28 +1,14 @@
 <dom-module id="vessel-detail">
   <style include="iron-flex iron-flex-alignment">
-  .flexchild-1 {
-    @apply(--layout-flex);
-  }
-  .flexchild-2 {
-    @apply(--layout-flex-2);
-  }
 .top{
   margin-top: 15px;
 }
 .box{
-  width: 160px;
+  width: 100px;
 }
 .box2{
-  width: 70px;
-}
-.box3{
-  width: 80%;
-}
-.box4{
-  width: 90%;
-}
-.box5{
   width: 25px;
+  text-align: center;
 }
 paper-button{
   width: 20px;
@@ -42,110 +28,136 @@ paper-button{
 }
   </style>
   <template>
-    <div class="vertical layout">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่ชื่อเรือ" placeholder="ใส่ชื่อเรือ" required label="ชื่อเรือ" value="[[data.vesselName]]"></paper-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,2],[700,2]]">
+          <paper-input auto-validate error-message="กรุณาใส่สายเรือ" placeholder="ใส่สายเรือ" required label="สายเรือ" value="[[data.vesselLine]]"></paper-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,2],[700,2]]">
+          <paper-input auto-validate error-message="กรุณาใส่เลขที่ลำเรือ" placeholder="ใส่เลขที่ลำเรือ" required label="ลำที่" value="[[data.vesselOrder]]"></paper-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+          <paper-input placeholder="ใส่รายละเอียด" required label="หมายเหตุ" value="[[data.note]]"></paper-input>
+        </gl-grid-col>
 
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่ชื่อเรือ" placeholder="ใส่ชื่อเรือ" required label="ชื่อเรือ" value="[[data.vesselName]]"></paper-input></div>
-        <div class="flexchild-1"><paper-input class="box2" auto-validate error-message="กรุณาใส่สายเรือ" placeholder="ใส่สายเรือ" required label="สายเรือ" value="[[data.vesselLine]]"></paper-input></div>
-        <div class="flexchild-1"><paper-input class="box2" auto-validate error-message="กรุณาใส่เลขที่ลำเรือ" placeholder="ใส่เลขที่ลำเรือ" required label="ลำที่" value="[[data.vesselOrder]]"></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box" placeholder="ใส่รายละเอียด" required label="หมายเหตุ" value="[[data.note]]"></paper-input></div>
-      </div>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+          <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่booking shipper" placeholder="ใส่รายละเอียด" required label="Booking Shipper" value="[[data.bookIngShipping]]"></paper-input>
+        </gl-grid-col>
 
-      <div class="horizontal layout top">
-        <div class="flexchild-1"><div class="box"><vaadin-date-picker label="วันที่"></vaadin-date-picker></div></div>
-        <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใส่booking shipper" placeholder="ใส่รายละเอียด" required label="Booking Shipper" value="[[data.bookIngShipping]]"></paper-input></div>
-      </div>
 
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใส่Booking No." placeholder="ใส่รายละเอียด" required label="Booking No." value="[[data.bookIngNo]]"></paper-input></div>
-        <div class="flexchild-1"><paper-input class="box3" auto-validate error-message="กรุณาใส่POL" placeholder="ใส่รายละเอียด" required label="POL" value="[[data.pol]]"></paper-input></div>
-      </div>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่Booking No." placeholder="ใส่รายละเอียด" required label="Booking No." value="[[data.bookIngNo]]"></paper-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่POL" placeholder="ใส่รายละเอียด" required label="POL" value="[[data.pol]]"></paper-input>
+        </gl-grid-col>
 
-      <div class="horizontal layout top">
-        <div class="flexchild-1"><div class="box3"><vaadin-date-picker label="ETD"></vaadin-date-picker></div></div>
-        <div class="flexchild-1"><div class="box3"><vaadin-date-picker label="ETA"></vaadin-date-picker></div></div>
-        <div class="flexchild-1"><paper-input class="box" auto-validate error-message="กรุณาใส่POD" placeholder="ใส่รายละเอียด" required label="POD" value="[[data.pod]]"></paper-input></div>
-      </div>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+          <vaadin-date-picker label="ETD"></vaadin-date-picker>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+          <vaadin-date-picker label="ETA"></vaadin-date-picker>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่POD" placeholder="ใส่รายละเอียด" required label="POD" value="[[data.pod]]"></paper-input>
+        </gl-grid-col>
 
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใส่B/L No." placeholder="ใส่รายละเอียด" required label="B/L No." value="[[data.blNo]]"></paper-input></div>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่B/L No." placeholder="ใส่รายละเอียด" required label="B/L No." value="[[data.blNo]]"></paper-input>
+        </gl-grid-col>
+      </gl-grid-row>
 
-      </div>
       <template is="dom-repeat" items="[[data.actual]]">
+        <div class="bg">
+          <gl-grid-row>
+                <gl-grid-col width="[[getWidth]]" grid="[[500,8],[700,4]]">
+                  <paper-input auto-validate error-message="กรุณาใสรายละเอียด" placeholder="ใส่รายละเอียด" required label="Actual Shipper" value="[[item.actualShipper]]"></paper-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+                  <paper-dropdown-menu label="ขนาดบรรจุ /kg" placeholder="ใส่รายละเอียด" disabled>
+                    <paper-listbox class="dropdown-content" attr-for-selected="quantity" selected="{{item.quantity}}">
+                      <paper-item quantity="25">25 Kg PP bags</paper-item>
+                      <paper-item quantity="40">40 Kg PP bags</paper-item>
+                      <paper-item quantity="50">50 Kg PP bags</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
+                </gl-grid-col>
 
 
-      <div class="vertical layout bg">
-        <div class="horizontal layout top">
-            <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใสรายละเอียด" placeholder="ใส่รายละเอียด" required label="Actual Shipper" value="[[item.actualShipper]]"></paper-input></div>
-            <div class="flexchild-1">
-              <paper-dropdown-menu class="box" label="ขนาดบรรจุ /kg" placeholder="ใส่รายละเอียด" disabled>
-                <paper-listbox class="dropdown-content" attr-for-selected="quantity" selected="{{item.quantity}}">
-                  <paper-item quantity="25">25 Kg PP bags</paper-item>
-                  <paper-item quantity="40">40 Kg PP bags</paper-item>
-                  <paper-item quantity="50">50 Kg PP bags</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
-            </div>
+                <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+                  <paper-input placeholder="ใส่รายละเอียด" required label="ตันละ USD" disabled value="[[item.tonPerusd]]"></paper-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,3]]">
+                  <paper-input auto-validate error-message="กรุณาใส่น้ำหนัก" placeholder="ใส่รายละเอียด" required label="น้ำหนักกละสอบ /gram" value="[[item.weightGram]]"></paper-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,3]]">
+                  <paper-input auto-validate error-message="กรุณาใส่น้ำหนัก" placeholder="ใส่รายละเอียด" required label="Weight" value="[[item.weightMt]]"></paper-input>
+                </gl-grid-col>
+
+
+                <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,3]]">
+                <paper-input auto-validate error-message="กรุณาใสจำนวนกระสอบ" placeholder="ใส่รายละเอียด" required label="จำนวนกระสอบ / BAGS" value="[[item.quantitySack]]"></paper-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[500,5],[700,3]]">
+                <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" label="MARKS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.Marks]]"></paper-textarea>
+                </gl-grid-col>
+
+
+              <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+                <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" label="DECRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
+              </gl-grid-col>
+
+              <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+                <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" label="PACKING :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
+              </gl-grid-col>
+
+              <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+                <div class="top">WEIGHT</div>
+              </gl-grid-col>
+
+              <div class="horizontal layout top">
+                <div class="horizontal layout flexchild-2">
+                  <div class="padR">G.W.</div>
+                  <input class="box" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[item.gw]]">
+                  <div class="padL">M/T</div>
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <div class="horizontal layout flexchild-2">
+                  <div class="padR">N.W.</div>
+                  <input class="box" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[item.nw]]">
+                  <div class="padL">M/T</div>
+                </div>
+              </div>
+            </gl-grid-row>
           </div>
-
-          <div class="horizontal layout top">
-            <div class="flexchild-2"><paper-input class="box3" placeholder="ใส่รายละเอียด" required label="ตันละ USD" disabled value="[[item.tonPerusd]]"></paper-input></div>
-            <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใส่น้ำหนัก" placeholder="ใส่รายละเอียด" required label="น้ำหนักกละสอบ /gram" value="[[item.weightGram]]"></paper-input></div>
-            <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใส่น้ำหนัก" placeholder="ใส่รายละเอียด" required label="Weight" value="[[item.weightMt]]"></paper-input></div>
-          </div>
-
-          <div class="horizontal layout top">
-            <div class="flexchild-2"><paper-input class="box3" auto-validate error-message="กรุณาใสจำนวนกระสอบ" placeholder="ใส่รายละเอียด" required label="จำนวนกระสอบ / BAGS" value="[[item.quantitySack]]"></paper-input></div>
-            <div class="flexchild-2"><paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box3" label="MARKS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.Marks]]"></paper-textarea></div>
-          </div>
-
-          <div class="horizontal layout top">
-            <div class="flexchild-2"><paper-textarea class="box4" label="DECRIPTION OF GOODS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea></div>
-          </div>
-
-          <div class="horizontal layout top">
-            <div class="flexchild-2"><paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box4" label="PACKING :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea></div>
-          </div>
-
-          <div>WEIGHT</div>
-
-          <div class="horizontal layout top">
-            <div class="horizontal layout flexchild-2">
-              <div class="padR">G.W.</div>
-              <input class="box2" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[item.gw]]">
-              <div class="padL">M/T</div>
-            </div>
-            <div class="horizontal layout flexchild-2">
-              <div class="padR">N.W.</div>
-              <input class="box2" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[item.nw]]">
-              <div class="padL">M/T</div>
-            </div>
-          </div>
-        </div>
         </template>
-      </div>
 
       <div class="horizontal end-justified layout">
         <paper-button raised>เพิ่ม</paper-button>
       </div>
 
-      <div class="top">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
         <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.consigned]]"></paper-textarea>
-      </div>
+      </gl-grid-col>
 
-      <div class="top">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
         <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.notify]]"></paper-textarea>
-      </div>
+      </gl-grid-col>
 
-      <div class="top">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
         <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="2" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
-      </div>
+      </gl-grid-col>
 
       <div class="horizontal center-justified layout top">
         <div class="padR">ORIGINALS</div>
-        <input class="box5" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[data.ori]]">
+        <input class="box2" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[data.ori]]">
         <div class="padR padL">/</div>
-        <input class="box5" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[data.nn]]">
+        <input class="box2" is="iron-input" prevent-invalid-input allowed-pattern="[0-9,.]" value="[[data.nn]]">
         <div class="padL">N/N</div>
       </div>
 
