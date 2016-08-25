@@ -1,9 +1,17 @@
-<link rel="import" href="components/my-drawer.html">
+<style media="screen">
+  html,body {
+   margin: 0;
+   height: 100%;
+  }
+</style>
+<link rel="import" href="components/icon-toggle.html">
 <dom-module id="layout-main">
-  <style media="screen">
+  <style is="custom-style" include="iron-flex iron-flex-alignment">
+  .iconhead{
+    --iron-icon-height: 20px;
+     --iron-icon-width: 20px;
+  }
   paper-toolbar.toolbarHead {
-
-    /*border-right: 1px solid var(--paper-grey-300);*/
      --paper-toolbar-background: var(--paper-orange-300);
      --paper-toolbar-height:15px;
      --paper-toolbar-title: {
@@ -22,18 +30,11 @@
         font-weight: bold;
     };
   }
-   paper-drawer-panel {
-    --paper-drawer-panel-drawer-container: {
-        background-color: var(--paper-grey-100);
-        position: absolute;;
-        /*top: 127px;*/
-        /*border-right: 1px solid var(--paper-grey-300);*/
-    };
-  }
-  .drawerss{
-    height:100%;
-    border-right: 1px solid var(--paper-grey-300);
-  }
+    .toolbarMid:last-of-type {
+      margin-bottom: 10px;
+      /*box-shadow: 0px 3px 9px #888888;*/
+    }
+
     paper-button.custom {
       --paper-button:{
         height: 33px;
@@ -60,46 +61,84 @@
         color: white !important;
       };
     }
+    paper-icon-button.pink {
+     color: var(--paper-grey-700);
+     --paper-icon-button-ink-color: var(--paper-indigo-500);
+    }
+    paper-icon-button.pink:active {
+      background-color: var(--paper-pink-500);
+      color: white;
+    }
+    paper-progress.slow {
+    --paper-progress-active-color:var(--paper-orange-300);
+   --paper-progress-indeterminate-cycle-duration: 2s;
+ }
   </style>
   <template>
-    <paper-drawer-panel drawer-width="235px">
-      <paper-header-panel drawer>
         <paper-toolbar class="toolbarHead"></paper-toolbar>
-        <paper-toolbar class="toolbarMid"></paper-toolbar>
-        <paper-toolbar class="toolbarMid"></paper-toolbar>
-        <div class="drawerss">
-          <my-drawer ></my-drawer>
-        </div>
-      </paper-header-panel>
-      <paper-header-panel main>
-        <paper-toolbar class="toolbarHead">
-          <!-- <div>
-            <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
-            <div class="title">  COCCO ประเทศจีน</div>
-          </div> -->
-        </paper-toolbar>
         <paper-toolbar class="toolbarMid">
-          <!-- <div class="">
-            <paper-button raised>เพิ่ม</paper-button>
-          </div> -->
           <div>
             <div class="title">ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
-            <!-- <div class="title">  COCCO ประเทศจีน</div> -->
+            <div class="title">  COCCO ประเทศจีน</div>
           </div>
         </paper-toolbar>
         <paper-toolbar class="toolbarMid">
-          <paper-button raised class="custom green">เพิ่ม</paper-button>
+          <span class="title">
+            <paper-button raised class="custom green">เพิ่ม</paper-button>
+          </span>
+          <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
+            <iron-icon class="iconhead" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
+          </icon-toggle>
+          <icon-toggle toggles tabindex="0" on-tap="loadPages">
+            <iron-icon class="iconhead" icon="settings" title="ตั้งค่า" ></iron-icon>
+          </icon-toggle>
+          <template is="dom-if" if="[[loadContent]]">
+              <paper-progress class="middle fit slow" indeterminate></paper-progress>
+          </template>
+
         </paper-toolbar>
-        <tag-page-load></tag-page-load>
-      </paper-header-panel>
-    </paper-drawer-panel>
+        <tag-page-load id="tagPageLoad"></tag-page-load>
+
 
     </html>
   </template>
   <script>
     Polymer({
       is:'layout-main',
-      behaviors:[nxTemplateBehavior,nxLocalesBehavior],
+      behaviors:[nxTemplateBehavior,nxLocalesBehavior,nxCoreBehavior],
+      properties: {
+        loadContent: {
+          type: Boolean,
+          value:false
+        }
+      },
+      created: function() {
+        this.nxSetGlobalElement('layoutMain');
+      },
+      changePath:function(path){
+        this.loadContent = true;
+        console.log('a',this.loadContent);
+        this.nxChangePath(path);
+      },
+      ready:function(){
+        // this._observer = Polymer.dom(this.$.tagPageLoad).observeNodes((info)=>{
+        //
+        //   this.loadContent = false;
+        //   console.log('b',this.loadContent);
+        // });
+      },
+      attached: function() {
+        if(localStorage.getItem("togglePanel")=="true"
+        && localStorage.getItem("togglePanel")!=null){
+          var button = Polymer.dom(this.root).querySelector('#changeWidth');
+          button.setAttribute("active","")
+        }
+      },
+      togglePanel:function(e){
+        //if(typeof e.currentTarget.getAttribute('active') != "object"){}
+        //เรียกใช้อีรีเม็นแล้วเข้าไปใช้ฟั่งชั่น
+        this.nxGetGlobalElement('contentPanel').changeDiv();
+      },
       changeLanguage:function(){
         if(this.language == 'th'){
           this.nxSwitchLanguage('en');
