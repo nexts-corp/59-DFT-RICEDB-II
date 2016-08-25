@@ -24,6 +24,7 @@
         color: gray;
       }
     </style>
+    <app-location route="{{routeError}}"></app-location>
     <div class="container">
       <img src="/images/logo_dft.jpg" alt="Smiley face">
       <div class="head">
@@ -31,7 +32,7 @@
            <hr>
       </div>
      <div class="content">
-        The requested URL was not found on this server. <span>That's all we know.</span> <a href="#" on-tap="toHome">Click to homepage</a>
+        The requested URL[[routeError.path]] was not found on this server. <span>That's all we know.</span> <a href="#" on-tap="toHome">Click to homepage</a>
      </div>
 
 
@@ -42,6 +43,14 @@
     Polymer({
       is:'error-404',
       behaviors:[nxCoreBehavior],
+      properties:{
+        urlError:{
+          type:"String",
+          value:function(){
+            return window.location.href;
+          }
+        }
+      },
       created:function(){
         this.nxSetLayout('layout-error');
       },
