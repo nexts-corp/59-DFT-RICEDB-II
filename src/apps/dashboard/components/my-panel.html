@@ -1,0 +1,71 @@
+<link rel="import" href="../panel-seleted.html">
+<link rel="import" href="promise/promise-detail.html">
+<link rel="import" href="promise/promise-fileup.html">
+<link rel="import" href="promise/promise-file.html">
+<link rel="import" href="promise/promise-confirm.html">
+<link rel="import" href="period/period-lot.html">
+<link rel="import" href="period/period-city.html">
+<link rel="import" href="vessel/vessel-detail.html">
+<link rel="import" href="vessel/vessel-print.html">
+<link rel="import" href="vessel/vessel-draf.html">
+<link rel="import" href="invoice/invoice-detail.html">
+<link rel="import" href="invoice/invoice-print.html">
+<link rel="import" href="payment/payment-detail.html">
+<link rel="import" href="payment/payment-print.html">
+
+
+<dom-module id="my-panel">
+  <template>
+
+    <panel-seleted>
+      <section-content name="detail">
+        <iron-pages attr-for-selected="name-page-detail" selected="{{pageSeletedDetail}}">
+          <promise-detail data="{{dataselected}}" name-page-detail="promiseDetail"></promise-detail>
+          <promise-confirm data="{{dataselected}}" name-page-detail="promiseConfirm"></promise-confirm>
+          <period-lot data="{{dataselected}}" name-page-detail="periodLot"></period-lot>
+          <period-city data="{{dataselected}}" name-page-detail="periodCity"></period-city>
+          <vessel-detail data="{{dataselected}}" name-page-detail="vesselDetail"></vessel-detail>
+          <vessel-draf data="{{dataselected}}" name-page-detail="vesselDraf"></vessel-draf>
+          <invoice-detail data="{{dataselected}}" name-page-detail="invoiceDetail"></invoice-detail>
+          <payment-detail data="{{dataselected}}" name-page-detail="paymentDetail"></payment-detail>
+        </iron-pages>
+
+      </section-content>
+      <section-content name="print">
+        <iron-pages attr-for-selected="name-page-print" selected="{{pageSeletedPrint}}">
+          <vessel-print name-page-print="vesselPrint"></vessel-print>
+          <invoice-print name-page-print="invoicePrint"></invoice-print>
+          <payment-print name-page-print="paymentPrint"></payment-print>
+        </iron-pages>
+      </section-content>
+      <section-content name="file">
+          <!-- <promisefile name="promiseFile"></promisefile> -->
+          <promise-fileup ></promise-fileup>
+      </section-content>
+    </panel-seleted>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "my-panel",
+      properties: {
+        pageSeletedDetail:{
+          type: String,
+          value:'promiseDetail'
+          // value:'promiseConfirm'
+          // value:'periodLot'
+          // value:'periodCity'
+          // value:'vesselDetail'
+          // value:'vesselDraf'
+          // value:'invoiceDetail'
+          // value:'paymentDetail'
+        },
+        pageSeletedPrint:{
+          type: String,
+          value:'vesselPrint'
+        }
+      }
+    });
+  </script>
+</dom-module>

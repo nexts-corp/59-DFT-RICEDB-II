@@ -1,0 +1,108 @@
+<dom-module id="vessel-draf">
+  <style include="iron-flex iron-flex-alignment">
+    .flexchild-1 {
+      @apply(--layout-flex);
+    }
+    .flexchild-2 {
+      @apply(--layout-flex-2);
+    }
+    .top{
+      margin-top: 10px;
+    }
+    .top2{
+      margin-top: 30px;
+    }
+    .box{
+      width: 80%;
+    }
+    .padR{
+      padding-right: 10px;
+    }
+    .padL{
+      padding-left: 10px;
+    }
+    paper-textarea{
+      word-break: break-all;
+      width: 90%;
+    }
+    paper-button{
+      width: 20px;
+      height: 30px;
+      margin-top: 30px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+  <template>
+
+    <div class="vertical layout">
+
+      <div>
+        <paper-textarea rows="2" label="SHIPPER" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.actualShipper]]"></paper-textarea>
+      </div>
+      <div>
+        <paper-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></paper-textarea>
+      </div>
+      <div class="horizontal layout top">
+        <div class="flexchild-2"><paper-input class="box" label="VESSEL" placeholder="ใส่รายละเอียด" value="[[data.vesselName]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="B/L No." placeholder="ใส่รายละเอียด" value="[[data.bookIngNo]]"></paper-input></div>
+      </div>
+      <div class="horizontal layout top">
+        <div class="flexchild-2"><paper-input class="box" label="POL (PORT OF LOADING)" placeholder="ใส่รายละเอียด" value="[[data.pol]]"></paper-input></div>
+        <div class="flexchild-2"><paper-input class="box" label="POD (PORT OF DISCHAR)" placeholder="ใส่รายละเอียด" value="[[data.pod]]"></paper-input></div>
+      </div>
+      <template is="dom-repeat" items="[[data.actual]]">
+
+
+      <div class="horizontal layout top">
+        <div class="flexchild-2">MARK</div>
+        <div class="flexchild-2">[[item.quantity]] Bag</div>
+      </div>
+      <div>
+        <paper-textarea rows="2" label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.descriptionOfGood]]"></paper-textarea>
+      </div>
+      <div>
+        <paper-textarea rows="2" label="PACKING :" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[item.packing]]"></paper-textarea>
+      </div>
+
+      <div class="top">WEIGHT</div>
+
+      <div class="horizontal center-justified layout top">
+        <div class="horizontal center-justified layout flexchild-2">
+          <div class="padR">G.W.</div>
+          <div>[[item.gw]]</div>
+          <div class="padL">M/T</div>
+        </div>
+        <div class="horizontal layout flexchild-2">
+          <div class="padR">N.W.</div>
+          <div>[[item.nw]]</div>
+          <div class="padL">M/T</div>
+        </div>
+      </div>
+      </template>
+
+      <div class="horizontal center-justified layout top2">
+        <div class="padR">ORIGINALS</div>
+        <div>[[data.ori]] </div>
+        <div class="padR padL">/</div>
+        <div>[[data.nn]] </div>
+        <div class="padL">N/N</div>
+      </div>
+
+      <div class="horizontal end-justified layout">
+        <paper-button raised>ยกเลิก</paper-button>
+        <paper-button raised>บันทึก</paper-button>
+      </div>
+
+
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "vessel-draf",
+
+    });
+  </script>
+</dom-module>

@@ -11,13 +11,6 @@ paper-button{
   height: 30px;
   margin-top: 10px;
 }
-.box{
-  width: 65%;
-}
-.bg{
-  border: 1px solid black;
-  padding-left: 10px;
-}
   </style>
 
   <template>
@@ -25,13 +18,14 @@ paper-button{
         <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <paper-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.promiseName}}" placeholder="ใส่รายละเอียด"></paper-input>
         </gl-grid-col>
-        <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <paper-input auto-validate error-message="กรุณาใส่เลขที่สัญญา" required  label="เลขที่สัญญา" value="{{data.promiseNo}}" placeholder="ใส่รายละเอียด"></paper-input>
-        </gl-grid-col> -->
-        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]">
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <vaadin-date-picker label="วันที่"></vaadin-date-picker>
         </gl-grid-col>
-        <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <paper-dropdown-menu id="valid" on-tap="requiredDropdown" label="ราคา" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
             <paper-listbox  class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
               <paper-item price-type="fob">FOB</paper-item>
@@ -39,31 +33,22 @@ paper-button{
               <paper-item price-type="other">ฯลฯ</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
-        </gl-grid-col> -->
-        </gl-grid-row>
+        </gl-grid-col>
 
       <template is="dom-repeat" items="{{data.rice}}">
-        <div class="bg">
-          <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-                <paper-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท">
-                  <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
-                    <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
-                    <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-                <paper-input class="box" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input>
-            </gl-grid-col>
-          </gl-grid-row>
-        </div>
-
-        <div class="horizontal end-justified layout">
-          <paper-button raised>เพิ่ม</paper-button>
-        </div>
-
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <paper-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท">
+              <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
+                <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
+                <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input>
+        </gl-grid-col>
       </template>
+      </gl-grid-row>
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
