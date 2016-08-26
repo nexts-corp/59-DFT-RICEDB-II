@@ -3,6 +3,11 @@
   .top{
     margin-top: 15px;
   }
+  .bg{
+    /*background-color:var(--paper-grey-200);*/
+    border: 1px solid black;
+    padding-left: 10px;
+  }
   paper-button{
     width: 20px;
     height: 30px;
@@ -25,6 +30,7 @@
 
 
       <template is="dom-repeat" items="[[data.confirmItem]]">
+        <div class="bg">
           <div class="top">Commodities, Price, Package</div>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]">
@@ -37,6 +43,7 @@
               <paper-input class="box" auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.price]]"></paper-input>
             </gl-grid-col>
           </gl-grid-row>
+        </div>
       </template>
 
 
