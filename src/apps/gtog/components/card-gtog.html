@@ -1,0 +1,96 @@
+<dom-module id="card-gtog">
+  <style include="iron-flex iron-flex-alignment iron-flex-factors">
+  .lime {
+    background: var(--paper-lime-500);
+  }
+  paper-card{
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+  }
+  paper-card:nth-of-type(9) {
+    background: red;
+    float: right;
+  }
+
+  paper-card.lime {
+      color: white;
+      --paper-card-header-color: white;
+    }
+  paper-card >div.heading{
+      padding-left: 20px;
+      padding-top: 5px;
+      color: red;
+    }
+  paper-card > div.card-actions >div.sub-content{
+    color: blue;
+    text-align: right;
+  }
+  </style>
+  <template>
+    <div class="layout horizontal ">
+    <template is="dom-repeat" items="[[counties]]">
+      <paper-card class="lime">
+        <div class="heading">
+          [[item.name]]
+        </div>
+        <div class="card-actions">
+          <div class="sub-content">
+              รายละเอียดเล็กน้อย
+          </div>
+        </div>
+      </paper-card>
+    </template>
+  </div>
+  </template>
+  <script>
+    Polymer({
+      is: "card-gtog",
+      properties: {
+        counties: {
+          type: Object,
+          value:function(){
+            return [
+                {
+                  id:1,
+                  name:'COFCO ประเทศจีน'
+                },
+                {
+                  id:2,
+                  name:'BULOG  ประเทศอินโดนีเซีย'
+                },
+                {
+                  id:3,
+                  name:'NFA ประเทศฟิลิปินส์'
+                },
+                {
+                  id:1,
+                  name:'COFCO ประเทศจีน'
+                },
+                {
+                  id:2,
+                  name:'BULOG  ประเทศอินโดนีเซีย'
+                },
+                {
+                  id:3,
+                  name:'NFA ประเทศฟิลิปินส์'
+                },
+                {
+                  id:1,
+                  name:'COFCO ประเทศจีน'
+                },
+                {
+                  id:2,
+                  name:'BULOG  ประเทศอินโดนีเซีย'
+                },
+                {
+                  id:3,
+                  name:'NFA ประเทศฟิลิปินส์'
+                },
+              ]
+            }
+        }
+      }
+    });
+  </script>
+</dom-module>

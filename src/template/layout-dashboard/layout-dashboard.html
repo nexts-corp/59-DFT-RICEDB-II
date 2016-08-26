@@ -6,9 +6,15 @@
 </style>
 <dom-module id="layout-dashboard">
   <style media="screen">
+  paper-header-panel {
+    --paper-header-panel-shadow: {
+        height: 6px;
+        bottom: -6px;
+        box-shadow: inset 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+    };
+  }
   paper-toolbar.toolbarHead {
-  box-shadow: 0px 3px 9px #888888;
-  /*border-right: 1px solid var(--paper-grey-300);*/
+  /*box-shadow: 0px 1px 3px var(--paper-grey-50);;*/
    --paper-toolbar-background: var(--paper-orange-300);
    --paper-toolbar-height:70px;
    --paper-toolbar-title: {
@@ -17,17 +23,28 @@
      margin-left: 1px;
    };
  }
+
+ footer {
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+      background-color: blue;
+      font-size: 14px;
+    }
+
   </style>
   <template>
-    <paper-toolbar class="toolbarHead">
-      <div>
-        <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+    <paper-header-panel >
+      <paper-toolbar class="toolbarHead">
+        <div>
+          <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+        </div>
+      </paper-toolbar>
+      <div id="main-content">
+        <tag-page-load></tag-page-load>
       </div>
-    </paper-toolbar>
-    <div id="main-content">
-      <tag-page-load></tag-page-load>
-    </div>
-
+    </paper-header-panel>
+  <!-- <footer> DFT @ Project 2016</footer> -->
 
   </template>
   <script>
