@@ -62,22 +62,24 @@
            is:'list-datas',
            toggle: function(e) {
               var targetAttribute = e.target.getAttribute('aria-controls');
-              // console.log(this.$$('#'+targetAttribute));
               this.$$('#'+targetAttribute).toggle();
             },
-            editChange:function(){
-              // console.log(Polymer.dom(this.root).querySelectorAll('paper-input'));
-              console.log(Polymer.dom(this.node));
-              var change = Polymer.dom(this.root).querySelectorAll('paper-input');
+            editChange:function(e){
+              var change = this._edit(e);
               change.map((el)=>{
                   el.removeAttribute("disabled");
               })
             },
-            finChange:function(){
-              var change = Polymer.dom(this.root).querySelectorAll('paper-input');
+            finChange:function(e){
+              var change = this._edit(e);
               change.map((el)=>{
                   el.setAttribute('disabled', '')
               })
+            },
+            _edit:function(e){
+              var editText = '#'+e.target.parentElement.parentElement.getAttribute('id');
+              var change = Polymer.dom(this.$$(editText)).querySelectorAll('paper-input');
+              return change;
             }
         });
 
