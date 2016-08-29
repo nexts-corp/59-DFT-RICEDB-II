@@ -15,19 +15,50 @@
         padding: 15px;
         border: 1px solid #dedede;
       }
+      .bd{
+        border: 1px solid #000;
+        padding: 0px;
+        height: 48px;
+        line-height: 48px;
+      }
+      .fon{
+        padding-left: 5px;
+      }
   </style>
     <template >
         <div class="layout horizontal">
-          <div class="flex head">หัวข้อที่ 1</div>
-          <div class="flex head">หัวข้อที่ 2</div>
-          <div class="flex head">หัวข้อที่ 3</div>
+          <div class="flex head bd">หัวข้อที่ 1</div>
+          <div class="flex head bd">หัวข้อที่ 2</div>
+          <div class="flex head bd">หัวข้อที่ 3</div>
+        </div>
+        <div role="listbox">
+          <paper-item class="fancy bd" on-tap="toggle" aria-controls="collapse1">
+            <div class="flex bd">
+              <div class="fon">
+                COFCO
+              </div>
+            </div>
+            <div class="flex bd">ประเทศจีน
+            </div>
+            <div class="flex bd">20000000
+            </div>
+          </paper-item>
+          <iron-collapse id="collapse1">
+            <div class="collapse-content">
+              <button type="button" name="button" on-tap="editChange">แก้ไข</button>
+              <button type="button" name="button" on-tap="finChange">บันทึก</button>
+              <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+              <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+              <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+            </div>
+          </iron-collapse>
         </div>
         <!-- <paper-menu> -->
-          <paper-icon-item class="lineButtom">
+          <!-- <paper-icon-item class="lineButtom">
             <paper-icon-button icon="expand-more" on-tap="toggle" aria-controls="collapse1"></paper-icon-button>
-              <div class="flex">COFCO</div>
-              <div class="flex">ประเทศจีน</div>
-              <div class="flex">20000000</div>
+              <div class="flex bd">COFCO</div>
+              <div class="flex bd">ประเทศจีน</div>
+              <div class="flex bd">20000000</div>
           </paper-icon-item>
           <iron-collapse id="collapse1">
             <div class="collapse-content">
@@ -40,9 +71,9 @@
           </iron-collapse>
           <paper-icon-item class="lineButtom">
             <paper-icon-button icon="expand-more" on-tap="toggle" aria-controls="collapse2"></paper-icon-button>
-            <div class="flex">COFCO</div>
-            <div class="flex">ประเทศจีน</div>
-            <div class="flex">20000000</div>
+            <div class="flex bd">COFCO</div>
+            <div class="flex bd">ประเทศจีน</div>
+            <div class="flex bd">20000000</div>
           </paper-icon-item>
           <iron-collapse id="collapse2">
             <div class="collapse-content">
@@ -52,7 +83,7 @@
               <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
               <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
             </div>
-          </iron-collapse>
+          </iron-collapse> -->
 
 
     </template>

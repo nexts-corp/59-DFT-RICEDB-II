@@ -1,0 +1,122 @@
+<dom-module id="list-vessel">
+  <style include="iron-flex iron-flex-factors">
+      .head{
+        text-align: center;
+        background-color: var(--paper-grey-100);
+        padding: 10px 0px 10px 10px;
+        color: var(--paper-grey-600);
+      }
+      paper-icon-item.lineButtom{
+        --paper-icon-item:{
+            border-bottom:1px solid #ccc;
+        }
+      }
+      .collapse-content {
+        padding: 15px;
+        border: 1px solid #dedede;
+      }
+      .bd{
+        border: 1px solid #000;
+        padding: 0px;
+        height: 48px;
+        line-height: 48px;
+      }
+      .fon{
+        padding-left: 5px;
+      }
+  </style>
+    <template >
+        <div class="layout horizontal">
+          <div class="flex head bd">หัวข้อที่ 1</div>
+          <div class="flex head bd">หัวข้อที่ 2</div>
+          <div class="flex head bd">หัวข้อที่ 3</div>
+        </div>
+        <paper-item class="fancy bd" on-tap="toggle" aria-controls="collapse1">
+          <div class="flex bd">
+            <div class="fon">
+              COFCO
+            </div>
+          </div>
+          <div class="flex bd">
+            <div class="fon">
+              COFCO
+            </div>
+          </div>
+          <div class="flex bd">
+            <div class="fon">
+              COFCO
+            </div>
+          </div>
+        </paper-item>
+
+
+        <iron-collapse id="collapse1">
+          <div class="collapse-content">
+            <button type="button" name="button" on-tap="editChange">แก้ไข</button>
+            <button type="button" name="button" on-tap="finChange">บันทึก</button>
+            <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+            <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+            <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+          </div>
+        </iron-collapse>
+
+        <paper-item class="fancy bd" on-tap="toggle" aria-controls="collapse2">
+          <div class="flex bd">
+            <div class="fon">
+              COFCO
+            </div>
+          </div>
+          <div class="flex bd">
+            <div class="fon">
+              COFCO
+            </div>
+          </div>
+          <div class="flex bd">
+            <div class="fon">
+              COFCO
+            </div>
+          </div>
+        </paper-item>
+        <iron-collapse id="collapse2">
+          <div class="collapse-content">
+            <button type="button" name="button" on-tap="editChange">แก้ไข</button>
+            <button type="button" name="button" on-tap="finChange">บันทึก</button>
+            <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+            <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+            <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+          </div>
+        </iron-collapse>
+
+
+
+    </template>
+
+    <script>
+        Polymer({
+           is:'list-vessel',
+           toggle: function(e) {
+              var targetAttribute = e.currentTarget.getAttribute('aria-controls');
+              this.$$('#'+targetAttribute).toggle();
+            },
+            editChange:function(e){
+              var change = this._edit(e);
+              change.map((el)=>{
+                  el.removeAttribute("disabled");
+              })
+            },
+            finChange:function(e){
+              var change = this._edit(e);
+              change.map((el)=>{
+                  el.setAttribute('disabled', '')
+              })
+            },
+            _edit:function(e){
+              var editText = '#'+e.target.parentElement.parentElement.getAttribute('id');
+              var change = Polymer.dom(this.$$(editText)).querySelectorAll('paper-input');
+              return change;
+            }
+        });
+
+
+    </script>
+</dom-module>
