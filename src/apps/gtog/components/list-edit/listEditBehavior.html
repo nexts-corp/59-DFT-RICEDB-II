@@ -1,0 +1,80 @@
+<script>
+  listEditBehavior = {
+    properties:{
+        seleted:{
+            type:Object,
+            notify:true
+        },
+        config:{
+            type:Object
+        },
+        subComponent:{
+          type:Object
+        }
+    },
+    ready: function() {
+      //หัวตาราง
+      var config = {primary:[]};
+      var items = Polymer.dom(this.$.primary).getDistributedNodes();
+      var lists = Polymer.dom(items[0]).querySelectorAll('list');
+      var countPrimary =lists.length;
+      for (var i = 0; i < countPrimary; i++) {
+          var configPointer = {
+              item:lists[i].getAttribute('item'),
+              label:lists[i].getAttribute('label'),
+              width:lists[i].getAttribute('width')
+          };
+          config.primary.push(configPointer);
+      }
+      //ข้อมูลในตาราง
+      var items2 = Polymer.dom(this.$.secondary).getDistributedNodes();
+      var lists2 = Polymer.dom(items2[0]).querySelector('list');
+      // var subComponent = this.$.subComponent;
+      this.subComponent = lists2;
+      // console.log(subComponent);
+      console.log(this.subComponent);
+      // var countSecondary =lists.length;
+      // for (var i = 0; i < countSecondary; i++) {
+      //
+      //     var configPointer2 = {
+      //         item:lists2[i].getAttribute('item'),
+      //         label:lists2[i].getAttribute('label'),
+      //         width:lists2[i].getAttribute('width')
+      //     };
+      //
+
+      // }
+      this.config = config;
+    },
+    attached: function() {
+      var subComponent = this.$.subComponent;
+      console.log(subComponent);
+
+    },
+    _getItemPrimary:function(item,config){
+        return item[config.item];
+    },
+    toggle: function(e) {
+       var targetAttribute = e.currentTarget.getAttribute('aria-controls');
+      //  console.log(targetAttribute);
+       this.$$('#'+targetAttribute).toggle();
+     },
+     editChange:function(e){
+       var change = this._edit(e);
+       change.map((el)=>{
+           el.removeAttribute("disabled");
+       })
+     },
+     finChange:function(e){
+       var change = this._edit(e);
+       change.map((el)=>{
+           el.setAttribute('disabled', '')
+       })
+     },
+     _edit:function(e){
+       var editText = '#'+e.target.parentElement.parentElement.getAttribute('id');
+       var change = Polymer.dom(this.$$(editText)).querySelectorAll('paper-input');
+       return change;
+     }
+  };
+</script>

@@ -1,0 +1,61 @@
+<link rel="import" href="listEditBehavior.html">
+<dom-module id="list-edit">
+  <style include="iron-flex iron-flex-factors">
+    .header{
+      text-align: center;
+    }
+    .cleanBd{
+      padding: 0px;
+      height: 48px;
+      line-height: 48px;
+    }
+    .bd{
+      border: 1px solid #000;
+    }
+    .fontPdLeft{
+      padding-left: 10px;
+    }
+  </style>
+  <template>
+    <content id="primary" select="items[type=primary]"></content>
+    <content id="secondary" select="items[type=secondary]"></content>
+
+    <div class="layout horizontal bd">
+      <template is="dom-repeat" items="{{config.primary}}">
+        <div class$="[[item.width]] bd cleanBd header">
+          [[item.label]]
+        </div>
+      </template>
+    </div>
+    <template is="dom-repeat" as="itemPrimary" items="{{data}}">
+      <paper-item class="fancy cleanBd" on-tap="toggle" aria-controls$="[[itemPrimary.collapse]]">
+        <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+          <div class$="[[configPrimary.width]] bd">
+            <div class="fontPdLeft">
+              {{_getItemPrimary(itemPrimary,configPrimary)}}
+            </div>
+          </div>
+        </template>
+      </paper-item>
+      <iron-collapse id="[[itemPrimary.collapse]]">
+        <div class="collapse-content">
+
+          <button type="button" name="button" on-tap="editChange">แก้ไข</button>
+          <button type="button" name="button" on-tap="finChange">บันทึก</button>
+          <!-- เพิ่มคอมโพเน้นตรงนี้ -->
+
+          <div id="subComponent">{{subComponent}}</div>
+          <!-- จบ -->
+        </div>
+      </iron-collapse>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "list-edit",
+      behaviors:[listEditBehavior],
+
+
+    });
+  </script>
+</dom-module>

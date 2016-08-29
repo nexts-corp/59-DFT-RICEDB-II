@@ -6,6 +6,7 @@
 <link rel="import" href="components/vessel/vessel-print.html">
 <link rel="import" href="components/vessel/vessel-draf.html">
 <link rel="import" href="components/list-vessel.html">
+<link rel="import" href="components/list-edit/list-edit.html">
 <dom-module id="gtog-add-vessel">
 
   <template>
@@ -33,7 +34,18 @@
         <panel-seleted>
           <section-content name="detail">
             <!-- <vessel-detail name="primary" data="{{dataSelect}}"></vessel-detail> -->
-            <list-vessel></list-vessel>
+            <!-- <list-vessel></list-vessel> -->
+              <list-edit data="{{data}}">
+                <items type="primary">
+                  <list item="vesselName" label="ชื่อเรือ" width="flex"></list>
+                  <list item="vesselLine" label="สายเรือ" width="flex"></list>
+                </items>
+                <items type="secondary" item="sub" style="display:none;">
+                  <list>
+                    <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+                  </list>
+                </items>
+              </list-edit>
 
           </section-content>
           <section-content name="print">
@@ -75,6 +87,7 @@
                 {
                   id:1,
                   vesselName:'Hanjin Belawan V.1609',
+                  collapse:'collapse1',
                   vesselLine:'cscl',
                   vesselOrder:50,
                   actualShipper:'Toumi Food And Product CO., LTD',
@@ -112,6 +125,7 @@
                 {
                   id:2,
                   vesselName:'ZHONG XING 898',
+                  collapse:'collapse2',
                   vesselLine:'cscl',
                   vesselOrder:56,
                   actualShipper:'Toumi Food And Product CO., LTD',
@@ -149,6 +163,7 @@
                 {
                   id:3,
                   vesselName:'SHUN HONG HAI 828',
+                  collapse:'collapse3',
                   vesselLine:'cscl',
                   vesselOrder:90,
                   actualShipper:'Toumi Food And Product CO., LTD',
