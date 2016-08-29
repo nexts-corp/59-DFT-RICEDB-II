@@ -3,7 +3,10 @@
       .head{
         text-align: center;
         background-color: var(--paper-grey-100);
-        padding: 10px 0px 10px 10px;
+        /*padding: 10px 0px 10px 10px;*/
+        padding: 0px;
+        height: 48px;
+        line-height: 48px;
         color: var(--paper-grey-600);
       }
       paper-icon-item.lineButtom{
@@ -25,33 +28,24 @@
       }
       .fontPdLeft{
         padding-left: 5px;
+        word-wrap: break-word;
       }
   </style>
-    <template >
-        <div class="layout horizontal">
-          <div class="flex head bd">หัวข้อที่ 1</div>
-          <div class="flex head bd">หัวข้อที่ 2</div>
-          <div class="flex head bd">หัวข้อที่ 3</div>
+    <template>
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col class="head bd" width="[[getWidth]]" grid="[[500,4]]">ผู้ส่งออก</gl-grid-col>
+        <gl-grid-col class="head bd" width="[[getWidth]]" grid="[[500,4]]">ชนิดข้าว</gl-grid-col>
+        <gl-grid-col class="head bd" width="[[getWidth]]" grid="[[500,2]]">Price (USD/MT)</gl-grid-col>
+        <gl-grid-col class="head bd" width="[[getWidth]]" grid="[[500,2]]">จำนวน/ตัน</gl-grid-col>
+      </gl-grid-row>
+        <div class="fancy cleanBd" on-tap="toggle" aria-controls="collapse1">
+          <gl-grid-row>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,4]]"><div class="fontPdLeft">Toumi Foods and Prosucts co.,ltd</div></gl-grid-col>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,4]]"><div class="fontPdLeft">Thai White Rice 5% Brokens,</div></gl-grid-col>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,2]]"><div class="fontPdLeft">392</div></gl-grid-col>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,2]]"><div class="fontPdLeft">1,000</div></gl-grid-col>
+          </gl-grid-row>
         </div>
-        <paper-item class="fancy cleanBd" on-tap="toggle" aria-controls="collapse1">
-          <div class="flex cleanBd bd">
-            <div class="fontPdLeft">
-              COFCO
-            </div>
-          </div>
-          <div class="flex cleanBd bd">
-            <div class="fontPdLeft">
-              COFCO
-            </div>
-          </div>
-          <div class="flex cleanBd bd">
-            <div class="fontPdLeft">
-              COFCO
-            </div>
-          </div>
-        </paper-item>
-
-
         <iron-collapse id="collapse1">
           <div class="collapse-content">
             <button type="button" name="button" on-tap="editChange">แก้ไข</button>
@@ -62,23 +56,14 @@
           </div>
         </iron-collapse>
 
-        <paper-item class="fancy cleanBd" on-tap="toggle" aria-controls="collapse2">
-          <div class="flex cleanBd bd">
-            <div class="fontPdLeft">
-              COFCO
-            </div>
-          </div>
-          <div class="flex cleanBd bd">
-            <div class="fontPdLeft">
-              COFCO
-            </div>
-          </div>
-          <div class="flex cleanBd bd">
-            <div class="fontPdLeft">
-              COFCO
-            </div>
-          </div>
-        </paper-item>
+        <div class="fancy cleanBd" on-tap="toggle" aria-controls="collapse2">
+          <gl-grid-row>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,4]]"><div class="fontPdLeft">Capital Seril co.,ltd</div></gl-grid-col>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,4]]"><div class="fontPdLeft">Thai White Rice 5% Brokens,</div></gl-grid-col>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,2]]"><div class="fontPdLeft">397</div></gl-grid-col>
+            <gl-grid-col class="cleanBd bd" width="[[getWidth]]" grid="[[500,2]]"><div class="fontPdLeft">1,000</div></gl-grid-col>
+          </gl-grid-row>
+        </div>
         <iron-collapse id="collapse2">
           <div class="collapse-content">
 
