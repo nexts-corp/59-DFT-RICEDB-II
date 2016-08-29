@@ -3,13 +3,22 @@
 .top{
   margin-top: 15px;
 }
+.bg{
+  /*background-color:var(--paper-grey-200);*/
+  border: 1px solid black;
+  padding-left: 10px;
+}
 paper-textarea{
   word-break: break-all;
+  width: 100%;
 }
 paper-button{
   width: 20px;
   height: 30px;
   margin-top: 10px;
+}
+paper-input{
+  width: 100%;
 }
   </style>
 
@@ -19,13 +28,10 @@ paper-button{
           <paper-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.promiseName}}" placeholder="ใส่รายละเอียด"></paper-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <paper-input auto-validate error-message="กรุณาใส่เลขที่สัญญา" required  label="เลขที่สัญญา" value="{{data.promiseNo}}" placeholder="ใส่รายละเอียด"></paper-input>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <vaadin-date-picker label="วันที่"></vaadin-date-picker>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+
+        <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <paper-dropdown-menu id="valid" on-tap="requiredDropdown" label="ราคา" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
             <paper-listbox  class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
               <paper-item price-type="fob">FOB</paper-item>
@@ -33,22 +39,30 @@ paper-button{
               <paper-item price-type="other">ฯลฯ</paper-item>
             </paper-listbox>
           </paper-dropdown-menu>
-        </gl-grid-col>
-
-      <template is="dom-repeat" items="{{data.rice}}">
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-            <paper-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท">
-              <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
-                <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
-                <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
-              </paper-listbox>
-            </paper-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-            <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input>
-        </gl-grid-col>
-      </template>
+        </gl-grid-col> -->
       </gl-grid-row>
+
+      <template id="zatest" is="dom-repeat" items="{{data.rice}}">
+        <div class="bg">
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+                <paper-dropdown-menu valid="valid" on-tap="requiredDropdown" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
+                  <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
+                    <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
+                    <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+                <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></paper-input>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
+        <div class="horizontal end-justified layout">
+          <paper-button raised>เพิ่ม</paper-button>
+        </div>
+      </template>
+
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
@@ -82,7 +96,19 @@ paper-button{
         }
       },
       ready:function(){
-        this.listen(this.$.valid,'iron-select','requiredDropdown');
+        //this.listen(this.$.valid,'iron-select','requiredDropdown');
+        //console.log(this.listen(this.$.valid,'iron-select','requiredDropdown'));
+        this.listen(this.$.zatest,'dom-change','testza');
+        // this.listen(this.$.zatest,'dom-change','testza');
+        //console.log(this.$.zatest);
+
+      },
+      testza:function(){
+        l('change');
+        this.listen(this.$$('[valid]'),'iron-select','requiredTest');
+      },
+      requiredTest:function(){
+        console.log('select');
       },
       requiredDropdown:function(e){
         if((e.target.is)=="paper-dropdown-menu"){

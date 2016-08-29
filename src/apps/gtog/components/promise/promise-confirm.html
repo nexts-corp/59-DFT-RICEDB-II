@@ -15,8 +15,11 @@
   }
   paper-textarea{
     word-break: break-all;
+    width: 100%;
   }
-
+  paper-input{
+    width: 100%;
+  }
   </style>
   <template>
     <gl-grid-row width="{{getWidth}}">
@@ -46,13 +49,28 @@
         </div>
       </template>
 
-
       <div class="horizontal end-justified layout">
+        <paper-button raised>ลบ</paper-button>
         <paper-button raised>เพิ่ม</paper-button>
       </div>
 
       <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <paper-dropdown-menu id="valid" on-tap="requiredDropdown" label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+            <paper-listbox  class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
+              <paper-item price-type="fob">FOB</paper-item>
+              <paper-item price-type="cy">CY</paper-item>
+              <paper-item price-type="other">ฯลฯ</paper-item>
+            </paper-listbox>
+          </paper-dropdown-menu>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <paper-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value=""></paper-input>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
           <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="3" label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
         </gl-grid-col>
       </gl-grid-row>
