@@ -9,7 +9,11 @@
             type:Object
         },
         subComponent:{
-          type:Object
+            type:Object
+        },
+        selectChoice:{
+            type:Number,
+            value:0
         }
     },
     ready: function() {
@@ -60,16 +64,24 @@
        this.$$('#'+targetAttribute).toggle();
      },
      editChange:function(e){
-       var change = this._edit(e);
-       change.map((el)=>{
-           el.removeAttribute("disabled");
-       })
-     },
-     finChange:function(e){
-       var change = this._edit(e);
-       change.map((el)=>{
-           el.setAttribute('disabled', '')
-       })
+      //  var change = this._edit(e);
+      //  change.map((el)=>{
+      //      el.removeAttribute("disabled");
+      //  })
+
+      //console.log(e.currentTarget.index);
+      //console.log(this.$$(".iron-index-"+e.currentTarget.index));
+      this.$$(".iron-index-"+e.currentTarget.index).selected = 1;
+      //console.log(Polymer.dom(this.root).querySelector("[iron-index="+e.currentTarget.index+"]"));
+          //this.selectChoice = 1;
+    },
+     saveChange:function(e){
+       this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
+      //  var change = this._edit(e);
+      //  change.map((el)=>{
+      //      el.setAttribute('disabled', '')
+      //  })
+        //this.selectChoice = 0;
      },
      _edit:function(e){
        var editText = '#'+e.target.parentElement.parentElement.getAttribute('id');

@@ -28,7 +28,7 @@
     paper-input{
       width: 100%;
     }
-  </style>
+    </style>
   <template>
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
@@ -52,11 +52,21 @@
       </paper-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
-
-          <button type="button" name="button" on-tap="editChange">แก้ไข</button>
-          <button type="button" name="button" on-tap="finChange">บันทึก</button>
+          <div class="layout horizontal">
+            <div class="flex-4"></div>
+            <div class="flex-2">
+              <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
+              <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
+            </div>
+          </div>
+          <button type="button" name="button" on-tap="checkDom" id="[[itemPrimary.collapse]]">เข้าถึงดูม</button>
+          <hr>
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-            <vessel-draf data="{{itemPrimary}}"></vessel-draf>
+          <iron-pages selected="0" class$="iron-index-{{index}}">
+            <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
+            <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
+          </iron-pages>
+          <hr>
           <!-- จบ -->
         </div>
       </iron-collapse>
@@ -77,6 +87,12 @@
           type: Object,
           notify: true
         }
+      },
+      checkDom:function(e){
+        var id = e.target.id;
+        console.log(id);
+        // this.$$.id;
+        console.log(this.$$.collapsel1);
       }
 
 

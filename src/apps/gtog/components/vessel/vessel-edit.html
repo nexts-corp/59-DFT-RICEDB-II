@@ -1,0 +1,59 @@
+<dom-module id="vessel-edit">
+  <style include="iron-flex iron-flex-alignment">
+    paper-input{
+      width: 100%;
+    }
+  </style>
+
+  <template>
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,2]]">
+            <paper-input label="Package(kg/PP Page)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,2]]">
+            <paper-input label="เมืองท่าปลายทาง" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.cityEnd}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <paper-input label="Booking Shipper" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bs}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,2]]">
+              <paper-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bn}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+            <paper-input label="Vessel" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.vesselName}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+            <paper-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.voidNo}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
+            <paper-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.lotNo}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+            <paper-input label="Pol" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pol}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+            <paper-input label="ETD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.etd}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+            <paper-input label="ETA" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.eta}}"></paper-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,5]]">
+            <paper-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></paper-input>
+          </gl-grid-col>
+        </gl-grid-row>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "vessel-edit",
+      requiredTextArea:function(e){
+        e.target.validate();
+      },
+      ready: function() {
+        l(this.data)
+      },
+
+    });
+  </script>
+</dom-module>
