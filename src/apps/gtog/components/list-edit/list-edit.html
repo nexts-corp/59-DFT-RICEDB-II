@@ -1,4 +1,6 @@
 <link rel="import" href="listEditBehavior.html">
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+
 <dom-module id="list-edit">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     .header{
@@ -59,14 +61,16 @@
               <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
             </div>
           </div>
-          <button type="button" name="button" on-tap="checkDom" id="[[itemPrimary.collapse]]">เข้าถึงดูม</button>
-          <hr>
+          
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-          <iron-pages selected="0" class$="iron-index-{{index}}">
-            <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
-            <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
-          </iron-pages>
-          <hr>
+          <gl-form-panel>
+            <iron-pages selected="0" class$="iron-index-{{index}}">
+              <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
+              <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
+            </iron-pages>
+          </gl-form-panel>
+          
+          
           <!-- จบ -->
         </div>
       </iron-collapse>
