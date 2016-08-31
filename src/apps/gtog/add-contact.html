@@ -26,7 +26,7 @@
             <list item="cmlBalanceRice" label="" width="flex"></list>
           </items>
           <items type="third" item="sub3">
-            <list item="" label="" width="flex"></list>
+            <list item="" label="" width=""></list>
             <list item="period" label="งวดการส่งมอบ" width="flex-9"></list>
           </items>
           <template type="primary">
@@ -44,6 +44,9 @@
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
               <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
+              <!--แก้ใส่แท็กฟรอม -->
+              <promise-confirm name="third" data="{{dataSelect}}"></promise-confirm>
+              <!--  -->
             </iron-pages>
 
           </section-content>
@@ -258,14 +261,15 @@
       },
       nxGridTap:function(e){
         this.layerContent = e.detail.level;
+        // console.log(this.layerContent);
         this.dataSelect = e.detail.data;
         // console.log(this.dataSelect);
       },
       nxGridDblclick:function(e){
-        if (e.detail.level == 'primary') {
-          this.nxChangePath('/gtog/add-period');
+        // if (e.detail.level == 'primary') {
+          // this.nxChangePath('/gtog/add-period');
           //this.layoutMain.changePath('/gtog/add-period');
-        }
+        // }
       }
     });
   </script>

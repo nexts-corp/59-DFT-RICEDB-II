@@ -107,7 +107,35 @@
                                 <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
                             </paper-item>-->
                         </paper-menu>
-                    </paper-submenu>
+                    
+                    <!-- จบอันแรก  -->
+                    <!-- อันที่2 -->
+                    <paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
+                        <paper-item disabled>
+                            <!-- Head secondary -->
+                            <template is="dom-repeat" as="itemConfigThird" items="{{config.third}}">
+                              <div class$="{{itemConfigThird.width}}">
+                                {{itemConfigThird.label}}
+                                <!-- width:{{itemConfigSecondary.width}} -->
+                              </div>
+                            </template>
+                        </paper-item>
+                        <template is="dom-repeat" as="itemThird" items="{{_getDataSub(itemPrimary,config.sub3)}}">
+                            <paper-item on-tap="_getBind" on-dblclick="_getBind" level="Third" data="{{itemThird}}">
+                                <template is="dom-repeat" as="configThird" items="{{config.third}}">
+                                  <div class$="{{configThird.width}} cml" data="{{itemThird}}">
+                                   {{_getItemSecondary(itemThird,configThird)}}
+                                    <!-- width:{{configSecondary.width}} -->
+                                  </div>
+                                </template>
+                            <paper-item>
+                        </template>
+                        <!--<paper-item class="testclass">
+                            <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
+                        </paper-item>-->
+                    </paper-menu>
+                </paper-submenu>
+                <!-- จบอันแรก  -->
                 </template>
             </paper-menu>
             <!--<div>
@@ -138,8 +166,10 @@
                 var templateSecondary = Polymer.dom(this).querySelector('template[type=secondary]');
                 this.tempSecondary = templateSecondary;
 
-
-                var config = {primary:[],secondary:[]};
+                var templateThird = Polymer.dom(this).querySelector('template[type=third]');
+                this.tempThird = templateThird;
+                //เพิ่มตัวแปล
+                var config = {primary:[],secondary:[],third:[]};
 
                 var items = Polymer.dom(this.$.primary).getDistributedNodes();
                 var lists = Polymer.dom(items[0]).querySelectorAll('list');
@@ -169,9 +199,25 @@
                     config.secondary.push(configPointer2);
                 }
 
+                var items3 = Polymer.dom(this.$.third).getDistributedNodes();
+                var lists3 = Polymer.dom(items3[0]).querySelectorAll('list');
+
+                for (var i = 0; i < lists3.length; i++) {
+
+                    var configPointer3 = {
+                        item:lists3[i].getAttribute('item'),
+                        label:lists3[i].getAttribute('label'),
+                        width:lists3[i].getAttribute('width')
+                    };
+
+                    config.third.push(configPointer3);
+                }
+
                 config.sub = Polymer.dom(this.$.secondary).getDistributedNodes()[0].getAttribute('item');
+                config.sub3 = Polymer.dom(this.$.third).getDistributedNodes()[0].getAttribute('item');
 
                 this.config = config;
+                console.log(this.config);
             },
             _toggleSub:function(e){
                 this.$$('#'+e.target.dataSub).toggle();
