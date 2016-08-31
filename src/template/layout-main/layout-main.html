@@ -7,100 +7,80 @@
 <link rel="import" href="components/icon-toggle.html">
 <dom-module id="layout-main">
   <style is="custom-style" include="iron-flex iron-flex-alignment">
-  .iconhead{
-    --iron-icon-height: 20px;
-     --iron-icon-width: 20px;
-  }
-  paper-toolbar.toolbarHead {
-     --paper-toolbar-background: var(--paper-orange-300);
-     --paper-toolbar-height:15px;
-     --paper-toolbar-title: {
-       font-size: 1em;
-       height: 20px;
-       margin-left: 1px;
-     };
 
-   }
-  paper-toolbar.toolbarMid {
-    --paper-toolbar-background: var(--paper-grey-50);
-    --paper-toolbar-height:50px;
-    --paper-toolbar-title: {
-        font-size: 1em;
-        color: black;
-        font-weight: bold;
-    };
-  }
-    .toolbarMid:last-of-type {
-      margin-bottom: 10px;
-      /*box-shadow: 0px 3px 9px #888888;*/
+  </style>
+  <style is="custom-style">
+    div.paper-header{
+      border-bottom: 1px solid var(--paper-grey-300);
     }
-
-    paper-button.custom {
-      --paper-button:{
-        height: 33px;
-        width: 90px;
-      }
-     --paper-button-ink-color: var(--paper-green-a200);
-     --paper-button-flat-keyboard-focus: {
-       background-color: var(--paper-green-a200);
-       color: white !important;
-     };
-     --paper-button-raised-keyboard-focus: {
-       background-color: var(--paper-green-a200) !important;
-       color: white !important;
-     };
-   }
-     paper-button.custom:hover {
-      background-color: var(--paper-green-100);
-    }
-    paper-button.green {
-      background-color: var(--paper-green-500);
-      color: white;
-      --paper-button-raised-keyboard-focus: {
-        background-color: var(--paper-pink-a200) !important;
-        color: white !important;
+    paper-toolbar.toolbarHead {
+      --paper-toolbar-background:#29AAE3;
+      --paper-toolbar-title: {
+          font-weight: normal;
+          font-size: 16px;
+          padding: 0px 0px 10px 70px;
+          line-height: 25px
       };
     }
-    paper-icon-button.pink {
-     color: var(--paper-grey-700);
-     --paper-icon-button-ink-color: var(--paper-indigo-500);
+    paper-toolbar.toolbarbody {
+      height: 5px;
+      --paper-toolbar-background:#E65830;
     }
-    paper-icon-button.pink:active {
-      background-color: var(--paper-pink-500);
-      color: white;
+    paper-toolbar.toolbarfoot {
+      /*height: 50px;*/
+      --paper-toolbar-background:#FFF;
+      --paper-header-panel-body: {
+        font-size: 16px;
+      };
     }
-    paper-progress.slow {
-    --paper-progress-active-color:var(--paper-orange-300);
-   --paper-progress-indeterminate-cycle-duration: 2s;
- }
+    paper-toolbar.toolbarbody > div.title {
+      margin-left: 0px;
+    }
+    iron-icon {
+      --iron-icon-height: 25px;
+       --iron-icon-width: 25px;
+       --iron-icon-fill-color:black;
+    }
+    div.content {
+      margin: 5px 0px 0px 0px;
+    }
   </style>
   <template>
-        <paper-toolbar class="toolbarHead"></paper-toolbar>
-        <paper-toolbar class="toolbarMid">
-          <div>
-            <div class="title">ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
-            <div class="title">  COCCO ประเทศจีน</div>
+
+  <paper-header-panel mode="waterfall">
+    <div class="paper-header">
+      <paper-toolbar class="toolbarHead">
+        <div class="title">
+          <div class="lineName">
+            ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
           </div>
-        </paper-toolbar>
-        <paper-toolbar class="toolbarMid">
-          <span class="title">
-            <paper-button raised class="custom green">เพิ่ม</paper-button>
-          </span>
+          <div class="lineMenu">
+            สัญญาการซื้อขาย > ประเทศจีน
+          </div>
+        </div>
+      </paper-toolbar>
+      <paper-toolbar class="toolbarbody">
+      </paper-toolbar>
+      <paper-toolbar class="toolbarfoot">
+          <div class="title">
+            <div>
+              <button type="button" name="button">df</button>
+            </div>
+          </div>
           <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
             <iron-icon class="iconhead" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
           </icon-toggle>
           <icon-toggle toggles tabindex="0" on-tap="loadPages">
             <iron-icon class="iconhead" icon="settings" title="ตั้งค่า" ></iron-icon>
           </icon-toggle>
-          <template is="dom-if" if="[[loadContent]]">
-              <paper-progress class="middle fit slow" indeterminate></paper-progress>
-          </template>
-
-        </paper-toolbar>
+      </paper-toolbar>
+    </div>
+      <div class="content">
         <tag-page-load id="tagPageLoad"></tag-page-load>
+      </div>
+    </paper-header-panel>
 
 
-    </html>
   </template>
   <script>
     Polymer({
