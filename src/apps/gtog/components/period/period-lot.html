@@ -16,61 +16,15 @@
     /*background-color:var(--paper-grey-200);*/
     border: 1px solid black;
     padding: 10px;
-
   }
   </style>
   <template>
 
-    <div class="horizontal end-justified layout">
-      <paper-button raised>เพิ่ม</paper-button>
-    </div>
-
       <gl-grid-row width="{{getWidth}}">
-        <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-          <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></paper-input>
-        </gl-grid-col>
-      </gl-grid-row>
-
-      <template is="dom-repeat" items="[[data.confirmLetter]]">
-        <div class="bg">
-          <gl-grid-row>
-              <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-                <paper-dropdown-menu required label="Confirmation Letter No." error-message="กรุณาใส่เลขที่สัญญา" placeholder="เลือกเลขที่สัญญา">
-                  <paper-listbox class="dropdown-content" attr-for-selected="confirm-letter-no" selected="{{item.confirmLetterNo}}">
-                    <paper-item confirm-letter-no="11">11</paper-item>
-                    <paper-item confirm-letter-no="12">12</paper-item>
-                  </paper-listbox>
-                </paper-dropdown-menu>
-              </gl-grid-col> -->
-
-              <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-                  <paper-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" placeholder="ใส่ชื่อเมืองปลายทาง" required label="เมืองท่าปลายทาง" value="[[data.cityDestination]]"></paper-input>
-              </gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-                <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="จำนวน (ตัน)" placeholder="ใส่จำนวน" value="[[item.cfQuantity]]"></paper-input>
-              </gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-                <paper-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></paper-textarea>
-              </gl-grid-col>
-
-          </gl-grid-row>
-        </div>
-      </template>
-
-
-      <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-          <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" rows="3" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
+          <paper-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></paper-textarea>
         </gl-grid-col>
       </gl-grid-row>
-
-      <div class="horizontal end-justified layout">
-        <paper-button class="button" raised>ยกเลิก</paper-button>
-        <paper-button class="button" raised>บันทึก</paper-button>
-      </div>
-
-
-    </div>
 
   </template>
   <script>

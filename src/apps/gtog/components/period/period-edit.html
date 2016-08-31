@@ -1,0 +1,40 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-label.html">
+<dom-module id="period-edit">
+  <style include="iron-flex iron-flex-alignment">
+  paper-textarea{
+    word-break: break-all;
+    width: 100%;
+  }
+  paper-input{
+    width: 100%;
+  }
+  paper-button{
+    width: 20px;
+    height: 30px;
+    margin-top: 10px;
+  }
+  .bg{
+    /*background-color:var(--paper-grey-200);*/
+    border: 1px solid black;
+    padding: 10px;
+  }
+  </style>
+  <template>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+        <gl-form-label rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-label>
+      </gl-grid-col>
+    </gl-grid-row>
+
+  </template>
+  <script>
+    Polymer({
+      is: "period-edit",
+      requiredTextArea:function(e){
+        e.target.validate();
+      }
+
+    });
+  </script>
+</dom-module>

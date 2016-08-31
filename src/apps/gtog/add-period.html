@@ -3,9 +3,11 @@
 <link rel="import" href="components/content-panel.html">
 
 <link rel="import" href="components/period/period-lot.html">
+<link rel="import" href="components/period/period-edit.html">
 <link rel="import" href="components/period/period-city.html">
 <link rel="import" href="components/promise/promise-fileup.html">
 <link rel="import" href="components/vessel/vessel-print.html">
+<link rel="import" href="components/list-edit/list-period.html">
 <dom-module id="gtog-add-period">
 
   <template>
@@ -34,10 +36,22 @@
         <panel-seleted>
           <section-content name="detail">
 
-            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+            <!-- <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <period-lot name="primary" data="{{dataSelect}}"></period-lot>
               <period-city name="secondary" data="{{dataSelect}}"></period-city>
-            </iron-pages>
+            </iron-pages> -->
+
+            <list-period data="{{data}}">
+              <items type="primary">
+                <list item="cityDestination" label="เมืองท่าปลายทาง" width="flex"></list>
+                <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
+              </items>
+              <items type="secondary" item="sub" style="display:none;">
+                <list>
+                  <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+                </list>
+              </items>
+            </list-period>
 
           </section-content>
           <section-content name="print">
@@ -78,95 +92,20 @@
               return [
                 {
                   id:1 ,
+                  collapse:'collapsel1',
                   periodNo:1,
                   quantity:50000,
-                  confirmLetter:[
-                    {
-                      id:1,
-                      confirmLetterNo:11,
-                      cfQuantity:25000
-                    },
-                    {
-                      id:2,
-                      confirmLetterNo:12,
-                      cfQuantity:25000
-                    }
-                  ],
-                  detail:'lorem',
-                  sub:[
-                    {
-                      id:1,
-                      cityDestination:'Husngpu',
-                      notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-                    },
-                    {
-                      id:2,
-                      cityDestination:'Guangzhou',
-                      notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-                    }
-                  ]
+                  cityDestination:'Husngpu',
+                  notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
                 },
                 {
                   id:2 ,
+                  collapse:'collapsel2',
                   periodNo:12,
                   quantity:70000,
-                  confirmLetter:[
-                    {
-                      id:1,
-                      confirmLetterNo:11,
-                      cfQuantity:35000
-                    },
-                    {
-                      id:2,
-                      confirmLetterNo:12,
-                      cfQuantity:35000
-                    }
-                  ],
-                  detail:'lorem',
-                  sub:[
-                    {
-                      id:1,
-                      cityDestination:'Hangzhou',
-                      notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-                    },
-                    {
-                      id:2,
-                      cityDestination:'Beijing',
-                      notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-                    }
-                  ]
-                },
-                {
-                  id:3 ,
-                  periodNo:13,
-                  quantity:800000,
-                  confirmLetter:[
-                    {
-                      id:1,
-                      confirmLetterNo:11,
-                      cfQuantity:400000
-                    },
-                    {
-                      id:2,
-                      confirmLetterNo:12,
-                      cfQuantity:400000
-                    }
-                  ],
-                  detail:'lorem',
-                  sub:[
-                    {
-                      id:1,
-                      cityDestination:'Chongqing',
-                      notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-                    },
-                    {
-                      id:2,
-                      cityDestination:'Shanghai',
-                      notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-                    }
-                  ]
+                  cityDestination:'Wuhu',
+                  notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
                 }
-
               ]}
         }
       },

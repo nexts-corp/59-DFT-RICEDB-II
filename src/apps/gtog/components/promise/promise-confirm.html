@@ -4,9 +4,11 @@
     margin-top: 15px;
   }
   .bg{
-    /*background-color:var(--paper-grey-200);*/
+    background-color:var(--paper-grey-200);
     border: 1px solid black;
     padding-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
   }
   paper-button{
     width: 20px;
@@ -15,10 +17,10 @@
   }
   paper-textarea{
     word-break: break-all;
-    width: 100%;
   }
-  paper-input{
-    width: 100%;
+  paper-icon-button{
+    margin-top: 10px;
+    margin-right: 5px;
   }
   </style>
   <template>
@@ -26,31 +28,43 @@
         <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <paper-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.confirmLetter}}"></paper-input>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,4]]">
           <vaadin-date-picker label="Date"></vaadin-date-picker>
         </gl-grid-col>
     </gl-grid-row>
 
+      <div class="top">Commodities, Price, Package</div>
+
+
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]">
+          <paper-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Item" placeholder="ใส่รายละเอียด" value="Thai White Rice 5% Brokens, 2015 Current New Crop"></paper-input>
+        </gl-grid-col>
+      </gl-grid-row>
+
 
       <template is="dom-repeat" items="[[data.confirmItem]]">
         <div class="bg">
-          <div class="top">Commodities, Price, Package</div>
           <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]">
+            <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]">
               <paper-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Item" placeholder="ใส่รายละเอียด" value="[[item.item]]"></paper-input>
+            </gl-grid-col> -->
+            <gl-grid-col width="[[getWidth]]" grid="[[500,5.5],[700,3]]">
+              <paper-input auto-validate error-message="กรุณาใส่น้ำหนัก" required label="Package(kg)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.package]]"></paper-input>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,3]]">
-              <paper-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Package(kg)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.package]]"></paper-input>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,5.5],[700,2]]">
+              <paper-input class="box" auto-validate error-message="กรุณาใส่ราคา" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.price]]"></paper-input>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,2]]">
-              <paper-input class="box" auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.price]]"></paper-input>
-            </gl-grid-col>
+
+              <paper-icon-button icon="icons:delete" style="color: gray;"></paper-icon-button>
+
           </gl-grid-row>
+
         </div>
       </template>
 
       <div class="horizontal end-justified layout">
-        <paper-button raised>ลบ</paper-button>
+        <!-- <paper-button raised>ลบ</paper-button> -->
         <paper-button raised>เพิ่ม</paper-button>
       </div>
 
