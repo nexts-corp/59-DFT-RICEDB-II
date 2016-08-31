@@ -1,7 +1,7 @@
 <link rel="import" href="listEditBehavior.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 
-<dom-module id="list-edit">
+<dom-module id="list-period">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     .header{
       text-align: center;
@@ -17,7 +17,8 @@
       border-bottom: 1px solid #ccc;
     }
     .fontPdLeft{
-      padding: 10px 0px 10px 10px;
+      /*padding: 10px 0px 10px 10px;*/
+      text-align: center;
       word-wrap: break-word;
     }
     paper-button{
@@ -49,6 +50,17 @@
      }
     </style>
   <template>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+        <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></paper-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
+        <paper-button raised>เพิ่ม</paper-button>
+      </gl-grid-col>
+    </gl-grid-row>
+
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
 
@@ -81,33 +93,34 @@
           </div>
 
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-          <gl-form-panel label="[[itemPrimary.actualShipper]]">
+          <gl-form-panel label="[[itemPrimary.cityDestination]]">
             <iron-pages selected="0" class$="iron-index-{{index}}">
-              <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
-              <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
+              <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
+              <period-lot data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-lot>
             </iron-pages>
           </gl-form-panel>
-
-
           <!-- จบ -->
         </div>
       </iron-collapse>
     </template>
+
     <paper-toast id="toastPass" class="fit-bottom" >
       <div class="content">
         <iron-icon icon="check"></iron-icon>บันทึกข้อมูลเสร็จสิน<paper-button on-tap="closeToast" class="yellow-button">ปิด</paper-button>
       </div>
     </paper-toast>
 
+
     <div class="horizontal end-justified layout">
       <paper-button class="button" raised>ยกเลิก</paper-button>
       <paper-button class="button" raised>บันทึก</paper-button>
     </div>
 
+
   </template>
   <script>
     Polymer({
-      is: "list-edit",
+      is: "list-period",
       behaviors:[listEditBehavior],
       properties: {
         data: {
