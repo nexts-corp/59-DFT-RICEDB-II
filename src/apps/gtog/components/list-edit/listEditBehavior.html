@@ -36,7 +36,7 @@
       // var subComponent = this.$.subComponent;
       this.subComponent = lists2;
       // console.log(subComponent);
-      console.log(this.subComponent);
+      // console.log(this.subComponent);
       // var countSecondary =lists.length;
       // for (var i = 0; i < countSecondary; i++) {
       //
@@ -74,9 +74,13 @@
       this.$$(".iron-index-"+e.currentTarget.index).selected = 1;
       //console.log(Polymer.dom(this.root).querySelector("[iron-index="+e.currentTarget.index+"]"));
           //this.selectChoice = 1;
+          this.closeToast();
     },
      saveChange:function(e){
        this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
+       this.openToast();
+      //  console.log(this.$$("paper-toast").id.toggle());
+
       //  var change = this._edit(e);
       //  change.map((el)=>{
       //      el.setAttribute('disabled', '')
@@ -87,6 +91,12 @@
        var editText = '#'+e.target.parentElement.parentElement.getAttribute('id');
        var change = Polymer.dom(this.$$(editText)).querySelectorAll('paper-input');
        return change;
-     }
+     },
+     openToast: function() {
+      this.$.toastPass.open();
+    },
+    closeToast:function () {
+      this.$.toastPass.hide();
+    }
   };
 </script>

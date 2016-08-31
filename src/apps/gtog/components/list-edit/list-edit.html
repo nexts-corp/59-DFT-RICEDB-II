@@ -30,6 +30,26 @@
     paper-input{
       width: 100%;
     }
+    paper-item{
+      cursor:pointer;
+    }
+    .yellow-button {
+       text-transform: none;
+       color: #eeff41;
+     }
+     paper-toast {
+       --paper-toast-background-color:var(--paper-green-500);
+       /*height: 50px;*/
+       /*margin: 0px 0px 0px 0px;*/
+       /*padding: 0px 0px 0px 0px;*/
+
+       font-size: 16px;
+       width: 600px;
+       text-align: center;
+     }
+     paper-toast > div.content > iron-icon {
+        padding: 0px 10px 0px 0px;
+     }
     </style>
   <template>
     <content id="primary" select="items[type=primary]"></content>
@@ -61,25 +81,31 @@
               <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
             </div>
           </div>
-          
+
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-          <gl-form-panel>
+          <gl-form-panel label="[[itemPrimary.actualShipper]]">
             <iron-pages selected="0" class$="iron-index-{{index}}">
               <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
               <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
             </iron-pages>
           </gl-form-panel>
-          
-          
+
+
           <!-- จบ -->
         </div>
       </iron-collapse>
     </template>
-
+    <paper-toast id="toastPass" class="fit-bottom" >
+      <div class="content">
+        <iron-icon icon="check"></iron-icon>บันทึกข้อมูลเสร็จสิน<paper-button on-tap="closeToast" class="yellow-button">ปิด</paper-button>
+      </div>
+    </paper-toast>
+<!--
     <div class="horizontal end-justified layout">
       <paper-button raised>ยกเลิก</paper-button>
       <paper-button raised>บันทึก</paper-button>
-    </div>
+    </div> -->
+
 
   </template>
   <script>
