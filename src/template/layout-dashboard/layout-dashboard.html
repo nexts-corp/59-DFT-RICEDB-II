@@ -6,27 +6,63 @@
 </style>
 <dom-module id="layout-dashboard">
   <style media="screen">
+  div.paper-header{
+    border-bottom: 1px solid var(--paper-grey-300);
+  }
   paper-toolbar.toolbarHead {
-  box-shadow: 0px 3px 9px #888888;
-  /*border-right: 1px solid var(--paper-grey-300);*/
-   --paper-toolbar-background: var(--paper-orange-300);
-   --paper-toolbar-height:70px;
-   --paper-toolbar-title: {
-     font-size: 1em;
-     height: 20px;
-     margin-left: 1px;
-   };
- }
+    --paper-toolbar-background:#29AAE3;
+    --paper-toolbar-title: {
+        font-weight: normal;
+        font-size: 20px;
+        /*padding: 0px 0px 10px 70px;*/
+        /*line-height: 25px*/
+    };
+  }
+  paper-toolbar.toolbarbody {
+    height: 5px;
+    --paper-toolbar-background:#E65830;
+  }
+  paper-toolbar.toolbarfoot {
+    /*height: 50px;*/
+    --paper-toolbar-background:#FFF;
+    --paper-header-panel-body: {
+      font-size: 16px;
+    };
+  }
+  paper-toolbar.toolbarbody > div.title {
+    margin-left: 0px;
+  }
+  iron-icon {
+    --iron-icon-height: 25px;
+     --iron-icon-width: 25px;
+     --iron-icon-fill-color:black;
+  }
+  div.content {
+    margin: 5px 0px 0px 0px;
+  }
   </style>
   <template>
-    <paper-toolbar class="toolbarHead">
-      <div>
-        <div class="title">  ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+    <paper-header-panel mode="waterfall">
+      <div class="paper-header">
+        <paper-toolbar class="toolbarHead">
+          <div class="title">
+              ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
+          </div>
+        </paper-toolbar>
+        <paper-toolbar class="toolbarbody">
+        </paper-toolbar>
+        <paper-toolbar class="toolbarfoot">
+            <div class="title">
+              <div>
+                <!-- <button type="button" name="button">เพิ่ม</button> -->
+              </div>
+            </div>
+        </paper-toolbar>
       </div>
-    </paper-toolbar>
-    <div id="main-content">
-      <tag-page-load></tag-page-load>
-    </div>
+        <div class="content">
+          <tag-page-load id="tagPageLoad"></tag-page-load>
+        </div>
+      </paper-header-panel>
 
 
   </template>
