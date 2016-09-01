@@ -57,9 +57,28 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
-        <paper-button raised>เพิ่ม</paper-button>
+        <paper-button raised on-tap="click">เพิ่ม</paper-button>
       </gl-grid-col>
     </gl-grid-row>
+
+    <div id="changeDivcss" class="testnone">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+          <gl-form-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-textarea>
+        </gl-grid-col>
+      </gl-grid-row>
+
+      <div class="horizontal end-justified layout">
+        <paper-button class="button" raised>ยกเลิก</paper-button>
+        <paper-button class="button" on-tap="validate" raised>บันทึก</paper-button>
+      </div>
+    </div>
 
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
@@ -133,7 +152,19 @@
         console.log(id);
         // this.$$.id;
         console.log(this.$$.collapsel1);
-      }
+      },
+      click:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+          // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+          // console.log(css
+          if (css.classList.contains('testnone') == true){
+            css.classList.remove("testnone");
+            css.classList.add("testblock");
+          }else{
+            css.classList.remove("testblock");
+            css.classList.add("testnone");
+          }
+      },
 
 
     });
