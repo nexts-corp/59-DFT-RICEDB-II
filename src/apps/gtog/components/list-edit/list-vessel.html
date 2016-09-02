@@ -1,7 +1,8 @@
 <link rel="import" href="listEditBehavior.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
-
-<dom-module id="list-edit">
+<link rel="import" href="../vessel/vessel-draf.html">
+<link rel="import" href="../vessel/vessel-edit.html">
+<dom-module id="list-vessel">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     .header{
       text-align: center;
@@ -51,7 +52,15 @@
   <template>
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
-
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+        <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></paper-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
+        <paper-button raised on-tap="click">เพิ่ม</paper-button>
+      </gl-grid-col>
+    </gl-grid-row>
     <div class="layout horizontal">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
@@ -107,7 +116,7 @@
   </template>
   <script>
     Polymer({
-      is: "list-edit",
+      is: "list-vessel",
       behaviors:[listEditBehavior],
       properties: {
         data: {

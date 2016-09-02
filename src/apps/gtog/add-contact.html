@@ -9,6 +9,7 @@
 <link rel="import" href="components/period/period-page.html">
 <link rel="import" href="components/period/period-edit.html">
 <link rel="import" href="components/period/period-lot.html">
+<link rel="import" href="components/vessel/vessel-page.html">
 <dom-module id="gtog-add-contact">
   <template>
     <content-panel>
@@ -43,7 +44,10 @@
         </nx-grid>
       </grid>
       <panel>
-        <panel-seleted>
+        <iron-pages selected="{{vesselPage}}" >
+
+
+        <panel-seleted-vessel>
           <section-content name="detail">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
@@ -56,12 +60,32 @@
           </section-content>
           <section-content name="print">
             <vessel-print></vessel-print>
+            <!-- <vessel-page></vessel-page> -->
           </section-content>
           <section-content name="file">
             <promise-fileup></promise-fileup>
           </section-content>
         </panel-seleted>
+        <!-- vessel -->
+        <panel-seleted>
+          <section-content name="detail">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+              <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
+              <!--แก้ใส่แท็กฟรอม -->
+              <period-page name="third"></period-page>
+              <!--  -->
+            </iron-pages>
+          </section-content>
+          <section-content name="print">
+            <vessel-page></vessel-page>
+          </section-content>
+          <section-content name="file">
+            <promise-fileup></promise-fileup>
+          </section-content>
+        </panel-seleted-vessel>
 
+      </iron-pages>
       </panel>
     </content-panel>
   </template>
@@ -80,6 +104,10 @@
           layerContent:{
             type:String,
             value:"primary"
+          },
+          vesselPage:{
+            type:Number,
+            value:0
           },
           data:{
             type:Object,
@@ -262,7 +290,13 @@
       nxGridTap:function(e){
         this.layerContent = e.detail.level;
         // console.log(this.layerContent);
+        if (this.layerContent === 'third'){
+            this.vesselPage = 1;
+        } else {
+            this.vesselPage = 0;
+        }
         this.dataSelect = e.detail.data;
+        console.log(this.vesselPage);
         // console.log(this.dataSelect);
       },
       nxGridDblclick:function(e){

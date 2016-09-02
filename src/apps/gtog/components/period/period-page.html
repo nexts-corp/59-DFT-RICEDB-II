@@ -1,18 +1,51 @@
 <link rel="import" href="../list-edit/list-period.html">
 <dom-module id="period-page">
   <style>
-    
+
   </style>
   <template>
 
-    <list-period></list-period>
+    <list-period data="{{data}}">
+      <items type="primary">
+        <list item="cityDestination" label="เมืองท่าปลายทาง" width="flex"></list>
+        <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
+      </items>
+      <items type="secondary" item="sub" style="display:none;">
+        <list>
+          <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
+        </list>
+      </items>
+    </list-period>
 
   </template>
 
   <script>
     Polymer({
       is: "period-page",
-
+      properties: {
+        data:{
+          type:Object,
+          value:function(){
+            return [
+              {
+                id:1 ,
+                collapse:'collapsel1',
+                periodNo:1,
+                quantity:50000,
+                cityDestination:'Husngpu',
+                notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+              },
+              {
+                id:2 ,
+                collapse:'collapsel2',
+                periodNo:12,
+                quantity:70000,
+                cityDestination:'Wuhu',
+                notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+              }
+            ]}
+        }
+      }
     });
   </script>
 </dom-module>
