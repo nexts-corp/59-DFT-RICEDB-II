@@ -50,10 +50,14 @@
     <template>
         <content id="primary" select="items[type=primary]"></content>
         <content id="secondary" select="items[type=secondary]"></content>
+        <content id="secondaryHalf" select="items[type=secondaryHalf]"></content>
         <content id="third" select="items[type=third]"></content>
+        <content id="thirdHalf" select="items[type=thirdHalf]"></content>
         <content select="template[type=primary]"></content>
         <content select="template[type=secondary]"></content>
+        <content select="template[type=secondaryHalf]"></content>
         <content select="template[type=third]"></content>
+        <content select="template[type=thirdHalf]"></content>
 
         <div class="horizontal-section">
             <div class="header layout horizontal">
@@ -107,6 +111,17 @@
                                     </template>
                                 <paper-item>
                             </template>
+                            <!-- เพิ่มข้อมูล -->
+                            <paper-item>
+                                <!-- Head secondary -->
+                                <template is="dom-repeat" as="itemConfigSecondaryHalf" items="{{config.secondaryHalf}}">
+                                  <div class$="{{itemConfigSecondaryHalf.width}}">
+                                    {{itemConfigSecondaryHalf.label}}
+                                    <!-- width:{{itemConfigSecondary.width}} -->
+                                  </div>
+                                </template>
+                            </paper-item>
+                            <!-- เพิ่มข้อมูล -->
                             <!--<paper-item class="testclass">
                                 <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
                             </paper-item>-->
@@ -134,6 +149,17 @@
                                 </template>
                             <paper-item>
                         </template>
+                        <!-- เพิ่มข้อมูล -->
+                        <paper-item>
+                            <!-- Head secondary -->
+                            <template is="dom-repeat" as="itemConfigthirdHalf" items="{{config.thirdHalf}}">
+                              <div class$="{{itemConfigthirdHalf.width}}">
+                                {{itemConfigthirdHalf.label}}
+                                <!-- width:{{itemConfigSecondary.width}} -->
+                              </div>
+                            </template>
+                        </paper-item>
+                        <!-- เพิ่มข้อมูล -->
                         <!--<paper-item class="testclass">
                             <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
                         </paper-item>-->
@@ -170,10 +196,17 @@
                 var templateSecondary = Polymer.dom(this).querySelector('template[type=secondary]');
                 this.tempSecondary = templateSecondary;
 
+                var templateSecondaryHalf = Polymer.dom(this).querySelector('template[type=secondaryHalf]');
+                this.tempSecondaryHalf = templateSecondaryHalf;
+
                 var templateThird = Polymer.dom(this).querySelector('template[type=third]');
                 this.tempThird = templateThird;
+
+                var templateThirdHalf = Polymer.dom(this).querySelector('template[type=thirdHalf]');
+                this.tempThirdHalf = templateThirdHalf;
+
                 //เพิ่มตัวแปล
-                var config = {primary:[],secondary:[],third:[]};
+                var config = {primary:[],secondary:[],secondaryHalf:[],third:[],thirdHalf:[]};
 
                 var items = Polymer.dom(this.$.primary).getDistributedNodes();
                 var lists = Polymer.dom(items[0]).querySelectorAll('list');
@@ -202,6 +235,20 @@
 
                     config.secondary.push(configPointer2);
                 }
+                //เพิ่อข้อมูล
+                var items22 = Polymer.dom(this.$.secondaryHalf).getDistributedNodes();
+                var lists22 = Polymer.dom(items22[0]).querySelectorAll('list');
+
+                for (var i = 0; i < lists22.length; i++) {
+
+                    var configPointer22 = {
+                        item:lists22[i].getAttribute('item'),
+                        label:lists22[i].getAttribute('label'),
+                        width:lists22[i].getAttribute('width')
+                    };
+
+                    config.secondaryHalf.push(configPointer22);
+                }
 
                 var items3 = Polymer.dom(this.$.third).getDistributedNodes();
                 var lists3 = Polymer.dom(items3[0]).querySelectorAll('list');
@@ -217,6 +264,21 @@
                     config.third.push(configPointer3);
                 }
 
+                //เพิ่มงวด
+                var items33 = Polymer.dom(this.$.third).getDistributedNodes();
+                var lists33 = Polymer.dom(items33[0]).querySelectorAll('list');
+
+                for (var i = 0; i < lists33.length; i++) {
+
+                    var configPointer33 = {
+                        item:lists33[i].getAttribute('item'),
+                        label:lists33[i].getAttribute('label'),
+                        width:lists33[i].getAttribute('width')
+                    };
+
+                    config.thirdHalf.push(configPointer33);
+                }
+                //จบเพิ่มงวด
                 config.sub = Polymer.dom(this.$.secondary).getDistributedNodes()[0].getAttribute('item');
                 config.sub3 = Polymer.dom(this.$.third).getDistributedNodes()[0].getAttribute('item');
 
