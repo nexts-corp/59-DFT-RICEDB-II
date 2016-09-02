@@ -53,7 +53,7 @@
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
               <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-              <period-page name="third"></period-page>
+              <period-page name="third" data="{{dataSelect}}"></period-page>
             </iron-pages>
 
           </section-content>
@@ -71,12 +71,12 @@
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
               <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-              <period-page name="third"></period-page>
+              <period-page name="third" data="{{dataSelect}}"> </period-page>
             </iron-pages>
 
           </section-content>
           <section-content name="print">
-            <vessel-page></vessel-page>
+            <vessel-page data="{{dataSelect}}"></vessel-page>
           </section-content>
           <section-content name="file">
             <promise-fileup></promise-fileup>
@@ -109,6 +109,7 @@
           },
           data:{
             type:Object,
+            notify: true,
             value:function(){
               return [
                 {
@@ -134,19 +135,21 @@
                       cmlBalanceRice:'100,000',
                       dateconfirm:'25/09/58',
                       detail:'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
-                      confirmItem:[{
+                      typeRice:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                      price:'fob',
+                      totalQuantity:'1,000,000',
+                      confirmItem:[
+                        {
                         id:1,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
                         package:'50',
                         price:'392'
-                      },
-                      {
+                        },
+                        {
                         id:2,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
                         package:'25',
                         price:'392'
-                      }
-                     ]
+                        },
+                      ]
                    },
                    {
                      id:2,
@@ -156,23 +159,139 @@
                      cmlBalanceRice:'100,000',
                      dateconfirm:'25/11/58',
                      detail:'รายละเอียดเพิ่มเติม',
+                     typeRice:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                     price:'fob',
+                     totalQuantity:'1,000,000',
                      confirmItem:[{
                        id:1,
-                       item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                       package:'25kg PP bags',
-                       price:'USD392/MT'
+                       package:'25',
+                       price:'392'
                      }
                     ]
                    }
                  ],
                  sub3:[
                    {
-                       id:1,
-                       period:"งวดที่ 1"
+                     id:1 ,
+                     periodNo:1,
+                     period:'งวดที่ 1',
+                     city:[
+                           {
+                             idCity:1,
+                             collapse:'collapsel1',
+                             quantity:50000,
+                             cityDestination:'Husngpu',
+                             notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                          },
+                          {
+                            idCity:2,
+                            collapse:'collapsel2',
+                            quantity:12000,
+                            cityDestination:'Wuhu',
+                            notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                         }
+                     ],
+                     sender:[
+                       {
+                         id:1,
+                         collapse:'collapsel1',
+                         actualShipper:'Toumi Food And Product CO., LTD',
+                         riceType:'Thai White Rice 5% Brokens,',
+                         price:'392',
+                         weight:'1,000',
+                         package:'50',
+                         cityEnd:'Shekou',
+                         bs:'Sinotrans Thai Logistics Co., LTD',
+                         bn:'SITGBUU0678088',
+                         vesselName:'Hanjin Belawan V.1609',
+                         voidNo:'V.1452-018E',
+                         lotNo:'14',
+                         pol:'THBKK',
+                         etd:'26/04/2016',
+                         eta:'10/05/2016',
+                         pod:'Yueyang (CHENG LING JI)',
+                       },
+                       {
+                         id:2,
+                         collapse:'collapsel2',
+                         actualShipper:'Capital Seril co.,ltd',
+                         riceType:'Thai White Rice 5% Brokens,',
+                         price:'397',
+                         weight:'1,000',
+                         package:'20',
+                         cityEnd:'Thailand',
+                         bs:'Sinotrans Thai Logistics Co., LTD',
+                         bn:'SITGBUU0678088',
+                         vesselName:'Hanjin Belawan V.1609',
+                         voidNo:'V.1234',
+                         lotNo:'12',
+                         pol:'THBKK',
+                         etd:'26/04/2016',
+                         eta:'10/05/2016',
+                         pod:'Bangnatrad',
+                       }
+                     ]
                    },
                    {
-                       id:2,
-                       period:"งวดที่ 2"
+                     id:2 ,
+                     periodNo:2,
+                     period:'งวดที่ 2',
+                     city:[
+                           {
+                             idCity:1,
+                             collapse:'collapsel1',
+                             quantity:50000,
+                             cityDestination:'Husngpu',
+                             notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                          },
+                          {
+                            idCity:2,
+                            collapse:'collapsel2',
+                            quantity:12000,
+                            cityDestination:'Wuhu',
+                            notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                         }
+                     ],
+                     sender:[
+                       {
+                         id:1,
+                         collapse:'collapsel1',
+                         actualShipper:'Toumi Food And Product CO., LTD',
+                         riceType:'Thai White Rice 5% Brokens,',
+                         price:'392',
+                         weight:'1,000',
+                         package:'50',
+                         cityEnd:'Shekou',
+                         bs:'Sinotrans Thai Logistics Co., LTD',
+                         bn:'SITGBUU0678088',
+                         vesselName:'Hanjin Belawan V.1609',
+                         voidNo:'V.1452-018E',
+                         lotNo:'14',
+                         pol:'THBKK',
+                         etd:'26/04/2016',
+                         eta:'10/05/2016',
+                         pod:'Yueyang (CHENG LING JI)',
+                       },
+                       {
+                         id:2,
+                         collapse:'collapsel2',
+                         actualShipper:'Capital Seril co.,ltd',
+                         riceType:'Thai White Rice 5% Brokens,',
+                         price:'397',
+                         weight:'1,000',
+                         package:'20',
+                         cityEnd:'Thailand',
+                         bs:'Sinotrans Thai Logistics Co., LTD',
+                         bn:'SITGBUU0678088',
+                         vesselName:'Hanjin Belawan V.1609',
+                         voidNo:'V.1234',
+                         lotNo:'12',
+                         pol:'THBKK',
+                         etd:'26/04/2016',
+                         eta:'10/05/2016',
+                         pod:'Bangnatrad',
+                       }
+                     ]
                    },
                  ]
                 },
@@ -200,28 +319,143 @@
                       cmlBalanceRice:'-',
                       dateconfirm:'25/09/58',
                       detail:'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
+                      typeRice:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                      price:'fob',
+                      totalQuantity:'1,000,000',
                       confirmItem:[{
                         id:1,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'40kg PP bags',
-                        price:'USD392/MT'
+                        package:'40',
+                        price:'392'
                       },{
                         id:2,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'25kg PP bags',
-                        price:'USD392/MT'
+                        package:'25',
+                        price:'392'
                       }
                      ]
                     }
                   ],
                   sub3:[
                     {
-                        id:1,
-                        period:"งวดที่ 1"
+                      id:1 ,
+                      periodNo:1,
+                      period:'งวดที่ 1',
+                      city:[
+                            {
+                              idCity:1,
+                              collapse:'collapsel1',
+                              quantity:50000,
+                              cityDestination:'Husngpu',
+                              notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                           },
+                           {
+                             idCity:2,
+                             collapse:'collapsel2',
+                             quantity:12000,
+                             cityDestination:'Wuhu',
+                             notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                          }
+                      ],
+                      sender:[
+                        {
+                          id:1,
+                          collapse:'collapsel1',
+                          actualShipper:'Toumi Food And Product CO., LTD',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'392',
+                          weight:'1,000',
+                          package:'50',
+                          cityEnd:'Shekou',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1452-018E',
+                          lotNo:'14',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Yueyang (CHENG LING JI)',
+                        },
+                        {
+                          id:2,
+                          collapse:'collapsel2',
+                          actualShipper:'Capital Seril co.,ltd',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'397',
+                          weight:'1,000',
+                          package:'20',
+                          cityEnd:'Thailand',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1234',
+                          lotNo:'12',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Bangnatrad',
+                        }
+                      ]
                     },
                     {
-                        id:2,
-                        period:"งวดที่ 2"
+                      id:2 ,
+                      periodNo:2,
+                      period:'งวดที่ 2',
+                      city:[
+                            {
+                              idCity:1,
+                              collapse:'collapsel1',
+                              quantity:50000,
+                              cityDestination:'Husngpu',
+                              notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                           },
+                           {
+                             idCity:2,
+                             collapse:'collapsel2',
+                             quantity:12000,
+                             cityDestination:'Wuhu',
+                             notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                          }
+                      ],
+                      sender:[
+                        {
+                          id:1,
+                          collapse:'collapsel1',
+                          actualShipper:'Toumi Food And Product CO., LTD',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'392',
+                          weight:'1,000',
+                          package:'50',
+                          cityEnd:'Shekou',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1452-018E',
+                          lotNo:'14',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Yueyang (CHENG LING JI)',
+                        },
+                        {
+                          id:2,
+                          collapse:'collapsel2',
+                          actualShipper:'Capital Seril co.,ltd',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'397',
+                          weight:'1,000',
+                          package:'20',
+                          cityEnd:'Thailand',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1234',
+                          lotNo:'12',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Bangnatrad',
+                        }
+                      ]
                     },
                   ]
                 },
@@ -249,28 +483,143 @@
                       cmlBalanceRice:'50,000',
                       dateconfirm:'25/09/58',
                       detail:'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
+                      typeRice:'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                      price:'cy',
+                      totalQuantity:'1,000,000',
                       confirmItem:[{
                         id:1,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'50kg PP bags',
-                        price:'USD392/MT'
+                        package:'50',
+                        price:'392'
                       },{
                         id:2,
-                        item:'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        package:'25kg PP bags',
-                        price:'USD392/MT'
+                        package:'25',
+                        price:'392'
                       }
                      ]
                     }
                   ],
                   sub3:[
                     {
-                        id:1,
-                        period:"งวดที่ 1"
+                      id:1 ,
+                      periodNo:1,
+                      period:'งวดที่ 1',
+                      city:[
+                            {
+                              idCity:1,
+                              collapse:'collapsel1',
+                              quantity:50000,
+                              cityDestination:'Husngpu',
+                              notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                           },
+                           {
+                             idCity:1,
+                             collapse:'collapsel2',
+                             quantity:12000,
+                             cityDestination:'Wuhu',
+                             notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                          }
+                      ],
+                      sender:[
+                        {
+                          id:1,
+                          collapse:'collapsel1',
+                          actualShipper:'Toumi Food And Product CO., LTD',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'392',
+                          weight:'1,000',
+                          package:'50',
+                          cityEnd:'Shekou',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1452-018E',
+                          lotNo:'14',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Yueyang (CHENG LING JI)',
+                        },
+                        {
+                          id:2,
+                          collapse:'collapsel2',
+                          actualShipper:'Capital Seril co.,ltd',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'397',
+                          weight:'1,000',
+                          package:'20',
+                          cityEnd:'Thailand',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1234',
+                          lotNo:'12',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Bangnatrad',
+                        }
+                      ]
                     },
                     {
-                        id:2,
-                        period:"งวดที่ 2"
+                      id:2 ,
+                      periodNo:2,
+                      period:'งวดที่ 2',
+                      city:[
+                            {
+                              idCity:1,
+                              collapse:'collapsel1',
+                              quantity:50000,
+                              cityDestination:'Husngpu',
+                              notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                           },
+                           {
+                             idCity:2,
+                             collapse:'collapsel2',
+                             quantity:12000,
+                             cityDestination:'Wuhu',
+                             notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
+                          }
+                      ],
+                      sender:[
+                        {
+                          id:1,
+                          collapse:'collapsel1',
+                          actualShipper:'Toumi Food And Product CO., LTD',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'392',
+                          weight:'1,000',
+                          package:'50',
+                          cityEnd:'Shekou',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1452-018E',
+                          lotNo:'14',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Yueyang (CHENG LING JI)',
+                        },
+                        {
+                          id:2,
+                          collapse:'collapsel2',
+                          actualShipper:'Capital Seril co.,ltd',
+                          riceType:'Thai White Rice 5% Brokens,',
+                          price:'397',
+                          weight:'1,000',
+                          package:'20',
+                          cityEnd:'Thailand',
+                          bs:'Sinotrans Thai Logistics Co., LTD',
+                          bn:'SITGBUU0678088',
+                          vesselName:'Hanjin Belawan V.1609',
+                          voidNo:'V.1234',
+                          lotNo:'12',
+                          pol:'THBKK',
+                          etd:'26/04/2016',
+                          eta:'10/05/2016',
+                          pod:'Bangnatrad',
+                        }
+                      ]
                     },
                   ]
                 }
@@ -294,7 +643,7 @@
             this.vesselPage = 0;
         }
         this.dataSelect = e.detail.data;
-        console.log(this.vesselPage);
+        // console.log(this.vesselPage);
         // console.log(this.dataSelect);
       },
       nxGridDblclick:function(e){

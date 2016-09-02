@@ -4,7 +4,7 @@
 
   </style>
   <template>
-
+    <!-- {{data.cityDestination}} -->
     <list-period data="{{data}}">
       <items type="primary">
         <list item="cityDestination" label="เมืองท่าปลายทาง" width="flex"></list>
@@ -16,7 +16,6 @@
         </list>
       </items>
     </list-period>
-
   </template>
 
   <script>
@@ -24,27 +23,13 @@
       is: "period-page",
       properties: {
         data:{
-          type:Object,
-          value:function(){
-            return [
-              {
-                id:1 ,
-                collapse:'collapsel1',
-                periodNo:1,
-                quantity:50000,
-                cityDestination:'Husngpu',
-                notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-              },
-              {
-                id:2 ,
-                collapse:'collapsel2',
-                periodNo:12,
-                quantity:70000,
-                cityDestination:'Wuhu',
-                notifyParty:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
-              }
-            ]}
+          type: Object,
+          notify: true,
+          value: function() {return [];}
         }
+      },
+      ss:function () {
+        console.log(this.data.cityDestination);
       }
     });
   </script>
