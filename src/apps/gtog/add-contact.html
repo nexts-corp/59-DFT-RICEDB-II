@@ -1,4 +1,5 @@
 <link rel="import" href="panel-seleted.html">
+้<link rel="import" href="panel-seleted-vessel.html">
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
 
@@ -44,38 +45,35 @@
         </nx-grid>
       </grid>
       <panel>
-        <iron-pages selected="{{vesselPage}}" >
+        <iron-pages selected="{{vesselPage}}">
 
+
+        <panel-seleted>
+          <section-content name="detail">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+              <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
+              <period-page name="third"></period-page>
+            </iron-pages>
+
+          </section-content>
+          <section-content name="print">
+            <vessel-print></vessel-print>
+          </section-content>
+          <section-content name="file">
+            <promise-fileup></promise-fileup>
+          </section-content>
+        </panel-seleted>
+        <!-- vesse -->
 
         <panel-seleted-vessel>
           <section-content name="detail">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
               <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-              <!--แก้ใส่แท็กฟรอม -->
               <period-page name="third"></period-page>
-              <!--  -->
             </iron-pages>
 
-          </section-content>
-          <section-content name="print">
-            <vessel-print></vessel-print>
-            <!-- <vessel-page></vessel-page> -->
-          </section-content>
-          <section-content name="file">
-            <promise-fileup></promise-fileup>
-          </section-content>
-        </panel-seleted>
-        <!-- vessel -->
-        <panel-seleted>
-          <section-content name="detail">
-            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-              <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-              <!--แก้ใส่แท็กฟรอม -->
-              <period-page name="third"></period-page>
-              <!--  -->
-            </iron-pages>
           </section-content>
           <section-content name="print">
             <vessel-page></vessel-page>
@@ -84,7 +82,7 @@
             <promise-fileup></promise-fileup>
           </section-content>
         </panel-seleted-vessel>
-
+        <!-- vesse -->
       </iron-pages>
       </panel>
     </content-panel>
