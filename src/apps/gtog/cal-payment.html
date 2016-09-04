@@ -57,8 +57,8 @@
         'nx-grid-dblclick':'nxGridDblclick'
       },
       behaviors: [
-        nxCoreBehavior,
-        nxLocalesBehavior
+        gl.behavior.core,
+        gl.behavior.locales
       ],
       properties:{
           layerContent:{
@@ -123,8 +123,8 @@
       }
     },
     created:function(){
-      this.nxSetTitle('ทำสัญญา');
-      this.nxSetLayout('layout-main');
+      this.glSetTitle('ทำสัญญา');
+      this.glSetLayout('layout-main');
     },
     nxGridTap:function(e){
       this.layerContent = e.detail.level;
@@ -133,7 +133,7 @@
     },
     nxGridDblclick:function(e){
       if (e.detail.level == 'primary') {
-        this.nxChangePath('/gtog/add-invoice');
+        this.glChangePath('/gtog/add-invoice');
       }
     }
     });

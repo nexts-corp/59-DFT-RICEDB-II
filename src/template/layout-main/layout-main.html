@@ -110,7 +110,7 @@
   <script>
     Polymer({
       is:'layout-main',
-      behaviors:[nxTemplateBehavior,nxLocalesBehavior,nxCoreBehavior],
+      behaviors:[gl.behavior.template,gl.behavior.locales,gl.behavior.core],
       properties: {
         loadContent: {
           type: Boolean,
@@ -118,12 +118,12 @@
         }
       },
       created: function() {
-        this.nxSetGlobalElement('layoutMain');
+        this.glQuery('layoutMain',this);
       },
       changePath:function(path){
         this.loadContent = true;
         console.log('a',this.loadContent);
-        this.nxChangePath(path);
+        this.glChangePath(path);
       },
       ready:function(){
         // this._observer = Polymer.dom(this.$.tagPageLoad).observeNodes((info)=>{
@@ -143,13 +143,13 @@
       togglePanel:function(e){
         //if(typeof e.currentTarget.getAttribute('active') != "object"){}
         //เรียกใช้อีรีเม็นแล้วเข้าไปใช้ฟั่งชั่น
-        this.nxGetGlobalElement('contentPanel').changeDiv();
+        this.glQuery('contentPanel').changeDiv();
       },
       changeLanguage:function(){
         if(this.language == 'th'){
-          this.nxSwitchLanguage('en');
+          this.glSwitchLanguage('en');
         }else{
-          this.nxSwitchLanguage('th');
+          this.glSwitchLanguage('th');
         }
       }
     });
