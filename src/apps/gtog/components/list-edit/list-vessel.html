@@ -1,7 +1,7 @@
 <link rel="import" href="listEditBehavior.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
-<link rel="import" href="../vessel/vessel-draf.html">
 <link rel="import" href="../vessel/vessel-edit.html">
+<link rel="import" href="../vessel/vessel-save.html">
 <dom-module id="list-vessel">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     .header{
@@ -92,8 +92,8 @@
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
           <gl-form-panel label="[[itemPrimary.actualShipper]]">
             <iron-pages selected="0" class$="iron-index-{{index}}">
+              <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-save>
               <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
-              <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
             </iron-pages>
           </gl-form-panel>
 
