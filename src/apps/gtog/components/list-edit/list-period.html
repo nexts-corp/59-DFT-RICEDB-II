@@ -58,11 +58,14 @@
      .testnone{
        display: none;
      }
+     .marL{
+       margin-left: 10px;
+     }
     </style>
   <template>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
+        <gl-form-input class="marL" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -111,18 +114,20 @@
       </paper-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
-          <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px;>
-              <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
-              <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
-              <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
-          </gl-form-panel-head>
 
           <gl-form-panel>
+            <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px;>
+                <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
+                <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
+                <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
+            </gl-form-panel-head>
+
             <iron-pages selected="0" class$="iron-index-{{index}}">
               <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
               <period-lot data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-lot>
             </iron-pages>
           </gl-form-panel>
+
         </div>
       </iron-collapse>
     </template>
