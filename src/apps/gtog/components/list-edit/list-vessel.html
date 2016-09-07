@@ -2,7 +2,6 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
-<link rel="import" href="../vessel/vessel-save.html">
 <dom-module id="list-vessel">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     .header{
@@ -39,7 +38,6 @@
        /*height: 50px;*/
        /*margin: 0px 0px 0px 0px;*/
        /*padding: 0px 0px 0px 0px;*/
-
        font-size: 16px;
        width: 600px;
        text-align: center;
@@ -47,13 +45,16 @@
      paper-toast > div.content > iron-icon {
         padding: 0px 10px 0px 0px;
      }
+     .marL{
+       margin-left: 10px;
+     }
     </style>
   <template>
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></gl-form-input>
+        <gl-form-input class="marL" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -79,14 +80,14 @@
       </paper-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
-          <gl-form-panel-head label="[[itemPrimary.actualShipper]]" font-size=20px;>
-              <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
-              <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
-              <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
-          </gl-form-panel-head>
+          <gl-form-panel>
+            <gl-form-panel-head label="[[itemPrimary.actualShipper]]" font-size=20px;>
+                <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
+                <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
+                <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
+            </gl-form-panel-head>
 
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-          <gl-form-panel>
             <iron-pages selected="0" class$="iron-index-{{index}}">
               <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-save>
               <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
