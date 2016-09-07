@@ -1,5 +1,6 @@
 <link rel="import" href="listEditBehavior.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
 <link rel="import" href="../vessel/vessel-save.html">
 <dom-module id="list-vessel">
@@ -19,14 +20,12 @@
     }
     .fontPdLeft{
       padding: 10px 0px 10px 10px;
-      word-wrap: break-word;
+      /*word-wrap: break-word;*/
+      text-align: center;
     }
     paper-button{
       width: 20px;
       height: 30px;
-      margin-top: 30px;
-      margin-right: 10px;
-      margin-bottom: 10px;
     }
     paper-item{
       cursor:pointer;
@@ -54,7 +53,7 @@
     <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <paper-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></paper-input>
+        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -80,21 +79,19 @@
       </paper-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
-          <div class="layout horizontal">
-            <div class="flex-2"></div>
-            <div class="flex-2">
+          <gl-form-panel-head label="[[itemPrimary.actualShipper]]" font-size=20px;>
               <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
               <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
               <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
-            </div>
-          </div>
+          </gl-form-panel-head>
 
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-          <gl-form-panel label="[[itemPrimary.actualShipper]]">
+          <gl-form-panel>
             <iron-pages selected="0" class$="iron-index-{{index}}">
               <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-save>
               <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
             </iron-pages>
+
           </gl-form-panel>
 
 
@@ -108,10 +105,10 @@
       </div>
     </paper-toast>
 
-    <div class="horizontal end-justified layout">
+    <!-- <div class="horizontal end-justified layout">
       <paper-button class="button" raised>ยกเลิก</paper-button>
       <paper-button class="button" raised>บันทึก</paper-button>
-    </div>
+    </div> -->
 
   </template>
   <script>

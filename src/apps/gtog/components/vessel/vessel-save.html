@@ -1,4 +1,5 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-label-input.html">
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="vessel-save">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
   paper-button{
@@ -12,6 +13,53 @@
   </style>
 
   <template>
+        <gl-form-panel-body>
+          <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[500,3]]">
+              <gl-form-label-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.lotNo}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+              <gl-form-label-input label="Vessel" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.vesselName}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,5],[700,4]]">
+              <gl-form-label-input label="Booking Shipper" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bs}}"></gl-form-label-input>
+            </gl-grid-col>
+
+            <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,3]]">
+              <gl-form-label-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.voidNo}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+              <gl-form-label-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bn}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,5],[700,4]]">
+              <gl-form-label-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-label-input>
+            </gl-grid-col>
+
+            <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,3]]">
+              <gl-form-label-input label="เมืองท่าปลายทาง" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.cityEnd}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,2]]">
+              <gl-form-label-input label="Package(kg/PP Page)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,5],[700,2]]">
+              <gl-form-label-input label="Pol" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pol}}"></gl-form-label-input>
+            </gl-grid-col>
+
+            <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,2]]">
+              <gl-form-label-input label="ETD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.etd}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,2]]">
+              <gl-form-label-input label="ETA" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.eta}}"></gl-form-label-input>
+            </gl-grid-col>
+          </gl-grid-row>
+        </gl-form-panel-body>
+
+          <gl-form-panel-footer>
+              <paper-button raised index="[[index]"></iron-icon>Draft B/L</paper-button>
+              <paper-button raised index="[[index]"></iron-icon>List เรือ</paper-button>
+              <paper-icon-button icon="expand-less"></paper-icon-button>
+          </gl-form-panel-footer>
+
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,2]]">
             <gl-form-label-input label="Package(kg/PP Page)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package}}"></gl-form-label-input>
@@ -62,12 +110,6 @@
   <script>
     Polymer({
       is: "vessel-save",
-      requiredTextArea:function(e){
-        e.target.validate();
-      },
-      ready: function() {
-        l(this.data)
-      },
 
     });
   </script>

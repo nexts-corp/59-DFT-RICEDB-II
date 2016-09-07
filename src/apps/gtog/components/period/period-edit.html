@@ -1,3 +1,4 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="period-edit">
   <style include="iron-flex iron-flex-alignment">
   paper-textarea{
@@ -15,20 +16,18 @@
   }
   </style>
   <template>
-
-    <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-        <gl-form-label-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-label-textarea>
-      </gl-grid-col>
-    </gl-grid-row>
+    <gl-form-panel-body>
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+          <gl-form-label-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-label-textarea>
+        </gl-grid-col>
+      </gl-grid-row>
+    </gl-form-panel-body>
 
   </template>
   <script>
     Polymer({
       is: "period-edit",
-      requiredTextArea:function(e){
-        e.target.validate();
-      }
 
     });
   </script>

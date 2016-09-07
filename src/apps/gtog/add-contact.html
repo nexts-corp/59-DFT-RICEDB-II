@@ -2,6 +2,7 @@
 ้<link rel="import" href="panel-seleted-vessel.html">
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
+<link rel="import" href="test.html">
 
 <link rel="import" href="components/promise/promise-confirm.html">
 <link rel="import" href="components/promise/promise-detail.html">
@@ -12,7 +13,14 @@
 <link rel="import" href="components/period/period-lot.html">
 <link rel="import" href="components/vessel/vessel-page.html">
 <dom-module id="gtog-add-contact">
+  <style is="custom-style" include="gl-rsu-font">
+    *{
+      font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+  </style>
   <template>
+
     <content-panel>
       <grid>
         <nx-grid data="{{data}}">
@@ -59,6 +67,7 @@
         <panel-seleted>
           <section-content name="detail">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <!-- <test-za name="primary"></test-za> -->
               <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
               <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
               <period-page name="third" data="{{dataSelect}}"></period-page>
