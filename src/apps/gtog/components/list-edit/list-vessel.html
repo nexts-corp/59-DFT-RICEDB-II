@@ -1,6 +1,6 @@
 <link rel="import" href="listEditBehavior.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
-<link rel="import" href="../vessel/vessel-draf.html">
+<link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
 <dom-module id="list-vessel">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
@@ -19,14 +19,12 @@
     }
     .fontPdLeft{
       padding: 10px 0px 10px 10px;
-      word-wrap: break-word;
+      /*word-wrap: break-word;*/
+      text-align: center;
     }
     paper-button{
       width: 20px;
       height: 30px;
-      margin-top: 30px;
-      margin-right: 10px;
-      margin-bottom: 10px;
     }
     paper-item{
       cursor:pointer;
@@ -80,21 +78,19 @@
       </paper-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
-          <div class="layout horizontal">
-            <div class="flex-2"></div>
-            <div class="flex-2">
+          <gl-form-panel-head label="[[itemPrimary.actualShipper]]" font-size=20px;>
               <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
               <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
               <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
-            </div>
-          </div>
+          </gl-form-panel-head>
 
           <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-          <gl-form-panel label="[[itemPrimary.actualShipper]]">
+          <gl-form-panel>
             <iron-pages selected="0" class$="iron-index-{{index}}">
+              <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-save>
               <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
-              <vessel-draf data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-draf>
             </iron-pages>
+
           </gl-form-panel>
 
 
@@ -108,10 +104,10 @@
       </div>
     </paper-toast>
 
-    <div class="horizontal end-justified layout">
+    <!-- <div class="horizontal end-justified layout">
       <paper-button class="button" raised>ยกเลิก</paper-button>
       <paper-button class="button" raised>บันทึก</paper-button>
-    </div>
+    </div> -->
 
   </template>
   <script>

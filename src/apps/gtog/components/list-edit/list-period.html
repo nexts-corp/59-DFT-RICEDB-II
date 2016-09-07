@@ -24,9 +24,6 @@
     paper-button{
       width: 20px;
       height: 30px;
-      margin-top: 30px;
-      margin-right: 10px;
-      margin-bottom: 10px;
     }
     paper-item{
       cursor:pointer;
@@ -87,8 +84,8 @@
       </gl-grid-row>
 
       <div class="horizontal end-justified layout">
+        <paper-button class="button" on-tap="click" raised>บันทึก</paper-button>
         <paper-button class="button" raised>ยกเลิก</paper-button>
-        <paper-button class="button" on-tap="validate" raised>บันทึก</paper-button>
       </div>
     </div>
 
@@ -114,16 +111,13 @@
       </paper-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
-          <div class="layout horizontal">
-            <div class="flex-2"></div>
-            <div class="flex-2">
+          <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px;>
               <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
               <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
               <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
-            </div>
-          </div>
+          </gl-form-panel-head>
 
-          <gl-form-panel label="[[itemPrimary.cityDestination]]">
+          <gl-form-panel>
             <iron-pages selected="0" class$="iron-index-{{index}}">
               <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
               <period-lot data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-lot>
@@ -140,10 +134,10 @@
     </paper-toast>
 
 
-    <div class="horizontal end-justified layout">
+    <!-- <div class="horizontal end-justified layout">
       <paper-button class="button" raised>ยกเลิก</paper-button>
       <paper-button class="button" raised>บันทึก</paper-button>
-    </div>
+    </div> -->
 
 
   </template>
@@ -179,6 +173,11 @@
             css.classList.add("testnone");
           }
       },
+      validate:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+            css.classList.remove("testblock");
+            css.classList.add("testnone");
+      }
 
 
     });
