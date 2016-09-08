@@ -1,37 +1,56 @@
 <dom-module id="panel-seleted">
 
-  <style is="custom-style" include="gl-rsu-font iron-flex iron-flex-alignment"  >
+  <style is="custom-style" include="gl-rsu-font iron-flex iron-flex-alignment gl-color gl-size"  >
     paper-tabs{
-      /*width: 300px;*/
       /*margin-left: 100px;*/
       background-color: var(--paper-orange-300);
-      color: #fff;
-      --paper-tabs-selection-bar-color: var(--paper-blue-a100)
+      /*color:var(--gl-gray-light-color);*/
+      font-weight: bold;
+      color: black;
+      --paper-tabs-selection-bar:{
+        height: 5px;
+        background-color: var(--gl-info-color);
+      }
     }
-    *{
+    paper-tab {
+      font-size: var(--font-size-h5);
       font-family: 'rsuregular', sans-serif;
         -webkit-font-smoothing: antialiased;
     }
     paper-tabs paper-tab.iron-selected {
-      color: blue;
+      font-size: var(--font-size-h4);
+      color: var(--gl-white-color);
+      background-color: var(--gl-info-color);
+    }
+    .button{
+      margin: 5px 0px 5px 0px;
+    }
+    .button:hover{
+      margin: 5px 0px 5px 0px;
+    }
+    .bdDrawer{
+      margin-top: 10px;
+      padding: 10px 15px 15px 15px;
     }
   </style>
 
     <template>
-      <div class="horizontal end-justified layout">
+      <div class="horizontal end-justified layout button">
         <div><paper-icon-button icon="close" on-tap="toggleDrawer"></paper-icon-button> </div>
       </div>
-       <paper-tabs selected="{{selected}}" align-bottom>
+       <paper-tabs selected="{{selected}}" align-bottom no-slide>
         <paper-tab>รายละเอียด</paper-tab>
         <paper-tab>พิมพ์</paper-tab>
         <paper-tab>ไฟล์</paper-tab>
       </paper-tabs>
+      <paper-material elevation="1" class="bdDrawer">
+        <iron-pages selected="{{selected}}">
+          <div><content select="section-content[name=detail]"></content></div>
+          <div><content select="section-content[name=print]"></content></div>
+          <div><content select="section-content[name=file]"></content></div>
+        </iron-pages>
+      </paper-material>
 
-      <iron-pages selected="{{selected}}">
-        <div><content select="section-content[name=detail]"></content></div>
-        <div><content select="section-content[name=print]"></content></div>
-        <div><content select="section-content[name=file]"></content></div>
-      </iron-pages>
 
     </template>
     <script>
