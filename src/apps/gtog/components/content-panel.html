@@ -31,6 +31,9 @@
     #changeDivcss > div.head-button {
       padding: 10px 0px 10px 0px;
     }
+    .displyNone{
+      display:none;
+    }
   </style>
 
   <template>
@@ -39,7 +42,8 @@
         <content select="grid"></content>
       </div>
 
-      <div class="rightdata flexchild-1" id="changeDivcss">
+      <div class="rightdata displyNone" id="changeDivcss">
+        <button type="button" name="button" on-tap="removeClass">ปิดแท็บ</button>
         <content select="panel"></content>
       </div>
     </div>
@@ -54,6 +58,10 @@
       },
       ready:function(){
         this.changeDiv();
+      },
+      removeClass:function(){
+        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+        css.classList.remove("flexchild-2");
       },
       changeDiv:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
@@ -71,11 +79,13 @@
           // console.log(css);
           if (css.classList.contains('flexchild-2') == false){
             // css.style.display = "inline";
+            css.classList.remove("displyNone");
             css.className += " flexchild-2";
             localStorage.setItem("togglePanel", true);
           }else{
             // css.style.display = "none";
             css.classList.remove("flexchild-2");
+            css.className += " displyNone";
             localStorage.setItem("togglePanel", false);
           }
         }
