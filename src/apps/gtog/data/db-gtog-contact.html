@@ -13,9 +13,21 @@
         //     console.log(data);
         // });
 
-        this.fetchContract('contract1',(data)=>{
-            console.log(data);
-        });
+        // this.fetchContract2('contract1',(data)=>{
+        //     console.log(data);
+        // });
+
+        // this.fetchContract('contract1',(data)=>{
+        //     console.log(data);
+        // });
+
+        // this.fetchConfirmation('confirmation1',(data)=>{
+        //     console.log(data);
+        // });
+
+        // this.fetchRice(['rice1','rice2'],(data)=>{
+        //     console.log(data);
+        // })
             
       },
       connectDb:function(){
@@ -60,7 +72,17 @@
             });
 
       },
+    
+
       fetchContract:function(contractId,callback){
+            this.db.get(contractId).then((view)=>{
+                return view;
+            }).then((view)=>{
+                callback(view);
+            });
+      },
+
+      fetchContract2:function(contractId,callback){
             this.db.get('_design/contract').then((view)=>{
                 return view;
             }).then((view)=>{
@@ -89,7 +111,37 @@
 
                 callback(result.data);
             });
+      },
+
+      
+
+      fetchConfirmation:function(confirmationId,callback){
+            this.db.get(confirmationId).then((view)=>{
+                return view;
+            }).then((view)=>{
+                callback(view);
+            });
+      },
+
+      fetchRice:function(arrRiceId,callback){
+            var all = (arrRiceId==null);
+            this.db.get('_design/rice').then((view)=>{
+                return view;
+            }).then((view)=>{
+                if(all){
+                    return this.db.query(view.views['rice']);
+                }else{
+                    return this.db.query(view.views['rice'], {
+                        keys: arrRiceId
+                    });
+                }
+                
+            }).then((data)=>{
+                callback(data);
+            });
       }
+
+
       
 
     });
