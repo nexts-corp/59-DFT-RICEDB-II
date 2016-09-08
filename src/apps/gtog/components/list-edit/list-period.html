@@ -1,5 +1,7 @@
 <link rel="import" href="listEditBehavior.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../period/period-save.html">
+<link rel="import" href="../period/period-edit.html">
 
 <dom-module id="list-period">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
@@ -52,20 +54,17 @@
        padding: 10px;
        margin-bottom: 10px;
      }
-     .testblock{
+     .show{
        display: block;
      }
-     .testnone{
+     .hide{
        display: none;
-     }
-     .marL{
-       margin-left: 10px;
      }
     </style>
   <template>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input class="marL" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
+        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -73,7 +72,7 @@
       </gl-grid-col>
     </gl-grid-row>
 
-    <div id="changeDivcss" class="testnone">
+    <div id="changeDivcss" class="hide">
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
           <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
@@ -123,8 +122,8 @@
             </gl-form-panel-head>
 
             <iron-pages selected="0" class$="iron-index-{{index}}">
+              <period-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-save>
               <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
-              <period-lot data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-lot>
             </iron-pages>
           </gl-form-panel>
 
@@ -170,18 +169,18 @@
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
           // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
           // console.log(css
-          if (css.classList.contains('testnone') == true){
-            css.classList.remove("testnone");
-            css.classList.add("testblock");
+          if (css.classList.contains('hide') == true){
+            css.classList.remove("hide");
+            css.classList.add("show");
           }else{
-            css.classList.remove("testblock");
-            css.classList.add("testnone");
+            css.classList.remove("show");
+            css.classList.add("hide");
           }
       },
       validate:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-            css.classList.remove("testblock");
-            css.classList.add("testnone");
+            css.classList.remove("show");
+            css.classList.add("hide");
       }
 
 
