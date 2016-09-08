@@ -1,0 +1,48 @@
+<dom-module id="db-gtog-contact">
+    <script>
+    Polymer({
+      is:'db-gtog-contact',
+      behaviors: [
+        gl.behavior.core
+      ],
+      created:function(){
+         
+          this.connectDb();
+          this.fetchData();
+
+            
+      },
+      connectDb:function(){
+          this.db = new PouchDB('http://127.0.0.1:5984/gtog');
+      },
+      fetchData:function(){
+            this.db.get('_design/test').then((doc)=>{
+                this.db.query(doc.views.za, {include_docs : true}).then(function (result) {
+                    let dataQuery = {data:[],index:[]};
+
+                    result.rows.map((row)=>{
+                        if(!row.key.lv){
+                            row.value.rice = [];
+                            dataQuery.data.push(row.value);
+                            dataQuery.index.push(row.id);
+                        }else{
+                            var id = dataQuery.index.indexOf(row.id);
+                            console.log(row);
+                            dataQuery.data[id].rice.push(row.doc);
+                        }
+                    });
+
+                    console.log(dataQuery);
+
+                }).catch(function (err) {
+                    console.log(err);
+                });
+            }).catch(function (err) {
+                console.log(err);
+            });
+      }
+      
+
+    });
+  </script>
+</dom-module>
