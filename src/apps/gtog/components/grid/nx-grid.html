@@ -77,7 +77,7 @@
                     <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
                         <paper-icon-button on-tap="_toggleSub" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
                         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
-                            <div class$="{{configPrimary.width}}">
+                            <div class$="{{configPrimary.width}}" on-tap="toggleDrawer">
                                 {{_getItemPrimary(itemPrimary,configPrimary)}}
                                 <!-- width:{{configPrimary.width}} -->
                             </div>
@@ -107,7 +107,7 @@
                             <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
                                 <paper-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
                                     <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
-                                      <div class$="{{configSecondary.width}} cml" data="{{itemSecondary}}">
+                                      <div class$="{{configSecondary.width}} cml" data="{{itemSecondary}}" on-tap="toggleDrawer">
                                        {{_getItemSecondary(itemSecondary,configSecondary)}}
                                         <!-- width:{{configSecondary.width}} -->
                                       </div>
@@ -118,7 +118,7 @@
                             <paper-item>
                                 <!-- Head secondary -->
                                 <template is="dom-repeat" as="itemConfigSecondaryHalf" items="{{config.secondaryHalf}}">
-                                  <div class$="{{itemConfigSecondaryHalf.width}}">
+                                  <div class$="{{itemConfigSecondaryHalf.width}}" on-tap="toggleDrawer">
                                     {{itemConfigSecondaryHalf.label}}
                                     <!-- width:{{itemConfigSecondary.width}} -->
                                   </div>
@@ -145,7 +145,7 @@
                         <template is="dom-repeat" as="itemThird" items="{{_getDataSub(itemPrimary,config.sub3)}}">
                             <paper-item on-tap="_getBind" on-dblclick="_getBind" level="third" data="{{itemThird}}">
                                 <template is="dom-repeat" as="configThird" items="{{config.third}}">
-                                  <div class$="{{configThird.width}} cml" data="{{itemThird}}">
+                                  <div class$="{{configThird.width}} cml" data="{{itemThird}}" on-tap="toggleDrawer">
                                    {{_getItemSecondary(itemThird,configThird)}}
                                     <!-- width:{{configSecondary.width}} -->
                                   </div>
@@ -156,7 +156,7 @@
                         <paper-item>
                             <!-- Head secondary -->
                             <template is="dom-repeat" as="itemConfigthirdHalf" items="{{config.thirdHalf}}">
-                              <div class$="{{itemConfigthirdHalf.width}}">
+                              <div class$="{{itemConfigthirdHalf.width}}" >
                                 {{itemConfigthirdHalf.label}}
                                 <!-- width:{{itemConfigSecondary.width}} -->
                               </div>
@@ -181,7 +181,7 @@
         var nxGridRender = [];
         Polymer({
             is:'nx-grid',
-            behaviors:[Polymer.Templatizer],
+            behaviors:[Polymer.Templatizer,gl.behavior.core],
             properties:{
                 seleted:{
                     type:Object,
@@ -190,6 +190,9 @@
                 config:{
                     type:Object
                 }
+            },
+            toggleDrawer:function(){
+                this.glQuery('contentPanel').changDrawer();
             },
             ready:function(){
 

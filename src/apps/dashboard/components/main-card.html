@@ -9,10 +9,6 @@
       padding-left: 20px;
       padding-top: 15px;
     }
-    .container {
-      @apply(--layout-horizontal);
-      @apply(--layout-center-justified);
-    }
     .title{
       padding: 10px;
       font-size: 14px;
@@ -26,17 +22,16 @@
     }
   </style>
   <template>
-    <div class="container">
-
-    <div class="horizontal layout wrap" style="width: 1240px">
-      <template is="dom-repeat" items="[[cardName]]">
+    <!-- <div class="horizontal center-justified layout wrap" style="width: 1240px"> -->
+    <div class="horizontal center-justified layout">
+    <template is="dom-repeat" items="[[cardName]]">
       <div class="card" >
         <div class="flex">
           <paper-card class="card" on-tap="clickChange" url$="[[item.path]]">
             <div class="heading">
               <div class="layout horizontal">
                 <div class="flex title">[[item.nameMenu]]</div>
-                </div>
+              </div>
             </div>
             <div class="card-content">
               <iron-image src="[[item.detail]]"></iron-image>
@@ -44,9 +39,7 @@
           </paper-card>
         </div>
       </div>
-
-      </template>
-    </div>
+    </template>
   </div>
   </template>
   <script>
