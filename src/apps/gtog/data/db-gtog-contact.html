@@ -7,38 +7,87 @@
       ],
       created:function(){
          
-          this.connectDb();
-          this.fetchData();
+        this.connectDb();
 
+        // this.fetchOverviewList((data)=>{
+        //     console.log(data);
+        // });
+
+        this.fetchContract('contract1',(data)=>{
+            console.log(data);
+        });
             
       },
       connectDb:function(){
           this.db = new PouchDB('http://127.0.0.1:5984/gtog');
       },
-      fetchData:function(){
-            this.db.get('_design/test').then((doc)=>{
-                this.db.query(doc.views.za, {include_docs : true}).then(function (result) {
-                    let dataQuery = {data:[],index:[]};
+      fetchOverviewList:function(callback){
 
-                    result.rows.map((row)=>{
-                        if(!row.key.lv){
-                            row.value.rice = [];
-                            dataQuery.data.push(row.value);
-                            dataQuery.index.push(row.id);
-                        }else{
-                            var id = dataQuery.index.indexOf(row.id);
-                            console.log(row);
-                            dataQuery.data[id].rice.push(row.doc);
-                        }
-                    });
+            this.db.get('_design/contract').then((view)=>{
+                return view;
+            }).then((view)=>{
+                return this.db.query(view.views['overviewList'], {
+                    include_docs : true
+                })
+            }).then((data)=>{
+                let result = {data:[],index:[],stack:[]};
+                data.rows.map((row)=>{
+                    let type = row.doc.type;
+                    if(type == 'contract'){
 
-                    console.log(dataQuery);
+                        result.data.push(row.doc);
+                        result.index.push(row.doc._id);
 
-                }).catch(function (err) {
-                    console.log(err);
+                        let index = result.data.length-1;
+                        result.data[index]['confirmation'] = [];
+                        result.data[index]['period'] = [];
+
+                    }else if(type == 'confirmation'){
+                        
+                        let index = result.index.indexOf(row.doc.contractId);
+                        result.data[index].confirmation.push(row.doc);
+
+                    }else if(type == 'period'){
+                        let index = result.index.indexOf(row.doc.contractId);
+                        result.data[index].period.push(row.doc);
+                        
+                    }
+
                 });
-            }).catch(function (err) {
-                console.log(err);
+
+                callback(result.data);
+                
+            });
+
+      },
+      fetchContract:function(contractId,callback){
+            this.db.get('_design/contract').then((view)=>{
+                return view;
+            }).then((view)=>{
+                return this.db.query(view.views['contract'], {
+                    startkey: [contractId],
+                    endkey: [contractId,{}],
+                    include_docs : true
+                })
+            }).then((data)=>{
+                let result = {data:[],index:[],stack:[]};
+                data.rows.map((row)=>{
+                    let type = row.doc.type;
+                    if(type == 'contract'){
+                        result.data.push(row.doc);
+                        result.index.push(row.doc._id);
+                    }else if(type == 'rice'){
+                        let index = result.index.indexOf(row.id);
+                        result.data[index].rice.map((res,i)=>{
+                            if(row.doc._id==res.riceId){
+                                result.data[index].rice[i]['name'] = row.doc.name;
+                            }
+                        });
+                    }
+
+                });
+
+                callback(result.data);
             });
       }
       
