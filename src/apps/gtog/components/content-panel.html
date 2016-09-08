@@ -1,91 +1,25 @@
 <dom-module id="content-panel">
 
   <style include="iron-flex iron-flex-factors">
-    .flex-horizontal {
-      @apply(--layout-horizontal);
-    }
-
-    .flexchild-1 {
-      @apply(--layout-flex);
-    }
-
-    .flexchild-2 {
-      @apply(--layout-flex-2);
-      display: inline;
-    }
-
-    .rightdata {
+  .rightdata {
       height: 100%;
-      /*display: none;*/
       border-left: 1px solid var(--paper-grey-300);
       padding: 5px 10px 0px 10px;
     }
-    #changeDivcss {
-      /*width: 0px;*/
+    /*#changeDivcss {
+      width: 0px;
       -webkit-transition: all 1s ease;
       -moz-transition: all 1s ease;
       -o-transition: all 1s ease;
       transition: all 1s ease;
-      /*display: none;*/
-    }
-    #changeDivcss > div.displyNone {
       display: none;
-    }
-    .displyNone {
-      -webkit-animation-name: slideFromright; /* Chrome, Safari, Opera */
-      -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
-      -webkit-animation-fill-mode: both;
-     animation-name:slideFromright;
-     animation-duration: 1s;
-     animation-fill-mode: both;
-    }
+    }*/
 
-    /* Chrome, Safari, Opera
-    */@-webkit-keyframes slideFromright{
-          0%   {
-         /*-webkit-transform: translateX(500%);*/
-         opacity: 1;
-      }
-        100% {
-          opacity: 0;
-         /*-webkit-transform: translateX(100%);*/
-      }
-    }
-
-    /* Standard syntax */
-    @keyframes slideFromright {
-        0%   {
-          opacity: 1;
-         /*transform: translateX(500%);*/
-      }
-        100% {
-          opacity: 0;
-         /*transform: translateX(100%);*/
-      }
-    }
   </style>
 
   <template>
     <div class=" flex-horizontal">
-      <!-- <div class="flex-1 ">
-        <content select="grid"></content>
-      </div>
-
-      <div id="changeDivcss" >
-        <content select="panel"></content>
-      </div> -->
-
-      <!-- <paper-drawer-panel right-drawer drawer-width="900px" force-narrow id="drawer"> -->
-          <!-- <div drawer>
-          <div class="rightdata">
-            <content select="panel"></content>
-          </div>
-        </div>
-        <div main>
-          <button type="button" name="button" on-tap="changDrawer"> กด</button>ผปแผปแ<br><br><br>
-          <content select="grid"></content>
-         </div> -->
-      <!-- </paper-drawer-panel> -->
+      
       <paper-drawer-panel right-drawer drawer-width="75%" force-narrow id="drawer">
         <paper-header-panel drawer >
           <div class="rightdata">
@@ -113,34 +47,34 @@
         //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
         this.$.drawer.togglePanel();
       },
-      changeDiv:function(){
-        var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-
-        if(!this.fristPanel){
-          if(localStorage.getItem("togglePanel")=="true"
-          && localStorage.getItem("togglePanel")!=null){
-            // l('s');
-            css.className += " flexchild-2";
-          }
-          this.fristPanel = true;
-        }else{
-
-          // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
-          // console.log(css);
-          if (css.classList.contains('flexchild-2') == false){
-            // css.style.display = "inline";
-            css.classList.remove("displyNone");
-            css.className += " flexchild-2 rightdata";
-            localStorage.setItem("togglePanel", true);
-          }else{
-            // css.style.display = "none";
-            css.classList.remove("flexchild-2");
-            css.classList.remove("rightdata");
-            css.className += " displyNone";
-            localStorage.setItem("togglePanel", false);
-          }
-        }
-      },
+      // changeDiv:function(){
+      //   var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+      //
+      //   if(!this.fristPanel){
+      //     if(localStorage.getItem("togglePanel")=="true"
+      //     && localStorage.getItem("togglePanel")!=null){
+      //       // l('s');
+      //       css.className += " flex-2";
+      //     }
+      //     this.fristPanel = true;
+      //   }else{
+      //
+      //     // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+      //     // console.log(css);
+      //     if (css.classList.contains('flex-2') == false){
+      //       // css.style.display = "inline";
+      //       css.classList.remove("displyNone");
+      //       css.className += " flex-2 rightdata";
+      //       localStorage.setItem("togglePanel", true);
+      //     }else{
+      //       // css.style.display = "none";
+      //       css.classList.remove("flex-2");
+      //       css.classList.remove("rightdata");
+      //       css.className += " displyNone";
+      //       localStorage.setItem("togglePanel", false);
+      //     }
+      //   }
+      // },
     });
   </script>
 
