@@ -1,5 +1,5 @@
 <dom-module id="promise-fileup">
-  <style include="iron-flex iron-flex-factors">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment">
   .flexchild-1 {
     @apply(--layout-flex);
   }
@@ -12,14 +12,6 @@
   }
   .content2{
     padding-left: 20px;
-  }
-
-  paper-button{
-    position: fixed;
-    right: 0px;
-    bottom: 0px;
-    margin-right: 20px;
-    margin-bottom: 20px;
   }
   .text{
     text-align: center;
@@ -34,11 +26,7 @@
   }
 	.upload input {
 		visibility: hidden;
-    position: fixed;
-    right: 0px;
-    bottom: 0px;
-    margin-right: 20px;
-    margin-bottom: 20px;
+    position: absolute;
 	}
   .dropzone{
     @apply(--layout-vertical);
@@ -89,17 +77,16 @@
                  </template>
               </paper-menu>
             </template>
-
         </div>
+
       </div>
-
-      <label class="upload">
-        <paper-button raised>เพิ่มไฟล์</paper-button>
-        <input id="dropSelect" type="file" id="input" multiple>
-      </label>
-
     </div>
-
+    <div class="horizontal end-justified layout">
+        <label class="upload">
+          <input id="dropSelect" type="file" id="input" multiple>
+          <paper-button raised>เพิ่มไฟล์</paper-button>
+        </label>
+    </div>
   </template>
   <script>
   Polymer({
