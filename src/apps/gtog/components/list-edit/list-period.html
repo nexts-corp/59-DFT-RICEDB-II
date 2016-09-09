@@ -89,8 +89,8 @@
       </gl-grid-row>
 
       <div class="horizontal end-justified layout">
-        <paper-button class="button" on-tap="click" raised>บันทึก</paper-button>
         <paper-button class="button" raised>ยกเลิก</paper-button>
+        <paper-button class="button" on-tap="click" raised>บันทึก</paper-button>
       </div>
     </div>
 
@@ -117,19 +117,20 @@
       </paper-icon-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
+          <div class="bd">
+            <gl-form-panel>
+              <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px; set-border="1px">
+                  <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
+                  <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
+                  <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
+              </gl-form-panel-head>
 
-          <gl-form-panel>
-            <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px;>
-                <paper-button raised on-tap="saveChange" index="[[index]]"><iron-icon icon="save"></iron-icon>บันทึก</paper-button>
-                <paper-button raised on-tap="editChange" index="[[index]]"><iron-icon icon="create"></iron-icon>แก้ไข</paper-button>
-                <paper-button raised on-tap="" index="[[index]]"><iron-icon icon="delete"></iron-icon>ลบ</paper-button>
-            </gl-form-panel-head>
-
-            <iron-pages selected="0" class$="iron-index-{{index}}">
-              <period-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-save>
-              <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
-            </iron-pages>
-          </gl-form-panel>
+              <iron-pages selected="0" class$="iron-index-{{index}}">
+                <period-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-save>
+                <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
+              </iron-pages>
+            </gl-form-panel>
+          </div>
 
         </div>
       </iron-collapse>
