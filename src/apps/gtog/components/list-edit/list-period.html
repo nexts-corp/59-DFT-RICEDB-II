@@ -15,6 +15,9 @@
     .cleanBd{
       padding: 0px;
     }
+    .top {
+      margin-top: 10px;
+    }
     .bd{
       border-bottom: 1px solid #ccc;
     }
@@ -94,7 +97,7 @@
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
 
-    <div class="layout horizontal">
+    <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
           [[item.label]]
@@ -102,7 +105,8 @@
       </template>
     </div>
     <template is="dom-repeat" as="itemPrimary" items="{{data.city}}">
-      <paper-item class="fancy cleanBd bd" on-tap="toggle" aria-controls$="[[itemPrimary.collapse]]">
+      <paper-icon-item class="fancy cleanBd bd" >
+        <paper-icon-button on-tap="_toggleSub" aria-controls$="[[itemPrimary.collapse]]" icon="chevron-right" item-icon></paper-icon-button>
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
           <div class$="[[configPrimary.width]]">
             <div class="fontPdLeft">
@@ -110,7 +114,7 @@
             </div>
           </div>
         </template>
-      </paper-item>
+      </paper-icon-item>
       <iron-collapse id="[[itemPrimary.collapse]]">
         <div class="collapse-content">
 
@@ -138,10 +142,6 @@
     </paper-toast>
 
 
-    <!-- <div class="horizontal end-justified layout">
-      <paper-button class="button" raised>ยกเลิก</paper-button>
-      <paper-button class="button" raised>บันทึก</paper-button>
-    </div> -->
 
 
   </template>

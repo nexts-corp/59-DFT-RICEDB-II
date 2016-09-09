@@ -63,6 +63,15 @@
       //  console.log(targetAttribute);
        this.$$('#'+targetAttribute).toggle();
      },
+     _toggleSub:function(e){
+       var targetAttribute = e.currentTarget.getAttribute('aria-controls');
+       this.$$('#'+targetAttribute).toggle();
+       if (e.target.icon == 'expand-more') {
+         e.target.icon = 'chevron-right';
+       }else {
+         e.target.icon = 'expand-more'
+       }
+     },
      editChange:function(e){
       //  var change = this._edit(e);
       //  change.map((el)=>{
