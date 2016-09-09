@@ -25,11 +25,17 @@
     .sublist paper-item {
       padding-left: 30px;
     }
-
-    .cml{
+    .cml {
+      text-align: left;
       padding-left: 15px;
     }
-
+    .cml:not(:nth-of-type(1)){
+      text-align: right;
+    }
+    .subTitle {
+      margin-left: 60px;
+      /*padding-right: -60px;*/
+    }
     .paper-menu-lv1 {
         --paper-menu-selected-item: {
             font-weight: normal;
@@ -77,7 +83,7 @@
                     <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
                         <paper-icon-button on-tap="_toggleSub" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
                         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
-                            <div class$="{{configPrimary.width}}" on-tap="toggleDrawer">
+                            <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
                                 {{_getItemPrimary(itemPrimary,configPrimary)}}
                                 <!-- width:{{configPrimary.width}} -->
                             </div>
@@ -107,7 +113,7 @@
                             <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
                                 <paper-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
                                     <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
-                                      <div class$="{{configSecondary.width}} cml" data="{{itemSecondary}}" on-tap="toggleDrawer">
+                                      <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
                                        {{_getItemSecondary(itemSecondary,configSecondary)}}
                                         <!-- width:{{configSecondary.width}} -->
                                       </div>
