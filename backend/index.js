@@ -1,8 +1,8 @@
-var express = require('express')
-var app = express()
+var express = require('express');
+var app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-})
+var test = require('./routes/test');
 
-app.listen(3000)
+app.use('/', test);
+
+app.listen(3000);
