@@ -1,79 +1,61 @@
 <style media="screen">
-  html,body {
-   margin: 0;
-   height: 100%;
-  }
+    html,
+    body {
+        margin: 0;
+        height: 100%;
+    }
 </style>
 <link rel="import" href="components/icon-toggle.html">
 <dom-module id="layout-main">
-  <style is="custom-style" include="iron-flex iron-flex-alignment">
+    <style is="custom-style" include="iron-flex iron-flex-alignment">
 
-  </style>
-  <style is="custom-style">
-    div.paper-header{
-      border-bottom: 1px solid var(--paper-grey-300);
-    }
-    paper-toolbar.toolbarHead {
-      --paper-toolbar-background: #f7941e;
-      --paper-toolbar-title: {
-          font-weight: normal;
-          font-size: 16px;
-          padding: 0px 0px 10px 70px;
-          line-height: 25px;
-      };
-    }
-    paper-toolbar.toolbarbody {
-      height: 5px;
-      --paper-toolbar-background:#29AAE3;
-    }
-    paper-toolbar.toolbarfoot {
-      /*height: 50px;*/
-      --paper-toolbar-background:#FFF;
-      --paper-header-panel-body: {
-        font-size: 16px;
-      };
-    }
-    paper-toolbar.toolbarbody > div.title {
-      margin-left: 0px;
-    }
-    iron-icon {
-      --iron-icon-height: 25px;
-       --iron-icon-width: 25px;
-       --iron-icon-fill-color:black;
-    }
-    div.content {
-      margin: 5px 0px 0px 0px;
-    }
-    paper-button.custom {
-   --paper-button-ink-color: var(--paper-pink-a200);
-   /* These could also be individually defined for each of the
-     specific css classes, but we'll just do it once as an example */
-   --paper-button-flat-keyboard-focus: {
-     background-color: var(--paper-pink-a200);
-     color: white !important;
-   };
-   --paper-button-raised-keyboard-focus: {
-     background-color: var(--paper-pink-a200) !important;
-     color: white !important;
-   };
- }
- paper-button.green {
-    background-color: var(--paper-green-500);
-    color: white;
-    --paper-button-raised-keyboard-focus: {
-      background-color: var(--paper-green-50) !important;
-      color: white !important;
-    };
-  }
-  paper-button > iron-icon {
-    --iron-icon-height: 20px;
-    --iron-icon-width: 20px;
-    padding-right: 5px;
-    --iron-icon-fill-color :white !important;
-  }
-  </style>
+    </style>
+    <style is="custom-style" include="gl-color">
+        div.paper-header {
+            border-bottom: 1px solid var(--paper-grey-300);
+        }
+        
+        paper-toolbar.toolbarHead {
+            --paper-toolbar-background: #f7941e;
+            --paper-toolbar-title: {
+                font-weight: normal;
+                font-size: 16px;
+                padding: 0px 0px 10px 70px;
+                line-height: 25px;
+                font-family: 'rsubold', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+            ;
+        }
+        
+        paper-toolbar.toolbarbody {
+            height: 5px;
+            --paper-toolbar-background: #29AAE3;
+        }
+        
+        paper-toolbar.toolbarfoot {
+            /*height: 50px;*/
+            --paper-toolbar-background: #FFF;
+            --paper-header-panel-body: {
+                font-size: 16px;
+            }
+            ;
+        }
+        
+        paper-toolbar.toolbarbody>div.title {
+            margin-left: 0px;
+        }
+        
+        div.content {
+            margin: 5px 0px 0px 0px;
+        }
+        
+        .gl-btn-success {
+            width: auto;
+        }
+    </style>
 
-  <template>
+    <template>
 
   <paper-header-panel mode="waterfall">
     <div class="paper-header">
@@ -90,13 +72,13 @@
       <paper-toolbar class="toolbarbody">
       </paper-toolbar>
       <paper-toolbar class="toolbarfoot">
-          <paper-button raised class="custom green"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
+          <paper-button raised class="gl-btn-success"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
           <div class="title"></div>
           <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
-            <iron-icon class="iconhead" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
+            <iron-icon class="gl-icon-size" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
           </icon-toggle>
           <icon-toggle toggles tabindex="0" on-tap="loadPages">
-            <iron-icon class="iconhead" icon="settings" title="ตั้งค่า" ></iron-icon>
+            <iron-icon class="gl-icon-size" icon="settings" title="ตั้งค่า" ></iron-icon>
           </icon-toggle>
       </paper-toolbar>
     </div>
@@ -107,52 +89,52 @@
 
 
   </template>
-  <script>
-    Polymer({
-      is:'layout-main',
-      behaviors:[gl.behavior.template,gl.behavior.locales,gl.behavior.core],
-      properties: {
-        loadContent: {
-          type: Boolean,
-          value:false
-        }
-      },
-      created: function() {
-        this.glQuery('layoutMain',this);
-      },
-      changePath:function(path){
-        this.loadContent = true;
-        // console.log('a',this.loadContent);
-        this.glChangePath(path);
-      },
-      ready:function(){
-        // this._observer = Polymer.dom(this.$.tagPageLoad).observeNodes((info)=>{
-        //
-        //   this.loadContent = false;
-        //   console.log('b',this.loadContent);
-        // });
-      },
-      // attached: function() {
-      //   //
-      //   if(localStorage.getItem("togglePanel")=="true"
-      //   && localStorage.getItem("togglePanel")!=null){
-      //     var button = Polymer.dom(this.root).querySelector('#changeWidth');
-      //     button.setAttribute("active","")
-      //   }
-      // },
-      // togglePanel:function(e){
-      //   //if(typeof e.currentTarget.getAttribute('active') != "object"){}
-      //   //เรียกใช้อีรีเม็นแล้วเข้าไปใช้ฟั่งชั่น
-      //   this.glQuery('contentPanel').changeDiv();
-      // },
-      changeLanguage:function(){
-        if(this.language == 'th'){
-          this.glSwitchLanguage('en');
-        }else{
-          this.glSwitchLanguage('th');
-        }
-      }
-    });
-  </script>
+    <script>
+        Polymer({
+            is: 'layout-main',
+            behaviors: [gl.behavior.template, gl.behavior.locales, gl.behavior.core],
+            properties: {
+                loadContent: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+            created: function() {
+                this.glQuery('layoutMain', this);
+            },
+            changePath: function(path) {
+                this.loadContent = true;
+                // console.log('a',this.loadContent);
+                this.glChangePath(path);
+            },
+            ready: function() {
+                // this._observer = Polymer.dom(this.$.tagPageLoad).observeNodes((info)=>{
+                //
+                //   this.loadContent = false;
+                //   console.log('b',this.loadContent);
+                // });
+            },
+            // attached: function() {
+            //   //
+            //   if(localStorage.getItem("togglePanel")=="true"
+            //   && localStorage.getItem("togglePanel")!=null){
+            //     var button = Polymer.dom(this.root).querySelector('#changeWidth');
+            //     button.setAttribute("active","")
+            //   }
+            // },
+            // togglePanel:function(e){
+            //   //if(typeof e.currentTarget.getAttribute('active') != "object"){}
+            //   //เรียกใช้อีรีเม็นแล้วเข้าไปใช้ฟั่งชั่น
+            //   this.glQuery('contentPanel').changeDiv();
+            // },
+            changeLanguage: function() {
+                if (this.language == 'th') {
+                    this.glSwitchLanguage('en');
+                } else {
+                    this.glSwitchLanguage('th');
+                }
+            }
+        });
+    </script>
 
 </dom-module>
