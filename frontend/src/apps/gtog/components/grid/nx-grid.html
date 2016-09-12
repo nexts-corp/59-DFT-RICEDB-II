@@ -3,7 +3,7 @@
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 
 <dom-module id="nx-grid">
-    <style include="iron-flex iron-flex-factors">
+    <style include="iron-flex iron-flex-factors gl-size">
     .header{
       padding: 10px 0px 10px 10px;
       background-color: var(--paper-grey-100);
@@ -23,17 +23,32 @@
       cursor:pointer;
     }
     .sublist paper-item {
-      padding-left: 30px;
+      /*padding-left: 30px;*/
     }
-    .cml {
-      text-align: left;
-      padding-left: 15px;
+    .cml:first-of-type {
+      /*margin-left: 60px;*/
+        text-align: left;
+        /*color: red;*/
     }
-    .cml:not(:nth-of-type(1)){
+    .cml:not(:first-of-type){
       text-align: right;
+        /*color: blue;*/
     }
+    .headLabel{
+      text-align: left;
+      margin-left: 10%;
+      /*color: red;*/
+      font-size: var(--font-size-h4);
+    }
+    .headLabel:not(:first-of-type){
+      margin-left: 0px;
+      text-align: right;
+      padding-right: 25px;
+      /*color: blue;*/
+    }
+
     .subTitle {
-      margin-left: 60px;
+      /*margin-left: 60px;*/
       /*padding-right: -60px;*/
     }
     .paper-menu-lv1 {
@@ -71,9 +86,9 @@
         <div class="horizontal-section">
             <div class="header layout horizontal">
               <!-- Head primary Level 1 -->
-                <div style="width:55px">&nbsp;</div>
+                <!-- <div style="width:55px headLabel">&nbsp;</div> -->
                 <template is="dom-repeat" as="itemConfigPrimary" items="{{config.primary}}">
-                    <div class$="{{itemConfigPrimary.width}}">{{itemConfigPrimary.label}}
+                    <div class$="{{itemConfigPrimary.width}} headLabel">{{itemConfigPrimary.label}}
                       <!-- width:{{itemConfigPrimary.width}} -->
                     </div>
                 </template>
@@ -111,14 +126,23 @@
                                 </template>
                             </paper-item>
                             <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
-                                <paper-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
+                                <!-- <paper-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
+                                    <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
+                                      <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
+                                       {{_getItemSecondary(itemSecondary,configSecondary)}} -->
+                                        <!-- width:{{configSecondary.width}} -->
+                                      <!-- </div>
+                                    </template>
+                                <paper-item> -->
+                                <paper-icon-item  >
+                                    <!-- Head secondary -->
                                     <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
                                       <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
                                        {{_getItemSecondary(itemSecondary,configSecondary)}}
                                         <!-- width:{{configSecondary.width}} -->
                                       </div>
                                     </template>
-                                <paper-item>
+                                </paper-icon-item >
                             </template>
                             <!-- เพิ่มข้อมูล -->
                             <paper-item>
@@ -149,14 +173,14 @@
                             </template>
                         </paper-item>
                         <template is="dom-repeat" as="itemThird" items="{{_getDataSub(itemPrimary,config.sub3)}}">
-                            <paper-item on-tap="_getBind" on-dblclick="_getBind" level="third" data="{{itemThird}}">
+                            <paper-icon-item  on-tap="_getBind" on-dblclick="_getBind" level="third" data="{{itemThird}}">
                                 <template is="dom-repeat" as="configThird" items="{{config.third}}">
                                   <div class$="{{configThird.width}} cml" data="{{itemThird}}" on-tap="toggleDrawer">
                                    {{_getItemSecondary(itemThird,configThird)}}
                                     <!-- width:{{configSecondary.width}} -->
                                   </div>
                                 </template>
-                            <paper-item>
+                            <paper-icon-item >
                         </template>
                         <!-- เพิ่มข้อมูล -->
                         <paper-item>
@@ -236,7 +260,7 @@
 
                 var items2 = Polymer.dom(this.$.secondary).getDistributedNodes();
                 var lists2 = Polymer.dom(items2[0]).querySelectorAll('list');
-
+                console.log(lists2);
                 for (var i = 0; i < lists2.length; i++) {
 
                     var configPointer2 = {
