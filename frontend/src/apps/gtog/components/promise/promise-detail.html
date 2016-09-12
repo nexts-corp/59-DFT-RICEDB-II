@@ -1,6 +1,6 @@
 <dom-module id="promise-detail">
 
-  <style include="iron-flex iron-flex-alignment">
+  <style include="iron-flex iron-flex-alignment gl-color">
     .bg{
       background-color:var(--paper-grey-200);
       border: 1px solid black;
@@ -10,8 +10,6 @@
         word-break: break-all;
       }
       paper-button{
-        width: 20px;
-        height: 30px;
         margin-top: 10px;
       }
       .top{
@@ -22,10 +20,10 @@
 
   <template>
       <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.promiseName}}" placeholder="ใส่รายละเอียด"></gl-form-input>
           </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,4]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <vaadin-date-picker label="วันที่"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
@@ -33,7 +31,7 @@
         <template id="zatest" is="dom-repeat" items="{{data.rice}}">
           <div class="bg top">
             <gl-grid-row>
-              <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                   <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                     <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
                       <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
@@ -41,33 +39,33 @@
                     </paper-listbox>
                   </gl-form-dropdown-menu>
               </gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,3]]">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                   <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></gl-form-input>
               </gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[500,3],[700,4]]"></gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                 <paper-icon-button class="top" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
               </gl-grid-col>
             </gl-grid-row>
           </div>
         </template>
         <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="add">เพิ่ม</paper-button>
+          <paper-button raised on-tap="add" class="gl-btn-primary">เพิ่ม</paper-button>
         </div>
 
 
           <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
-              <gl-form-textarea label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></gl-form-textarea>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+              <gl-form-textarea rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></gl-form-textarea>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
-              <gl-form-textarea label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}"></gl-form-textarea>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+              <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}"></gl-form-textarea>
             </gl-grid-col>
           </gl-grid-row>
 
           <div class="horizontal end-justified layout">
-            <paper-button class="button" raised>ยกเลิก</paper-button>
-            <paper-button class="button" on-tap="validate" raised>บันทึก</paper-button>
+            <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+            <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
           </div>
 
   </template>
