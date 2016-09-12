@@ -102,7 +102,7 @@
     </div>
     <template is="dom-repeat" as="itemPrimary" items="{{data.city}}">
       <paper-icon-item class="fancy cleanBd bd" >
-        <paper-icon-button on-tap="_toggleSub" aria-controls$="[[itemPrimary.collapse]]" icon="chevron-right" item-icon></paper-icon-button>
+        <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse{{index}}" icon="chevron-right" item-icon></paper-icon-button>
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
           <div class$="[[configPrimary.width]]">
             <div class="fontPdLeft">
@@ -111,7 +111,7 @@
           </div>
         </template>
       </paper-icon-item>
-      <iron-collapse id="[[itemPrimary.collapse]]">
+      <iron-collapse id="collapse{{index}}">
         <div class="collapse-content">
           <div class="bd">
             <gl-form-panel>
