@@ -1,26 +1,30 @@
 <dom-module id="promise-confirm">
-  <style include="iron-flex iron-flex-alignment gl-color">
-  .top{
-    margin-top: 15px;
-  }
-  .bg{
-    background-color:var(--paper-grey-200);
-    border: 1px solid black;
-    padding-left: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-  paper-button{
-    margin-top: 10px;
-  }
-  gl-form-textarea{
-    word-break: break-all;
-  }
-  paper-icon-button{
-    margin-top: 10px;
-  }
-  </style>
-  <template>
+    <style include="iron-flex iron-flex-alignment gl-color">
+        .top {
+            margin-top: 15px;
+        }
+
+        .bg {
+            background-color: var(--paper-grey-200);
+            border: 1px solid black;
+            padding-left: 10px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        paper-button {
+            margin-top: 10px;
+        }
+
+        gl-form-textarea {
+            word-break: break-all;
+        }
+
+        paper-icon-button {
+            margin-top: 10px;
+        }
+    </style>
+    <template>
     <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.id}}"></gl-form-input>
@@ -59,56 +63,61 @@
         </div>
       </template>
 
-      <div class="horizontal end-justified layout">
+    <div class="horizontal end-justified layout">
         <paper-button raised on-tap="add" class="gl-btn-primary">เพิ่ม</paper-button>
-      </div>
+    </div>
 
-      <gl-grid-row>
+    <gl-grid-row>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-            <paper-listbox  class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
-              <paper-item price-type="fob">FOB</paper-item>
-              <paper-item price-type="cy">CY</paper-item>
-              <paper-item price-type="other">ฯลฯ</paper-item>
-            </paper-listbox>
-          </gl-form-dropdown-menu>
+            <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+                <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
+                    <paper-item price-type="fob">FOB</paper-item>
+                    <paper-item price-type="cy">CY</paper-item>
+                    <paper-item price-type="other">ฯลฯ</paper-item>
+                </paper-listbox>
+            </gl-form-dropdown-menu>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.totalQuantity]]"></gl-form-input>
+            <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.totalQuantity]]"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-          <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></gl-form-textarea>
+            <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></gl-form-textarea>
         </gl-grid-col>
-      </gl-grid-row>
+    </gl-grid-row>
 
-      <div class="horizontal end-justified layout">
+    <div class="horizontal end-justified layout">
         <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
-      </div>
+    </div>
 
     </div>
-  </template>
-  <script>
-    Polymer({
-      is: "promise-confirm",
-      properties: {
-        data: {
-          type: Object,
-          value: { name:''}
-        }
-      },
-      add:function () {
-        this.push('data.confirmItem',{package:'',price:''});
-        // console.log(this.data);
-      },
-      dele: function(data){
-        var index = this.data.confirmItem.indexOf(data);
-        this.splice('data.confirmItem',index,1);
-      }
+    </template>
+    <script>
+        Polymer({
+            is: "promise-confirm",
+            properties: {
+                data: {
+                    type: Object,
+                    value: {
+                        name: ''
+                    }
+                }
+            },
+            add: function() {
+                this.push('data.confirmItem', {
+                    package: '',
+                    price: ''
+                });
+                // console.log(this.data);
+            },
+            dele: function(data) {
+                var index = this.data.confirmItem.indexOf(data);
+                this.splice('data.confirmItem', index, 1);
+            }
 
-    });
-  </script>
+        });
+    </script>
 </dom-module>
