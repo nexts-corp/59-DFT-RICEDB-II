@@ -51,10 +51,8 @@
 
       this.config = config;
     },
-    attached: function() {
-      // var subComponent = this.$.subComponent;
-      // console.log(subComponent);
-      // l(this.data);
+    _toggleDrawer: function() {
+      this.glQuery('contentPanel').changDrawer();
     },
     _getItemPrimary:function(item,config){
         return item[config.item];
@@ -107,6 +105,15 @@
     },
     closeToast:function () {
       this.$.toastPass.hide();
+    },
+    toggleDrawer: function() {
+      this.glQuery('contentPanel').changDrawer();
+    },
+    _getBind: function(e) {
+      this.fire('nx-grid-' + e.type, {
+          data: e.currentTarget.data,
+          level: e.currentTarget.getAttribute('level')
+        });
     }
   };
 </script>
