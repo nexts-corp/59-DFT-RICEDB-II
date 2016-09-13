@@ -1,0 +1,71 @@
+<link rel="import" href="listEditBehavior.html">
+<dom-module id="list-draft">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-size">
+.title{
+margin: 15px;
+font-size: var(--font-size-h3);
+}
+.header {
+padding: 10px 0px 0px 10px;
+background-color: var(--paper-grey-100);
+color: var(--paper-grey-600);
+font-size: var(--font-size-h4);
+}
+paper-menu{
+padding: 0px;
+}
+paper-icon-item{
+cursor: pointer;
+}
+.labelSearch{
+font-size: var(--font-size-h4);
+margin: 10px 10px 10px 10px;
+font-family: 'rsuregular', sans-serif;
+-webkit-font-smoothing: antialiased;
+}
+.bd {
+border: 1px solid #000;
+
+}
+    </style>
+    <template>
+    <content id="primary" select="items[type=primary]"></content>
+
+
+    <div class="title">[[data.0.periodNo]]</div>
+   <div class="header layout horizontal">
+     <template is="dom-repeat" items="{{config.primary}}">
+        <div  class$="[[item.width]]">
+           [[item.label]]
+        </div>
+    </template>
+      <div class="flex searchInput ">
+         <div class="horizontal end-justified layout">
+           <div class="labelSearch">B/L No.</div>
+           <paper-input label="Input label" no-label-float></paper-input>
+           <paper-icon-button icon="search"></paper-icon-button>
+         </div>
+     </div>
+   </div>
+    <template is="dom-repeat" as="itemPrimary" items="{{data}}">
+      <paper-icon-item on-tap="_getBind" level="primary" data="{{itemPrimary}}">
+        <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
+          <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+            <div class$="[[configPrimary.width]]"  on-tap="_toggleDrawer">
+              <div class="fontPdLeft" >
+                {{_getItemPrimary(itemPrimary,configPrimary)}}
+              </div>
+            </div>
+          </template>
+      </paper-icon-item>
+    </template>
+
+    </template>
+    <script>
+        Polymer({
+            is: "list-draft",
+            behaviors: [listEditBehavior,gl.behavior.core],
+
+        });
+    </script>
+</dom-module>
