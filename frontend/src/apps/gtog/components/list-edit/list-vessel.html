@@ -3,6 +3,81 @@
 <link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
 <dom-module id="list-vessel">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    .header{
+      text-align: center;
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      word-wrap: break-word;
+    }
+    .cleanBd{
+      padding: 0px;
+    }
+    .bd{
+      border-bottom: 1px solid #ccc;
+    }
+    .top{
+      margin-top: 30px;
+    }
+    .w{
+      width: 50%;
+      text-align: center;
+    }
+    .padL{
+      padding-left: 35px;
+    }
+    .fontPdLeft{
+      padding: 10px 0px 10px 10px;
+      /*word-wrap: break-word;*/
+      text-align: center;
+    }
+    paper-item{
+      cursor:pointer;
+    }
+    .yellow-button {
+       text-transform: none;
+       color: #eeff41;
+     }
+     paper-toast {
+       --paper-toast-background-color:var(--paper-green-500);
+       /*height: 50px;*/
+       /*margin: 0px 0px 0px 0px;*/
+       /*padding: 0px 0px 0px 0px;*/
+       font-size: 16px;
+       width: 600px;
+       text-align: center;
+     }
+     paper-toast > div.content > iron-icon {
+        padding: 0px 10px 0px 0px;
+     }
+     gl-form-dropdown-menu{
+       width: 90%;
+     }
+     vaadin-date-picker{
+       width: 60%;
+     }
+     .marL{
+       margin-left: 10px;
+     }
+     .title{
+       text-align: center;
+       font-size: var(--font-size-h4);
+       font-family: 'rsubold', sans-serif;
+       -webkit-font-smoothing: antialiased;
+     }
+     #changeDivcss {
+       background-color: var(--paper-grey-100);
+       border: 1px solid black;
+       padding: 10px;
+       margin-bottom: 10px;
+     }
+     .show{
+       display: block;
+     }
+     .hide{
+       display: none;
+     }
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         .header {
             text-align: center;
@@ -112,40 +187,46 @@
             <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.actualShipper}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Vessel" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.vesselName}}"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input label="Booking Shipper" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bs}}"></gl-form-input>
           </gl-grid-col>
-
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.lotNo}}"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bn}}"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-input>
+            <gl-form-input label="Vessel" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.vesselName}}"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.voidNo}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="เมืองท่าปลายทาง" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.cityEnd}}"></gl-form-input>
+            <gl-form-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.lotNo}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Package (kg/PP Page)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package}}"></gl-form-input>
+            <gl-form-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bn}}"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Pol" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pol}}"></gl-form-input>
+            <gl-form-input label="B/L No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="ETD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.etd}}"></gl-form-input>
+            <gl-form-input label="POL" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pol}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="ETA" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.eta}}"></gl-form-input>
+            <vaadin-date-picker label="ETD" placeholder="เลือกวันที่"></vaadin-date-picker>
+          </gl-grid-col>
+
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <vaadin-date-picker label="ETA" placeholder="เลือกวันที่"></vaadin-date-picker>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือเมืองท่า" placeholder="เลือกเมืองท่า" required>
+              <paper-listbox  class="dropdown-content" attr-for-selected="confirmLetter" selected="{{data.cityEnd}}">
+                <paper-item confirmLetter="Shekou">Shekou</paper-item>
+                <paper-item confirmLetter="Patthaya">Patthaya</paper-item>
+                <paper-item confirmLetter="Rayong">Rayong</paper-item>
+              </paper-listbox>
+            </gl-form-dropdown-menu>
           </gl-grid-col>
         </gl-grid-row>
       </gl-form-panel-body>
@@ -158,24 +239,24 @@
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-              <paper-listbox  class="dropdown-content" attr-for-selected="confirmLetter" selected="{{data.confirmLetter}}">
-                <paper-item confirmLetter="Con1">Confirmmation Letter No. 1</paper-item>
-                <paper-item confirmLetter="Con2">Confirmmation Letter No. 2</paper-item>
-                <paper-item confirmLetter="Con3">Confirmmation Letter No. 3</paper-item>
+              <paper-listbox  class="dropdown-content" attr-for-selected="confirm-letter" selected="{{data.confirmLetter}}">
+                <paper-item confirm-letter="Con1">Confirmmation Letter No. 1</paper-item>
+                <paper-item confirm-letter="Con2">Confirmmation Letter No. 2</paper-item>
+                <paper-item confirm-letter="Con3">Confirmmation Letter No. 3</paper-item>
               </paper-listbox>
             </gl-form-dropdown-menu>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-              <paper-listbox  class="dropdown-content" attr-for-selected="rice-type" selected="{{data.riceType}}">
-                <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
-                <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
+              <paper-listbox  class="dropdown-content" attr-for-selected="type-rice" selected="{{data.typeRice}}">
+                <paper-item type-rice="rice-white">Thai White Rice 5% Brokens, 2015 Current New Crop</paper-item>
+                <paper-item type-rice="rice">ฯลฯ</paper-item>
               </paper-listbox>
             </gl-form-dropdown-menu>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-              <paper-listbox  class="dropdown-content" attr-for-selected="package-type" selected="{{}}">
+              <paper-listbox  class="dropdown-content" attr-for-selected="package-type" selected="{{data.package}}">
                 <paper-item package-type="50">50</paper-item>
                 <paper-item package-type="55">55</paper-item>
                 <paper-item package-type="60">60</paper-item>
