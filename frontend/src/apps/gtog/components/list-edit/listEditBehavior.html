@@ -18,7 +18,7 @@
     },
     ready: function() {
       //หัวตาราง
-      var config = {primary:[]};
+      var config = {primary:[],secondary:[],third:[]};
       var items = Polymer.dom(this.$.primary).getDistributedNodes();
       var lists = Polymer.dom(items[0]).querySelectorAll('list');
       var countPrimary =lists.length;
@@ -31,24 +31,31 @@
           config.primary.push(configPointer);
       }
       //ข้อมูลในตาราง
-      var items2 = Polymer.dom(this.$.secondary).getDistributedNodes();
-      var lists2 = Polymer.dom(items2[0]).querySelector('list');
-      // var subComponent = this.$.subComponent;
-      this.subComponent = lists2;
-      // console.log(subComponent);
-      // console.log(this.subComponent);
-      // var countSecondary =lists.length;
-      // for (var i = 0; i < countSecondary; i++) {
-      //
-      //     var configPointer2 = {
-      //         item:lists2[i].getAttribute('item'),
-      //         label:lists2[i].getAttribute('label'),
-      //         width:lists2[i].getAttribute('width')
-      //     };
-      //
+       items = Polymer.dom(this.$.secondary).getDistributedNodes();
+       lists = Polymer.dom(items[0]).querySelectorAll('list');
+      var countsecondary =lists.length;
+      for (var i = 0; i < countsecondary; i++) {
+           configPointer = {
+              item:lists[i].getAttribute('item'),
+              label:lists[i].getAttribute('label'),
+              width:lists[i].getAttribute('width')
+          };
+          config.secondary.push(configPointer);
+      }
 
-      // }
-
+      items = Polymer.dom(this.$.third).getDistributedNodes();
+      lists = Polymer.dom(items[0]).querySelectorAll('list');
+     var countthird =lists.length;
+    //  console.log(lists);
+     for (var i = 0; i < countthird; i++) {
+          configPointer = {
+             item:lists[i].getAttribute('item'),
+             label:lists[i].getAttribute('label'),
+             width:lists[i].getAttribute('width')
+         };
+         config.third.push(configPointer);
+     }
+      // console.log(config);
       this.config = config;
     },
     _toggleDrawer: function() {

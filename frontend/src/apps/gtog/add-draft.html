@@ -22,9 +22,15 @@
     <db-gtog-contact></db-gtog-contact>
     <content-panel>
       <grid>
-        <list-draft data="{{dataBl}}">
+        <list-draft data="{{dataPeriod}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}" >
           <items type="primary">
             <list item="blNo" label="Bill of Landing Number (B/L No.)" width="flex"></list>
+          </items>
+          <items type="secondary" >
+            <list item="invoiceNo" label="Invoice No." width="flex"></list>
+          </items>
+          <items type="third" >
+            <list item="blNos" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
           </items>
         </list-draft>
       </grid>
@@ -66,7 +72,7 @@
                     type: Number,
                     value: 0
                 },
-                dataBl: {
+                dataPeriod: {
                     type: Object,
                     notify: true,
                     value: function() {
@@ -74,17 +80,69 @@
                           {
                             id: 1,
                             periodNo:'งวดที่ 1',
-                            blNo: '0356A7812',
+                            blNo: '0356A7812'
                           },
                           {
                             id: 2,
                             periodNo:'งวดที่ 1',
-                            blNo: '0356A7813',
+                            blNo: '0356A7813'
                           },
                           {
                             id: 3,
                             periodNo:'งวดที่ 1',
-                            blNo: '0356A7814',
+                            blNo: '0356A7814'
+                          }
+                      ]
+                    }
+                },
+                dataInvoice:{
+                  type:Object,
+                  notify:true,
+                  value:function(){
+                      return [
+                        {
+                          id:1,
+                          invoiceNo:'C123453'
+                        },
+                        {
+                          id:2,
+                          invoiceNo:'C123454'
+                        },
+                        {
+                          id:3,
+                          invoiceNo:'C123455'
+                        }
+                      ]
+                  }
+                },
+                dataRound: {
+                    type: Object,
+                    notify: true,
+                    value: function() {
+                        return [
+                          {
+                            id: 1,
+                            round:'1',
+                            blNos: [
+                              {
+                                id:1,
+                                blNo:'C123456'
+                              },
+                              {
+                                id:2,
+                                blNo:'C123457'
+                              }
+                            ]
+                          },
+                          {
+                            id: 2,
+                            round:'2',
+                            blNos: [
+                              {
+                                id:1,
+                                blNo:'C123458'
+                              }
+                            ]
                           }
                       ]
                     }

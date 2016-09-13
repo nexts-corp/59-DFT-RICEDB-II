@@ -30,9 +30,11 @@ border: 1px solid #000;
     </style>
     <template>
     <content id="primary" select="items[type=primary]"></content>
+    <content id="secondary" select="items[type=secondary]"></content>
+    <content id="third" select="items[type=third]"></content>
+   <div class="title">[[data.0.periodNo]]</div>
 
-
-    <div class="title">[[data.0.periodNo]]</div>
+   <!-- Bl -->
    <div class="header layout horizontal">
      <template is="dom-repeat" items="{{config.primary}}">
         <div  class$="[[item.width]]">
@@ -59,13 +61,78 @@ border: 1px solid #000;
           </template>
       </paper-icon-item>
     </template>
-
+<!-- End Bl -->
+<!-- Invoice -->
+{{data}}|{{datainvoice}}d
+    <div class="header layout horizontal">
+      <template is="dom-repeat" items="{{config.secondary}}">
+         <div  class$="[[item.width]]">
+            [[item.label]]
+         </div>
+     </template>
+       <div class="flex searchInput ">
+          <div class="horizontal end-justified layout">
+            <div class="labelSearch">Invoice</div>
+            <paper-input label="Input label" no-label-float></paper-input>
+            <paper-icon-button icon="search"></paper-icon-button>
+          </div>
+      </div>
+    </div>
+     <template is="dom-repeat" as="itemSecondary" items="{{datainvoice}}">
+       <paper-icon-item on-tap="_getBind" level="primary" data="{{itemSecondary}}">
+         <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
+           <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
+             <div class$="[[configSecondary.width]]">
+               <div class="fontPdLeft" >
+                 {{_getItemPrimary(itemSecondary,configSecondary)}}
+               </div>
+             </div>
+             <div class="layout horizontal">
+               <div class="horizontal end-justified layout">
+                 <paper-checkbox>รับเงินแล้ว</paper-checkbox>
+               </div>
+            </div>
+           </template>
+       </paper-icon-item>
+     </template>
+<!-- End Invoice -->
+<!-- Round -->
+    <div class="header layout horizontal">
+      <template is="dom-repeat" items="{{config.third}}">
+         <div  class$="[[item.width]]">
+            [[item.label]]
+         </div>
+     </template>
+       <div class="flex searchInput ">
+          <div class="horizontal end-justified layout">
+            <div class="labelSearch">ครั้งที่ </div>
+            <paper-input label="Input label" no-label-float></paper-input>
+            <paper-icon-button icon="search"></paper-icon-button>
+          </div>
+      </div>
+    </div>
+     <template is="dom-repeat" as="itemPrimary" items="{{dataround}}">
+       <paper-icon-item on-tap="_getBind" level="primary" data="{{itemPrimary}}">
+         <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
+           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+             <div class$="[[configPrimary.width]]"  on-tap="_toggleDrawer">
+               <div class="fontPdLeft" >
+                 {{_getItemPrimary(itemPrimary,configPrimary)}}
+               </div>
+             </div>
+           </template>
+       </paper-icon-item>
+     </template>
+<!-- End Round -->
     </template>
     <script>
         Polymer({
             is: "list-draft",
             behaviors: [listEditBehavior,gl.behavior.core],
-
+            attached: function() {
+              console.log(this.dataround);
+              // console.log(this.data[0].blNos[0]);
+            },
         });
     </script>
 </dom-module>
