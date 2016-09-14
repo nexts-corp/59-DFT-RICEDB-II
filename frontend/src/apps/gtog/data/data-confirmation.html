@@ -2,12 +2,55 @@
     <script>
     Polymer({
       is:'data-confirmation',
+      behaviors:[gl.behavior.core],
       properties:{
           dataExample:{
               type:String,
               value:"abc",
               notify:true
+          },
+          dataConfirm:{
+            type:Object,
+            notify:true,
+            value: function() {
+              return {
+                id:1,
+                confirmLetter: 'Confirmmation Letter No. 1',
+                cmlSendRice: '-',
+                cmlBalanceRice: '100,000',
+                dateconfirm: '2016-08-20',
+                detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
+                typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                price: 'fob',
+                totalQuantity: '100,000',
+                confirmItem: [{
+                  id: 1,
+                  package: '50',
+                  price: '392'
+                }, {
+                  id: 2,
+                  package: '25',
+                  price: '392'
+                }, ]
+              };
+            }
           }
+
+      },
+      created: function() {
+        this.glQuery('dataConfirm',this);
+      },
+      addConfirmLetter:function () {
+        // console.log(12);
+      },
+      addConfirmLetterItem:function () {
+        // var nowDateTime=Date.now()
+        //   this.push('dataConfirm.confirmItem', {
+        //       id: nowDateTime,
+        //       package: '',
+        //       price: ''
+        //   });
+        //   this.dataConfirm = JSON.parse(JSON.stringify(this.dataConfirm));
       }
     });
   </script>
