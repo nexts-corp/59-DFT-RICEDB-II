@@ -1,0 +1,19 @@
+<dom-module id="nx-grid-component">
+  <template>
+    <div id="content"></div>
+  </template>
+  <script>
+    Polymer({
+      is: "nx-grid-component",
+      behaviors:[Polymer.Templatizer],
+      observers:['_getTemp(temp)'],
+      _getTemp:function(temp){
+        if(typeof temp != "undefined"){
+          this.templatize(temp);
+          var instance = this.stamp({myProp: 'initial'});
+          this.$.content.appendChild(instance.root);
+        }
+      }
+    });
+  </script>
+</dom-module>
