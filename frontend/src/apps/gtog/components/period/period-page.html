@@ -1,16 +1,14 @@
 <link rel="import" href="../list-edit/list-period.html">
+<link rel="import" href="../../data/data-port.html">
 <dom-module id="period-page">
   <template>
+    <data-port data-ports="{{dataEx}}"></data-port>
     <!-- {{data.cityDestination}} -->
-    <list-period data="{{data}}">
+
+    <list-period data="{{dataEx}}">
       <items type="primary">
         <list item="cityDestination" label="เมืองท่าปลายทาง" width="flex"></list>
         <list item="quantity" label="จำนวน/ตัน" width="flex"></list>
-      </items>
-      <items type="secondary" item="sub" style="display:none;">
-        <list>
-          <paper-input label="ทดสอบการปิด" disabled value="ทดสอบการเพิ่ม"></paper-input>
-        </list>
       </items>
     </list-period>
   </template>
@@ -22,12 +20,9 @@
         data:{
           type: Object,
           notify: true,
-          value: function() {return [];}
         }
       },
-      ss:function () {
-        console.log(this.data.cityDestination);
-      }
+
     });
   </script>
 </dom-module>

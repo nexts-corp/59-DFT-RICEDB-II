@@ -69,7 +69,7 @@
   <template>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
+        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.idperiod}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -80,25 +80,24 @@
     <div id="changeDivcss" class="hide">
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
+          <gl-form-input id="insertCity" auto-validate error-message="กรุณาใส่เมืองท่าปลายทาง" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
+          <gl-form-input id="insertTon" auto-validate error-message="กรุณาใสจำนวน/ตัน" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-          <gl-form-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-textarea>
+          <gl-form-textarea id="insertNotify" rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value=""></gl-form-textarea>
         </gl-grid-col>
       </gl-grid-row>
 
       <div class="horizontal end-justified layout">
         <paper-button  class="gl-btn-danger" raised>ยกเลิก</paper-button>
-        <paper-button  class="gl-btn-success" on-tap="click" raised>บันทึก</paper-button>
+        <paper-button  class="gl-btn-success" on-tap="insertCity" raised>บันทึก</paper-button>
       </div>
     </div>
 
     <content id="primary" select="items[type=primary]"></content>
-    <content id="secondary" select="items[type=secondary]"></content>
-
+    <!-- config:{{config.primary.0.label}} -->
     <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
@@ -106,7 +105,7 @@
         </div>
       </template>
     </div>
-    <template is="dom-repeat" as="itemPrimary" items="{{data.city}}">
+    <template is="dom-repeat" as="itemPrimary" items="{{data.port}}">
       <paper-icon-item class="fancy cleanBd bd" >
         <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse{{index}}" icon="chevron-right" item-icon></paper-icon-button>
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
@@ -122,9 +121,9 @@
           <div class="bd">
             <gl-form-panel>
               <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px; set-border="1px">
-                  <paper-button class="gl-btn-success" raised on-tap="saveChange" index="[[index]]"><iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
-                  <paper-button class="gl-btn-warning" raised on-tap="editChange" index="[[index]]"><iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
-                  <paper-button class="gl-btn-danger" raised on-tap="" index="[[index]]"><iron-icon class="gl-icon-size" icon="delete"></iron-icon>ลบ</paper-button>
+                  <paper-button class="gl-btn-success" raised on-tap="saveChange" index$="[[index]]"><iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+                  <paper-button class="gl-btn-warning" raised on-tap="editChange" index$="[[index]]"><iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
+                  <paper-button class="gl-btn-danger" raised on-tap="delectPeriod" index$="[[index]]"><iron-icon class="gl-icon-size" icon="delete" ></iron-icon>ลบ</paper-button>
               </gl-form-panel-head>
 
               <iron-pages selected="0" class$="iron-index-{{index}}">
@@ -156,17 +155,39 @@
         data: {
           type: Object,
           notify: true,
-          value: function() {return [];}
+          // value: function() {return [];}
         }
       },
-      checkdata: function() {
-        console.log(this.data);
+      attached: function() {
+        console.log(this.config.primary);
+      },
+      insertCity: function() {
+        var insertCity = this.$.insertCity.value;
+        var inserTon = this.$.insertTon.value;
+        var insertNotify = this.$.insertNotify.value;
+        // console.log(this.data.port);
+        var nowDateTime=Date.now()
+          this.push('data.port', {
+              id: nowDateTime,
+              quantity: inserTon,
+              cityDestination:insertCity,
+              notifyParty: insertNotify
+          });
+          this.click();
+          // console.log(this.data.port);
+      },
+      delectPeriod:function(e){
+        var r = confirm("ต้องการลบใช่หรือไม่!");
+        if (r == true) {
+          var id = e.currentTarget.getAttribute("index");
+          this.splice('data.port', id, 1);
+        }
       },
       checkDom:function(e){
         var id = e.target.id;
-        console.log(id);
+        // console.log(id);
         // this.$$.id;
-        console.log(this.$$.collapsel1);
+        // console.log(this.$$.collapsel1);
       },
       click:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
