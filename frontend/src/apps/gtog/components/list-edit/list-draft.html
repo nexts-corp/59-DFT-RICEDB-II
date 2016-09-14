@@ -63,7 +63,6 @@ border: 1px solid #000;
     </template>
 <!-- End Bl -->
 <!-- Invoice -->
-{{data}}|{{datainvoice}}d
     <div class="header layout horizontal">
       <template is="dom-repeat" items="{{config.secondary}}">
          <div  class$="[[item.width]]">
@@ -79,10 +78,10 @@ border: 1px solid #000;
       </div>
     </div>
      <template is="dom-repeat" as="itemSecondary" items="{{datainvoice}}">
-       <paper-icon-item on-tap="_getBind" level="primary" data="{{itemSecondary}}">
+       <paper-icon-item on-tap="_getBind" level="secondary" data="{{itemSecondary}}">
          <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
            <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
-             <div class$="[[configSecondary.width]]">
+             <div class$="[[configSecondary.width]]"  on-tap="_toggleDrawer">
                <div class="fontPdLeft" >
                  {{_getItemPrimary(itemSecondary,configSecondary)}}
                </div>
@@ -111,13 +110,14 @@ border: 1px solid #000;
           </div>
       </div>
     </div>
-     <template is="dom-repeat" as="itemPrimary" items="{{dataround}}">
-       <paper-icon-item on-tap="_getBind" level="primary" data="{{itemPrimary}}">
+    <!-- [[dataround.0.blNos.0.blNo]] -->
+     <template is="dom-repeat" as="itemThird" items="{{dataround}}">
+      <paper-icon-item on-tap="_getBind" level="Third" data="{{itemThird}}">
          <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
-           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
-             <div class$="[[configPrimary.width]]"  on-tap="_toggleDrawer">
+           <template is="dom-repeat" as="configThird" items="{{config.Third}}">
+             <div class$="[[configPrimary.width]]" on-tap="_toggleDrawer">
                <div class="fontPdLeft" >
-                 {{_getItemPrimary(itemPrimary,configPrimary)}}
+                 <!-- {{_getItemPrimary(itemThird,configThird)}} -->drtdrtert
                </div>
              </div>
            </template>
@@ -130,7 +130,7 @@ border: 1px solid #000;
             is: "list-draft",
             behaviors: [listEditBehavior,gl.behavior.core],
             attached: function() {
-              console.log(this.dataround);
+              console.log(this.dataround[0]);
               // console.log(this.data[0].blNos[0]);
             },
         });
