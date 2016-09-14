@@ -7,7 +7,7 @@
 <link rel="import" href="grid-period.html">
 
 <dom-module id="nx-grid">
-  <style is="custom-style" include="iron-flex iron-flex-factors gl-size">
+  <style is="custom-style" include="iron-flex iron-flex-factors gl-size gl-color">
     .header {
       padding: 10px 0px 10px 10px;
       background-color: var(--paper-grey-100);
@@ -150,18 +150,22 @@ background-color: var(--paper-grey-600);
               </template>
 
               <!--hotwork-->
-              <grid-confirmation  on-tap="_getBind" level="secondary"></grid-confirmation>
-
+              
+              
+              <template is="dom-if" if="{{showListConfirmation}}">
+                <grid-confirmation on-tap="_getBind" level="secondary"></grid-confirmation>
+              </template>
+              <paper-button raised on-tap="showList" data="confirmation" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
               
 
               <!-- เพิ่มข้อมูล -->
-              <paper-item>
+              <!--<paper-item>
                 <template is="dom-repeat" as="itemConfigSecondaryHalf" items="{{config.secondaryHalf}}">
                   <div class$="{{itemConfigSecondaryHalf.width}}" on-tap="toggleDrawer">
                     {{itemConfigSecondaryHalf.label}}
                   </div>
                 </template>
-              </paper-item>
+              </paper-item>-->
               <!-- เพิ่มข้อมูล -->
               <!--<paper-item class="testclass">
     <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
@@ -193,20 +197,21 @@ background-color: var(--paper-grey-600);
               </template>
 
               <!--hotwork-->
-              <grid-period on-tap="_getBind" level="third"></grid-period>
               
+              <template is="dom-if" if="{{showListPeriod}}">
+                <grid-period on-tap="_getBind" level="third"></grid-period>
+              </template>
+              <paper-button raised on-tap="showList" data="period" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
 
 
               <!-- เพิ่มข้อมูล -->
-              <paper-item>
-                <!-- Head secondary -->
+              <!--<paper-item>
                 <template is="dom-repeat" as="itemConfigthirdHalf" items="{{config.thirdHalf}}">
                   <div class$="{{itemConfigthirdHalf.width}}">
                     {{itemConfigthirdHalf.label}}
-                    <!-- width:{{itemConfigSecondary.width}} -->
                   </div>
                 </template>
-              </paper-item>
+              </paper-item>-->
               <!-- เพิ่มข้อมูล -->
               <!--<paper-item class="testclass">
       <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
@@ -368,6 +373,15 @@ Polymer({
         level: e.currentTarget.getAttribute('level')
       });
     }
+  },
+
+  showList: function(e){
+    if(e.target.getAttribute('data')=="period"){
+      this.showListPeriod = 1;
+    }else{
+      this.showListConfirmation = 1;
+    }
+    
   }
 });
 </script>
