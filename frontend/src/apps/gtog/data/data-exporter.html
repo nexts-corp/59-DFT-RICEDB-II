@@ -20,16 +20,18 @@
                 sender:
                 [{
                     id: 1,
-                    cflNo: 'cflNo1',
-                    typeRiceNo: 'typeRiceNo1',
+                    cflNo: 2,
+                    typeRiceNo: 0,
                     confirmLetter: 'Confirmmation Letter No. 1',
                     typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
                     actualShipper: 'Toumi Food And Product CO., LTD',
                     riceType: 'Thai White Rice 5% Brokens,',
                     price: '392',
-                    weight: '1,000',
-                    package: '50',
-                    cityEnd: 'Shekou',
+                    weight: '1000',
+                    ton:1000,
+                    package: 1,
+                    blNo: '0356A7812',
+                    cityEnd: 1,
                     bs: 'Sinotrans Thai Logistics Co., LTD',
                     bn: 'SITGBUU0678088',
                     vesselName: 'Hanjin Belawan V.1609',
@@ -39,14 +41,25 @@
                     etd: '26/04/2016',
                     eta: '10/05/2016',
                     pod: 'Yueyang (CHENG LING JI)',
+                    marks:'Des123',
+                    quantityBag:'1000',
+                    gw:'1000',
+                    nw:'100',
+                    desOfGood:'Is Good',
+                    moneyText:'Ten bath',
+                    ORIGINALS1:'1',
+                    ORIGINALS2:'2'
                 }, {
                     id: 2,
                     actualShipper: 'Capital Seril co.,ltd',
+                    typeRiceNo: 1,
                     riceType: 'Thai White Rice 5% Brokens,',
                     price: '397',
-                    weight: '1,000',
-                    package: '20',
-                    cityEnd: 'Thailand',
+                    weight: '1000',
+                    ton:1000,
+                    package: 2,
+                    blNo: '0356A781',
+                    cityEnd: 1,
                     bs: 'Sinotrans Thai Logistics Co., LTD',
                     bn: 'SITGBUU0678088',
                     vesselName: 'Hanjin Belawan V.1609',
@@ -56,6 +69,14 @@
                     etd: '26/04/2016',
                     eta: '10/05/2016',
                     pod: 'Bangnatrad',
+                    marks:'Des123',
+                    quantityBag:'1000',
+                    gw:'1000',
+                    nw:'100',
+                    desOfGood:'Is Good',
+                    moneyText:'Ten bath',
+                    ORIGINALS1:'1',
+                    ORIGINALS2:'2'
                 }]
               },
               {
@@ -64,16 +85,18 @@
                 sender:
                 [{
                     id: 1,
-                    cflNo: 'cflNo1',
-                    typeRiceNo: 'typeRiceNo1',
+                    cflNo: 1,
+                    typeRiceNo: 0,
                     confirmLetter: 'Confirmmation Letter No. 1',
                     typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
                     actualShipper: 'Toumi Food And Product CO., LTD',
                     riceType: 'Thai White Rice 5% Brokens,',
                     price: '392',
-                    weight: '1,000',
-                    package: '50',
-                    cityEnd: 'Shekou',
+                    weight: '1000',
+                    ton:1000,
+                    package: 0,
+                    blNo: '0356A7814',
+                    cityEnd: 0,
                     bs: 'Sinotrans Thai Logistics Co., LTD',
                     bn: 'SITGBUU0678088',
                     vesselName: 'Hanjin Belawan V.1609',
@@ -83,24 +106,15 @@
                     etd: '26/04/2016',
                     eta: '10/05/2016',
                     pod: 'Yueyang (CHENG LING JI)',
-                }, {
-                    id: 2,
-                    actualShipper: 'Capital Seril co.,ltd',
-                    riceType: 'Thai White Rice 5% Brokens,',
-                    price: '397',
-                    weight: '1,000',
-                    package: '20',
-                    cityEnd: 'Thailand',
-                    bs: 'Sinotrans Thai Logistics Co., LTD',
-                    bn: 'SITGBUU0678088',
-                    vesselName: 'Hanjin Belawan V.1609',
-                    voidNo: 'V.1234',
-                    lotNo: '12',
-                    pol: 'THBKK',
-                    etd: '26/04/2016',
-                    eta: '10/05/2016',
-                    pod: 'Bangnatrad',
-                }]
+                    marks:'Des123',
+                    quantityBag:'1000',
+                    gw:'1000',
+                    nw:'100',
+                    desOfGood:'Is Good',
+                    moneyText:'Ten bath',
+                    ORIGINALS1:'1',
+                    ORIGINALS2:'2'
+                }, ]
               }
             ]
           },
@@ -116,19 +130,22 @@
           }
       },
       created:function(){
-        this.glQuery('data-port',this);
+        this.glQuery('data-export',this);
       },
       obSelectIndexPort:function(){
         this.selectData=this.glClone(this.dataExport[this.selectIndexExport]);
         // console.log(this.selectData);
       },
-      deleteDataPeriod:function(data){
+      deleteDataExport:function(data){
+        // console.log(data);
         this.dataExport[this.selectIndexExport] = data;
         //  console.log(this.dataExport);
       },
       saveData:function(data){
-        this.dataExport[this.selectIndexPort] = data;
-        // console.log(this.dataExport);
+        // console.log(data);
+        // console.log(this.dataExport[this.selectIndexExport]);
+        this.dataExport[this.selectIndexExport] = data;
+        console.log(this.dataExport);
       }
     });
   </script>
