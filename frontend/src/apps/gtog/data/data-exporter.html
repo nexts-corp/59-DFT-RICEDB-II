@@ -2,6 +2,7 @@
     <script>
     Polymer({
       is:'data-exporter',
+      behaviors:[gl.behavior.core],
       properties:{
           dataExample:{
               type:String,
@@ -11,13 +12,123 @@
           dataExport:{
             type:Object,
             notify:true,
-            value: function() {
-              return {
+            value:
+            [
+              {
                 id:1,
-                
+                periodNo:1,
+                sender:
+                [{
+                    id: 1,
+                    cflNo: 'cflNo1',
+                    typeRiceNo: 'typeRiceNo1',
+                    confirmLetter: 'Confirmmation Letter No. 1',
+                    typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                    actualShipper: 'Toumi Food And Product CO., LTD',
+                    riceType: 'Thai White Rice 5% Brokens,',
+                    price: '392',
+                    weight: '1,000',
+                    package: '50',
+                    cityEnd: 'Shekou',
+                    bs: 'Sinotrans Thai Logistics Co., LTD',
+                    bn: 'SITGBUU0678088',
+                    vesselName: 'Hanjin Belawan V.1609',
+                    voidNo: 'V.1452-018E',
+                    lotNo: '14',
+                    pol: 'THBKK',
+                    etd: '26/04/2016',
+                    eta: '10/05/2016',
+                    pod: 'Yueyang (CHENG LING JI)',
+                }, {
+                    id: 2,
+                    actualShipper: 'Capital Seril co.,ltd',
+                    riceType: 'Thai White Rice 5% Brokens,',
+                    price: '397',
+                    weight: '1,000',
+                    package: '20',
+                    cityEnd: 'Thailand',
+                    bs: 'Sinotrans Thai Logistics Co., LTD',
+                    bn: 'SITGBUU0678088',
+                    vesselName: 'Hanjin Belawan V.1609',
+                    voidNo: 'V.1234',
+                    lotNo: '12',
+                    pol: 'THBKK',
+                    etd: '26/04/2016',
+                    eta: '10/05/2016',
+                    pod: 'Bangnatrad',
+                }]
+              },
+              {
+                id:2,
+                periodNo:1,
+                sender:
+                [{
+                    id: 1,
+                    cflNo: 'cflNo1',
+                    typeRiceNo: 'typeRiceNo1',
+                    confirmLetter: 'Confirmmation Letter No. 1',
+                    typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                    actualShipper: 'Toumi Food And Product CO., LTD',
+                    riceType: 'Thai White Rice 5% Brokens,',
+                    price: '392',
+                    weight: '1,000',
+                    package: '50',
+                    cityEnd: 'Shekou',
+                    bs: 'Sinotrans Thai Logistics Co., LTD',
+                    bn: 'SITGBUU0678088',
+                    vesselName: 'Hanjin Belawan V.1609',
+                    voidNo: 'V.1452-018E',
+                    lotNo: '14',
+                    pol: 'THBKK',
+                    etd: '26/04/2016',
+                    eta: '10/05/2016',
+                    pod: 'Yueyang (CHENG LING JI)',
+                }, {
+                    id: 2,
+                    actualShipper: 'Capital Seril co.,ltd',
+                    riceType: 'Thai White Rice 5% Brokens,',
+                    price: '397',
+                    weight: '1,000',
+                    package: '20',
+                    cityEnd: 'Thailand',
+                    bs: 'Sinotrans Thai Logistics Co., LTD',
+                    bn: 'SITGBUU0678088',
+                    vesselName: 'Hanjin Belawan V.1609',
+                    voidNo: 'V.1234',
+                    lotNo: '12',
+                    pol: 'THBKK',
+                    etd: '26/04/2016',
+                    eta: '10/05/2016',
+                    pod: 'Bangnatrad',
+                }]
               }
-              }
+            ]
+          },
+          selectData:{
+            type:Object,
+            notify:true
+          },
+          selectIndexExport:{
+            type:Number,
+            value:0,
+            notify:true,
+            observer:'obSelectIndexPort'
           }
+      },
+      created:function(){
+        this.glQuery('data-port',this);
+      },
+      obSelectIndexPort:function(){
+        this.selectData=this.glClone(this.dataExport[this.selectIndexExport]);
+        // console.log(this.selectData);
+      },
+      deleteDataPeriod:function(data){
+        this.dataExport[this.selectIndexExport] = data;
+        //  console.log(this.dataExport);
+      },
+      saveData:function(data){
+        this.dataExport[this.selectIndexPort] = data;
+        // console.log(this.dataExport);
       }
     });
   </script>
