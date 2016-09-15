@@ -1,0 +1,258 @@
+<link rel="import" href="nx-grid-component.html">
+<link rel="import" href="/bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+
+<!--hotwork-->
+<link rel="import" href="grid-confirmation.html">
+<link rel="import" href="grid-period.html">
+
+<dom-module id="nx-grid">
+  <style is="custom-style" include="iron-flex iron-flex-factors gl-size gl-color">
+    .header {
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+    }
+
+    .ss {
+      color: red;
+      border: 1px solid #000;
+    }
+    /*paper-item {
+--paper-item-selected : {
+background-color: var(--paper-grey-600);
+};
+}*/
+
+    paper-icon-item {
+      cursor: pointer;
+    }
+
+    .sublist paper-item {
+      /*padding-left: 30px;*/
+    }
+
+    .cml:first-of-type {
+      /*margin-left: 60px;*/
+      text-align: left;
+      /*color: red;*/
+    }
+
+    .cml:not(:first-of-type) {
+      text-align: right;
+      /*color: blue;*/
+    }
+
+    .headLabel {
+      text-align: left;
+      margin-left: 5%;
+      /*color: red;*/
+      font-size: var(--font-size-h4);
+    }
+
+    .headLabelRight {
+      margin-left: 0px;
+      text-align: right;
+      padding-right: 25px;
+      /*color: blue;*/
+    }
+
+    .subTitle {
+      /*margin-left: 60px;*/
+      /*padding-right: -60px;*/
+    }
+
+    .paper-menu-lv1 {
+      --paper-menu-selected-item: {
+        font-weight: normal;
+      }
+      ;
+    }
+
+    .paper-menu-lv2 {
+      --paper-menu-selected-item: {
+        font-weight: normal;
+      }
+      ;
+    }
+
+    .paper-icon-item {
+      --paper-icon-item: {
+        border-bottom: 1px solid #ccc;
+      }
+    }
+    .bd{
+      /*border: 1px solid black;*/
+      text-align: right;
+    }
+    .b{
+      border: 1px solid black;
+    }
+  </style>
+
+  <template>
+
+
+    <div class="horizontal-section">
+      <div class="header layout horizontal">
+        <div class="flex-2 headLabel">ชื่อสัญญา</div>
+        <div class="flex headLabelRight">ทั้งหมด(ตัน)</div>
+        <div class="flex headLabelRight">ส่งแล้ว(ตัน)</div>
+        <div class="flex headLabelRight">เหลือ(ตัน)</div>
+      </div>
+
+      <paper-menu attr-for-item-title="label" multi style="padding-top:0px" class="paper-menu-lv1">
+            <paper-submenu>
+              <paper-icon-item class="paper-icon-item" on-tap="_getBind">
+                <paper-icon-button on-tap="_toggleSub" data-sub="sub-1" index="{{index}}" icon="chevron-right" item-icon>
+                </paper-icon-button>
+                <div class="flex-2">sssss</div>
+                <div class="flex bd">testestestes</div>
+                <div class="flex bd">hihihihihi</div>
+                <div class="flex bd">babababababab</div>
+              </paper-icon-item>
+            </paper-submenu>
+
+            <paper-submenu>
+              <paper-icon-item class="menu-trigger">
+                <paper-icon-button on-tap="_toggleSub" data-sub="sub-1" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+              </paper-icon-item>
+              <paper-menu class="menu-content">
+                <div class="flex-2">sssss</div>
+                <div class="flex bd">testestestes</div>
+                <div class="flex bd">hihihihihi</div>
+                <div class="flex bd">babababababab</div>
+              </paper-menu>
+            </paper-submenu>
+
+
+            <paper-icon-item class="paper-icon-item" on-tap="_getBind" level="">
+              <paper-icon-button on-tap="_toggleSub" data-sub="sub-2" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+              <div class="flex-2">5555555</div>
+              <div class="flex bd">testestestes</div>
+              <div class="flex bd">hihihihihi</div>
+              <div class="flex bd">babababababab</div>
+            </paper-icon-item>
+
+            <paper-icon-item class="paper-icon-item" on-tap="_getBind" level="">
+              <paper-icon-button on-tap="_toggleSub" data-sub="sub-3" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+              <div class="flex-2">5555555</div>
+              <div class="flex bd">testestestes</div>
+              <div class="flex bd">hihihihihi</div>
+              <div class="flex bd">babababababab</div>
+            </paper-icon-item>
+
+
+        <paper-submenu id="sub-{{index}}" label$="{{index}}">
+          <paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
+            <paper-item disabled>
+              <!-- Head secondary -->
+              <template is="dom-repeat" as="itemConfigSecondary" items="{{config.secondary}}">
+                <div class$="{{itemConfigSecondary.width}}">
+                  {{itemConfigSecondary.label}}
+                  <!-- width:{{itemConfigSecondary.width}} -->
+                </div>
+              </template>
+            </paper-item>
+            <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
+
+              <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
+                <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
+                  <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
+                    {{_getItemSecondary(itemSecondary,configSecondary)}}
+                  </div>
+                </template>
+              </paper-icon-item>
+
+            </template>
+
+            <!--hotwork-->
+
+
+            <template is="dom-if" if="{{showListConfirmation}}">
+              <grid-confirmation on-tap="_getBind" level="secondary"></grid-confirmation>
+            </template>
+            <paper-button raised on-tap="showList" data="confirmation" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
+
+
+            <paper-icon-item class="paper-icon-item" on-tap="_getBind" level="">
+              <div class="flex-2">5555555</div>
+              <div class="flex bd">testestestes</div>
+              <div class="flex bd">hihihihihi</div>
+              <div class="flex bd">babababababab</div>
+
+            </paper-icon-item>
+          </paper-menu>
+
+        </paper-submenu>
+      </paper-menu>
+
+      <paper-menu>
+
+  <paper-submenu>
+    <paper-item class="menu-trigger">
+      <paper-icon-item class="paper-icon-item" on-tap="_getBind" level="">
+        <paper-icon-button on-tap="_toggleSub" data-sub="sub-1" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+        <div class="flex-2">5555555</div>
+        <div class="flex bd">testestestes</div>
+        <div class="flex bd">hihihihihi</div>
+        <div class="flex bd">babababababab</div>
+      </paper-icon-item>
+    </paper-item>
+    <paper-menu class="menu-content">
+      <paper-item>Topic 1</paper-item>
+      <paper-item>Topic 2</paper-item>
+      <paper-item>Topic 3</paper-item>
+    </paper-menu>
+  </paper-submenu>
+
+
+    </div>
+  </template>
+
+  <script>
+var nxGridRender = [];
+Polymer({
+  is: 'nx-grid',
+  behaviors: [Polymer.Templatizer, gl.behavior.core],
+  properties: {
+    seleted: {
+      type: Object,
+      notify: true
+    },
+    config: {
+      type: Object
+    }
+  },
+  ready: function() {
+
+  },
+  _toggleSub: function(e) {
+    this.$$('#' + e.currentTarget.getAttribute('data-sub')).toggle();
+    if (e.target.icon == 'expand-more') {
+      e.currentTarget.icon = 'chevron-right';
+    } else {
+      e.currentTarget.icon = 'expand-more';
+      Polymer.dom(this.root).querySelectorAll('.sublist')[e.currentTarget.index].select(0);
+    }
+  },
+  _getBind: function(e) {
+    if (e.target.is != "paper-icon-button") {
+      this.fire('nx-grid-' + e.type, {
+        data: e.currentTarget.data,
+        level: e.currentTarget.getAttribute('level')
+      });
+    }
+  },
+
+  showList: function(e){
+    if(e.target.getAttribute('data')=="period"){
+      this.showListPeriod = 1;
+    }else{
+      this.showListConfirmation = 1;
+    }
+
+  }
+});
+</script>
+</dom-module>

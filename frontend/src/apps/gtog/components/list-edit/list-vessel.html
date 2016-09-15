@@ -4,7 +4,81 @@
 <link rel="import" href="../vessel/vessel-edit.html">
 <dom-module id="list-vessel">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-
+    .header{
+      text-align: center;
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      word-wrap: break-word;
+    }
+    .cleanBd{
+      padding: 0px;
+    }
+    .bd{
+      border-bottom: 1px solid #ccc;
+    }
+    .top{
+      margin-top: 30px;
+    }
+    .w{
+      width: 50%;
+      text-align: center;
+    }
+    .padL{
+      padding-left: 35px;
+    }
+    .fontPdLeft{
+      padding: 10px 0px 10px 10px;
+      /*word-wrap: break-word;*/
+      text-align: center;
+    }
+    paper-item{
+      cursor:pointer;
+    }
+    .yellow-button {
+       text-transform: none;
+       color: #eeff41;
+     }
+     paper-toast {
+       --paper-toast-background-color:var(--paper-green-500);
+       /*height: 50px;*/
+       /*margin: 0px 0px 0px 0px;*/
+       /*padding: 0px 0px 0px 0px;*/
+       font-size: 16px;
+       width: 600px;
+       text-align: center;
+     }
+     paper-toast > div.content > iron-icon {
+        padding: 0px 10px 0px 0px;
+     }
+     gl-form-dropdown-menu{
+       width: 90%;
+     }
+     vaadin-date-picker{
+       width: 60%;
+     }
+     .marL{
+       margin-left: 10px;
+     }
+     .title{
+       text-align: center;
+       font-size: var(--font-size-h4);
+       font-family: 'rsubold', sans-serif;
+       -webkit-font-smoothing: antialiased;
+     }
+     #changeDivcss {
+       background-color: var(--paper-grey-100);
+       border: 1px solid black;
+       padding: 10px;
+       margin-bottom: 10px;
+     }
+     .show{
+       display: block;
+     }
+     .hide{
+       display: none;
+     }
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         .header {
             text-align: center;
             padding: 10px 0px 10px 10px;
@@ -59,12 +133,13 @@
             text-align: center;
         }
 
-        paper-toast > div.content>iron-icon {
+        paper-toast>div.content>iron-icon {
             padding: 0px 10px 0px 0px;
         }
 
-        .marL {
+        .mar-head {
             margin-left: 10px;
+            margin-bottom: 10px;
         }
 
         .title {
@@ -91,9 +166,10 @@
     </style>
     <template>
     <content id="primary" select="items[type=primary]"></content>
+    <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input class="marL" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></gl-form-input>
+        <gl-form-input class="mar-head" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -145,6 +221,9 @@
             <gl-form-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input label="Place of Delivery" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pode}}"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือเมืองท่า" placeholder="เลือกเมืองท่า" required>
               <paper-listbox  class="dropdown-content" attr-for-selected="confirmLetter" selected="{{data.cityEnd}}">
                 <paper-item confirmLetter="Shekou">Shekou</paper-item>
@@ -190,10 +269,10 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
+            <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-label-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
+            <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-label-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
@@ -203,16 +282,16 @@
             <gl-form-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
+            <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{quantity}}"></gl-form-label-input>
           </gl-grid-col>
         </gl-grid-row>
 
         <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="G.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-label-input label="WEIGHT (M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="G.W."></gl-form-label-input>
             </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value=""></gl-form-input>
+            <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.w. {{data.amount}}"></gl-form-label-input>
           </gl-grid-col>
         </gl-grid-row>
 
@@ -246,7 +325,7 @@
           <paper-button class="gl-btn-success" raised index="[[index]" on-tap="click"></iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
-      {{config.primary}}
+
     <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
@@ -322,7 +401,7 @@
                 }
             },
             attached: function() {
-              // console.log(this.config.primary);
+              console.log(this.config.primary);
             },
             checkDom: function(e) {
                 var id = e.target.id;
@@ -346,6 +425,10 @@
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');
                 css.classList.remove("show");
                 css.classList.add("hide");
+            },
+            attached: function() {
+              this.quantity=(parseFloat(this.data.amount)*parseFloat(1000))/parseFloat(this.data.package);
+              this.GW=((parseFloat(this.quantity)*(parseFloat(this.data.package)+(parseFloat(this.data.weight)/parseFloat(1000)))/parseFloat(1000)));
             }
 
 
