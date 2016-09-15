@@ -3,8 +3,7 @@
 <link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
 <dom-module id="list-vessel">
-  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-
+    <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         .header {
             text-align: center;
             padding: 10px 0px 10px 10px;
@@ -12,43 +11,43 @@
             color: var(--paper-grey-600);
             word-wrap: break-word;
         }
-
+        
         .cleanBd {
             padding: 0px;
         }
-
+        
         .bd {
             border-bottom: 1px solid #ccc;
         }
-
+        
         .top {
             margin-top: 30px;
         }
-
+        
         .w {
             width: 50%;
             text-align: center;
         }
-
+        
         .padL {
             padding-left: 35px;
         }
-
+        
         .fontPdLeft {
             padding: 10px 0px 10px 10px;
             /*word-wrap: break-word;*/
             text-align: center;
         }
-
+        
         paper-item {
             cursor: pointer;
         }
-
+        
         .yellow-button {
             text-transform: none;
             color: #eeff41;
         }
-
+        
         paper-toast {
             --paper-toast-background-color: var(--paper-green-500);
             /*height: 50px;*/
@@ -58,42 +57,138 @@
             width: 600px;
             text-align: center;
         }
-
-        paper-toast > div.content>iron-icon {
+        
+        paper-toast>div.content>iron-icon {
             padding: 0px 10px 0px 0px;
         }
-
+        
+        gl-form-dropdown-menu {
+            width: 90%;
+        }
+        
+        vaadin-date-picker {
+            width: 60%;
+        }
+        
         .marL {
             margin-left: 10px;
         }
-
+        
         .title {
             text-align: center;
             font-size: var(--font-size-h4);
             font-family: 'rsubold', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
+        
         #changeDivcss {
             background-color: var(--paper-grey-100);
             border: 1px solid black;
             padding: 10px;
             margin-bottom: 10px;
         }
-
+        
         .show {
             display: block;
         }
-
+        
+        .hide {
+            display: none;
+        }
+        
+        <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">.header {
+            text-align: center;
+            padding: 10px 0px 10px 10px;
+            background-color: var(--paper-grey-100);
+            color: var(--paper-grey-600);
+            word-wrap: break-word;
+        }
+        
+        .cleanBd {
+            padding: 0px;
+        }
+        
+        .bd {
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .top {
+            margin-top: 30px;
+        }
+        
+        .w {
+            width: 50%;
+            text-align: center;
+        }
+        
+        .padL {
+            padding-left: 35px;
+        }
+        
+        .fontPdLeft {
+            padding: 10px 0px 10px 10px;
+            /*word-wrap: break-word;*/
+            text-align: center;
+        }
+        
+        paper-item {
+            cursor: pointer;
+        }
+        
+        .yellow-button {
+            text-transform: none;
+            color: #eeff41;
+        }
+        
+        paper-toast {
+            --paper-toast-background-color: var(--paper-green-500);
+            /*height: 50px;*/
+            /*margin: 0px 0px 0px 0px;*/
+            /*padding: 0px 0px 0px 0px;*/
+            font-size: 16px;
+            width: 600px;
+            text-align: center;
+        }
+        
+        paper-toast>div.content>iron-icon {
+            padding: 0px 10px 0px 0px;
+        }
+        
+        .mar-head {
+            margin-left: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: var(--font-size-h4);
+            font-family: 'rsubold', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        #changeDivcss {
+            background-color: var(--paper-grey-100);
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .show {
+            display: block;
+        }
+        
         .hide {
             display: none;
         }
     </style>
     <template>
     <content id="primary" select="items[type=primary]"></content>
+    <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+
         <gl-form-input class="marL" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[datas.periodNo]]"></gl-form-input>
+
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -143,6 +238,9 @@
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.pod}}" id="pod"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input label="Place of Delivery" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pode}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือเมืองท่า" placeholder="เลือกเมืองท่า" required>
@@ -203,16 +301,20 @@
             <gl-form-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.marks}}" id="marks"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
             <gl-form-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.quantityBag}}" id="quantityBag"></gl-form-input>
+
           </gl-grid-col>
         </gl-grid-row>
 
         <gl-grid-row>
+
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="G.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.gw}}" id="gw"></gl-form-input>
             </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input label="N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.nw}}" id="nw"></gl-form-input>
+
           </gl-grid-col>
         </gl-grid-row>
 
@@ -246,6 +348,7 @@
           <paper-button class="gl-btn-success" raised index="[[index]" on-tap="saveExport"></iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
+
     <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
@@ -313,77 +416,73 @@
     <script>
         Polymer({
             is: "list-vessel",
-            behaviors: [listEditBehavior,gl.behavior.core],
+            behaviors: [listEditBehavior, gl.behavior.core],
             properties: {
                 datas: {
                     type: Object,
                     notify: true
-                },dataInput:{
+                },
+                dataInput: {
                     type: Object,
                 }
             },
-            attached: function() {
-              // console.log(this.datas);
-              // console.log(this.dataInput);
-            },
-            delExport:function (e) {
-              var r = confirm("ต้องการลบใช่หรือไม่!");
-              if (r == true) {
+           
+            delExport: function(e) {
+                var r = confirm("ต้องการลบใช่หรือไม่!");
+                if (r == true) {
 
-                var id = e.target.getAttribute("index");
-                this.splice('datas.sender', id, 1);
-                this.glQuery('data-export').deleteDataExport(this.glClone(this.datas));
+                    var id = e.target.getAttribute("index");
+                    this.splice('datas.sender', id, 1);
+                    this.glQuery('data-export').deleteDataExport(this.glClone(this.datas));
 
-              }
-              // var id = e.target.getAttribute("index");
-              // this.splice('datas.sender', id, 1);
-              // console.log(this.datas.sender);
+                }
+                // var id = e.target.getAttribute("index");
+                // this.splice('datas.sender', id, 1);
+                // console.log(this.datas.sender);
             },
-            saveExport:function(){
-              var nowDateTime=Date.now()
-              // console.log(this.$.confirmLetter.selected);
-              // console.log(this.$.cityEnd.selected);
-              this.push('datas.sender',
-                {
-                   id: nowDateTime,
-                   actualShipper: this.$.actualShipper.value,
-                   price: '',
-                   weight: '',
-                   package: this.$.package.selected,
-                   blNo: this.$.blNo.value,
-                   cityEnd: this.$.cityEnd.selected,
-                   bs: this.$.bs.value,
-                   bn: this.$.bn.value,
-                   cflNo:this.$.confirmLetter.selected,
-                   vesselName: this.$.vesselName.value,
-                   voidNo: this.$.voidNo.value,
-                   lotNo: this.$.lotNo.value,
-                   pol: this.$.pol.value,
-                   etd: this.$.etd.value,
-                   eta: this.$.eta.value,
-                   pod: this.$.pod.value,
-                   ton: this.$.ton.value,
-                   marks:this.$.marks.value,
-                   typeRiceNo: this.$.typeRiceNo.selected,
-                   quantityBag:this.$.quantityBag.value,
-                   gw: this.$.gw.value,
-                   nw: this.$.nw.value,
-                   desOfGood: this.$.desOfGood.value,
-                   moneyText: '',
-                   ORIGINALS1:this.$.ORIGINALS1.value,
-                   ORIGINALS2:this.$.ORIGINALS2.value
-               }
-              );
-              // console.log(this.datas.sender);
-              this._saveChange();
-              this.click();
-              // console.log(this.datas.sender);
+            saveExport: function() {
+                var nowDateTime = Date.now()
+                    // console.log(this.$.confirmLetter.selected);
+                    // console.log(this.$.cityEnd.selected);
+                this.push('datas.sender', {
+                    id: nowDateTime,
+                    actualShipper: this.$.actualShipper.value,
+                    price: '',
+                    weight: '',
+                    package: this.$.package.selected,
+                    blNo: this.$.blNo.value,
+                    cityEnd: this.$.cityEnd.selected,
+                    bs: this.$.bs.value,
+                    bn: this.$.bn.value,
+                    cflNo: this.$.confirmLetter.selected,
+                    vesselName: this.$.vesselName.value,
+                    voidNo: this.$.voidNo.value,
+                    lotNo: this.$.lotNo.value,
+                    pol: this.$.pol.value,
+                    etd: this.$.etd.value,
+                    eta: this.$.eta.value,
+                    pod: this.$.pod.value,
+                    ton: this.$.ton.value,
+                    marks: this.$.marks.value,
+                    typeRiceNo: this.$.typeRiceNo.selected,
+                    quantityBag: this.$.quantityBag.value,
+                    gw: this.$.gw.value,
+                    nw: this.$.nw.value,
+                    desOfGood: this.$.desOfGood.value,
+                    moneyText: '',
+                    ORIGINALS1: this.$.ORIGINALS1.value,
+                    ORIGINALS2: this.$.ORIGINALS2.value
+                });
+                // console.log(this.datas.sender);
+                this._saveChange();
+                this.click();
+                // console.log(this.datas.sender);
             },
-            _saveChange:function(e){
-              // console.log(this.datas);
-              this.glQuery('data-export').saveData(this.glClone(this.datas));
-              this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
-              this.openToast();
+            _saveChange: function(e) {
+                // console.log(this.datas);
+                this.glQuery('data-export').saveData(this.glClone(this.datas));
+                this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
+                this.openToast();
 
             },
             checkDom: function(e) {
@@ -408,6 +507,10 @@
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');
                 css.classList.remove("show");
                 css.classList.add("hide");
+            },
+            attached: function() {
+                this.quantity = (parseFloat(this.data.amount) * parseFloat(1000)) / parseFloat(this.data.package);
+                this.GW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
             }
 
 

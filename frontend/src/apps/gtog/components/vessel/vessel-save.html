@@ -1,23 +1,24 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-label-input.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="vessel-save">
-  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-  .title{
-    text-align: center;
-    font-size: var(--font-size-h4);
-    font-family: 'rsubold', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  .top{
-    margin-top: 30px;
-  }
-  .w{
-    text-align: center;
-  }
-  </style>
+    <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+        .text-center {
+            text-align: center;
+            font-size: var(--font-size-h4);
+            font-family: 'rsubold', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .top {
+            margin-top: 30px;
+        }
+        
+        .w {
+            text-align: center;
+        }
+    </style>
 
-  <template>
-
+    <template>
         <gl-form-panel-body>
           <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -57,6 +58,7 @@
               <gl-form-label-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
               <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือเมืองท่า" placeholder="เลือกเมืองท่า" required disabled>
                 <paper-listbox  class="dropdown-content" selected="{{data.cityEnd}}">
                   <paper-item >Shekou</paper-item>
@@ -64,17 +66,19 @@
                   <paper-item >Rayong</paper-item>
                 </paper-listbox>
               </gl-form-dropdown-menu>
+
             </gl-grid-col>
           </gl-grid-row>
         </gl-form-panel-body>
 
         <gl-form-panel-body>
-          <div class="title">รายละเอียดการส่งมอบ</div>
+          <div class="text-center">รายละเอียดการส่งมอบ</div>
         </gl-form-panel-body>
 
         <gl-form-panel-body>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
               <gl-form-dropdown-menu label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
                 <paper-listbox  class="dropdown-content"  selected="{{data.cflNo}}">
                   <paper-item >Confirmmation Letter No. 1</paper-item>
@@ -99,6 +103,7 @@
                   <paper-item >60</paper-item>
                 </paper-listbox>
               </gl-form-dropdown-menu>
+
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -108,32 +113,40 @@
               <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.weight}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
               <gl-form-label-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ton}}"></gl-form-label-input>
+
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.marks}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
               <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.quantityBag}}"></gl-form-label-input>
+
             </gl-grid-col>
           </gl-grid-row>
 
           <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
                 <gl-form-label-input label="WEIGHT (M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-label-input>
               </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="WEIGHT N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.nw}}"></gl-form-label-input>
+
             </gl-grid-col>
           </gl-grid-row>
 
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,12]]">
+
               <gl-form-label-textarea label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.desOfGood}}"></gl-form-textarea>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
               <gl-form-label-textarea label="(TWENTY THOUSAND BAGS ONLY)" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.moneyText}}"></gl-form-textarea>
+
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]"></gl-grid-col>
@@ -162,10 +175,81 @@
 
   </template>
 
-  <script>
-    Polymer({
-      is: "vessel-save",
+    <script>
+        Polymer({
+            is: "vessel-save",
 
-    });
-  </script>
+            attached: function() {
+                this.quantity = (parseFloat(this.data.amount) * parseFloat(1000)) / parseFloat(this.data.package);
+                this.toWords(this.quantity);
+                // console.log(this.quantity);
+
+                this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
+                this.GW = this.sumGW.toFixed(3);
+                // console.log(this.GW);
+            },
+
+            toWords: function(num) {
+
+                // Convert numbers to words
+                // copyright 25th July 2006, by Stephen Chapman http://javascript.about.com
+                // permission to use this Javascript on your web page is granted
+                // provided that all of the code (including this copyright notice) is
+                // used exactly as shown (you can change the numbering system if you wish)
+
+                // American Numbering System
+                var th = ['', 'thousand', 'million', 'billion', 'trillion'];
+                // uncomment this line for English Number System
+                // var th = ['','thousand','million', 'milliard','billion'];
+
+                var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+                var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+                var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+                var s = num.toString();
+                s =
+                    s.replace(/[\, ]/g, '');
+                if (s != parseFloat(s)) return 'not a number';
+                var x =
+                    s.indexOf('.');
+                if (x == -1) x = s.length;
+                if (x > 15) return 'too big';
+                var n =
+                    s.split('');
+                var str = '';
+                var sk = 0;
+                for (var i = 0; i < x; i++) {
+                    if ((x - i) % 3 == 2) {
+                        if (n[i] == '1') {
+                            str += tn[Number(n[i + 1])] + ' ';
+                            i++;
+                            sk = 1;
+                        } else if (n[i] != 0) {
+                            str += tw[n[i] - 2] + ' ';
+                            sk = 1;
+                        }
+                    } else if (n[i] != 0) {
+                        str +=
+                            dg[n[i]] + ' ';
+                        if ((x - i) % 3 == 0) str += 'hundred ';
+                        sk = 1;
+                    }
+                    if ((x - i) % 3 == 1) {
+                        if (sk)
+                            str += th[(x - i - 1) / 3] + ' ';
+                        sk = 0;
+                    }
+                }
+                if (x != s.length) {
+                    var y = s.length;
+                    str +=
+                        'point ';
+                    for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ';
+                }
+                this.quantityWords = '(' + str.replace(/\s+/g, ' ').toUpperCase() + ' BAGS ONLY)';
+                //  str.replace(/\s+/g,' ');
+            },
+
+
+        });
+    </script>
 </dom-module>
