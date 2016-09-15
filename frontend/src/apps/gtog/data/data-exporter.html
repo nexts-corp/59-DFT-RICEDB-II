@@ -81,7 +81,7 @@
               },
               {
                 id:2,
-                periodNo:1,
+                periodNo:2,
                 sender:
                 [{
                     id: 1,
@@ -122,30 +122,44 @@
             type:Object,
             notify:true
           },
-          selectIndexExport:{
+          selectIndex:{
             type:Number,
             value:0,
             notify:true,
-            observer:'obSelectIndexPort'
+            observer:'obSelectIndex'
           }
       },
       created:function(){
         this.glQuery('data-export',this);
       },
-      obSelectIndexPort:function(){
-        this.selectData=this.glClone(this.dataExport[this.selectIndexExport]);
+      obSelectIndex:function(){
+        this.selectData=this.glClone(this.dataExport[this.selectIndex]);
         // console.log(this.selectData);
       },
       deleteDataExport:function(data){
         // console.log(data);
-        this.dataExport[this.selectIndexExport] = data;
+        this.dataExport[this.selectIndex] = data;
         //  console.log(this.dataExport);
+        this.saved();
       },
       saveData:function(data){
-        // console.log(data);
-        // console.log(this.dataExport[this.selectIndexExport]);
-        this.dataExport[this.selectIndexExport] = data;
-        console.log(this.dataExport);
+        this.dataExport[this.selectIndex] = data;
+        this.saved();
+        
+      },
+      saved:function(){
+        var pNo = this.dataExport[this.selectIndex].periodNo;
+        var pAll =0;
+        var pBal =0;
+        this.dataExport[this.selectIndex].sender.map((getMap)=>{
+          pAll+=parseInt(getMap.weight);
+          pBal+=parseInt(getMap.weight);
+        });
+        if(this.selectIndex==1){
+            this.glQuery('grid-period').pNo = pNo;
+            this.glQuery('grid-period').pAll = pAll
+            this.glQuery('grid-period').pBal = pBal;
+        }
       }
     });
   </script>

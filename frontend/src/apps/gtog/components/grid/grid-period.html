@@ -15,22 +15,42 @@
     <template>
     <paper-icon-item>
         <div class="flex-2 cml subTitle">
-          งวดที่ 2
+          งวดที่ {{pNo}}
         </div>
         <div class="flex cml subTitle">
-          data
+          {{pAll}}
         </div>
         <div class="flex cml subTitle">
-          data
+          0
         </div>
         <div class="flex cml subTitle">
-          data
+          {{pBal}}
         </div>
     </paper-icon-item>
   </template>
     <script>
         Polymer({
-            is: "grid-period"
+            is: "grid-period",
+            behaviors: [
+                gl.behavior.core
+            ],
+            created:function(){
+                this.glQuery('grid-period',this);
+            },
+            properties:{
+                pNo:{
+                    type:String,
+                    value:2
+                },
+                pAll:{
+                    type:String,
+                    value:0
+                },
+                pBal:{
+                    type:String,
+                    value:0
+                }
+            }
         });
     </script>
 </dom-module>

@@ -62,11 +62,15 @@
                 this.glQuery('data-confirmation', this);
             },
             obSelectIndex: function(val) {
-                console.log('a',val);
                 this.selectData = this.glClone(this.dataConfirm[this.selectIndex]);
             },
             saveData: function(data) {
                 this.dataConfirm[this.selectIndex] = data;
+                if(this.selectIndex==1){
+                    this.glQuery('grid-confirmation').cNo = this.dataConfirm[1].id;
+                    this.glQuery('grid-confirmation').cAll = this.dataConfirm[1].totalQuantity;
+                    this.glQuery('grid-confirmation').cBal = this.dataConfirm[1].totalQuantity;
+                }
             }
         });
     </script>

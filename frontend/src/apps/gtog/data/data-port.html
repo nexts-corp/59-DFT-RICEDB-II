@@ -51,28 +51,30 @@
               type:Object,
               notify:true
             },
-            selectIndexPort:{
+            selectIndex:{
               type:Number,
               value:0,
               notify:true,
-              observer:'obSelectIndexPort'
+              observer:'obSelectIndex'
             }
 
         },
         created:function(){
           this.glQuery('data-port',this);
         },
-        obSelectIndexPort:function(){
-          this.selectData=this.glClone(this.dataPorts[this.selectIndexPort]);
+        obSelectIndex:function(){
+          this.selectData=this.glClone(this.dataPorts[this.selectIndex]);
           // console.log(this.selectData);
         },
         deleteDataPeriod:function(data){
-          this.dataPorts[this.selectIndexPort] = data;
+          this.dataPorts[this.selectIndex] = data;
            console.log(this.dataPorts);
         },
         saveData:function(data){
-          this.dataPorts[this.selectIndexPort] = data;
+          this.dataPorts[this.selectIndex] = data;
           // console.log(this.dataPorts);
+        },ready:function(){
+            console.log('test');
         }
     });
   </script>

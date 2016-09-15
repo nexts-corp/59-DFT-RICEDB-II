@@ -14,22 +14,42 @@
     <template>
     <paper-icon-item>
         <div class="flex-2 cml subTitle">
-          Confirmation Letter No.1
+          Confirmation Letter No.{{cNo}}
         </div>
         <div class="flex cml subTitle">
-          100,000
+          {{cAll}}
         </div>
         <div class="flex cml subTitle">
-          -
+          0
         </div>
         <div class="flex cml subTitle">
-          100,000
+          {{cBal}}
         </div>
     </paper-icon-item>
   </template>
     <script>
         Polymer({
-            is: "grid-confirmation"
+            is: "grid-confirmation",
+            behaviors: [
+                gl.behavior.core
+            ],
+            created:function(){
+                this.glQuery('grid-confirmation',this)
+            },
+            properties:{
+                cNo:{
+                    type:String,
+                    value:2
+                },
+                cAll:{
+                    type:String,
+                    value:0
+                },
+                cBal:{
+                    type:String,
+                    value:0
+                }
+            }
         });
     </script>
 </dom-module>
