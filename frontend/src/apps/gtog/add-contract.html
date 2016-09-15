@@ -20,7 +20,7 @@
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
+        
         .left {
             margin: 0px 10px 0px 10px;
         }
@@ -59,57 +59,57 @@
                     <template type="primary">
                         <input placeholder="text" value="primary">
                     </template>
-                    <template type="secondary">
+    <template type="secondary">
                         <input placeholder="text" value="secondary">
                     </template>
-                    <template type="third">
+    <template type="third">
                         <input placeholder="text" value="third">
                     </template>
-                </nx-grid>
-            </grid>
-            <panel>
-                <div class="left">
-                    <iron-pages selected="{{vesselPage}}">
-                        <panel-seleted>
-                            <section-content name="detail">
-                                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <!-- <test-ice name="primary" data="{{dataSelect}}"></test-ice> -->
-                                    <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                                    <period-page name="third" data="{{dataSelect}}"></period-page>
-                                </iron-pages>
+    </nx-grid>
+    </grid>
+    <panel>
+        <div class="left">
+            <iron-pages selected="{{vesselPage}}">
+                <panel-seleted>
+                    <section-content name="detail">
+                        <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                            <!-- <test-ice name="primary" data="{{dataSelect}}"></test-ice> -->
+                            <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+                            <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
+                            <period-page name="third" data="{{dataSelect}}"></period-page>
+                        </iron-pages>
 
-                            </section-content>
-                            <section-content name="print">
-                                <vessel-print></vessel-print>
-                            </section-content>
-                            <section-content name="file">
-                                <promise-fileup></promise-fileup>
-                            </section-content>
-                        </panel-seleted>
-                        <!-- vesse -->
+                    </section-content>
+                    <section-content name="print">
+                        <vessel-print></vessel-print>
+                    </section-content>
+                    <section-content name="file">
+                        <promise-fileup></promise-fileup>
+                    </section-content>
+                </panel-seleted>
+                <!-- vesse -->
 
-                        <panel-seleted-vessel>
-                            <section-content name="detail">
-                                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                                    <period-page name="third" data="{{dataSelect}}"> </period-page>
-                                </iron-pages>
+                <panel-seleted-vessel>
+                    <section-content name="detail">
+                        <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                            <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+                            <!--<promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>-->
+                            <period-page name="third" data="{{dataSelect}}"> </period-page>
+                        </iron-pages>
 
-                            </section-content>
-                            <section-content name="print">
-                                <vessel-page data="{{dataSelect}}"></vessel-page>
-                            </section-content>
-                            <section-content name="file">
-                                <promise-fileup></promise-fileup>
-                            </section-content>
-                        </panel-seleted-vessel>
-                        <!-- vesse -->
-                    </iron-pages>
-                </div>
-            </panel>
-        </content-panel>
+                    </section-content>
+                    <section-content name="print">
+                        <vessel-page data="{{dataSelect}}"></vessel-page>
+                    </section-content>
+                    <section-content name="file">
+                        <promise-fileup></promise-fileup>
+                    </section-content>
+                </panel-seleted-vessel>
+                <!-- vesse -->
+            </iron-pages>
+        </div>
+    </panel>
+    </content-panel>
     </template>
     <script>
         Polymer({
@@ -147,8 +147,8 @@
                 } else {
                     this.vesselPage = 0;
                 }
-                //console.log(e.detail.index);
-                this.glQuery('data-confirmation').selectIndex = 1;
+                console.log(e.detail.index);
+                this.glQuery('data-confirmation').selectIndex = e.detail.index;
                 //hotwork
                 //this.dataSelect = e.detail.data;
 

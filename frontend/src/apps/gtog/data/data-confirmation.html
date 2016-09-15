@@ -1,75 +1,73 @@
 <dom-module id="data-confirmation">
     <script>
-    Polymer({
-      is:'data-confirmation',
-      behaviors:[gl.behavior.core],
-      properties:{
-          dataConfirm:{
-            type:Object,
-            notify:true,
-            value: [
-              {
-                id:1,
-                confirmLetter: 'Confirmmation Letter No. 1',
-                cmlSendRice: '-',
-                cmlBalanceRice: '100,000',
-                dateconfirm: '2016-08-20',
-                detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
-                typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                price: 'fob',
-                totalQuantity: '100,000',
-                confirmItem: [{
-                  id: 1,
-                  package: '50',
-                  price: '392'
-                }, {
-                  id: 2,
-                  package: '25',
-                  price: '392'
-                }, ]
-              },
-              {
-                id:2,
-                confirmLetter: 'Confirmmation Letter No. 2',
-                cmlSendRice: '-',
-                cmlBalanceRice: '200,000',
-                dateconfirm: '2016-08-20',
-                detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
-                typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                price: 'fob',
-                totalQuantity: '200,000',
-                confirmItem: [{
-                  id: 1,
-                  package: '50',
-                  price: '392'
-                }, {
-                  id: 2,
-                  package: '25',
-                  price: '392'
-                }, ]
-              }
-            ]
-          },
-          selectData:{
-            type:Object,
-            notify:true
-          },
-          selectIndex:{
-            type:Number,
-            value:0,
-            notify:true,
-            observer:'obSelectIndex'
-          }
-      },
-      created:function(){
-        this.glQuery('data-confirmation',this);
-      },
-      obSelectIndex:function(){
-        this.selectData=this.glClone(this.dataConfirm[this.selectIndex]);
-      },
-      saveData:function(data){
-        this.dataConfirm[this.selectIndex] = data;
-      }
-    });
-  </script>
+        Polymer({
+            is: 'data-confirmation',
+            behaviors: [gl.behavior.core],
+            properties: {
+                dataConfirm: {
+                    type: Object,
+                    notify: true,
+                    value: [{
+                        id: 1,
+                        confirmLetter: 'Confirmmation Letter No. 1',
+                        cmlSendRice: '-',
+                        cmlBalanceRice: '100,000',
+                        dateconfirm: '2016-08-01',
+                        detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
+                        typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        price: 'fob',
+                        totalQuantity: '100,000',
+                        confirmItem: [{
+                            id: 1,
+                            package: '50',
+                            price: '392'
+                        }, {
+                            id: 2,
+                            package: '25',
+                            price: '392'
+                        }, ]
+                    }, {
+                        id: 2,
+                        confirmLetter: 'Confirmmation Letter No. 2',
+                        cmlSendRice: '-',
+                        cmlBalanceRice: '200,000',
+                        dateconfirm: '2016-08-20',
+                        detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
+                        typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                        price: 'fob',
+                        totalQuantity: '200,000',
+                        confirmItem: [{
+                            id: 1,
+                            package: '50',
+                            price: '392'
+                        }, {
+                            id: 2,
+                            package: '25',
+                            price: '392'
+                        }, ]
+                    }]
+                },
+                selectData: {
+                    type: Object,
+                    notify: true
+                },
+                selectIndex: {
+                    type: Number,
+                    value: 0,
+                    notify: true,
+                    observer: 'obSelectIndex'
+                }
+            },
+            created: function() {
+                this.glQuery('data-confirmation', this);
+            },
+            obSelectIndex: function(val) {
+                console.log('a',val);
+                this.selectData = this.glClone(this.dataConfirm[this.selectIndex]);
+            },
+            saveData: function(data) {
+                this.dataConfirm[this.selectIndex] = data;
+            }
+        });
+    </script>
 </dom-module>

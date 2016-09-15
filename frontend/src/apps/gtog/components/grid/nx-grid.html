@@ -7,83 +7,83 @@
 <link rel="import" href="grid-period.html">
 
 <dom-module id="nx-grid">
-  <style is="custom-style" include="iron-flex iron-flex-factors gl-size gl-color">
-    .header {
-      padding: 10px 0px 10px 10px;
-      background-color: var(--paper-grey-100);
-      color: var(--paper-grey-600);
-    }
-
-    .ss {
-      color: red;
-      border: 1px solid #000;
-    }
-    /*paper-item {
+    <style is="custom-style" include="iron-flex iron-flex-factors gl-size gl-color">
+        .header {
+            padding: 10px 0px 10px 10px;
+            background-color: var(--paper-grey-100);
+            color: var(--paper-grey-600);
+        }
+        
+        .ss {
+            color: red;
+            border: 1px solid #000;
+        }
+        /*paper-item {
 --paper-item-selected : {
 background-color: var(--paper-grey-600);
 };
 }*/
+        
+        paper-icon-item {
+            cursor: pointer;
+        }
+        
+        .sublist paper-item {
+            /*padding-left: 30px;*/
+        }
+        
+        .cml:first-of-type {
+            /*margin-left: 60px;*/
+            text-align: left;
+            /*color: red;*/
+        }
+        
+        .cml:not(:first-of-type) {
+            text-align: right;
+            /*color: blue;*/
+        }
+        
+        .headLabel {
+            text-align: left;
+            margin-left: 10%;
+            /*color: red;*/
+            font-size: var(--font-size-h4);
+        }
+        
+        .headLabel:not(:first-of-type) {
+            margin-left: 0px;
+            text-align: right;
+            padding-right: 25px;
+            /*color: blue;*/
+        }
+        
+        .subTitle {
+            /*margin-left: 60px;*/
+            /*padding-right: -60px;*/
+        }
+        
+        .paper-menu-lv1 {
+            --paper-menu-selected-item: {
+                font-weight: normal;
+            }
+            ;
+        }
+        
+        .paper-menu-lv2 {
+            --paper-menu-selected-item: {
+                font-weight: normal;
+            }
+            ;
+        }
+        
+        .paper-icon-item {
+            --paper-icon-item: {
+                border-bottom: 1px solid #ccc;
+            }
+        }
+    </style>
 
-    paper-icon-item {
-      cursor: pointer;
-    }
-
-    .sublist paper-item {
-      /*padding-left: 30px;*/
-    }
-
-    .cml:first-of-type {
-      /*margin-left: 60px;*/
-      text-align: left;
-      /*color: red;*/
-    }
-
-    .cml:not(:first-of-type) {
-      text-align: right;
-      /*color: blue;*/
-    }
-
-    .headLabel {
-      text-align: left;
-      margin-left: 10%;
-      /*color: red;*/
-      font-size: var(--font-size-h4);
-    }
-
-    .headLabel:not(:first-of-type) {
-      margin-left: 0px;
-      text-align: right;
-      padding-right: 25px;
-      /*color: blue;*/
-    }
-
-    .subTitle {
-      /*margin-left: 60px;*/
-      /*padding-right: -60px;*/
-    }
-
-    .paper-menu-lv1 {
-      --paper-menu-selected-item: {
-        font-weight: normal;
-      }
-      ;
-    }
-
-    .paper-menu-lv2 {
-      --paper-menu-selected-item: {
-        font-weight: normal;
-      }
-      ;
-    }
-
-    .paper-icon-item {
-      --paper-icon-item: {
-        border-bottom: 1px solid #ccc;
-      }
-    }
-  </style>
-
-  <template>
+    <template>
     <div class="horizontal-section">
       <div class="header layout horizontal">
           <div class="flex-2 headLabel">ชื่อสัญญา</div>
@@ -94,16 +94,16 @@ background-color: var(--paper-grey-600);
       <paper-menu attr-for-item-title="label" multi style="padding-top:0px" class="paper-menu-lv1">
           <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary">
             <paper-icon-button on-tap="_toggleSub" data-sub="sub-1" icon="chevron-right" item-icon></paper-icon-button>
-              <div class="flex-2 cml" on-tap="toggleDrawer">
+              <div class="flex-2 cml">
                 COFCO ประเทศจีน
               </div>
-              <div class="flex cml" on-tap="toggleDrawer">
+              <div class="flex cml">
                 1,000,000
               </div>
-              <div class="flex cml" on-tap="toggleDrawer">
+              <div class="flex cml">
                 -
               </div>
-              <div class="flex cml" on-tap="toggleDrawer">
+              <div class="flex cml">
                 1,000,000
               </div>
           </paper-icon-item>
@@ -116,16 +116,16 @@ background-color: var(--paper-grey-600);
               </paper-item>
 
                 <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" index="0">
-                    <div class="flex-2 cml subTitle" on-tap="toggleDrawer">
+                    <div class="flex-2 cml subTitle">
                       Confirmation Letter No.1
                     </div>
-                    <div class="flex cml subTitle" on-tap="toggleDrawer">
+                    <div class="flex cml subTitle">
                       100,000
                     </div>
-                    <div class="flex cml subTitle" on-tap="toggleDrawer">
+                    <div class="flex cml subTitle">
                       -
                     </div>
-                    <div class="flex cml subTitle" on-tap="toggleDrawer">
+                    <div class="flex cml subTitle">
                       100,000
                     </div>
                 </paper-icon-item>
@@ -136,89 +136,89 @@ background-color: var(--paper-grey-600);
               <template is="dom-if" if="{{showListConfirmation}}">
                 <grid-confirmation on-tap="_getBind" level="secondary" index="1"></grid-confirmation>
               </template>
-              <paper-button raised on-tap="showList" data="confirmation" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
+    <paper-button raised on-tap="showList" data="confirmation" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
 
 
-            </paper-menu>
+    </paper-menu>
 
-            <!-- จบอันแรก  -->
-            <!-- อันที่2 -->
-            <paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
-              <paper-item disabled>
-                <!-- Head secondary -->
-                <div class="flex-9">
-                  งวดการส่งมอบ
-                </div>
-              </paper-item>
-              <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="third" index="0">
-                  <div class="flex-2 cml subTitle" on-tap="toggleDrawer">
-                    งวดที่ 1
-                  </div>
-                  <div class="flex cml subTitle" on-tap="toggleDrawer">
-                    data
-                  </div>
-                  <div class="flex cml subTitle" on-tap="toggleDrawer">
-                    data
-                  </div>
-                  <div class="flex cml subTitle" on-tap="toggleDrawer">
-                    data
-                  </div>
-              </paper-icon-item>
-              <!--hotwork-->
+    <!-- จบอันแรก  -->
+    <!-- อันที่2 -->
+    <paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
+        <paper-item disabled>
+            <!-- Head secondary -->
+            <div class="flex-9">
+                งวดการส่งมอบ
+            </div>
+        </paper-item>
+        <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="third" index="0">
+            <div class="flex-2 cml subTitle">
+                งวดที่ 1
+            </div>
+            <div class="flex cml subTitle">
+                data
+            </div>
+            <div class="flex cml subTitle">
+                data
+            </div>
+            <div class="flex cml subTitle">
+                data
+            </div>
+        </paper-icon-item>
+        <!--hotwork-->
 
-              <template is="dom-if" if="{{showListPeriod}}">
+        <template is="dom-if" if="{{showListPeriod}}">
                 <grid-period on-tap="_getBind" level="third" index="1"></grid-period>
               </template>
-              <paper-button raised on-tap="showList" data="period" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
+        <paper-button raised on-tap="showList" data="period" style="margin-left:70px" class="gl-btn-success gl-small">+ Create</paper-button>
 
 
-            </paper-menu>
-          </paper-submenu>
+    </paper-menu>
+    </paper-submenu>
 
-      </paper-menu>
+    </paper-menu>
     </div>
-  </template>
+    </template>
 
-  <script>
-Polymer({
-  is: 'nx-grid',
-  behaviors: [Polymer.Templatizer, gl.behavior.core],
-  properties: {
-    seleted: {
-      type: Object,
-      notify: true
-    },
-    config: {
-      type: Object
-    }
-  },
-  _toggleSub: function(e) {
-    this.$$('#sub-1').toggle();
-    if (e.target.icon == 'expand-more') {
-      e.currentTarget.icon = 'chevron-right';
-    } else {
-      e.currentTarget.icon = 'expand-more';
-      Polymer.dom(this.root).querySelectorAll('.sublist')[e.currentTarget.index].select(0);
-    }
-  },
-  _getBind: function(e) {
-    if (e.target.is != "paper-icon-button") {
-      this.fire('nx-grid-' + e.type, {
-        data: e.currentTarget.data,
-        level: e.currentTarget.getAttribute('level'),
-        index: e.currentTarget.getAttribute('index')
-      });
-    }
-  },
+    <script>
+        Polymer({
+            is: 'nx-grid',
+            behaviors: [Polymer.Templatizer, gl.behavior.core],
+            properties: {
+                seleted: {
+                    type: Object,
+                    notify: true
+                },
+                config: {
+                    type: Object
+                }
+            },
+            _toggleSub: function(e) {
+                this.$$('#sub-1').toggle();
+                if (e.target.icon == 'expand-more') {
+                    e.currentTarget.icon = 'chevron-right';
+                } else {
+                    e.currentTarget.icon = 'expand-more';
+                    //Polymer.dom(this.root).querySelectorAll('.sublist')[e.currentTarget.index].select(0);
+                }
+            },
+            _getBind: function(e) {
+                if (e.target.is != "paper-icon-button") {
+                    this.fire('nx-grid-' + e.type, {
+                        data: e.currentTarget.data,
+                        level: e.currentTarget.getAttribute('level'),
+                        index: e.currentTarget.getAttribute('index')
+                    });
+                }
+            },
 
-  showList: function(e){
-    if(e.target.getAttribute('data')=="period"){
-      this.showListPeriod = 1;
-    }else{
-      this.showListConfirmation = 1;
-    }
+            showList: function(e) {
+                if (e.target.getAttribute('data') == "period") {
+                    this.showListPeriod = 1;
+                } else {
+                    this.showListConfirmation = 1;
+                }
 
-  }
-});
-</script>
+            }
+        });
+    </script>
 </dom-module>

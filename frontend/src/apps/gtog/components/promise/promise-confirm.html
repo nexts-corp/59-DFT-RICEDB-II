@@ -4,7 +4,7 @@
         .top {
             margin-top: 15px;
         }
-
+        
         .bg {
             background-color: var(--paper-grey-200);
             border: 1px solid black;
@@ -12,15 +12,15 @@
             margin-bottom: 10px;
             margin-top: 10px;
         }
-
+        
         paper-button {
             margin-top: 10px;
         }
-
+        
         gl-form-textarea {
             word-break: break-all;
         }
-
+        
         paper-icon-button {
             margin-top: 10px;
         }
@@ -34,7 +34,7 @@
           <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{datas.id}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่" value="{{datas.dateconfirm}}"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่" value="{{datas.dateconfirm}}" id="date"></vaadin-date-picker>
         </gl-grid-col>
     </gl-grid-row>
 
@@ -102,21 +102,21 @@
     <script>
         Polymer({
             is: "promise-confirm",
-            behaviors:[gl.behavior.core],
+            behaviors: [gl.behavior.core],
             properties: {
                 datas: {
                     type: Object
                 }
             },
             attached: function() {
-              // console.log(this.selectIndex);
-              // console.log(this.testData[this.selectIndex]);
-              // this.data=this.testData[this.selectIndex];
-              // console.log(this.data);
+                // console.log(this.selectIndex);
+                // console.log(this.testData[this.selectIndex]);
+                // this.data=this.testData[this.selectIndex];
+                // console.log(this.data);
             },
             add: function() {
-              //this.glQuery('dataConfirm').addConfirmLetterItem(this.selectIndex);
-              var nowDateTime=Date.now()
+                //this.glQuery('dataConfirm').addConfirmLetterItem(this.selectIndex);
+                var nowDateTime = Date.now()
                 this.push('datas.confirmItem', {
                     id: nowDateTime,
                     package: '',
@@ -124,14 +124,15 @@
                 });
             },
             dele: function(e) {
-              var r = confirm("ต้องการลบใช่หรือไม่!");
-              if (r == true) {
-                var id = e.currentTarget.getAttribute("del");
-                this.splice('datas.confirmItem', id, 1);
-              }
+                var r = confirm("ต้องการลบใช่หรือไม่!");
+                if (r == true) {
+                    var id = e.currentTarget.getAttribute("del");
+                    this.splice('datas.confirmItem', id, 1);
+                }
             },
-            saveConfirm:function(){
-              this.glQuery('data-confirmation').saveData(this.glClone(this.datas));
+            saveConfirm: function() {
+                console.log(this.$.date.value);
+                this.glQuery('data-confirmation').saveData(this.glClone(this.datas));
             }
 
         });
