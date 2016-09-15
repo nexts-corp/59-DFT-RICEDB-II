@@ -69,7 +69,7 @@
   <template>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.idperiod}}"></gl-form-input>
+        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{datas.idperiod}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -97,7 +97,6 @@
     </div>
 
     <content id="primary" select="items[type=primary]"></content>
-    <!-- config:{{config.primary.0.label}} -->
     <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
@@ -105,7 +104,7 @@
         </div>
       </template>
     </div>
-    <template is="dom-repeat" as="itemPrimary" items="{{data.port}}">
+    <template is="dom-repeat" as="itemPrimary" items="{{datas.port}}">
       <paper-icon-item class="fancy cleanBd bd" >
         <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse{{index}}" icon="chevron-right" item-icon></paper-icon-button>
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
@@ -150,16 +149,16 @@
   <script>
     Polymer({
       is: "list-period",
-      behaviors:[listEditBehavior],
+      behaviors:[listEditBehavior,gl.behavior.core],
       properties: {
-        data: {
+        datas: {
           type: Object,
           notify: true,
           // value: function() {return [];}
         }
       },
       attached: function() {
-        // console.log(this.config.primary);
+        // console.log(this.datas);
       },
       insertCity: function() {
         var insertCity = this.$.insertCity.value;
@@ -167,20 +166,24 @@
         var insertNotify = this.$.insertNotify.value;
         // console.log(this.data.port);
         var nowDateTime=Date.now()
-          this.push('data.port', {
+          this.push('datas.port', {
               id: nowDateTime,
               quantity: inserTon,
               cityDestination:insertCity,
               notifyParty: insertNotify
           });
+          this.glQuery('data-port').saveData(this.glClone(this.datas));
           this.click();
           // console.log(this.data.port);
       },
       delectPeriod:function(e){
         var r = confirm("ต้องการลบใช่หรือไม่!");
         if (r == true) {
+
           var id = e.currentTarget.getAttribute("index");
-          this.splice('data.port', id, 1);
+          this.splice('datas.port', id, 1);
+          this.glQuery('data-port').deleteDataPeriod(this.glClone(this.datas));
+
         }
       },
       _editChange:function(e){
@@ -188,6 +191,7 @@
        this.closeToast();
      },
       _saveChange:function(e){
+        console.log(this.datas);
         this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
         this.openToast();
 

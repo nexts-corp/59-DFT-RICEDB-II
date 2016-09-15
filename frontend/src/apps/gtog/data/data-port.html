@@ -2,6 +2,7 @@
     <script>
     Polymer({
       is:'data-port',
+      behaviors:[gl.behavior.core],
       properties:{
           dataExample:{
               type:String,
@@ -11,8 +12,9 @@
           dataPorts: {
               type: Object,
               notify: true,
-              value: function() {
-                return {
+              value:
+               [
+                 {
                   idperiod:1,
                   port:[
                     {
@@ -29,13 +31,48 @@
                       notifyParty: 'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
 
                     }
-                  ],
+                  ]
+                },
+                {
+                 idperiod:2,
+                 port:[
+                   {
+                     id:1,
+                     quantity: 40000,
+                     cityDestination: 'Husngpua',
+                     notifyParty: 'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311'
 
-
-                };
-              }
+                   },
+                 ]
+               }
+             ]
+            },
+            selectData:{
+              type:Object,
+              notify:true
+            },
+            selectIndexPort:{
+              type:Number,
+              value:0,
+              notify:true,
+              observer:'obSelectIndexPort'
             }
 
+        },
+        created:function(){
+          this.glQuery('data-port',this);
+        },
+        obSelectIndexPort:function(){
+          this.selectData=this.glClone(this.dataPorts[this.selectIndexPort]);
+          // console.log(this.selectData);
+        },
+        deleteDataPeriod:function(data){
+          this.dataPorts[this.selectIndexPort] = data;
+           console.log(this.dataPorts);
+        },
+        saveData:function(data){
+          this.dataPorts[this.selectIndexPort] = data;
+          // console.log(this.dataPorts);
         }
     });
   </script>

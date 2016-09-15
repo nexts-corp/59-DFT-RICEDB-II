@@ -2,7 +2,7 @@
 <link rel="import" href="../../data/data-exporter.html">
 <dom-module id="vessel-page">
   <template>
-    <data-exporter data-export="{{data}}"></data-exporter>
+    <data-exporter select-data="{{datas}}"></data-exporter>
     <!-- {{data}} -->
     <list-vessel data="{{data}}">
       <items type="primary">
@@ -16,12 +16,15 @@
   <script>
     Polymer({
       is: "vessel-page",
-      properties: {
-        data:{
-          type:Object,
-          notify:true
-        }
-      }
+      // properties: {
+      //   datas:{
+      //     type:Object,
+      //     notify:true
+      //   }
+      // },
+      attached: function() {
+        // console.log(this.datas);
+      },
     });
   </script>
 </dom-module>
