@@ -10,6 +10,7 @@
             padding-left: 10px;
             margin-bottom: 10px;
             margin-top: 10px;
+            padding: 10px 0px 10px 10px;
         }
 
         paper-button {
@@ -30,7 +31,7 @@
           <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.id}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่" value="{{data.dateconfirm}}"></vaadin-date-picker>
         </gl-grid-col>
     </gl-grid-row>
 
@@ -53,7 +54,10 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <gl-form-input auto-validate error-message="กรุณาใส่ราคา" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.price]]"></gl-form-input>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,5]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,3]]">
+              <gl-form-input auto-validate error-message="กรุณาใส่ราคา" required label="น้ำหนักกระสอบ(gram/bag)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.weight]]"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,2]]"></gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
               <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
             </gl-grid-col>
@@ -72,8 +76,8 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
                 <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
-                    <paper-item price-type="fob">FOB</paper-item>
-                    <paper-item price-type="cy">CY</paper-item>
+                    <paper-item price-type="fob">FOB CY</paper-item>
+                    <paper-item price-type="bath">Bath</paper-item>
                     <paper-item price-type="other">ฯลฯ</paper-item>
                 </paper-listbox>
             </gl-form-dropdown-menu>

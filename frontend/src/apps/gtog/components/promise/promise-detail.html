@@ -4,7 +4,7 @@
     .bg{
       background-color:var(--paper-grey-200);
       border: 1px solid black;
-      padding-left: 10px;
+      padding: 10px 0px 10px 10px;
       }
       gl-form-textarea{
         word-break: break-all;
@@ -12,8 +12,11 @@
       paper-button{
         margin-top: 10px;
       }
-      .top{
+      .icon-bin{
         margin-top: 10px;
+      }
+      .bottom{
+        margin-bottom: 10px;
       }
     </style>
 
@@ -21,10 +24,10 @@
   <template>
       <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.promiseName}}" placeholder="ใส่รายละเอียด"></gl-form-input>
+            <gl-form-input class="bottom" auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.promiseName}}" placeholder="ใส่รายละเอียด"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+            <vaadin-date-picker label="วันที่" value="{{data.date}}"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
 
@@ -44,7 +47,7 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-                <paper-icon-button class="top" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
+                <paper-icon-button class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
               </gl-grid-col>
             </gl-grid-row>
           </div>
@@ -58,6 +61,8 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
               <gl-form-textarea rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></gl-form-textarea>
             </gl-grid-col>
+          </gl-grid-row>
+          <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
               <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}"></gl-form-textarea>
             </gl-grid-col>
