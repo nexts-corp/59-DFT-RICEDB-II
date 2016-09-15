@@ -121,8 +121,8 @@
           <div class="bd">
             <gl-form-panel>
               <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px; set-border="1px">
-                  <paper-button class="gl-btn-success" raised on-tap="saveChange" index$="[[index]]"><iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
-                  <paper-button class="gl-btn-warning" raised on-tap="editChange" index$="[[index]]"><iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
+                  <paper-button class="gl-btn-success" raised on-tap="_saveChange" index="[[index]]"><iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+                  <paper-button class="gl-btn-warning" raised on-tap="_editChange" index="[[index]]"><iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
                   <paper-button class="gl-btn-danger" raised on-tap="delectPeriod" index$="[[index]]"><iron-icon class="gl-icon-size" icon="delete" ></iron-icon>ลบ</paper-button>
               </gl-form-panel-head>
 
@@ -159,7 +159,7 @@
         }
       },
       attached: function() {
-        console.log(this.config.primary);
+        // console.log(this.config.primary);
       },
       insertCity: function() {
         var insertCity = this.$.insertCity.value;
@@ -182,6 +182,15 @@
           var id = e.currentTarget.getAttribute("index");
           this.splice('data.port', id, 1);
         }
+      },
+      _editChange:function(e){
+       this.$$(".iron-index-"+e.currentTarget.index).selected = 1;
+       this.closeToast();
+     },
+      _saveChange:function(e){
+        this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
+        this.openToast();
+
       },
       checkDom:function(e){
         var id = e.target.id;

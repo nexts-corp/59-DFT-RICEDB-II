@@ -4,20 +4,12 @@
   gl-form-textarea{
     word-break: break-all;
   }
-  paper-button{
-    margin-top: 10px;
-  }
-  .bg{
-    /*background-color:var(--paper-grey-200);*/
-    border: 1px solid black;
-    padding: 10px;
-  }
   </style>
   <template>
       <gl-form-panel-body set-border="0px">
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-            <gl-form-textarea autofocus label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-textarea>
+            <gl-form-textarea autofocus label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="{{data.notifyParty}}"></gl-form-textarea>
           </gl-grid-col>
         </gl-grid-row>
       </gl-form-panel-body>
@@ -26,8 +18,18 @@
   <script>
     Polymer({
       is: "period-edit",
-
-
+      // properties: {
+      //   data: {
+      //     type: Object,
+      //     notify:true
+      //   }
+      // }
+      // observers: [
+      //   'saveEx(data.notifyParty)'
+      // ],
+      // saveEx:function (data) {
+      //   console.log(data);
+      // },
     });
   </script>
 </dom-module>

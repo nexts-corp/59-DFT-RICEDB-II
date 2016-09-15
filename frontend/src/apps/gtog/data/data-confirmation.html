@@ -4,16 +4,11 @@
       is:'data-confirmation',
       behaviors:[gl.behavior.core],
       properties:{
-          dataExample:{
-              type:String,
-              value:"abc",
-              notify:true
-          },
           dataConfirm:{
             type:Object,
             notify:true,
-            value: function() {
-              return {
+            value: [
+              {
                 id:1,
                 confirmLetter: 'Confirmmation Letter No. 1',
                 cmlSendRice: '-',
@@ -32,25 +27,48 @@
                   package: '25',
                   price: '392'
                 }, ]
-              };
-            }
+              },
+              {
+                id:2,
+                confirmLetter: 'Confirmmation Letter No. 2',
+                cmlSendRice: '-',
+                cmlBalanceRice: '200,000',
+                dateconfirm: '2016-08-20',
+                detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
+                typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                price: 'fob',
+                totalQuantity: '200,000',
+                confirmItem: [{
+                  id: 1,
+                  package: '50',
+                  price: '392'
+                }, {
+                  id: 2,
+                  package: '25',
+                  price: '392'
+                }, ]
+              }
+            ]
+          },
+          selectData:{
+            type:Object,
+            notify:true
+          },
+          selectIndex:{
+            type:Number,
+            value:0,
+            notify:true,
+            observer:'obSelectIndex'
           }
-
       },
-      created: function() {
-        this.glQuery('dataConfirm',this);
+      created:function(){
+        this.glQuery('data-confirmation',this);
       },
-      addConfirmLetter:function () {
-        // console.log(12);
+      obSelectIndex:function(){
+        this.selectData=this.glClone(this.dataConfirm[this.selectIndex]);
       },
-      addConfirmLetterItem:function () {
-        // var nowDateTime=Date.now()
-        //   this.push('dataConfirm.confirmItem', {
-        //       id: nowDateTime,
-        //       package: '',
-        //       price: ''
-        //   });
-        //   this.dataConfirm = JSON.parse(JSON.stringify(this.dataConfirm));
+      saveData:function(data){
+        this.dataConfirm[this.selectIndex] = data;
       }
     });
   </script>

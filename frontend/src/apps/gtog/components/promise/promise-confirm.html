@@ -27,14 +27,14 @@
     </style>
     <template>
 
-    <data-confirmation data-confirm="{{testData}}"></data-confirmation>
+    <data-confirmation select-data="{{datas}}" select-index="{{selectIndex}}"></data-confirmation>
 
     <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{testData.id}}"></gl-form-input>
+          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{datas.id}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่" value="{{testData.dateconfirm}}"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่" value="{{datas.dateconfirm}}"></vaadin-date-picker>
         </gl-grid-col>
     </gl-grid-row>
 
@@ -43,19 +43,19 @@
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Item" placeholder="ใส่รายละเอียด" value="[[testData.typeRice]]"></gl-form-input>
+          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Item" placeholder="ใส่รายละเอียด" value="[[datas.typeRice]]"></gl-form-input>
         </gl-grid-col>
       </gl-grid-row>
 
 
-      <template is="dom-repeat" items="[[testData.confirmItem]]">
+      <template is="dom-repeat" items="[[datas.confirmItem]]">
         <div class="bg">
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่น้ำหนัก" required label="Package(kg)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.package]]"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่น้ำหนัก" required label="Package(kg)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="{{item.package}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ราคา" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.price]]"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่ราคา" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="{{item.price}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,5]]"></gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -75,7 +75,7 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{testData.price}}">
+                <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{datas.price}}">
                     <paper-item price-type="fob">FOB</paper-item>
                     <paper-item price-type="cy">CY</paper-item>
                     <paper-item price-type="other">ฯลฯ</paper-item>
@@ -84,17 +84,17 @@
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-            <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[testData.totalQuantity]]"></gl-form-input>
+            <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[datas.totalQuantity]]"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-            <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[testData.detail]]"></gl-form-textarea>
+            <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[datas.detail]]"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
 
     <div class="horizontal end-justified layout">
         <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="saveConfirm" raised>บันทึก</paper-button>
     </div>
 
     </div>
@@ -104,34 +104,34 @@
             is: "promise-confirm",
             behaviors:[gl.behavior.core],
             properties: {
-                data: {
-                    type: Object,
+                datas: {
+                    type: Object
                 }
             },
             attached: function() {
+              // console.log(this.selectIndex);
+              // console.log(this.testData[this.selectIndex]);
+              // this.data=this.testData[this.selectIndex];
               // console.log(this.data);
             },
             add: function() {
-              // this.glQuery('dataConfirm').addConfirmLetterItem();
+              //this.glQuery('dataConfirm').addConfirmLetterItem(this.selectIndex);
               var nowDateTime=Date.now()
-                this.push('testData.confirmItem', {
+                this.push('datas.confirmItem', {
                     id: nowDateTime,
                     package: '',
                     price: ''
                 });
-                // console.log(this.data);
-                // console.log(this.testData);
             },
             dele: function(e) {
               var r = confirm("ต้องการลบใช่หรือไม่!");
               if (r == true) {
                 var id = e.currentTarget.getAttribute("del");
-                this.splice('testData.confirmItem', id, 1);
+                this.splice('datas.confirmItem', id, 1);
               }
-              // console.log((e.currentTarget).currentTarget);
-                // var id = e.currentTarget.getAttribute("del");
-                // var index = this.testData.confirmItem.indexOf(id);
-                // this.splice('testData.confirmItem', id, 1);
+            },
+            saveConfirm:function(){
+              this.glQuery('data-confirmation').saveData(this.glClone(this.datas));
             }
 
         });

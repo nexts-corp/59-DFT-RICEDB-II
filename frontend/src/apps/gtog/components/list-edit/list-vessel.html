@@ -91,7 +91,6 @@
     </style>
     <template>
     <content id="primary" select="items[type=primary]"></content>
-    <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
         <gl-form-input class="marL" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="[[data.periodNo]]"></gl-form-input>
@@ -247,7 +246,7 @@
           <paper-button class="gl-btn-success" raised index="[[index]" on-tap="click"></iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
-
+      {{config.primary}}
     <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
         <div class$="[[item.width]] header">
