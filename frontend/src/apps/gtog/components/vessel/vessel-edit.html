@@ -1,27 +1,31 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="vessel-edit">
-  <style include="iron-flex iron-flex-alignment">
-  .top{
-    margin-top: 30px;
-  }
-  .w{
-    text-align: center;
-  }
-  .padL{
-    padding-left: 35px;
-  }
-  .text-center{
-    text-align: center;
-    font-size: var(--font-size-h4);
-    font-family: 'rsubold', sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-  .width-dropdown{
-    width: 100%;
-  }
-  </style>
+    <style include="iron-flex iron-flex-alignment">
+        .top {
+            margin-top: 30px;
+        }
+        
+        .w {
+            text-align: center;
+        }
+        
+        .padL {
+            padding-left: 35px;
+        }
+        
+        .text-center {
+            text-align: center;
+            font-size: var(--font-size-h4);
+            font-family: 'rsubold', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .width-dropdown {
+            width: 100%;
+        }
+    </style>
 
-  <template>
+    <template>
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -175,15 +179,15 @@
 
   </template>
 
-  <script>
-    Polymer({
-      is: "vessel-edit",
+    <script>
+        Polymer({
+            is: "vessel-edit",
 
-      attached: function() {
-        this.quantity=(parseFloat(this.data.amount)*parseFloat(1000))/parseFloat(this.data.package);
-        this.GW=((parseFloat(this.quantity)*(parseFloat(this.data.package)+(parseFloat(this.data.weight)/parseFloat(1000)))/parseFloat(1000)));
-      },
+            attached: function() {
+                this.quantity = (parseFloat(this.data.amount) * parseFloat(1000)) / parseFloat(this.data.package);
+                this.GW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
+            },
 
-    });
-  </script>
+        });
+    </script>
 </dom-module>
