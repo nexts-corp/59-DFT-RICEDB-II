@@ -8,19 +8,21 @@
             font-family: 'rsubold', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
+        
         .top {
             margin-top: 30px;
         }
-
+        
         .w {
             text-align: center;
         }
+        
         .width-dropdown {
             width: 100%;
         }
-        vaadin-date-picker{
-          width: 80%;
+        
+        vaadin-date-picker {
+            width: 80%;
         }
     </style>
 
@@ -174,8 +176,10 @@
         </gl-form-panel-body>
 
         <gl-form-panel-footer set-padding="0px 20px 20px 20px">
-            <paper-button class="gl-btn-info" raised index="[[index]"></iron-icon>Draft B/L</paper-button>
-            <paper-button class="gl-btn-info" raised index="[[index]"></iron-icon>List เรือ</paper-button>
+
+ .          <paper-button class="gl-btn-info" raised index="[[index]" on-tap="openLink" src="/file/bl.pdf"></iron-icon>Draft B/L</paper-button>
+
+            <paper-button class="gl-btn-info" raised index="[[index]" on-tap="openLink" src="/file/list.pdf"></iron-icon>List เรือ</paper-button>
         </gl-form-panel-footer>
 
   </template>
@@ -199,6 +203,10 @@
                 // this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
                 // this.GW = this.sumGW.toFixed(3);
                 // console.log(this.GW);
+            },
+            openLink: function(e) {
+                // console.log(e.currentTarget.getAttribute("src"));
+                window.location = this.resolveUrl(e.currentTarget.getAttribute("src"))
             },
 
             toWords: function(num) {
