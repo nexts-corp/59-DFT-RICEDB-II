@@ -1,155 +1,163 @@
 <dom-module id="data-exporter.html">
     <script>
-    Polymer({
-      is:'data-exporter',
-      behaviors:[gl.behavior.core],
-      properties:{
-          dataExample:{
-              type:String,
-              value:"abc",
-              notify:true
-          },
-          dataExport:{
-            type:Object,
-            notify:true,
-            value:
-            [
-              {
-                id:1,
-                periodNo:1,
-                sender:
-                [{
-                    id: 1,
-                    cflNo: 0,
-                    typeRiceNo: 0,
-                    confirmLetter: 'Confirmmation Letter No. 1',
-                    typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                    actualShipper: 'Toumi Food And Product CO., LTD',
-                    riceType: 'Thai White Rice 5% Brokens,',
-                    price: '392',
-                    weight: '80',
-                    ton:1000,
-                    package: 1,
-                    blNo: '0356A7812',
-                    cityEnd: 1,
-                    bs: 'Sinotrans Thai Logistics Co., LTD',
-                    bn: 'SITGBUU0678088',
-                    vesselName: 'Hanjin Belawan V.1609',
-                    voidNo: 'V.1452-018E',
-                    lotNo: '14',
-                    pol: 'THBKK',
-                    etd: '2016-08-20',
-                    eta: '2016-09-25',
-                    pod: 'Yueyang (CHENG LING JI)',
-                    pode: 'Yueyang (CHENG LING JI)',
-                    marks:'RED COFCO',
-                    quantityBag:0,
-                    gw:'1001.6',
-                    nw:'1000',
-                    desOfGood:'Thai White Rice 5% Brokens, 2015 Current New Crop PACKING : 50 kg/bags 80 gram/bags',
-                    moneyText:' ',
-                    ORIGINALS1:'1',
-                    ORIGINALS2:'2'
-                }, {
-                    id: 2,
-                    actualShipper: 'Capital Seril co.,ltd',
-                    typeRiceNo: 1,
-                    riceType: 'Thai White Rice 5% Brokens,',
-                    price: '397',
-                    weight: '80',
-                    ton:1000,
-                    package: 0,
-                    blNo: '0356A781',
-                    cityEnd: 1,
-                    bs: 'Sinotrans Thai Logistics Co., LTD',
-                    bn: 'SITGBUU0678088',
-                    vesselName: 'Hanjin Belawan V.1609',
-                    voidNo: 'V.1234',
-                    lotNo: '12',
-                    pol: 'THBKK',
-                    etd: '2016-08-20',
-                    eta: '2016-09-25',
-                    pod: 'Bangnatrad',
-                    pode: 'Bangnatrad',
-                    marks:'RED COFCO',
-                    quantityBag:0,
-                    gw:'1001.6',
-                    nw:'1000',
-                    desOfGood:'Thai White Rice 5% Brokens, 2015 Current New Crop PACKING : 50 kg/bags 80 gram/bags',
-                    moneyText:' ',
-                    ORIGINALS1:'1',
-                    ORIGINALS2:'2'
-                }]
-              },
-              {
-                id:2,
-                periodNo:2,
-                sender:
-                [{
-                    id: 1,
-                    cflNo: 0,
-                    typeRiceNo: 0,
-                    confirmLetter: 'Confirmmation Letter No. 1',
-                    typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                    actualShipper: 'Toumi Food And Product CO., LTD',
-                    riceType: 'Thai White Rice 5% Brokens,',
-                    price: '392',
-                    weight: '80',
-                    ton:1000,
-                    package: 0,
-                    blNo: '0356A7814',
-                    cityEnd: 0,
-                    bs: 'Sinotrans Thai Logistics Co., LTD',
-                    bn: 'SITGBUU0678088',
-                    vesselName: 'Hanjin Belawan V.1609',
-                    voidNo: 'V.1452-018E',
-                    lotNo: '14',
-                    pol: 'THBKK',
-                    etd: '2016-04-21',
-                    eta: '2016-05-10',
-                    pod: 'Yueyang (CHENG LING JI)',
-                    pode: 'Yueyang (CHENG LING JI)',
-                    marks:'RED COFCO',
-                    quantityBag:'20000',
-                    gw:'1001.6',
-                    nw:'1000',
-                    desOfGood:'Thai White Rice 5% Brokens, 2015 Current New Crop PACKING : 50 kg/bags 80 gram/bags',
-                    moneyText:' ',
-                    ORIGINALS1:'1',
-                    ORIGINALS2:'2'
-                }]
-              }
-            ]
-          },
-          selectData:{
-            type:Object,
-            notify:true
-          },
-          selectIndex:{
-            type:Number,
-            value:0,
-            notify:true,
-            observer:'obSelectIndex'
-          }
-      },
-      created:function(){
-        this.glQuery('data-export',this);
-      },
-      obSelectIndex:function(){
-        this.selectData=this.glClone(this.dataExport[this.selectIndex]);
-        // console.log(this.selectData);
-      },
-      deleteDataExport:function(data){
-        // console.log(data);
-        this.dataExport[this.selectIndex] = data;
-        //  console.log(this.dataExport);
-        this.saved();
-      },
-      saveData:function(data){
-        // console.log(data);
-        this.dataExport[this.selectIndex] = data;
-        this.saved();     
-     }
-    });
+        Polymer({
+            is: 'data-exporter',
+            behaviors: [gl.behavior.core],
+            properties: {
+                dataExample: {
+                    type: String,
+                    value: "abc",
+                    notify: true
+                },
+                dataExport: {
+                    type: Object,
+                    notify: true,
+                    value: [{
+                        id: 1,
+                        periodNo: 1,
+                        sender: [{
+                            id: 1,
+                            cflNo: 0,
+                            typeRiceNo: 0,
+                            confirmLetter: 'Confirmmation Letter No. 1',
+                            typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                            actualShipper: 'Toumi Food And Product CO., LTD',
+                            riceType: 'Thai White Rice 5% Brokens,',
+                            price: '392',
+                            weight: '80',
+                            ton: 1000,
+                            package: 1,
+                            blNo: '0356A7812',
+                            cityEnd: 1,
+                            bs: 'Sinotrans Thai Logistics Co., LTD',
+                            bn: 'SITGBUU0678088',
+                            vesselName: 'Hanjin Belawan V.1609',
+                            voidNo: 'V.1452-018E',
+                            lotNo: '14',
+                            pol: 'THBKK',
+                            etd: '2016-08-20',
+                            eta: '2016-09-25',
+                            pod: 'Yueyang (CHENG LING JI)',
+                            pode: 'Yueyang (CHENG LING JI)',
+                            marks: 'RED COFCO',
+                            quantityBag: 0,
+                            gw: '1001.6',
+                            nw: '1000',
+                            desOfGood: 'Thai White Rice 5% Brokens, 2015 Current New Crop PACKING : 50 kg/bags 80 gram/bags',
+                            moneyText: ' ',
+                            ORIGINALS1: '1',
+                            ORIGINALS2: '2'
+                        }, {
+                            id: 2,
+                            actualShipper: 'Capital Seril co.,ltd',
+                            typeRiceNo: 1,
+                            riceType: 'Thai White Rice 5% Brokens,',
+                            price: '397',
+                            weight: '80',
+                            ton: 1000,
+                            package: 0,
+                            blNo: '0356A781',
+                            cityEnd: 1,
+                            bs: 'Sinotrans Thai Logistics Co., LTD',
+                            bn: 'SITGBUU0678088',
+                            vesselName: 'Hanjin Belawan V.1609',
+                            voidNo: 'V.1234',
+                            lotNo: '12',
+                            pol: 'THBKK',
+                            etd: '2016-08-20',
+                            eta: '2016-09-25',
+                            pod: 'Bangnatrad',
+                            pode: 'Bangnatrad',
+                            marks: 'RED COFCO',
+                            quantityBag: 0,
+                            gw: '1001.6',
+                            nw: '1000',
+                            desOfGood: 'Thai White Rice 5% Brokens, 2015 Current New Crop PACKING : 50 kg/bags 80 gram/bags',
+                            moneyText: ' ',
+                            ORIGINALS1: '1',
+                            ORIGINALS2: '2'
+                        }]
+                    }, {
+                        id: 2,
+                        periodNo: 2,
+                        sender: [{
+                            id: 1,
+                            cflNo: 0,
+                            typeRiceNo: 0,
+                            confirmLetter: 'Confirmmation Letter No. 1',
+                            typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
+                            actualShipper: 'Toumi Food And Product CO., LTD',
+                            riceType: 'Thai White Rice 5% Brokens,',
+                            price: '392',
+                            weight: '80',
+                            ton: 1000,
+                            package: 0,
+                            blNo: '0356A7814',
+                            cityEnd: 0,
+                            bs: 'Sinotrans Thai Logistics Co., LTD',
+                            bn: 'SITGBUU0678088',
+                            vesselName: 'Hanjin Belawan V.1609',
+                            voidNo: 'V.1452-018E',
+                            lotNo: '14',
+                            pol: 'THBKK',
+                            etd: '2016-04-21',
+                            eta: '2016-05-10',
+                            pod: 'Yueyang (CHENG LING JI)',
+                            pode: 'Yueyang (CHENG LING JI)',
+                            marks: 'RED COFCO',
+                            quantityBag: '20000',
+                            gw: '1001.6',
+                            nw: '1000',
+                            desOfGood: 'Thai White Rice 5% Brokens, 2015 Current New Crop PACKING : 50 kg/bags 80 gram/bags',
+                            moneyText: ' ',
+                            ORIGINALS1: '1',
+                            ORIGINALS2: '2'
+                        }]
+                    }]
+                },
+                selectData: {
+                    type: Object,
+                    notify: true
+                },
+                selectIndex: {
+                    type: Number,
+                    value: 0,
+                    notify: true,
+                    observer: 'obSelectIndex'
+                }
+            },
+            created: function() {
+                this.glQuery('data-export', this);
+            },
+            obSelectIndex: function() {
+                this.selectData = this.glClone(this.dataExport[this.selectIndex]);
+                // console.log(this.selectData);
+            },
+            deleteDataExport: function(data) {
+                // console.log(data);
+                this.dataExport[this.selectIndex] = data;
+                //  console.log(this.dataExport);
+                this.saved();
+            },
+            saveData: function(data) {
+                // console.log(data);
+                this.dataExport[this.selectIndex] = data;
+                this.saved();
+            },
+            saved: function() {
+                var pNo = this.dataExport[this.selectIndex].periodNo;
+                var pAll = 0;
+                var pBal = 0;
+                this.dataExport[this.selectIndex].sender.map((getMap) => {
+                    pAll += parseInt(getMap.weight);
+                    pBal += parseInt(getMap.weight);
+                });
+                if (this.selectIndex == 1) {
+                    this.glQuery('grid-period').pNo = pNo;
+                    this.glQuery('grid-period').pAll = pAll
+                    this.glQuery('grid-period').pBal = pBal;
+                }
+            }
+        });
     </script>
 </dom-module>
