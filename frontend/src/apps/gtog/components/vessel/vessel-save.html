@@ -103,7 +103,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
-                <paper-listbox  class="dropdown-content" selected="{{data.package}}" id="package" attr-for-selected="value">
+                <paper-listbox  class="dropdown-content" selected="{{data.package}}" id="package">
                   <paper-item value="25">25</paper-item>
                   <paper-item value="50">50</paper-item>
                 </paper-listbox>
@@ -128,7 +128,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-              <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.quantityBag}}"></gl-form-label-input>
+              <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{quantityBag}}" ></gl-form-label-input>
 
             </gl-grid-col>
           </gl-grid-row>
@@ -150,7 +150,7 @@
               <gl-form-label-textarea label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.desOfGood}}"></gl-form-textarea>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
-              <gl-form-label-textarea label="(TWENTY THOUSAND BAGS ONLY)" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.moneyText}}"></gl-form-textarea>
+              <gl-form-label-textarea label="{{quantityWords}}" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.moneyText}}"></gl-form-textarea>
 
             </gl-grid-col>
 
@@ -185,10 +185,16 @@
             is: "vessel-save",
 
             attached: function() {
-                //this.quantity = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(this.data.package);
-                // this.toWords(this.quantity);
-                var index = this.data.package;
-                console.log(trim(this.$.package.innerText).split(' '));
+              var index = this.data.package;
+              var arr = this.$.package.innerText.split(' ');
+              var packs = new Array();
+              for(i=0;i<arr.length;i++){
+                if(parseFloat(arr[i])>=0){
+                  packs.push(parseFloat(arr[i]));
+                }
+              }
+              this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
+              this.toWords(this.quantityBag);
 
                 // this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
                 // this.GW = this.sumGW.toFixed(3);
@@ -212,15 +218,12 @@
                 var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
                 var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
                 var s = num.toString();
-                s =
-                    s.replace(/[\, ]/g, '');
+                s = s.replace(/[\, ]/g, '');
                 if (s != parseFloat(s)) return 'not a number';
-                var x =
-                    s.indexOf('.');
+                var x = s.indexOf('.');
                 if (x == -1) x = s.length;
                 if (x > 15) return 'too big';
-                var n =
-                    s.split('');
+                var n = s.split('');
                 var str = '';
                 var sk = 0;
                 for (var i = 0; i < x; i++) {
