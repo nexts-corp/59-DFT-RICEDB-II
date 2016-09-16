@@ -1,189 +1,335 @@
+
+<link rel="import" href="./../../../../../bower_components/gl-form/gl-form-panel.html">
+
 <dom-module id="payment-detail">
 
-<style is="custom-style" include="iron-flex iron-flex-alignment">
-.flexchild-1 {
-  @apply(--layout-flex);
-}
-.flexchild-2 {
-  @apply(--layout-flex-2);
-}
-.flexchild-5 {
-  @apply(--layout-flex-5);
-}
-.top{
-  margin-top: 10px;
-}
-.top2{
-  margin-top: 20px;
-}
-.box{
-  width: 40%;
-}
-.box2{
-  width: 90%;
-}
-.box3{
-  width: 50%;
-}
-.bd {
-  border: 1px solid #000;
-}
-.bg{
-  background-color:var(--paper-grey-200);
-  border: 1px solid var(--paper-grey-300);
-}
-.r{
-  align-items: center;
-}
-.text{
-  color: gray;
-}
-table, td{
-  border: 1px solid black;
-  border-collapse: collapse;
-  text-align: center;
-}
-paper-button{
-  width: 20px;
-  height: 30px;
-  margin-top: 10px;
-}
-</style>
+  <style is="custom-style" include="iron-flex iron-flex-alignment">
+    .flexchild-1 {
+      @apply(--layout-flex);
+    }
+    
+    .flexchild-2 {
+      @apply(--layout-flex-2);
+    }
+    
+    .flexchild-5 {
+      @apply(--layout-flex-5);
+    }
+    
+    .flex-center-justified {
+      @apply(--layout-horizontal);
+      @apply(--layout-center-justified);
+    }
+    
+    .header {
+      text-align: center;
+    }
+    
+    .text {
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    .setText{
+      font-weight: bold;
+      font-size: 18px;
+      color : #737373;
+    }
+    .inputHeader {
+      width: 40%;
+    }
+    
+    .container {
+      padding: 10px;
+    }
+    
+    table.default {
+      border-collapse: collapse;
+      width: 100%
+    }
+    
+    table.default,
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th,
+    td {
+      padding: 15px;
+    }
+    
+    th {
+      text-align: center;
+      background-color: #F1F1F1;
+      white-space: nowrap;
+    }
+    
+    td {
+      text-align: left;
+      white-space: nowrap;
+    }
+    
+    tr:hover {
+      background-color: #F1F1F1;
+    }
+  </style>
 
 
-<template>
-
-  <div class="vertical layout">
-
-    <div class="horizontal layout top">
-      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="ครั้งที่" value="[[data.order]]"></paper-input></div>
-      <div class="flexchild-2"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="งวดที่" value="[[data.periodNo]]" disabled></paper-input></div>
-      <div class="flexchild-5"><paper-input class="box" auto-validate error-message="กรุณาใส่รายละเอียด" placeholder="กรุณาใส่รายละเอียด" required label="วันที่ได้รับเงิน" value="[[data.date]]"></paper-input></div>
+  <template>
+    <div class="header flex-center-justified">
+      <gl-form-input class="inputHeader" value="รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO" no-label-float></gl-form-input>
+    </div>
+    <div class="container">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+          <gl-form-input label="งวดที่" value="1"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+          <gl-form-input label="ครั้งที่" value="1"></gl-form-input>
+        </gl-grid-col>
+      </gl-grid-row>
+    </div>
+    <div class="container">
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <vaadin-date-picker label="วันที่ได้รับเงิน" value="2015-09-12"></vaadin-date-picker>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="490,250"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <div class="setText">อัตราแลกเปลี่ยน</div>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,10]]">
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+                <div class="text">T/T</div>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-form-input style="width:60px;" value="34.89" no-label-float></gl-form-input>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+                <div class="text">ธ.กรุงไทยเสนอ</div>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-form-input style="width:60px;" value="34.96" no-label-float></gl-form-input>
+              </gl-grid-col>
+            </gl-grid-row>
+          </gl-grid-col>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="17,139,140.00"></gl-form-label-input>
+        </gl-grid-col>
+      </gl-grid-row>
     </div>
 
-    <template is="dom-repeat" items="[[data.paymentProduct]]">
-    <div class="vertical layout bg">
-      <table>
+    <div class="container">
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="50"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="500.00"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="0"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="1,374.00"></gl-form-label-input>
+        </gl-grid-col>
+      </gl-grid-row>
+    </div>
+    <gl-form-panel>
+      <gl-form-panel-body set-padding="5px" set-border="0px">
+        <div class="horizontal justified layout">
+             <div>Invoice No : C123456</div>
+             <div>Vessel : EVER LOYAL V.1449-01BE</div>
+             <div>LotNo : 14</div>
+             <div style="width:20px"></div>
+             <div>1/2</div>
+        </div>
+      <div style="overflow-x:auto;">
+      <table class="default">
         <tr>
-          <td>เลขที่ใบกำกับสินค้า</td>
-          <td>จำนวน (ตัน)</td>
-          <td>มูลค่าUSD</td>
-          <td>จัดการ</td>
+          <th>ผู้ส่งออก</th>
+          <th>เลขที่ใบแจ้งหนี้</th>
+          <th>วันที่ใบแจ้งหนี้</th>
+          <th>จำนวน(ตัน) <br>(1)</th>
+          <th>มูลค่าต่อตัน(USD)<br>(2)</th>
+          <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
+          <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
+          <th>หักค่า FE (บาท)<br>(5)</th>
+          <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
+          <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
         </tr>
-        <template is="dom-repeat" items="[[item.product]]">
-          <tr>
-            <td>
-              <paper-dropdown-menu error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-listbox class="dropdown-content" attr-for-selected="product-no" selected="{{item.productNo}}">
-                  <paper-item product-no="C277/2558">C277/2558</paper-item>
-                  <paper-item product-no="C278/2558">C278/2558</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
-            </td>
-            <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]* value="[[item.quantity]]"></paper-input></td>
-            <td><paper-input label="Input label" auto-validate error-message="กรอกเป็นตัวเลข" required pattern=[0-9,.]* value="[[item.value]]"></paper-input></td>
-            <td><paper-button raised>ลบ</paper-button></td>
-          </tr>
-        </template>
+        <tr>
+          <td>Capital Cereals Co., Ltd</td>
+          <td>
+            <gl-form-input style="width:140px;" value="ตม.สนก 001/2559"></gl-form-input>
+          </td>
+          <td>
+            <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-12"></vaadin-date-picker>
+          </td>
+          <td>200</td>
+          <td>392</td>
+          <td>78,400</td>
+          <td>2,740,864.00</td>
+          <td>
+            <gl-form-input value="343.50"></gl-form-input>
+          </td>
+          <td>27,405.20</td>
+          <td>2,713,115.30</td>
+        </tr>
+         <tr>
+          <td>Toumi Foods and Prosucts Co,Ltd</td>
+          <td>
+            <gl-form-input style="width:140px;" value="ตม.สนก 008/2559"></gl-form-input>
+          </td>
+          <td>
+            <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-04"></vaadin-date-picker>
+          </td>
+          <td>1,000</td>
+          <td>392</td>
+          <td>392,000</td>
+          <td>13,704,320.00</td>
+          <td>
+            <gl-form-input value="343.50"></gl-form-input>
+          </td>
+          <td>137,039.76</td>
+          <td>13,566,936.74</td>
+        </tr>
+        <tr>
+          <td colspan="3">รวม</td>
+          <td>1,200</td>
+          <td></td>
+          <td>470,792</td>
+          <td>16,445,184.00</td>
+          <td>687.00</td>
+          <td>164,444.96</td>
+          <td>16.280,052.04</td>
+        </tr>
       </table>
-
-      <div class="horizontal end-justified layout">
-        <paper-button raised>เพิ่ม</paper-button>
-      </div>
-
-
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box3" placeholder="กรุณาใส่รายละเอียด"  label="รวมจำนวน (ตัน)" value="[[item.totalton]]" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="มูลค่ารวม (USD)" value="[[item.totalValue]]" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียมธนาคารต่างประเทศ" value="[[item.feeusd]]" disabled></paper-input></div>
-      </div>
-
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงินที่ได้รับ (USD)" value="[[item.amountReceived]]" disabled></paper-input></div>
-        <div class="horizontal layout flexchild-2 r text">
-          <div style="padding-left:65%;">T/T</div>
-          <div><input style="width:20px; margin-left:5px;"is="iron-input" value="[[item.t]]"></div>
-        </div>
-        <div class=" flexchild-2 text">
-          <div>อัตราแลกเปลี่ยน</div>
-          <div class="horizontal layout">
-            <div>ธนาคารกรุงไทยเสนอ</div>
-            <input style="width:25px; margin-left:5px;"is="iron-input" value="[[item.ktb]]">
-          </div>
-        </div>
-      </div>
-
-      <div class="horizontal layout top">
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="จำนวนเงิน (บาท)" value="[[item.bath]]" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ค่าธรรมเนียม (บาท)" value="[[item.feethb]]" disabled></paper-input></div>
-        <div class="flexchild-2"><paper-input class="box2" placeholder="กรุณาใส่รายละเอียด"  label="ได้รับเงิน (บาท)" value="[[item.receivedBath]]" disabled></paper-input></div>
-      </div>
-
-      <div class="horizontal end-justified layout">
-        <paper-button raised>ลบ</paper-button>
-      </div>
     </div>
-   </template>
-    <div class="horizontal end-justified layout">
-      <paper-button raised>เพิ่ม</paper-button>
+      </gl-form-panel-body>
+    </gl-form-panel>
+
+    <gl-form-panel>
+      <gl-form-panel-body set-padding="5px" set-border="0px">
+        <div class="horizontal justified layout">
+             <div>Invoice No : C123457</div>
+             <div>Vessel : COSCO ASHDOD V.015N</div>
+             <div>LotNo : 9</div>
+             <div style="width:20px"></div>
+             <div>2/2</div>
+        </div>
+      <div style="overflow-x:auto;">
+      <table class="default">
+        <tr>
+          <th>ผู้ส่งออก</th>
+          <th>เลขที่ใบแจ้งหนี้</th>
+          <th>วันที่ใบแจ้งหนี้</th>
+          <th>จำนวน(ตัน) <br>(1)</th>
+          <th>มูลค่าต่อตัน(USD)<br>(2)</th>
+          <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
+          <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
+          <th>หักค่า FE (บาท)<br>(5)</th>
+          <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
+          <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
+        </tr>
+        <tr>
+          <td>Thai Ha Public Co., Ltd</td>
+          <td>
+            <gl-form-input style="width:140px;" value="ตม.สนก 001/2559"></gl-form-input>
+          </td>
+          <td>
+            <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-12"></vaadin-date-picker>
+          </td>
+          <td>50</td>
+          <td>397</td>
+          <td>19,850</td>
+          <td>693,956.00</td>
+          <td>
+            <gl-form-input value="687.00"></gl-form-input>
+          </td>
+          <td>6,932.69</td>
+          <td>686,336.31</td>
+        </tr>
+        <tr>
+          <td colspan="3">รวม</td>
+          <td>50</td>
+          <td></td>
+          <td>19,850</td>
+          <td>693,656.00</td>
+          <td>687.00</td>
+          <td>6,932.69</td>
+          <td>686,336.31</td>
+        </tr>
+      </table>
     </div>
-
-    <div class="horizontal layout top">
-      <div class="horizontal layout flexchild-2">
-        <div class="flexchild-2">รวมจำนวนตันทั้งสิ้น</div>
-        <div class="flexchild-2"> [[data.totalton]]ตัน </div>
-      </div>
-      <div class="horizontal layout flexchild-2">
-        <div class="flexchild-2">มูลค่ารวม (USD)</div>
-        <div class="flexchild-2">[[data.valueUsd]]</div>
-      </div>
+      </gl-form-panel-body>
+    </gl-form-panel>
+    <gl-form-panel>
+      <gl-form-panel-body set-padding="5px" set-border="0px">
+        สรุปผล
+        <div style="overflow-x:auto;">
+      <table class="default">
+         <tr>
+          <th colspan="3">รายการ Invoice</th>
+          <th>จำนวน(ตัน) <br>(1)</th>
+          <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
+          <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
+          <th>หักค่า FE (บาท)<br>(5)</th>
+          <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
+          <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
+        </tr>
+        <tr>
+          <td colspan="3">รวม (Invoice No : C123456)</td>
+          <td>1,200</td>
+          <td>470,792</td>
+          <td>16,445,184.00</td>
+          <td>687.00</td>
+          <td>164,444.96</td>
+          <td>16.280,052.04</td>
+        </tr>
+        <tr>
+          <td colspan="3">รวม (Invoice No : C123457)</td>
+          <td>50</td>
+          <td>19,850</td>
+          <td>693,656.00</td>
+          <td>687.00</td>
+          <td>6,932.69</td>
+          <td>686,336.31</td>
+        </tr>
+        <tr>
+          <td colspan="3">รวมทั้งหมด</td>
+          <td>1,250</td>
+          <td>490,250</td>
+          <td>17,139,140.00</td>
+          <td>1,374.00</td>
+          <td>171,377.65</td>
+          <td>16,966,388.35</td>
+        </tr>
+      </table>
     </div>
-
-      <div class="vertical layout top">
-        <div class="horizontal layout">
-          <div class="flexchild-2">รวมค่าธรรมเนียมต่างประเทศ (USD)</div>
-          <div class="flexchild-2"> [[data.feeusd]]</div>
-        </div>
-        <div class="horizontal layout top">
-          <div class="flexchild-2">จำนวนเงินที่ได้รับ (USD)</div>
-          <div class="flexchild-2"> [[data.receivedUsd]] </div>
-        </div>
-        <div class="horizontal layout top">
-          <div class="flexchild-2">จำนวนเงินที่ได้รับ (บาท)</div>
-          <div class="flexchild-2"> [[data.receivedBath]] </div>
-        </div>
-        <div class="horizontal layout top">
-          <div class="flexchild-2">ค่าธรรมเนียม (บาท)</div>
-          <div class="flexchild-2"> [[data.feethb]] </div>
-        </div>
-        <div class="horizontal layout top">
-          <div class="flexchild-2">ได้รับเงิน (บาท)</div>
-          <div class="flexchild-2"> [[data.receivedMoney]] </div>
-        </div>
-      </div>
-
-
-    <div>
-      <paper-textarea on-blur="requiredTextArea" on-keyup="requiredTextArea" class="box2" rows="2" label="หมายเหตุ" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></paper-textarea>
+      </gl-form-panel-body>
+    </gl-form-panel>
+    <div class="container">
+      หมายเหตุ
+      <ul style="list-style-type:none">
+        <li>FE = ค่าธรรมเนียมธนาคาร</li>
+      </ul>
     </div>
 
     <div class="horizontal end-justified layout">
       <paper-button raised>ยกเลิก</paper-button>
       <paper-button raised>บันทึก</paper-button>
     </div>
+    </div>
 
+  </template>
 
-  </div>
-
-</template>
-
-<script>
+  <script>
 Polymer({
-  is: "payment-detail",
-  requiredTextArea:function(e){
-    e.target.validate();
-  }
-
+  is: "payment-detail"
 });
 </script>
 </dom-module>

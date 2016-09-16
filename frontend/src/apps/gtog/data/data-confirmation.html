@@ -12,19 +12,21 @@
                         confirmLetter: 'Confirmmation Letter No. 1',
                         cmlSendRice: '-',
                         cmlBalanceRice: '100,000',
-                        dateconfirm: '2016-08-01',
+                        dateconfirm: '2015-09-21',
                         detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
                         typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        price: 'fob',
+                        price: 0,
                         totalQuantity: '100,000',
                         confirmItem: [{
                             id: 1,
                             package: '50',
-                            price: '392'
+                            price: '392',
+                            weight:'140'
                         }, {
                             id: 2,
                             package: '25',
-                            price: '392'
+                            price: '392',
+                            weight:'80'
                         }, ]
                     }, {
                         id: 2,
@@ -34,16 +36,18 @@
                         dateconfirm: '2016-08-20',
                         detail: 'ต้องการการข้าวเพิ่มอีก 1,000,000 ล้านตัน',
                         typeRice: 'Thai White Rice 5% Brokens, 2015 Current New Crop',
-                        price: 'fob',
+                        price: 0,
                         totalQuantity: '200,000',
                         confirmItem: [{
                             id: 1,
                             package: '50',
-                            price: '392'
+                            price: '392',
+                            weight:'80'
                         }, {
                             id: 2,
                             package: '25',
-                            price: '392'
+                            price: '392',
+                            weight:'80'
                         }, ]
                     }]
                 },
@@ -65,6 +69,7 @@
                 this.selectData = this.glClone(this.dataConfirm[this.selectIndex]);
             },
             saveData: function(data) {
+
                 this.dataConfirm[this.selectIndex] = data;
                 if(this.selectIndex==1){
                     this.glQuery('grid-confirmation').cNo = this.dataConfirm[1].id;

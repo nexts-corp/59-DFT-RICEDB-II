@@ -2,6 +2,7 @@
 <link rel="import" href="/bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 
+<link rel="import" href="../../data/data-promise.html">
 <!--hotwork-->
 <link rel="import" href="grid-confirmation.html">
 <link rel="import" href="grid-period.html">
@@ -13,69 +14,64 @@
             background-color: var(--paper-grey-100);
             color: var(--paper-grey-600);
         }
-        
+
         .ss {
             color: red;
             border: 1px solid #000;
         }
-        /*paper-item {
---paper-item-selected : {
-background-color: var(--paper-grey-600);
-};
-}*/
-        
+
         paper-icon-item {
             cursor: pointer;
         }
-        
+
         .sublist paper-item {
             /*padding-left: 30px;*/
         }
-        
+
         .cml:first-of-type {
             /*margin-left: 60px;*/
             text-align: left;
             /*color: red;*/
         }
-        
+
         .cml:not(:first-of-type) {
             text-align: right;
             /*color: blue;*/
         }
-        
+
         .headLabel {
             text-align: left;
             margin-left: 10%;
             /*color: red;*/
             font-size: var(--font-size-h4);
         }
-        
+
         .headLabel:not(:first-of-type) {
             margin-left: 0px;
             text-align: right;
             padding-right: 25px;
             /*color: blue;*/
         }
-        
+
         .subTitle {
             /*margin-left: 60px;*/
             /*padding-right: -60px;*/
         }
-        
+
         .paper-menu-lv1 {
             --paper-menu-selected-item: {
                 font-weight: normal;
             }
             ;
         }
-        
+
         .paper-menu-lv2 {
             --paper-menu-selected-item: {
                 font-weight: normal;
             }
             ;
         }
-        
+
         .paper-icon-item {
             --paper-icon-item: {
                 border-bottom: 1px solid #ccc;
@@ -84,6 +80,7 @@ background-color: var(--paper-grey-600);
     </style>
 
     <template>
+      <data-promise select-data="{{datas}}"></data-promise>
     <div class="horizontal-section">
       <div class="header layout horizontal">
           <div class="flex-2 headLabel">ชื่อสัญญา</div>
@@ -95,7 +92,7 @@ background-color: var(--paper-grey-600);
           <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary">
             <paper-icon-button on-tap="_toggleSub" data-sub="sub-1" icon="chevron-right" item-icon></paper-icon-button>
               <div class="flex-2 cml">
-                COFCO ประเทศจีน
+                {{datas.promiseName}}
               </div>
               <div class="flex cml">
                 1,000,000
@@ -104,7 +101,7 @@ background-color: var(--paper-grey-600);
                 0
               </div>
               <div class="flex cml">
-                1,000,000
+                500,000
               </div>
           </paper-icon-item>
           <paper-submenu id="sub-1">

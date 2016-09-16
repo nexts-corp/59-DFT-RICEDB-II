@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/data-promise.html">
 <dom-module id="promise-detail">
 
   <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
@@ -19,32 +20,33 @@
 
 
   <template>
+    <data-promise select-data={{datas}}></data-promise>
       <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.promiseName}}" placeholder="ใส่รายละเอียด"></gl-form-input>
+            <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{datas.promiseName}}" placeholder="ใส่รายละเอียด"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+            <vaadin-date-picker label="วันที่" value="{{datas.date}}"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
 
-        <template id="zatest" is="dom-repeat" items="{{data.rice}}">
+        <template id="zatest" is="dom-repeat" items="{{datas.riceTypes}}">
           <div class="bg top">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                   <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
-                    <paper-listbox class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
-                      <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
-                      <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
+                    <paper-listbox class="dropdown-content"  selected="{{item.riceType}}" id="riceType-[[index]]">
+                      <paper-item >ข้าวขาว</paper-item>
+                      <paper-item >ข้าวหอมมะลิ</paper-item>
                     </paper-listbox>
                   </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                  <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></gl-form-input>
+                  <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด" id="volume"></gl-form-input>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-                <paper-icon-button class="top" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
+                <paper-icon-button class="top" icon="icons:delete" style="color: gray;" on-tap="dele" del="[[index]]"></paper-icon-button>
               </gl-grid-col>
             </gl-grid-row>
           </div>
@@ -56,10 +58,10 @@
 
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-              <gl-form-textarea rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.customerDetail}}"></gl-form-textarea>
+              <gl-form-textarea rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{datas.customerDetail}}"></gl-form-textarea>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-              <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.detail}}"></gl-form-textarea>
+              <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{datas.otherDetail}}"></gl-form-textarea>
             </gl-grid-col>
           </gl-grid-row>
 
@@ -73,6 +75,7 @@
   <script>
     Polymer({
       is: "promise-detail",
+      behaviors:[gl.behavior.core],
       properties: {
         data: {
           type: Object,
@@ -83,21 +86,36 @@
           value:{ name:false }
         }
       },
-      add: function() {
-        this.push('data.rice',{riceType:'',volume:''});
-        // console.log(this.data);
+      ready: function() {
+        // console.log(this.datas);
       },
-      dele: function(data){
-        var index = this.data.rice.indexOf(data);
-        this.splice('data.rice',index,1);
+      add: function() {
+        var nowDateTime = Date.now()
+        this.push('datas.riceTypes',
+                  {
+                    id:nowDateTime,
+                    riceType:'',
+                    volume: ''
+                  }
+                );
+      },
+      dele: function(e){
+        var r = confirm("ต้องการลบใช่หรือไม่!");
+        if (r == true) {
+            var id = e.currentTarget.getAttribute("del");
+            this.splice('datas.riceTypes', id, 1);
+        }
+        // var index = this.datas.riceTypes.indexOf(data);
+        // this.splice('datas.riceTypes',index,1);
       },
       validate: function(){
+        this.glQuery('data-promise').saveData(this.glClone(this.datas));
         if(
             (
-              this.data.name != ""
-              // this.data.id != "" &&
-              // this.data.etd != "" &&
-              // this.data.eta != ""
+              this.datas.name != ""
+              // this.datas.id != "" &&
+              // this.datas.etd != "" &&
+              // this.datas.eta != ""
             )
             &&
             (
