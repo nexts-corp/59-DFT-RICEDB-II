@@ -57,9 +57,11 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <gl-form-input auto-validate error-message="กรุณาใส่ราคา" required label="Price(USD)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="{{item.price}}"></gl-form-input>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,5]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-form-input auto-validate error-message="กรุณาใสน้ำหนักกระสอบ" required label="น้ำหนักกระสอบ (gram/bag)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="{{item.weight}}"></gl-form-input>
+            </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
-              <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="dele"  del$="[[index]]"></paper-icon-button>
+              <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="dele"  del$="[[index]]" title="ลบข้อมูล"></paper-icon-button>
             </gl-grid-col>
 
           </gl-grid-row>
@@ -75,10 +77,9 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-listbox class="dropdown-content" attr-for-selected="price-type" selected="{{datas.price}}">
-                    <paper-item price-type="fob">FOB</paper-item>
-                    <paper-item price-type="cy">CY</paper-item>
-                    <paper-item price-type="other">ฯลฯ</paper-item>
+                <paper-listbox class="dropdown-content" selected="{{datas.price}}">
+                    <paper-item >FOB CY</paper-item>
+                    <paper-item >ฯลฯ</paper-item>
                 </paper-listbox>
             </gl-form-dropdown-menu>
         </gl-grid-col>
@@ -120,7 +121,8 @@
                 this.push('datas.confirmItem', {
                     id: nowDateTime,
                     package: '',
-                    price: ''
+                    price: '',
+                    weight:''
                 });
             },
             dele: function(e) {
