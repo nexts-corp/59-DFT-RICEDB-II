@@ -1,0 +1,73 @@
+<dom-module id="data-promise">
+    <script>
+    Polymer({
+      is:'data-promise',
+      behaviors:[gl.behavior.core],
+      properties:{
+          dataExample:{
+              type:String,
+              value:"abc",
+              notify:true
+          },
+          dataPromises: {
+              type: Object,
+              notify: true,
+              value:
+               [
+                 {
+                  idPromise:1,
+                  promiseName:'COFCO-DFT-201401',
+                  date: '26/04/2016',
+                  riceTypes:
+                  [
+                    {
+                      id:1,
+                      riceType:0,
+                      volume:'1000000',
+                    },
+                    {
+                      id:2,
+                      riceType:1,
+                      volume:'1000000',
+                    }
+                  ],
+                  customerDetail:'COFCO International (Beijing) LTD,. 17F, COFCO Fortune Plaza, No. 8 Chao Yang Men, South Street, Chao Yang District, Beijing, 100020, P.R. Chian Fax: 010-5863 6311',
+                  otherDetail:'-'
+
+                }
+             ]
+            },
+            selectData:{
+              type:Object,
+              notify:true
+            },
+            selectIndex:{
+              type:Number,
+              value:0,
+              notify:true,
+              observer:'obSelectIndex'
+            }
+
+        },
+        created:function(){
+          this.glQuery('data-promise',this);
+        },
+        obSelectIndex:function(){
+          this.selectData=this.glClone(this.dataPromises[this.selectIndex]);
+          // console.log(this.selectData);
+        },
+        deleteDataPeriod:function(data){
+          this.dataPromises[this.selectIndex] = data;
+           console.log(this.dataPromises);
+        },
+        saveData:function(data){
+          // console.log(data);
+          this.dataPromises[this.selectIndex] = data;
+          this.obSelectIndex();
+          console.log(this.dataPromises);
+        },ready:function(){
+            // console.log('test');
+        }
+    });
+  </script>
+</dom-module>
