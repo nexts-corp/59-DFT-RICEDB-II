@@ -108,7 +108,7 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-            <paper-listbox  class="dropdown-content" selected="{{data.package}}" id="package">
+            <paper-listbox  class="dropdown-content" selected="{{data.package}}" id="package" on-tap="calcBags">
               <paper-item value="25">25</paper-item>
               <paper-item value="50">50</paper-item>
             </paper-listbox>
@@ -123,7 +123,7 @@
           <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.weight}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ton}}"></gl-form-input>
+          <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" on-keyup="calcBags" value="{{data.ton}}"></gl-form-input>
 
         </gl-grid-col>
 
@@ -140,7 +140,7 @@
       <gl-grid-row>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input label="WEIGHT G.W.(M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-label-input>
+            <gl-form-label-input label="WEIGHT G.W.(M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{GW}}"></gl-form-label-input>
           </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="WEIGHT N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.nw}}"></gl-form-label-input>
@@ -154,7 +154,7 @@
           <gl-form-textarea label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.desOfGood}}"></gl-form-textarea>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
-          <gl-form-textarea label="(TWENTY THOUSAND BAGS ONLY)" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.moneyText}}"></gl-form-textarea>
+          <gl-form-textarea label="{{quantityWords}}" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.moneyText}}"></gl-form-textarea>
 
         </gl-grid-col>
 
@@ -183,7 +183,7 @@
             is: "vessel-edit",
 
             attached: function() {
-              var index = this.data.package;
+              var index = this.$.package.selected;
               var arr = this.$.package.innerText.split(' ');
               var packs = new Array();
               for(i=0;i<arr.length;i++){
@@ -194,9 +194,9 @@
               this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
               this.toWords(this.quantityBag);
 
-                // this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
-                // this.GW = this.sumGW.toFixed(3);
-                // console.log(this.GW);
+                this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
+                this.GW = this.sumGW.toFixed(3);
+              //  console.log(this.GW);
             },
 
             toWords: function(num) {
@@ -255,7 +255,23 @@
                 this.quantityWords = '(' + str.replace(/\s+/g, ' ').toUpperCase() + ' BAGS ONLY)';
                 //  str.replace(/\s+/g,' ');
             },
+            calcBags:function(){
+              var index = this.$.package.selected;
+              // console.log(index);
+              // return;
+              var arr = this.$.package.innerText.split(' ');
+              var packs = new Array();
+              for(i=0;i<arr.length;i++){
+                if(parseFloat(arr[i])>=0){
+                  packs.push(parseFloat(arr[i]));
+                }
+              }
+              this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
+              this.toWords(this.quantityBag);
 
+              this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
+              this.GW = this.sumGW.toFixed(3);
+            }
         });
     </script>
 </dom-module>

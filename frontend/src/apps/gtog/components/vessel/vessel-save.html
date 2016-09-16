@@ -8,19 +8,19 @@
             font-family: 'rsubold', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        
+
         .top {
             margin-top: 30px;
         }
-        
+
         .w {
             text-align: center;
         }
-        
+
         .width-dropdown {
             width: 100%;
         }
-        
+
         vaadin-date-picker {
             width: 80%;
         }
@@ -138,7 +138,7 @@
           <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-                <gl-form-label-input label="WEIGHT G.W.(M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-label-input>
+                <gl-form-label-input label="WEIGHT G.W.(M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{GW}}"></gl-form-label-input>
               </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="WEIGHT N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.nw}}"></gl-form-label-input>
@@ -189,7 +189,7 @@
             is: "vessel-save",
 
             attached: function() {
-              var index = this.data.package;
+              var index = this.$.package.selected;
               var arr = this.$.package.innerText.split(' ');
               var packs = new Array();
               for(i=0;i<arr.length;i++){
@@ -200,9 +200,9 @@
               this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
               this.toWords(this.quantityBag);
 
-                // this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
-                // this.GW = this.sumGW.toFixed(3);
-                // console.log(this.GW);
+              this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
+              this.GW = this.sumGW.toFixed(3);
+              //  console.log(this.GW);
             },
             openLink: function(e) {
                 // console.log(e.currentTarget.getAttribute("src"));
