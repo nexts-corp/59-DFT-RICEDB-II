@@ -8,13 +8,19 @@
             font-family: 'rsubold', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        
+
         .top {
             margin-top: 30px;
         }
-        
+
         .w {
             text-align: center;
+        }
+        .width-dropdown {
+            width: 100%;
+        }
+        vaadin-date-picker{
+          width: 80%;
         }
     </style>
 
@@ -48,17 +54,19 @@
               <gl-form-label-input label="POL" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pol}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="ETD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.etd}}"></gl-form-label-input>
+              <vaadin-date-picker disabled label="ETD" value="{{data.etd}}"></vaadin-date-picker>
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="ETA" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.eta}}"></gl-form-label-input>
+              <vaadin-date-picker disabled label="ETA" value="{{data.eta}}"></vaadin-date-picker>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-
+              <gl-form-label-input label="Place of Delivery" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pode}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือเมืองท่า" placeholder="เลือกเมืองท่า" required disabled>
                 <paper-listbox  class="dropdown-content" selected="{{data.cityEnd}}">
                   <paper-item >Shekou</paper-item>
@@ -79,28 +87,25 @@
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-              <gl-form-dropdown-menu label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
+              <gl-form-dropdown-menu class="width-dropdown" label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
                 <paper-listbox  class="dropdown-content"  selected="{{data.cflNo}}">
                   <paper-item >Confirmmation Letter No. 1</paper-item>
                   <paper-item >Confirmmation Letter No. 2</paper-item>
-                  <paper-item >Confirmmation Letter No. 3</paper-item>
                 </paper-listbox>
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
+              <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
                 <paper-listbox  class="dropdown-content" selected="{{data.typeRiceNo}}">
                   <paper-item >Thai White Rice 5% Brokens, 2015 Current New Crop</paper-item>
-                  <paper-item >ฯลฯ</paper-item>
                 </paper-listbox>
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" disabled>
-                <paper-listbox  class="dropdown-content" selected="{{data.package}}">
-                  <paper-item >50</paper-item>
-                  <paper-item >55</paper-item>
-                  <paper-item >60</paper-item>
+                <paper-listbox  class="dropdown-content" selected="{{data.package}}" id="package" attr-for-selected="value">
+                  <paper-item value="25">25</paper-item>
+                  <paper-item value="50">50</paper-item>
                 </paper-listbox>
               </gl-form-dropdown-menu>
 
@@ -131,7 +136,7 @@
           <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-                <gl-form-label-input label="WEIGHT (M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-label-input>
+                <gl-form-label-input label="WEIGHT G.W.(M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-label-input>
               </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="WEIGHT N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.nw}}"></gl-form-label-input>
@@ -180,12 +185,13 @@
             is: "vessel-save",
 
             attached: function() {
-                this.quantity = (parseFloat(this.data.amount) * parseFloat(1000)) / parseFloat(this.data.package);
-                this.toWords(this.quantity);
-                // console.log(this.quantity);
+                //this.quantity = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(this.data.package);
+                // this.toWords(this.quantity);
+                var index = this.data.package;
+                console.log(trim(this.$.package.innerText).split(' '));
 
-                this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
-                this.GW = this.sumGW.toFixed(3);
+                // this.sumGW = ((parseFloat(this.quantity) * (parseFloat(this.data.package) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
+                // this.GW = this.sumGW.toFixed(3);
                 // console.log(this.GW);
             },
 

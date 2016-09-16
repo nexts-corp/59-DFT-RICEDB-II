@@ -89,6 +89,9 @@
         .hide {
             display: none;
         }
+        vaadin-date-picker{
+          width: 80%;
+        }
     </style>
     <template>
     <content id="primary" select="items[type=primary]"></content>
@@ -197,10 +200,10 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.price}}" id="price"></gl-form-label-input>
+            <gl-form-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.price}}" id="price"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.weight}}" id="weight"></gl-form-label-input>
+            <gl-form-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.weight}}" id="weight"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{dataInput.ton}}" id="ton"></gl-form-input>
@@ -253,7 +256,7 @@
         </gl-grid-row>
       </gl-form-panel-body>
       <gl-form-panel-footer>
-          <paper-button class="gl-btn-danger" raised index="[[index]"></iron-icon>ยกเลิก</paper-button>
+          <paper-button class="gl-btn-danger" raised index="[[index]" on-tap="cancel"></iron-icon>ยกเลิก</paper-button>
           <paper-button class="gl-btn-success" raised index="[[index]" on-tap="saveExport"></iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
@@ -356,8 +359,8 @@
                 this.push('datas.sender', {
                     id: nowDateTime,
                     actualShipper: this.$.actualShipper.value,
-                    price: '',
-                    weight: '',
+                    price: this.$.price.value,
+                    weight: this.$.weight.value,
                     package: this.$.package.selected,
                     blNo: this.$.blNo.value,
                     cityEnd: this.$.cityEnd.selected,
@@ -386,6 +389,9 @@
                 this.glQuery('data-export').saveData(this.glClone(this.datas));
                 this.click();
                 // console.log(this.datas.sender);
+            },
+            cancel: function(){
+              this.click();
             },
             _saveChange: function(e) {
                 // console.log(this.datas);

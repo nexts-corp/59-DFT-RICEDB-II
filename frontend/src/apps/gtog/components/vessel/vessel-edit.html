@@ -4,24 +4,27 @@
         .top {
             margin-top: 30px;
         }
-        
+
         .w {
             text-align: center;
         }
-        
+
         .padL {
             padding-left: 35px;
         }
-        
+
         .text-center {
             text-align: center;
             font-size: var(--font-size-h4);
             font-family: 'rsubold', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        
+
         .width-dropdown {
             width: 100%;
+        }
+        vaadin-date-picker{
+          width: 80%;
         }
     </style>
 
@@ -55,11 +58,11 @@
           <gl-form-input label="POL" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pol}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="ETD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.etd}}"></gl-form-input>
+          <vaadin-date-picker label="ETD" value="{{data.etd}}"></vaadin-date-picker>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="ETA" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.eta}}"></gl-form-input>
+          <vaadin-date-picker label="ETA" value="{{data.eta}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.pod}}"></gl-form-input>
@@ -87,41 +90,37 @@
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-          <gl-form-dropdown-menu label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+          <gl-form-dropdown-menu class="width-dropdown" label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
             <paper-listbox  class="dropdown-content"  selected="{{data.cflNo}}">
               <paper-item >Confirmmation Letter No. 1</paper-item>
               <paper-item >Confirmmation Letter No. 2</paper-item>
-              <paper-item >Confirmmation Letter No. 3</paper-item>
 
             </paper-listbox>
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-          <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
+          <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
             <paper-listbox  class="dropdown-content" selected="{{data.typeRiceNo}}">
               <paper-item >Thai White Rice 5% Brokens, 2015 Current New Crop</paper-item>
-              <paper-item >ฯลฯ</paper-item>
-
             </paper-listbox>
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
             <paper-listbox  class="dropdown-content" selected="{{data.package}}">
+              <paper-item >25</paper-item>
               <paper-item >50</paper-item>
-              <paper-item >55</paper-item>
-              <paper-item >60</paper-item>
             </paper-listbox>
           </gl-form-dropdown-menu>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-          <gl-form-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.price}}"></gl-form-input>
+          <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.price}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.weight}}"></gl-form-input>
+          <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.weight}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ton}}"></gl-form-input>
@@ -133,7 +132,7 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 
-          <gl-form-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.quantityBag}}"></gl-form-input>
+          <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.quantityBag}}"></gl-form-label-input>
 
         </gl-grid-col>
       </gl-grid-row>
@@ -141,10 +140,10 @@
       <gl-grid-row>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input label="WEIGHT G.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-input>
+            <gl-form-label-input label="WEIGHT G.W.(M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.gw}}"></gl-form-label-input>
           </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="WEIGHT N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.nw}}"></gl-form-input>
+          <gl-form-label-input label="WEIGHT N.W." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.nw}}"></gl-form-label-input>
 
         </gl-grid-col>
       </gl-grid-row>

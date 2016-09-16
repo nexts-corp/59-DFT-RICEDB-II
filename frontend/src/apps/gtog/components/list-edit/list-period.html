@@ -91,7 +91,7 @@
       </gl-grid-row>
 
       <div class="horizontal end-justified layout">
-        <paper-button  class="gl-btn-danger" raised>ยกเลิก</paper-button>
+        <paper-button  class="gl-btn-danger" on-tap="cancel" raised>ยกเลิก</paper-button>
         <paper-button  class="gl-btn-success" on-tap="insertCity" raised>บันทึก</paper-button>
       </div>
     </div>
@@ -213,6 +213,9 @@
             css.classList.remove("show");
             css.classList.add("hide");
           }
+      },
+      cancel: function(){
+        this.click();
       },
       validate:function(){
         var css = Polymer.dom(this.root).querySelector('#changeDivcss');
