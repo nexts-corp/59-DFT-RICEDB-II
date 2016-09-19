@@ -32,25 +32,27 @@
         </gl-grid-row>
 
         <template id="zatest" is="dom-repeat" items="{{data.rice}}">
-          <div class="bg top">
-            <gl-grid-row>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                  <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
-                    <paper-menu class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
-                      <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
-                      <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
-                    </paper-menu>
-                  </gl-form-dropdown-menu>
-              </gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                  <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></gl-form-input>
-              </gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-                <paper-icon-button class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
-              </gl-grid-col>
-            </gl-grid-row>
-          </div>
+          <form is="iron-form" id="form" method="post" action="/form/handler">
+            <div class="bg top">
+              <gl-grid-row>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
+                      <paper-menu class="dropdown-content" attr-for-selected="rice-type" selected="{{item.riceType}}">
+                        <paper-item rice-type="riceWhite">ข้าวขาว</paper-item>
+                        <paper-item rice-type="jasmineRice">ข้าวหอมมะลิ</paper-item>
+                      </paper-menu>
+                    </gl-form-dropdown-menu>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required  label="จำนวน (ตัน)" value="{{item.volume}}" placeholder="ใส่รายละเอียด"></gl-form-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                  <paper-icon-button class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
+                </gl-grid-col>
+              </gl-grid-row>
+            </div>
+          </form>
         </template>
         <div class="horizontal end-justified layout">
           <paper-button raised on-tap="add" class="gl-btn-primary">เพิ่ม</paper-button>
