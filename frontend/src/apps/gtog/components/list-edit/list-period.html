@@ -12,41 +12,41 @@
             color: var(--paper-grey-600);
             word-wrap: break-word;
         }
-        
+
         .cleanBd {
             padding: 0px;
         }
-        
+
         .top {
             margin-top: 10px;
         }
-        
+
         .bd {
             border-bottom: 1px solid #ccc;
         }
-        
+
         .fontPdLeft {
             /*padding: 10px 0px 10px 10px;*/
             text-align: center;
             word-wrap: break-word;
         }
-        
+
         paper-icon-item {
             cursor: pointer;
             --paper-item-focused: {
                 background-color: var(--paper-blue-100);
             }
         }
-        
+
         paper-icon-item:hover {
             background-color: var(--paper-blue-100);
         }
-        
+
         .yellow-button {
             text-transform: none;
             color: #eeff41;
         }
-        
+
         paper-toast {
             --paper-toast-background-color: var(--paper-green-500);
             /*height: 50px;*/
@@ -56,32 +56,34 @@
             width: 600px;
             text-align: center;
         }
-        
+
         paper-toast>div.content>iron-icon {
             padding: 0px 10px 0px 0px;
         }
-        
+
         .mar-head {
             margin-left: 10px;
             margin-bottom: 10px;
         }
-        
+
         #changeDivcss {
             background-color: var(--paper-grey-100);
             border: 1px solid black;
             padding: 10px;
             margin-bottom: 10px;
         }
-        
+
         .show {
             display: block;
         }
-        
+
         .hide {
             display: none;
         }
     </style>
+
     <template>
+
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
         <gl-form-input class="mar-head" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}"required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
@@ -94,18 +96,18 @@
 
     <div id="changeDivcss" class="hide">
       <form is="iron-form" id="addPort" >
-      <gl-grid-row width="{{getWidth}}">
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <gl-form-input name="cityPort" auto-validate error-message="กรุณาใส่เมืองท่าปลายทาง" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <gl-form-input name="ton" auto-validate error-message="กรุณาใส่จำนวนตัน" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-          <gl-form-textarea name="notifyParty" rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-textarea>
-        </gl-grid-col>
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <gl-form-input name="cityPort" auto-validate error-message="กรุณาใส่เมืองท่าปลายทาง" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด" id="" name=""></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <gl-form-input name="ton" auto-validate error-message="กรุณาใส่จำนวนตัน" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด" id="" name=""></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+            <gl-form-textarea name="notifyParty" rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]" id="notifyParty" name="notifyParty"></gl-form-textarea>
+          </gl-grid-col>
+        </gl-grid-row>
       </form>
-      </gl-grid-row>
 
       <div class="horizontal end-justified layout">
         <paper-button  class="gl-btn-danger" raised>ยกเลิก</paper-button>

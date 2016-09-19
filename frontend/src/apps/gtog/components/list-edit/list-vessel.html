@@ -93,7 +93,9 @@
           width: 80%;
         }
     </style>
+
     <template>
+
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
@@ -107,7 +109,7 @@
     </gl-grid-row>
 
     <div id="changeDivcss" class="hide">
-      <form is="iron-form" id="addExPort" >
+      <form is="iron-form" id="addExPort">
         <gl-form-panel-body>
           <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
         </gl-form-panel-body>
@@ -125,7 +127,7 @@
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Tel." auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]{9}" placeholder="ใส่รายละเอียด" value="" id="" name=""></gl-form-input>
+              <gl-form-input label="Tel." auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]{0,9}" placeholder="ใส่รายละเอียด" value="" id="" name=""></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="Vessel" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.vesselName}}" id="vesselName" name="vesselName"></gl-form-input>
@@ -172,7 +174,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือเมืองท่า" placeholder="เลือกเมืองท่า" required>
-                <paper-menu  class="dropdown-content"  selected="{{data.cityEnd}}" id="cityEnd" name="cityEnd">
+                <paper-menu  class="dropdown-content" selected="{{data.cityEnd}}" id="cityEnd" name="cityEnd">
                   <paper-item value="Shekou">Shekou</paper-item>
                   <paper-item value="Patthaya">Patthaya</paper-item>
                   <paper-item value="Rayong">Rayong</paper-item>
@@ -197,7 +199,7 @@
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-menu  class="dropdown-content"  selected="{{data.confirmLetter}}" id="confirmLetter" name="confirmLetter">
+                <paper-menu  class="dropdown-content" selected="{{data.confirmLetter}}" id="confirmLetter" name="confirmLetter">
                   <paper-item value="Con1">Confirmmation Letter No. 1</paper-item>
                   <paper-item value="Con2">Confirmmation Letter No. 2</paper-item>
                   <paper-item value="Con3">Confirmmation Letter No. 3</paper-item>
@@ -214,7 +216,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-menu  class="dropdown-content"  selected="{{data.package}}"id="package" name="package">
+                <paper-menu  class="dropdown-content" selected="{{data.package}}"id="package" name="package">
                   <paper-item value="25">25</paper-item>
                   <paper-item value="50">50</paper-item>
                 </paper-menu>
