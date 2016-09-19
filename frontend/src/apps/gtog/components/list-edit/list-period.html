@@ -81,18 +81,19 @@
     </gl-grid-row>
 
     <div id="changeDivcss" class="hide">
-      <gl-grid-row width="{{getWidth}}">
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
-          <gl-form-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-textarea>
-        </gl-grid-col>
-      </gl-grid-row>
-
+      <form is="iron-form" id="form" method="post" action="/form/handler">
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+            <gl-form-textarea rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]"></gl-form-textarea>
+          </gl-grid-col>
+        </gl-grid-row>
+      </form>
       <div class="horizontal end-justified layout">
         <paper-button  class="gl-btn-danger" raised>ยกเลิก</paper-button>
         <paper-button  class="gl-btn-success" on-tap="click" raised>บันทึก</paper-button>
