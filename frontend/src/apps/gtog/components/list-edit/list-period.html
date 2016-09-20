@@ -4,7 +4,7 @@
 <link rel="import" href="../period/period-edit.html">
 
 <dom-module id="list-period">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
         .header {
             text-align: center;
             padding: 10px 0px 10px 10px;
@@ -30,7 +30,16 @@
             text-align: center;
             word-wrap: break-word;
         }
-
+        .title {
+          margin: 10px 0px 10px 10px;
+            font-size: var(--font-size-h3);
+            font-family: 'rsubold', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .box{
+          border: 1px solid black;
+          padding: 0px 0px 0px 10px;
+        }
         paper-icon-item {
             cursor: pointer;
             --paper-item-focused: {
@@ -107,6 +116,18 @@
             <gl-form-textarea name="notifyParty" rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]" id="notifyParty" name="notifyParty"></gl-form-textarea>
           </gl-grid-col>
         </gl-grid-row>
+
+          <div class="title">Shipping Line</div>
+        <div class="box">
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+                <gl-form-input name="shippingLine" auto-validate error-message="กรุณาใส่Shipping line" required no-label-float value="" placeholder="กรอกShipping Line" id="" name=""></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,1]]">
+              <paper-button raised class="gl-btn-primary">เพิ่ม</paper-button>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
       </form>
 
       <div class="horizontal end-justified layout">
