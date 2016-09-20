@@ -37,17 +37,14 @@
 
       <div class="top">Commodities, Price, Package</div>
 
-
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Item" placeholder="ใส่รายละเอียด" value="[[data.typeRice]]"></gl-form-input>
-        </gl-grid-col>
-      </gl-grid-row>
-
-
       <template is="dom-repeat" items="[[data.confirmItem]]">
         <form is="iron-form" id="form" method="post" action="/form/handler">
           <div class="bg">
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+                <gl-form-input auto-validate error-message="กรุณาใส่ชื่อสินค้า" required label="Item" placeholder="ใส่รายละเอียด" value="[[data.typeRice]]"></gl-form-input>
+              </gl-grid-col>
+            </gl-grid-row>
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 <gl-form-input auto-validate error-message="กรุณาใส่น้ำหนัก" required label="Package(kg)" pattern="[0-9]{1,9}" placeholder="ใส่รายละเอียด" value="[[item.package]]"></gl-form-input>
