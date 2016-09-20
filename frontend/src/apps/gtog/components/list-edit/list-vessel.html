@@ -3,7 +3,7 @@
 <link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
 <dom-module id="list-vessel">
-
+  
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         .header {
             text-align: center;
@@ -93,9 +93,7 @@
           width: 80%;
         }
     </style>
-
     <template>
-
     <content id="primary" select="items[type=primary]"></content>
     <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
@@ -109,7 +107,7 @@
     </gl-grid-row>
 
     <div id="changeDivcss" class="hide">
-      <form is="iron-form" id="addExPort">
+      <form is="iron-form" id="form" method="post" action="/form/handler">
         <gl-form-panel-body>
           <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
         </gl-form-panel-body>
@@ -129,6 +127,7 @@
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+
               <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line" placeholder="เลือก Shipping Line" required>
                 <paper-menu  class="dropdown-content" selected="{{data.bs}}" id="bs" name="bs">
                   <paper-item value="">Sinotrans Thailogistics</paper-item>
@@ -136,6 +135,7 @@
                   <paper-item value=""></paper-item>
                 </paper-menu>
               </gl-form-dropdown-menu>
+
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Vessel" error-message="กรุณาเลือก Vessel" placeholder="เลือก Vessel" required>
@@ -216,24 +216,24 @@
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Confirmation Letter" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-menu  class="dropdown-content" selected="{{data.confirmLetter}}" id="confirmLetter" name="confirmLetter">
-                  <paper-item value="Con1">Confirmmation Letter No. 1</paper-item>
-                  <paper-item value="Con2">Confirmmation Letter No. 2</paper-item>
-                  <paper-item value="Con3">Confirmmation Letter No. 3</paper-item>
+                <paper-menu  class="dropdown-content" attr-for-selected="confirm-letter" selected="{{data.confirmLetter}}" id="confirmLetter" name="confirmLetter">
+                  <paper-item confirm-letter="Con1">Confirmmation Letter No. 1</paper-item>
+                  <paper-item confirm-letter="Con2">Confirmmation Letter No. 2</paper-item>
+                  <paper-item confirm-letter="Con3">Confirmmation Letter No. 3</paper-item>
                 </paper-menu>
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-menu  class="dropdown-content"  selected="{{data.typeRice}}" id="typeRice" name="typeRice">
-                  <paper-item value="rice-white">Thai White Rice 5% Brokens, 2015 Current New Crop</paper-item>
-                  <paper-item value="rice">ฯลฯ</paper-item>
+                <paper-menu  class="dropdown-content" attr-for-selected="type-rice" selected="{{data.typeRice}}" id="typeRice" name="typeRice">
+                  <paper-item type-rice="rice-white">Thai White Rice 5% Brokens, 2015 Current New Crop</paper-item>
+                  <paper-item type-rice="rice">ฯลฯ</paper-item>
                 </paper-menu>
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Package (kg/PP Page)" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-menu  class="dropdown-content" selected="{{data.package}}"id="package" name="package">
+                <paper-menu  class="dropdown-content" attr-for-selected="package-type" selected="{{data.package}}"id="package" name="package">
                   <paper-item value="25">25</paper-item>
                   <paper-item value="50">50</paper-item>
                 </paper-menu>
