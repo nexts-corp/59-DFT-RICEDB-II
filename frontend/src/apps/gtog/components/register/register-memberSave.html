@@ -1,0 +1,106 @@
+<dom-module id="register-memberSave">
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    .title {
+        text-align: center;
+        font-size: var(--font-size-h4);
+        font-family: 'rsubold', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        margin: 20px 0px 20px 0px;
+    }
+    .bd{
+      border: 1px solid black;
+      padding: 15px;
+    }
+    .mar-top{
+      margin: 20px 0px 20px 0px;
+    }
+    vaadin-date-picker{
+      width: 70%;
+    }
+    paper-icon-button{
+      margin-top: 20px;
+    }
+  </style>
+  <template>
+
+    <div class="title">เพิ่มทะเบียนผู้ส่งออกข้าว</div>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-dropdown-menu label="ประเภทการอนุญาติ :" disabled>
+          <paper-menu  class="dropdown-content" selected="0">
+            <paper-item value="">ทั่วไป</paper-item>
+          </paper-menu>
+        </gl-form-dropdown-menu>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input label="เลขประจำตัวผู้ส่งออกข้าว :" auto-validate error-message="กรุณาใส่เลขประจำตัวผู้ส่งออกข้าว" required value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <vaadin-date-picker label="ETA" value=""></vaadin-date-picker>
+      </gl-grid-col>
+
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี :" auto-validate error-message="กรุณาใส่เลขประจำตัวผู้เสียภาษี" required value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input label="ชื่อบริษัท :" auto-validate error-message="กรุณาใส่ชื่อบริษัท" required value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="ชื่อบริษัท (อังกฤษ) :" auto-validate error-message="กรุณาใส่ชื่อบริษัทภาษาอังกฤษเท่านั้น" required pattern="[a-zA-Z]*" value=""></gl-form-label-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+        <gl-form-label-textarea label="ที่อยู่ :" error-message="กรุณาใส่รายละเอียด" required value=""></gl-form-label-textarea>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+        <gl-form-label-textarea label="ที่อยู่ (อังกฤษ) :" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[a-zA-Z]*" value=""></gl-form-label-textarea>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="รหัสไปรษณีย์ :" auto-validate error-message="กรอกเป็นตัวเลขเท่านั้น" required pattern="[0-9]*" value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="หมายเลขโทรศัพท์ :" auto-validate error-message="กรอกเป็นตัวเลขเท่านั้น" required pattern="[0-9]*" value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="FAX :" auto-validate error-message="กรอกเป็นตัวเลขเท่านั้น" required pattern="[0-9]*" value=""></gl-form-label-input>
+      </gl-grid-col>
+
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="E-Mail Address :" auto-validate error-message="กรุณาใส่E-Mail" required value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" auto-validate error-message="กรุณาใส่เลขที่หนังสืออนุญาต" required value=""></gl-form-label-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+      <div class="title">
+        <paper-checkbox class="bd" noink>เป็นสมาชิกสมาคมผู้ส่งออกข้าว</paper-checkbox>
+      </div>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input  label="ชื่อคณะกรรมการ :" auto-validate error-message="กรุณาใส่ชื่อคณะกรรมการ" required value=""></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <paper-icon-button icon="icons:add-circle"></paper-icon-button>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout mar-top">
+        <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "register-memberSave",
+
+    });
+  </script>
+</dom-module>
