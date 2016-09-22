@@ -40,8 +40,6 @@ router.get('/list', function (req, res, next) {
                     cursor.toArray(function (err, result) {
                         if (!err) {
                             //console.log(JSON.stringify(result, null, 2));
-                            // Website you wish to allow to connect
-                            res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
                             res.json(result);
                         }
                     });
