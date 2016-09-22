@@ -1,10 +1,6 @@
 <link rel="import" href="listEditBehavior.html">
 <dom-module id="list-registration">
     <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-    .title{
-      margin: 15px;
-      font-size: var(--font-size-h3);
-    }
     .header {
       padding: 10px 0px 0px 10px;
       background-color: var(--paper-grey-100);
@@ -12,11 +8,25 @@
       font-size: var(--font-size-h4);
       padding: 5px;
       text-align: center;
+
       font-family: 'rsuregular', sans-serif;
         -webkit-font-smoothing: antialiased;
     }
-    paper-menu {
-      padding: 0px;
+    paper-item {
+      cursor:pointer;
+      /*--paper-item-focused-before:{
+        opacity:0;
+        background-color: pink;
+      }*/
+      --paper-item-focused: {
+        background-color: var(--gl-info-color);
+      }
+      --paper-item-selected:{
+        background-color: var(--gl-info-color);
+      }
+    }
+    paper-item:hover {
+      background-color: var(--gl-info-color);
     }
     .text{
       text-align: center;
@@ -33,17 +43,18 @@
         </div>
     </template>
    </div>
+   <paper-listbox>
     <template is="dom-repeat" as="itemPrimary" items="{{data}}">
       <paper-item on-tap="_getBind" level="detailRegExporter" data="{{itemPrimary}}">
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
             <div class$="[[configPrimary.width]] text"  on-tap="_toggleDrawer">
-              <!-- <div class="fontPdLeft" >[[itemPrimary.regisExporters]] -->
                 {{_getItemPrimary(itemPrimary,configPrimary)}}
               </div>
             </div>
           </template>
-      </paper-icon-item>
+      </paper-item>
     </template>
+  </paper-listbox>
 <!-- End Bl -->
 
     </template>
@@ -51,10 +62,7 @@
         Polymer({
             is: "list-registration",
             behaviors: [listEditBehavior,gl.behavior.core],
-            attached: function() {
-              // console.log(this.data[0]);
-              // console.log(this.data[0].blNos[0]);
-            },
+
         });
     </script>
 </dom-module>
