@@ -27,12 +27,12 @@
     <template>
     <db-gtog-contact></db-gtog-contact>
 
-  <!-- <iron-ajax
-    auto
-    url="http://localhost:3000/contract/list"
-    handle-as="json"
-    last-response="{{lastResponse}}"></iron-ajax>
-				<template is="dom-repeat" items="{{lastResponse}}">
+      <iron-ajax  auto
+                  url="http://localhost:3000/contract/list"
+                  handle-as="json"
+                  last-response="{{lastResponse}}">
+      </iron-ajax>
+				<!-- <template is="dom-repeat" items="{{lastResponse}}">
 					<div>
 						<h2>Record: <span>{{item.buyer_id}}</span></h2>
 						<h1>{{item.buyer_name}}</h1>
@@ -41,17 +41,17 @@
 
             <content-panel>
               <grid>
-                <nx-grid data="{{data}}">
+                <nx-grid data="{{lastResponse}}">
                   <items type="primary">
-                    <list item="promiseName" label="ชื่อ" width="flex-2"></list>
-                    <list item="totalRice" label="ทั้งหมด (ตัน) /" width="flex"></list>
-                    <list item="sendRice" label="ส่งแล้ว (ตัน) /" width="flex"></list>
-                    <list item="balanceRice" label="เหลือ (ตัน)" width="flex"></list>
+                    <list item="buyer_name" label="ชื่อ" width="flex-2"></list>
+                    <list item="contract_quantity" label="ทั้งหมด (ตัน) /" width="flex"></list>
+                    <list item="contract_sent" label="ส่งแล้ว (ตัน) /" width="flex"></list>
+                    <list item="contract_balance" label="เหลือ (ตัน)" width="flex"></list>
                   </items>
-                  <items type="secondary" item="sub">
+                  <items type="secondary" item="confirm_letter">
                     <!-- <list item="" label="" width=""></list> -->
-                    <list item="confirmLetter" label="Confirmation Letter" width="flex-2"></list>
-                    <list item="cmlTotalRice" label="" width="flex"></list>
+                    <list item="cl_name" label="Confirmation Letter" width="flex-2"></list>
+                    <list item="cl_quantity" label="" width="flex"></list>
                     <list item="cmlSendRice" label="" width="flex"></list>
                     <list item="cmlBalanceRice" label="" width="flex"></list>
                   </items>
