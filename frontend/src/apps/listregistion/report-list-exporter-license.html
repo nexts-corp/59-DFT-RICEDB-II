@@ -1,0 +1,210 @@
+<link rel="import" href="components/content-panel.html">
+<link rel="import" href="components/list-edit/list-registration.html">
+
+
+<dom-module id="listregistion-report-list-exporter-license">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+
+
+        .header {
+          padding: 10px 0px 10px 10px;
+          background-color: var(--paper-grey-100);
+          color: var(--paper-grey-600);
+          font-size: var(--font-size-h4);
+          font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .registor{
+          margin: 20px;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+        .searchBox{
+          padding: 5px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+        .elevation{
+          border-radius: 5px;
+          margin: 10px;
+          padding: 5px;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px
+        }
+    </style>
+    <template>
+
+    <content-panel>
+      <grid>
+        <paper-material elevation="1" class="elevation">
+
+
+        <div class="layout vertical registor">
+
+          <div class="flex title">
+              รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว
+          </div>
+          <div class="flex searchBox searchBorder">
+            <div class="layout horizontal">
+              <div class="flex"></div>
+              <div class="flex-6">
+                <gl-search-input result="{{result}}"
+                                 search-label-type="ประเภทการค้าข้าว"
+                                 search-label-type2="สถานนะสมาชิกสมาคมผู้ส่งออก"
+                                 search-type="[[searchType]]"
+                                 search-type2="[[searchType2]]"
+                                 search-input-type="true"
+                                 search-input-type2="true"
+                                 search-data="true">
+                </gl-search-input>
+              </div>
+              <div class="flex"></div>
+            </div>
+          </div>
+          <div class="flex title">
+              รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
+              ส่งไปจำหน่ายต่างประเทศ ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
+          </div>
+          <div class="flex searchBorder">
+            <list-registration data={{dataRegistion}}>
+              <items type="primary">
+                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
+                <list item="taxIdenNumber" label="เลขประจำตัวผู้เสียภาษี" width="flex"></list>
+                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
+                <list item="memberRiceType" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก" width="flex"></list>
+              </items>
+            </list-registration>
+          </div>
+        </div>
+        </paper-material>
+
+      </grid>
+    <panel>
+        <div class="left">
+          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+            <div name="addRedRegExporter">0</div>
+            <div name="detailRegExporter">1</div>
+          </iron-pages>
+        </div>
+    </panel>
+    </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "listregistion-report-list-exporter-license",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            properties: {
+                layerContent: {
+                    type: String,
+                    value: "detailRegExporter"
+                },
+                dataRegistion: {
+                    type: Object,
+                    notify: true,
+                    value:
+                    [
+                      {
+                        id:1,
+                        regisExporters:"ข031",
+                        companyName:"สำเภาทอง",
+                        taxIdenNumber:01355500315,
+                        licenceType:"ชายแดน",
+                        memberRiceType:"ไม่เป็นสมาชิก"
+                      },
+                      {
+                        id:2,
+                        regisExporters:"ข5/2559",
+                        companyName:"กรุงไทย พืชผล บจก.",
+                        taxIdenNumber:01355500315,
+                        licenceType:"ชายแดน",
+                        memberRiceType:"ไม่เป็นสมาชิก"
+                      },
+                      {
+                        id:3,
+                        regisExporters:"ข2/2559",
+                        companyName:"โรงสีทรัพย์อนันต์",
+                        taxIdenNumber:01355500315,
+                        licenceType:"ชายแดน",
+                        memberRiceType:"เป็นสมาชิก"
+                      },
+                      {
+                        id:4,
+                        regisExporters:"ข003",
+                        companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
+                        taxIdenNumber:01355500315,
+                        licenceType:"ทั่วไป",
+                        memberRiceType:"เป็นสมาชิก"
+                      }
+
+                    ]
+                },
+                searchType: {
+                    type: Object,
+                    value: [{
+                        id: 1,
+                        name: 'ทั้งหมด'
+                    }, {
+                        id: 2,
+                        name: 'ผู้ส่งออกที่ถูกระงับ'
+                    } ]
+                },
+                searchType2: {
+                    type: Object,
+                    value: [{
+                        id: 1,
+                        name: 'เป็นสมาชิก'
+                    }, {
+                        id: 2,
+                        name: 'ไม่เป็นสมาชิก'
+                    } ]
+                },
+                result: {
+                    type: Object,
+                    observer: '_result'
+                }
+            },
+            created: function() {
+                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
+                this.glSetLayout('layout-registion');
+
+            },
+            attached: function() {
+                // this.layoutMain = this.glQuery('layoutMain');
+            },
+            _result:function () {
+              console.log(this.result);
+            },
+            nxGridTap: function(e) {
+              // console.log(e.detail.level);
+              // console.log(e.detail.data);
+              // console.log(this.layerContent );
+                this.layerContent = e.detail.level;
+                // console.log(this.layerContent);
+                if (this.layerContent === 'third') {
+                    this.vesselPage = 1;
+                } else {
+                    this.vesselPage = 0;
+                }
+                this.dataSelect = e.detail.data;
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent = e.target.id;
+              // console.log(e.target.id);
+            }
+        });
+    </script>
+</dom-module>

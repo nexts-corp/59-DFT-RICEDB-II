@@ -1,0 +1,53 @@
+<link rel="import" href="register-memberSave.html">
+<link rel="import" href="register-memberEdit.html">
+<dom-module id="register-page">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+
+    <content id="primary" select="items[type=primary]"></content>
+    <content id="secondary" select="items[type=secondary]"></content>
+
+    <div class="layout horizontal top">
+      <template is="dom-repeat" items="{{config.primary}}">
+        <div class$="[[item.width]] header">
+          [[item.label]]
+        </div>
+      </template>
+    </div>
+    <template is="dom-repeat" as="itemPrimary" items="{{data.city}}">
+      <iron-collapse id="collapse{{index}}">
+          <div class="collapse-content">
+              <div class="bd">
+                  <gl-form-panel>
+                      <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px; set-border="1px">
+                          <paper-button class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
+                              <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+                          <paper-button class="gl-btn-warning" raised on-tap="editChange" index="[[index]]">
+                              <iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
+                          <paper-button class="gl-btn-danger" raised on-tap="" index="[[index]]">
+                              <iron-icon class="gl-icon-size" icon="delete"></iron-icon>ลบ</paper-button>
+                      </gl-form-panel-head>
+
+                      <iron-pages selected="0" class$="iron-index-{{index}}">
+                          <register-memberSave data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></register-memberSave>
+                          <register-memberEdit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></register-memberEdit>
+                      </iron-pages>
+                  </gl-form-panel>
+              </div>
+
+          </div>
+      </iron-collapse>
+    </template>
+
+  </template>
+  <script>
+    Polymer({
+      is: "register-page",
+
+    });
+  </script>
+</dom-module>
