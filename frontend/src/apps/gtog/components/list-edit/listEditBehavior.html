@@ -89,11 +89,23 @@
       this.$$(".iron-index-"+e.currentTarget.index).selected = 1;
       //console.log(Polymer.dom(this.root).querySelector("[iron-index="+e.currentTarget.index+"]"));
           //this.selectChoice = 1;
-          this.closeToast();
+      this.closeToast();
+
+      var css = Polymer.dom(this.root).querySelector('#changeCss');
+      if (css.classList.contains('hide') == true) {
+          css.classList.remove("hide");
+          css.classList.add("show");
+      }
     },
      saveChange:function(e){
        this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
        this.openToast();
+
+       var css = Polymer.dom(this.root).querySelector('#changeCss');
+       if (css.classList.contains('show') == true) {
+           css.classList.remove("show");
+           css.classList.add("hide");
+       }
       //  console.log(this.$$("paper-toast").id.toggle());
 
       //  var change = this._edit(e);
