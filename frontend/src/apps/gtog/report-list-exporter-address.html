@@ -2,22 +2,11 @@
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/list-edit/list-registration.html">
-<<<<<<< HEAD
-<link rel="import" href="components/register/register-member.html">
-<link rel="import" href="components/register/register-memberSave.html">
-<link rel="import" href="components/register/register-memberEdit.html">
-<link rel="import" href="components/register/register-page.html">
 
-=======
-<link rel="import" href="components/list-edit/list-registration-pause.html">
->>>>>>> bed9889f56b9f82340fed0e918e7b763955188bf
 
-<dom-module id="gtog-add-registion-exporter">
+<dom-module id="gtog-report-list-exporter-address">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-        .a{
-            font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+
 
         .header {
           padding: 10px 0px 10px 10px;
@@ -59,48 +48,37 @@
 
 
         <div class="layout vertical registor">
-          <div class="flex ">
-            <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" id="addRedRegExporter"> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
-            </div>
-          </div>
+
           <div class="flex title">
-            ทะเบียนผู้ส่งออกข้าว
+              รายชื่อและที่อยู่ของผู้ส่งออกข้าว
           </div>
           <div class="flex searchBox searchBorder">
             <div class="layout horizontal">
               <div class="flex"></div>
               <div class="flex-6">
                 <gl-search-input result="{{result}}"
-                                 search-label-name="บริษัท"
-                                 search-label-type="ประเภททะเบียน"
-                                 search-input="true"
-                                 search-input-type="true"
-                                 search-type="[[searchType]]">
+                                 search-type="[[searchType]]"
+                                 search-data="true">
                 </gl-search-input>
               </div>
               <div class="flex"></div>
             </div>
           </div>
+          <div class="flex title">
+              รายชื่อและที่อยู่ของผู้ส่งออกข้าว ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
+               ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
+          </div>
           <div class="flex searchBorder">
-            <!-- <list-registration data={{dataRegistion}}>
+            <list-registration data={{dataRegistion}}>
               <items type="primary">
                 <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
-              </items>
-            </list-registration> -->
+                <list item="address" label="ที่อยู่" width="flex"></list>
+                <list item="tel" label="โทรศัพท์" width="flex"></list>
+                <list item="fax" label="โทรสาร" width="flex"></list>
 
-            <list-registration-pause data={{dataRegistionPause}}>
-              <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
               </items>
-            </list-registration-pause>
-
+            </list-registration>
           </div>
         </div>
         </paper-material>
@@ -109,8 +87,8 @@
     <panel>
         <div class="left">
           <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter"><register-member></register-member></div>
-            <div name="detailRegExporter"><register-memberSave></register-memberSave></div>
+            <div name="addRedRegExporter">0</div>
+            <div name="detailRegExporter">1</div>
           </iron-pages>
         </div>
     </panel>
@@ -118,7 +96,7 @@
     </template>
     <script>
         Polymer({
-            is: "gtog-add-registion-exporter",
+            is: "gtog-report-list-exporter-address",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
@@ -138,69 +116,38 @@
                     [
                       {
                         id:1,
-                        regisExporters:"ข1003",
+                        regisExporters:"ข031",
                         companyName:"สำเภาทอง",
-                        licenceType:"ไม่เกิน 12 กก.",
-                        approvalDate:"18/09/255"
+                        address:'823 ถ.ผังเมือง ต.สะเตง อ.เมือง จ.ยะลา',
+                        tel:'073-214967',
+                        fax:'073-214967'
                       },
                       {
                         id:2,
                         regisExporters:"ข5/2559",
                         companyName:"กรุงไทย พืชผล บจก.",
-                        licenceType:"ชายแดน",
-                        approvalDate:"18/09/2559"
+                        address:'79 ถนนงามวงศวาน เขตจตุจักรกรุงเทพ',
+                        tel:'02-561-8898',
+                        fax:'02-561-8898'
                       },
                       {
                         id:3,
                         regisExporters:"ข2/2559",
                         companyName:"โรงสีทรัพย์อนันต์",
-                        licenceType:"ชายแดน",
-                        approvalDate:"17/09/255"
+                        address:'311 ม.11 ต.ฟากห้อย อ.อรัญประเทศ จ.สระแก้ว',
+                        tel:'073-214967',
+                        fax:'073-214967'
                       },
                       {
                         id:4,
                         regisExporters:"ข003",
                         companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                        licenceType:"ทั่วไป",
-                        approvalDate:"17/09/2559"
+                        address:'823 ถ.ผังเมือง ต.สะเตง อ.เมือง จ.ยะลา',
+                        tel:'073-214967',
+                        fax:'073-214967'
                       }
 
                     ]
-                },
-                dataRegistionPause:{
-                  type: Object,
-                  notify: true,
-                  value:
-                  [
-                    {
-                      id:1,
-                      regisExporters:"ข1003",
-                      companyName:"สำเภาทอง",
-                      licenceType:"ไม่เกิน 12 กก.",
-                      approvalDate:"18/09/255"
-                    },
-                    {
-                      id:2,
-                      regisExporters:"ข5/2559",
-                      companyName:"กรุงไทย พืชผล บจก.",
-                      licenceType:"ชายแดน",
-                      approvalDate:"18/09/2559"
-                    },
-                    {
-                      id:3,
-                      regisExporters:"ข2/2559",
-                      companyName:"โรงสีทรัพย์อนันต์",
-                      licenceType:"ชายแดน",
-                      approvalDate:"17/09/255"
-                    },
-                    {
-                      id:4,
-                      regisExporters:"ข003",
-                      companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                      licenceType:"ทั่วไป",
-                      approvalDate:"17/09/2559"
-                    }
-                  ]
                 },
                 searchType: {
                     type: Object,
@@ -226,12 +173,12 @@
                 this.layoutMain = this.glQuery('layoutMain');
             },
             _result:function () {
-              // console.log(this.result);
+              console.log(this.result);
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
               // console.log(e.detail.data);
-              console.log(this.layerContent );
+              // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
                 // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
