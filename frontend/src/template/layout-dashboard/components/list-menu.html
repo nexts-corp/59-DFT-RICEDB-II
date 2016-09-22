@@ -1,16 +1,40 @@
-<dom-module id="list-menu">
+<dom-module id="list-menu" inclue="iron-flex iron-flex-factors iron-flex-alignment">
   <style>
     :host {
       display: block;
+    }
+    .subMenu{
+      padding-left: 15%;
     }
   </style>
   <template>
     <paper-menu>
       <template is="dom-repeat" items="[[menuData]]">
-        <paper-icon-item on-tap="getUrl" url$="[[item.url]]">
-          <paper-icon-button icon="chevron-right" item-icon  ></paper-icon-button>
+        <paper-submenu>
+        <paper-item class="menu-trigger">
+          <div class="flex">
+
+          </div>
+            <div on-tap="getUrl" url$="[[item.url]]">
               [[item.nameMenu]]
-        </paper-icon-item>
+            </div>
+            <template is="dom-if" if="[[item.subMenu]]">
+              <paper-icon-button icon="chevron-right" item-icon  on-tap="_getSub"></paper-icon-button>
+            </template>
+        </paper-item>
+        <template is="dom-if" if="[[item.subMenu]]">
+          <paper-menu class="menu-content">
+            <template is="dom-repeat" items="[[item.subMenu]]">
+                <paper-item>
+                  <div class="subMenu" on-tap="getUrl" url$="[[item.url]]">
+                    [[item.nameMenu]]
+                  </div>
+                </paper-item>
+            </template>
+          </paper-menu>
+        </template>
+
+      </paper-submenu>
       </template>
 
     </paper-menu>
@@ -71,7 +95,7 @@
             },
             {
               id:5,
-              nameMenu:'ระบบเชื่อมโยงเว็บไซต์และเผยแพร่ข้อมูลด้านการผลิตและการค้าข้าวของไทย',
+              nameMenu:'เว็ป Thairiceinfo.go.th',
               url:'http://thairiceinfo.go.th/'
             }
           ]
@@ -81,6 +105,9 @@
         // console.log(e.target.getAttribute("url"));
         var url = e.target.getAttribute('url')
         this.glChangePath(url);
+      },
+      _getSub:function (e) {
+        console.log(e);
       }
     });
   </script>
