@@ -28,7 +28,9 @@ router.get('/list', function (req, res, next) {
                     contract_sent: r.table('confirm_letter')
                         .filter({ 'contract_id': row('id') })
                         .sum('cl_quantity'),
-                    contract_balance: row('contract_quantity')
+                    contract_balance: row('contract_quantity').sub(r.table('confirm_letter')
+                        .filter({ 'contract_id': row('id') })
+                        .sum('cl_quantity'))
                 }
             }).without('id')
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
