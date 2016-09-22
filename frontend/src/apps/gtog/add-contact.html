@@ -26,88 +26,21 @@
     </style>
     <template>
     <db-gtog-contact></db-gtog-contact>
-    <content-panel>
-      <grid>
-        <nx-grid data="{{data}}">
-          <items type="primary">
-            <list item="promiseName" label="ชื่อ" width="flex-2"></list>
-            <list item="totalRice" label="ทั้งหมด (ตัน) /" width="flex"></list>
-            <list item="sendRice" label="ส่งแล้ว (ตัน) /" width="flex"></list>
-            <list item="balanceRice" label="เหลือ (ตัน)" width="flex"></list>
-          </items>
-          <items type="secondary" item="sub">
-            <!-- <list item="" label="" width=""></list> -->
-            <list item="confirmLetter" label="Confirmation Letter" width="flex-2"></list>
-            <list item="cmlTotalRice" label="" width="flex"></list>
-            <list item="cmlSendRice" label="" width="flex"></list>
-            <list item="cmlBalanceRice" label="" width="flex"></list>
-          </items>
-          <items type="secondaryHalf" item="sub">
-            <list item="" label="" width="flex"></list>
-            <list item="period" label="+ เพิ่ม Confirmation Letter" width="flex-12"></list>
-          </items>
-          <items type="third" item="sub3">
-            <!-- <list item="" label="" width=""></list> -->
-            <list item="period" label="งวดการส่งมอบ" width="flex-9"></list>
-          </items>
-          <items type="thirdHalf" item="sub3">
-            <list item="" label="" width="flex"></list>
-            <list item="period" label="+ เพิ่มงวด" width="flex-12"></list>
-          </items>
-          <template type="primary">
-            <input placeholder="text" value="primary">
-          </template>
-    <template type="secondary">
-            <input placeholder="text" value="secondary">
-          </template>
-    <template type="third">
-            <input placeholder="text" value="third">
-          </template>
-    </nx-grid>
-    </grid>
-    <panel>
-        <div class="left">
-            <iron-pages selected="{{vesselPage}}">
-                <panel-seleted>
-                    <section-content name="detail">
-                        <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                            <!-- <test-ice name="primary" data="{{dataSelect}}"></test-ice> -->
-                            <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-                            <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                            <period-page name="third" data="{{dataSelect}}"></period-page>
-                        </iron-pages>
+    <!-- url="http://jsonplaceholder.typicode.com/posts" -->
+    <byutv-jsonp auto
+							 url="http://localhost:3000/contract/list"
+							 last-response="{{lastResponse}}"
+							 last-error="{{lastError}}"></byutv-jsonp>
+				<template is="dom-repeat" items="{{lastResponse}}">
+					<div>
+						<h2>Record: <span>{{item.id}}</span></h2>
+						<h1>{{item.title}}</h1>
+						<p>{{item.body}}</p>
+					</div>
+				</template>
+    {{lastResponse}}/7
+    sdfsdfsd
 
-                    </section-content>
-                    <section-content name="print">
-                        <vessel-print></vessel-print>
-                    </section-content>
-                    <section-content name="file">
-                        <promise-fileup></promise-fileup>
-                    </section-content>
-                </panel-seleted>
-                <!-- vesse -->
-
-                <panel-seleted-vessel>
-                    <section-content name="detail">
-                        <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                            <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-                            <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                            <period-page name="third" data="{{dataSelect}}"> </period-page>
-                        </iron-pages>
-
-                    </section-content>
-                    <section-content name="print">
-                        <vessel-page data="{{dataSelect}}"></vessel-page>
-                    </section-content>
-                    <section-content name="file">
-                        <promise-fileup></promise-fileup>
-                    </section-content>
-                </panel-seleted-vessel>
-                <!-- vesse -->
-            </iron-pages>
-        </div>
-    </panel>
-    </content-panel>
     </template>
     <script>
         Polymer({
@@ -667,6 +600,7 @@
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
+                console.log(this.lastResponse);
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
