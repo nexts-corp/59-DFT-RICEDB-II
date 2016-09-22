@@ -5,7 +5,7 @@
   }
 </style>
 <dom-module id="layout-dashboard">
-  <style media="screen">
+  <style media="screen" include="gl-color">
   div.paper-header{
     border-bottom: 1px solid var(--paper-grey-300);
   }
@@ -42,29 +42,60 @@
   div.content {
     margin: 5px 0px 0px 0px;
   }
+  paper-icon-button.menu {
+     color: var(--gl-gray-darker-color);
+     --paper-icon-button-ink-color: var(--paper-indigo-500);
+   }
   </style>
   <template>
-    <paper-header-panel mode="waterfall">
-      <div class="paper-header">
-        <paper-toolbar class="toolbarHead">
-          <div class="title">
-              ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
-          </div>
-        </paper-toolbar>
-        <paper-toolbar class="toolbarbody">
-        </paper-toolbar>
-        <paper-toolbar class="toolbarfoot">
+    <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="30%">
+      <paper-header-panel mode="waterfall" drawer >
+        <div class="paper-header">
+          <paper-toolbar class="toolbarHead">
             <div class="title">
-              <div>
-                <!-- <button type="button" name="button">เพิ่ม</button> -->
-              </div>
+                Menu
             </div>
-        </paper-toolbar>
-      </div>
+          </paper-toolbar>
+          <paper-toolbar class="toolbarbody">
+          </paper-toolbar>
+          <paper-toolbar class="toolbarfoot">
+              <div class="title">
+                <div>
+                  <!-- <button type="button" name="button">เพิ่ม</button> -->
+                </div>
+              </div>
+          </paper-toolbar>
+        </div>
         <div class="content">
-          <tag-page-load id="tagPageLoad"></tag-page-load>
+          <paper-menu>
+            <paper-item>ระบบการซื้อขายข้าวรัฐบาลต่อรัฐบาล</paper-item>
+            <paper-item>ระบบการการขึ้นทะเบียน</paper-item>
+            <paper-item>WTO</paper-item>
+            <paper-item>EU</paper-item>
+            <paper-item>EU</paper-item>
+            <paper-item>ระบบเชื่อมโยงเว็บไซต์และเผยแพร่ข้อมูลด้านการผลิตและการค้าข้าวของไทย</paper-item>
+          </paper-menu>
         </div>
       </paper-header-panel>
+      <paper-header-panel mode="waterfall" main>
+        <div class="paper-header">
+          <paper-toolbar class="toolbarHead">
+            <div class="title">
+                ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
+            </div>
+          </paper-toolbar>
+          <paper-toolbar class="toolbarbody">
+          </paper-toolbar>
+          <paper-toolbar class="toolbarfoot">
+            <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
+            <div class="title"></div>
+          </paper-toolbar>
+        </div>
+          <div class="content">
+            <tag-page-load id="tagPageLoad"></tag-page-load>
+          </div>
+        </paper-header-panel>
+      </paper-drawer-panel>
 
 
   </template>
@@ -78,7 +109,11 @@
         }else{
           this.glSwitchLanguage('th');
         }
-      }
+      },
+      _changDrawer:function(){
+        //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
+        this.$.drawerDashboard.togglePanel();
+      },
     });
   </script>
 
