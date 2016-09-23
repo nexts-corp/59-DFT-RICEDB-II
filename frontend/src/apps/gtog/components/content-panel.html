@@ -1,6 +1,6 @@
 <dom-module id="content-panel">
 
-  <style include="iron-flex iron-flex-factors">
+  <style include="iron-flex iron-flex-factors gl-color">
   .rightdata {
       height: 100%;
       border-left: 1px solid var(--paper-grey-300);
@@ -14,7 +14,11 @@
       transition: all 1s ease;
       display: none;
     }*/
-
+    paper-material {
+      background-color: var(--gl-white-color);
+      margin: 10px;
+      padding: 5px;
+    }
   </style>
 
   <template>
@@ -26,7 +30,10 @@
           </div>
         </paper-header-panel>
         <paper-header-panel main>
-          <content select="grid"></content>
+          <paper-material elevation="1">
+            <content select="grid"></content>
+          </paper-material>
+
         </paper-header-panel>
       </paper-drawer-panel>
     </div>

@@ -18,7 +18,7 @@
 
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <dom-module id="gtog-add-contract">
-    <style is="custom-style" >
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -26,6 +26,9 @@
 
         .left {
             margin: 0px 10px 0px 10px;
+        }
+        .button{
+          margin: 5px;
         }
     </style>
     <template>
@@ -52,9 +55,15 @@
 						<h1>{{item.buyer_name}}</h1>
 					</div>
 				</template> -->
-
+          
             <content-panel>
               <grid>
+                <div class="horizontal end-justified layout">
+                  <div class="button">
+                    <paper-button raised class="gl-btn-success"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
+                  </div>
+
+                </div>
                 <nx-grid data="{{lastResponse}}">
                   <items type="primary">
                     <list item="buyer_name" label="ชื่อ" width="flex-2" type="string"></list>
@@ -131,6 +140,7 @@
                 </div>
             </panel>
             </content-panel>
+
     </template>
     <script>
         Polymer({
