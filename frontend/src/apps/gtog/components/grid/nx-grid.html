@@ -104,7 +104,7 @@ paper-icon-item {
     </div>
     <paper-menu attr-for-item-title="label" multi style="padding-top:0px" class="paper-menu-lv1">
       <template is="dom-repeat" as="itemPrimary" items="{{data}}">
-        <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
+        <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary.buyer_id}}">
           <paper-icon-button on-tap="_toggleSub" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
             <template is="dom-if" if="[[_checkTypeString(configPrimary.type)]]">
@@ -155,7 +155,7 @@ paper-icon-item {
         <!-- </div>
       </template>
       <paper-item> -->
-      <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
+      <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary.cl_id}}">
         <!-- Head secondary -->
         <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
           <!-- <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
