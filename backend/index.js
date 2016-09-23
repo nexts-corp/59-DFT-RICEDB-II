@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 var test = require('./routes/test');
-var contract = require('./routes/contract');
+var g2g_contract = require('./routes/gtog/contract');
 
 app.use(function(req, res, next) {
   // Website you wish to allow to connect
@@ -11,6 +11,6 @@ app.use(function(req, res, next) {
 });
 
 app.use(test);
-app.use('/contract', contract);
+app.use('/gtog/contract', g2g_contract);
 
 app.listen(3000);
