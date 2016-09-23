@@ -12,7 +12,7 @@ router.get(['/', '/list'], function (req, res, next) {
                 return { ship_id: row('id') }
             })
             .without('id')
-            .eqJoin("carrier_id", r.table("carrier")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -35,7 +35,7 @@ router.get('/:ship_id', function (req, res, next) {
             .get(req.params.ship_id)
             .merge(
             { ship_id: r.row('id') },
-            r.table("carrier").get(r.row("carrier_id"))
+            r.table("shipline").get(r.row("shipline_id"))
             )
             .without('id')
             .run(conn, function (err, cursor) {

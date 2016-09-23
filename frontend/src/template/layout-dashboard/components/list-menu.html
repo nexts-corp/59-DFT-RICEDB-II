@@ -3,25 +3,22 @@
     .subMenu{
       padding-left: 15%;
     }
+    .bd{
+      border: 1px solid #000;
+    }
   </style>
   <template>
     <paper-menu>
       <template is="dom-repeat" items="[[menuData]]">
         <paper-submenu>
-        <paper-item class="menu-trigger">
-          <div class="layout horizontal">
-            <div class="flex">
-              <div on-tap="getUrl" url$="[[item.url]]">
+        <paper-icon-item class="menu-trigger">
+          <template is="dom-if" if="[[item.subMenu]]">
+            <paper-icon-button icon="chevron-right" item-icon  on-tap="_getSub"></paper-icon-button>
+          </template>
+          <div on-tap="getUrl" url$="[[item.url]]">
                 [[item.nameMenu]]
-              </div>
-            </div>
-            <div class="flex">
-              <template is="dom-if" if="[[item.subMenu]]">
-                <paper-icon-button icon="chevron-right" item-icon  on-tap="_getSub"></paper-icon-button>
-              </template>
-            </div>
           </div>
-        </paper-item>
+        </paper-icon-item>
         <template is="dom-if" if="[[item.subMenu]]">
           <paper-menu class="menu-content">
             <template is="dom-repeat" items="[[item.subMenu]]">
