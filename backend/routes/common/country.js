@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var r = require('rethinkdb');
-var db = require('../db.js');
+var db = require('../../db.js');
 
 
 router.get(['/', '/list'], function (req, res, next) {

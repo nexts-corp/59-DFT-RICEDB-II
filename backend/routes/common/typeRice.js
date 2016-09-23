@@ -2,17 +2,16 @@ var express = require('express');
 var router = express.Router();
 
 var r = require('rethinkdb');
-var db = require('../db.js');
+var db = require('../../db.js');
 
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("port")
+        r.table("type_rice")
             .merge(function (row) {
-                return { port_id: row('id') }
+                return { type_rice_id: row('id') }
             })
             .without('id')
-            .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -29,17 +28,16 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:port_id', function (req, res, next) {
+
+router.get('/:type_rice_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("port")
-            .get(req.params.port_id.toUpperCase())
-            .merge(
-                { port_id: r.row('id') },
-                r.table("country").get(r.row("country_id"))
-            )
+        r.table("type_rice")
+            .get(req.params.type_rice_id.toUpperCase())
+            .merge({
+                type_rice_id: r.row('id')
+            })
             .without('id')
             .run(conn, function (err, cursor) {
-                console.log(err);
                 if (!err) {
                     res.json(cursor);
                 } else {
@@ -48,4 +46,5 @@ router.get('/:port_id', function (req, res, next) {
             });
     })
 });
+
 module.exports = router;
