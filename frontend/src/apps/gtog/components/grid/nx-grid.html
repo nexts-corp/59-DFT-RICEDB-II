@@ -158,10 +158,20 @@ paper-icon-item {
       <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
         <!-- Head secondary -->
         <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
-          <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
-            {{_getItemSecondary(itemSecondary,configSecondary)}}
+          <!-- <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
+            {{_getItemSecondary(itemSecondary,configSecondary)}} -->
             <!-- width:{{configSecondary.width}} -->
-          </div>
+          <!-- </div> -->
+          <template is="dom-if" if="[[_checkTypeString(configSecondary.type)]]">
+            <div class$="{{configSecondary.width}} cml" on-tap="toggleDrawer">
+              {{_getItemSecondary(itemSecondary,configSecondary)}}
+            </div>
+          </template>
+          <template is="dom-if" if="[[_checkTypeNumber(configSecondary.type)]]">
+            <div class$="{{configSecondary.width}} cml" on-tap="toggleDrawer">
+              <numeral-js number="{{_getItemSecondary(itemSecondary,configSecondary)}}" format="0,0" print></numeral-js>
+            </div>
+          </template>
         </template>
       </paper-icon-item>
     </template>
@@ -294,7 +304,8 @@ Polymer({
       var configPointer2 = {
         item: lists2[i].getAttribute('item'),
         label: lists2[i].getAttribute('label'),
-        width: lists2[i].getAttribute('width')
+        width: lists2[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
       };
 
       config.secondary.push(configPointer2);
@@ -308,7 +319,8 @@ Polymer({
       var configPointer22 = {
         item: lists22[i].getAttribute('item'),
         label: lists22[i].getAttribute('label'),
-        width: lists22[i].getAttribute('width')
+        width: lists22[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
       };
 
       config.secondaryHalf.push(configPointer22);
@@ -322,7 +334,8 @@ Polymer({
       var configPointer3 = {
         item: lists3[i].getAttribute('item'),
         label: lists3[i].getAttribute('label'),
-        width: lists3[i].getAttribute('width')
+        width: lists3[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
       };
 
       config.third.push(configPointer3);
@@ -337,7 +350,8 @@ Polymer({
       var configPointer33 = {
         item: lists33[i].getAttribute('item'),
         label: lists33[i].getAttribute('label'),
-        width: lists33[i].getAttribute('width')
+        width: lists33[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
       };
 
       config.thirdHalf.push(configPointer33);

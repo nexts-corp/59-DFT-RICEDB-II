@@ -34,6 +34,11 @@
                   handle-as="json"
                   last-response="{{lastResponse}}">
       </iron-ajax>
+      <iron-ajax  auto
+                  url="http://localhost:3000/typerice"
+                  handle-as="json"
+                  last-response="{{typeRice}}">
+      </iron-ajax>
 				<!-- <template is="dom-repeat" items="{{lastResponse}}">
 					<div>
 						<h2>Record: <span>{{item.buyer_id}}</span></h2>
@@ -51,10 +56,9 @@
                     <list item="contract_balance" label="เหลือ (ตัน)" width="flex" type="number"></list>
                   </items>
                   <items type="secondary" item="confirm_letter">
-                    <!-- <list item="" label="" width=""></list> -->
                     <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
-                    <list item="cl_quantity" label="" width="flex" type="string"></list>
-                    <list item="cmlSendRice" label="" width="flex" type="string"></list>
+                    <list item="cl_total_quantity" label="" width="flex" type="string"></list>
+                    <list item="cl_ship_quantity" label="" width="flex" type="string"></list>
                     <list item="cmlBalanceRice" label="" width="flex" type="string"></list>
                   </items>
                   <items type="secondaryHalf" item="sub">
@@ -62,7 +66,6 @@
                     <list item="period" label="+ เพิ่ม Confirmation Letter" width="flex-12" type="string"></list>
                   </items>
                   <items type="third" item="sub3">
-                    <!-- <list item="" label="" width=""></list> -->
                     <list item="period" label="งวดการส่งมอบ" width="flex-9" type="string"></list>
                   </items>
                   <items type="thirdHalf" item="sub3">
@@ -86,8 +89,7 @@
                         <panel-seleted>
                             <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <!-- <test-ice name="primary" data="{{dataSelect}}"></test-ice> -->
-                                    <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+                                    <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
                                     <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
                                     <period-page name="third" data="{{dataSelect}}"></period-page>
                                 </iron-pages>
@@ -144,6 +146,10 @@
                 vesselPage: {
                     type: Number,
                     value: 0
+                },
+                idData: {
+                    type:String,
+                    value:''
                 },
                 data: {
                     type: Object,
@@ -694,6 +700,12 @@
                     this.vesselPage = 0;
                 }
                 this.dataSelect = e.detail.data;
+                if(e.detail.data.buyer_id){
+                  this.idData = e.detail.data.buyer_id;
+                }else {
+                  this.idData = e.detail.data.cl_id;
+                }
+                console.log(this.idData);
                 // console.log(this.vesselPage);
                 // console.log(this.dataSelect);
             },
