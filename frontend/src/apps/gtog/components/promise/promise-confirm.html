@@ -69,7 +69,7 @@
         <form is="iron-form" id="form" method="post" action="/form/handler">
           <div class="bg">
             <gl-grid-row>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
                     <template is="dom-repeat" items="[[typeRice]]">
@@ -77,6 +77,9 @@
                     </template>
                   </paper-menu>
                 </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.type_rice_quantity}}"></gl-form-input>
               </gl-grid-col>
             </gl-grid-row>
 
