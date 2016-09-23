@@ -28,10 +28,10 @@
     <template>
     <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.id}}"></gl-form-input>
+          <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.cl_no}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่" value="{{data.dateconfirm}}"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่" value="{{data.cl_date}}"></vaadin-date-picker>
         </gl-grid-col>
     </gl-grid-row>
 
@@ -74,20 +74,20 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{data.price}}">
-                    <paper-item price-type="fob">FOB CY</paper-item>
-                    <paper-item price-type="bath">Bath</paper-item>
-                    <paper-item price-type="other">ฯลฯ</paper-item>
+                <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{data.inct_id}}">
+                    <paper-item price-type="FOB">FOB CY</paper-item>
+                    <paper-item price-type="Bath">Bath</paper-item>
+                    <paper-item price-type="Other">ฯลฯ</paper-item>
                 </paper-menu>
             </gl-form-dropdown-menu>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-            <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.totalQuantity]]"></gl-form-input>
+            <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.cl_quantity]]"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-            <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.detail]]"></gl-form-textarea>
+            <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.cl_quality]]"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
 
