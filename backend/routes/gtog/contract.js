@@ -5,7 +5,7 @@ var r = require('rethinkdb');
 var db = require('../../db.js');
 
 
-router.get('/list', function (req, res, next) {
+router.get(['/','/list'], function (req, res, next) {
     db.query(function (conn) {
         r.table("contract")
             .merge(function (row) {
@@ -52,9 +52,5 @@ router.get('/list', function (req, res, next) {
             });
     })
 });
-
-// router.get('/list/:abc', function (req, res, next) {
-//     console.log(req.abc);
-// });
 
 module.exports = router;
