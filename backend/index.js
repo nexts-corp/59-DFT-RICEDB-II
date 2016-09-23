@@ -1,8 +1,13 @@
 var express = require('express');
 var app = express();
+var prefix = '/api';
 
 var test = require('./routes/test');
+//g2g
 var g2g_contract = require('./routes/gtog/contract');
+var g2g_confirm = require('./routes/gtog/confirm');
+
+//common
 var typeRice = require('./routes/typeRice');
 var package = require('./routes/package');
 var country = require('./routes/country');
@@ -17,12 +22,15 @@ app.use(function (req, res, next) {
 });
 
 app.use(test);
-app.use('/gtog/contract', g2g_contract);
-app.use('/typeRice', typeRice);
-app.use('/package', package);
-app.use('/country', country);
-app.use('/port', port);
-app.use('/ship', ship);
-app.use('/carrier', carrier);
+//path g2g
+app.use(prefix+'/gtog/contract', g2g_contract);
+app.use(prefix+'/gtog/confirm', g2g_confirm);
+//path common
+app.use(prefix+'/common/typeRice', typeRice);
+app.use(prefix+'/common/package', package);
+app.use(prefix+'/common/country', country);
+app.use(prefix+'/common/port', port);
+app.use(prefix+'/common/ship', ship);
+app.use(prefix+'/common/carrier', carrier);
 
 app.listen(3000);
