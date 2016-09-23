@@ -1,6 +1,8 @@
 <link rel="import" href="nx-grid-component.html">
 <link rel="import" href="/bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/gl-form/gl-form-label-input.html">
+<link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <dom-module id="nx-grid">
 <style is="custom-style" include="iron-flex iron-flex-factors gl-size">
 .header {
@@ -105,9 +107,22 @@ paper-icon-item {
         <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
           <paper-icon-button on-tap="_toggleSub" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
-            <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
-              {{_getItemPrimary(itemPrimary,configPrimary)}}
-            </div>
+            <template is="dom-if" if="[[_checkTypeString(configPrimary.type)]]">
+              <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
+                {{_getItemPrimary(itemPrimary,configPrimary)}}
+              </div>
+            </template>
+            <template is="dom-if" if="[[_checkTypeNumber(configPrimary.type)]]">
+              <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
+                <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js>
+              </div>
+            </template>
+
+            <!-- <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
+              <gl-form-label-input label=" " value="1111111111.00553443" format-number="on"></gl-form-label-input>
+             {{_getItemPrimary(itemPrimary,configPrimary)}}
+            </div> -->
+
           </template>
         </paper-icon-item>
         <paper-submenu id="sub-{{index}}" label$="{{index}}">
@@ -267,7 +282,7 @@ Polymer({
         width: lists[i].getAttribute('width'),
         type: lists[i].getAttribute('type')
       };
-      console.log(configPointer);
+      // console.log(configPointer);
       config.primary.push(configPointer);
     }
 
@@ -359,7 +374,16 @@ Polymer({
         level: e.currentTarget.getAttribute('level')
       });
     }
-  }
+  },
+  _checkTypeString:function(type){
+    return type === 'string';
+  },
+  _checkTypeNumber:function(type){
+    return type === 'number';
+  },
+  attached: function() {
+    console.log(this.config.primary);
+  },
 });
 </script>
 </dom-module>
