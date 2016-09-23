@@ -7,9 +7,9 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("carrier")
+        r.table("shipline")
             .merge(function (row) {
-                return { carrier_id: row('id') }
+                return { shipline_id: row('id') }
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -28,15 +28,16 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:carrier_id', function (req, res, next) {
+router.get('/:shipline_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("carrier")
-            .get(req.params.carrier_id)
-            .merge({
-                carrier_id: r.row('id')
-            })
+        r.table("shipline")
+            .get(req.params.shipline_id)
+            .merge(
+                { shipline_id: r.row('id') }
+            )
             .without('id')
             .run(conn, function (err, cursor) {
+                console.log(err);
                 if (!err) {
                     res.json(cursor);
                 } else {
