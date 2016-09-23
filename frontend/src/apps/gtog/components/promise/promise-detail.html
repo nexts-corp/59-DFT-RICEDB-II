@@ -27,7 +27,6 @@
             <vaadin-date-picker label="วันที่" value="{{data.contract_date}}"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
-
         <template id="zatest" is="dom-repeat" items="{{data.contract_type_rice}}">
           <form is="iron-form" id="form" method="post" action="/form/handler">
             <div class="bg top">
@@ -35,8 +34,12 @@
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                     <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                       <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
-                        <paper-item rice-type-id="WH-05">ข้าวขาว 5%</paper-item>
-                        <paper-item rice-type-id="WH-10">ข้าวขาว 10%</paper-item>
+                        <template is="dom-repeat" items="[[typeRice]]">
+                          <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
+                        </template>
+
+                        <!-- <paper-item rice-type-id="WH-10">ข้าวขาว 10%</paper-item> -->
+
                       </paper-menu>
                     </gl-form-dropdown-menu>
                 </gl-grid-col>
