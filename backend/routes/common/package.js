@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 var r = require('rethinkdb');
-var db = require('../db.js');
+var db = require('../../db.js');
 
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("type_rice")
+        r.table("package")
             .merge(function (row) {
-                return { type_rice_id: row('id') }
+                return { package_id: row('id') }
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -28,13 +28,12 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-
-router.get('/:type_rice_id', function (req, res, next) {
+router.get('/:package_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("type_rice")
-            .get(req.params.type_rice_id.toUpperCase())
+        r.table("package")
+            .get(req.params.package_id.toUpperCase())
             .merge({
-                type_rice_id: r.row('id')
+                package_id: r.row('id')
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -46,5 +45,4 @@ router.get('/:type_rice_id', function (req, res, next) {
             });
     })
 });
-
 module.exports = router;

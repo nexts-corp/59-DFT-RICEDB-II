@@ -2,16 +2,17 @@ var express = require('express');
 var router = express.Router();
 
 var r = require('rethinkdb');
-var db = require('../db.js');
+var db = require('../../db.js');
 
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("carrier")
+        r.table("buyer")
             .merge(function (row) {
-                return { carrier_id: row('id') }
+                return { buyer_id: row('id') }
             })
             .without('id')
+            .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -28,12 +29,13 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:carrier_id', function (req, res, next) {
+router.get('/:buyer_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("carrier")
-            .get(req.params.carrier_id)
+        r.table("buyer")
+            .get(req.params.buyer_id)
             .merge(
-                { carrier_id: r.row('id') }
+                { buyer_id: r.row('id') },
+                r.table("country").get(r.row("country_id"))
             )
             .without('id')
             .run(conn, function (err, cursor) {

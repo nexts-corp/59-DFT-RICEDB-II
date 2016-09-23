@@ -20,10 +20,11 @@ router.get('/:cl_id', function (req, res, next) {
                                         return r.table('package').get(row_package('package_id')).without('id')
                                     })
                                 })
-                            }
-                        }).merge(function (row_type_rice) {
-                            return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                            },r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
+                        // .merge(function (row_type_rice) {
+                        //     return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                        // })
                     })
                 }
             })
