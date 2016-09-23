@@ -3,6 +3,8 @@
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
 
+<link rel="import" href="../database/con-db.html">
+
 <link rel="import" href="components/promise/promise-confirm.html">
 <link rel="import" href="components/promise/promise-detail.html">
 <link rel="import" href="components/promise/promise-fileup.html">
@@ -29,16 +31,21 @@
     <template>
     <db-gtog-contact></db-gtog-contact>
 
-      <iron-ajax  auto
+      <!-- <iron-ajax  auto
                   url="http://localhost:3000/gtog/contract/list"
                   handle-as="json"
                   last-response="{{lastResponse}}">
-      </iron-ajax>
-      <iron-ajax  auto
+      </iron-ajax> -->
+      <!-- <iron-ajax  auto
                   url="http://localhost:3000/typerice"
                   handle-as="json"
                   last-response="{{typeRice}}">
       </iron-ajax>
+      <iron-ajax auto
+                  url="http://localhost:3000/country/th"
+                  handle-as="json"
+                  last-response="{{contry}}">
+      </iron-ajax> -->
 				<!-- <template is="dom-repeat" items="{{lastResponse}}">
 					<div>
 						<h2>Record: <span>{{item.buyer_id}}</span></h2>
@@ -687,9 +694,14 @@
                 this.glSetLayout('layout-main');
 
             },
+            ready: function() {
+              this.getDb('http://localhost:3000/gtog/contract/list');
+            },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
-                console.log(this.lastResponse);
+                // this.getDb('http://localhost:3000/gtog/contract/list');
+                // this.glQuery('conDb').getDb('http://localhost:3000/gtog/contract/list');
+
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
@@ -705,7 +717,7 @@
                 }else {
                   this.idData = e.detail.data.cl_id;
                 }
-                console.log(this.idData);
+                // console.log(this.idData);
                 // console.log(this.vesselPage);
                 // console.log(this.dataSelect);
             },
@@ -715,6 +727,29 @@
                 //this.layoutMain.changePath('/gtog/add-period');
                 // }
             },
+            getDb:function (url) {
+              // console.log(url);
+              axios.get(url)
+                .then(function(response){
+                  console.log(this.lastResponse=response.data);
+                }.bind(this))
+                .catch(function (error) {
+                console.log(error);
+                });
+            },
+            postDb:function (url) {
+              axios.get('/user', {
+                params: {
+                  ID: 12345
+                }
+              })
+              .then(function (response) {
+                console.log(response);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+            }
         });
     </script>
 </dom-module>
