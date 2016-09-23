@@ -150,14 +150,15 @@
         Polymer({
             is: "promise-confirm",
             properties: {
-                // data: {
-                //     type: Object,
-                //     value: {
-                //         name: ''
-                //     }
-                // }
+                data: {
+                    type: Object
+                }
             },
-            ready: function() {
+            observers: [
+              'dataChange(data)'
+            ],
+            dataChange: function(data) {
+              this.data= data;
               console.log(this.data);
             },
             add: function() {
