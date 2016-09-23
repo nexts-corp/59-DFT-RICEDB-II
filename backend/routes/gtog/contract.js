@@ -20,17 +20,18 @@ router.get('/list', function (req, res, next) {
                         .filter({ 'contract_id': row('id') })
                         .merge(function (cl) {
                             return {
-                                cl_id: cl('id')
+                                cl_id: cl('id'),
+                                cl_ship_quantity:cl('cl_total_quantity').div(2)
                             }
                         })
                         .without('id')
                         .coerceTo('array'),
                     contract_sent: r.table('confirm_letter')
                         .filter({ 'contract_id': row('id') })
-                        .sum('cl_quantity'),
+                        .sum('cl_total_quantity'),
                     contract_balance: row('contract_quantity').sub(r.table('confirm_letter')
                         .filter({ 'contract_id': row('id') })
-                        .sum('cl_quantity'))
+                        .sum('cl_total_quantity'))
                 }
             }).without('id')
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
@@ -47,5 +48,9 @@ router.get('/list', function (req, res, next) {
             });
     })
 });
+
+// router.get('/list/:abc', function (req, res, next) {
+//     console.log(req.abc);
+// });
 
 module.exports = router;
