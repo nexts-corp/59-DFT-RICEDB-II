@@ -21,7 +21,7 @@ router.get('/list', function (req, res, next) {
                         .merge(function (cl) {
                             return {
                                 cl_id: cl('id'),
-                                cl_ship_quantity:cl('cl_total_quantity').div(2)
+                                cl_ship_quantity: cl('cl_total_quantity').div(2)
                             }
                         })
                         .without('id')
@@ -42,8 +42,12 @@ router.get('/list', function (req, res, next) {
                         if (!err) {
                             //console.log(JSON.stringify(result, null, 2));
                             res.json(result);
+                        } else {
+                            res.json(null);
                         }
                     });
+                } else {
+                    res.json(null);
                 }
             });
     })
