@@ -12,53 +12,57 @@
 
 
 <dom-module id="gtog-add-draft">
-    <style is="custom-style" >
-        * {
-            font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .left {
-            margin: 0px 10px 0px 10px;
-            border: 1px solid #000;
-        }
-    </style>
-    <template>
+  <style is="custom-style">
+    * {
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .left {
+      margin: 0px 10px 0px 10px;
+      border: 1px solid #000;
+    }
+  </style>
+  <template>
     <db-gtog-contact></db-gtog-contact>
     <!-- <gl-search-input result="{{result}}"></gl-search-input>
     {{result.name}} // {{result.searchType}} -->
     <content-panel>
       <grid>
-        <list-draft data="{{dataPeriod}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}" >
+        <list-draft data="{{dataPeriod}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}">
           <items type="primary">
             <list item="blNo" label="Bill of Landing Number (B/L No.)" width="flex"></list>
           </items>
-          <items type="secondary" >
+          <items type="secondary">
             <list item="invoiceNo" label="Invoice No." width="flex"></list>
           </items>
-          <items type="third" >
+          <items type="third">
             <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
           </items>
         </list-draft>
       </grid>
-    <panel>
+      <panel>
         <div class="left">
           <panel-seleted-perriod>
             <section-content name="detail">
-              <payment-detail></payment-detail>
+              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                <payment-detail name="primary" data="{{dataSelect}}"></payment-detail>
+                <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
+                <period-page name="third" data="{{dataSelect}}"></period-page>
+              </iron-pages>]
             </section-content>
             <section-content name="print">
-                <payment-pay></payment-pay>
+              <payment-pay></payment-pay>
             </section-content>
             <section-content name="file">
-                3
+              3
             </section-content>
           </panel-seleted-perriod>
         </div>
-    </panel>
+      </panel>
     </content-panel>
-    </template>
-    <script>
+  </template>
+  <script>
         Polymer({
             is: "gtog-add-draft",
             listeners: {
