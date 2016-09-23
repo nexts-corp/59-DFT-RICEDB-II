@@ -13,9 +13,7 @@
 <link rel="import" href="data/db-gtog-contact.html">
 <link rel="import" href="test.html">
 
-
-<link rel="import" href="/bower_components/numeral-js/numeral-js.html">
-<dom-module id="gtog-add-contract">
+<dom-module id="gtog-add-contact">
     <style is="custom-style" >
         * {
             font-family: 'rsuregular', sans-serif;
@@ -28,106 +26,25 @@
     </style>
     <template>
     <db-gtog-contact></db-gtog-contact>
-
-      <iron-ajax  auto
-                  url="http://localhost:3000/gtog/contract/list"
-                  handle-as="json"
-                  last-response="{{lastResponse}}">
-      </iron-ajax>
-				<!-- <template is="dom-repeat" items="{{lastResponse}}">
+    <!-- url="http://jsonplaceholder.typicode.com/posts" -->
+    <byutv-jsonp auto
+							 url="http://localhost:3000/contract/list"
+							 last-response="{{lastResponse}}"
+							 last-error="{{lastError}}"></byutv-jsonp>
+				<template is="dom-repeat" items="{{lastResponse}}">
 					<div>
-						<h2>Record: <span>{{item.buyer_id}}</span></h2>
-						<h1>{{item.buyer_name}}</h1>
+						<h2>Record: <span>{{item.id}}</span></h2>
+						<h1>{{item.title}}</h1>
+						<p>{{item.body}}</p>
 					</div>
-				</template> -->
+				</template>
+    {{lastResponse}}/7
+    sdfsdfsd
 
-            <content-panel>
-              <grid>
-                <nx-grid data="{{lastResponse}}">
-                  <items type="primary">
-                    <list item="buyer_name" label="ชื่อ" width="flex-2" type="string"></list>
-                    <list item="contract_quantity" label="ทั้งหมด (ตัน) /" width="flex" type="number"></list>
-                    <list item="contract_sent" label="ส่งแล้ว (ตัน) /" width="flex" type="number"></list>
-                    <list item="contract_balance" label="เหลือ (ตัน)" width="flex" type="number"></list>
-                  </items>
-                  <items type="secondary" item="confirm_letter">
-                    <!-- <list item="" label="" width=""></list> -->
-                    <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
-                    <list item="cl_quantity" label="" width="flex" type="string"></list>
-                    <list item="cmlSendRice" label="" width="flex" type="string"></list>
-                    <list item="cmlBalanceRice" label="" width="flex" type="string"></list>
-                  </items>
-                  <items type="secondaryHalf" item="sub">
-                    <list item="" label="" width="flex" type="string"></list>
-                    <list item="period" label="+ เพิ่ม Confirmation Letter" width="flex-12" type="string"></list>
-                  </items>
-                  <items type="third" item="sub3">
-                    <!-- <list item="" label="" width=""></list> -->
-                    <list item="period" label="งวดการส่งมอบ" width="flex-9" type="string"></list>
-                  </items>
-                  <items type="thirdHalf" item="sub3">
-                    <list item="" label="" width="flex"></list>
-                    <list item="period" label="+ เพิ่มงวด" width="flex-12" type="string"></list>
-                  </items>
-                  <template type="primary">
-                    <input placeholder="text" value="primary">
-                  </template>
-            <template type="secondary">
-                    <input placeholder="text" value="secondary">
-                  </template>
-            <template type="third">
-                    <input placeholder="text" value="third">
-                  </template>
-            </nx-grid>
-            </grid>
-            <panel>
-                <div class="left">
-                    <iron-pages selected="{{vesselPage}}">
-                        <panel-seleted>
-                            <section-content name="detail">
-                                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <!-- <test-ice name="primary" data="{{dataSelect}}"></test-ice> -->
-                                    <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                                    <period-page name="third" data="{{dataSelect}}"></period-page>
-                                </iron-pages>
-
-
-                            </section-content>
-                            <section-content name="print">
-                                <vessel-print></vessel-print>
-                            </section-content>
-                            <section-content name="file">
-                                <promise-fileup></promise-fileup>
-                            </section-content>
-                        </panel-seleted>
-                        <!-- vesse -->
-
-                        <panel-seleted-vessel>
-                            <section-content name="detail">
-                                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                                    <period-page name="third" data="{{dataSelect}}"> </period-page>
-                                </iron-pages>
-
-                            </section-content>
-                            <section-content name="print">
-                                <vessel-page data="{{dataSelect}}"></vessel-page>
-                            </section-content>
-                            <section-content name="file">
-                                <promise-fileup></promise-fileup>
-                            </section-content>
-                        </panel-seleted-vessel>
-                        <!-- vesse -->
-                    </iron-pages>
-                </div>
-            </panel>
-            </content-panel>
     </template>
     <script>
         Polymer({
-            is: "gtog-add-contract",
+            is: "gtog-add-contact",
             listeners: {
                 'nx-grid-tap': 'nxGridTap',
                 'nx-grid-dblclick': 'nxGridDblclick'
