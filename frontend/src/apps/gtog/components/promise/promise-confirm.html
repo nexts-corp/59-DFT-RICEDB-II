@@ -65,15 +65,16 @@
 
       <div class="top">Commodities, Price, Package</div>
 
-      <template is="dom-repeat" items="[[data.confirmItem]]">
+      <template is="dom-repeat" items="[[data.cl_type_rice]]">
         <form is="iron-form" id="form" method="post" action="/form/handler">
           <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
-                    <paper-item rice-type-id="WH-05">ข้าวขาว 5%</paper-item>
-                    <paper-item rice-type-id="WH-10">ข้าวขาว 10%</paper-item>
+                    <template is="dom-repeat" items="[[typeRice]]">
+                      <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
+                    </template>
                   </paper-menu>
                 </gl-form-dropdown-menu>
               </gl-grid-col>
@@ -84,23 +85,28 @@
                 <th>Package (Kg/PP Bags)</th>
                 <th>Price (USD/MT)</th>
                 <th>Minimum Tare Weight</th>
-                <th></th>
+                <th>{{item.package_id}}f</th>
               </tr>
-              <tr>
-                <td><gl-form-dropdown-menu error-message="กรุณาเลือกชนิดpackage" placeholder="เลือกประเภท" required no-label-float>
-                  <paper-menu class="dropdown-content" attr-for-selected="package" selected="{{item.package}}">
-                    <paper-item package="WH-05">25</paper-item>
-                    <paper-item package="WH-10">50</paper-item>
-                  </paper-menu>
-                </gl-form-dropdown-menu>
-                </td>
-                <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.price]]" no-label-float></gl-form-input></td>
-                <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.weight]]" no-label-float></gl-form-input></td>
-                <td>
-                  <paper-icon-button icon="icons:add" style="color: gray;" on-tap=""></paper-icon-button>
-                  <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
-                </td>
-              </tr>
+              <template is="dom-repeat" items="[[item.package]]">
+                <tr>
+                  <td><gl-form-dropdown-menu error-message="กรุณาเลือกชนิดpackage" placeholder="เลือกประเภท" required no-label-float>
+                    <paper-menu class="dropdown-content" attr-for-selected="package" selected="{{item.package_id}}">
+                      <template is="dom-repeat" items="[[package]]">
+                        <paper-item package="[[item.package_id]]">[[item.pack_name]]</paper-item>
+                      </template>
+                    </paper-menu>
+                  </gl-form-dropdown-menu>
+                  </td>
+                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.price_per_ton]]" no-label-float></gl-form-input></td>
+                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.weight]]" no-label-float></gl-form-input></td>
+                  <td>
+                    <paper-icon-button icon="icons:add" style="color: gray;" on-tap=""></paper-icon-button>
+                    <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
+                  </td>
+                </tr>
+              </template>
+
+
             </table>
 
             </div>
@@ -123,7 +129,7 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.cl_quantity]]"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.cl_total_quantity]]"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -133,7 +139,7 @@
 
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-          <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
+          <paper-button class="gl-btn-success" on-tap="add" raised>บันทึก</paper-button>
       </div>
 
     </template>
@@ -148,7 +154,11 @@
                     }
                 }
             },
+            ready: function() {
+              // console.log(this.data.cl_type_rice);
+            },
             add: function() {
+              console.log(this.data.cl_type_rice);
                 this.push('data.confirmItem', {
                     package: '',
                     price: ''

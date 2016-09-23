@@ -97,11 +97,9 @@
                             <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
+                                    <promise-confirm name="secondary" data="{{dataSelect}}" type-rice=[[typeRice]] package=[[package]]></promise-confirm>
                                     <period-page name="third" data="{{dataSelect}}"></period-page>
                                 </iron-pages>
-
-
                             </section-content>
                             <section-content name="print">
                                 <vessel-print></vessel-print>
@@ -115,7 +113,7 @@
                         <panel-seleted-vessel>
                             <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <promise-detail name="primary" data="{{dataSelect}}"></promise-detail>
+                                    <!-- <promise-detail name="primary" data="{{dataSelect}}"></promise-detail> -->
                                     <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
                                     <period-page name="third" data="{{dataSelect}}"> </period-page>
                                 </iron-pages>
@@ -695,7 +693,34 @@
 
             },
             ready: function() {
-              this.getDb('http://localhost:3000/gtog/contract/list');
+              // list county
+              this.getDb('http://localhost:3000/api/gtog/contract/list',(data)=>{
+                this.lastResponse=data;
+              });
+              // list riceType
+              this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
+                this.typeRice=data;
+              });
+              // list package
+              this.getDb('http://localhost:3000/api/common/package',(data)=>{
+                this.package=data;
+              });
+              // list port
+              this.getDb('http://localhost:3000/api/common/port',(data)=>{
+                this.ports=data;
+              });
+              // list country
+              this.getDb('http://localhost:3000/api/common/country',(data)=>{
+                this.country=data;
+              });
+              // list ship
+              this.getDb('http://localhost:3000/api/common/ship',(data)=>{
+                this.ship=data;
+              });
+              // list carrier
+              this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
+                this.carrier=data;
+              });
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
@@ -727,15 +752,16 @@
                 //this.layoutMain.changePath('/gtog/add-period');
                 // }
             },
-            getDb:function (url) {
+            getDb:function (url,callback) {
               // console.log(url);
               axios.get(url)
                 .then(function(response){
-                  console.log(this.lastResponse=response.data);
+                  // console.log(this.lastResponse=response.data);
+                  callback(response.data);
                 }.bind(this))
                 .catch(function (error) {
-                console.log(error);
-                });
+                  //return this.lastResponse = error;
+                }.bind(this));
             },
             postDb:function (url) {
               axios.get('/user', {
