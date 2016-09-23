@@ -58,14 +58,14 @@ border: 1px solid #000;
       <div class="flex searchInput ">
          <div class="horizontal end-justified layout">
            <div class="labelSearch">B/L No.</div>
-           <paper-input label="Input label" no-label-float></paper-input>
+           <paper-input label=" " no-label-float></paper-input>
            <paper-icon-button icon="search"></paper-icon-button>
          </div>
      </div>
    </div>
     <template is="dom-repeat" as="itemPrimary" items="{{data}}">
       <paper-icon-item on-tap="_getBind" level="primary" data="{{itemPrimary}}">
-        <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
+        <!-- <iron-icon icon="radio-button-unchecked" item-icon></iron-icon> -->
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
             <div class$="[[configPrimary.width]]"  on-tap="_toggleDrawer">
               <div class="fontPdLeft" >
@@ -86,25 +86,25 @@ border: 1px solid #000;
        <div class="flex searchInput ">
           <div class="horizontal end-justified layout">
             <div class="labelSearch">Invoice</div>
-            <paper-input label="Input label" no-label-float></paper-input>
+            <paper-input label=" " no-label-float></paper-input>
             <paper-icon-button icon="search"></paper-icon-button>
           </div>
       </div>
     </div>
      <template is="dom-repeat" as="itemSecondary" items="{{datainvoice}}">
        <paper-icon-item on-tap="_getBind" level="secondary" data="{{itemSecondary}}">
-         <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
+         <iron-icon icon="check-box-outline-blank" item-icon on-tap="acceptMoney"></iron-icon>
            <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
              <div class$="[[configSecondary.width]]"  on-tap="_toggleDrawer">
                <div class="fontPdLeft" >
                  {{_getItemPrimary(itemSecondary,configSecondary)}}
                </div>
              </div>
-             <div class="layout horizontal">
+             <!-- <div class="layout horizontal">
                <div class="horizontal end-justified layout">
                  <paper-checkbox>รับเงินแล้ว</paper-checkbox>
                </div>
-            </div>
+            </div> -->
            </template>
        </paper-icon-item>
      </template>
@@ -123,7 +123,7 @@ border: 1px solid #000;
        <div class="flex searchInput ">
           <div class="horizontal end-justified layout">
             <div class="labelSearch">ครั้งที่ </div>
-            <paper-input label="Input label" no-label-float></paper-input>
+            <paper-input label=" " no-label-float></paper-input>
             <paper-icon-button icon="search"></paper-icon-button>
           </div>
       </div>
@@ -142,7 +142,7 @@ border: 1px solid #000;
       <template is="dom-repeat" as="itemThirdSub" items="{{itemThird.blNos}}">
 
         <paper-icon-item on-tap="_getBind" level="third" data="{{itemThird.blNos}}">
-          <iron-icon icon="radio-button-unchecked" item-icon></iron-icon>
+          <!-- <iron-icon icon="radio-button-unchecked" item-icon></iron-icon> -->
             <template is="dom-repeat" as="configThird" items="{{config.third}}">
               <div class$="[[configThird.width]]"  on-tap="_toggleDrawer">
                 <div class="fontPdLeft" >
@@ -160,9 +160,20 @@ border: 1px solid #000;
             is: "list-draft",
             behaviors: [listEditBehavior,gl.behavior.core],
             attached: function() {
-              console.log(this.dataround[0]);
+              // console.log(this.dataround[0]);
               // console.log(this.data[0].blNos[0]);
             },
+            acceptMoney:function(e){
+              if(e.target.getAttribute("icon") == 'check-box'){
+                e.target.setAttribute("icon", 'check-box-outline-blank')
+              } else {
+                e.target.setAttribute("icon", 'check-box')
+              }
+
+              // console.log(1);
+              console.log(e.target.getAttribute("icon"));
+              // console.log(e.target.setAttribute("icon", 'check-box'));
+            }
         });
     </script>
 </dom-module>
