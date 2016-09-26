@@ -105,7 +105,7 @@ paper-icon-item {
     <paper-menu attr-for-item-title="label" multi style="padding-top:0px" class="paper-menu-lv1">
       <template is="dom-repeat" as="itemPrimary" items="{{data}}">
         <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
-          <paper-icon-button on-tap="_toggleSub" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+          <paper-icon-button on-tap="_toggleSub" contract-id$="{{itemPrimary.contract_id}}" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
             <template is="dom-if" if="[[_checkTypeString(configPrimary.type)]]">
               <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
@@ -250,6 +250,10 @@ Polymer({
     },
     config: {
       type: Object
+    },
+    contractId:{
+      type:String,
+      notify:true
     }
   },
   toggleDrawer: function() {
@@ -364,6 +368,8 @@ Polymer({
     // console.log(this.config);
   },
   _toggleSub: function(e) {
+    // console.log(e.target.getAttribute("contract-id"));
+    this.contractId = e.target.getAttribute("contract-id");
     this.$$('#' + e.currentTarget.dataSub).toggle();
     if (e.target.icon == 'expand-more') {
       e.currentTarget.icon = 'chevron-right';
