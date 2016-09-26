@@ -55,7 +55,7 @@
 						<h1>{{item.buyer_name}}</h1>
 					</div>
 				</template> -->
-          
+
             <content-panel>
               <grid>
                 <div class="horizontal end-justified layout">
@@ -81,12 +81,12 @@
                     <list item="" label="" width="flex" type="string"></list>
                     <list item="period" label="+ เพิ่ม Confirmation Letter" width="flex-12" type="string"></list>
                   </items>
-                  <items type="third" item="sub3">
-                    <list item="period" label="งวดการส่งมอบ" width="flex-9" type="string"></list>
+                  <items type="third" item="shipment">
+                    <list item="shm_no" label="งวดการส่งมอบ" width="flex-9" type="string"></list>
                   </items>
-                  <items type="thirdHalf" item="sub3">
+                  <items type="thirdHalf" item="shipment">
                     <list item="" label="" width="flex"></list>
-                    <list item="period" label="+ เพิ่มงวด" width="flex-12" type="string"></list>
+                    <list item="shm_no" label="+ เพิ่มงวด" width="flex-12" type="string"></list>
                   </items>
                   <template type="primary">
                     <input placeholder="text" value="primary">
@@ -120,16 +120,8 @@
                         <!-- vesse -->
 
                         <panel-seleted-vessel>
-                            <section-content name="detail">
-                                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                                    <!-- <promise-detail name="primary" data="{{dataSelect}}"></promise-detail> -->
-                                    <!-- <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm> -->
-                                    <period-page name="third" data="{{dataSelect}}"> </period-page>
-                                </iron-pages>
-
-                            </section-content>
                             <section-content name="print">
-                                <vessel-page data="{{dataSelect}}"></vessel-page>
+                                <vessel-page data="{{shipMent}}"></vessel-page>
                             </section-content>
                             <section-content name="file">
                                 <promise-fileup></promise-fileup>
@@ -744,7 +736,6 @@
                 this.layoutMain = this.glQuery('layoutMain');
                 // this.getDb('http://localhost:3000/gtog/contract/list');
                 // this.glQuery('conDb').getDb('http://localhost:3000/gtog/contract/list');
-
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
@@ -760,10 +751,17 @@
                 }else {
                   this.idData = e.detail.data.cl_id;
                 }
-                // console.log(this.idData);
-                // console.log(this.vesselPage);
-                // console.log(1);
-                // console.log(this.dataSelect);
+                if (this.dataSelect.shm_id) {
+                  // console.log(this.dataSelect.shm_id);
+                  this._shipMent(this.dataSelect.shm_id);
+                }
+
+            },
+            _shipMent:function (id) {
+              this.getDb('http://localhost:3000/api/gtog/shipment/'+id,(data)=>{
+                this.shipMent = data;
+                console.log(this.shipMent);
+              });
             },
             nxGridDblclick: function(e) {
                 // if (e.detail.level == 'primary') {
