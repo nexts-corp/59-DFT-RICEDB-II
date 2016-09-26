@@ -15,36 +15,30 @@ router.get('/:shm_id', function (req, res, next) {
                     shm_id: row('id'),
                     shipment_detail: r.table("shipment_detail")
                         .filter({ "shm_id": row('id') })
-                        .eqJoin("load_port_id", r.table("port"))
-                        .map(function (port) {
+                        .eqJoin("load_port_id", r.table("port")).map(function (port) {
                             return port.merge({
                                 right: {
                                     load_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
                                     load_port_code: port("right")("port_code")
                                 }
                             })
-                        })
-                        .without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("dest_port_id", r.table("port"))
-                        .map(function (port) {
+                        }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                        .eqJoin("dest_port_id", r.table("port")).map(function (port) {
                             return port.merge({
                                 right: {
                                     dest_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
                                     dest_port_code: port("right")("port_code")
                                 }
                             })
-                        })
-                        .without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("deli_port_id", r.table("port"))
-                        .map(function (port) {
+                        }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                        .eqJoin("deli_port_id", r.table("port")).map(function (port) {
                             return port.merge({
                                 right: {
                                     deli_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
                                     deli_port_code: port("right")("port_code")
                                 }
                             })
-                        })
-                        .without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("cl_id", r.table("confirm_letter")).without({
                             right: ["id", "cl_quality", "cl_type_rice", "cl_total_quantity", "cl_date"]
                         }).zip()
