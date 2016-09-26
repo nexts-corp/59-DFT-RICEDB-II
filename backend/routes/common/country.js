@@ -51,12 +51,13 @@ router.post('/insert', function (req, res, next) {
             .insert(req.body)
             .run(conn)
             .then(function (response) {
+                res.json(true);
                 console.log('Success ', response);
             })
             .error(function (err) {
+                res.json(false);
                 console.log('error occurred ', err);
             })
     })
-
 });
 module.exports = router;
