@@ -64,7 +64,6 @@
       </gl-grid-row>
 
       <div class="top">Commodities, Price, Package</div>
-
       <template is="dom-repeat" items="[[data.cl_type_rice]]">
         <form is="iron-form" id="form" method="post" action="/form/handler">
           <div class="bg">
@@ -72,7 +71,7 @@
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
-                    <template is="dom-repeat" items="[[typeRice]]">
+                    <template is="dom-repeat" items="[[riceType.contract_type_rice]]">
                       <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                     </template>
                   </paper-menu>
@@ -139,7 +138,6 @@
               <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.cl_quality]]"></gl-form-textarea>
           </gl-grid-col>
       </gl-grid-row>
-
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
           <paper-button class="gl-btn-success" on-tap="add" raised>บันทึก</paper-button>
@@ -152,20 +150,42 @@
             properties: {
                 data: {
                     type: Object
+                },
+                riceType:{
+                    type: Object
                 }
             },
-            observers: [
-              'dataChange(data)'
+            behaviors: [
+                gl.behavior.core
             ],
+            observers: [
+              'dataChange(data)',
+              'getTyperice(contractId)'
+            ],
+            getTyperice: function(contractId) {
+              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+                this.riceType = data;
+                // console.log(this.riceType);
+              });
+            },
+            getDb:function (url,callback) {
+              // console.log(url);
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+            },
             dataChange: function(data) {
               this.data= data;
-              console.log(this.data.cl_type_rice);
+              // console.log(this.data.cl_type_rice);
 
               // console.log(this.data);
 
             },
             add: function() {
-              console.log(this.data.cl_type_rice);
+              // console.log(this.data.cl_type_rice);
                 this.push('data.confirmItem', {
                     package: '',
                     price: ''
