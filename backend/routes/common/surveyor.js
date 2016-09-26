@@ -7,9 +7,9 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("country")
+        r.table("surveyor")
             .merge(function (row) {
-                return { country_id: row('id') }
+                return { surveyor_id: row('id') }
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -28,12 +28,12 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:country_id', function (req, res, next) {
+router.get('/:surveyor_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("country")
-            .get(req.params.country_id.toUpperCase())
+        r.table("surveyor")
+            .get(req.params.surveyor_id)
             .merge({
-                country_id: r.row('id')
+                surveyor_id: r.row('id')
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -45,5 +45,4 @@ router.get('/:country_id', function (req, res, next) {
             });
     })
 });
-
 module.exports = router;

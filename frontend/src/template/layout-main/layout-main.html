@@ -5,7 +5,8 @@
         height: 100%;
     }
 </style>
-<link rel="import" href="components/icon-toggle.html">
+<!-- <link rel="import" href="components/icon-toggle.html"> -->
+<link rel="import" href="../layout-dashboard/components/list-menu.html">
 <dom-module id="layout-main">
     <style is="custom-style" include="iron-flex iron-flex-alignment">
 
@@ -57,10 +58,11 @@
     </style>
 
     <template>
-
+<!-- <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="40%"> -->
   <paper-header-panel mode="waterfall">
     <div class="paper-header">
       <paper-toolbar class="toolbarHead">
+        <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
         <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
         <div class="title">
           <div class="lineName">
@@ -88,7 +90,7 @@
         <tag-page-load id="tagPageLoad"></tag-page-load>
       </div>
     </paper-header-panel>
-
+    <!-- </paper-drawer-panel> -->
 
   </template>
     <script>
@@ -135,7 +137,11 @@
                 } else {
                     this.glSwitchLanguage('th');
                 }
-            }
+            },
+            _changDrawer:function(){
+              //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
+              this.$.drawerDashboard.togglePanel();
+            },
         });
     </script>
 

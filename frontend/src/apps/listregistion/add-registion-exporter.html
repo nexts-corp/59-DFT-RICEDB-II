@@ -14,7 +14,7 @@
 
 <dom-module id="listregistion-add-registion-exporter">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-        .a{
+        * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
@@ -50,6 +50,12 @@
           margin: 15px;
           border-radius: 3px
         }
+        paper-material {
+          background-color: var(--gl-white-color);
+        }
+        gl-search-input{
+          margin: 30px 0px 0px 0px;
+        }
     </style>
     <template>
 
@@ -61,7 +67,7 @@
         <div class="layout vertical registor">
           <div class="flex ">
             <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" id="addRedRegExporter"> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
+              <paper-button raised class="gl-btn-success"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
             </div>
           </div>
           <div class="flex title">
@@ -83,23 +89,15 @@
             </div>
           </div>
           <div class="flex searchBorder">
-            <!-- <list-registration data={{dataRegistion}}>
+            <list-registration data={{dataRegistion}}>
               <items type="primary">
                 <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
                 <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
                 <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
               </items>
-            </list-registration> -->
+            </list-registration>
 
-            <list-registration-pause data={{dataRegistionPause}}>
-              <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
-              </items>
-            </list-registration-pause>
 
           </div>
         </div>
@@ -179,41 +177,7 @@
 
                     ]
                 },
-                dataRegistionPause:{
-                  type: Object,
-                  notify: true,
-                  value:
-                  [
-                    {
-                      id:1,
-                      regisExporters:"ข1003",
-                      companyName:"สำเภาทอง",
-                      licenceType:"ไม่เกิน 12 กก.",
-                      approvalDate:"18/09/255"
-                    },
-                    {
-                      id:2,
-                      regisExporters:"ข5/2559",
-                      companyName:"กรุงไทย พืชผล บจก.",
-                      licenceType:"ชายแดน",
-                      approvalDate:"18/09/2559"
-                    },
-                    {
-                      id:3,
-                      regisExporters:"ข2/2559",
-                      companyName:"โรงสีทรัพย์อนันต์",
-                      licenceType:"ชายแดน",
-                      approvalDate:"17/09/255"
-                    },
-                    {
-                      id:4,
-                      regisExporters:"ข003",
-                      companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                      licenceType:"ทั่วไป",
-                      approvalDate:"17/09/2559"
-                    }
-                  ]
-                },
+
                 searchType: {
                     type: Object,
                     value: [{
@@ -238,7 +202,7 @@
                 // this.layoutMain = this.glQuery('layoutMain');
             },
             _result:function () {
-              // console.log(this.result);
+              console.log(this.result);
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
