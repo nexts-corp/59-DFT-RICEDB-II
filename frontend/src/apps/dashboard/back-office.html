@@ -1,0 +1,47 @@
+<link rel="import" href="components/main-card.html">
+
+<dom-module id="dashboard-back-office">
+  <style include="iron-flex iron-flex-factors">
+
+  </style>
+  <template>
+
+    <main-card card-name="[[cardname]]"></main-card>
+  </template>
+  <script>
+    Polymer({
+      is: "dashboard-back-office",
+      behaviors: [
+        gl.behavior.core,
+        gl.behavior.locales
+      ],
+      properties: {
+        cardname: {
+          type: Object,
+          value: [
+              { id:0 , nameMenu:"ระบบการซื้อขายข้าวรัฐบาลต่อรัฐบาล" ,path:"/gtog/add-contract", detail:"../../../../images/01/192.png" },
+              { id:1 , nameMenu:"ระบบการการขึ้นทะเบียน" ,path:"/listregistion/add-registion-exporter", detail:"../../../../images/02/192.png" },
+              { id:2 , nameMenu:"ระบบเชื่อมโยงเว็บไซต์และเผยแพร่ข้อมูลด้านการผลิตและการค้าข้าวของไทย" ,path:"http://thairiceinfo.go.th/", detail:"../../../../images/03/192.png" },
+            ]
+        }
+      },
+
+      created:function(){
+        this.glSetTitle('หน้าจัดการข้อมูลการซื้อขายข้าวระหว่างประเทศ');
+        this.glSetLayout('layout-dashboard');
+      }
+      // ready:function(){
+      //   this.$$('nx-grid').addEventListener('nx-grid-tap', (e) => {
+      //     console.log('click',e.detail.data);
+      //     this.promise= e.detail.data;
+      //   }),
+      //   this.$$('nx-grid').addEventListener('nx-grid-dblclick', (e) => {
+      //     console.log('dblclick',e.detail.data);
+      //     this.glChangePath('dashboard/my-period');
+      //   })
+      // },
+
+
+    });
+  </script>
+</dom-module>
