@@ -32,25 +32,9 @@
 
     <gl-form-panel-body set-border="0px">
 
-      <div class="title">เพิ่มทะเบียนผู้ส่งออกข้าว</div>
+      <div class="title">รายละเอียดทะเบียนผู้ส่งออกข้าว</div>
 
       <gl-grid-row width="{{getWidth}}">
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="ประเภทการอนุญาติ :" disabled>
-            <paper-menu  class="dropdown-content" selected="0">
-              <paper-item value="">ทั่วไป</paper-item>
-              <paper-item value="">ชายแดน</paper-item>
-              <paper-item value="">ไม่เกิน 12 กก.</paper-item>
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="เลขประจำตัวผู้ส่งออกข้าว :" value="ข004"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="ETA" value="2016-09-18" disabled></vaadin-date-picker>
-        </gl-grid-col>
-
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี :" value="0123335568790"></gl-form-label-input>
         </gl-grid-col>
@@ -64,7 +48,7 @@
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
-          <gl-form-label-textarea label="ที่อยู่ :" value="107 หมู่ 4 ตำบลโพทะเล อำเภอบางระจัน จังหวัดสิงห์บุรี"></gl-form-label-textarea>
+          <gl-form-label-textarea label="ที่อยู่ :" value="107 หมู่ 4 ตำบลโพทะเลอำเภอบางระจัน จังหวัดสิงห์บุรี"></gl-form-label-textarea>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
           <gl-form-label-textarea label="ที่อยู่ (อังกฤษ) :" value="107 Village No. 4, Sub-district Potale, District Bangrajan, Province Sing Buri"></gl-form-label-textarea>
@@ -88,19 +72,30 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" value="9/2555"></gl-form-label-input>
         </gl-grid-col>
-      </gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value="เป็นสมาชิก"></gl-form-label-input>
+        </gl-grid-col>
 
-        <div class="title">
-          <paper-checkbox class="bd" noink checked>เป็นสมาชิกสมาคมผู้ส่งออกข้าว</paper-checkbox>
-        </div>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-dropdown-menu label="ประเภทการอนุญาติ :"disabled>
+            <paper-menu  class="dropdown-content" selected="0">
+              <paper-item value="">ทั่วไป</paper-item>
+            </paper-menu>
+          </gl-form-dropdown-menu>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="เลขประจำตัวผู้ส่งออกข้าว :" auto-validate error-message="กรุณาใส่เลขประจำตัวผู้ส่งออกข้าว" required value="ข004"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker label="วันที่อนุมัติ :" value="2016-09-18" disabled></vaadin-date-picker>
+        </gl-grid-col>
+      </gl-grid-row>
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="ชื่อคณะกรรมการ :" value="คุณสมพร ใจดี"></gl-form-label-input>
+          <gl-form-label-input  label="ชื่อคณะกรรมการ :" auto-validate error-message="กรุณาใส่ชื่อคณะกรรมการ" required value="คุณสมพร ใจดี"></gl-form-label-input>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <paper-icon-button icon="icons:add-circle"></paper-icon-button>
-        </gl-grid-col>
+
       </gl-grid-row>
 
     </gl-form-panel-body>

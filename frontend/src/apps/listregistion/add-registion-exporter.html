@@ -5,6 +5,8 @@
 <link rel="import" href="components/register/register-memberSave.html">
 <link rel="import" href="components/register/register-memberEdit.html">
 <link rel="import" href="components/register/register-page.html">
+<link rel="import" href="components/register/register-fileup.html">
+<link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
 
 
 <link rel="import" href="components/list-edit/list-registration-pause.html">
@@ -106,10 +108,22 @@
       </grid>
     <panel>
         <div class="left">
-          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+          <gl-tabs>
+            <items>
+                <list data="detail" label="รายละเอียด"></list>
+                <list data="file" label="แนบไฟล์"></list>
+            </items>
+            <section-content data="detail">
+              <register-memberSave></register-memberSave>
+            </section-content>
+            <section-content data="file">
+              <register-fileup></register-fileup>
+            </section-content>
+          </gl-tabs>
+          <!--<iron-pages selected="{{layerContent}}" attr-for-selected="name">
             <div name="addRedRegExporter"><register-member></register-member></div>
             <div name="detailRegExporter"><register-memberSave></register-memberSave></div>
-          </iron-pages>
+          </iron-pages>-->
         </div>
     </panel>
     </content-panel>
