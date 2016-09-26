@@ -1,7 +1,7 @@
 <link rel="import" href="../../../gtog/components/list-edit/listEditBehavior.html">
 <link rel="import" href="register-memberSave.html">
 <link rel="import" href="register-memberEdit.html">
-<dom-module id="register-page">
+<dom-module id="register-pageDetail">
   <style>
     :host {
       display: block;
@@ -12,7 +12,9 @@
     <gl-form-panel set-border="0px">
 
       <gl-form-panel-head set-padding="0px 0px 0px 0px">
-        <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+        <div id="removePen" hidden>
+          <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+        </div>
       </gl-form-panel-head>
 
               <div class="bd">
@@ -33,7 +35,7 @@
   </template>
   <script>
     Polymer({
-      is: "register-page",
+      is: "register-pageDetail",
       behaviors: [listEditBehavior],
       properties: {
         pages:{
@@ -42,13 +44,18 @@
             value: 0
         }
       },
+      ready: function() {
+        this.$$('#removePen').removeAttribute("hidden");
+      },
       editChange:function(e){
         this.pages = 1;
         this.$$('#removeButtom').removeAttribute("hidden");
+        this.$$('#removePen').setAttribute("hidden", "hidden");
       },
       save:function(e) {
         this.pages = 0;
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#removePen').removeAttribute("hidden");
       }
     });
   </script>

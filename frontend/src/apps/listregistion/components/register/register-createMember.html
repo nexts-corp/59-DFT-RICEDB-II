@@ -1,4 +1,4 @@
-<dom-module id="register-searchMember">
+<dom-module id="register-createMember">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
   .title {
       text-align: center;
@@ -21,18 +21,18 @@
 
     <div class="title">เพิ่มทะเบียนผู้ส่งออกข้าวไปต่างประเทศ</div>
     <div class="searchBox searchBorder">
-      <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+      <div class="horizontal layout">
+        <div class="flex"></div>
+          <div class="flex-2">
+            <gl-search-input result="{{result}}"
+                              search-label-name="บริษัท"
+                              search-input="true"
+                              search-type="[[searchType]]">
+            </gl-search-input>
+          </div>
+        </div>
+      </div>
 
-                <gl-search-input result="{{result}}"
-                                 search-label-name="บริษัท"
-                                 search-input="true"
-                                 search-type="[[searchType]]">
-                </gl-search-input>
-
-          </gl-grid-col>
-      </gl-grid-row>
     </div>
 
 
@@ -41,7 +41,7 @@
 
   <script>
     Polymer({
-      is: "register-searchMember",
+      is: "register-createMember",
 
     });
   </script>
