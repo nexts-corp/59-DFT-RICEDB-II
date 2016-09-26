@@ -37,7 +37,7 @@
             <content-panel>
               <grid>
                 <div class="horizontal end-justified layout">
-                  <div class="button">contractId:    {{contractId}}
+                  <div class="button">
                     <paper-button raised class="gl-btn-success"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
                   </div>
 
@@ -85,7 +85,7 @@
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
                                     <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]]></promise-confirm>
-                                    <period-page name="third" data="{{dataSelect}}"></period-page>
+                                    <period-page name="third" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page>
                                 </iron-pages>
                             </section-content>
                             <section-content name="print">
@@ -99,7 +99,7 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
-                                <vessel-page data="{{shipMent}}"></vessel-page>
+                                <vessel-page data="{{shipMent}}" contract-id="[[contractId]]" shipline="[[shipline]]"></vessel-page>
                             </section-content>
                             <section-content name="file">
                                 <promise-fileup></promise-fileup>
@@ -167,6 +167,10 @@
               this.getDb('http://localhost:3000/api/common/ship',(data)=>{
                 this.ship=data;
               });
+              // list shipline
+              this.getDb('http://localhost:3000/api/common/shipline',(data)=>{
+                this.shipline=data;
+              });
               // list carrier
               this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
                 this.carrier=data;
@@ -210,7 +214,7 @@
             _shipMent:function (id) {
               this.getDb('http://localhost:3000/api/gtog/shipment/'+id,(data)=>{
                 this.shipMent = data;
-                console.log(this.shipMent);
+                // console.log(this.shipMent);
               });
             },
             nxGridDblclick: function(e) {

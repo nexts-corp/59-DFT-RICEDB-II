@@ -30,28 +30,31 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือกเมืองท่า" placeholder="เลือกเมืองท่า" required>
-            <paper-menu  class="dropdown-content" selected="{{data.cityEnd}}" id="cityEnd" name="cityEnd">
-              <paper-item value="Shekou">Shekou</paper-item>
-              <paper-item value="Patthaya">Patthaya</paper-item>
-              <paper-item value="Rayong">Rayong</paper-item>
+            <paper-menu  class="dropdown-content" attr-for-selected="dest-port-id" selected="{{data.dest_port_id}}" id="cityEnd" name="cityEnd">
+              <template is="dom-repeat" items="[[port]]">
+                <paper-item dest-port-id="[[item.port_id]]">[[item.port_name]]</paper-item>
+              </template>
+
             </paper-menu>
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line" placeholder="เลือก Shipping Line" required>
-            <paper-menu  class="dropdown-content" selected="{{data.bs}}" id="bs" name="bs">
-              <paper-item value="">Sinotrans Thailogistics</paper-item>
-              <paper-item value=""></paper-item>
-              <paper-item value=""></paper-item>
+            <paper-menu  class="dropdown-content" attr-for-selected="shipline-id" selected="{{data.shipline_id}}" id="bs" name="bs">
+              <template is="dom-repeat" items="[[shipline]]">
+                <paper-item shipline-id="[[item.shipline_id]]">[[item.shipline_name]]</paper-item>
+              </template>
             </paper-menu>
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="Vessel" error-message="กรุณาเลือก Vessel" placeholder="เลือก Vessel" required>
-            <paper-menu  class="dropdown-content" selected="{{data.vesselName}}" id="vesselName" name="vesselName">
-              <paper-item value="">EVER LOGIC</paper-item>
-              <paper-item value=""></paper-item>
-              <paper-item value=""></paper-item>
+            <paper-menu  class="dropdown-content" attr-for-selected="ship-id" selected="{{data.ship_id}}" id="vesselName" name="vesselName">
+              <template is="dom-repeat" items="[[ship]]">
+                  <paper-item ship-id="[[item.ship_id]]">[[item.ship_name]]</paper-item>
+              </template>
+
+
             </paper-menu>
           </gl-form-dropdown-menu>
         </gl-grid-col>
@@ -208,6 +211,33 @@ SHIPPED ON BOARD "></gl-form-textarea>
   <script>
     Polymer({
       is: "vessel-edit",
+      properties: {
+        ship:{
+          type:Object,
+        },
+        data:{
+          type:Object,
+        }
+      },
+      observers: [
+        'getShip(data.shipline_id)'
+      ],
+      getShip:function (shipline_id) {
+        // console.log(shipline_id);
+        this.getDb('http://localhost:3000/api/common/ship/shipline/'+shipline_id,(data)=>{
+          this.ship = data;
+          console.log(this.ship);
+        });
+      },
+      getDb:function (url,callback) {
+        // console.log(url);
+        axios.get(url)
+          .then(function(response){
+            callback(response.data);
+          }.bind(this))
+          .catch(function (error) {
+          }.bind(this));
+      },
       attached: function() {
         var index = this.$.package.selected;
         var arr = this.$.package.innerText.split(' ');

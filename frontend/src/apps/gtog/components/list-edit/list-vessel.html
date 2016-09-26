@@ -345,8 +345,11 @@
                     <!-- เพิ่มคอมโพเน้นตรงนี้ -->
 
                     <iron-pages selected="0" class$="iron-index-{{index}}">
-                        <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-save>
-                        <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></vessel-edit>
+                        <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" ></vessel-save>
+                        <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
+                                     port="[[port]]"
+                                     shipline="[[shipline]]">
+                        </vessel-edit>
                     </iron-pages>
 
                     <gl-form-panel-footer set-padding="10px 20px 0px 20px">
@@ -383,9 +386,41 @@
                 },
                 dataInput: {
                     type: Object,
+                },
+                county:{
+                    type:String,
+                    value:'TH'
+                },
+                shipline:{
+                  type:Object,
+                  notify:true
+                },
+                ship:{
+                  type:Object,
                 }
             },
+            observers: [
+              'getCounty(contractId)'
+            ],
+            getCounty: function(contractId) {
+              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+                this.county = data.country_id;
+                this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
+                  this.port = data;
+                  // console.log(this.port);
+                });
+              });
 
+            },
+            getDb:function (url,callback) {
+              // console.log(url);
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+            },
             delExport: function(e) {
                 var r = confirm("ต้องการลบใช่หรือไม่!");
                 if (r == true) {

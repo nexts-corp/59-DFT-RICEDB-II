@@ -1,7 +1,7 @@
 <link rel="import" href="../list-edit/list-vessel.html">
 <dom-module id="vessel-page">
   <template>
-    <list-vessel data="{{data}}">
+    <list-vessel data="{{data}}" contract-id="[[contractId]]" shipline="[[shipline]]">
       <items type="primary">
         <list item="seller_name_en" label="ผู้ส่งออก" width="flex-2"></list>
         <list item="type_rice_name_en" label="ชนิดข้าว" width="flex-2"></list>
@@ -20,48 +20,17 @@
       is: "vessel-page",
       properties: {
         data:{
+          type: Object,
+          notify: true,
+          value: function() {return [];}
+        },
+        contractId:{
+          type:String,
+          notify:true
+        },
+        shipline:{
           type:Object,
-          value:function(){
-            return [
-              {
-                id:1,
-                collapse:'collapsel1',
-                actualShipper:'Toumi Food And Product CO., LTD',
-                riceType:'Thai White Rice 5% Brokens,',
-                price:'392',
-                amount:'1000',
-                package:'50',
-                cityEnd:'Shekou',
-                bs:'Sinotrans Thai Logistics Co., LTD',
-                bn:'SITGBUU0678088',
-                vesselName:'Hanjin Belawan V.1609',
-                voidNo:'V.1452-018E',
-                lotNo:'14',
-                pol:'THBKK',
-                etd:'26/04/2016',
-                eta:'10/05/2016',
-                pod:'Yueyang (CHENG LING JI)',
-              },
-              {
-                id:2,
-                collapse:'collapsel2',
-                actualShipper:'Capital Seril co.,ltd',
-                riceType:'Thai White Rice 5% Brokens,',
-                price:'397',
-                amount:'1000',
-                package:'20',
-                cityEnd:'Thailand',
-                bs:'Sinotrans Thai Logistics Co., LTD',
-                bn:'SITGBUU0678088',
-                vesselName:'Hanjin Belawan V.1609',
-                voidNo:'V.1234',
-                lotNo:'12',
-                pol:'THBKK',
-                etd:'26/04/2016',
-                eta:'10/05/2016',
-                pod:'Bangnatrad',
-              }
-              ]}
+          notify:true
         }
       }
     });
