@@ -37,10 +37,10 @@
             <content-panel>
               <grid>
                 <div class="horizontal end-justified layout">
-                  <div class="button">
+                  <div class="button">contractId:    {{contractId}}
                     <paper-button raised class="gl-btn-success"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
                   </div>
-                  contractId:    {{contractId}}
+
                 </div>
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
@@ -81,10 +81,10 @@
                 <div class="left">
                     <iron-pages selected="{{vesselPage}}">
                         <panel-seleted>
-                            <section-content name="detail">ดกด[[dataSelect.contract_type_rice]]/8
+                            <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}" type-rice=[[lastResponse.contract_type_rice]] package=[[package]]></promise-confirm>
+                                    <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]]></promise-confirm>
                                     <period-page name="third" data="{{dataSelect}}"></period-page>
                                 </iron-pages>
                             </section-content>
@@ -140,7 +140,7 @@
             created: function() {
                 this.glSetTitle('ทำสัญญา');
                 this.glSetLayout('layout-main');
-
+                this.glQuery('addContract',this);
             },
             ready: function() {
               // list county

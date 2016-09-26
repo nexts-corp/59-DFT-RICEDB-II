@@ -1,6 +1,6 @@
 <link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/list-edit/list-registration.html">
-
+<link rel="import" href="components/register/register-searchMember.html">
 <link rel="import" href="components/register/register-member.html">
 <link rel="import" href="components/register/register-memberSave.html">
 <link rel="import" href="components/register/register-memberEdit.html">
@@ -65,7 +65,7 @@
 
 
         <div class="layout vertical registor">
-          <div class="flex ">
+          <div class="flex">
             <div class="layout horizontal end-justified">
               <paper-button raised class="gl-btn-success"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
             </div>
@@ -112,16 +112,17 @@
                 <list data="file" label="แนบไฟล์"></list>
             </items>
             <section-content data="detail">
-              <register-memberSave></register-memberSave>
+              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                <div name="addRedRegExporter"><register-searchMember></register-searchMember></div>
+                <!-- <register-member></register-member> -->
+                <div name="detailRegExporter"><register-page></register-page></div>
+              </iron-pages>
             </section-content>
             <section-content data="file">
               <register-fileup></register-fileup>
             </section-content>
           </gl-tabs>
-          <!--<iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter"><register-member></register-member></div>
-            <div name="detailRegExporter"><register-memberSave></register-memberSave></div>
-          </iron-pages>-->
+
         </div>
     </panel>
     </content-panel>
