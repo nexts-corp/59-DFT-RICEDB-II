@@ -65,4 +65,35 @@ router.get(['/', '/list'], function (req, res, next) {
     })
 });
 
+router.get('/:contract_id', function (req, res, next) {
+    db.query(function (conn) {
+        r.table("contract")
+            .get(req.params.contract_id)
+            .merge(function (row) {
+                return {
+                    contract_id: row('id'),
+                    contract_type_rice: row('contract_type_rice').map(function (arr_type_rice) {
+                        return arr_type_rice.merge(function (row_type_rice) {
+                            return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                        })
+                    })
+                }
+            })
+            .merge(function (row) {
+                return r.table("buyer").get(row('buyer_id')).without('id')
+                    .merge(function (r_buyer) {
+                        return r.table("country").get(r_buyer("country_id")).without("id")
+                    })
+            })
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    res.json(cursor);
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
+
 module.exports = router;

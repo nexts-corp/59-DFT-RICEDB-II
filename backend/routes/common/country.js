@@ -45,5 +45,20 @@ router.get('/:country_id', function (req, res, next) {
             });
     })
 });
-
+router.post('/insert', function (req, res, next) {
+    //res.json(req);
+    console.log(JSON.stringify(req.body, null, 2));
+    // r.table("Employee")
+    //     .insert({
+    //         name: "Jay",
+    //         company: "SitePoint"
+    //     })
+    //     .run()
+    //     .then(function (response) {
+    //         console.log('Success ', response);
+    //     })
+    //     .error(function (err) {
+    //         console.log('error occurred ', err);
+    //     })
+});
 module.exports = router;
