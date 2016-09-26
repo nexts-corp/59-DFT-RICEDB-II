@@ -45,4 +45,5 @@ router.get('/:country_id', function (req, res, next) {
             });
     })
 });
+
 module.exports = router;
