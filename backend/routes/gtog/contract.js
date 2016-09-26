@@ -5,7 +5,7 @@ var r = require('rethinkdb');
 var db = require('../../db.js');
 
 
-router.get(['/','/list'], function (req, res, next) {
+router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.table("contract")
             .merge(function (row) {
@@ -31,7 +31,19 @@ router.get(['/','/list'], function (req, res, next) {
                         .sum('cl_total_quantity'),
                     contract_balance: row('contract_quantity').sub(r.table('confirm_letter')
                         .filter({ 'contract_id': row('id') })
-                        .sum('cl_total_quantity'))
+                        .sum('cl_total_quantity')),
+                    shipment: r.table('shipment')
+                        .filter({ 'contract_id': row('id') })
+                        .merge(function (shm) {
+                            return {
+                                shm_id: shm('id'),
+                                shm_quantity: r.table("shipment_detail")
+                                    .filter({ "shm_id": shm('id') })
+                                    .sum("shm_det_quantity")
+                            }
+                        })
+                        .without('id')
+                        .coerceTo('array')
                 }
             }).without('id')
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()

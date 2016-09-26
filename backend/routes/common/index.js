@@ -10,6 +10,7 @@ var shipline = require('./shipline');
 var ship = require('./ship');
 var buyer = require('./buyer');
 var seller = require('./seller');
+var surveyor = require('./surveyor');
 
 app.use('/typeRice', typeRice);
 app.use('/package', package);
@@ -20,5 +21,6 @@ app.use('/ship', ship);
 app.use('/shipline', shipline);
 app.use('/buyer', buyer);
 app.use('/seller', seller);
+app.use('/surveyor', surveyor);
 
 module.exports = app;
