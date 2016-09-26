@@ -71,9 +71,20 @@
         Polymer({
             is: "list-registration-pause",
             behaviors: [listEditBehavior,gl.behavior.core],
-            checkbox:function () {
-              console.log(1);
-              console.log(Polymer.dom(this.root).querySelectorAll('#checkbox'));
+            checkbox:function (e) {
+               var i;
+              if(e.target.checked == true){
+                for(i=0;i< this.data.length; i++){
+                  Polymer.dom(this.root).querySelectorAll('.checkbox')[i].setAttribute('checked','checked');
+                }
+              }
+              else {
+                console.log('not select');
+                for(i=0;i< this.data.length; i++){
+                   Polymer.dom(this.root).querySelectorAll('.checkbox')[i].removeAttribute('checked');
+                }
+              }
+              // console.log(Polymer.dom(this.root).querySelectorAll('#checkbox'));
             }
         });
     </script>

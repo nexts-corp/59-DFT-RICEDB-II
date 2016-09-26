@@ -1,3 +1,4 @@
+<link rel="import" href="../../../gtog/components/list-edit/listEditBehavior.html">
 <link rel="import" href="register-memberSave.html">
 <link rel="import" href="register-memberEdit.html">
 <dom-module id="register-page">
@@ -8,46 +9,47 @@
   </style>
   <template>
 
-    <content id="primary" select="items[type=primary]"></content>
-    <content id="secondary" select="items[type=secondary]"></content>
+    <gl-form-panel set-border="0px">
 
-    <div class="layout horizontal top">
-      <template is="dom-repeat" items="{{config.primary}}">
-        <div class$="[[item.width]] header">
-          [[item.label]]
-        </div>
-      </template>
-    </div>
-    <template is="dom-repeat" as="itemPrimary" items="{{data.city}}">
-      <iron-collapse id="collapse{{index}}">
-          <div class="collapse-content">
+      <gl-form-panel-head set-padding="0px 0px 0px 0px">
+        <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+      </gl-form-panel-head>
+
               <div class="bd">
                   <gl-form-panel>
-                      <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px; set-border="1px">
-                          <paper-button class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
-                              <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
-                          <paper-button class="gl-btn-warning" raised on-tap="editChange" index="[[index]]">
-                              <iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
-                          <paper-button class="gl-btn-danger" raised on-tap="" index="[[index]]">
-                              <iron-icon class="gl-icon-size" icon="delete"></iron-icon>ลบ</paper-button>
-                      </gl-form-panel-head>
-
-                      <iron-pages selected="0" class$="iron-index-{{index}}">
-                          <register-memberSave data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></register-memberSave>
-                          <register-memberEdit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></register-memberEdit>
+                      <iron-pages selected="{{pages}}">
+                          <register-memberSave></register-memberSave>
+                          <register-memberEdit></register-memberEdit>
                       </iron-pages>
                   </gl-form-panel>
               </div>
 
-          </div>
-      </iron-collapse>
-    </template>
+        <gl-form-panel-footer>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+        </gl-form-panel-footer>
+    </gl-form-panel>
+
 
   </template>
   <script>
     Polymer({
       is: "register-page",
-
+      behaviors: [listEditBehavior],
+      properties: {
+        pages:{
+            type:Number,
+            notify:true,
+            value: 0
+        }
+      },
+      editChange:function(e){
+        this.pages = 1;
+        this.$$('#removeButtom').removeAttribute("hidden");
+      },
+      save:function(e) {
+        this.pages = 0;
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      }
     });
   </script>
 </dom-module>
