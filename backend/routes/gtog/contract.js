@@ -95,5 +95,7 @@ router.get('/:contract_id', function (req, res, next) {
             });
     })
 });
-
+router.post('/insert', function (req, res, next) {
+   res.json(req.body);
+});
 module.exports = router;
