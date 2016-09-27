@@ -336,10 +336,16 @@
                     <!-- เพิ่มคอมโพเน้นตรงนี้ -->
 
                     <iron-pages selected="0" class$="iron-index-{{index}}">
-                        <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" ></vessel-save>
+                        <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
+                                     buyer-masks='[[buyerMasks]]'>
+                        </vessel-save>
                         <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
                                      port="[[port]]"
-                                     shipline="[[shipline]]">
+                                     shipline="[[shipline]]"
+                                     pol="[[pol]]"
+                                     cml="[[cml]]"
+                                     buyer-masks='[[buyerMasks]]'
+                                     contract-id='[[contractId]]'>
                         </vessel-edit>
                     </iron-pages>
 
@@ -388,6 +394,15 @@
                 },
                 ship:{
                   type:Object,
+                },
+                pol:{
+                  type:Object,
+                },
+                cml:{
+                  type:Object,
+                },
+                buyerMasks:{
+                  type:String,
                 }
             },
             observers: [
@@ -402,6 +417,21 @@
                 });
               });
 
+              // get pol
+              this.getDb('http://localhost:3000/api/common/port/country/TH',(data)=>{
+                this.pol = data;
+                // console.log(this.pol);
+              });
+              //get cl
+              this.getDb('http://localhost:3000/api/gtog/confirm/contract/'+contractId,(data)=>{
+                this.cml = data;
+                // console.log(this.cml);
+              });
+              //get buyer_masks
+              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+                this.buyerMasks = data.buyer_masks;
+                // console.log(this.buyerMasks);
+              });
             },
             getDb:function (url,callback) {
               // console.log(url);
