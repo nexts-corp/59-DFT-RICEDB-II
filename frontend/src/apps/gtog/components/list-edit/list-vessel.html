@@ -343,7 +343,9 @@
                         <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" ></vessel-save>
                         <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
                                      port="[[port]]"
-                                     shipline="[[shipline]]">
+                                     shipline="[[shipline]]"
+                                     pol="[[pol]]"
+                                     cml="[[cml]]">
                         </vessel-edit>
                     </iron-pages>
 
@@ -392,7 +394,13 @@
                 },
                 ship:{
                   type:Object,
-                }
+                },
+                pol:{
+                  type:Object,
+                },
+                cml:{
+                  type:Object,
+                },
             },
             observers: [
               'getCounty(contractId)'
@@ -404,6 +412,17 @@
                   this.port = data;
                   // console.log(this.port);
                 });
+              });
+
+              // get pol
+              this.getDb('http://localhost:3000/api/common/port/country/TH',(data)=>{
+                this.pol = data;
+                // console.log(this.pol);
+              });
+              //get cl
+              this.getDb('http://localhost:3000/api/gtog/confirm/contract/'+contractId,(data)=>{
+                this.cml = data;
+                // console.log(this.cml);
               });
 
             },

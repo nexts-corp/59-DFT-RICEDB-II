@@ -17,6 +17,7 @@
   </style>
 
   <template>
+    51515/[[contractId]]
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -59,7 +60,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="POL" disabled>
             <paper-menu  class="dropdown-content" attr-for-selected="pol" selected="{{data.load_port_id}}" id="pol" name="pol">
-              <paper-item pol="{{data.load_port_id}}">[[data.load_port_id]]</paper-item>
+              <paper-item pol="{{data.load_port_id}}">[[data.load_port_name]]</paper-item>
             </paper-menu>
           </gl-form-dropdown-menu>
         </gl-grid-col>
@@ -82,15 +83,16 @@
           <gl-form-label-input label="Place of Delivery" value="{{data.deli_port_id}}" id="pode" name="pode"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Cut of Date" value="[[data.pack_date]]" disabled></vaadin-date-picker>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Time" value="[[data.pack_time]]" id="" name=""></gl-form-label-input>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="จำนวนตู้คอนเทนเนอร์" value="[[data.num_of_container]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker label="Packing Date" value="[[data.pack_date]]" disabled></vaadin-date-picker>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="Packing Time" value="[[data.pack_time]]" id="" name=""></gl-form-label-input>
+        </gl-grid-col>
+
+
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="ตู้ละ (ตัน)" value="[[data.weight_per_container]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
@@ -123,7 +125,7 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Package (kg/PP Bag)" disabled>
                 <paper-menu  class="dropdown-content" attr-for-selected="package-id" selected="{{data.package_id}}" id="package">
-                  <paper-item package-id="[[data.package_id]]">[[data.pack_name]]</paper-item>
+                  <paper-item package-id="[[data.package_id]]">[[data.package_name]]</paper-item>
                 </paper-menu>
               </gl-form-dropdown-menu>
             </gl-grid-col>
