@@ -340,12 +340,16 @@
                     <!-- เพิ่มคอมโพเน้นตรงนี้ -->
 
                     <iron-pages selected="0" class$="iron-index-{{index}}">
-                        <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" ></vessel-save>
+                        <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
+                                     buyer-masks='[[buyerMasks]]'>
+                        </vessel-save>
                         <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
                                      port="[[port]]"
                                      shipline="[[shipline]]"
                                      pol="[[pol]]"
-                                     cml="[[cml]]">
+                                     cml="[[cml]]"
+                                     buyer-masks='[[buyerMasks]]'
+                                     contract-id='[[contractId]]'>
                         </vessel-edit>
                     </iron-pages>
 
@@ -401,6 +405,9 @@
                 cml:{
                   type:Object,
                 },
+                buyerMasks:{
+                  type:String,
+                }
             },
             observers: [
               'getCounty(contractId)'
@@ -424,7 +431,11 @@
                 this.cml = data;
                 // console.log(this.cml);
               });
-
+              //get buyer_masks
+              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+                this.buyerMasks = data.buyer_masks;
+                // console.log(this.buyerMasks);
+              });
             },
             getDb:function (url,callback) {
               // console.log(url);
