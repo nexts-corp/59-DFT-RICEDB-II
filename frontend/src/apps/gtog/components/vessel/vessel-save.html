@@ -20,24 +20,17 @@
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" value="{{data.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-label-input>
+          <gl-form-label-input label="ผู้ส่งออก" value="{{data.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือกเมืองท่า" placeholder="เลือกเมืองท่า" required disabled>
-            <paper-menu  class="dropdown-content" attr-for-selected="dest-port-id" selected="{{data.dest_port_id}}" id="cityEnd" name="cityEnd">
-              <paper-item dest-port-id="[[data.dest_port_id]]">[[data.dest_port_id]]</paper-item>
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line" placeholder="เลือก Shipping Line" required disabled>
+          <gl-form-dropdown-menu label="Shipping Line" disabled>
             <paper-menu  class="dropdown-content" attr-for-selected="shiplineId" selected="{{data.shipline_id}}" id="bs" name="bs">
               <paper-item shipline-id="[[data.shipline_id]]">[[data.shipline_name]]</paper-item>
             </paper-menu>
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Vessel" error-message="กรุณาเลือก Vessel" placeholder="เลือก Vessel" required disabled>
+          <gl-form-dropdown-menu label="Vessel" disabled>
             <paper-menu  class="dropdown-content" attr-for-selected="shipId" selected="{{data.ship_id}}" id="vesselName" name="vesselName">
               <paper-item ship-id="[[data.ship_id]]">[[data.ship_name]]</paper-item>
             </paper-menu>
@@ -45,26 +38,26 @@
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}" id="voidNo" name="voidNo"></gl-form-label-input>
+          <gl-form-label-input label="Void No." value="{{data.ship_voy_no}}" id="voidNo" name="voidNo"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}" id="lotNo" name="lotNo"></gl-form-label-input>
+          <gl-form-label-input label="Lot No." value="{{data.ship_lot_no}}" id="lotNo" name="lotNo"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.book_no]]" id="bn" name="bn"></gl-form-label-input>
+          <gl-form-label-input label="Booking No." value="[[data.book_no]]" id="bn" name="bn"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="B/L No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.bl_no]]" id="package" name="package"></gl-form-label-input>
+          <gl-form-label-input label="B/L No." value="[[data.bl_no]]" id="package" name="package"></gl-form-label-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.carrier_name]]" id="" name=""></gl-form-label-input>
+          <gl-form-label-input label="Shipping Agent" value="[[data.carrier_name]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Tel." auto-validate error-message="เป็นตัวเลขเท่านั้น" required pattern="[0-9]*" maxlength="20" placeholder="ใส่รายละเอียด" value="[[data.seller_phone]]"></gl-form-label-input>
+          <gl-form-label-input label="Tel." value="[[data.seller_phone]]"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="POL" error-message="กรุณาเลือก POL" placeholder="เลือก POL" required disabled>
+          <gl-form-dropdown-menu label="POL" disabled>
             <paper-menu  class="dropdown-content" attr-for-selected="pol" selected="{{data.load_port_id}}" id="pol" name="pol">
               <paper-item pol="{{data.load_port_id}}">[[data.load_port_id]]</paper-item>
             </paper-menu>
@@ -78,24 +71,28 @@
           <vaadin-date-picker label="ETA" value="{{data.eta_date}}" disabled></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.dest_port_id}}" id="pod" name="pod"></gl-form-label-input>
+          <gl-form-dropdown-menu label="POD" disabled>
+            <paper-menu  class="dropdown-content" attr-for-selected="dest-port-id" selected="{{data.dest_port_id}}" id="cityEnd" name="cityEnd">
+              <paper-item dest-port-id="[[data.dest_port_id]]">[[data.dest_port_id]]</paper-item>
+            </paper-menu>
+          </gl-form-dropdown-menu>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Place of Delivery" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.deli_port_id}}" id="pode" name="pode"></gl-form-label-input>
+          <gl-form-label-input label="Place of Delivery" value="{{data.deli_port_id}}" id="pode" name="pode"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="Cut of Date" value="[[data.pack_date]]" disabled></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.pack_time]]" id="" name=""></gl-form-label-input>
+          <gl-form-label-input label="Time" value="[[data.pack_time]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]{9}" placeholder="ใส่รายละเอียด" value="[[data.num_of_container]]" id="" name=""></gl-form-label-input>
+          <gl-form-label-input label="จำนวนตู้คอนเทนเนอร์" value="[[data.num_of_container]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]{9}" placeholder="ใส่รายละเอียด" value="[[data.weight_per_container]]" id="" name=""></gl-form-label-input>
+          <gl-form-label-input label="ตู้ละ (ตัน)" value="[[data.weight_per_container]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="Production" value="[[data.product_date]]" disabled></vaadin-date-picker>
@@ -110,7 +107,7 @@
         <gl-form-panel-body>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]" >
-              <gl-form-dropdown-menu class="width-dropdown" label="Confirmation Letter"disabled >
+              <gl-form-dropdown-menu class="width-dropdown" label="Confirmation Letter" disabled>
                 <paper-menu  class="dropdown-content" attr-for-selected="clNo" selected="[[data.cl_no]]">
                   <paper-item cl-no="[[data.cl_no]]">[[data.cl_no]]</paper-item>
                 </paper-menu>

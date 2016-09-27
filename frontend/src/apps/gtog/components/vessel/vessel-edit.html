@@ -29,16 +29,6 @@
           <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" value="{{data.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือกเมืองท่า" placeholder="เลือกเมืองท่า" required>
-            <paper-menu  class="dropdown-content" attr-for-selected="dest-port-id" selected="{{data.dest_port_id}}" id="cityEnd" name="cityEnd">
-              <template is="dom-repeat" items="[[port]]">
-                <paper-item dest-port-id="[[item.port_id]]">[[item.port_name]]</paper-item>
-              </template>
-
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line" placeholder="เลือก Shipping Line" required>
             <paper-menu  class="dropdown-content" attr-for-selected="shipline-id" selected="{{data.shipline_id}}" id="bs" name="bs">
               <template is="dom-repeat" items="[[shipline]]">
@@ -95,7 +85,14 @@
           <vaadin-date-picker label="ETA" value="{{data.eta_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="POD" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.dest_port_id}}" id="pod" name="pod"></gl-form-input>
+          <gl-form-dropdown-menu label="เมืองท่าปลายทาง" error-message="กรุณาเลือกเมืองท่า" placeholder="เลือกเมืองท่า" required>
+            <paper-menu  class="dropdown-content" attr-for-selected="dest-port-id" selected="{{data.dest_port_id}}" id="cityEnd" name="cityEnd">
+              <template is="dom-repeat" items="[[port]]">
+                <paper-item dest-port-id="[[item.port_id]]">[[item.port_name]]</paper-item>
+              </template>
+
+            </paper-menu>
+          </gl-form-dropdown-menu>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">

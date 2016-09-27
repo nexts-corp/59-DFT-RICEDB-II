@@ -54,23 +54,24 @@
         }
     </style>
     <template>
-      <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.cl_no}}"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker label="วันที่" value="{{data.cl_date}}"></vaadin-date-picker>
-          </gl-grid-col>
-      </gl-grid-row>
+      <form is="iron-form" id="form" method="post" action="/form/handler">
+        <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{data.cl_no}}" name="cl_no"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <vaadin-date-picker label="วันที่" value="{{data.cl_date}}" name="cl_date"></vaadin-date-picker>
+            </gl-grid-col>
+        </gl-grid-row>
+
 
       <div class="top">Commodities, Price, Package</div>
       <template is="dom-repeat" items="[[data.cl_type_rice]]">
-        <form is="iron-form" id="form" method="post" action="/form/handler">
           <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
-                  <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
+                  <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
                     <template is="dom-repeat" items="[[riceType.contract_type_rice]]">
                       <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                     </template>
@@ -78,7 +79,7 @@
                 </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.type_rice_quantity}}"></gl-form-input>
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.type_rice_quantity}}" name="type_rice_quantity"></gl-form-input>
               </gl-grid-col>
             </gl-grid-row>
 
@@ -92,15 +93,15 @@
               <template is="dom-repeat" items="[[item.package]]">
                 <tr>
                   <td><gl-form-dropdown-menu error-message="กรุณาเลือกชนิดpackage" placeholder="เลือกประเภท" required no-label-float>
-                    <paper-menu class="dropdown-content" attr-for-selected="package" selected="{{item.package_id}}">
+                    <paper-menu class="dropdown-content" attr-for-selected="package" selected="{{item.package_id}}" name="package_id">
                       <template is="dom-repeat" items="[[package]]">
                         <paper-item package="[[item.package_id]]">[[item.pack_name]]</paper-item>
                       </template>
                     </paper-menu>
                   </gl-form-dropdown-menu>
                   </td>
-                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.price_per_ton]]" no-label-float></gl-form-input></td>
-                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.weight]]" no-label-float></gl-form-input></td>
+                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.price_per_ton]]" name="price_per_ton" no-label-float></gl-form-input></td>
+                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.weight]]" name="weight" no-label-float></gl-form-input></td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่ม'style="color: gray;" on-tap=""></paper-icon-button>
                     <paper-icon-button icon="icons:delete" title='ลบ'style="color: gray;" on-tap="dele"></paper-icon-button>
@@ -122,7 +123,7 @@
       <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                  <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{data.inct_id}}">
+                  <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{data.inct_id}}" name="inct_id">
                       <paper-item price-type="FOB">FOB CY</paper-item>
                       <paper-item price-type="Bath">Bath</paper-item>
                       <paper-item price-type="Other">ฯลฯ</paper-item>
@@ -131,11 +132,11 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.cl_total_quantity]]"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.cl_total_quantity]]" name="cl_total_quantity"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-              <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.cl_quality]]"></gl-form-textarea>
+              <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="[[data.cl_quality]]" name="cl_quality"></gl-form-textarea>
           </gl-grid-col>
       </gl-grid-row>
       <div class="horizontal end-justified layout">
