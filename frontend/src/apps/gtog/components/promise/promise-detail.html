@@ -19,7 +19,7 @@
 
 
   <template>
-    <form is="iron-form" id="form" method="post" action="/form/handler">
+    <form is="iron-form" id="insertPromiseDetail" method="post">
       <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input class="bottom" auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
@@ -28,13 +28,13 @@
             <vaadin-date-picker label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
-        
+
         <template id="zatest" is="dom-repeat" items="{{data.contract_type_rice}}">
             <div class="bg top">
               <gl-grid-row>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
-                      <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
+                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_id" required>
+                      <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
                         <template is="dom-repeat" items="[[typeRice]]">
                           <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                         </template>
@@ -53,8 +53,8 @@
                 </gl-grid-col>
               </gl-grid-row>
             </div>
-          </form>
         </template>
+
         <div class="horizontal end-justified layout">
           <paper-button raised on-tap="add" class="gl-btn-primary">เพิ่ม</paper-button>
         </div>
@@ -62,20 +62,21 @@
 
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+              <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
               <gl-form-textarea rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.buyer_address}}" name="buyer_address"></gl-form-textarea>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-              <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name=""></gl-form-textarea>
+              <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
             </gl-grid-col>
           </gl-grid-row>
 
           <div class="horizontal end-justified layout">
             <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-            <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
+            <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
           </div>
-
+    </form>
   </template>
 
   <script>
@@ -98,6 +99,40 @@
       dele: function(data){
         var index = this.data.rice.indexOf(data);
         this.splice('data.rice',index,1);
+      },
+      listeners:{
+        'iron-form-submit': '_submitData'
+      },
+      _saveData: function(event){
+        this.$.insertPromiseDetail.submit();
+      },
+      _submitData:function (event) {
+          // console.log(JSON.stringify(event.detail));
+          console.log(event.detail);
+          this.result = event.detail
+
+          // var keys = ["weight","price"];
+          //       var datas = event.detail;
+          //       var type_rice = {};
+          //       for ( key in datas ) {
+          //           if(keys.indexOf(key)>-1){
+          //               console.log(key + " "+datas[key]);
+          //               for(key2 in datas[key]){
+          //                   if(!type_rice.hasOwnProperty(key2)){
+          //                       type_rice[key2] = {};
+          //                   }
+          //                   if(!type_rice[key2].hasOwnProperty(key)){
+          //                       type_rice[key2][key] = {};
+          //                   }
+          //                   type_rice[key2][key] = datas[key][key2];
+          //                   console.log("key2=> "+key2+" "+datas[key][key2]);
+          //               }
+          //               delete datas[key];
+          //           }
+          //       }
+          //       console.log(type_rice);
+          //       datas["type_rice"] = type_rice;
+          //       console.log(datas);
       },
       validate: function(){
         if(

@@ -1,4 +1,4 @@
-<dom-module id="panel-seleted-perriod">
+<dom-module id="panel-seleted-payment">
 
 <style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size">
 paper-tabs{
@@ -12,11 +12,6 @@ paper-tabs{
     height: 5px;
     background-color: var(--gl-info-color);
   }
-}
-paper-tab:focus > div.tab-content{
-  background-color: yellow;
-  opacity: 1;
-  font-weight: 0;
 }
 paper-tab {
   font-size: var(--font-size-h5);
@@ -47,30 +42,28 @@ paper-material{
 </style>
 
     <template>
+
       <div class="horizontal end-justified layout button">
         <div><paper-icon-button icon="close" on-tap="toggleDrawer" title="ปิดหน้าต่างนี้"></paper-icon-button> </div>
       </div>
       <paper-material elevation="1" >
-
-
-       <paper-tabs selected="{{selected}}" align-bottom no-slide>
-        <paper-tab>NEW COMMERCIAL INVOICE</paper-tab>
-        <paper-tab>ไฟล์</paper-tab>
+      <paper-tabs selected="{{selected}}" align-bottom no-slide>
+        <paper-tab>รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ</paper-tab>
+        <paper-tab>การจ่ายเงิน</paper-tab>
+        <paper-tab>รายงาน</paper-tab>
       </paper-tabs>
-      <div class="bdDrawer">
-        <iron-pages selected="{{selected}}">
-          <div><content select="section-content[name=detail]"></content></div>
-          <!-- <div><content select="section-content[name=print]"></content></div> -->
-          <div><content select="section-content[name=file]"></content></div>
-        </iron-pages>
+        <div class="bdDrawer">
+      <iron-pages selected="{{selected}}">
+        <div><content select="section-content[name=detail]"></content></div>
+        <div><content select="section-content[name=print]"></content></div>
+        <div><content select="section-content[name=file]"></content></div>
         </div>
-      </paper-material>
-
-
+      </iron-pages>
+</paper-material>
     </template>
     <script>
         Polymer({
-            is:'panel-seleted-perriod',
+            is:'panel-seleted-payment',
             behaviors:[gl.behavior.core],
             properties: {
               selected: {

@@ -1,9 +1,12 @@
 <link rel="import" href="panel-seleted-perriod.html">
+<link rel="import" href="panel-seleted-payment.html">
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/list-edit/list-draft.html">
 <link rel="import" href="components/bill/bill-create.html">
+<link rel="import" href="components/bill/bill-fileup.html">
 <link rel="import" href="components/payment/payment-pay.html">
+<link rel="import" href="components/invoice/invoice-page.html">
 
 <link rel="import" href="./components/payment/payment-detail.html">
 
@@ -42,21 +45,35 @@
       </grid>
       <panel>
         <div class="left">
-          <panel-seleted-perriod>
-            <section-content name="detail">
-              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <payment-detail name="primary" data="{{dataSelect}}"></payment-detail>
-                <promise-confirm name="secondary" data="{{dataSelect}}"></promise-confirm>
-                <period-page name="third" data="{{dataSelect}}"></period-page>
-              </iron-pages>]
-            </section-content>
-            <section-content name="print">
-              <payment-pay></payment-pay>
-            </section-content>
-            <section-content name="file">
-              3
-            </section-content>
-          </panel-seleted-perriod>
+          <iron-pages selected="{{changePage}}">
+            <panel-seleted-perriod>
+              <section-content name="detail">
+                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                  <bill-create name="primary" data="{{dataSelect}}"></bill-create>
+                  <!-- <invoice-save></invoice-save> -->
+                  <invoice-page name="secondary" data="{{dataSelect}}"></invoice-page>
+                </iron-pages>
+              </section-content>
+              <section-content name="file">
+                <bill-fileup></bill-fileup>
+              </section-content>
+            </panel-seleted-perriod>
+
+            <!-- payment -->
+
+            <panel-seleted-payment>
+                <section-content name="detail">
+                  <payment-detail></payment-detail>
+                </section-content>
+                <section-content name="print">
+                  <payment-pay></payment-pay>
+                </section-content>
+                <section-content name="file">
+                  3
+                </section-content>
+            </panel-seleted-payment>
+            <!-- payment -->
+        </iron-pages>
           <!-- <gl-tabs get-data="{{panalBl}}">
             <section-content name="NEW">
               <bill-create></bill-create>
@@ -81,7 +98,7 @@
                     type: String,
                     value: "primary"
                 },
-                vesselPage: {
+                changePage: {
                     type: Number,
                     value: 0
                 },
@@ -186,9 +203,9 @@
                 this.layerContent = e.detail.level;
                 // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
-                    this.vesselPage = 1;
+                    this.changePage = 1;
                 } else {
-                    this.vesselPage = 0;
+                    this.changePage = 0;
                 }
                 this.dataSelect = e.detail.data;
             }
