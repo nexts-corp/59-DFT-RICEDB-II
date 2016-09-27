@@ -79,7 +79,10 @@
                 </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.type_rice_quantity}}" name="type_rice_quantity"></gl-form-input>
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+                  on-keyup="dataChange"
+                  value="{{item.type_rice_quantity}}"
+                 name="type_rice_quantity"></gl-form-input>
               </gl-grid-col>
             </gl-grid-row>
 
@@ -132,7 +135,7 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="[[data.cl_total_quantity]]" name="cl_total_quantity"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -179,10 +182,13 @@
                 }.bind(this));
             },
             dataChange: function(data) {
-              this.data= data;
-              // console.log(this.data.cl_type_rice);
-
-              // console.log(this.data);
+              //this.data.cl_total_quantity
+              var total = 0;
+              var datas = this.data.cl_type_rice;
+              for(index in datas){
+                total += parseFloat(datas[index].type_rice_quantity);
+              }
+              this.cl_total_quantity = total;
 
             },
             add: function() {
