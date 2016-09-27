@@ -105,7 +105,7 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
-        <paper-button class="gl-btn-primary" raised on-tap="click">เพิ่ม</paper-button>
+        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่ม</paper-button>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -294,8 +294,8 @@
       </form>
 
       <gl-form-panel-footer>
-          <paper-button class="gl-btn-danger" raised index="[[index]"></iron-icon>ยกเลิก</paper-button>
-          <paper-button class="gl-btn-success" raised index="[[index]" on-tap="click"></iron-icon>บันทึก</paper-button>
+          <paper-button class="gl-btn-danger" raised index="[[index]" on-tap="clickCancel"></iron-icon>ยกเลิก</paper-button>
+          <paper-button class="gl-btn-success" raised index="[[index]" on-tap="clickSubmit"></iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
 
@@ -322,16 +322,12 @@
         <div class="collapse-content">
             <div class="bd">
                 <gl-form-panel set-padding="10px 20px 10px 20px">
+                  <div id="removePen" hidden>
                     <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-                        <!-- <paper-button class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
-                            <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button> -->
-                        <!-- <paper-button class="gl-btn-warning" raised on-tap="editChange" index="[[index]]">
-                            <iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button> -->
-                        <!-- <paper-button class="gl-btn-danger" raised on-tap="" index="[[index]]">
-                            <iron-icon class="gl-icon-size" icon="delete"></iron-icon>ลบ</paper-button> -->
                             <paper-icon-button icon="create" raised on-tap="editChange" index="[[index]]"></paper-icon-button>
                             <paper-icon-button icon="delete" raised on-tap=""></paper-icon-button>
                     </gl-form-panel-head>
+                  </div>
 
                     <gl-form-panel-body>
                         <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
@@ -512,15 +508,32 @@
                 // this.$$.id;
                 console.log(this.$$.collapsel1);
             },
-            click: function() {
+            ready: function() {
+              this.$$('#removeButtom').removeAttribute("hidden");
+            },
+            clickInsert: function() {
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');
                 if (css.classList.contains('hide') == true) {
                     css.classList.remove("hide");
                     css.classList.add("show");
-                } else {
-                    css.classList.remove("show");
-                    css.classList.add("hide");
+                    this.$$('#removeButtom').setAttribute("hidden", "hidden");
                 }
+            },
+            clickSubmit: function(){
+              var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+              if (css.classList.contains('show') == true) {
+                  css.classList.remove("show");
+                  css.classList.add("hide");
+                  this.$$('#removeButtom').removeAttribute("hidden");
+              }
+            },
+            clickCancel: function(){
+              var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+              if (css.classList.contains('show') == true) {
+                  css.classList.remove("show");
+                  css.classList.add("hide");
+                  this.$$('#removeButtom').removeAttribute("hidden");
+              }
             },
             attached: function() {
               var index = this.$.package.selected;
