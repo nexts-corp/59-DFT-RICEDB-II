@@ -32,18 +32,18 @@
         <template id="zatest" is="dom-repeat" items="{{data.contract_type_rice}}">
             <div class="bg top">
               <gl-grid-row>
+                <gl-form-input value="{{item.type_rice_id}}" name="type_rice_id" hidden></gl-form-input>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_id" required>
-                      <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}">
+                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
+                      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
                         <template is="dom-repeat" items="[[typeRice]]">
-                          <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
+                          <paper-item value="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                         </template>
-
-                        <!-- <paper-item rice-type-id="WH-10">ข้าวขาว 10%</paper-item> -->
 
                       </paper-menu>
                     </gl-form-dropdown-menu>
                 </gl-grid-col>
+
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                     <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required  label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
                 </gl-grid-col>
@@ -105,6 +105,7 @@
       },
       _saveData: function(event){
         this.$.insertPromiseDetail.submit();
+        // console.log(this.data);
       },
       _submitData:function (event) {
           // console.log(JSON.stringify(event.detail));
@@ -112,7 +113,7 @@
           // this.result = event.detail
           var keys = ["type_rice_id","type_rice_quantity"];
                 var datas = event.detail;
-                var type_rice = {};
+                var type_rice = [];
                 for ( key in datas ) {
                     if(keys.indexOf(key)>-1){
                         // console.log(key + " "+datas[key]);
@@ -129,9 +130,20 @@
                         delete datas[key];
                     }
                 }
-                console.log(type_rice);
+                // console.log(type_rice);
+                delete datas['buyer_address'];
+                delete datas['type_rice_name'];
                 datas["contract_type_rice"] = type_rice;
-                // console.log(datas);
+                //console.log(JSON.stringify(datas));
+                axios.post('http://localhost:3000/api/g2g/contract/insert', JSON.stringify(datas))
+                          .then(function (response) {
+                            console.log("success");
+                            console.log(response);
+                          })
+                          .catch(function (error) {
+                            console.log("error");
+                            console.log(error);
+                          })
       },
       validate: function(){
         if(
