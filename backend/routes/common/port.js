@@ -76,4 +76,16 @@ router.get('/:field_name/:value_id', function (req, res, next) {
             });
     })
 });
+
+
+
+router.post('/test', function (req, res) {
+    console.log(req.body)
+
+});
+
+
 module.exports = router;
+
+
+
