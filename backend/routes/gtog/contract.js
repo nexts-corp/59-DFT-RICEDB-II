@@ -21,8 +21,12 @@ router.get(['/', '/list'], function (req, res, next) {
                         .merge(function (cl) {
                             return {
                                 cl_id: cl('id'),
+<<<<<<< HEAD
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
                                 cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4)
+=======
+                                cl_ship_quantity: cl('cl_total_quantity').div(2)
+>>>>>>> d81764fc825c7ca8bfac8f58e1c1d9c82188158d
                             }
                         })
                         .without('id')
