@@ -21,6 +21,10 @@ paper-icon-item {
     background-color: var(--gl-info-color);
   }*/
 }
+.borderHeader{
+    border-top: 1px solid var(--paper-grey-300);
+    border-bottom: 1px solid var(--paper-grey-300);
+}
 paper-icon-item:hover {
   background-color: var(--gl-info-color);
 }
@@ -58,6 +62,7 @@ paper-icon-item:hover {
   padding-right: 25px;
   /*color: red;*/
   font-size: var(--font-size-h4);
+  color: var(--gl-gray-darker-color);
   font-family: 'rsuregular', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -68,12 +73,12 @@ paper-icon-item:hover {
   /*color: blue;*/
 }
 .headThird {
-  border-bottom: 1px solid #000;
+  /*border-bottom: 1px solid #000;*/
   text-align: left;
   margin-left: 10%;
   padding-right: 25px;
   font-size: var(--font-size-h4);
-
+  color: var(--gl-gray-darker-color);
   font-family: 'rsuregular', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -162,7 +167,7 @@ paper-icon-item:hover {
     </paper-item>-->
 
     <paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
-      <paper-item disabled>
+      <paper-item disabled class="borderHeader">
         <!-- Head secondary -->
         <template is="dom-repeat" as="itemConfigSecondary" items="{{config.secondary}}">
           <div class$="{{itemConfigSecondary.width}} headsecondary">
@@ -201,7 +206,7 @@ paper-icon-item:hover {
       </paper-icon-item>
     </template>
     <!-- เพิ่มข้อมูล -->
-    <paper-item>
+    <paper-item class="borderHeader">
       <!-- Head secondary -->
       <template is="dom-repeat" as="itemConfigSecondaryHalf" items="{{config.secondaryHalf}}">
         <div class$="{{itemConfigSecondaryHalf.width}}" on-tap="toggleDrawer">
@@ -218,8 +223,8 @@ paper-icon-item:hover {
 
 <!-- จบอันแรก  -->
 <!-- อันที่2 -->
-<paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
-  <paper-item disabled>
+<paper-menu class="menu-content sublist paper-menu-lv2 " style="padding:0px;" selected="100">
+  <paper-item disabled class="borderHeader">
     <!-- Head secondary -->
     <template is="dom-repeat" as="itemConfigThird" items="{{config.third}}">
       <div class$="{{itemConfigThird.width}} headThird">
@@ -239,10 +244,10 @@ paper-icon-item:hover {
       <paper-icon-item>
       </template>
       <!-- เพิ่มข้อมูล -->
-      <paper-item>
+      <paper-item class="borderHeader">
         <!-- Head secondary -->
         <template is="dom-repeat" as="itemConfigthirdHalf" items="{{config.thirdHalf}}">
-          <div class$="{{itemConfigthirdHalf.width}}" >
+          <div class$="{{itemConfigthirdHalf.width}}" on-tap="toggleDrawer">
             {{itemConfigthirdHalf.label}}
             <!-- width:{{itemConfigSecondary.width}} -->
           </div>

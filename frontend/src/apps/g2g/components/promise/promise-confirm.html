@@ -107,7 +107,7 @@
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.price_per_ton]]" name="price_per_ton" no-label-float></gl-form-input></td>
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.weight]]" name="weight" no-label-float></gl-form-input></td>
                   <td>
-                    <paper-icon-button icon="icons:add" title='เพิ่ม'style="color: gray;" on-tap=""></paper-icon-button>
+                    <paper-icon-button icon="icons:add" title='เพิ่ม'style="color: gray;" on-tap="addTypeRice"></paper-icon-button>
                     <paper-icon-button icon="icons:delete" title='ลบ'style="color: gray;" on-tap="dele"></paper-icon-button>
                   </td>
                 </tr>
@@ -167,6 +167,9 @@
             observers: [
               'getTyperice(contractId)'
             ],
+            addTypeRice:function () {
+              console.log(1);
+            },
             getTyperice: function(contractId) {
               this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
                 this.riceType = data;
@@ -196,11 +199,11 @@
               console.log(this.data);
             },
             add: function() {
-              // console.log(this.data.cl_type_rice);
-                this.push('data.confirmItem', {
-                    package: '',
-                    price: ''
-                });
+              console.log(this.data);
+                // this.push('data.confirmItem', {
+                //     package: '',
+                //     price: ''
+                // });
                 // console.log(this.data);
             },
             dele: function(data) {
