@@ -58,40 +58,59 @@
     </style>
 
     <template>
-<!-- <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="40%"> -->
-  <paper-header-panel mode="waterfall">
-    <div class="paper-header">
-      <paper-toolbar class="toolbarHead">
-        <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
-        <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
-        <div class="title">
-          <div class="lineName">
-            ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
-          </div>
-          <div class="lineMenu">
-            สัญญาการซื้อขาย > ประเทศจีน
-          </div>
+
+    <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="40%">
+      <paper-header-panel mode="waterfall" drawer >
+        <div class="paper-header">
+          <paper-toolbar class="toolbarHead">
+            <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+            <div class="title">
+                Menu
+            </div>
+          </paper-toolbar>
+          <paper-toolbar class="toolbarbody">
+          </paper-toolbar>
+          <!-- <paper-toolbar class="toolbarfoot">
+
+              <div class="title"></div>
+              <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
+                <iron-icon class="gl-icon-size" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
+              </icon-toggle>
+              <icon-toggle toggles tabindex="0" on-tap="loadPages">
+                <iron-icon class="gl-icon-size" icon="settings" title="ตั้งค่า" ></iron-icon>
+              </icon-toggle>
+          </paper-toolbar> -->
         </div>
-      </paper-toolbar>
-      <paper-toolbar class="toolbarbody">
-      </paper-toolbar>
-      <!-- <paper-toolbar class="toolbarfoot">
-
-          <div class="title"></div>
-          <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
-            <iron-icon class="gl-icon-size" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
-          </icon-toggle>
-          <icon-toggle toggles tabindex="0" on-tap="loadPages">
-            <iron-icon class="gl-icon-size" icon="settings" title="ตั้งค่า" ></iron-icon>
-          </icon-toggle>
-      </paper-toolbar> -->
-    </div>
-      <div class="content">
-        <tag-page-load id="tagPageLoad"></tag-page-load>
-      </div>
-    </paper-header-panel>
-    <!-- </paper-drawer-panel> -->
-
+        <div class="content">
+          <list-menu></list-menu>
+        </div>
+      </paper-header-panel>
+      <paper-header-panel mode="waterfall" main>
+        <div class="paper-header">
+          <paper-toolbar class="toolbarHead">
+            <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
+            <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+            <div class="title">
+              <div class="lineName">
+                ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
+              </div>
+              <div class="lineMenu">
+                สัญญาการซื้อขาย 
+              </div>
+            </div>
+          </paper-toolbar>
+          <paper-toolbar class="toolbarbody">
+          </paper-toolbar>
+          <!-- <paper-toolbar class="toolbarfoot">
+            <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
+            <div class="title"></div>
+          </paper-toolbar> -->
+        </div>
+          <div class="content">
+            <tag-page-load id="tagPageLoad"></tag-page-load>
+          </div>
+        </paper-header-panel>
+      </paper-drawer-panel>
   </template>
     <script>
         Polymer({

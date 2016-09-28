@@ -146,10 +146,12 @@
               // list county
               this.getDb('http://localhost:3000/api/gtog/contract/list',(data)=>{
                 this.lastResponse=data;
+                console.log(this.lastResponse);
               });
               // list riceType
               this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
                 this.typeRice=data;
+                console.log(this.typeRice);
               });
               // list package
               this.getDb('http://localhost:3000/api/common/package',(data)=>{
@@ -231,7 +233,7 @@
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
-                console.log(1);
+                // console.log(1);
             },
             postDb:function (url) {
               axios.get('/user', {
