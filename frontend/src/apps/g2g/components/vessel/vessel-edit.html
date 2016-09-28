@@ -163,10 +163,8 @@
           </gl-form-dropdown-menu>
         </gl-grid-col>
 
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">{{price}}
-          <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{price}}"></gl-form-label-input>
-          <paper-input label="Input label" value="{{price}}"></paper-input>
-          <input type="text" name="name" value="{{price}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" format-number value="{{price}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package_weight_bag}}"></gl-form-label-input>
@@ -246,8 +244,6 @@
         });
       },
       _getCmlForRiceType : function(e) {
-        // console.log(this.cml);
-        // console.log(this.cml);
         var selectedItem = e.target.selectedItem;
         if (selectedItem) {
           this.cmlNo = selectedItem.id ;
@@ -255,7 +251,6 @@
           var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem.id });
           this.riceType = cmls[0].cl_type_rice;
           // console.log(this.riceType);
-
         }
       },
       _getRiceTypeForPackage : function (e) {
@@ -268,12 +263,11 @@
       _getPackageForPrice:function (e) {
         // console.log(this.package.package);
         var packageAl = this.package.package;
-        // console.log(packageAl);
         var selectedItem = e.target.selectedItem;
         if (selectedItem) {
           var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem.packageId });
-          this.price = prices[0].price_per_ton.toString();
-          console.log(typeof this.price);
+          this.price = prices[0].price_per_ton;
+          // console.log(typeof this.price);
         }
       },
       getDb:function (url,callback) {
