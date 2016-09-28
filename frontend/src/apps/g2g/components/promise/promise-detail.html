@@ -108,31 +108,30 @@
       },
       _submitData:function (event) {
           // console.log(JSON.stringify(event.detail));
-          console.log(event.detail);
-          this.result = event.detail
-
-          // var keys = ["weight","price"];
-          //       var datas = event.detail;
-          //       var type_rice = {};
-          //       for ( key in datas ) {
-          //           if(keys.indexOf(key)>-1){
-          //               console.log(key + " "+datas[key]);
-          //               for(key2 in datas[key]){
-          //                   if(!type_rice.hasOwnProperty(key2)){
-          //                       type_rice[key2] = {};
-          //                   }
-          //                   if(!type_rice[key2].hasOwnProperty(key)){
-          //                       type_rice[key2][key] = {};
-          //                   }
-          //                   type_rice[key2][key] = datas[key][key2];
-          //                   console.log("key2=> "+key2+" "+datas[key][key2]);
-          //               }
-          //               delete datas[key];
-          //           }
-          //       }
-          //       console.log(type_rice);
-          //       datas["type_rice"] = type_rice;
-          //       console.log(datas);
+          // console.log(event.detail);
+          // this.result = event.detail
+          var keys = ["type_rice_id","type_rice_quantity"];
+                var datas = event.detail;
+                var type_rice = {};
+                for ( key in datas ) {
+                    if(keys.indexOf(key)>-1){
+                        // console.log(key + " "+datas[key]);
+                        for(key2 in datas[key]){
+                            if(!type_rice.hasOwnProperty(key2)){
+                                type_rice[key2] = {};
+                            }
+                            if(!type_rice[key2].hasOwnProperty(key)){
+                                type_rice[key2][key] = {};
+                            }
+                            type_rice[key2][key] = datas[key][key2];
+                            // console.log("key2=> "+key2+" "+datas[key][key2]);
+                        }
+                        delete datas[key];
+                    }
+                }
+                console.log(type_rice);
+                datas["contract_type_rice"] = type_rice;
+                // console.log(datas);
       },
       validate: function(){
         if(

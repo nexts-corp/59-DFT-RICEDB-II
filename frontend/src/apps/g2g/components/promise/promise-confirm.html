@@ -63,7 +63,7 @@
               <vaadin-date-picker label="วันที่" value="{{data.cl_date}}" name="cl_date"></vaadin-date-picker>
             </gl-grid-col>
         </gl-grid-row>
-        {{data.cl_type_rice.0.type_rice_quantity}}
+        <!-- {{data.cl_type_rice.0.type_rice_quantity}} -->
       <div class="top">Commodities, Price, Package</div>
       <template is="dom-repeat" items="[[data.cl_type_rice]]">
 
@@ -80,11 +80,11 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
-                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" on-change="" auto-validate error-message="กรุณาใส่ราคา" required
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                   value="{{item.type_rice_quantity}}"
                  name="type_rice_quantity"></gl-form-input>
               </gl-grid-col>
-              {{item.type_rice_quantity}}
+              <!-- {{item.type_rice_quantity}} -->
             </gl-grid-row>
 
             <table class="default">
@@ -112,7 +112,7 @@
                   </td>
                 </tr>
               </template>
-              <button on-tap="test">test</button>
+              <!-- <button on-tap="test">test</button> -->
 
 
             </table>
@@ -183,7 +183,6 @@
                 }.bind(this));
             },
             calcWeight: function(data) {
-
               var total = 0;
               var datas = this.data.cl_type_rice;
               for(index in datas){
