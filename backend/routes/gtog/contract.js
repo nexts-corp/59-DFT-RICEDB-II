@@ -21,17 +21,12 @@ router.get(['/', '/list'], function (req, res, next) {
                         .merge(function (cl) {
                             return {
                                 cl_id: cl('id'),
-                                cl_ship_quantity: cl('cl_total_quantity').div(2)
+                                cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
+                                cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4)
                             }
                         })
                         .without('id')
                         .coerceTo('array'),
-                    contract_sent: r.table('confirm_letter')
-                        .filter({ 'contract_id': row('id') })
-                        .sum('cl_total_quantity'),
-                    contract_balance: row('contract_quantity').sub(r.table('confirm_letter')
-                        .filter({ 'contract_id': row('id') })
-                        .sum('cl_total_quantity')),
                     shipment: r.table('shipment')
                         .filter({ 'contract_id': row('id') })
                         .merge(function (shm) {
@@ -45,7 +40,16 @@ router.get(['/', '/list'], function (req, res, next) {
                         .without('id')
                         .coerceTo('array')
                 }
-            }).without('id')
+            })
+            .merge(function (row) {
+                return {
+                    contract_quantity_sent: row('confirm_letter').sum('cl_quantity_sent'),
+                    contract_quantity_confirm: row('confirm_letter').sum('cl_quantity_total'),
+                    contract_quantity_total: row('contract_type_rice').sum('type_rice_quantity'),
+                    contract_quantity_balance: row('contract_type_rice').sum('type_rice_quantity').sub(row('confirm_letter').sum('cl_quantity_total'))
+                }
+            })
+            .without('id')
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
             .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
@@ -96,6 +100,6 @@ router.get('/:contract_id', function (req, res, next) {
     })
 });
 router.post('/insert', function (req, res, next) {
-   res.json(req.body);
+    res.json(req.body);
 });
 module.exports = router;

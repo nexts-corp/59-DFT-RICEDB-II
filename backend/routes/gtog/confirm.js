@@ -25,7 +25,8 @@ router.get('/:cl_id', function (req, res, next) {
                             .merge(function (row_type_rice) {
                                 return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
-                    })
+                    }),
+                    cl_total_quantity: row('cl_type_rice').sum('type_rice_quantity')
                 }
             })
             .without('id')
