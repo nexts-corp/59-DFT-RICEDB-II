@@ -7,13 +7,18 @@ var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 
 var schema = {
-  "properties": {
-    "foo": { "type": "string" },
-    "bar": { "type": "number", "maximum": 3 }
-  }
+    "patternProperties": {
+        ".*$": { "type": "string" }
+    },
+    "properties": {
+        "id": {
+            "type": "string",
+            "maxLength": 2,
+            "minLength": 2
+        }
+    }
 };
-
-var validate = ajv.compile(schema); 
+var validate = ajv.compile(schema);
 
 
 router.get(['/', '/list'], function (req, res, next) {
@@ -57,18 +62,31 @@ router.get('/:country_id', function (req, res, next) {
     });
 });
 router.post('/insert', function (req, res, next) {
-    db.query(function (conn) {
-        r.table("country")
-            .insert(req.body)
-            .run(conn)
-            .then(function (response) {
-                res.json(true);
-                console.log('Success ', response);
-            })
-            .error(function (err) {
-                res.json(false);
-                console.log('error occurred ', err);
-            })
-    })
+    var valid = validate(req.body);
+    if (valid) {
+        //res.json(req.body);
+        db.query(function (conn) {
+            r.table("country")
+                .insert(req.body)
+                .run(conn)
+                .then(function (response) {
+                    if (response.errors == 0) {
+                        res.json(req.body);
+                        console.log('Success ', response);
+                    } else {
+                        res.json("Error ", response);
+                        console.log('Error ', response);
+                    }
+                })
+                .error(function (err) {
+                    res.json("Error", err);
+                    console.log('error occurred ', err);
+                })
+        })
+    } else {
+        //console.log('Invalid: ' + ajv.errorsText(validate.errors));
+        res.json('Invalid: ' + ajv.errorsText(validate.errors));
+    }
+
 });
 module.exports = router;

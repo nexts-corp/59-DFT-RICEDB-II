@@ -4,6 +4,42 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
+var schema = {
+    //'type': 'object',
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "contract_name": {
+            "type": "string"
+        },
+        "buyer_id": {
+            "type": "string"
+        },
+        "contract_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "contract_desc": {
+            "type": "string"
+        },
+        "contract_type_rice": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type_rice_id": { "type": "string" },
+                    "type_rice_quantity": { "type": "number" },
+                },
+                "required": ["type_rice_id", "type_rice_quantity"]
+            }
+        }
+    },
+    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice"]
+};
+var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
@@ -23,7 +59,7 @@ router.get(['/', '/list'], function (req, res, next) {
                                 cl_id: cl('id'),
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
                                 cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
-                                cl_quantity_balance:cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4))
+                                cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4))
                             }
                         })
                         .without('id')
@@ -101,6 +137,15 @@ router.get('/:contract_id', function (req, res, next) {
     })
 });
 router.post('/insert', function (req, res, next) {
-    res.json(req.body);
+    //console.log(req.body);
+    var valid = validate(req.body);
+    if (valid) {
+        console.log(req.body);
+        res.json(req.body);
+    } else {
+        console.log(req.body);
+        console.log('Invalid: ' + ajv.errorsText(validate.errors));
+        res.json('Invalid: ' + ajv.errorsText(validate.errors));
+    }
 });
 module.exports = router;
