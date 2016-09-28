@@ -10,21 +10,20 @@
   background-color: var(--paper-grey-100);
   color: var(--paper-grey-600);
 }
-
-.ss {
-  color: red;
-  border: 1px solid #000;
-}
-/*paper-item {
---paper-item-selected : {
-background-color: var(--paper-grey-600);
-};
-}*/
-
 paper-icon-item {
   cursor: pointer;
-}
 
+  --paper-item-focused: {
+    background-color: var(--gl-info-color);
+    /*opacity: 0;*/
+  }
+  /*--paper-item-selected:{
+    background-color: var(--gl-info-color);
+  }*/
+}
+paper-icon-item:hover {
+  background-color: var(--gl-info-color);
+}
 .sublist paper-item {
   /*padding-left: 30px;*/
 }
@@ -53,10 +52,36 @@ paper-icon-item {
   padding-right: 25px;
   /*color: blue;*/
 }
+.headsecondary {
+  text-align: left;
+  margin-left: 10%;
+  padding-right: 25px;
+  /*color: red;*/
+  font-size: var(--font-size-h4);
+  font-family: 'rsuregular', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.headsecondary:not(:first-of-type) {
+  margin-left: 0px;
+  text-align: right;
+  padding-right: 0px;
+  /*color: blue;*/
+}
+.headThird {
+  border-bottom: 1px solid #000;
+  text-align: left;
+  margin-left: 10%;
+  padding-right: 25px;
+  font-size: var(--font-size-h4);
 
-.subTitle {
-  /*margin-left: 60px;*/
-  /*padding-right: -60px;*/
+  font-family: 'rsuregular', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.headThird:not(:first-of-type) {
+  margin-left: 0px;
+  text-align: right;
+  padding-right: 0px;
+  /*color: blue;*/
 }
 
 .paper-menu-lv1 {
@@ -140,7 +165,7 @@ paper-icon-item {
       <paper-item disabled>
         <!-- Head secondary -->
         <template is="dom-repeat" as="itemConfigSecondary" items="{{config.secondary}}">
-          <div class$="{{itemConfigSecondary.width}}">
+          <div class$="{{itemConfigSecondary.width}} headsecondary">
             {{itemConfigSecondary.label}}
             <!-- width:{{itemConfigSecondary.width}} -->
           </div>
@@ -197,7 +222,7 @@ paper-icon-item {
   <paper-item disabled>
     <!-- Head secondary -->
     <template is="dom-repeat" as="itemConfigThird" items="{{config.third}}">
-      <div class$="{{itemConfigThird.width}}">
+      <div class$="{{itemConfigThird.width}} headThird">
         {{itemConfigThird.label}}
         <!-- width:{{itemConfigSecondary.width}} -->
       </div>
