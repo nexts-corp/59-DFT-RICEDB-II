@@ -63,10 +63,10 @@
               <vaadin-date-picker label="วันที่" value="{{data.cl_date}}" name="cl_date"></vaadin-date-picker>
             </gl-grid-col>
         </gl-grid-row>
-
-
+        {{data.cl_type_rice.0.type_rice_quantity}}
       <div class="top">Commodities, Price, Package</div>
       <template is="dom-repeat" items="[[data.cl_type_rice]]">
+
           <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -79,11 +79,12 @@
                 </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
-                  on-keyup="dataChange"
+                [[calcWeight(item.*)]]
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" on-change="" auto-validate error-message="กรุณาใส่ราคา" required
                   value="{{item.type_rice_quantity}}"
                  name="type_rice_quantity"></gl-form-input>
               </gl-grid-col>
+              {{item.type_rice_quantity}}
             </gl-grid-row>
 
             <table class="default">
@@ -111,6 +112,7 @@
                   </td>
                 </tr>
               </template>
+              <button on-tap="test">test</button>
 
 
             </table>
@@ -135,7 +137,7 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+              <gl-form-input label="Total Quantity" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -163,7 +165,6 @@
                 gl.behavior.core
             ],
             observers: [
-              'dataChange(data)',
               'getTyperice(contractId)'
             ],
             addTypeRice:function () {
@@ -184,8 +185,8 @@
                 .catch(function (error) {
                 }.bind(this));
             },
-            dataChange: function(data) {
-              //this.data.cl_total_quantity
+            calcWeight: function(data) {
+
               var total = 0;
               var datas = this.data.cl_type_rice;
               for(index in datas){
@@ -193,6 +194,9 @@
               }
               this.cl_total_quantity = total;
 
+            },
+            test:function(){
+              console.log(this.data);
             },
             add: function() {
               console.log(this.data);
