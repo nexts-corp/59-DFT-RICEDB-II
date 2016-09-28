@@ -64,9 +64,9 @@
             </gl-grid-col>
         </gl-grid-row>
         <!-- {{data.cl_type_rice.0.type_rice_quantity}} -->
+
       <div class="top">Commodities, Price, Package</div>
       <template is="dom-repeat" items="[[data.cl_type_rice]]">
-
           <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -85,6 +85,11 @@
                  name="type_rice_quantity"></gl-form-input>
               </gl-grid-col>
               <!-- {{item.type_rice_quantity}} -->
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+                  on-keyup="dataChange"
+                  value="{{item.type_rice_quantity}}"
+                 name="type_rice_quantity"></gl-form-input>
+              </gl-grid-col>
             </gl-grid-row>
 
             <table class="default">
@@ -107,13 +112,12 @@
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.price_per_ton]]" name="price_per_ton" no-label-float></gl-form-input></td>
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[item.weight]]" name="weight" no-label-float></gl-form-input></td>
                   <td>
-                    <paper-icon-button icon="icons:add" title='เพิ่ม'style="color: gray;" on-tap=""></paper-icon-button>
+                    <paper-icon-button icon="icons:add" title='เพิ่ม'style="color: gray;" on-tap="add"></paper-icon-button>
                     <paper-icon-button icon="icons:delete" title='ลบ'style="color: gray;" on-tap="dele"></paper-icon-button>
                   </td>
                 </tr>
               </template>
               <!-- <button on-tap="test">test</button> -->
-
 
             </table>
 
@@ -122,7 +126,7 @@
         </template>
 
       <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="add" class="gl-btn-primary">เพิ่ม</paper-button>
+          <paper-button raised on-tap="addTypeRice" class="gl-btn-primary">เพิ่ม</paper-button>
       </div>
 
       <gl-grid-row>
@@ -137,7 +141,7 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input label="Total Quantity" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -165,13 +169,17 @@
                 gl.behavior.core
             ],
             observers: [
+              'dataChange(data)',
               'getTyperice(contractId)'
             ],
             getTyperice: function(contractId) {
-              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+              this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.riceType = data;
                 // console.log(this.riceType);
               });
+            },
+            addTypeRice:function () {
+              console.log(1);
             },
             getDb:function (url,callback) {
               // console.log(url);
@@ -183,6 +191,7 @@
                 }.bind(this));
             },
             calcWeight: function(data) {
+
               var total = 0;
               var datas = this.data.cl_type_rice;
               for(index in datas){
@@ -191,15 +200,12 @@
               this.cl_total_quantity = total;
 
             },
-            test:function(){
-              console.log(this.data);
-            },
             add: function() {
-              // console.log(this.data.cl_type_rice);
-                this.push('data.confirmItem', {
-                    package: '',
-                    price: ''
-                });
+              console.log(this.data);
+                // this.push('data.confirmItem', {
+                //     package: '',
+                //     price: ''
+                // });
                 // console.log(this.data);
             },
             dele: function(data) {
