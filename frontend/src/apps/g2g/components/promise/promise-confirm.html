@@ -67,7 +67,7 @@
 
       <div class="top">Commodities, Price, Package</div>
       <template is="dom-repeat" items="[[confirmLetter.cl_type_rice]]">
-          <div class="bg">
+          <div class="bg" >
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
@@ -87,7 +87,7 @@
 
             </gl-grid-row>
 
-            <table class="default">
+            <table class="default" id="[[index]]">
               <tr>
                 <th>Package (Kg/PP Bags)</th>
                 <th>Price (USD/MT)</th>
@@ -95,7 +95,7 @@
                 <th></th>
               </tr>
               <template is="dom-repeat" items="[[item.package]]">
-                <tr>
+                <tr >
                   <td><gl-form-dropdown-menu error-message="กรุณาเลือกชนิด Package" placeholder="เลือกประเภท" required no-label-float>
                     <paper-menu class="dropdown-content" attr-for-selected="package" selected="{{item.package_id}}" name="package_id">
                       <template is="dom-repeat" items="[[package]]">
@@ -107,8 +107,8 @@
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input></td>
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input></td>
                   <td>
-                    <paper-icon-button icon="icons:add" title='เพิ่ม'style="color: gray;" on-tap="add"></paper-icon-button>
-                    <paper-icon-button icon="icons:delete" title='ลบ'style="color: gray;" on-tap="dele"></paper-icon-button>
+                    <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
+                    <paper-icon-button icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
               </template>
@@ -126,11 +126,12 @@
 
       <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" required>
-                  <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" name="inct_id">
-                      <paper-item price-type="FOB">FOB CY</paper-item>
-                      <paper-item price-type="Bath">Bath</paper-item>
-                      <paper-item price-type="Other">ฯลฯ</paper-item>
+              <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
+                  <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
+                      <template is="dom-repeat" items="[[incoterms]]">
+                        <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
+                      </template>
+
                   </paper-menu>
               </gl-form-dropdown-menu>
           </gl-grid-col>
@@ -188,6 +189,7 @@
                 gl.behavior.core
             ],
             observers: [
+              'dataChange(data.cl_id)',
               'getTyperice(contractId)'
             ],
             getTyperice: function(contractId) {
@@ -211,7 +213,7 @@
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_name;
                 }
               }
-              console.log(this.confirmLetter);
+              // console.log(this.confirmLetter);
             },
             getDb:function (url,callback) {
               // console.log(url);
@@ -246,6 +248,27 @@
                     ]
                 });
                 // console.log(this.confirmLetter);
+            },
+            addPackage:function (e) {
+              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
+              console.log(table.node.id);
+              console.log(this.confirmLetter.cl_type_rice[table.node.id]);
+              console.log(this.confirmLetter.cl_type_rice);
+              this.push('confirmLetter.cl_type_rice'+[table.node.id]+'package',
+                  [
+                    {
+                      package_id: '',
+                      price_per_ton: '',
+                      package_weight_bag: '',
+                    }
+                  ]
+                );
+              // var index = Polymer.dom(this.root).querySelectorAll('.default')
+              // // console.log(index);
+              // index.map((el)=>{
+              //     console.log(el.id);
+              // })
+              // Polymer.dom(this.root).querySelector(default).
             },
             dele: function(data) {
               console.log(this.confirmLetter.cl_type_rice);
