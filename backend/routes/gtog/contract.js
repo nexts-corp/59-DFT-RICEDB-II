@@ -20,7 +20,7 @@ router.get(['/', '/list'], function (req, res, next) {
                         .filter({ 'contract_id': row('id') })
                         .merge(function (cl) {
                             return {
-                                cl_id: cl('id')//,
+                                cl_id: cl('id'),
                                 cl_ship_quantity: cl('cl_total_quantity').div(2)
                             }
                         })
