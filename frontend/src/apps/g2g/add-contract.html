@@ -84,7 +84,7 @@
                             <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]]></promise-confirm>
+                                    <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]] incoterms=[[incoterms]]></promise-confirm>
                                     <!-- <period-page name="third" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page> -->
                                 </iron-pages>
                             </section-content>
@@ -182,6 +182,10 @@
               // list seller
               this.getDb('http://localhost:3000/api/common/seller',(data)=>{
                 this.seller=data;
+              });
+              // list incoterms
+              this.getDb('http://localhost:3000/api/common/incoterms',(data)=>{
+                this.incoterms=data;
               });
             },
             attached: function() {
