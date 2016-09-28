@@ -3,60 +3,67 @@
   <template>
     <!--error 404<br>
     <a href="/app1/page1">test link</a>-->
-    <style>
-      .container{
-        padding:40px;
-        color:black;
-        font-family: Arial, Helvetica, sans-serif;
-      }
-      .head{
-        font-size: 28px;
-        padding-top: 10px;
-      }
-      .content{
-        font-size: 18px;
-      }
-      .head,.content{
-        padding-left: 50px;
-        padding-right: 50px;
-      }
-      span{
-        color: gray;
-      }
+    <style include="gl-color">
+    .container{
+      padding:40px;
+      color:black;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .head{
+      font-size: 28px;
+      padding-top: 10px;
+    }
+    .content{
+      font-size: 18px;
+    }
+    .head,.content{
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+    span{
+      color: gray;
+    }
+    paper-material {
+      background-color: var(--gl-white-color);
+      margin: 10px;
+      padding: 5px;
+    }
     </style>
-    <app-location route="{{routeError}}"></app-location>
-    <div class="container">
-      <img src="/images/logo_dft.png" style="width: 30%; height: auto;" alt="Smiley face">
-      <div class="head">
+    <paper-material elevation="1">
+
+
+      <app-location route="{{routeError}}"></app-location>
+      <div class="container">
+        <img src="/images/logo_dft.png" style="width: 30%; height: auto;" alt="Smiley face">
+        <div class="head">
           404 <span>That's an error.</span>
-           <hr>
+          <hr>
+        </div>
+        <div class="content">
+          The requested URL[[routeError.path]] was not found on this server. <span>That's all we know.</span> <a href="#" on-tap="toHome">Click to homepage</a>
+        </div>
       </div>
-     <div class="content">
-        The requested URL[[routeError.path]] was not found on this server. <span>That's all we know.</span> <a href="#" on-tap="toHome">Click to homepage</a>
-     </div>
-
-
-    </div>
+    </paper-material>
   </template>
 
   <script>
-    Polymer({
-      is:'error-404',
-      behaviors:[gl.behavior.core],
-      properties:{
-        urlError:{
-          type:"String",
-          value:function(){
-            return window.location.href;
-          }
+  Polymer({
+    is:'error-404',
+    behaviors:[gl.behavior.core],
+    properties:{
+      urlError:{
+        type:"String",
+        value:function(){
+          return window.location.href;
         }
-      },
-      created:function(){
-        this.glSetLayout('layout-error');
-      },
-      toHome:function () {
-        this.glChangePath('/dashboard/back-office');
       }
-    });
+    },
+    created:function(){
+      this.glSetLayout('layout-error');
+    },
+    toHome:function () {
+      this.glChangePath('/');
+    }
+  });
   </script>
 </dom-module>

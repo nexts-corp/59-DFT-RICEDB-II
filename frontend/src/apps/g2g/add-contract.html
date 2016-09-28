@@ -17,7 +17,7 @@
 
 
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
-<dom-module id="gtog-add-contract">
+<dom-module id="g2g-add-contract">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
@@ -114,7 +114,7 @@
     </template>
     <script>
         Polymer({
-            is: "gtog-add-contract",
+            is: "g2g-add-contract",
             listeners: {
                 'nx-grid-tap': 'nxGridTap',
                 'nx-grid-dblclick': 'nxGridDblclick'
@@ -146,10 +146,12 @@
               // list county
               this.getDb('http://localhost:3000/api/gtog/contract/list',(data)=>{
                 this.lastResponse=data;
+                console.log(this.lastResponse);
               });
               // list riceType
               this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
                 this.typeRice=data;
+                console.log(this.typeRice);
               });
               // list package
               this.getDb('http://localhost:3000/api/common/package',(data)=>{
@@ -231,6 +233,7 @@
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
+                // console.log(1);
             },
             postDb:function (url) {
               axios.get('/user', {
