@@ -3,6 +3,17 @@ var router = express.Router();
 
 var r = require('rethinkdb');
 var db = require('../../db.js');
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
+
+var schema = {
+  "properties": {
+    "foo": { "type": "string" },
+    "bar": { "type": "number", "maximum": 3 }
+  }
+};
+
+var validate = ajv.compile(schema); 
 
 
 router.get(['/', '/list'], function (req, res, next) {

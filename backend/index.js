@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var test = require('./routes/test');
-var gtog = require('./routes/gtog');
+var g2g = require('./routes/g2g');
 var common = require('./routes/common');
 
 // parse application/x-www-form-urlencoded
@@ -21,7 +21,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(test);
-app.use('/gtog', gtog);
+app.use('/g2g', g2g);
 app.use('/common', common);
 
 
