@@ -22,7 +22,8 @@ router.get(['/', '/list'], function (req, res, next) {
                             return {
                                 cl_id: cl('id'),
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
-                                cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4)
+                                cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
+                                cl_quantity_balance:cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4))
                             }
                         })
                         .without('id')
@@ -43,7 +44,7 @@ router.get(['/', '/list'], function (req, res, next) {
             })
             .merge(function (row) {
                 return {
-                    contract_quantity_sent: row('confirm_letter').sum('cl_quantity_sent'),
+                    //contract_quantity_sent: row('confirm_letter').sum('cl_quantity_sent'),
                     contract_quantity_confirm: row('confirm_letter').sum('cl_quantity_total'),
                     contract_quantity_total: row('contract_type_rice').sum('type_rice_quantity'),
                     contract_quantity_balance: row('contract_type_rice').sum('type_rice_quantity').sub(row('confirm_letter').sum('cl_quantity_total'))
