@@ -1,0 +1,89 @@
+<link rel="import" href="../../../gtog/components/list-edit/listEditBehavior.html">
+<link rel="import" href="register-createMember.html">
+<link rel="import" href="register-member.html">
+<dom-module id="register-pageRegister">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    .title {
+        text-align: center;
+        font-size: var(--font-size-h4);
+        font-family: 'rsubold', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        margin: 20px 0px 20px 0px;
+    }
+    .searchBox{
+      padding: 5px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    .searchBorder{
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+</style>
+  <template>
+
+    <gl-form-panel set-border="0px">
+
+      <!-- <gl-form-panel-head set-padding="0px 0px 0px 0px"> -->
+        <!-- <div id="removePen" hidden>
+          <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+        </div> -->
+        <div class="title">เพิ่มทะเบียนผู้ส่งออกข้าวไปต่างประเทศ</div>
+            <div class="searchBox searchBorder">
+              <div class="horizontal layout">
+                <div class="flex"></div>
+                  <div class="flex-2">
+                <gl-search-input result="{{result}}"
+                                  search-label-name="บริษัท"
+                                  search-input="true"
+                                  search-type="[[searchType]]">
+                </gl-search-input>
+              </div>
+            </div>
+          </div>
+
+      <!-- </gl-form-panel-head> -->
+
+              <div class="bd">
+                  <gl-form-panel>
+                      <iron-pages selected="{{pages}}">
+                          <!-- <register-createMember></register-createMember> -->
+                          <register-member></register-member>
+                      </iron-pages>
+                  </gl-form-panel>
+              </div>
+
+        <gl-form-panel-footer>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+        </gl-form-panel-footer>
+    </gl-form-panel>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "register-pageRegister",
+      behaviors: [listEditBehavior],
+      properties: {
+        pages:{
+            type:Number,
+            notify:true,
+            value: 0
+        }
+      },
+      // ready: function() {
+      //   this.$$('#removePen').removeAttribute("hidden");
+      // },
+      // editChange:function(e){
+      //   this.pages = 1;
+      //   this.$$('#removeButtom').removeAttribute("hidden");
+      //   this.$$('#removePen').setAttribute("hidden", "hidden");
+      // },
+      // save:function(e) {
+      //   this.pages = 0;
+      //   this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      //   this.$$('#removePen').removeAttribute("hidden");
+      // }
+    });
+  </script>
+</dom-module>
