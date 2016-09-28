@@ -21,17 +21,17 @@ router.get(['/', '/list'], function (req, res, next) {
                         .merge(function (cl) {
                             return {
                                 cl_id: cl('id')//,
-                                //cl_ship_quantity: cl('cl_total_quantity').div(2)
+                                cl_ship_quantity: cl('cl_total_quantity').div(2)
                             }
                         })
                         .without('id')
                         .coerceTo('array'),
-                    // contract_sent: r.table('confirm_letter')
-                    //     .filter({ 'contract_id': row('id') })
-                    //     .sum('cl_total_quantity'),
-                    // contract_balance: row('contract_quantity').sub(r.table('confirm_letter')
-                    //     .filter({ 'contract_id': row('id') })
-                    //     .sum('cl_total_quantity')),
+                    contract_sent: r.table('confirm_letter')
+                        .filter({ 'contract_id': row('id') })
+                        .sum('cl_total_quantity'),
+                    contract_balance: row('contract_quantity').sub(r.table('confirm_letter')
+                        .filter({ 'contract_id': row('id') })
+                        .sum('cl_total_quantity')),
                     shipment: r.table('shipment')
                         .filter({ 'contract_id': row('id') })
                         .merge(function (shm) {
