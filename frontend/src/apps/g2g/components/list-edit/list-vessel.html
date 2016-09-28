@@ -409,7 +409,7 @@
               'getCounty(contractId)'
             ],
             getCounty: function(contractId) {
-              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+              this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.county = data.country_id;
                 this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
                   this.port = data;
@@ -423,12 +423,12 @@
                 // console.log(this.pol);
               });
               //get cl
-              this.getDb('http://localhost:3000/api/gtog/confirm/contract/'+contractId,(data)=>{
+              this.getDb('http://localhost:3000/api/g2g/confirm/contract/'+contractId,(data)=>{
                 this.cml = data;
                 // console.log(this.cml);
               });
               //get buyer_masks
-              this.getDb('http://localhost:3000/api/gtog/contract/'+contractId,(data)=>{
+              this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.buyerMasks = data.buyer_masks;
                 // console.log(this.buyerMasks);
               });
