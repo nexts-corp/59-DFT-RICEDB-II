@@ -45,15 +45,15 @@
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
                     <list item="buyer_name" label="ชื่อ" width="flex-2" type="string"></list>
-                    <list item="contract_quantity" label="ทั้งหมด (ตัน) /" width="flex" type="number"></list>
-                    <list item="contract_sent" label="ส่งแล้ว (ตัน) /" width="flex" type="number"></list>
-                    <list item="contract_balance" label="เหลือ (ตัน)" width="flex" type="number"></list>
+                    <list item="contract_quantity_total" label="ทั้งหมด (ตัน) /" width="flex" type="number"></list>
+                    <list item="contract_quantity_confirm" label="ทำสัญญาแล้ว (ตัน) /" width="flex" type="number"></list>
+                    <list item="contract_quantity_balance" label="คงเหลือ (ตัน)" width="flex" type="number"></list>
                   </items>
                   <items type="secondary" item="confirm_letter">
                     <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
-                    <list item="cl_total_quantity" label="" width="flex" type="string"></list>
-                    <list item="cl_ship_quantity" label="" width="flex" type="string"></list>
-                    <list item="cmlBalanceRice" label="" width="flex" type="string"></list>
+                    <list item="cl_quantity_total" label="ทำสัญญาแล้ว (ตัน)/" width="flex" type="string"></list>
+                    <list item="cl_quantity_sent" label="ส่งแล้ว (ตัน)/" width="flex" type="string"></list>
+                    <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ(ตัน)" width="flex" type="string"></list>
                   </items>
                   <items type="secondaryHalf" item="sub">
                     <list item="" label="" width="flex" type="string"></list>
@@ -146,12 +146,10 @@
               // list county
               this.getDb('http://localhost:3000/api/gtog/contract/list',(data)=>{
                 this.lastResponse=data;
-                console.log(this.lastResponse);
               });
               // list riceType
               this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
                 this.typeRice=data;
-                console.log(this.typeRice);
               });
               // list package
               this.getDb('http://localhost:3000/api/common/package',(data)=>{
