@@ -94,14 +94,14 @@
                 <th>Minimum Tare Weight</th>
                 <th></th>
               </tr>
-              
+
               <template is="dom-repeat" as="testxx" items="[[item.package]]">
                 <tr >
                   <td>
                     <gl-form-dropdown-menu error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
                     <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{testxx.package_id}}" name="package_id" >
                       <template is="dom-repeat" items="[[package]]">
-                        
+
 
                         <paper-item package-id="{{item.package_id}}" >[[item.package_name]]</paper-item>
                       </template>
@@ -109,8 +109,8 @@
                   </gl-form-dropdown-menu>
                   </td>
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{testxx.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input></td>
-                  <td><gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{testxx.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input>
-                  [[testza(testxx.package_id,package)]]xxxx
+                  <td><gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(testxx.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
+
                   </td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
@@ -118,7 +118,7 @@
                   </td>
                 </tr>
               </template>
-              
+
 
 
             </table>
@@ -225,7 +225,7 @@
                 }
               }
               console.log(this.confirmLetter);
-              this.postDb(this.confirmLetter)
+              // this.postDb(this.confirmLetter)
             },
             getDb:function (url,callback) {
               axios.get(url)
@@ -271,33 +271,6 @@
                 });
                 // console.log(this.confirmLetter);
             },
-            _getPackageForWeightBag:function (e) {
-              // console.log(this.package);
-              var packageWeigthBag = this.package;
-              // console.log(packageWeigthBag);
-              var selectedItem = e.target.selectedItem;
-              // console.log(e.currentTarget.parentNode.nextSibling);
-              // var selectedItem = e.target.id;
-              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
-              // console.log(table.node.id);
-              // console.log(e.target.id);
-              // console.log(e.target.selectedItem.id);
-              // console.log(selectedItem.packageId);
-              if (selectedItem) {
-                var packageBag = packageWeigthBag.filter(function (packageWeigthBag) { return packageWeigthBag.package_id == selectedItem.packageId });
-                this.packageWeigthBag = packageBag[0].package_weight_bag;
-                // console.log(this.packageWeigthBag);
-                // this.set('myArray.1.name', 'Rupert');
-                // this.set('confirmLetter.cl_type_rice.0.package.0.package_weight_bag', this.packageWeigthBag);
-                // console.log('confirmLetter.cl_type_rice.'+[table.node.id]+'.package.'+[e.target.id]+'.package_weight_bag');
-
-                   this.set('confirmLetter.cl_type_rice.'+[table.node.id]+'.package.'+[e.target.id]+'.package_weight_bag', this.packageWeigthBag);
-
-              }
-              // this.confirmLetter.cl_type_rice[table.node.id].package[e.target.id].package_weight_bag=this.packageWeigthBag;
-              // console.log(this.confirmLetter.cl_type_rice[table.node.id].package[e.target.id].package_weight_bag);
-
-            },
             weight:function () {
               return this.packageWeigthBag;
             },
@@ -320,17 +293,17 @@
                 // var index = this.data.confirmItem.indexOf(data);
                 this.splice('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
             },
-            testza:function(data,list){
+            changePrice:function(data,list){
               var result = "";
               list.map((package,index)=>{
                 //console.log(package.package_id,data,index,package.package_weight_bag)
                 //console.log(package);
                 if(package.package_id==data){
-                  console.log(data,package.package_id,package);
+                  // console.log(data,package.package_id,package);
                   result = package.package_weight_bag;
                 }
               });
-              
+
               return result;
             }
 
