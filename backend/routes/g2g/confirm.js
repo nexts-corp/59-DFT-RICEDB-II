@@ -130,7 +130,7 @@ router.get('/contract/:contract_id', function (req, res, next) {
     })
 });
 router.post('/update', function (req, res, next) {
-    //console.log(req.body);
+    //console.log(rseq.body);
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
@@ -138,7 +138,7 @@ router.post('/update', function (req, res, next) {
         if (req.body.id != '' || req.body.id === 'undefined') {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("confirm_letter")
+                r.table("confirm_letter ")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
