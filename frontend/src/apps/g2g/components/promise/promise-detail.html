@@ -50,7 +50,7 @@
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-                  <paper-icon-button class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
+                  <paper-icon-button id="[[index]]" class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
                 </gl-grid-col>
               </gl-grid-row>
             </div>
@@ -93,18 +93,19 @@
           value:{ name:false }
         }
       },
-      addNewData: function(e) {
-        // this.push('data.contract_type_rice',{
-        //   type_rice_id:'',
-        //   type_rice_name_en:'',
-        //   type_rice_name_th:'',
-        //   type_rice_quantity:'',
-        // });
+      addNewData: function() {
+        this.push('data.contract_type_rice',{
+          type_rice_id:'',
+          type_rice_name_en:'',
+          type_rice_name_th:'',
+          type_rice_quantity:'',
+        });
         // console.log(this.data);
       },
-      dele: function(data){
-        var index = this.data.rice.indexOf(data);
-        this.splice('data.rice',index,1);
+      dele: function(e){
+        // console.log(e.currentTarget.id);
+        // var index = this.data.contract_type_rice.indexOf(data);
+        this.splice('data.contract_type_rice',e.currentTarget.id,1);
       },
       listeners:{
         'iron-form-submit': '_submitData'
@@ -115,44 +116,53 @@
       },
       _submitData:function (event) {
           // console.log(JSON.stringify(event.detail));
-          // console.log(event.detail);
+          //console.log(event.detail);
           // this.result = event.detail
           var keys = ["type_rice_id","type_rice_quantity"];
                 var datas = event.detail;
                 var type_rice = [];
                 for ( key in datas ) {
                     if(keys.indexOf(key)>-1){
-                        // console.log(key + " "+datas[key]);
-                        for(key2 in datas[key]){
-                            if(!type_rice.hasOwnProperty(key2)){
-                                type_rice[key2] = {};
+                        //  console.log(key + " "+datas[key]);
+                        //   console.log(datas[key].constructor === Array);
+                        if(datas[key].constructor === Array){
+                            for(key2 in datas[key]){
+                                if(!type_rice.hasOwnProperty(key2)){
+                                    type_rice[key2] = {};
+                                }
+                                type_rice[key2][key] = datas[key][key2];
+                                // if(!type_rice[key2].hasOwnProperty(key)){
+                                //     type_rice[key2][key] = datas[key][key2];
+                                // }
+                              //  type_rice[key2][key] = datas[key][key2];
+                                // console.log("key2=> "+key2+" "+datas[key][key2]);
                             }
-                            if(!type_rice[key2].hasOwnProperty(key)){
-                                type_rice[key2][key] = {};
-                            }
-                            type_rice[key2][key] = datas[key][key2];
-                            // console.log("key2=> "+key2+" "+datas[key][key2]);
+                        }else{
+                          if(!type_rice.hasOwnProperty(0)){
+                              type_rice[0] = {};
+                          }
+                          type_rice[0][key] = datas[key];
                         }
                         delete datas[key];
                     }
                 }
-                console.log(type_rice);
+                // console.log(type_rice);
                 delete datas['buyer_address'];
                 delete datas['type_rice_name'];
                 datas["contract_type_rice"] = type_rice;
                 datas["id"]=datas["contract_id"];
                 delete datas["contract_id"];
-                //console.log(JSON.stringify(datas));
-                console.log(datas);
-                axios.post('http://localhost:3000/api/g2g/contract/update', datas)
-                          .then(function (response) {
-                            console.log("success");
-                            console.log(response);
-                          })
-                          .catch(function (error) {
-                            console.log("error");
-                            console.log(error);
-                          })
+                // console.log(JSON.stringify(datas));
+                 console.log(datas);
+                // axios.post('http://localhost:3000/api/g2g/contract/update', datas)
+                //           .then(function (response) {
+                //             console.log("success");
+                //             console.log(response);
+                //           })
+                //           .catch(function (error) {
+                //             console.log("error");
+                //             console.log(error);
+                //           })
       },
       validate: function(){
         if(
