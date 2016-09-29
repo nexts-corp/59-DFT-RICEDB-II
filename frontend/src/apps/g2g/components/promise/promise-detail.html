@@ -24,6 +24,7 @@
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input class="bottom" auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
           </gl-grid-col>
+          <gl-form-input value="{{data.contract_id}}" name="contract_id" hidden></gl-form-input>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <vaadin-date-picker label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
@@ -56,7 +57,7 @@
         </template>
 
         <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="add" class="gl-btn-primary">เพิ่ม</paper-button>
+          <paper-button raised on-tap="addNewData" class="gl-btn-primary">เพิ่ม</paper-button>
         </div>
 
 
@@ -92,8 +93,13 @@
           value:{ name:false }
         }
       },
-      add: function() {
-        this.push('data.rice',{riceType:'',volume:''});
+      addNewData: function(e) {
+        // this.push('data.contract_type_rice',{
+        //   type_rice_id:'',
+        //   type_rice_name_en:'',
+        //   type_rice_name_th:'',
+        //   type_rice_quantity:'',
+        // });
         // console.log(this.data);
       },
       dele: function(data){
@@ -135,7 +141,7 @@
                 delete datas['type_rice_name'];
                 datas["contract_type_rice"] = type_rice;
                 //console.log(JSON.stringify(datas));
-                axios.post('http://localhost:3000/api/g2g/contract/insert', JSON.stringify(datas))
+                axios.post('http://localhost:3000/api/g2g/contract/update', datas)
                           .then(function (response) {
                             console.log("success");
                             console.log(response);
