@@ -108,7 +108,7 @@
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input></td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
-                    <paper-icon-button icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
+                    <paper-icon-button id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
               </template>
@@ -204,6 +204,10 @@
               });
             },
             addConfirm:function () {
+              //เปลี่ยนเป็น id
+              this.confirmLetter.id = this.confirmLetter.cl_id;
+              delete this.confirmLetter.cl_id
+
               delete this.confirmLetter.contract_id;
               for (var i = 0; i < this.confirmLetter.cl_type_rice.length; i++) {
                 delete this.confirmLetter.cl_type_rice[i].type_rice_name_en;
@@ -214,15 +218,26 @@
                 }
               }
               // console.log(this.confirmLetter);
+              this.postDb(this.confirmLetter)
             },
             getDb:function (url,callback) {
-              // console.log(url);
               axios.get(url)
                 .then(function(response){
                   callback(response.data);
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
+            },
+            postDb:function (data) {
+              axios.post('http://localhost:3000/api/g2g/contract/insert', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                        })
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
             },
             calcWeight: function(data) {
 
@@ -237,13 +252,13 @@
               // console.log(this.confirmLetter.cl_type_rice);
                 this.push('confirmLetter.cl_type_rice', {
                   type_rice_id: '',
-                  type_rice_quantity: '',
+                  type_rice_quantity: '0',
                   package:
                     [
                       {
                         package_id: '',
-                        price_per_ton: '',
-                        package_weight_bag: '',
+                        price_per_ton: '0',
+                        package_weight_bag: '0',
                       }
                     ]
                 });
@@ -251,29 +266,22 @@
             },
             addPackage:function (e) {
               var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
-              console.log(table.node.id);
-              console.log(this.confirmLetter.cl_type_rice[table.node.id]);
-              console.log(this.confirmLetter.cl_type_rice);
-              this.push('confirmLetter.cl_type_rice'+[table.node.id]+'package',
-                  [
-                    {
+              // console.log(table.node.id);
+              // console.log(this.confirmLetter.cl_type_rice[table.node.id]);
+              var data = {
                       package_id: '',
-                      price_per_ton: '',
-                      package_weight_bag: '',
-                    }
-                  ]
-                );
-              // var index = Polymer.dom(this.root).querySelectorAll('.default')
-              // // console.log(index);
-              // index.map((el)=>{
-              //     console.log(el.id);
-              // })
-              // Polymer.dom(this.root).querySelector(default).
+                      price_per_ton: '0',
+                      package_weight_bag: '0',
+                    };
+                    // console.log(data);
+              this.push('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', data);
             },
-            dele: function(data) {
-              console.log(this.confirmLetter.cl_type_rice);
+            delePackage: function(e) {
+              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
+              // console.log(table.node.id);
+              // console.log(e.target.id);
                 // var index = this.data.confirmItem.indexOf(data);
-                // this.splice('data.confirmItem', index, 1);
+                this.splice('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
             }
 
         });
