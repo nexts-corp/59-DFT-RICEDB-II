@@ -14,9 +14,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-  res.setHeader('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
+  // Website you wish to allow to connect 
+  // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+  // res.setHeader('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
   return next();
 });
 app.use(test);
