@@ -96,16 +96,18 @@
               </tr>
               <template is="dom-repeat" items="[[item.package]]">
                 <tr >
-                  <td><gl-form-dropdown-menu error-message="กรุณาเลือกชนิด Package" placeholder="เลือกประเภท" required no-label-float>
-                    <paper-menu class="dropdown-content" attr-for-selected="package" selected="{{item.package_id}}" name="package_id">
+                  <td>
+                    <gl-form-dropdown-menu error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float on-iron-select="_getPackageForWeightBag">
+                    <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{item.package_id}}" name="package_id" >
                       <template is="dom-repeat" items="[[package]]">
-                        <paper-item package="{{item.package_id}}">[[item.package_name]]</paper-item>
+                        <paper-item package-id="{{item.package_id}}" >[[item.package_name]]</paper-item>
                       </template>
                     </paper-menu>
                   </gl-form-dropdown-menu>
                   </td>
                   <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input></td>
-                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input></td>
+                  <td><gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input>
+                  </td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
                     <paper-icon-button id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
@@ -137,7 +139,7 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+              <gl-form-label-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-label-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -207,17 +209,17 @@
               //เปลี่ยนเป็น id
               this.confirmLetter.id = this.confirmLetter.cl_id;
               delete this.confirmLetter.cl_id
-
-              delete this.confirmLetter.contract_id;
+              delete this.confirmLetter.cl_total_quantity;
               for (var i = 0; i < this.confirmLetter.cl_type_rice.length; i++) {
                 delete this.confirmLetter.cl_type_rice[i].type_rice_name_en;
                 delete this.confirmLetter.cl_type_rice[i].type_rice_name_th;
                 for (var j = 0; j < this.confirmLetter.cl_type_rice[i].package.length; j++) {
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_kg_per_bag;
+                  delete this.confirmLetter.cl_type_rice[i].package[j].package_weight_bag;
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_name;
                 }
               }
-              // console.log(this.confirmLetter);
+              console.log(this.confirmLetter);
               this.postDb(this.confirmLetter)
             },
             getDb:function (url,callback) {
@@ -263,6 +265,36 @@
                     ]
                 });
                 // console.log(this.confirmLetter);
+            },
+            _getPackageForWeightBag:function (e) {
+              // console.log(this.package);
+              var packageWeigthBag = this.package;
+              // console.log(packageWeigthBag);
+              var selectedItem = e.target.selectedItem;
+              // console.log(e.currentTarget.parentNode.nextSibling);
+              // var selectedItem = e.target.id;
+              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
+              // console.log(table.node.id);
+              // console.log(e.target.id);
+              // console.log(e.target.selectedItem.id);
+              // console.log(selectedItem.packageId);
+              if (selectedItem) {
+                var packageBag = packageWeigthBag.filter(function (packageWeigthBag) { return packageWeigthBag.package_id == selectedItem.packageId });
+                this.packageWeigthBag = packageBag[0].package_weight_bag;
+                // console.log(this.packageWeigthBag);
+                // this.set('myArray.1.name', 'Rupert');
+                // this.set('confirmLetter.cl_type_rice.0.package.0.package_weight_bag', this.packageWeigthBag);
+                // console.log('confirmLetter.cl_type_rice.'+[table.node.id]+'.package.'+[e.target.id]+'.package_weight_bag');
+
+                   this.set('confirmLetter.cl_type_rice.'+[table.node.id]+'.package.'+[e.target.id]+'.package_weight_bag', this.packageWeigthBag);
+
+              }
+              // this.confirmLetter.cl_type_rice[table.node.id].package[e.target.id].package_weight_bag=this.packageWeigthBag;
+              // console.log(this.confirmLetter.cl_type_rice[table.node.id].package[e.target.id].package_weight_bag);
+
+            },
+            weight:function () {
+              return this.packageWeigthBag;
             },
             addPackage:function (e) {
               var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
