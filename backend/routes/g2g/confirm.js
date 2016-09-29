@@ -4,6 +4,56 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
+var schema = {
+    //'type': 'object',
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "cl_name": {
+            "type": "string"
+        },
+        "cl_no": {
+            "type": "string"
+        },
+        "cl_date": {
+            "type": "string",
+            "format": "date"
+        },
+        "cl_quality": {
+            "type": "string"
+        },
+        "cl_type_rice": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type_rice_id": { "type": "string" },
+                    "type_rice_quantity": { "type": "number" },
+                    "package": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "package_id": { "type": "string" },
+                                "price_per_ton": { "type": "number" },
+                            },
+                            "required": ["package_id", "price_per_ton"]
+                        }
+                    }
+                },
+                "required": ["type_rice_id", "type_rice_quantity","package"]
+            }
+        },
+        "inct_id":{
+            "type":"string"
+        }
+    },
+    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice","inct_id"]
+};
+var validate = ajv.compile(schema);
 
 router.get('/:cl_id', function (req, res, next) {
     db.query(function (conn) {
@@ -56,9 +106,9 @@ router.get('/contract/:contract_id', function (req, res, next) {
                                 })
                             }
                         })
-                        .merge(function (row_type_rice) {
-                            return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
-                        })
+                            .merge(function (row_type_rice) {
+                                return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                            })
                     })
                 }
             })
@@ -78,5 +128,41 @@ router.get('/contract/:contract_id', function (req, res, next) {
                 }
             });
     })
+});
+router.post('/update', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        //console.log(req.body);
+        if (req.body.id != '' || req.body.id === 'undefined') {
+            result.id = req.body.id;
+            db.query(function (conn) {
+                r.table("confirm_letter")
+                    .get(req.body.id)
+                    .update(req.body)
+                    .run(conn)
+                    .then(function (response) {
+                        result.message = response;
+                        if (response.errors == 0) {
+                            result.result = true;
+                        }
+                        res.json(result);
+                        console.log(result);
+                    })
+                    .error(function (err) {
+                        result.message = err;
+                        res.json(result);
+                        console.log(result);
+                    })
+            })
+        } else {
+            result.message = 'require field id';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
 });
 module.exports = router;
