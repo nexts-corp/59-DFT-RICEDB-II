@@ -1,7 +1,8 @@
 <dom-module id="promise-confirm">
-    <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-alignment gl-size gl-color">
         .top {
             margin-top: 15px;
+            font-size: var(--font-size-large);
         }
         .bg {
             background-color: var(--paper-grey-200);
@@ -55,6 +56,7 @@
     </style>
     <template>
       <form is="iron-form" id="confirmLitter" method="get">
+
         <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
@@ -65,9 +67,9 @@
         </gl-grid-row>
 
 
-      <div class="top">Commodities, Price, Package</div>
+      <div class="top ">Commodities, Price, Package</div>
       <template is="dom-repeat" items="[[confirmLetter.cl_type_rice]]">
-          <div class="bg" >
+          <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
@@ -84,6 +86,8 @@
                   value="{{item.type_rice_quantity}}"
                  name="type_rice_quantity"></gl-form-input>
               </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <paper-icon-button icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์' style="color: gray;" on-tap=""></paper-icon-button>
 
             </gl-grid-row>
 
@@ -110,7 +114,7 @@
                   </td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
-                    <paper-icon-button id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
+                    <paper-icon-button id="[[index]]" icon="icons:remove" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
               </template>

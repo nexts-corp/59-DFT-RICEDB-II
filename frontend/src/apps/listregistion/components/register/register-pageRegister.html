@@ -1,4 +1,4 @@
-<link rel="import" href="../../../gtog/components/list-edit/listEditBehavior.html">
+<link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
 <link rel="import" href="register-createMember.html">
 <link rel="import" href="register-member.html">
 <dom-module id="register-pageRegister">
@@ -28,12 +28,13 @@
         <!-- <div id="removePen" hidden>
           <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
         </div> -->
-        <div class="title">เพิ่มทะเบียนผู้ส่งออกข้าวไปต่างประเทศ</div>
+        <div id="changTitle" class="title" hidden>เพิ่มทะเบียนผู้ส่งออกข้าวไปต่างประเทศ</div>
+        <div id="changTitle2" class="title" hidden>ขึ้นทะเบียนผู้ส่งออกข้าวส่งออกไปจำหน่ายต่างประเทศ</div>
             <div class="searchBox searchBorder">
               <div class="horizontal layout">
                 <div class="flex"></div>
                   <div class="flex-2">
-                <gl-search-input result="{{result}}"
+                <gl-search-input on-tap="_search" result="{{result}}"
                                   search-label-name="บริษัท"
                                   search-input="true"
                                   search-type="[[searchType]]">
@@ -44,7 +45,7 @@
 
       <!-- </gl-form-panel-head> -->
 
-              <div class="bd">
+              <div id="formData" class="bd" hidden>
                   <gl-form-panel>
                       <iron-pages selected="{{pages}}">
                           <!-- <register-createMember></register-createMember> -->
@@ -54,7 +55,7 @@
               </div>
 
         <gl-form-panel-footer>
-          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised >บันทึก</paper-button>
         </gl-form-panel-footer>
     </gl-form-panel>
 
@@ -71,19 +72,30 @@
             value: 0
         }
       },
-      // ready: function() {
-      //   this.$$('#removePen').removeAttribute("hidden");
-      // },
+      ready: function() {
+        this.$$('#changTitle').removeAttribute("hidden");
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      },
+      _search:function(){
+        this.$$('#formData').removeAttribute("hidden");
+        this.$$('#changTitle').setAttribute("hidden", "hidden");
+        this.$$('#changTitle2').removeAttribute("hidden");
+        this.$$('#removeButtom').removeAttribute("hidden");
+      },
+      save:function() {
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#formData').setAttribute("hidden", "hidden");
+        this.$$('#changTitle').removeAttribute("hidden");
+        this.$$('#changTitle2').setAttribute("hidden", "hidden");
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      }
+
       // editChange:function(e){
       //   this.pages = 1;
       //   this.$$('#removeButtom').removeAttribute("hidden");
       //   this.$$('#removePen').setAttribute("hidden", "hidden");
       // },
-      // save:function(e) {
-      //   this.pages = 0;
-      //   this.$$('#removeButtom').setAttribute("hidden", "hidden");
-      //   this.$$('#removePen').removeAttribute("hidden");
-      // }
+
     });
   </script>
 </dom-module>
