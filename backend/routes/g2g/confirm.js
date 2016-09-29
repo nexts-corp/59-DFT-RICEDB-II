@@ -138,7 +138,7 @@ router.post('/update', function (req, res, next) {
         if (req.body.id != '' || req.body.id === 'undefined') {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("confirm_letter ")
+                r.table("confirm_letter")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
