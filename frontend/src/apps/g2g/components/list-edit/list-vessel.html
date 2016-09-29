@@ -118,7 +118,7 @@
         <gl-form-panel-body>
           <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required value="{{data.actualShipper}}" id="actualShipper" name="actualShipper"></gl-form-input>
+              <gl-form-input label="ผู้ส่งออก"  auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required value="{{data.actualShipper}}" id="actualShipper" name="actualShipper"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line" required>
@@ -410,6 +410,7 @@
             getCounty: function(contractId) {
               this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.county = data.country_id;
+                // console.log(this.county);
                 this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
                   this.port = data;
                   // console.log(this.port);

@@ -94,19 +94,23 @@
                 <th>Minimum Tare Weight</th>
                 <th></th>
               </tr>
-              <template is="dom-repeat" items="[[item.package]]">
+              
+              <template is="dom-repeat" as="testxx" items="[[item.package]]">
                 <tr >
                   <td>
-                    <gl-form-dropdown-menu error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float on-iron-select="_getPackageForWeightBag">
-                    <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{item.package_id}}" name="package_id" >
+                    <gl-form-dropdown-menu error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
+                    <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{testxx.package_id}}" name="package_id" >
                       <template is="dom-repeat" items="[[package]]">
+                        
+
                         <paper-item package-id="{{item.package_id}}" >[[item.package_name]]</paper-item>
                       </template>
                     </paper-menu>
                   </gl-form-dropdown-menu>
                   </td>
-                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input></td>
-                  <td><gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{item.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input>
+                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{testxx.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input></td>
+                  <td><gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{testxx.package_weight_bag}}" name="package_weight_bag"  no-label-float></gl-form-input>
+                  [[testza(testxx.package_id,package)]]xxxx
                   </td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
@@ -114,6 +118,7 @@
                   </td>
                 </tr>
               </template>
+              
 
 
             </table>
@@ -314,6 +319,19 @@
               // console.log(e.target.id);
                 // var index = this.data.confirmItem.indexOf(data);
                 this.splice('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
+            },
+            testza:function(data,list){
+              var result = "";
+              list.map((package,index)=>{
+                //console.log(package.package_id,data,index,package.package_weight_bag)
+                //console.log(package);
+                if(package.package_id==data){
+                  console.log(data,package.package_id,package);
+                  result = package.package_weight_bag;
+                }
+              });
+              
+              return result;
             }
 
         });
