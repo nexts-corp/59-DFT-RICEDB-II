@@ -24,7 +24,7 @@
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input class="bottom" auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
           </gl-grid-col>
-          <gl-form-input value="{{data.contract_id}}" name="contract_id" hidden></gl-form-input>
+          <gl-form-input value="{{data.contract_id}}" name="id" hidden></gl-form-input>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <vaadin-date-picker label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
@@ -141,6 +141,7 @@
                 delete datas['type_rice_name'];
                 datas["contract_type_rice"] = type_rice;
                 //console.log(JSON.stringify(datas));
+                console.log(datas);
                 axios.post('http://localhost:3000/api/g2g/contract/update', datas)
                           .then(function (response) {
                             console.log("success");
