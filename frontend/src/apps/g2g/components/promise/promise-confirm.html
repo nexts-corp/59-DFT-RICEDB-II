@@ -53,13 +53,30 @@
         paper-icon-button {
             margin-top: 10px;
         }
+
+        paper-icon-button.iconAdd {
+          /*color: var(--paper-pink-500);*/
+          color: gray;
+          /*--paper-icon-button-ink-color: var(--paper-indigo-500);*/
+        }
+        /*paper-icon-button.iconAdd:last-child:hover{
+          background-color: var(--paper-pink-500);
+          color: white;
+        }*/
+
     </style>
     <template>
       <form is="iron-form" id="confirmLitter" method="get">
-
+        <!-- <paper-icon-button
+  id = 'add-btn'
+  label = 'NAME'
+  required
+  icon = 'add'
+  on-click = '{{ toggle }}'
+></paper-icon-button> -->
         <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" pattern="[0-9]{1,6}" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
+              <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
@@ -118,11 +135,11 @@
                     <gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                   </td>
                   <td>
-                    <gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
+                    <gl-form-input disabled  placeholder="" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                   </td>
                   <td>
-                    <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
-                    <paper-icon-button id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
+                    <paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd"></paper-icon-button>
+                    <paper-icon-button  id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
               </template>
