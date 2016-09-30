@@ -62,6 +62,7 @@ router.get(['/', '/list'], function (req, res, next) {
                                 cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4))
                             }
                         })
+                        .orderBy('cl_no')
                         .without('id')
                         .coerceTo('array'),
                     shipment: r.table('shipment')
@@ -74,6 +75,7 @@ router.get(['/', '/list'], function (req, res, next) {
                                     .sum("shm_det_quantity")
                             }
                         })
+                        .orderBy('shm_no')
                         .without('id')
                         .coerceTo('array')
                 }

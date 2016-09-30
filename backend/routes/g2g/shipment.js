@@ -36,6 +36,7 @@ router.get('/:shm_id', function (req, res, next) {
                     shm_id: row('id'),
                     shipment_detail: r.table("shipment_detail")
                         .filter({ "shm_id": row('id') })
+                        .orderBy(r.desc('shm_det_quantity'))
                         .eqJoin("load_port_id", r.table("port")).map(function (port) {
                             return port.merge({
                                 right: {
