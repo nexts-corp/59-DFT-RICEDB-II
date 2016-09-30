@@ -144,9 +144,7 @@
             },
             ready: function() {
               // list county
-              this.getDb('http://localhost:3000/api/g2g/contract/list',(data)=>{
-                this.lastResponse=data;
-              });
+              this.getChange();
               // list riceType
               this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
                 this.typeRice=data;
@@ -187,6 +185,12 @@
               this.getDb('http://localhost:3000/api/common/incoterms',(data)=>{
                 this.incoterms=data;
               });
+            },
+            getChange:function () {
+              this.getDb('http://localhost:3000/api/g2g/contract/list',(data)=>{
+                this.lastResponse=data;
+              })
+              console.log(11);
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');

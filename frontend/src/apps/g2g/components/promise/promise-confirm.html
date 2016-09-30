@@ -1,3 +1,4 @@
+<link rel="import" href="test-numbers.html">
 <dom-module id="promise-confirm">
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-size gl-color">
         .top {
@@ -82,9 +83,13 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
+
+                    <!-- <test-numbers  data="{{item.type_rice_quantity}}"></test-numbers> -->
+
                 <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                   value="{{item.type_rice_quantity}}"
-                 name="type_rice_quantity"></gl-form-input>
+                 name="type_rice_quantity" on-input="testza"></gl-form-input>
+
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
               <paper-icon-button icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์' style="color: gray;" on-tap=""></paper-icon-button>
@@ -228,8 +233,9 @@
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_name;
                 }
               }
-              console.log(this.confirmLetter);
+              //
               // this.postDb(this.confirmLetter)
+              console.log(this.confirmLetter);
             },
             getDb:function (url,callback) {
               axios.get(url)
@@ -240,15 +246,17 @@
                 }.bind(this));
             },
             postDb:function (data) {
-              axios.post('http://localhost:3000/api/g2g/confirm/update', data)
+              axios.put('http://localhost:3000/api/g2g/confirm/update', data)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                        })
+                          this.glQuery('addContract').getChange();
+                        }.bind(this))
                         .catch(function (error) {
                           console.log("error");
                           console.log(error);
                         })
+
             },
             calcWeight: function(data) {
 
@@ -263,13 +271,13 @@
               // console.log(this.confirmLetter.cl_type_rice);
                 this.push('confirmLetter.cl_type_rice', {
                   type_rice_id: '',
-                  type_rice_quantity: '0',
+                  type_rice_quantity: 0,
                   package:
                     [
                       {
                         package_id: '',
-                        price_per_ton: '0',
-                        package_weight_bag: '0',
+                        price_per_ton: 0,
+                        package_weight_bag: 0,
                       }
                     ]
                 });
@@ -284,8 +292,8 @@
               // console.log(this.confirmLetter.cl_type_rice[table.node.id]);
               var data = {
                       package_id: '',
-                      price_per_ton: '0',
-                      package_weight_bag: '0',
+                      price_per_ton: 0,
+                      package_weight_bag: 0,
                     };
                     // console.log(data);
               this.push('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', data);
@@ -309,8 +317,12 @@
               });
 
               return result;
-            }
+            },
+            testza:function(e){
+              // console.log(e.target.value);
+              return parseFloat(e.target.value);
 
+            }
         });
     </script>
 </dom-module>
