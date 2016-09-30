@@ -85,7 +85,7 @@
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
                                     <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]] incoterms=[[incoterms]]></promise-confirm>
-                                    <!-- <period-page name="third" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page> -->
+                                    <!-- <period-page name="secondaryHalf" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page> -->
                                 </iron-pages>
                             </section-content>
                             <section-content name="print">
@@ -99,6 +99,7 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
+                                <!-- <period-page name="thirdHalf" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page> -->
                                 <vessel-page data="{{shipMent}}" contract-id="[[contractId]]" shipline="[[shipline]]"></vessel-page>
                             </section-content>
                             <section-content name="file">
@@ -197,7 +198,7 @@
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
+                console.log(this.layerContent);
                 if (this.layerContent === 'third') {
                     this.vesselPage = 1;
                 } else {
@@ -205,18 +206,21 @@
                 }
                 this.dataSelect = e.detail.data;
                 // console.log(this.dataSelect);
-                if(e.detail.data.buyer_id){
-                  this.idData = e.detail.data.buyer_id;
-                  // console.log(this.idData);
+                if (typeof e.detail.data == 'undefined') {
+                  console.log(1);
                 }else {
-                  this.idData = e.detail.data.cl_id;
+                  if(e.detail.data.buyer_id ){
+                    this.idData = e.detail.data.buyer_id;
+                    // console.log(this.idData);
+                  }else {
+                    this.idData = e.detail.data.cl_id;
+                  }
+                  //เช็คว่าส่งค่า shm_id มาไหม
+                  if (this.dataSelect.shm_id) {
+                    // console.log(this.dataSelect.shm_id)
+                    this._shipMent(this.dataSelect.shm_id);
+                  }
                 }
-                //เช็คว่าส่งค่า shm_id มาไหม
-                if (this.dataSelect.shm_id) {
-                  // console.log(this.dataSelect.shm_id)
-                  this._shipMent(this.dataSelect.shm_id);
-                }
-
             },
             _shipMent:function (id) {
               this.getDb('http://localhost:3000/api/g2g/shipment/'+id,(data)=>{
