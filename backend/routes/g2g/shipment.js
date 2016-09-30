@@ -72,6 +72,9 @@ router.get('/:shm_id', function (req, res, next) {
                         .eqJoin("type_rice_id", r.table("type_rice")).without({ right: "id" }).zip()
                         .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
                         // .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
+                        .merge(function (r) {
+                            return { shm_det_id: r('id') }
+                        })
                         .without('id')
                         .coerceTo('array'),
                     shm_quantity: r.table("shipment_detail")
