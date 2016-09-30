@@ -82,7 +82,7 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
-
+                [[testNum(item.*,'type_rice_quantity')]]
                 <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                   value="{{item.type_rice_quantity}}"
                  name="type_rice_quantity"></gl-form-input>
@@ -101,11 +101,11 @@
                 <th></th>
               </tr>
 
-              <template is="dom-repeat" as="testxx" items="[[item.package]]">
+              <template is="dom-repeat" as="packageitem" items="[[item.package]]">
                 <tr >
                   <td>
                     <gl-form-dropdown-menu error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
-                    <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{testxx.package_id}}" name="package_id" >
+                    <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{packageitem.package_id}}" name="package_id" >
                       <template is="dom-repeat" items="[[package]]">
 
 
@@ -114,9 +114,11 @@
                     </paper-menu>
                   </gl-form-dropdown-menu>
                   </td>
-                  <td><gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{testxx.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input></td>
-                  <td><gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(testxx.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
-
+                  <td> [[testNum(packageitem.*,'price_per_ton')]]
+                    <gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  </td>
+                  <td>
+                    <gl-form-input disabled  placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                   </td>
                   <td>
                     <paper-icon-button icon="icons:add" title='เพิ่มขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="addPackage"></paper-icon-button>
@@ -224,11 +226,11 @@
               delete this.confirmLetter.cl_total_quantity;
               for (var i = 0; i < this.confirmLetter.cl_type_rice.length; i++) {
                 // console.log(this.confirmLetter.cl_type_rice[i].type_rice_quantity);
-                this.confirmLetter.cl_type_rice[i].type_rice_quantity = parseFloat(this.confirmLetter.cl_type_rice[i].type_rice_quantity);
+                // this.confirmLetter.cl_type_rice[i].type_rice_quantity = parseFloat(this.confirmLetter.cl_type_rice[i].type_rice_quantity);
                 delete this.confirmLetter.cl_type_rice[i].type_rice_name_en;
                 delete this.confirmLetter.cl_type_rice[i].type_rice_name_th;
                 for (var j = 0; j < this.confirmLetter.cl_type_rice[i].package.length; j++) {
-                  this.confirmLetter.cl_type_rice[i].package[j].price_per_ton = parseFloat(this.confirmLetter.cl_type_rice[i].package[j].price_per_ton);
+                  // this.confirmLetter.cl_type_rice[i].package[j].price_per_ton = parseFloat(this.confirmLetter.cl_type_rice[i].package[j].price_per_ton);
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_kg_per_bag;
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_weight_bag;
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_name;
@@ -333,11 +335,12 @@
               return result;
             },
 
-            // testza:function(e){
-            //   console.log(e.target.value);
-            //   // this.confirmLetter.cl_type_rice[0].type_rice_quantity = parseFloat(e.target.value);
-            //
-            // }
+            testNum:function(ob,param){
+                    if(ob.path.split(".").length == 2){
+                        ob.base[param]=parseFloat(ob.value);
+
+                    }
+                }
         });
     </script>
 </dom-module>

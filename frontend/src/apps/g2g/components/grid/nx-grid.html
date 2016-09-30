@@ -206,10 +206,10 @@ paper-icon-item:hover {
       </paper-icon-item>
     </template>
     <!-- เพิ่มข้อมูล -->
-    <paper-item class="borderHeader" on-tap="_getBind" level="secondaryHalf">
+    <paper-item class="borderHeader" on-tap="_getBind" level="secondaryHalf" on-tap="toggleDrawer">
       <!-- Head secondary -->
       <template is="dom-repeat" as="itemConfigSecondaryHalf" items="{{config.secondaryHalf}}">
-        <div class$="{{itemConfigSecondaryHalf.width}}" on-tap="toggleDrawer">
+        <div class$="{{itemConfigSecondaryHalf.width}}" >
           {{itemConfigSecondaryHalf.label}}
           <!-- width:{{itemConfigSecondary.width}} -->
         </div>
@@ -425,6 +425,7 @@ Polymer({
         level: e.currentTarget.getAttribute('level')
       });
     }
+
   },
   _checkTypeString:function(type){
     return type === 'string';
