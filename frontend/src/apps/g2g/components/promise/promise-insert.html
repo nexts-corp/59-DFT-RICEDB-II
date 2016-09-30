@@ -231,7 +231,7 @@
 
               this.confirmLetter.contract_id = this.contractId;
               this.postDb(this.confirmLetter)
-              console.log(this.confirmLetter);
+              // console.log(this.confirmLetter);
             },
             getDb:function (url,callback) {
               axios.get(url)
@@ -247,6 +247,7 @@
                           console.log("success");
                           console.log(response);
                           this.glQuery('addContract').getChange();
+                          this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
