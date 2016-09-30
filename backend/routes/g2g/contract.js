@@ -153,6 +153,7 @@ router.post('/insert', function (req, res, next) {
                         result.message = response;
                         if (response.errors == 0) {
                             result.result = true;
+                            result.id = response.generated_keys;
                         }
                         res.json(result);
                         console.log(result);
