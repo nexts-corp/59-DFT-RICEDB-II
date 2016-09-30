@@ -86,6 +86,9 @@
     <script>
         Polymer({
             is: "promise-detail",
+            behaviors: [
+                gl.behavior.core
+            ],
             properties: {
                 data: {
                     type: Object,
@@ -100,6 +103,7 @@
                     }
                 }
             },
+
             addNewData: function() {
                 this.push('data.contract_type_rice', {
                     type_rice_id: '',
@@ -172,6 +176,8 @@
                     .then(function(response) {
                         console.log("success");
                         console.log(response);
+                        // this.glQuery('addContract').getChange();
+                        // this.glQuery('contentPanel').changDrawer();
                     })
                     .catch(function(error) {
                         console.log("error");
