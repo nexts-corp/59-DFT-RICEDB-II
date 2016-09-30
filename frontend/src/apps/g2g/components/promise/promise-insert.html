@@ -1,0 +1,43 @@
+<dom-module id="promise-insert">
+    <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+
+    </style>
+    <template>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <vaadin-date-picker label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
+                <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
+                    <template is="dom-repeat" items="[[incoterms]]">
+                      <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
+                    </template>
+                </paper-menu>
+            </gl-form-dropdown-menu>
+        </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+          <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+      <paper-button class="gl-btn-primary" raised>เพิ่ม</paper-button>
+    </div>
+    </template>
+    <script>
+        Polymer({
+            is: "promise-insert",
+
+        });
+    </script>
+</dom-module>

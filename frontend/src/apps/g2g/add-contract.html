@@ -4,12 +4,13 @@
 <link rel="import" href="components/content-panel.html">
 
 <link rel="import" href="../database/con-db.html">
-
+<link rel="import" href="components/promise/promise-insert.html">
 <link rel="import" href="components/promise/promise-confirm.html">
 <link rel="import" href="components/promise/promise-detail.html">
 <link rel="import" href="components/promise/promise-fileup.html">
 <link rel="import" href="components/vessel/vessel-print.html">
 <link rel="import" href="components/period/period-page.html">
+<link rel="import" href="components/period/period-insert.html">
 <link rel="import" href="components/vessel/vessel-page.html">
 
 <link rel="import" href="data/db-gtog-contact.html">
@@ -85,7 +86,8 @@
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
                                     <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]] incoterms=[[incoterms]]></promise-confirm>
-                                    <!-- <period-page name="secondaryHalf" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page> -->
+                                    <promise-insert name="secondaryHalf" data="{{dataSelect}}" contract-id="[[contractId]]"></promise-insert>
+                                    <period-insert name="thirdHalf" data="{{dataSelect}}" contract-id="[[contractId]]"></period-insert>
                                 </iron-pages>
                             </section-content>
                             <section-content name="print">
@@ -99,7 +101,6 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
-                                <!-- <period-page name="thirdHalf" data="{{dataSelect}}" contract-id="[[contractId]]"></period-page> -->
                                 <vessel-page name="third" data="{{shipMent}}" contract-id="[[contractId]]" shipline="[[shipline]]"></vessel-page>
                             </section-content>
                             <section-content name="file">
