@@ -20,15 +20,123 @@ var schema = {
         },
         "shm_name": {
             "type": "string"
+        },
+        "shipment_detail": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "bl_no": {
+                        "type": "string"
+                    },
+                    "book_no": {
+                        "type": "string"
+                    },
+                    "carrier_id": {
+                        "type": "string"
+                    },
+                    "cl_id": {
+                        "type": "string"
+                    },
+                    "deli_port_id": {
+                        "type": "string"
+                    },
+                    "dest_port_id": {
+                        "type": "string"
+                    },
+                    "eta_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "etd_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "load_port_id": {
+                        "type": "string"
+                    },
+                    "nn_page": {
+                        "type": "integer"
+                    },
+                    "num_of_container": {
+                        "type": "integer"
+                    },
+                    "origin_page": {
+                        "type": "integer"
+                    },
+                    "package_id": {
+                        "type": "string"
+                    },
+                    "packing_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "packing_time": {
+                        "type": "string",
+                        "pattern": "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
+                    },
+                    "product_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "seller_id": {
+                        "type": "string"
+                    },
+                    "ship_id": {
+                        "type": "string"
+                    },
+                    "ship_lot_no": {
+                        "type": "string"
+                    },
+                    "ship_voy_no": {
+                        "type": "string"
+                    },
+                    "shipline_id": {
+                        "type": "string"
+                    },
+                    "shm_det_quantity": {
+                        "type": "number"
+                    },
+                    "shm_id": {
+                        "type": "string"
+                    },
+                    "surveyor_id": {
+                        "type": "string"
+                    },
+                    "type_rice_id": {
+                        "type": "string"
+                    },
+                    "weight_per_container": {
+                        "type": "number"
+                    }
+                },
+                "required": [
+                    "carrier_id",
+                    "cl_id",
+                    "deli_port_id",
+                    "dest_port_id",
+                    "load_port_id",
+                    "num_of_container",
+                    "package_id",
+                    "seller_id",
+                    "ship_id",
+                    "shipline_id",
+                    "shm_det_quantity",
+                    "shm_id",
+                    "surveyor_id",
+                    "type_rice_id",
+                    "weight_per_container"
+                ]
+            }
         }
     },
-    "required": ["contract_id", "shm_no", "shm_name"]
+    "required": ["contract_id", "shm_no", "shm_name", "shipment_detail"]
 };
 var validate = ajv.compile(schema);
 
 router.get('/:shm_id', function (req, res, next) {
     db.query(function (conn) {
-        r.db('external_f3').table("shipment")
+        r.table("shipment")
             //.filter({contract_id:req.params.contract_id})
             .get(req.params.shm_id)
             .merge(function (row) {
