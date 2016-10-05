@@ -86,11 +86,12 @@
           <gl-form-label-input label="จำนวนตู้คอนเทนเนอร์" value="[[data.num_of_container]]" id="" name=""></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Packing Date" value="[[data.pack_date]]" disabled></vaadin-date-picker>
+          <vaadin-date-picker label="Packing Date" value="{{data.packing_date}}" disabled></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Packing Time" value="[[data.pack_time]]" id="" name=""></gl-form-label-input>
+          <gl-form-label-input label="Packing Time"  value="{{data.packing_time}}" ></gl-form-label-input>
         </gl-grid-col>
+
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -109,32 +110,14 @@
         <gl-form-panel-body>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" on-iron-select="_getCmlForRiceType" disabled>
-                <paper-menu  class="dropdown-content" attr-for-selected="clNo"  selected="{{data.cl_no}}">
-                  <template is="dom-repeat" items="[[cml]]">
-                    <paper-item cl-no="[[item.cl_no]]" id=[[item.cl_id]]>[[item.cl_no]]</paper-item>
-                  </template>
-                </paper-menu>
-              </gl-form-dropdown-menu>
+              <gl-form-label-input label="Confirmation Letter" value="{{data.cl_no}}" ></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" on-iron-select="_getRiceTypeForPackage" disabled>
-                <paper-menu  class="dropdown-content"attr-for-selected="rice-type-id" selected="{{data.type_rice_id}}">
-                  <template is="dom-repeat" items="[[riceType]]">
-                    <paper-item rice-type-id="[[item.type_rice_id]]" id=[[item.type_rice_id]]>[[item.type_rice_name_en]]</paper-item>
-                  </template>
+              <gl-form-label-input label="Rice Type" value="{{data.type_rice_name_en}}" ></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-label-input label="Package (kg/PP Bag)" value="{{data.package_name}}" ></gl-form-label-input>
 
-                </paper-menu>
-              </gl-form-dropdown-menu>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu label="Package (kg/PP Bag)" on-iron-select="_getPackageForPrice" disabled>
-                <paper-menu  class="dropdown-content" attr-for-selected="package-id"  selected="{{data.package_id}}" id="package_id">
-                  <template is="dom-repeat" items="[[package.package]]">
-                    <paper-item package-id="[[item.package_id]]">[[item.package_name]]</paper-item>
-                  </template>
-                </paper-menu>
-              </gl-form-dropdown-menu>
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">

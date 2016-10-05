@@ -67,7 +67,7 @@
           <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.carrier_name]]" id="carrier_name" name="carrier_name"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Tel." auto-validate error-message="เป็นตัวเลขเท่านั้น" required placeholder="ใส่รายละเอียด" value="[[data.seller_phone]]"></gl-form-input>
+          <gl-form-input label="Tel." auto-validate error-message="เป็นตัวเลขเท่านั้น" required placeholder="ใส่รายละเอียด" value="{{data.seller_phone}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="POL" error-message="กรุณาเลือก POL" placeholder="เลือก POL" required>
@@ -109,18 +109,18 @@
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]*" placeholder="ใส่รายละเอียด" value="[[data.num_of_container]]" id="" name=""></gl-form-input>
+          <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]*" placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Packing Date" value="[[data.pack_date]]"></vaadin-date-picker>
+          <vaadin-date-picker label="Packing Date" value="{{data.packing_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.pack_time]]" id="" name=""></gl-form-input>
+          <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="packing_time" name="packing_time"></gl-form-input>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด" value="[[data.weight_per_container]]" id="" name=""></gl-form-input>
+          <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด" value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="Production" value="[[data.product_date]]"></vaadin-date-picker>
@@ -144,7 +144,7 @@
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท" on-iron-select="_getRiceTypeForPackage">
+          <gl-form-dropdown-menu class="width-dropdown" label="Rice Type" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท" on-iron-select="_getRiceTypeForPackage">
             <paper-menu  class="dropdown-content"attr-for-selected="rice-type-id" selected="{{data.type_rice_id}}">
               <template is="dom-repeat" items="[[riceType]]">
                 <paper-item rice-type-id="[[item.type_rice_id]]" id=[[item.type_rice_id]]>[[item.type_rice_name_en]]</paper-item>
@@ -174,7 +174,7 @@
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[buyerMasks]]"></gl-form-input>
+          <gl-form-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{buyerMasks}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{quantityBag}}"></gl-form-label-input>
