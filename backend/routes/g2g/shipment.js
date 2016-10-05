@@ -65,7 +65,7 @@ router.get('/:shm_id', function (req, res, next) {
                             right: ["id", "cl_quality", "cl_type_rice", "cl_total_quantity", "cl_date"]
                         }).zip()
                         .eqJoin("carrier_id", r.table("carrier")).without({ right: "id" }).zip()
-                        .eqJoin("seller_id", r.db('common').table("seller")).without({ right: ["id", "country_id"] }).zip()
+                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
                         .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
                         .eqJoin("surveyor_id", r.table("surveyor")).without({ right: "id" }).zip()
