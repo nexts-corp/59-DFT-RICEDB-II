@@ -1,0 +1,55 @@
+<script>
+  window.gl = {behavior:{},queryLocalize:{},element:{}};
+
+  let localesBehavior = {
+    attached: function(){
+      this.set('language',localStorage.glLanguage);
+      this.resources = mergeLocales;
+    },
+    glSwitchLanguage: function(local){
+      localStorage.glLanguage = local;
+      for(var key in gl.queryLocalize) {
+        gl.queryLocalize[key].language = local;
+      }
+    },
+    ready: function(){
+      gl.queryLocalize[this.is] = this;
+    },
+    detached:function(){
+      delete gl.queryLocalize[this.is];
+    }
+  };
+  gl.behavior.locales = [Polymer.AppLocalizeBehavior, localesBehavior];
+
+  gl.behavior.core = {
+      glChangePath: function(path) {
+        window.gl.glonSystem.changePath(path);
+      },
+      glSetLayout: function(layout){
+        window.gl.glonSystem.layout = layout;
+      },
+      glSetTitle:function(txt){
+        document.title = txt;
+      },
+      glQuery:function(name,el='get'){
+        if(el!='get'){
+          gl.element[name] = el;
+        }else{
+          return gl.element[name];
+        }
+      },
+      glClone:function(data){
+        return JSON.parse(JSON.stringify(data));
+      }
+  };
+
+  gl.behavior.template = {
+    observers:['getPage(page)'],
+    getPage:function(page){
+      var queryTag = this.$$('tag-page-load');
+      queryTag.innerHTML='';
+      queryTag.appendChild(page);
+    }
+  };
+
+</script>
