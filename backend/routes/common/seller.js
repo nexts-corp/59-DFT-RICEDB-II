@@ -7,7 +7,7 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("seller")
+        r.db('common').table("seller")
             .merge(function (row) {
                 return { seller_id: row('id') }
             })

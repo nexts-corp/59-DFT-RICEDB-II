@@ -108,30 +108,37 @@
 
         <gl-form-panel-body>
           <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]" >
-              <gl-form-dropdown-menu class="width-dropdown" label="Confirmation Letter" disabled>
-                <paper-menu  class="dropdown-content" attr-for-selected="clNo" selected="[[data.cl_no]]">
-                  <paper-item cl-no="[[data.cl_no]]">[[data.cl_no]]</paper-item>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" on-iron-select="_getCmlForRiceType" disabled>
+                <paper-menu  class="dropdown-content" attr-for-selected="clNo"  selected="{{data.cl_no}}">
+                  <template is="dom-repeat" items="[[cml]]">
+                    <paper-item cl-no="[[item.cl_no]]" id=[[item.cl_id]]>[[item.cl_no]]</paper-item>
+                  </template>
                 </paper-menu>
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" disabled>
-                <paper-menu  class="dropdown-content" attr-for-selected="rice-type-id" selected="{{data.type_rice_id}}">
-                  <paper-item rice-type-id="[[data.type_rice_id]]">[[data.type_rice_name_en]]</paper-item>
+              <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" on-iron-select="_getRiceTypeForPackage" disabled>
+                <paper-menu  class="dropdown-content"attr-for-selected="rice-type-id" selected="{{data.type_rice_id}}">
+                  <template is="dom-repeat" items="[[riceType]]">
+                    <paper-item rice-type-id="[[item.type_rice_id]]" id=[[item.type_rice_id]]>[[item.type_rice_name_en]]</paper-item>
+                  </template>
+
                 </paper-menu>
               </gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-dropdown-menu label="Package (kg/PP Bag)" disabled>
-                <paper-menu  class="dropdown-content" attr-for-selected="package-id" selected="{{data.package_id}}" id="package">
-                  <paper-item package-id="[[data.package_id]]">[[data.package_name]]</paper-item>
+              <gl-form-dropdown-menu label="Package (kg/PP Bag)" on-iron-select="_getPackageForPrice" disabled>
+                <paper-menu  class="dropdown-content" attr-for-selected="package-id"  selected="{{data.package_id}}" id="package_id">
+                  <template is="dom-repeat" items="[[package.package]]">
+                    <paper-item package-id="[[item.package_id]]">[[item.package_name]]</paper-item>
+                  </template>
                 </paper-menu>
               </gl-form-dropdown-menu>
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Price (USD/MT)" value="{{data.price}}"></gl-form-label-input>
+              <gl-form-label-input label="Price (USD/MT)" format-number value="{{price.price_per_ton}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" value="{{data.package_weight_bag}}"></gl-form-label-input>
@@ -144,7 +151,7 @@
               <gl-form-label-input label="MARKS" value="[[buyerMasks]]"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Quantity (BAGS)" value="{{data.quantity_per_bag}}"></gl-form-label-input>
+              <gl-form-label-input label="Quantity (BAGS)" value="{{quantityBag}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
 
@@ -153,7 +160,7 @@
                 <gl-form-label-input label="WEIGHT (M/T)" value="G.W. {{gw}}"></gl-form-label-input>
               </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="" value="N.W. {{data.amount}}"></gl-form-label-input>
+              <gl-form-label-input label="" value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
 
@@ -195,24 +202,18 @@
   <script>
     Polymer({
       is: "vessel-save",
-
-      attached: function() {
-        var index = this.$.package.selected;
-        var arr = this.$.package.innerText.split(' ');
-        var packs = new Array();
-        for(i=0;i<arr.length;i++){
-          if(parseFloat(arr[i])>=0){
-            packs.push(parseFloat(arr[i]));
-          }
+      properties: {
+        ship:{
+          type:Object,
+        },
+        data:{
+          type:Object,
         }
-        this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
-        this.toWords(this.quantityBag);
-
-          this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
-          this.GW = this.sumGW.toFixed(3);
-        //  console.log(this.GW);
       },
-
+      observers: [
+        'getShip(data.shipline_id)',
+        // 'riceType'()
+      ],
       toWords: function(num) {
 
           // Convert numbers to words
@@ -269,23 +270,54 @@
           this.quantityWords = '(' + str.replace(/\s+/g, ' ').toUpperCase() + ' BAGS ONLY)';
           //  str.replace(/\s+/g,' ');
       },
-      calcBags:function(){
-        var index = this.$.package.selected;
-        // console.log(index);
-        // return;
-        var arr = this.$.package.innerText.split(' ');
-        var packs = new Array();
-        for(i=0;i<arr.length;i++){
-          if(parseFloat(arr[i])>=0){
-            packs.push(parseFloat(arr[i]));
-          }
+      _getCmlForRiceType : function(e) {
+        var selectedItem = e.target.selectedItem;
+        if (selectedItem) {
+          this.cmlNo = selectedItem.id ;
+          // console.log(this.cmlNo);
+          var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem.id });
+          this.riceType = cmls[0].cl_type_rice;
+          // console.log(this.riceType);
         }
-        this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
-        this.toWords(this.quantityBag);
-
-        this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
-        this.gw = this.sumGW.toFixed(3);
+      },
+      getShip:function (shipline_id) {
+        // console.log(shipline_id);
+        this.getDb('http://localhost:3000/api/common/ship/shipline/'+shipline_id,(data)=>{
+          this.ship = data;
+          // console.log(this.ship);
+        });
+      },
+      getDb:function (url,callback) {
+        // console.log(url);
+        axios.get(url)
+          .then(function(response){
+            callback(response.data);
+          }.bind(this))
+          .catch(function (error) {
+          }.bind(this));
+      },
+      _getRiceTypeForPackage : function (e) {
+        var selectedItem = e.target.selectedItem;
+        if (selectedItem) {
+          var packages = this.riceType.filter(function (riceType) { return riceType.type_rice_id == selectedItem.id });
+          this.package = packages[0];
+        }
+      },
+      _getPackageForPrice:function (e) {
+      // console.log(this.package.package);
+      var packageAl = this.package.package;
+      var selectedItem = e.target.selectedItem;
+      if (selectedItem) {
+        var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem.packageId });
+        this.price = prices[0];
+        // console.log(this.price);
       }
+      this.quantityBag = (parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag);
+      this.toWords(this.quantityBag);
+
+      this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
+      this.gw = this.sumGW.toFixed(3);
+    }
   });
   </script>
 </dom-module>
