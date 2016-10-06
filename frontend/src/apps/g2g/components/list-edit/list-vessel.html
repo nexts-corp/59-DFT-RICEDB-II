@@ -146,7 +146,9 @@
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input>
+              <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
+              <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
+                  item-value-path="carrier_id"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="Tel." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-input>
@@ -429,11 +431,19 @@
               'getCounty(contractId)',
               'getShip(shipment.shipline_id)',
             ],
+            attached: function() {
+              this.carrier_id = this.carrier_id || this.$.carrier_id;
+              this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
+                  this.carrier = data;
+                  this.carrier_id.items = this.carrier;
+              });
+
+            },
             getCounty: function(contractId) {
               this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.county = data.country_id;
-                console.log(this.county);
-                console.log(this.data);
+                // console.log(this.county);
+                // console.log(this.data);
                 this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
                   this.port = data;
                   // console.log(this.port);
@@ -523,12 +533,6 @@
                 this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
                 this.openToast();
             },
-            checkDom: function(e) {
-                var id = e.target.id;
-                console.log(id);
-                // this.$$.id;
-                console.log(this.$$.collapsel1);
-            },
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
             },
@@ -544,9 +548,39 @@
               console.log(this.shipment.contract_id = this.contractId);
               console.log(this.shipment);
               // console.log(this.data);
+              this.shipment.contract_id = this.contractId;
+              console.log(this.shipment);
+              // console.log(this.data);
               this.push('data.shipment_detail', {
-                bl_no: 11
+                bl_no:this.shipment.bl_no,
+                book_no:this.shipment.book_no,
+                carrier_id:this.carrier_id.value,
+                cl_id:this.shipment.cl_id,
+                contract_id:this.shipment.contract_id,
+                deli_port_id:this.shipment.deli_port_id,
+                dest_port_id:this.shipment.dest_port_id,
+                eta_date:this.shipment.eta_date,
+                etd_date:this.shipment.etd_date,
+                load_port_id:this.shipment.load_port_id,
+                nn_page:this.shipment.nn_page,
+                num_of_container:this.shipment.num_of_container,
+                origin_page:this.shipment.origin_page,
+                packing_date:this.shipment.packing_date,
+                packing_time:this.shipment.packing_time,
+                package_id:this.shipment.package_id,
+                product_date:this.shipment.product_date,
+                seller_name_en:this.shipment.seller_name_en,
+                seller_phone:this.shipment.seller_phone,
+                ship_id:this.shipment.ship_id,
+                ship_lot_no:this.shipment.ship_lot_no,
+                ship_voy_no:this.shipment.ship_voy_no,
+                shipline_id:this.shipment.shipline_id,
+                shm_det_quantity:this.shipment.shm_det_quantity,
+                type_rice_id:this.shipment.type_rice_id,
+                weight_per_container:this.shipment.weight_per_container
               });
+              // console.log(this.data);
+              // this.postDb(this.data);
               console.log(this.data);
               // this.postDb(this.shipment);
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
