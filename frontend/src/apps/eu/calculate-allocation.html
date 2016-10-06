@@ -1,16 +1,14 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="./components/list-edit/list-quota.html">
-<link rel="import" href="./../listregistion/components/register/register-pageRegister.html">
-<link rel="import" href="./../listregistion/components/register/register-pageDetail.html">
-<link rel="import" href="./../listregistion/components/register/register-fileup.html">
 <link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
+<link rel="import" href="components/calculate/calculate-setting.html">
 
 
 <!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
 
 
 <dom-module id="eu-calculate-allocation">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -112,6 +110,7 @@
             </paper-listbox>
           </gl-form-dropdown-menu>
           </div>
+          
           <div style="overflow-x:auto;">
           <table class="gl-table-default">
               <tr>
@@ -145,21 +144,23 @@
         </div>
         <!-- </paper-material> -->
 
+        <div class="layout horizontal end-justified">
+          <paper-button raised class="gl-btn-primary">ดำเนินการคำนวณโควตา</paper-button>
+        </div>
+
       </grid>
     <panel>
         <div class="left">
           <gl-tabs>
-            
-            <!--<section-content data="detail">
+            <items>
+                <list data="detail" label="การคำนวณส่วนจัดสรร"></list>
+            </items>
+            <section-content data="detail">
               <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <div name="addRedRegExporter"><register-pageRegister></register-pageRegister></div>
-                <div name="detailRegExporter"><register-pageDetail></register-pageDetail></div>
+                <div name="addRedRegExporter"><calculate-setting></calculate-setting></div>
               </iron-pages>
             </section-content>
-            <section-content data="file">
-              <register-fileup></register-fileup>
-            </section-content>
-          </gl-tabs>-->
+          </gl-tabs>
 
         </div>
     </panel>

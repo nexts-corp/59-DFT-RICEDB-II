@@ -218,7 +218,22 @@
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
               // console.log(e.target.id);
-            }
+            },
+            getDb:function (url,callback) {
+              // console.log(url);
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+                // console.log(1);
+            },
+            ready: function() {
+              this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
+                this.typeRice=data;
+              });
+            },
         });
     </script>
 </dom-module>
