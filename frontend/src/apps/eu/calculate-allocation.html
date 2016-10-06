@@ -10,7 +10,7 @@
 
 
 <dom-module id="eu-calculate-allocation">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -45,7 +45,7 @@
         .searchBorder{
           border: 1px solid var(--gl-gray-light-color);
           margin: 15px;
-          border-radius: 3px
+          border-radius: 3px;
         }
         paper-material {
           background-color: var(--gl-white-color);
@@ -56,6 +56,35 @@
         .container{
           margin-left: 30px;
         }
+        .fontContent{
+          font-size: var(--font-size-h4);
+          /*text-decoration: underline ;*/
+          padding: 15px;
+          margin-top: 20px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+          table.gl-table-default{
+               border-collapse: collapse;
+               width: 100%;
+               overflow-x:auto;
+               white-space: nowrap;
+           }
+           table.gl-table-default,th,td{
+               border-bottom: 1px solid #ddd;
+           }
+           th,td{
+               padding: 15px;
+           }
+           th{
+              text-align: left;
+              background-color: #F1F1F1;
+           }
+           td{
+               text-align: left;
+           }
+           tr:hover{
+               background-color: #F1F1F1;
+           }
     </style>
     <template>
 
@@ -67,14 +96,17 @@
         <div class="layout vertical registor">
           <div class="flex">
             <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่ม</paper-button>
+              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter">ตั้งค่าการคำนวณโควตา</paper-button>
             </div>
           </div>
           <div class="flex title">
-            รายการจัดสรรปีโควตา
+            การคำนวณส่วนจัดสรร
+          </div>
+          <div class="fontContent">
+              การคำนวณส่วนจัดสรรข้าวขาวภายใต้โควตาภาษีสหภาพยุโรป
           </div>
           <div class="container">
-           <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+           <gl-form-dropdown-menu label="ปีโควตา">
             <paper-listbox class="dropdown-content">
               <paper-item>2558</paper-item>
               <paper-item>2557</paper-item>
@@ -98,20 +130,52 @@
               <div class="flex"></div>
             </div>
           </div>-->
-          <div class="flex searchBorder">
+          <!--<div class="flex searchBorder" >
             <list-quota data={{dataRegistion}}>
-              <items type="primary">
-                <list item="quotaYear" label="ปีโควตา" width="flex"></list>
-                <list item="riceType" label="ประเภทข้าว" width="flex"></list>
-                <list item="shipment1" label="งวดที่ 1 (มกราคม)" width="flex"></list>
-                <list item="shipment2" label="งวดที่ 2 (เมษายน)" width="flex"></list>
-                <list item="shipment3" label="งวดที่ 3 (กรกฏาคม)" width="flex"></list>
-                <list item="sumQuota" label="ปริมาณโควตารวม" width="flex"></list>
-                <!--<list item="edit" label="แก้ไข" width="flex"></list>-->
+              <items type="primary" style="overflow-x:auto;">
+                <list item="quotaYear" label="คำนวณครั้งที่" width="flex"></list>
+                <list item="riceType" label="ปีโควตา" width="flex"></list>
+                <list item="shipment1" label="ประเภทข้าว" width="flex"></list>
+                <list item="shipment2" label="ยอดรวมการส่งออก" width="flex"></list>
+                <list item="shipment3" label="ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวนส่วนจัดสรร" width="flex"></list>
+                <list item="sumQuota" label="ยอดรวมการขอหนังสือรับรอง" width="flex"></list>
+                <list item="sumQuota" label="ยอดรวมส่วนต่างปริมาณการส่งขาว(ตามกรมศุลการกร)" width="flex"></list>
+                <list item="sumQuota" label="ยอดรวมส่วนต่างมูลค่าการส่งขาว(ตามกรมศุลการกร)" width="flex"></list>
+                <list item="sumQuota" label="ปริมาณโควตา 80%" width="flex"></list>
+                <list item="sumQuota" label="ปริมาณโควตา 10%" width="flex"></list>
+                <list item="sumQuota" label="จัดการ" width="flex"></list>
               </items>
             </list-quota>
-
-
+          </div>-->
+          <div style="overflow-x:auto;">
+          <table class="gl-table-default">
+              <tr>
+                  <th>คำนวณครั้งที่</th>
+                  <th>ปีโควตา</th>
+                  <th>ประเภทข้าว</th>
+                  <th>ยอดรวมการส่งออก</th>
+                  <th>ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวนส่วนจัดสรร</th>
+                  <th>ยอดรวมการขอหนังสือรับรอง</th>
+                  <th>ยอดรวมส่วนต่างปริมาณการส่งขาว(ตามกรมศุลการกร)</th>
+                  <th>ยอดรวมส่วนต่างมูลค่าการส่งขาว(ตามกรมศุลการกร)</th>
+                  <th>ปริมาณโควตา 80%</th>
+                  <th>ปริมาณโควตา 10%</th>
+                  <th>จัดการ</th>
+              </tr>
+              <tr>
+                  <td>1</td>
+                  <td>2559</td>
+                  <td>ข้าวขาว</td>
+                  <td>178,450.14</td>
+                  <td>64,364.66</td>
+                  <td>119,343.15</td>
+                  <td>-5,318,061.14</td>
+                  <td>-77,706,431,185.66</td>
+                  <td>21,455.00</td>
+                  <td>-</td>
+                  <td></td>
+              </tr>
+          </table>
           </div>
         </div>
         <!-- </paper-material> -->
