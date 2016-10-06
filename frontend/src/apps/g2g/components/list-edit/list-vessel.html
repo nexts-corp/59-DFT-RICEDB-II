@@ -105,7 +105,6 @@
   </style>
   <template>
     <content id="primary" select="items[type=primary]"></content>
-    <content id="secondary" select="items[type=secondary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
         <gl-form-input class="mar-head" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required label="งวดที่"
@@ -371,7 +370,8 @@
               <!-- เพิ่มคอมโพเน้นตรงนี้ -->
 
               <iron-pages selected="0" class$="iron-index-{{index}}">
-                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" buyer-masks='[[buyerMasks]]'>
+                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
+                  buyer-masks='[[buyerMasks]]' contract-id='[[contractId]]'>
                 </vessel-save>
                 <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
                   buyer-masks='[[buyerMasks]]' contract-id='[[contractId]]'>
@@ -449,7 +449,8 @@
             getCounty: function(contractId) {
               this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.county = data.country_id;
-                // console.log(this.county);
+                console.log(this.county);
+                console.log(this.data);
                 this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
                   this.port = data;
                   // console.log(this.port);
@@ -539,7 +540,7 @@
             },
             _saveChange: function(e) {
                 // console.log('1234');
-                console.log(this.datas);
+                // console.log(this.datas);
                 this.glQuery('data-export').saveData(this.glClone(this.datas));
                 this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
                 this.openToast();
@@ -564,12 +565,31 @@
             clickSubmit: function(){
               console.log(this.shipment.contract_id = this.contractId);
               console.log(this.shipment);
+              // console.log(this.data);
+              this.push('data.shipment_detail', {
+                bl_no: 11
+              });
+              console.log(this.data);
+              // this.postDb(this.shipment);
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
               if (css.classList.contains('show') == true) {
                   css.classList.remove("show");
                   css.classList.add("hide");
                   this.$$('#removeButtom').removeAttribute("hidden");
               }
+            },
+            postDb:function (data) {
+              axios.post('http://localhost:3000/api/g2g/shipment/detail/insert', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          // this.glQuery('addContract').getChange();
+                          // this.glQuery('contentPanel').changDrawer();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
             },
             clickCancel: function(){
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
