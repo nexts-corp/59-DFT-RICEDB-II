@@ -18,43 +18,34 @@
       font-family: 'rsubold', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-
     .cleanBd {
       padding: 0px;
     }
-
     .bd {
       border-bottom: 1px solid #ccc;
     }
-
     .top {
       margin-top: 30px;
     }
-
     .w {
       width: 50%;
       text-align: center;
     }
-
     .padL {
       padding-left: 35px;
     }
-
     .fontPdLeft {
       padding: 10px 0px 10px 10px;
       /*word-wrap: break-word;*/
       text-align: center;
     }
-
     paper-item {
       cursor: pointer;
     }
-
     .yellow-button {
       text-transform: none;
       color: #eeff41;
     }
-
     paper-toast {
       --paper-toast-background-color: var(--paper-green-500);
       /*height: 50px;*/
@@ -64,41 +55,34 @@
       width: 600px;
       text-align: center;
     }
-
     paper-toast > div.content > iron-icon {
       padding: 0px 10px 0px 0px;
     }
-
     .mar-head {
       margin-left: 10px;
       margin-bottom: 10px;
     }
-
     .title {
       text-align: center;
       font-size: var(--font-size-h4);
       font-family: 'rsubold', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-
     #changeDivcss {
       background-color: var(--paper-grey-100);
       border: 1px solid black;
       padding: 10px;
       margin-bottom: 10px;
     }
-
     .show {
       display: block;
       /*color: white;
             background-color: var(--gl-success-color);
             margin: 20px 20px 20px 20px;*/
     }
-
     .hide {
       display: none;
     }
-
     vaadin-date-picker {
       width: 80%;
     }
@@ -162,18 +146,7 @@
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <!-- <template is="dom-bind" id="demo"> -->
-                <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
-                  item-value-path="carrier_id"></gl-combo-box>
-              <!-- </template> -->
-              <!-- <gl-form-dropdown-menu label="Shipping Agent" error-message="กรุณาเลือกขนาดบรรจุภัณฑ์" required placeholder="เลือกประเภท" on-iron-select="_getPackageForPrice">
-                <paper-menu  class="dropdown-content" attr-for-selected="package-id"  selected="{{data.package_id}}" id="package_id">
-                  <template is="dom-repeat" items="[[package.package]]">
-                    <paper-item package-id="[[item.package_id]]">[[item.package_name]]</paper-item>
-                  </template>
-                </paper-menu>
-              </gl-form-dropdown-menu> -->
-              <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
+              <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="Tel." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-input>
@@ -221,11 +194,11 @@
                 <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker label="Packing Date" value="{{shipment.packing_date}}"></vaadin-date-picker>
+              <vaadin-date-picker label="Packing Date" value="{{shipment.pack_date}}"></vaadin-date-picker>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <!-- <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[shipment.packing_time]]" id="packing_time" name="packing_time"></gl-form-input> -->
-              <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.packing_time}}" id="packing_time" name="packing_time"></gl-form-input>
+              <!-- <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[shipment.pack_time]]" id="pack_time" name="pack_time"></gl-form-input> -->
+              <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.pack_time}}" id="pack_time" name="pack_time"></gl-form-input>
             </gl-grid-col>
 
 
@@ -248,9 +221,9 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" error-message="Confirmation Letter" required
                 placeholder="Confirmation Letter" on-iron-select="_getCmlForRiceType">
-                <paper-menu class="dropdown-content" attr-for-selected="clNo" selected="{{shipment.cl_id}}">
+                <paper-menu class="dropdown-content" attr-for-selected="clNo" selected="{{shipment.cl_no}}">
                   <template is="dom-repeat" items="[[cml]]">
-                    <paper-item cl-no="[[item.cl_id]]">[[item.cl_no]]</paper-item>
+                    <paper-item cl-no="[[item.cl_no]]" id=[[item.cl_id]]>[[item.cl_no]]</paper-item>
                   </template>
                 </paper-menu>
               </gl-form-dropdown-menu>
@@ -446,35 +419,26 @@
                 },
                 shipment:{
                   type:Object,
-                  value:[{}]
-                },
-                carrier:{
-                  type:Object,
+                  value:[
+                    {
+                    }
+                  ]
                 }
             },
             observers: [
               'getCounty(contractId)',
               'getShip(shipment.shipline_id)',
             ],
-            attached: function() {
-              var combobox = combobox || this.$.carrier_id;
-              this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
-                  this.carrier = data;
-                  combobox.items = this.carrier;
-              });
-
-            },
             getCounty: function(contractId) {
               this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.county = data.country_id;
-                // console.log(this.county);
-                // console.log(this.data);
+                console.log(this.county);
+                console.log(this.data);
                 this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
                   this.port = data;
                   // console.log(this.port);
                 });
               });
-
               // get pol
               this.getDb('http://localhost:3000/api/common/port/country/TH',(data)=>{
                 this.pol = data;
@@ -535,24 +499,20 @@
               }
               this.quantityBag = (parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag);
               this.toWords(this.quantityBag);
-
               this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
               this.gw = this.sumGW.toFixed(3);
             },
             delExport: function(e) {
                 var r = confirm("ต้องการลบใช่หรือไม่!");
                 if (r == true) {
-
                     var id = e.target.getAttribute("index");
                     this.splice('datas.sender', id, 1);
                     this.glQuery('data-export').deleteDataExport(this.glClone(this.datas));
-
                 }
                 // var id = e.target.getAttribute("index");
                 // this.splice('datas.sender', id, 1);
                 // console.log(this.datas.sender);
             },
-
             cancel: function(){
               this.click();
             },
@@ -562,7 +522,13 @@
                 this.glQuery('data-export').saveData(this.glClone(this.datas));
                 this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
                 this.openToast();
-            }
+            },
+            checkDom: function(e) {
+                var id = e.target.id;
+                console.log(id);
+                // this.$$.id;
+                console.log(this.$$.collapsel1);
+            },
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
             },
@@ -575,39 +541,14 @@
                 }
             },
             clickSubmit: function(){
-              this.shipment.contract_id = this.contractId;
+              console.log(this.shipment.contract_id = this.contractId);
               console.log(this.shipment);
               // console.log(this.data);
               this.push('data.shipment_detail', {
-                bl_no:this.shipment.bl_no,
-                book_no:this.shipment.book_no,
-                carrier_name:this.shipment.carrier_name,
-                cl_id:this.shipment.cl_id,
-                contract_id:this.shipment.contract_id,
-                deli_port_id:this.shipment.deli_port_id,
-                dest_port_id:this.shipment.dest_port_id,
-                eta_date:this.shipment.eta_date,
-                etd_date:this.shipment.etd_date,
-                load_port_id:this.shipment.load_port_id,
-                nn_page:this.shipment.nn_page,
-                num_of_container:this.shipment.num_of_container,
-                origin_page:this.shipment.origin_page,
-                packing_date:this.shipment.packing_date,
-                packing_time:this.shipment.packing_time,
-                package_id:this.shipment.package_id,
-                product_date:this.shipment.product_date,
-                seller_name_en:this.shipment.seller_name_en,
-                seller_phone:this.shipment.seller_phone,
-                ship_id:this.shipment.ship_id,
-                ship_lot_no:this.shipment.ship_lot_no,
-                ship_voy_no:this.shipment.ship_voy_no,
-                shipline_id:this.shipment.shipline_id,
-                shm_det_quantity:this.shipment.shm_det_quantity,
-                type_rice_id:this.shipment.type_rice_id,
-                weight_per_container:this.shipment.weight_per_container
+                bl_no: 11
               });
-              // console.log(this.data);
-              this.postDb(this.data);
+              console.log(this.data);
+              // this.postDb(this.shipment);
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
               if (css.classList.contains('show') == true) {
                   css.classList.remove("show");
@@ -616,7 +557,7 @@
               }
             },
             postDb:function (data) {
-              axios.post('http://localhost:3000/api/g2g/shipment/insert', data)
+              axios.post('http://localhost:3000/api/g2g/shipment/detail/insert', data)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
@@ -636,20 +577,16 @@
                   this.$$('#removeButtom').removeAttribute("hidden");
               }
             },
-
             toWords: function(num) {
-
                 // Convert numbers to words
                 // copyright 25th July 2006, by Stephen Chapman http://javascript.about.com
                 // permission to use this Javascript on your web page is granted
                 // provided that all of the code (including this copyright notice) is
                 // used exactly as shown (you can change the numbering system if you wish)
-
                 // American Numbering System
                 var th = ['', 'thousand', 'million', 'billion', 'trillion'];
                 // uncomment this line for English Number System
                 // var th = ['','thousand','million', 'milliard','billion'];
-
                 var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
                 var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
                 var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
@@ -706,12 +643,9 @@
               }
               this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
               this.toWords(this.quantityBag);
-
               this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
               this.gw = this.sumGW.toFixed(3);
             }
-
-
         });
     </script>
 </dom-module>
