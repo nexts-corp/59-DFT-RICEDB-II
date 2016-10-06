@@ -1,8 +1,6 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="./components/list-edit/list-quota.html">
-<link rel="import" href="./../listregistion/components/register/register-pageRegister.html">
-<link rel="import" href="./../listregistion/components/register/register-pageDetail.html">
-<link rel="import" href="./../listregistion/components/register/register-fileup.html">
+<link rel="import" href="components/quota-insert.html">
 <link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
 
 
@@ -67,7 +65,7 @@
         <div class="layout vertical registor">
           <div class="flex">
             <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่ม</paper-button>
+              <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่ม</paper-button>
             </div>
           </div>
           <div class="flex title">
@@ -88,12 +86,12 @@
                                   search-type="[[searchType]]">
             </gl-search-input>-->
           </div>
-         
+
           <!--<div class="flex searchBox searchBorder">
             <div class="layout horizontal">
               <!--<div class="flex-5"></div>-->
               <!--<div class="flex-2">
-                
+
               </div>
               <div class="flex"></div>
             </div>
@@ -120,17 +118,16 @@
     <panel>
         <div class="left">
           <gl-tabs>
-            
-            <!--<section-content data="detail">
+            <items>
+                <list data="detail" label="การกำหนดปีโควตา"></list>
+            </items>
+            <section-content data="detail">
               <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <div name="addRedRegExporter"><register-pageRegister></register-pageRegister></div>
-                <div name="detailRegExporter"><register-pageDetail></register-pageDetail></div>
+                <div name="addRedRegExporter"><quota-insert></quota-insert></div>
+                <div name="detailRegExporter"></div>
               </iron-pages>
             </section-content>
-            <section-content data="file">
-              <register-fileup></register-fileup>
-            </section-content>
-          </gl-tabs>-->
+          </gl-tabs>
 
         </div>
     </panel>
