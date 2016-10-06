@@ -144,7 +144,7 @@
           </gl-form-dropdown-menu>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu class="width-dropdown" label="Rice Type" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท" on-iron-select="_getRiceTypeForPackage">
+          <gl-form-dropdown-menu class="width-dropdown" label="Rice " error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท" on-iron-select="_getRiceTypeForPackage">
             <paper-menu  class="dropdown-content"attr-for-selected="rice-type-id" selected="{{data.type_rice_id}}">
               <template is="dom-repeat" items="[[riceType]]">
                 <paper-item rice-type-id="[[item.type_rice_id]]" id=[[item.type_rice_id]]>[[item.type_rice_name_en]]</paper-item>
@@ -193,7 +193,7 @@
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,12]]">
           <gl-form-textarea label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.typeRice}}
-                    PACKING : {{data.package}} kg/bags {{data.weight}} gram/bags"></gl-form-textarea>
+                    PACKING : {{data.package_name}} kg/bags"></gl-form-textarea>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
           <gl-form-textarea label="{{quantityWords}}" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="FREIGHT COLLECT
@@ -267,9 +267,8 @@
       if (selectedItem) {
         var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem.packageId });
         this.price = prices[0];
-        // console.log(this.price);
       }
-      this.quantityBag = (parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag);
+      this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
       this.toWords(this.quantityBag);
 
       this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
