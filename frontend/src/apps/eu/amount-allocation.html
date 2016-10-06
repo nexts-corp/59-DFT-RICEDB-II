@@ -1,15 +1,15 @@
 <link rel="import" href="../g2g/components/content-panel.html">
-<link rel="import" href="components/list-edit/list-registration.html">
-<link rel="import" href="components/register/register-pageRegister.html">
-<link rel="import" href="components/register/register-pageDetail.html">
-<link rel="import" href="components/register/register-fileup.html">
+<link rel="import" href="./../listregistion/components/list-edit/list-registration.html">
+<link rel="import" href="./../listregistion/components/register/register-pageRegister.html">
+<link rel="import" href="./../listregistion/components/register/register-pageDetail.html">
+<link rel="import" href="./../listregistion/components/register/register-fileup.html">
 <link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
 
 
 <!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
 
 
-<dom-module id="listregistion-add-registion-exporter">
+<dom-module id="eu-amount-allocation">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
@@ -53,6 +53,28 @@
         gl-search-input{
           margin: 30px 0px 0px 0px;
         }
+          table.gl-table-default{
+               border-collapse: collapse;
+               width: 100%;
+               overflow-x:auto;
+               /*white-space: nowrap;*/
+           }
+           table.gl-table-default,th,td{
+               border-bottom: 1px solid #ddd;
+           }
+           th,td{
+               padding: 15px;
+           }
+           th{
+              text-align: left;
+              background-color: #F1F1F1;
+           }
+           td{
+               text-align: left;
+           }
+           tr:hover{
+               background-color: #F1F1F1;
+           }
     </style>
     <template>
 
@@ -64,36 +86,92 @@
         <div class="layout vertical registor">
           <div class="flex">
             <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
+              <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
             </div>
           </div>
           <div class="flex title">
-            ทะเบียนผู้ส่งออกข้าว
+            ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท
           </div>
           <div class="flex searchBox searchBorder">
             <div class="layout horizontal">
               <div class="flex"></div>
-              <div class="flex-6">
-                <gl-search-input result="{{result}}"
-                                 search-label-name="บริษัท"
-                                 search-label-type="ประเภททะเบียน"
-                                 search-input="true"
-                                 search-input-type="true"
-                                 search-type="[[searchType]]">
-                </gl-search-input>
+              <div class="flex-2">
+                  <gl-form-dropdown-menu label="ปีโควตา">
+                    <paper-listbox class="dropdown-content">
+                        <paper-item>2559</paper-item>
+                        <paper-item>2558</paper-item>
+                        <paper-item>2557</paper-item>
+                        <paper-item>2559</paper-item>
+                    </paper-listbox>     
+                    </gl-form-dropdown-menu>
               </div>
-              <div class="flex"></div>
+              <div class="flex-2">
+                   <gl-form-dropdown-menu label="ประเภทข้าว">
+                        <paper-listbox class="dropdown-content">
+                            <paper-item>ข้าวขาว</paper-item>
+                            <paper-item>ข้าวหัก</paper-item>
+                        </paper-listbox>
+                    </gl-form-dropdown-menu>
+              </div>
+              <div class="flex-2">
+                   <gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                    <paper-listbox class="dropdown-content">
+                        <paper-item>1</paper-item>
+                        <paper-item>2</paper-item>
+                        <paper-item>3</paper-item>
+                        <paper-item>4</paper-item>
+                    </paper-listbox>
+                    </gl-form-dropdown-menu>
+              </div>      
+                <div class="flex-2">   
+                        <paper-button class="gl-btn-primary" raised>ค้นหา</paper-button>
+                </div>
+                    
+                  
+                    
+              </div>
+                <div class="flex"></div>
             </div>
           </div>
           <div class="flex searchBorder">
-            <list-registration data={{dataRegistion}}>
+            <!--<list-registration data={{dataRegistion}}>
               <items type="primary">
                 <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
                 <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
                 <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
               </items>
-            </list-registration>
+            </list-registration>-->
+              <div style="overflow-x:auto;">
+          <table class="gl-table-default">
+              <tr>
+                  <th>ลำดับที่</th>
+                  <th>ผู้ส่งออก</th>
+                  <th>งวดที่ 1 (มกราคม)</th>
+                  <th>ยอดปรับปรุงงวดที่ 1</th>
+                  <th>งวดที่ 2 (เมษายน)</th>
+                  <th>ยอดปรับปรุงงวดที่ 2</th>
+                  <th>งวดที่ 3 (กรกฏาคม)</th>
+                  <th>ยอดปรับปรุงงวดที่ 3</th>
+                  <th>ปริมาณโควตารวม</th>
+                  <th>รวมยอดปรับปรุง</th>
+                  <th>จัดการ</th>
+              </tr>
+              <tr>
+                  <td>1</td>
+                  <td>2559</td>
+                  <td>ข้าวขาว</td>
+                  <td>178,450.14</td>
+                  <td>64,364.66</td>
+                  <td>119,343.15</td>
+                  <td>-5,318,061.14</td>
+                  <td>-77,706,431,185.66</td>
+                  <td>21,455.00</td>
+                  <td>-</td>
+                  <td></td>
+              </tr>
+          </table>
+          </div>
 
 
           </div>
@@ -125,7 +203,7 @@
     </template>
     <script>
         Polymer({
-            is: "listregistion-add-registion-exporter",
+            is: "eu-amount-allocation",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
@@ -218,22 +296,7 @@
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
               // console.log(e.target.id);
-            },
-            getDb:function (url,callback) {
-              // console.log(url);
-              axios.get(url)
-                .then(function(response){
-                  callback(response.data);
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
-                // console.log(1);
-            },
-            ready: function() {
-              this.getDb('http://localhost:3000/api/common/typeRice',(data)=>{
-                this.typeRice=data;
-              });
-            },
+            }
         });
     </script>
 </dom-module>
