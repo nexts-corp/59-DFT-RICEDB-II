@@ -71,22 +71,18 @@
           <div class="flex title">
             รายการจัดสรรปีโควตา
           </div>
-          <div class="container">
-           <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
-            <paper-listbox class="dropdown-content">
-              <paper-item>2558</paper-item>
-              <paper-item>2557</paper-item>
-              <paper-item>2556</paper-item>
-              <paper-item>2555</paper-item>
-            </paper-listbox>
-          </gl-form-dropdown-menu>
-            <!--<gl-search-input result="{{result}}"
-                                  search-label-type="แสดงข้อมูลรายปี"
-                                  search-input-type
-                                  search-type="[[searchType]]">
-            </gl-search-input>-->
+          <div class="layout horizontal">
+            <div class="container flex-equal-justified">
+              <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+                  <paper-listbox class="dropdown-content">
+                    <paper-item>2558</paper-item>
+                    <paper-item>2557</paper-item>
+                    <paper-item>2556</paper-item>
+                    <paper-item>2555</paper-item>
+                  </paper-listbox>
+              </gl-form-dropdown-menu>
+            </div>
           </div>
-
           <!--<div class="flex searchBox searchBorder">
             <div class="layout horizontal">
               <!--<div class="flex-5"></div>-->
@@ -99,7 +95,7 @@
           <div class="flex searchBorder">
             <list-quota data={{dataRegistion}}>
               <items type="primary">
-                <list item="quotaYear" label="ปีโควตา" width="flex"></list>
+                <!--<list item="quotaYear" label="ปีโควตา" width="flex"></list>-->
                 <list item="riceType" label="ประเภทข้าว" width="flex"></list>
                 <list item="shipment1" label="งวดที่ 1 (มกราคม)" width="flex"></list>
                 <list item="shipment2" label="งวดที่ 2 (เมษายน)" width="flex"></list>
@@ -113,7 +109,7 @@
           </div>
         </div>
         <!-- </paper-material> -->
-
+        <button on-click="test">ss</button>
       </grid>
     <panel>
         <div class="left">
@@ -124,7 +120,7 @@
             <section-content data="detail">
               <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                 <div name="addRedRegExporter"><quota-insert></quota-insert></div>
-                <div name="detailRegExporter"></div>
+                <div name="detailRegExporter"><quota-insert></quota-insert></div>
               </iron-pages>
             </section-content>
           </gl-tabs>
@@ -155,7 +151,7 @@
                     [
                       {
                         id:1,
-                        quotaYear:"2558",
+                        // quotaYear:"2558",
                         riceType:"ข้าวขาว",
                         shipment1:"20000.00",
                         shipment2:"10000.00",
@@ -164,7 +160,7 @@
                       },
                       {
                         id:2,
-                        quotaYear:"2558",
+                        // quotaYear:"2558",
                         riceType:"ข้าวหัก",
                         shipment1:"15000.00",
                         shipment2:"-",
@@ -180,7 +176,7 @@
             },
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetLayout('layout-eu');
 
             },
             attached: function() {
@@ -206,6 +202,24 @@
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
               // console.log(e.target.id);
+            },
+            test:function(){
+              this.glQuery('layoutEu').openToastLoading();
+
+              axios.get('http://localhost:3000/api/common/ship/')
+              .then(function (response) {
+                console.log(response);
+
+                this.glQuery('layoutEu').closeToastLoading(function(){
+                  this.glQuery('contentPanel').changDrawer();
+                }.bind(this));
+
+                
+              }.bind(this))
+              .catch(function (error) {
+                //this.glQuery('toastLoading').hide();
+                console.log(error);
+              });
             }
         });
     </script>

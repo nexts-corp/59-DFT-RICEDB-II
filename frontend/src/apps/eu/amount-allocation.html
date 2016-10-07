@@ -4,7 +4,7 @@
 <link rel="import" href="./../listregistion/components/register/register-pageDetail.html">
 <link rel="import" href="./../listregistion/components/register/register-fileup.html">
 <link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
-
+<link rel="import" href="./components/amount/amount-allocation-edit.html">
 
 <!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
 
@@ -53,28 +53,32 @@
         gl-search-input{
           margin: 30px 0px 0px 0px;
         }
-          table.gl-table-default{
-               border-collapse: collapse;
-               width: 100%;
-               overflow-x:auto;
-               /*white-space: nowrap;*/
-           }
-           table.gl-table-default,th,td{
-               border-bottom: 1px solid #ddd;
-           }
-           th,td{
-               padding: 15px;
-           }
-           th{
-              text-align: left;
-              background-color: #F1F1F1;
-           }
-           td{
-               text-align: left;
-           }
-           tr:hover{
-               background-color: #F1F1F1;
-           }
+        table.gl-table-default{
+          border-collapse: collapse;
+          width: 100%;
+          overflow-x:auto;
+          white-space: nowrap;
+        }
+        table.gl-table-default,th,td{
+          border-bottom: 1px solid #ddd;
+        }
+        th,td{
+          padding: 15px;
+        }
+        th{
+          text-align: left;
+          background-color: #F1F1F1;
+        }
+        td{
+          text-align: left;
+        }
+        tr:hover{
+          background-color: #F1F1F1;
+        }
+        .contentHeader{
+          font-size: 22px;
+          text-align: center;
+        }
     </style>
     <template>
 
@@ -126,49 +130,40 @@
                 <div class="flex-2">   
                         <paper-button class="gl-btn-primary" raised>ค้นหา</paper-button>
                 </div>
-                    
-                  
-                    
               </div>
                 <div class="flex"></div>
             </div>
           </div>
+          <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
           <div class="flex searchBorder">
-            <!--<list-registration data={{dataRegistion}}>
-              <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
-              </items>
-            </list-registration>-->
-              <div style="overflow-x:auto;">
+             
+          <div style="overflow-x:auto;">
           <table class="gl-table-default">
               <tr>
-                  <th>ลำดับที่</th>
-                  <th>ผู้ส่งออก</th>
-                  <th>งวดที่ 1 (มกราคม)</th>
-                  <th>ยอดปรับปรุงงวดที่ 1</th>
-                  <th>งวดที่ 2 (เมษายน)</th>
-                  <th>ยอดปรับปรุงงวดที่ 2</th>
-                  <th>งวดที่ 3 (กรกฏาคม)</th>
-                  <th>ยอดปรับปรุงงวดที่ 3</th>
-                  <th>ปริมาณโควตารวม</th>
-                  <th>รวมยอดปรับปรุง</th>
-                  <th>จัดการ</th>
+                <template is="dom-repeat" items="{{dataAmount.header}}">
+                    <th>{{item}}</th>
+                </template>
               </tr>
               <tr>
-                  <td>1</td>
-                  <td>2559</td>
-                  <td>ข้าวขาว</td>
-                  <td>178,450.14</td>
-                  <td>64,364.66</td>
-                  <td>119,343.15</td>
-                  <td>-5,318,061.14</td>
-                  <td>-77,706,431,185.66</td>
-                  <td>21,455.00</td>
-                  <td>-</td>
-                  <td></td>
+                <template is="dom-repeat" items={{dataAmount.row1}}>
+                    <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+                </template>
+              </tr>
+              <tr>
+                <template is="dom-repeat" items={{dataAmount.row2}}>
+                    <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+                </template>
+              </tr>
+              <tr>
+                <th colspan="2">รวมปริมาณโควตา</th>
+                <th>10,727.00</th>
+                <th>10,727.00</th>
+                <th>5,364.00</th>
+                <th>5,364.00</th>
+                <th>5,364.00</th>
+                <th>5,364.00</th>
+                <th>21,455.00</th>
+                <th>21,455.00</th>
               </tr>
           </table>
           </div>
@@ -181,21 +176,7 @@
       </grid>
     <panel>
         <div class="left">
-          <gl-tabs>
-            <items>
-                <list data="detail" label="รายละเอียด"></list>
-                <list data="file" label="แนบไฟล์"></list>
-            </items>
-            <section-content data="detail">
-              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <div name="addRedRegExporter"><register-pageRegister></register-pageRegister></div>
-                <div name="detailRegExporter"><register-pageDetail></register-pageDetail></div>
-              </iron-pages>
-            </section-content>
-            <section-content data="file">
-              <register-fileup></register-fileup>
-            </section-content>
-          </gl-tabs>
+          <amount-allocation-edit></amount-allocation-edit>
 
         </div>
     </panel>
@@ -215,6 +196,48 @@
                 layerContent: {
                     type: String,
                     value: "detailRegExporter"
+                },
+                dataAmount:{
+                    type: Object,
+                    value:
+                      {
+                        header:[
+                          'ลำดับที่',
+                          'ผู้ส่งออก',
+                          'งวดที่ 1 (มกราคม)',
+                          'ยอดปรับปรุงงวดที่ 1',
+                          'งวดที่ 2 (เมษายน)',
+                          'ยอดปรับปรุงงวดที่ 2',
+                          'งวดที่ 3 (กรกฏาคม)',
+                          'ยอดปรับปรุงงวดที่ 3',
+                          'ปริมาณโควต้ารวม',
+                          'รวมยอดปรับปรุง'
+                        ],
+                        row1:[
+                            '1',
+                            'กมลกิจ บจก',
+                            '449.50',
+                            '449.00',
+                            '224.75',
+                            '225.00',
+                            '224.75',
+                            '225.00',
+                            '899.00',
+                            '899.00'
+                          ],
+                          row2:[
+                            '2',
+                            'กรุงเทพค้าข้าว',
+                            '67.50',
+                            '67.00',
+                            '33.75',
+                            '34.00',
+                            '33.75',
+                            '34.00',
+                            '135.00',
+                            '135.00'
+                          ]  
+                      }
                 },
                 dataRegistion: {
                     type: Object,
@@ -272,6 +295,9 @@
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
 
+            },
+            ready:function(){
+              // console.log(this.dataAmount.content[0]);
             },
             attached: function() {
                 // this.layoutMain = this.glQuery('layoutMain');
