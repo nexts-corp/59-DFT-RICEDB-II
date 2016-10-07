@@ -60,8 +60,38 @@ router.get('/id/:trader_id', function (req, res, next) {
             });
     })
 });
-
-router.get('/:field_name/:value_id', function (req, res, next) {
+router.get('/seller', function (req, res, next) {
+    db.query(function (conn) {
+        r.db('external_f3').table("trader")
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            //.eqJoin("exporter_id", r.db('external_f3').table("exporter")).not()
+            // ,function(t,e){
+            //     return t("exporter_id").eq(e("id"));
+            // })
+            // .filter(
+            //     r.row('seller_name_th').match(req.params.seller_name)
+            // )
+            // .pluck(
+            //     "seller_id","seller_name_th","seller_name_en","seller_address_th",
+            //     "trader_id","trader_no","trader_name"
+            // )
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
+router.get('/field/:field_name/:value_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("trader")
             .filter({ [req.params.field_name + "_id"]: req.params.value_id })
