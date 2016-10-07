@@ -170,6 +170,42 @@ router.get('/:exporter_id', function (req, res, next) {
             });
     })
 });
+router.get('/seller', function (req, res, next) {
+    // res.json(req.params.seller_name);
+    db.query(function (conn) {
+        r.db('external_f3').table("exporter")
+            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
+            .merge(function(r){
+                return {
+                    trader_date_approve:r('trader_date_approve').split('T')(0),
+                    trader_date_expire:r('trader_date_expire').split('T')(0)
+                }
+            })
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            // .filter(
+            //     r.row('seller_name_th').match(req.params.seller_name)
+            // )
+            .without(
+                "id","country_id","exporter_date_approve","exporter_date_create","exporter_date_update",
+                "exporter_no","seller_address_en","seller_agent","seller_phone","trader_date_approve",
+                "trader_date_expire","trader_distric","trader_office","trader_province","type_lic_id"
+            )
+           .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 router.get('/seller/name/:seller_name', function (req, res, next) {
     // res.json(req.params.seller_name);
     db.query(function (conn) {
