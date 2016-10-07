@@ -97,9 +97,6 @@ var schema = {
                     "shm_det_quantity": {
                         "type": "number"
                     },
-                    "shm_id": {
-                        "type": "string"
-                    },
                     "surveyor_id": {
                         "type": "string"
                     },
@@ -122,7 +119,6 @@ var schema = {
                     "ship_id",
                     "shipline_id",
                     "shm_det_quantity",
-                    "shm_id",
                     "surveyor_id",
                     "type_rice_id",
                     "weight_per_container"
