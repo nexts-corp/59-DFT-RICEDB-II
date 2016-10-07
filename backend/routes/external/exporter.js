@@ -16,7 +16,7 @@ router.get(['/', '/list'], function (req, res, next) {
             .merge(function (row) {
                 return { 
                     exporter_id: row('id'),
-                    exporter_status:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
+                    exporter_active:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve:row('exporter_date_approve').split('T')(0),
                     exporter_date_create:row('exporter_date_create').split('T')(0),
                     exporter_date_update:row('exporter_date_update').split('T')(0) 
@@ -59,7 +59,7 @@ router.get('/active', function (req, res, next) {
             .merge(function (row) {
                 return { 
                     exporter_id: row('id'),
-                    exporter_status:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
+                    exporter_active:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve:row('exporter_date_approve').split('T')(0),
                     exporter_date_create:row('exporter_date_create').split('T')(0),
                     exporter_date_update:row('exporter_date_update').split('T')(0) 
@@ -102,7 +102,7 @@ router.get('/unactive', function (req, res, next) {
             .merge(function (row) {
                 return { 
                     exporter_id: row('id'),
-                    exporter_status:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
+                    exporter_active:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve:row('exporter_date_approve').split('T')(0),
                     exporter_date_create:row('exporter_date_create').split('T')(0),
                     exporter_date_update:row('exporter_date_update').split('T')(0) 
@@ -142,7 +142,7 @@ router.get('/:exporter_id', function (req, res, next) {
             .get(req.params.exporter_id)
             .merge({ 
                 exporter_id: r.row('id'),
-                exporter_status:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_update')).toEpochTime()),
+                exporter_active:r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_update')).toEpochTime()),
                 exporter_date_approve:r.row('exporter_date_approve').split('T')(0),
                 exporter_date_create:r.row('exporter_date_create').split('T')(0),
                 exporter_date_update:r.row('exporter_date_update').split('T')(0)  
@@ -170,7 +170,42 @@ router.get('/:exporter_id', function (req, res, next) {
             });
     })
 });
-
+router.get('/seller/name/:seller_name', function (req, res, next) {
+    // res.json(req.params.seller_name);
+    db.query(function (conn) {
+        r.db('external_f3').table("exporter")
+            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
+            .merge(function(r){
+                return {
+                    trader_date_approve:r('trader_date_approve').split('T')(0),
+                    trader_date_expire:r('trader_date_expire').split('T')(0)
+                }
+            })
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            .filter(
+                r.row('seller_name_th').match(req.params.seller_name)
+            )
+            .without(
+                "id","country_id","exporter_date_approve","exporter_date_create","exporter_date_update",
+                "exporter_no","seller_address_en","seller_agent","seller_phone","trader_date_approve",
+                "trader_date_expire","trader_distric","trader_office","trader_province","type_lic_id"
+            )
+           .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 
 
 
