@@ -130,7 +130,7 @@ var schema = {
 };
 var validate = ajv.compile(schema);
 
-router.get('/:shm_id', function (req, res, next) {
+router.get('/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("shipment")
             //.filter({contract_id:req.params.contract_id})

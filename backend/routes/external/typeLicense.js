@@ -44,7 +44,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:type_lic_id', function (req, res, next) {
+router.get('/id/:type_lic_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("type_license")
             .get(req.params.type_lic_id.toUpperCase())

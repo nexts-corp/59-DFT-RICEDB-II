@@ -29,7 +29,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:ship_id', function (req, res, next) {
+router.get('/id/:ship_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("ship")
             .get(req.params.ship_id)

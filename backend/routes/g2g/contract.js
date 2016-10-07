@@ -108,7 +108,7 @@ router.get(['/', '/list'], function (req, res, next) {
     })
 });
 
-router.get('/:contract_id', function (req, res, next) {
+router.get('/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("contract")
             .get(req.params.contract_id)

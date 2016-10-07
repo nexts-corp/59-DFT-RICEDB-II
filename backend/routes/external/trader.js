@@ -35,7 +35,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:trader_id', function (req, res, next) {
+router.get('/id/:trader_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("trader")
             .get(req.params.trader_id)
