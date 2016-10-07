@@ -137,6 +137,12 @@
               </gl-form-dropdown-menu> -->
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
+                <!-- value="{{shipment.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
+                <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name"
+                    item-value-path="surveyor_id" value="{{shipment.surveyor_id}}"></gl-combo-box>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.ship_voy_no}}"
                 id="voidNo" name="voidNo"></gl-form-input>
             </gl-grid-col>
@@ -206,6 +212,7 @@
 
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              [[testNum(shipment.*,'num_of_container')]]
                 <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -217,6 +224,7 @@
 
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              [[testNum(shipment.*,'weight_per_container')]]
               <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
                 value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
             </gl-grid-col>
@@ -279,6 +287,7 @@
                 value="{{price.package_weight_bag}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              [[testNum(shipment.*,'shm_det_quantity')]]
               <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
             </gl-grid-col>
 
@@ -316,10 +325,12 @@
               <div class="top">ORIGINALS</div>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+              [[testNum(shipment.*,'origin_page')]]
               <gl-form-input label="" class="w padL" value="{{shipment.origin_page}}"></gl-form-input>
             </gl-grid-col>
             <div class="top">/</div>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+              [[testNum(shipment.*,'nn_page')]]
               <gl-form-input label="" class="w" value="{{shipment.nn_page}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
@@ -497,6 +508,12 @@
                 this.cl_id.items = data;
                 // console.log(this.cml);
               });
+              //get surveyor_id
+              this.surveyor_id = this.surveyor_id || this.$.surveyor_id;
+              this.getDb('http://localhost:3000/api/common/surveyor',(data)=>{
+                this.surveyor_id.items = data;
+                // console.log(this.cml);
+              });
               //get buyer_masks
               this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
                 this.buyerMasks = data.buyer_masks;
@@ -535,27 +552,27 @@
               // ต่อจาก getCmlForRiceType
               var selectedItem = e.detail.value;
               this.package_id = this.package_id || this.$.package_id;
-              // console.log(selectedItem);
               if (selectedItem) {
                 var packages = this.riceType.filter(function (riceType) { return riceType.type_rice_id ==  selectedItem });
-                this.package = packages[0];
-                this.package_id.items = packages[0];
+                this.package = packages[0].package;
+                this.package_id.items = this.package;
                 // console.log(this.package_id.items);
               }
             },
               getPackageForPrice:function (e) {
                 //ถึงมาจาก _getRiceTypeForPackage
-              // var packageAl = this.package.package;
-              // var selectedItem = e.target.selectedItem;
-              // if (selectedItem) {
-              //   var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem.packageId });
-              //   this.price = prices[0];
-              //   // console.log(this.price);
-              // }
-              // this.quantityBag = (parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag);
-              // this.toWords(this.quantityBag);
-              // this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
-              // this.gw = this.sumGW.toFixed(3);
+              var packageAl = this.package;
+              var selectedItem = e.detail.value;
+              if (selectedItem) {
+                var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
+                this.price = prices[0];
+                // console.log(this.price);
+                this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
+                this.toWords(this.quantityBag);
+                this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
+                this.gw = this.sumGW.toFixed(3);
+              }
+
             },
             delExport: function(e) {
                 var r = confirm("ต้องการลบใช่หรือไม่!");
@@ -592,8 +609,8 @@
             clickSubmit: function(){
               // this.shipment.contract_id = this.contractId;
               // this.shipment.shm_id=this.shmId;
-              // console.log(this.shmId);
-              // console.log(this.data);
+              // console.log(this.shipment.contract_id=this.shmId);
+              // console.log(this.shipment);
               // console.log(this.shipment.seller_id);
               this.push('data.shipment_detail', {
                 bl_no:this.shipment.bl_no,
@@ -621,13 +638,14 @@
                 ship_voy_no:this.shipment.ship_voy_no,
                 shipline_id:this.shipment.shipline_id,
                 shm_det_quantity:this.shipment.shm_det_quantity,
+                surveyor_id:this.shipment.surveyor_id,
                 type_rice_id:this.shipment.type_rice_id,
                 weight_per_container:this.shipment.weight_per_container
               });
               // console.log(this.data);
               // this.postDb(this.data);
-              console.log(this.data);
-              // this.postDb(this.shipment);
+              // console.log(this.data);
+              this.postDb(this.data);
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
               if (css.classList.contains('show') == true) {
                   css.classList.remove("show");
@@ -654,6 +672,11 @@
                   css.classList.remove("show");
                   css.classList.add("hide");
                   this.$$('#removeButtom').removeAttribute("hidden");
+              }
+            },
+            testNum:function(ob,param){
+              if(ob.path.split(".").length == 2){
+                  ob.base[param]=parseFloat(ob.value);
               }
             },
             toWords: function(num) {
