@@ -28,7 +28,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:carrier_id', function (req, res, next) {
+router.get('/id/:carrier_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("carrier")
             .get(req.params.carrier_id)

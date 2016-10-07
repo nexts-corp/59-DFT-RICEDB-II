@@ -29,7 +29,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:port_id', function (req, res, next) {
+router.get('/id/:port_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("port")
             .get(req.params.port_id.toUpperCase())
@@ -49,7 +49,7 @@ router.get('/:port_id', function (req, res, next) {
     })
 });
 
-router.get('/:field_name/:value_id', function (req, res, next) {
+router.get('/field/:field_name/:value_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("port")
             .filter({ [req.params.field_name + "_id"]: req.params.value_id })

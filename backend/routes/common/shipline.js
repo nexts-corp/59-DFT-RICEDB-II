@@ -28,7 +28,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:shipline_id', function (req, res, next) {
+router.get('/id/:shipline_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("shipline")
             .get(req.params.shipline_id)

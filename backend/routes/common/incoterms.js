@@ -27,7 +27,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:inct_id', function (req, res, next) {
+router.get('/id/:inct_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("incoterms")
             .get(req.params.inct_id)

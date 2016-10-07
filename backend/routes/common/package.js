@@ -28,7 +28,7 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:package_id', function (req, res, next) {
+router.get('/id/:package_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("package")
             .get(req.params.package_id.toUpperCase())
