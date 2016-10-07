@@ -97,9 +97,6 @@ var schema = {
                     "shm_det_quantity": {
                         "type": "number"
                     },
-                    "shm_id": {
-                        "type": "string"
-                    },
                     "surveyor_id": {
                         "type": "string"
                     },
@@ -122,7 +119,6 @@ var schema = {
                     "ship_id",
                     "shipline_id",
                     "shm_det_quantity",
-                    "shm_id",
                     "surveyor_id",
                     "type_rice_id",
                     "weight_per_container"
@@ -134,7 +130,7 @@ var schema = {
 };
 var validate = ajv.compile(schema);
 
-router.get('/:shm_id', function (req, res, next) {
+router.get('/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("shipment")
             //.filter({contract_id:req.params.contract_id})

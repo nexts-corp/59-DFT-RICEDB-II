@@ -55,7 +55,7 @@ var schema = {
 };
 var validate = ajv.compile(schema);
 
-router.get('/:cl_id', function (req, res, next) {
+router.get('/id/:cl_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("confirm_letter")
             .get(req.params.cl_id)
@@ -89,7 +89,7 @@ router.get('/:cl_id', function (req, res, next) {
             });
     })
 });
-router.get('/contract/:contract_id', function (req, res, next) {
+router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("confirm_letter")
             .filter({ "contract_id": req.params.contract_id })
