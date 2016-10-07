@@ -51,13 +51,7 @@
       // console.log(this.pol);
 
     });
-    //get cl cl_id
-    this.cl_id = this.cl_id || this.$.cl_id;
-    this.getDb('http://localhost:3000/api/g2g/confirm/contract/'+contractId,(data)=>{
-      this.cml = data;
-      this.cl_id.items = data;
-      // console.log(this.cml);
-    });
+
     //get surveyor_id
     this.surveyor_id = this.surveyor_id || this.$.surveyor_id;
     this.getDb('http://localhost:3000/api/common/surveyor',(data)=>{
@@ -68,6 +62,14 @@
     this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
       this.buyerMasks = data.buyer_masks;
       // console.log(this.buyerMasks);
+    });
+  },
+  getconfirm:function (contractId) {
+    //get cl cl_id
+    this.cl_id = this.cl_id || this.$.cl_id;
+    this.getDb('http://localhost:3000/api/g2g/confirm/contract/'+contractId,(data)=>{
+      this.cml = data;
+      this.cl_id.items = data;
     });
   },
   getSellerPhone:function (e) {
@@ -90,6 +92,7 @@
     },
     getCmlForRiceType : function(e) {
      var selectedItem = e.detail.value;
+    //  console.log(selectedItem);
      this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
      if (selectedItem) {
        var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
@@ -116,7 +119,6 @@
      if (selectedItem) {
        var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
        this.price = prices[0];
-       // console.log(this.price);
        this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
        this.toWords(this.quantityBag);
        this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));

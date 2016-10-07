@@ -200,7 +200,7 @@
               </gl-form-dropdown-menu> -->
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="deli_port_id" label="POD" item-label-path="port_name"
+              <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
                   item-value-path="port_id" value="{{shipment.deli_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Place of Delivery"  error-message="กรุณาใส่รายละเอียด" placeholder="Place of Delivery" required>
                 <paper-menu class="dropdown-content" attr-for-selected="deli-port-id" selected="{{shipment.deli_port_id}}" id="cityEnd" name="cityEnd">
@@ -280,12 +280,10 @@
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"
-                format-number value="{{price.price_per_ton}}"></gl-form-label-input>
+              <gl-form-label-input label="Price (USD/MT)" format-number value="{{price.price_per_ton}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"
-                value="{{price.package_weight_bag}}"></gl-form-label-input>
+              <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)"  value="{{price.package_weight_bag}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               [[testNum(shipment.*,'shm_det_quantity')]]
@@ -444,6 +442,7 @@
             },
             observers: [
               'getCounty(contractId)',
+              'getconfirm(contractId)'
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
