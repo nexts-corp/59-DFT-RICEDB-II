@@ -608,7 +608,14 @@
             },
             clickSubmit: function(){
               // this.shipment.contract_id = this.contractId;
-              // this.shipment.shm_id=this.shmId;
+
+              // this.shipment.id=this.shipment.shm_id;
+              // delete this.shipment.shm_id;
+              // console.log(this.shipment.shm_id);
+              this.data.id = this.data.shm_id;
+              // console.log(this.data.id);
+              delete this.data.shm_id;
+              // delete this.data.shm_name;
               // console.log(this.shipment.contract_id=this.shmId);
               // console.log(this.shipment);
               // console.log(this.shipment.seller_id);
@@ -633,7 +640,6 @@
                 seller_id:this.shipment.seller_id,
                 seller_phone:this.shipment.seller_phone,
                 ship_id:this.shipment.ship_id,
-                shm_id:this.shmId,
                 ship_lot_no:this.shipment.ship_lot_no,
                 ship_voy_no:this.shipment.ship_voy_no,
                 shipline_id:this.shipment.shipline_id,
@@ -643,6 +649,7 @@
                 weight_per_container:this.shipment.weight_per_container
               });
               // console.log(this.data);
+
               console.log(this.data);
               this.postDb(this.data);
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
@@ -653,7 +660,8 @@
               }
             },
             postDb:function (data) {
-              axios.post('http://localhost:3000/api/g2g/shipment/insert', data)
+              //axios.post('http://localhost:3000/api/g2g/shipment/insert', data)
+              axios.put('http://localhost:3000/api/g2g/shipment/update', data)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
