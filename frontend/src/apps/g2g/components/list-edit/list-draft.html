@@ -110,7 +110,7 @@ border: 1px solid #000;
      </template>
      <br>
      <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-success" raised>ได้รับเงิน</paper-button>
+        <paper-button class="gl-btn-success" raised on-tap="check">ได้รับเงิน</paper-button>
      </div>
 <!-- End Invoice -->
 <!-- Round -->
@@ -158,7 +158,7 @@ border: 1px solid #000;
     <script>
         Polymer({
             is: "list-draft",
-            behaviors: [listEditBehavior,gl.behavior.core],
+            behaviors: [listEditBehavior,gl.behavior.core,gl.behavior.notification],
             attached: function() {
               // console.log(this.dataround[0]);
               // console.log(this.data[0].blNos[0]);
@@ -173,6 +173,9 @@ border: 1px solid #000;
               // console.log(1);
               console.log(e.target.getAttribute("icon"));
               // console.log(e.target.setAttribute("icon", 'check-box'));
+            },
+            check:function () {
+              this.glNotify('title','text','/images/rice-icon-192.png')
             }
         });
     </script>
