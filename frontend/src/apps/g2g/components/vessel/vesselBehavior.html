@@ -15,30 +15,30 @@
   getCounty: function(contractId) {
     // ผู้ขาย
     this.seller_id = this.seller_id || this.$.seller_id;
-    this.getDb('http://localhost:3000/api/common/seller',(data)=>{
+    this.getDb('./common/seller',(data)=>{
         this.seller= data;
         this.seller_id.items = data;
     });
     //Shipping Agent
     this.carrier_id = this.carrier_id || this.$.carrier_id;
-    this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
+    this.getDb('./common/carrier',(data)=>{
       //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
         this.carrier_id.items = data;
     });
     //shipline_id
     this.shipline_id = this.shipline_id || this.$.shipline_id;
-    this.getDb('http://localhost:3000/api/common/shipline/',(data)=>{
+    this.getDb('./common/shipline/',(data)=>{
       //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id shipline_id
       this.shipline_id.items = data;
     });
 
     this.dest_port_id = this.dest_port_id || this.$.dest_port_id;
     this.deli_port_id = this.deli_port_id || this.$.deli_port_id;
-    this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
+    this.getDb('./g2g/contract/id/'+contractId,(data)=>{
       this.county = data.country_id;
       // console.log(this.county);
       // get pod;
-      this.getDb('http://localhost:3000/api/common/port/country/'+this.county,(data)=>{
+      this.getDb('./common/port/country/id/'+this.county,(data)=>{
         this.dest_port_id.items = data;
         this.deli_port_id.items = data;
         // console.log(this.port);dest_port_id
@@ -46,7 +46,7 @@
     });
     this.port_id = this.port_id || this.$.port_id;
     // get pol
-    this.getDb('http://localhost:3000/api/common/port/country/TH',(data)=>{
+    this.getDb('./common/port/country/id/TH',(data)=>{
       this.port_id.items =  data;
       // console.log(this.pol);
 
@@ -54,12 +54,12 @@
 
     //get surveyor_id
     this.surveyor_id = this.surveyor_id || this.$.surveyor_id;
-    this.getDb('http://localhost:3000/api/common/surveyor',(data)=>{
+    this.getDb('./common/surveyor',(data)=>{
       this.surveyor_id.items = data;
       // console.log(this.cml);
     });
     //get buyer_masks
-    this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
+    this.getDb('./g2g/contract/id/'+contractId,(data)=>{
       this.buyerMasks = data.buyer_masks;
       // console.log(this.buyerMasks);
     });
@@ -67,7 +67,7 @@
   getconfirm:function (contractId) {
     //get cl cl_id
     this.cl_id = this.cl_id || this.$.cl_id;
-    this.getDb('http://localhost:3000/api/g2g/confirm/contract/'+contractId,(data)=>{
+    this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
       this.cml = data;
       this.cl_id.items = data;
     });
@@ -83,12 +83,13 @@
   },
   getShip:function (shipline_id) {
       this.ship_id = this.ship_id || this.$.ship_id;
-      // console.log(shipline_id.detail.value);
-      this.getDb('http://localhost:3000/api/common/ship/shipline/'+shipline_id.detail.value,(data)=>{
-        // this.ship = data;
-          this.ship_id.items = data;
-        // console.log(this.ship_id.items);
-      });
+      //เช็ค null or undifile
+      if(shipline_id.detail.value){
+        this.getDb('./common/ship/shipline/id/'+shipline_id.detail.value,(data)=>{
+          // this.ship = data;
+            this.ship_id.items = data;
+        });
+      }
     },
     getCmlForRiceType : function(e) {
      var selectedItem = e.detail.value;
