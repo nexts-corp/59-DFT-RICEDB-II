@@ -92,14 +92,13 @@
       }
     },
     getCmlForRiceType : function(e) {
-     var selectedItem = e.detail.value;
-    //  console.log(selectedItem);
-     this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
+    var selectedItem = e.detail.value;
+    this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
      if (selectedItem) {
        var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
-       this.riceType = cmls[0].cl_type_rice;
+      this.riceType = cmls[0].cl_type_rice;
        this.type_rice_id.items = cmls[0].cl_type_rice;
-       // console.log(this.riceType);
+      //  console.log(this.type_rice_id.items);
      }
    },
    getRiceTypeForPackage : function (e) {

@@ -23,7 +23,6 @@
   </style>
 
   <template>
-  contractId//  {{contractId}}
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -103,20 +102,17 @@
     <gl-form-panel-body>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box disabled id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-              item-value-path="cl_id" value="{{data.cl_id}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
+          <gl-form-label-input  label="ตู้ละ (ตัน)" value="{{data.cl_no}}" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box disabled id="type_rice_id" label="กรุณาเลือกชนิดข้าว" item-label-path="type_rice_name_en"
-              item-value-path="type_rice_id" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+          <gl-form-label-input  label="ตู้ละ (ตัน)" value="{{data.type_rice_name_en}}" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box disabled id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-              item-value-path="package_id" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+          <gl-form-label-input  label="ตู้ละ (ตัน)" value="{{data.package_name}}" ></gl-form-label-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="Price (USD/MT)" value="{{price.price_per_ton}}" ></gl-form-label-input>
+          <gl-form-label-input  label="Price (USD/MT)" value="{{price_per_ton.price_per_ton}}" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="น้ำหนักกระสอบ (gram/bag)" value="{{data.package_weight_bag}}" ></gl-form-label-input>
@@ -138,7 +134,7 @@
           <gl-form-label-input  label="WEIGHT (M/T)" value="G.W. {{gw}}" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="" value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
+          <gl-form-label-input  label="" value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
@@ -152,11 +148,11 @@
           <div class="top">ORIGINALS</div>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-label-input  label="" class="w padL" value="{{data.origin_page}}" ></gl-form-label-input>
+          <gl-form-label-input label="" class="w padL" value="{{data.origin_page}}"></gl-form-label-input>
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-label-input  label="" class="w"value="{{data.cl_id}}" ></gl-form-label-input>
+          <gl-form-label-input label="" class="w" value="{{data.nn_page}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>
@@ -172,12 +168,33 @@
       is: "vessel-save",
       behaviors: [vesselBehavior, gl.behavior.core],
       observers:[
-        // 'getPrice(data)',
-        // 'getconfirm(contractId)',
+        'getPrice(contractId)',
+        'getCounty(contractId)',
+        'getconfirm(contractId)',
         // 'getCmlForRiceType(data.cl_id)'
       ],
-      getPrice:function (data) {
-        console.log(this.data.cl_id);
+      getPrice:function (contractId) {
+        var selected = this.data.cl_id;
+        this.getDb('http://localhost:3000/api/g2g/confirm/contract/id/'+contractId,(datacml)=>{
+          // console.log(datacml);
+          var cmls = datacml.filter(function (datacml) { return datacml.cl_id == selected });
+          var typeRicedb = this.data.type_rice_id;
+          //หาชนิดข้าว
+          var typeRice = cmls[0].cl_type_rice.filter(function (cmls) { return cmls.type_rice_id == typeRicedb});
+          var packages = this.data.package_id;
+          //หาขนาดแพ็คเก็ต
+          var packagefil = typeRice[0].package.filter(function (typeRice) { return typeRice.package_id == packages});
+          console.log(packagefil[0].price_per_ton);
+          this.price_per_ton = packagefil[0];
+          console.log(1);
+          this.quantityBag = ((parseFloat(this.price_per_ton.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price_per_ton.package_weight_bag)).toFixed(3);
+          this.toWords(this.quantityBag);
+          this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price_per_ton.package_weight_bag) + (parseFloat(this.price_per_ton.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
+          this.gw = this.sumGW.toFixed(3);
+
+        });
+        // http://localhost:3000/api/g2g/confirm/contract/id/
+        // console.log(this.data.package_id);
         // var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
         // this.price = prices[0];
         // this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);

@@ -23,108 +23,21 @@
   </style>
 
   <template>
-    <gl-form-panel-body>
+    <gl-form-panel-body>{{data.seller_id}}
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" value="{{data.seller_name_en}}" id="seller_name_en" name="seller_name_en"></gl-form-input>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line" placeholder="เลือก Shipping Line" required>
-            <paper-menu  class="dropdown-content" attr-for-selected="shipline-id" selected="{{data.shipline_id}}" id="shipline_id" name="shipline_id">
-              <template is="dom-repeat" items="[[shipline]]">
-                <paper-item shipline-id="[[item.shipline_id]]">[[item.shipline_name]]</paper-item>
-              </template>
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Vessel" error-message="กรุณาเลือก Vessel" placeholder="เลือก Vessel" required>
-            <paper-menu  class="dropdown-content" attr-for-selected="ship-id" selected="{{data.ship_id}}" id="ship_id" name="ship_id">
-              <template is="dom-repeat" items="[[ship]]">
-                  <paper-item ship-id="[[item.ship_id]]">[[item.ship_name]]</paper-item>
-              </template>
-
-
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}" id="ship_voy_no" name="ship_voy_no"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}" id="ship_lot_no" name="ship_lot_no"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.book_no}}" id="book_no" name="book_no"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="B/L No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bl_no}}" id="bl_no" name="bl_no"></gl-form-input>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[data.carrier_name]]" id="carrier_name" name="carrier_name"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Tel." auto-validate error-message="เป็นตัวเลขเท่านั้น" required placeholder="ใส่รายละเอียด" value="{{data.seller_phone}}"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="POL" error-message="กรุณาเลือก POL" placeholder="เลือก POL" required>
-            <paper-menu  class="dropdown-content" attr-for-selected="pol-id"  selected="{{data.load_port_id}}" id="load_port_id" name="load_port_id">
-              <template is="dom-repeat" items="[[pol]]">
-                <paper-item pol-id="[[item.port_id]]">[[item.port_name]]</paper-item>
-              </template>
-
-
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="ETD" value="{{data.etd_date}}"></vaadin-date-picker>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="ETA" value="{{data.eta_date}}"></vaadin-date-picker>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="POD" error-message="กรุณาเลือก POD" placeholder="เลือกเมืองท่า" required>
-            <paper-menu  class="dropdown-content" attr-for-selected="dest-port-id" selected="{{data.dest_port_id}}" id="cityEnd" name="cityEnd">
-              <template is="dom-repeat" items="[[port]]">
-                <paper-item dest-port-id="[[item.port_id]]">[[item.port_name]]</paper-item>
-              </template>
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Place of Delivery" error-message="กรุณาใส่รายละเอียด" placeholder="Place of Delivery" required>
-            <paper-menu  class="dropdown-content" attr-for-selected="deli-port-id" selected="{{data.deli_port_id}}" id="cityEnd" name="cityEnd">
-              <template is="dom-repeat" items="[[port]]">
-                <paper-item deli-port-id="[[item.port_id]]">[[item.port_name]]</paper-item>
-              </template>
-            </paper-menu>
-          </gl-form-dropdown-menu>
+          <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
+            <!-- value="{{data.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
+            <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
+                item-value-path="seller_id" value="{{data.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
         </gl-grid-col>
 
 
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9]*" placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Packing Date" value="{{data.packing_date}}"></vaadin-date-picker>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="packing_time" name="packing_time"></gl-form-input>
-        </gl-grid-col>
 
 
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด" value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Production" value="[[data.product_date]]"></vaadin-date-picker>
-        </gl-grid-col>
+
+
+
       </gl-grid-row>
     </gl-form-panel-body>
 
@@ -132,91 +45,6 @@
       <div class="text-center">รายละเอียดการส่งมอบ</div>
     </gl-form-panel-body>
 
-    <gl-form-panel-body>
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" error-message="Confirmation Letter" required placeholder="Confirmation Letter"  on-iron-select="_getCmlForRiceType">
-            <paper-menu  class="dropdown-content" attr-for-selected="clNo"  selected="{{data.cl_no}}">
-              <template is="dom-repeat" items="[[cml]]">
-                <paper-item cl-no="[[item.cl_no]]" id=[[item.cl_id]]>[[item.cl_no]]</paper-item>
-              </template>
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu class="width-dropdown" label="Rice " error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท" on-iron-select="_getRiceTypeForPackage">
-            <paper-menu  class="dropdown-content"attr-for-selected="rice-type-id" selected="{{data.type_rice_id}}">
-              <template is="dom-repeat" items="[[riceType]]">
-                <paper-item rice-type-id="[[item.type_rice_id]]" id=[[item.type_rice_id]]>[[item.type_rice_name_en]]</paper-item>
-              </template>
-
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Package (kg/PP Bag)" error-message="กรุณาเลือกขนาดบรรจุภัณฑ์" required placeholder="เลือกประเภท" on-iron-select="_getPackageForPrice">
-            <paper-menu  class="dropdown-content" attr-for-selected="package-id"  selected="{{data.package_id}}" id="package_id">
-              <template is="dom-repeat" items="[[package.package]]">
-                <paper-item package-id="[[item.package_id]]">[[item.package_name]]</paper-item>
-              </template>
-            </paper-menu>
-          </gl-form-dropdown-menu>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Price (USD/MT)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" format-number value="{{price.price_per_ton}}"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.package_weight_bag}}"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{buyerMasks}}"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{quantityBag}}"></gl-form-label-input>
-        </gl-grid-col>
-      </gl-grid-row>
-
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input label="WEIGHT (M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="G.W. {{gw}}"></gl-form-label-input>
-          </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
-        </gl-grid-col>
-      </gl-grid-row>
-
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,12]]">
-          <gl-form-textarea label="DESCRIPTION OF GOODS" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.typeRice}}
-                    PACKING : {{data.package_name}} kg/bags"></gl-form-textarea>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
-          <gl-form-textarea label="{{quantityWords}}" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="FREIGHT COLLECT
-                    SHIPPED ON BOARD "></gl-form-textarea>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]"></gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <div class="top">ORIGINALS</div>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w padL" value="{{data.origin_page}}"></gl-form-input>
-        </gl-grid-col>
-        <div class="top">/</div>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w" value="{{data.nn_page}}"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-        <div class="top">N/N</div>
-        </gl-grid-col>
-      </gl-grid-row>
-    </gl-form-panel-body>
 
 
   </template>
@@ -224,6 +52,7 @@
   <script>
     Polymer({
       is: "vessel-edit",
+      behaviors: [vesselBehavior, gl.behavior.core],
       properties: {
         ship:{
           type:Object,
@@ -233,130 +62,10 @@
         }
       },
       observers: [
-        'getShip(data.shipline_id)',
+        // 'getShip(data.shipline_id)',
         // 'riceType'()
       ],
-      getShip:function (shipline_id) {
-        // console.log(shipline_id);
-        this.getDb('./common/ship/shipline/id/'+shipline_id,(data)=>{
-          this.ship = data;
-          // console.log(this.ship);
-        });
-      },
-      _getCmlForRiceType : function(e) {
-        // console.log(this.cml);
-        var selectedItem = e.target.selectedItem;
-        if (selectedItem) {
-          this.cmlNo = selectedItem.id ;
-          // console.log(this.cmlNo);
-          var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem.id });
-          this.riceType = cmls[0].cl_type_rice;
-          // console.log(this.riceType);
-        }
-      },
-      _getRiceTypeForPackage : function (e) {
-        var selectedItem = e.target.selectedItem;
-        if (selectedItem) {
-          var packages = this.riceType.filter(function (riceType) { return riceType.type_rice_id == selectedItem.id });
-          this.package = packages[0];
-        }
-      },
-      _getPackageForPrice:function (e) {
-      // console.log(this.package.package);
-      var packageAl = this.package.package;
-      var selectedItem = e.target.selectedItem;
-      if (selectedItem) {
-        var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem.packageId });
-        this.price = prices[0];
-      }
-      this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
-      this.toWords(this.quantityBag);
 
-      this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
-      this.gw = this.sumGW.toFixed(3);
-    },
-      getDb:function (url,callback) {
-        // console.log(url);
-        axios.get(url)
-          .then(function(response){
-            callback(response.data);
-          }.bind(this))
-          .catch(function (error) {
-          }.bind(this));
-      },
-      toWords: function(num) {
-
-          // Convert numbers to words
-          // copyright 25th July 2006, by Stephen Chapman http://javascript.about.com
-          // permission to use this Javascript on your web page is granted
-          // provided that all of the code (including this copyright notice) is
-          // used exactly as shown (you can change the numbering system if you wish)
-
-          // American Numbering System
-          var th = ['', 'thousand', 'million', 'billion', 'trillion'];
-          // uncomment this line for English Number System
-          // var th = ['','thousand','million', 'milliard','billion'];
-
-          var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-          var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-          var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-          var s = num.toString();
-          s = s.replace(/[\, ]/g, '');
-          if (s != parseFloat(s)) return 'not a number';
-          var x = s.indexOf('.');
-          if (x == -1) x = s.length;
-          if (x > 15) return 'too big';
-          var n = s.split('');
-          var str = '';
-          var sk = 0;
-          for (var i = 0; i < x; i++) {
-              if ((x - i) % 3 == 2) {
-                  if (n[i] == '1') {
-                      str += tn[Number(n[i + 1])] + ' ';
-                      i++;
-                      sk = 1;
-                  } else if (n[i] != 0) {
-                      str += tw[n[i] - 2] + ' ';
-                      sk = 1;
-                  }
-              } else if (n[i] != 0) {
-                  str +=
-                      dg[n[i]] + ' ';
-                  if ((x - i) % 3 == 0) str += 'hundred ';
-                  sk = 1;
-              }
-              if ((x - i) % 3 == 1) {
-                  if (sk)
-                      str += th[(x - i - 1) / 3] + ' ';
-                  sk = 0;
-              }
-          }
-          if (x != s.length) {
-              var y = s.length;
-              str +=
-                  'point ';
-              for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ';
-          }
-          this.quantityWords = '(' + str.replace(/\s+/g, ' ').toUpperCase() + ' BAGS ONLY)';
-          //  str.replace(/\s+/g,' ');
-      },
-      // calcBags:function(){
-      //   var index = this.$.package.selected;
-      //   // console.log(index);
-      //   // return;
-      //   var arr = this.$.package.innerText.split(' ');
-      //   var packs = new Array();
-      //   for(i=0;i<arr.length;i++){
-      //     if(parseFloat(arr[i])>=0){
-      //       packs.push(parseFloat(arr[i]));
-      //     }
-      //   }
-      //   this.quantityBag = (parseFloat(this.data.ton) * parseFloat(1000)) / parseFloat(packs[index]);
-      //   this.toWords(this.quantityBag);
-      //
-      //   this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(packs[index]) + (parseFloat(this.data.weight) / parseFloat(1000))) / parseFloat(1000)));
-      //   this.gw = this.sumGW.toFixed(3);
-      // }
 
     });
   </script>
