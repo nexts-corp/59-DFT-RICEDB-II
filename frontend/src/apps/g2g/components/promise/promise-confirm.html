@@ -225,15 +225,15 @@
               'getTyperice(contractId)'
             ],
             getTyperice: function(contractId) {
-              this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
+              this.getDb('http://localhost:3000/api/g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
               });
             },
             dataChange:function (clId) {
               //ดึง confirmLetter
-              // this.getDb('http://localhost:3000/api/g2g/confirm/'+clId,(data)=>{
-              //   this.confirmLetter = data;
-              // });
+              this.getDb('http://localhost:3000/api/g2g/confirm/id/'+clId,(data)=>{
+                this.confirmLetter = data;
+              });
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
