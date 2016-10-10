@@ -31,31 +31,26 @@
         <div id="changTitle" class="title" hidden>เพิ่มทะเบียนผู้ส่งออกข้าวไปต่างประเทศ</div>
         <div id="changTitle2" class="title" hidden>ขึ้นทะเบียนผู้ส่งออกข้าวส่งออกไปจำหน่ายต่างประเทศ</div>
             <div class="searchBox searchBorder">
-              <div class="horizontal layout">
-                <div class="flex"></div>
-                  <div class="flex-2">
-                <gl-search-input on-tap="_search" result="{{result}}"
-                                  search-label-name="บริษัท"
-                                  search-input="true"
-                                  search-type="[[searchType]]">
-                </gl-search-input>
-              </div>
-            </div>
+              <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+                <gl-combo-box id="seller_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="seller_id"></gl-combo-box>
+                <paper-button class="gl-btn-info" raised on-tap="_search">ค้นหา</paper-button>
+              </gl-grid-row>
           </div>
 
       <!-- </gl-form-panel-head> -->
-
               <div id="formData" class="bd" hidden>
                   <gl-form-panel>
                       <iron-pages selected="{{pages}}">
                           <!-- <register-createMember></register-createMember> -->
-                          <register-member></register-member>
+                          <register-member data={{seller}}></register-member>
                       </iron-pages>
                   </gl-form-panel>
               </div>
 
         <gl-form-panel-footer>
-          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised >บันทึก</paper-button>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
         </gl-form-panel-footer>
     </gl-form-panel>
 
@@ -88,6 +83,26 @@
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#changTitle2').setAttribute("hidden", "hidden");
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      },
+      getDb:function (url,callback) {
+        // console.log(url);
+        axios.get(url)
+          .then(function(response){
+            callback(response.data);
+          }.bind(this))
+          .catch(function (error) {
+          }.bind(this));
+          // console.log(1);
+      },
+      attached: function() {
+        this.seller_id = this.seller_id || this.$.seller_id;
+        // console.log(this.seller_id);
+        this.getDb('http://localhost:3000/api/external/exporter/seller',(data)=>{
+          this.seller = data;
+          // console.log(this.seller);
+          this.seller_id.items = data;
+          // console.log(this.seller_id.items);
+        });
       }
 
       // editChange:function(e){
