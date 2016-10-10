@@ -231,19 +231,29 @@ router.delete('/delete', function (req, res, next) {
     //  if (valid) {
     //console.log(req.body);
     if (req.body.id != '' || req.body.id != null) {
-        // result.id = req.body.id;
+        result.id = req.body.id;
         db.query(function (conn) {
             r.table("shipment")
                 .get(req.body.id)
-                .delete()
+                .delete({ durability: "soft" })
                 .run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
+                        db.query(function (conn) {
+                            r.table("test")
+                                .filter({ shm_id: req.body.id })
+                                .delete({ durability: "soft" })
+                                .run(conn)
+                                .then(function (resp) {
+                                    res.json(result);
+                                    console.log(result);
+                                })
+                        })
+                        // res.json(result);
+                        // console.log(result);
                     }
-                    res.json(result);
-                    console.log(result);
                 })
                 .error(function (err) {
                     result.message = err;
