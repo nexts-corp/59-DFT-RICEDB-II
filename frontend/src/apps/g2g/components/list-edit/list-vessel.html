@@ -444,9 +444,9 @@
               'getCounty(contractId)',
               'getconfirm(contractId)'
             ],
-            // ready: function() {
-            //   this.$$('#removeButtom').removeAttribute("hidden");
-            // },
+            ready: function() {
+              this.$$('#removeButtom').removeAttribute("hidden");
+            },
             // saveChangess:function () {
             //   console.log(1);
             // },
@@ -454,11 +454,6 @@
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
               this.openToast();
               this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
-              var css = Polymer.dom(this.root).querySelector('#changeCss');
-              if (css.classList.contains('show') == true) {
-                  css.classList.remove("show");
-                  css.classList.add("hide");
-              }
             },
             delExport: function(e) {
                 var r = confirm("ต้องการลบใช่หรือไม่!");
@@ -471,13 +466,6 @@
                 // this.splice('datas.sender', id, 1);
                 // console.log(this.datas.sender);
             },
-            // _saveChange: function(e) {
-            //     console.log('1234');
-            //     // console.log(this.datas);
-            //     this.glQuery('data-export').saveData(this.glClone(this.datas));
-            //     this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
-            //     this.openToast();
-            // },
 
             clickInsert: function() {
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');
