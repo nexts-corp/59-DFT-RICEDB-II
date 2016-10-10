@@ -8,9 +8,6 @@
   .w{
     text-align: center;
   }
-  .padL{
-    padding-left: 35px;
-  }
   .text-center{
     text-align: center;
     font-size: var(--font-size-h4);
@@ -148,7 +145,7 @@
           <div class="top">ORIGINALS</div>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-label-input label="" class="w padL" value="{{data.origin_page}}"></gl-form-label-input>
+          <gl-form-label-input label="" class="w" value="{{data.origin_page}}"></gl-form-label-input>
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
@@ -184,23 +181,14 @@
           var packages = this.data.package_id;
           //หาขนาดแพ็คเก็ต
           var packagefil = typeRice[0].package.filter(function (typeRice) { return typeRice.package_id == packages});
-          console.log(packagefil[0].price_per_ton);
+          // console.log(packagefil[0].price_per_ton);
           this.price_per_ton = packagefil[0];
-          console.log(1);
           this.quantityBag = ((parseFloat(this.price_per_ton.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price_per_ton.package_weight_bag)).toFixed(3);
           this.toWords(this.quantityBag);
           this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price_per_ton.package_weight_bag) + (parseFloat(this.price_per_ton.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
           this.gw = this.sumGW.toFixed(3);
 
         });
-        // http://localhost:3000/api/g2g/confirm/contract/id/
-        // console.log(this.data.package_id);
-        // var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
-        // this.price = prices[0];
-        // this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
-        // this.toWords(this.quantityBag);
-        // this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
-        // this.gw = this.sumGW.toFixed(3);
       }
     });
   </script>
