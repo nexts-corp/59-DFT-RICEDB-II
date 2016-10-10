@@ -16,35 +16,28 @@ var schema = {
             "type": "string"
         },
         "exporter_date_approve": {
-            "type": "date"
+            "type": "string",
+            "format":"date-time"
         },
         "trader_id": {
             "type": "string"
         },
         "seller_agent": {
             "type": "array",
-            "items": [
-                {
-                    "type": "object",
-                    "properties": {
-                        "agent_name": {
-                            "type": "string"
-                        }
-                    },
-                    "required": ["agent_name"]
-                }
-            ]
+            "items": {
+                "type": "object",
+                "properties": {
+                    "agent_name": { "type": "string" }
+                },
+                "required": ["agent_name"]
+            }
         }
     },
     "required": ["exporter_no", "exporter_date_approve", "trader_id", "seller_agent"]
 };
 var validate = ajv.compile(schema);
 
-var dd = new Date();
-var y = dd.getFullYear();
-var m = dd.getMonth();
-var d = dd.getDate();
-var d1y = (y - 1) + '-' + (m < 9 ? '0' : '') + (m + 1) + '-' + (d < 10 ? '0' : '') + d + "T00:00:00.000Z";
+
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
@@ -312,7 +305,7 @@ router.post('/insert', function (req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function (conn) {
-                r.table("exporter")
+                r.db('external_f3').table("exporter")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -349,7 +342,7 @@ router.put('/update', function (req, res, next) {
         if (req.body.id != '' || req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("exporter")
+                r.db('external_f3').table("exporter")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -384,7 +377,7 @@ router.delete('/delete', function (req, res, next) {
     if (req.body.id != '' || req.body.id != null) {
         // result.id = req.body.id;
         db.query(function (conn) {
-            r.table("exporter")
+            r.db('external_f3').table("exporter")
                 .get(req.body.id)
                 .delete()
                 .run(conn)

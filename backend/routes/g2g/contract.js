@@ -20,7 +20,7 @@ var schema = {
         },
         "contract_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "contract_desc": {
             "type": "string"

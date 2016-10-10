@@ -20,7 +20,7 @@ var schema = {
         },
         "cl_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "cl_quality": {
             "type": "string"

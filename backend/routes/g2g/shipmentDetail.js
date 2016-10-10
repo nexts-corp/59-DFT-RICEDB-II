@@ -32,11 +32,11 @@ var schema = {
         },
         "eta_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "etd_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "load_port_id": {
             "type": "string"
@@ -55,7 +55,7 @@ var schema = {
         },
         "packing_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "packing_time": {
             "type": "string",
@@ -63,7 +63,7 @@ var schema = {
         },
         "product_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "seller_id": {
             "type": "string"
