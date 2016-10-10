@@ -44,16 +44,14 @@ var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
-            .group(r.row('bl_no'), {multi: true})
-            // .concatMap(function (r) {
-            //     return r('shipment_detail')('bl_no')
-            // })
-            .distinct()
-            .merge(function(r){
-                return {
-                    
-                }
+            .group(function(g){
+                return g.pluck(
+                    "bl_no","ship_id","load_port_id","dest_port_id","deli_port_id","packing_date"
+                    //"type_rice_id"
+                    )
             })
+            .sum('shm_det_quantity')
+            .ungroup()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

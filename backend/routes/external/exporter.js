@@ -4,6 +4,42 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
+var schema = {
+    //'type': 'object',
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "exporter_no": {
+            "type": "string"
+        },
+        "exporter_date_approve": {
+            "type": "date"
+        },
+        "trader_id": {
+            "type": "string"
+        },
+        "seller_agent": {
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "agent_name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["agent_name"]
+                }
+            ]
+        }
+    },
+    "required": ["exporter_no", "exporter_date_approve", "trader_id", "seller_agent"]
+};
+var validate = ajv.compile(schema);
+
 var dd = new Date();
 var y = dd.getFullYear();
 var m = dd.getMonth();
@@ -267,7 +303,114 @@ router.get('/seller/name/:seller_name', function (req, res, next) {
     })
 });
 
-
+router.post('/insert', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        //console.log(req.body);
+        if (req.body.id == null) {
+            //result.id = req.body.id;
+            db.query(function (conn) {
+                r.table("exporter")
+                    //.get(req.body.id)
+                    .insert(req.body)
+                    .run(conn)
+                    .then(function (response) {
+                        result.message = response;
+                        if (response.errors == 0) {
+                            result.result = true;
+                            result.id = response.generated_keys;
+                        }
+                        res.json(result);
+                        console.log(result);
+                    })
+                    .error(function (err) {
+                        result.message = err;
+                        res.json(result);
+                        console.log(result);
+                    })
+            })
+        } else {
+            result.message = 'field "id" must do not have data';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.put('/update', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        //console.log(req.body);
+        if (req.body.id != '' || req.body.id != null) {
+            result.id = req.body.id;
+            db.query(function (conn) {
+                r.table("exporter")
+                    .get(req.body.id)
+                    .update(req.body)
+                    .run(conn)
+                    .then(function (response) {
+                        result.message = response;
+                        if (response.errors == 0) {
+                            result.result = true;
+                        }
+                        res.json(result);
+                        console.log(result);
+                    })
+                    .error(function (err) {
+                        result.message = err;
+                        res.json(result);
+                        console.log(result);
+                    })
+            })
+        } else {
+            result.message = 'require field id';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.delete('/delete', function (req, res, next) {
+    //var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    //  if (valid) {
+    //console.log(req.body);
+    if (req.body.id != '' || req.body.id != null) {
+        // result.id = req.body.id;
+        db.query(function (conn) {
+            r.table("exporter")
+                .get(req.body.id)
+                .delete()
+                .run(conn)
+                .then(function (response) {
+                    result.message = response;
+                    if (response.errors == 0) {
+                        result.result = true;
+                    }
+                    res.json(result);
+                    console.log(result);
+                })
+                .error(function (err) {
+                    result.message = err;
+                    res.json(result);
+                    console.log(result);
+                })
+        })
+    } else {
+        result.message = 'require field id';
+        res.json(result);
+    }
+    // } else {
+    //     result.message = ajv.errorsText(validate.errors);
+    //     res.json(result);
+    // }
+});
 
 module.exports = router;
 
