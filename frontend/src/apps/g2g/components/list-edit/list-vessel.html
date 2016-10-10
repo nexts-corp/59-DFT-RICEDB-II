@@ -368,7 +368,7 @@
             <gl-form-panel set-padding="10px 20px 10px 20px">
               <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
                 <paper-icon-button icon="create" raised on-tap="editChange" index="[[index]]"></paper-icon-button>
-                <paper-icon-button icon="delete" raised on-tap=""></paper-icon-button>
+                <paper-icon-button icon="delete" raised on-tap="" index="[[index]]"></paper-icon-button>
               </gl-form-panel-head>
 
 
@@ -388,8 +388,8 @@
               </iron-pages>
 
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
-                <div id="changeCss" class="hide">
-                  <paper-button class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
+                <div id="btn_Save_{{index}}" hidden>
+                  <paper-button  class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
                     <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
                 </div>
               </gl-form-panel-footer>
@@ -444,11 +444,22 @@
               'getCounty(contractId)',
               'getconfirm(contractId)'
             ],
-            ready: function() {
-              this.$$('#removeButtom').removeAttribute("hidden");
+            // ready: function() {
+            //   this.$$('#removeButtom').removeAttribute("hidden");
+            // },
+            // saveChangess:function () {
+            //   console.log(1);
+            // },
+            saveChange:function(e){
+              this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
+              this.openToast();
+              this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
+              var css = Polymer.dom(this.root).querySelector('#changeCss');
+              if (css.classList.contains('show') == true) {
+                  css.classList.remove("show");
+                  css.classList.add("hide");
+              }
             },
-
-
             delExport: function(e) {
                 var r = confirm("ต้องการลบใช่หรือไม่!");
                 if (r == true) {
@@ -460,13 +471,13 @@
                 // this.splice('datas.sender', id, 1);
                 // console.log(this.datas.sender);
             },
-            saveChange: function(e) {
-                // console.log('1234');
-                // console.log(this.datas);
-                this.glQuery('data-export').saveData(this.glClone(this.datas));
-                this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
-                this.openToast();
-            },
+            // _saveChange: function(e) {
+            //     console.log('1234');
+            //     // console.log(this.datas);
+            //     this.glQuery('data-export').saveData(this.glClone(this.datas));
+            //     this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
+            //     this.openToast();
+            // },
 
             clickInsert: function() {
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');
