@@ -69,6 +69,7 @@
     this.cl_id = this.cl_id || this.$.cl_id;
     this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
       this.cml = data;
+      console.log(this.cml);
       this.cl_id.items = data;
     });
   },
@@ -84,17 +85,36 @@
   getShip:function (shipline_id) {
       this.ship_id = this.ship_id || this.$.ship_id;
       //เช็ค null or undifile
-      if(shipline_id.detail.value){
-        this.getDb('./common/ship/shipline/id/'+shipline_id.detail.value,(data)=>{
+      // console.log(this.ship_id);
+      var shipline_id;
+      if (typeof shipline_id === 'string'){
+        shipline_id=shipline_id;
+      }else {
+        shipline_id=shipline_id.detail.value;
+      }
+      if(shipline_id){
+        // console.log(shipline_id);
+        this.getDb('./common/ship/shipline/id/'+shipline_id,(data)=>{
           // this.ship = data;
             this.ship_id.items = data;
         });
       }
+
     },
     getCmlForRiceType : function(e) {
-    var selectedItem = e.detail.value;
+    // var selectedItem = e.detail.value;
+    console.log(e);
     this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
+    var selectedItem;
+    if (typeof e === 'string'){
+      selectedItem=e;
+      console.log('string');
+    }else {
+      selectedItem=e.detail.value;
+      console.log('object');
+    }
      if (selectedItem) {
+       console.log(this.cml);
        var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
       this.riceType = cmls[0].cl_type_rice;
        this.type_rice_id.items = cmls[0].cl_type_rice;

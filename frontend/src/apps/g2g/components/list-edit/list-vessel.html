@@ -92,8 +92,7 @@
     <content id="primary" select="items[type=primary]"></content>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input class="mar-head" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required label="งวดที่"
-          value$="[[data.shm_no]]"></gl-form-input>
+        <gl-form-label-input  label="งวดที่" value$="[[data.shm_no]]" ></gl-form-label-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
@@ -254,7 +253,7 @@
               </gl-form-dropdown-menu> -->
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="type_rice_id" label="กรุณาเลือกชนิดข้าว" item-label-path="type_rice_name_en"
+              <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
                   item-value-path="type_rice_id" value="{{shipment.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
               <!-- <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท"
                 on-iron-select="_getRiceTypeForPackage">
@@ -444,9 +443,9 @@
               'getCounty(contractId)',
               'getconfirm(contractId)'
             ],
-            // ready: function() {
-            //   this.$$('#removeButtom').removeAttribute("hidden");
-            // },
+            ready: function() {
+              this.$$('#removeButtom').removeAttribute("hidden");
+            },
             // saveChangess:function () {
             //   console.log(1);
             // },
@@ -454,11 +453,6 @@
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
               this.openToast();
               this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
-              var css = Polymer.dom(this.root).querySelector('#changeCss');
-              if (css.classList.contains('show') == true) {
-                  css.classList.remove("show");
-                  css.classList.add("hide");
-              }
             },
             delExport: function(e) {
                 var r = confirm("ต้องการลบใช่หรือไม่!");
@@ -471,13 +465,6 @@
                 // this.splice('datas.sender', id, 1);
                 // console.log(this.datas.sender);
             },
-            // _saveChange: function(e) {
-            //     console.log('1234');
-            //     // console.log(this.datas);
-            //     this.glQuery('data-export').saveData(this.glClone(this.datas));
-            //     this.$$(".iron-index-" + e.currentTarget.index).selected = 0;
-            //     this.openToast();
-            // },
 
             clickInsert: function() {
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');

@@ -1,0 +1,353 @@
+<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="./../listregistion/components/list-edit/list-registration.html">
+<link rel="import" href="./../listregistion/components/register/register-pageRegister.html">
+<link rel="import" href="./../listregistion/components/register/register-pageDetail.html">
+<link rel="import" href="./../listregistion/components/register/register-fileup.html">
+<link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
+<link rel="import" href="./components/amount/amount-allocation-edit.html">
+
+<!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
+
+
+<dom-module id="eu-extra-fee">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+        * {
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+          padding: 10px 0px 10px 10px;
+          background-color: var(--paper-grey-100);
+          color: var(--paper-grey-600);
+          font-size: var(--font-size-h4);
+          font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .registor{
+          margin: 20px;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+         .titleContent{
+      padding: 10px;
+      font-size: 18px;
+      color: white;
+      background-color: orange;
+      /*width: 25%;*/
+    }
+        .searchBox{
+          padding: 5px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+        .elevation{
+          border-radius: 5px;
+          margin: 10px;
+          padding: 5px;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px
+        }
+        paper-material {
+          background-color: var(--gl-white-color);
+        }
+        gl-search-input{
+          margin: 30px 0px 0px 0px;
+        }
+        table.gl-table-default{
+          border-collapse: collapse;
+          width: 100%;
+          overflow-x:auto;
+          white-space: nowrap;
+        }
+        table.gl-table-default,th,td{
+          border-bottom: 1px solid #ddd;
+        }
+        th,td{
+          padding: 15px;
+        }
+        th{
+          text-align: center;
+          background-color: #F1F1F1;
+        }
+        td{
+          text-align: center;
+        }
+        tr:hover{
+          background-color: #F1F1F1;
+        }
+        .contentHeader{
+          font-size: 22px;
+          text-align: center;
+        }
+        .container{
+            padding: 10px;
+        }
+
+        .flex-end-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-end-justified);
+        }
+    </style>
+    <template>
+
+    <content-panel>
+      <grid>
+        <!-- <paper-material elevation="1" class="elevation"> -->
+
+
+        <div class="layout vertical registor">
+          <div class="flex">
+            <div class="layout horizontal end-justified">
+              <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
+            </div>
+          </div>
+          <div class="flex title">
+            ชำระเงินค่าธรรมเนียมพิเศษ
+          </div>
+        
+        <div class="flex searchBorder">
+            <div class="titleContent">ค้นหาข้อมูล</div> 
+            <div>
+                <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-dropdown-menu label="กรุณาเลือกบริษัท">
+                            <paper-listbox class="dropdown-content">
+                                <paper-item>ข้าวขาว</paper-item>
+                                <paper-item>ข้าวหัก</paper-item>
+                            </paper-listbox>
+                        </gl-form-dropdown-menu>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <paper-button raised>ค้นหา</paper-button>
+                    </gl-grid-col>
+                </gl-grid-row>
+            </div>
+        </div>
+
+        <div class="flex searchBorder">
+            <div class="titleContent">ข้อมูลส่งออก</div> 
+            <div>
+                 <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-label-input label="บริษัท" value="ยูนิเวอร์แซลไรซ์"></gl-form-label-input>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี" value="034490290"></gl-form-label-input>
+                    </gl-grid-col>
+                </gl-grid-row>
+                 <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    </gl-grid-col>
+                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-label-textarea label="ที่อยู่" value="39/95 หมู่ที่ 2 ต. บางกระเจ้า อ.เมือง สมุทรสาคร 74000"></gl-form-label-textarea>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    </gl-grid-col>
+                </gl-grid-row>
+                 <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    </gl-grid-col>
+                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-label-input label="โทร" value="034-490290-3"></gl-form-label-input>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <gl-form-label-input label="โทรสาร" value="034-490290-3"></gl-form-label-input>
+                    </gl-grid-col>
+                </gl-grid-row>
+            </div>
+        </div>
+
+        <div class="flex searchBorder">
+            <div class="titleContent">ข้อมูลรายการ EC</div> 
+            <div class="container">จำนวนรายการทั้งหมด 4 รายการ</div>
+              <div class="flex searchBorder">
+             
+          <div style="overflow-x:auto;">
+          <table class="gl-table-default">
+              <tr>
+                <template is="dom-repeat" items="{{dataAmount.header}}">
+                    <th>{{item}}</th>
+                </template>
+              </tr>
+              <tr>
+                  <td><paper-checkbox></paper-checkbox></td>
+                <template is="dom-repeat" items={{dataAmount.row1}}>
+                    <td id="addRedRegExporter">{{item}}</td>
+                </template>
+              </tr>
+              <tr>
+                  <td><paper-checkbox></paper-checkbox></td>
+                <template is="dom-repeat" items={{dataAmount.row2}}>
+                    <td id="addRedRegExporter">{{item}}</td>
+                </template>
+              </tr>
+          </table>
+          </div>
+          </div>
+            <div class="container flex-end-justified">
+                <div>
+                <paper-button on-tap="_toggleDrawer" raised>บันทึก/พิมพ์ใบเสร็จแบบปกติ</paper-button>
+                </div>
+            </div>
+        </div>
+
+          </div>
+          <!--<div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>-->
+        
+        </div>
+        <!-- </paper-material> -->
+
+      </grid>
+    <panel>
+        <div class="left">
+          <amount-allocation-edit></amount-allocation-edit>
+
+        </div>
+    </panel>
+    </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "eu-extra-fee",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            properties: {
+                layerContent: {
+                    type: String,
+                    value: "detailRegExporter"
+                },
+                dataAmount:{
+                    type: Object,
+                    value:
+                      {
+                        header:[
+                          '',
+                          'ชื่อฟอร์ม',
+                          'เลขที่คำขอ EC',
+                          'เลขที่หนังสือรับรอง',
+                          'ผู้รับมอบ',
+                          'วันที่ส่ง',
+                          'ปริมาณ (ตัน)'
+                        ],
+                        row1:[
+                            'EC ข้าวในโควต้า EU',
+                            '20160701-0001',
+                            '012/2016',
+                            'นายสมพร มานะ',
+                            '03/07/2016',
+                            '120.00'
+                          ],
+                          row2:[
+                            'EC ข้าวในโควต้า EU',
+                            '20160701-0002',
+                            '013/2016',
+                            'นายสมพร มานะ',
+                            '03/07/2016',
+                            '100.00'
+                          ]  
+                      }
+                },
+                dataRegistion: {
+                    type: Object,
+                    notify: true,
+                    value:
+                    [
+                      {
+                        id:1,
+                        regisExporters:"ข1003",
+                        companyName:"สำเภาทอง",
+                        licenceType:"ไม่เกิน 12 กก.",
+                        approvalDate:"18/09/255"
+                      },
+                      {
+                        id:2,
+                        regisExporters:"ข5/2559",
+                        companyName:"กรุงไทย พืชผล บจก.",
+                        licenceType:"ชายแดน",
+                        approvalDate:"18/09/2559"
+                      },
+                      {
+                        id:3,
+                        regisExporters:"ข2/2559",
+                        companyName:"โรงสีทรัพย์อนันต์",
+                        licenceType:"ชายแดน",
+                        approvalDate:"17/09/255"
+                      },
+                      {
+                        id:4,
+                        regisExporters:"ข003",
+                        companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
+                        licenceType:"ทั่วไป",
+                        approvalDate:"17/09/2559"
+                      }
+
+                    ]
+                },
+
+                searchType: {
+                    type: Object,
+                    value: [{
+                        id: 1,
+                        name: 'ทั้งหมด'
+                    }, {
+                        id: 2,
+                        name: 'ผู้ส่งออกที่ถูกระงับ'
+                    } ]
+                },
+                result: {
+                    type: Object,
+                    observer: '_result'
+                }
+            },
+            created: function() {
+                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
+                this.glSetLayout('layout-registion');
+
+            },
+            ready:function(){
+              // console.log(this.dataAmount.content[0]);
+            },
+            attached: function() {
+                // this.layoutMain = this.glQuery('layoutMain');
+            },
+            _result:function () {
+              console.log(this.result);
+            },
+            nxGridTap: function(e) {
+              // console.log(e.detail.level);
+              // console.log(e.detail.data);
+              // console.log(this.layerContent );
+                this.layerContent = e.detail.level;
+                // console.log(this.layerContent);
+                if (this.layerContent === 'third') {
+                    this.vesselPage = 1;
+                } else {
+                    this.vesselPage = 0;
+                }
+                this.dataSelect = e.detail.data;
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent = e.target.id;
+              // console.log(e.target.id);
+            }
+        });
+    </script>
+</dom-module>
+
