@@ -48,7 +48,7 @@ router.get('/id/:buyer_id', function (req, res, next) {
             });
     })
 });
-router.get('/:field_name/:value_id', function (req, res, next) {
+router.get('/:field_name/id/:value_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("buyer")
             .filter({ [req.params.field_name + "_id"]: req.params.value_id })
