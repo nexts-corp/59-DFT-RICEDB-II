@@ -69,7 +69,7 @@
     this.cl_id = this.cl_id || this.$.cl_id;
     this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
       this.cml = data;
-      console.log(this.cml);
+      // console.log(this.cml);
       this.cl_id.items = data;
     });
   },
@@ -101,20 +101,18 @@
       }
 
     },
-    getCmlForRiceType : function(e) {
+    getCmlForRiceType : function(e,a) {
     // var selectedItem = e.detail.value;
-    console.log(e);
     this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
     var selectedItem;
-    if (typeof e === 'string'){
-      selectedItem=e;
-      console.log('string');
+    if (typeof a === 'string'){
+      selectedItem=a;
+      // console.log(selectedItem+"string");
     }else {
       selectedItem=e.detail.value;
-      console.log('object');
+      // console.log(selectedItem+"object");
     }
      if (selectedItem) {
-       console.log(this.cml);
        var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
       this.riceType = cmls[0].cl_type_rice;
        this.type_rice_id.items = cmls[0].cl_type_rice;
