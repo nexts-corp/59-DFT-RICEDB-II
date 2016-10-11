@@ -7,6 +7,7 @@
 <link rel="import" href="components/bill/bill-fileup.html">
 <link rel="import" href="components/payment/payment-pay.html">
 <link rel="import" href="components/invoice/invoice-page.html">
+<link rel="import" href="components/payment/draft-period.html">
 
 <link rel="import" href="./components/payment/payment-detail.html">
 
@@ -14,7 +15,7 @@
 
 
 <dom-module id="g2g-add-draft">
-  <style is="custom-style">
+  <style is="custom-style" include="gl-color">
     * {
       font-family: 'rsuregular', sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -31,17 +32,27 @@
     {{result.name}} // {{result.searchType}} -->
     <content-panel>
       <grid>
-        <list-draft data="{{dataPeriod}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}">
-          <items type="primary">
-            <list item="blNo" label="Bill of Landing Number (B/L No.)" width="flex"></list>
-          </items>
-          <items type="secondary">
-            <list item="invoiceNo" label="Invoice No." width="flex"></list>
-          </items>
-          <items type="third">
-            <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
-          </items>
-        </list-draft>
+        <iron-pages selected="{{selected}}">
+          <div>
+            <draft-period></draft-period>
+            <paper-button  class="gl-btn-success" raised on-tap="saveChangeShipment" index="[[index]]">
+              <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+          </div>
+          <div>
+            <list-draft data="{{dataPeriod}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}">
+              <items type="primary">
+                <list item="blNo" label="Bill of Landing Number (B/L No.)" width="flex"></list>
+              </items>
+              <items type="secondary">
+                <list item="invoiceNo" label="Invoice No." width="flex"></list>
+              </items>
+              <items type="third">
+                <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
+              </items>
+            </list-draft>
+          </div>
+        </iron-pages>
+
       </grid>
       <panel>
         <div class="left">
@@ -97,6 +108,10 @@
                 layerContent: {
                     type: String,
                     value: "primary"
+                },
+                selected:{
+                    type:Number,
+                    value:0
                 },
                 changePage: {
                     type: Number,
