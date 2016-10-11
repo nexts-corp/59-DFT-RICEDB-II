@@ -101,12 +101,12 @@
       }
 
     },
-    getCmlForRiceType : function(e,a) {
+    getCmlForRiceType : function(e,id) {
     // var selectedItem = e.detail.value;
     this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
     var selectedItem;
-    if (typeof a === 'string'){
-      selectedItem=a;
+    if (typeof id === 'string'){
+      selectedItem=id;
       // console.log(selectedItem+"string");
     }else {
       selectedItem=e.detail.value;
@@ -119,10 +119,17 @@
       //  console.log(this.type_rice_id.items);
      }
    },
-   getRiceTypeForPackage : function (e) {
+   getRiceTypeForPackage : function (e,id) {
      // ต่อจาก getCmlForRiceType
-     var selectedItem = e.detail.value;
      this.package_id = this.package_id || this.$.package_id;
+     var selectedItem;
+     if (typeof id === 'string'){
+       selectedItem=id;
+       // console.log(selectedItem+"string");
+     }else {
+       selectedItem=e.detail.value;
+       // console.log(selectedItem+"object");
+     }
      if (selectedItem) {
        var packages = this.riceType.filter(function (riceType) { return riceType.type_rice_id ==  selectedItem });
        this.package = packages[0].package;
@@ -130,10 +137,17 @@
        // console.log(this.package_id.items);
      }
    },
-     getPackageForPrice:function (e) {
+     getPackageForPrice:function (e,id) {
        //ถึงมาจาก _getRiceTypeForPackage
      var packageAl = this.package;
-     var selectedItem = e.detail.value;
+     var selectedItem;
+     if (typeof id === 'string'){
+       selectedItem=id;
+       // console.log(selectedItem+"string");
+     }else {
+       selectedItem=e.detail.value;
+       // console.log(selectedItem+"object");
+     }
      if (selectedItem) {
        var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
        this.price = prices[0];
