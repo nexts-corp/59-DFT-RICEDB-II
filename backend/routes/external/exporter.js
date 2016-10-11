@@ -17,7 +17,7 @@ var schema = {
         },
         "exporter_date_approve": {
             "type": "string",
-            "format":"date-time"
+            "format": "date-time"
         },
         "trader_id": {
             "type": "string"
@@ -37,7 +37,11 @@ var schema = {
 };
 var validate = ajv.compile(schema);
 
-
+var dd = new Date();
+var y = dd.getFullYear();
+var m = dd.getMonth();
+var d = dd.getDate();
+var d1y = (y - 1) + '-' + (m < 9 ? '0' : '') + (m + 1) + '-' + (d < 10 ? '0' : '') + d + "T00:00:00.000Z";
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
