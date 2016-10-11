@@ -41,17 +41,27 @@ var schema = {
 };
 var validate = ajv.compile(schema);
 
-router.get(['/', '/list'], function (req, res, next) {
+router.get('/shipment/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
-            .group(function(g){
-                return g.pluck(
-                    "bl_no","ship_id","load_port_id","dest_port_id","deli_port_id","packing_date"
-                    //"type_rice_id"
-                    )
-            })
-            .sum('shm_det_quantity')
+            .filter({ shm_id: req.params.shm_id })
+            .group("bl_no")
+            // .group(function(g){
+            //     return g.pluck(
+            //         "bl_no"
+            //         ,"ship_id","load_port_id","dest_port_id","deli_port_id","packing_date"
+            //         "type_rice_id"
+            //         )
+            // })
+            //.sum('shm_det_quantity')
             .ungroup()
+            .merge(function (m) {
+                return {
+                    bl_no: m('group'),
+                    shm_id: req.params.shm_id
+                }
+            })
+            .without("reduction", "group")
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -68,6 +78,47 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-
+router.get('/shipment/bl/no/:bl_no', function (req, res, next) {
+    db.query(function (conn) {
+        r.table('shipment_detail')
+            .filter({ bl_no: req.params.bl_no })
+            .group(function (g) {
+                return g.pluck(
+                    "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id"
+                )
+            })
+            .sum("shm_det_quantity")
+            .ungroup()
+            .merge(function (me) {
+                return {
+                    shm_id: me('group')('shm_id'),
+                    ship_id: me('group')('ship_id'),
+                    load_port_id: me('group')('load_port_id'),
+                    dest_port_id: me('group')('dest_port_id'),
+                    deli_port_id: me('group')('deli_port_id'),
+                    bl_no: me('group')('bl_no'),
+                    total_quantity: me('reduction')
+                }
+            })
+            .without("group", "reduction")
+            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
+            .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
+            .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 
 module.exports = router;
