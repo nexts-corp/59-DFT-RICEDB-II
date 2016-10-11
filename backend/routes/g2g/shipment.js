@@ -247,12 +247,13 @@ router.delete('/delete', function (req, res, next) {
                                 .delete({ durability: "soft" })
                                 .run(conn)
                                 .then(function (resp) {
-                                    res.json(result);
+                                    //console.log('yyyyy');
                                     console.log(result);
+                                    res.json(result);
                                 })
                         })
-                        // res.json(result);
-                        // console.log(result);
+                        // res.json(req.result);
+                        // console.log('xxxx');
                     }
                 })
                 .error(function (err) {
