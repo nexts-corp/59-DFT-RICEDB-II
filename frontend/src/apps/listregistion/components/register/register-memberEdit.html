@@ -23,15 +23,54 @@
 
     <gl-form-panel-body set-border="0px">
 
-      <div class="title">เพิ่มทะเบียนผู้ส่งออกข้าว</div>
+      <div class="title">ขึ้นทะเบียนผู้ส่งออกข้าวส่งออกไปจำหน่ายต่างประเทศ</div>
 
       <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี :" value="0123335568790"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="ชื่อบริษัท :" value="โกบอล พรีเซียส ไรซ์"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="ชื่อบริษัท (อังกฤษ) :" value="Golbal precious rice"></gl-form-label-input>
+        </gl-grid-col>
+      </gl-grid-row>
+
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+          <gl-form-label-textarea label="ที่อยู่ :" value="107 หมู่ 4 ตำบลโพทะเลอำเภอบางระจัน จังหวัดสิงห์บุรี"></gl-form-label-textarea>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+          <gl-form-label-textarea label="ที่อยู่ (อังกฤษ) :" value="107 Village No. 4, Sub-district Potale, District Bangrajan, Province Sing Buri"></gl-form-label-textarea>
+        </gl-grid-col>
+      </gl-grid-row>
+
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="รหัสไปรษณีย์ :" value="16150"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="หมายเลขโทรศัพท์ :" value="036-501024"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="FAX :" value="036-501024"></gl-form-label-input>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="E-Mail Address :" value="golbal@gmail.com"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" value="9/2555"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value="เป็นสมาชิก"></gl-form-label-input>
+        </gl-grid-col>
+
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu label="ประเภทการอนุญาติ :">
             <paper-menu  class="dropdown-content" selected="0">
               <paper-item value="">ทั่วไป</paper-item>
-              <paper-item value="">ชายแดน</paper-item>
-              <paper-item value="">ไม่เกิน 12 กก.</paper-item>
             </paper-menu>
           </gl-form-dropdown-menu>
         </gl-grid-col>
@@ -39,51 +78,13 @@
           <gl-form-input label="เลขประจำตัวผู้ส่งออกข้าว :" auto-validate error-message="กรุณาใส่เลขประจำตัวผู้ส่งออกข้าว" required value="ข004"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="ETA" value="2016-09-18"></vaadin-date-picker>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="เลขประจำตัวผู้เสียภาษี :" auto-validate error-message="กรุณาใส่เลขประจำตัวผู้เสียภาษี" required pattern="[0-9]*" value="0123335568790"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="ชื่อบริษัท :" auto-validate error-message="กรุณาใส่ชื่อบริษัท" required value="โกบอล พรีเซียส ไรซ์"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="ชื่อบริษัท (อังกฤษ) :" auto-validate error-message="กรุณาใส่ชื่อบริษัทภาษาอังกฤษเท่านั้น" required pattern="[a-zA-Z ]*" value="Golbal precious rice"></gl-form-input>
+          <vaadin-date-picker label="วันที่อนุมัติ :" value="2016-09-18"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
 
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
-          <gl-form-textarea label="ที่อยู่ :" error-message="กรุณาใส่รายละเอียด" required value="107 หมู่ 4 ตำบลโพทะเล อำเภอบางระจัน จังหวัดสิงห์บุรี"></gl-form-textarea>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
-          <gl-form-textarea label="ที่อยู่ (อังกฤษ) :" auto-validate error-message="กรุณาใส่รายละเอียด" required value="107 Village No. 4, Sub-district Potale, District Bangrajan, Province Sing Buri"></gl-form-textarea>
-        </gl-grid-col>
-      </gl-grid-row>
-
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="รหัสไปรษณีย์ :" auto-validate error-message="กรอกเป็นตัวเลขเท่านั้น" required pattern="[0-9]*" max-length="5" value="16150"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="หมายเลขโทรศัพท์ :" auto-validate error-message="กรอกเป็นตัวเลขเท่านั้น" required pattern="[0-9,-]*" value="036-501024"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="FAX :" auto-validate error-message="กรอกเป็นตัวเลขเท่านั้น" required pattern="[0-9,-]*" value="036-501024"></gl-form-input>
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="E-Mail Address :" auto-validate error-message="กรุณาใส่E-Mail" required value="golbal@gmail.com"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="เลขที่หนังสืออนุญาต ปกข. :" auto-validate error-message="กรุณาใส่เลขที่หนังสืออนุญาต" required value="9/2555"></gl-form-input>
-        </gl-grid-col>
-      </gl-grid-row>
-
-        <div class="title">
-          <paper-checkbox class="bd" noink checked>เป็นสมาชิกสมาคมผู้ส่งออกข้าว</paper-checkbox>
-        </div>
+        <!-- <div class="title">
+          <paper-checkbox class="bd" noink>เป็นสมาชิกสมาคมผู้ส่งออกข้าว</paper-checkbox>
+        </div> -->
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -94,15 +95,7 @@
         </gl-grid-col>
       </gl-grid-row>
 
-      <!-- <div class="horizontal end-justified layout mar-top">
-          <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
-      </div> -->
-
     </gl-form-panel-body>
-
-    <gl-form-panel-footer>
-      <paper-button class="gl-btn-success" on-tap="validate" raised>บันทึก</paper-button>
-    </gl-form-panel-footer>
 
   </template>
   <script>

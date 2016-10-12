@@ -29,7 +29,7 @@ router.get(['/', '/list'], function (req, res, next) {
     })
 });
 
-router.get('/:type_rice_id', function (req, res, next) {
+router.get('/id/:type_rice_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("type_rice")
             .get(req.params.type_rice_id.toUpperCase())

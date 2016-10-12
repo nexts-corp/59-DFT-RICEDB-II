@@ -1,0 +1,481 @@
+<dom-module id="promise-insert">
+    <style is="custom-style" include="iron-flex iron-flex-alignment gl-size gl-color">
+        .top {
+            margin-top: 15px;
+            font-size: var(--font-size-large);
+        }
+        .bg {
+            background-color: var(--paper-grey-200);
+            border: 1px solid black;
+            padding-left: 10px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            padding: 10px 0px 10px 10px;
+        }
+        table.default {
+          border-collapse: collapse;
+          width: 100%
+        }
+
+        table.default,
+        th,
+        td {
+          border-bottom: 1px solid #ddd;
+        }
+
+        th,
+        td {
+          padding: 15px;
+        }
+
+        th {
+          text-align: center;
+          background-color: #F1F1F1;
+          white-space: nowrap;
+        }
+
+        td {
+          text-align: left;
+          white-space: nowrap;
+        }
+
+        tr:hover {
+          background-color: #F1F1F1;
+        }
+        paper-button {
+            margin-top: 10px;
+        }
+
+        gl-form-textarea {
+            word-break: break-all;
+        }
+
+        paper-icon-button {
+            margin-top: 10px;
+        }
+
+        paper-icon-button.iconAdd {
+          /*color: var(--paper-pink-500);*/
+          color: gray;
+          /*--paper-icon-button-ink-color: var(--paper-indigo-500);*/
+        }
+    </style>
+    <template>
+      <form is="iron-form" id="confirmLitter" method="get">
+        <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <vaadin-date-picker label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
+            </gl-grid-col>
+        </gl-grid-row>
+        <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-input auto-validate error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="Confirmation Name" placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_name}}" name="cl_no"></gl-form-input>
+            </gl-grid-col>
+
+        </gl-grid-row>
+      <div class="top ">Commodities, Price, Package</div>
+      <template is="dom-repeat" items="[[confirmLetter.cl_type_rice]]">
+          <div class="bg">
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
+                  <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
+                    <template is="dom-repeat" items="[[riceType.contract_type_rice]]">
+                      <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
+                    </template>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                [[calcWeight(item.*)]]
+                [[testNum(item.*,'type_rice_quantity')]]
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+                  value="{{item.type_rice_quantity}}"
+                 name="type_rice_quantity"></gl-form-input>
+
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <paper-icon-button id="[[index]]" icon="icons:delete" title='ลบชนิดข้าว' style="color: gray;" on-tap="deleteRiceType"></paper-icon-button>
+
+            </gl-grid-row>
+
+            <table class="default" id="[[index]]">
+              <tr>
+                <th>Package (Kg/PP Bags)</th>
+                <th>Price (USD/MT)</th>
+                <th>Minimum Tare Weight</th>
+                <th></th>
+              </tr>
+
+              <template is="dom-repeat" as="packageitem" items="[[item.package]]">
+                <tr >
+                  <td>
+                    <gl-form-dropdown-menu error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
+                    <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{packageitem.package_id}}" name="package_id" >
+                      <template is="dom-repeat" items="[[package]]">
+                        <paper-item package-id="{{item.package_id}}" >[[item.package_name]]</paper-item>
+                      </template>
+                    </paper-menu>
+                  </gl-form-dropdown-menu>
+                  </td>
+                  <td> [[testNum(packageitem.*,'price_per_ton')]]
+                    <gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  </td>
+                  <td>
+                    <gl-form-input disabled  placeholder="" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
+                  </td>
+                  <td>
+                    <paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd"></paper-icon-button>
+                    <paper-icon-button  id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
+                  </td>
+                </tr>
+              </template>
+
+
+
+            </table>
+
+            </div>
+
+        </template>
+
+      <div class="horizontal end-justified layout">
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary">เพิ่ม</paper-button>
+      </div>
+
+      <gl-grid-row>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
+                  <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
+                      <template is="dom-repeat" items="[[incoterms]]">
+                        <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
+                      </template>
+
+                  </paper-menu>
+              </gl-form-dropdown-menu>
+          </gl-grid-col>
+
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-form-label-input auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-label-input>
+          </gl-grid-col>
+
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+              <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
+          </gl-grid-col>
+      </gl-grid-row>
+      </form>
+      <div class="horizontal end-justified layout">
+          <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+          <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
+      </div>
+    </template>
+    <script>
+        Polymer({
+            is: "promise-insert",
+            properties: {
+                data: {
+                    type: Object
+                },
+                riceType:{
+                    type: Object
+                },
+                contractId:{
+                    type:String
+                },
+                confirmLetter: {
+                  type: Object,
+                  value:
+                    {
+                      cl_type_rice:[
+                        {
+                          type_rice_id: 'WH-05',
+                          type_rice_quantity: 0,
+                          package:
+                            [
+                              {
+                                package_id: '',
+                                price_per_ton: 0,
+                                package_weight_bag: 0,
+                              }
+                            ]
+                        }
+                      ]
+                    }
+                }
+            },
+            behaviors: [
+                gl.behavior.core
+            ],
+            observers: [
+              'dataChange(data.cl_id)',
+              'getTyperice(contractId)'
+            ],
+            getTyperice: function(contractId) {
+              this.getDb('http://localhost:3000/api/g2g/contract/id/'+contractId,(data)=>{
+                this.riceType = data;
+                // console.log(this.riceType);
+              });
+            },
+            dataChange:function (clId) {
+              //ดึง confirmLetter
+              this.getDb('http://localhost:3000/api/g2g/confirm/id/'+clId,(data)=>{
+                this.confirmLetter = data;
+              });
+            },
+            addConfirm:function () {
+              //เปลี่ยนเป็น id
+              // this.confirmLetter.cl_type_rice[0].type_rice_quantity = parseFloat(e.target.value);
+
+              this.confirmLetter.contract_id = this.contractId;
+              this.postDb(this.confirmLetter)
+              // console.log(this.confirmLetter);
+            },
+            getDb:function (url,callback) {
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+            },
+            postDb:function (data) {
+              axios.post('http://localhost:3000/api/g2g/confirm/insert', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          this.glQuery('addContract').getChange();
+                          this.glQuery('contentPanel').changDrawer();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
+
+            },
+            calcWeight: function(data) {
+
+              var total = 0;
+              var datas = this.confirmLetter.cl_type_rice;
+              for(index in datas){
+                total += parseFloat(datas[index].type_rice_quantity);
+              }
+              this.cl_total_quantity = total;
+          },
+            addNewTypeRice: function() {
+              // console.log(this.confirmLetter.cl_type_rice);
+                this.push('confirmLetter.cl_type_rice', {
+                  type_rice_id: '',
+                  type_rice_quantity: 0,
+                  package:
+                    [
+                      {
+                        package_id: '',
+                        price_per_ton: 0,
+                        package_weight_bag: 0,
+                      }
+                    ]
+                });
+                // console.log(this.confirmLetter);
+            },
+            deleteRiceType:function (e) {
+              this.splice('confirmLetter.cl_type_rice', e.currentTarget.id, 1);
+            },
+            weight:function () {
+              return this.packageWeigthBag;
+            },
+            addPackage:function (e) {
+              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
+              // console.log(table.node.id);
+              // console.log(this.confirmLetter.cl_type_rice[table.node.id]);
+              var data = {
+                      package_id: '',
+                      price_per_ton: 0,
+                      package_weight_bag: 0,
+                    };
+                    // console.log(data);
+              this.push('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', data);
+            },
+            delePackage: function(e) {
+              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
+              // console.log(table.node.id);
+              // console.log(e.target.id);
+                // var index = this.data.confirmItem.indexOf(data);
+                // console.log('confirmLetter.cl_type_rice.'+[table.node.id]+'.package');
+                this.splice('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
+            },
+            changePrice:function(data,list){
+              var result = "";
+              list.map((package,index)=>{
+                //console.log(package.package_id,data,index,package.package_weight_bag)
+                //console.log(package);
+                if(package.package_id==data){
+                  // console.log(data,package.package_id,package);
+                  result = package.package_weight_bag;
+                }
+              });
+
+              return result;
+            },
+            selectWithOutSelected:function () {
+
+            },
+            testNum:function(ob,param){
+                    if(ob.path.split(".").length == 2){
+                        ob.base[param]=parseFloat(ob.value);
+
+                    }
+                }
+        });
+    </script>
+</dom-module>
+
+<!-- <dom-module id="promise-insert">
+    <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    .bg {
+        background-color: var(--paper-grey-200);
+        border: 1px solid black;
+        padding: 10px 0px 10px 10px;
+    }
+    </style>
+    <template>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <vaadin-date-picker label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
+      </gl-grid-col>
+
+    </gl-grid-row>
+
+    <template is="dom-repeat" items="{{confirmLetter.cl_type_rice}}">
+        <div class="bg top">
+          <gl-grid-row>
+            <gl-form-input value="{{item.type_rice_id}}" name="type_rice_id" hidden></gl-form-input>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
+                    <template is="dom-repeat" items="{{riceType.contract_type_rice}}">
+                      <paper-item value="{{item.type_rice_id}}">{{item.type_rice_name_th}}</paper-item>
+                    </template>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+            [[testNum(item.*,'type_rice_quantity')]]
+            <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+              value="{{item.type_rice_quantity}}"
+             name="type_rice_quantity"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+            <paper-icon-button id="[[index]]" class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
+          </gl-grid-col>
+        </gl-grid-row>
+      </div>
+    </template>
+
+
+
+    <div class="horizontal end-justified layout">
+    <paper-button raised class="gl-btn-primary" on-tap="addTypeRice">เพิ่มชนิดข้าว</paper-button>
+    </div>
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
+              <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
+                  <template is="dom-repeat" items="[[incoterms]]">
+                    <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
+                  </template>
+              </paper-menu>
+          </gl-form-dropdown-menu>
+    </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+          <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
+      </gl-grid-col>
+    </gl-grid-row>
+
+
+
+    <div class="horizontal end-justified layout">
+      <paper-button class="gl-btn-primary" raised on-tap="addConfirm">บันทึกข้อมูล</paper-button>
+    </div>
+    </template>
+    <script>
+        Polymer({
+            is: "promise-insert",
+            properties: {
+              confirmLetter: {
+                type: Object,
+                value:
+                {
+                cl_type_rice:[{}]
+                }
+              }
+            },
+            observers: [
+              'getTyperice(contractId)'
+            ],
+            getTyperice: function(contractId) {
+              this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
+                this.riceType = data;
+                // console.log(this.riceType.contract_type_rice);
+              });
+            },
+            addTypeRice:function () {
+              // console.log(1);
+              this.push('confirmLetter.cl_type_rice', {
+                type_rice_id: '',
+                type_rice_quantity: 0,
+                package:
+                  [
+                    {
+                      package_id: '',
+                      price_per_ton: 0,
+                      package_weight_bag: 0,
+                    }
+                  ]
+              });
+              // console.log(2);
+            },
+            addConfirm:function () {
+              // console.log(1);
+
+              this.confirmLetter.contract_id = this.contractId;
+              console.log(this.confirmLetter);
+              this.postDb(this.confirmLetter)
+            },
+            getDb:function (url,callback) {
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+            },
+            postDb:function (data) {
+              axios.post('http://localhost:3000/api/g2g/confirm/insert', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          this.glQuery('addContract').getChange();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
+
+            },
+            testNum:function(ob,param){
+                    if(ob.path.split(".").length == 2){
+                        ob.base[param]=parseFloat(ob.value);
+
+                    }
+                }
+        });
+    </script>
+</dom-module> -->

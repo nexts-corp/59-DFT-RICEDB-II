@@ -5,6 +5,7 @@
         height: 100%;
     }
 </style>
+<link rel="import" href="../layout-dashboard/components/list-menu.html">
 <dom-module id="layout-registion">
     <style is="custom-style" include="iron-flex iron-flex-alignment">
 
@@ -18,7 +19,7 @@
             --paper-toolbar-background: #f7941e;
             --paper-toolbar-title: {
                 font-weight: normal;
-                font-size: 16px;
+                font-size: 20px;
                 padding: 0px 0px 10px 70px;
                 line-height: 25px;
                 font-family: 'rsubold', sans-serif;
@@ -29,7 +30,7 @@
 
         paper-toolbar.toolbarbody {
             height: 5px;
-            --paper-toolbar-background: #29AAE3;
+            --paper-toolbar-background: #FFF;
         }
 
         paper-toolbar.toolbarfoot {
@@ -56,36 +57,53 @@
 
     <template>
 
-  <paper-header-panel mode="waterfall">
-    <div class="paper-header">
-      <paper-toolbar class="toolbarHead">
-        <div class="title">
-          <div class="lineName">
-            ระบบการขึ้นทะเบียนผู้ส่งออกข้าว
-          </div>
-          <div class="lineMenu">
-            <!-- สัญญาการซื้อขาย > ประเทศจีน -->
-          </div>
-        </div>
-      </paper-toolbar>
-      <paper-toolbar class="toolbarbody">
-      </paper-toolbar>
-      <paper-toolbar class="toolbarfoot">
-          <!-- <paper-button raised class="gl-btn-success"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
-          <div class="title"></div>
-          <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
-            <iron-icon class="gl-icon-size" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
-          </icon-toggle>
-          <icon-toggle toggles tabindex="0" on-tap="loadPages">
-            <iron-icon class="gl-icon-size" icon="settings" title="ตั้งค่า" ></iron-icon>
-          </icon-toggle> -->
-      </paper-toolbar>
-    </div>
-      <div class="content">
-        <tag-page-load id="tagPageLoad"></tag-page-load>
-      </div>
-    </paper-header-panel>
+    <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="40%">
+      <paper-header-panel mode="waterfall" drawer >
+        <div class="paper-header">
+          <paper-toolbar class="toolbarHead">
+            <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+            <div class="title">
+                Menu
+            </div>
+          </paper-toolbar>
+          <paper-toolbar class="toolbarbody">
+          </paper-toolbar>
+          <!-- <paper-toolbar class="toolbarfoot">
 
+              <div class="title"></div>
+              <icon-toggle toggles tabindex="0" on-tap="togglePanel" id="changeWidth">
+                <iron-icon class="gl-icon-size" icon="swap-horiz" title="ย่อ/ขยายหน้าต่าง" ></iron-icon>
+              </icon-toggle>
+              <icon-toggle toggles tabindex="0" on-tap="loadPages">
+                <iron-icon class="gl-icon-size" icon="settings" title="ตั้งค่า" ></iron-icon>
+              </icon-toggle>
+          </paper-toolbar> -->
+        </div>
+        <div class="content">
+          <list-menu></list-menu>
+        </div>
+      </paper-header-panel>
+      <paper-header-panel mode="waterfall" main>
+        <div class="paper-header">
+          <paper-toolbar class="toolbarHead">
+            <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
+            <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+            <div class="title">
+                  ระบบการขึ้นทะเบียนผู้ส่งออกข้าว
+            </div>
+          </paper-toolbar>
+          <paper-toolbar class="toolbarbody">
+          </paper-toolbar>
+          <!-- <paper-toolbar class="toolbarfoot">
+            <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
+            <div class="title"></div>
+          </paper-toolbar> -->
+        </div>
+          <div class="content">
+            <tag-page-load id="tagPageLoad"></tag-page-load>
+          </div>
+        </paper-header-panel>
+      </paper-drawer-panel>
 
   </template>
     <script>
@@ -113,7 +131,11 @@
                 } else {
                     this.glSwitchLanguage('th');
                 }
-            }
+            },
+            _changDrawer:function(){
+              //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
+              this.$.drawerDashboard.togglePanel();
+            },
         });
     </script>
 

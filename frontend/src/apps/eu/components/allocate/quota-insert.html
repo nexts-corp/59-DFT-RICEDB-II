@@ -1,0 +1,101 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<dom-module id="quota-insert">
+  <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+    .title{
+      background-color: orange;
+      width: 18%;
+    }
+    table.default {
+      border-collapse: collapse;
+      width: 100%
+    }
+
+    table.default,
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 15px;
+    }
+
+    th {
+      text-align: center;
+      background-color: #F1F1F1;
+      white-space: nowrap;
+    }
+
+    td {
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background-color: #F1F1F1;
+    }
+    .number{
+      text-align: right;
+    }
+  </style>
+  <template>
+    <gl-form-panel set-padding = "0px 0px 20px 0px">
+      <div class="title">รายละเอียดการจัดสรรโควตา</div>
+      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+            <gl-form-input label="ปีโควต้า" auto-validate error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="2559" id="" disabled name=""></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-dropdown-menu label="ประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" placeholder="เลือกประเภทข้าว" required>
+              <paper-menu  class="dropdown-content" attr-for-selected="ship-id" selected="" id="" name="">
+                    <paper-item value="0">Hello^^</paper-item>
+              </paper-menu>
+            </gl-form-dropdown-menu>
+          </gl-grid-col>
+        </gl-grid-row>
+
+        <table class="default" id="[[index]]">
+          <tr>
+            <th>ปริมาณงวดที่ 1 (มกราคม) :</th>
+            <th>ปริมาณงวดที่ 2 (เมษายน) :</th>
+            <th>ปริมาณงวดที่ 3 (กรกฎาคม) :</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>
+              <gl-form-input class="number" auto-validate error-message="กรุณาใสจำนวน" required placeholder="กรุณาใส่จำนวน" value="" name="" no-label-float></gl-form-input>
+            </td>
+            <td>
+              <gl-form-input class="number" auto-validate error-message="กรุณาใสจำนวน" required placeholder="กรุณาใส่จำนวน" value="" name="" no-label-float></gl-form-input>
+            </td>
+            <td>
+              <gl-form-input class="number" auto-validate error-message="กรุณาใสจำนวน" required placeholder="กรุณาใส่จำนวน" value="" name="" no-label-float></gl-form-input>
+            </td>
+          </tr>
+          <tr>
+            <th>ปริมาณโควต้ารวม :</th>
+            <th>value ตัน</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </table>
+
+      </gl-form-panel-body>
+    </gl-form-panel>
+
+    <div class="horizontal end-justified layout">
+        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "quota-insert",
+
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,60 @@
+<link rel="import" href="../list-edit/listEditBehavior.html">
+<link rel="import" href="invoice-save.html">
+<link rel="import" href="invoice-edit.html">
+<dom-module id="invoice-page">
+  <style include="gl-color gl-size">
+
+  </style>
+  <template>
+
+    <gl-form-panel set-border="0px">
+
+      <gl-form-panel-head set-padding="0px 0px 0px 0px">
+        <div id="removePen" hidden>
+          <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+        </div>
+      </gl-form-panel-head>
+
+              <div class="bd">
+                  <gl-form-panel>
+                      <iron-pages selected="{{pages}}">
+                          <invoice-save></invoice-save>
+                          <invoice-edit></invoice-edit>
+                      </iron-pages>
+                  </gl-form-panel>
+              </div>
+
+        <gl-form-panel-footer>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+        </gl-form-panel-footer>
+    </gl-form-panel>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "invoice-page",
+      behaviors: [listEditBehavior],
+      properties: {
+        pages:{
+            type:Number,
+            notify:true,
+            value: 0
+        }
+      },
+      ready: function() {
+        this.$$('#removePen').removeAttribute("hidden");
+      },
+      editChange:function(e){
+        this.pages = 1;
+        this.$$('#removeButtom').removeAttribute("hidden");
+        this.$$('#removePen').setAttribute("hidden", "hidden");
+      },
+      save:function(e) {
+        this.pages = 0;
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#removePen').removeAttribute("hidden");
+      }
+    });
+  </script>
+</dom-module>

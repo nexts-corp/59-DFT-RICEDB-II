@@ -1,0 +1,142 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<dom-module id="calculate-setting">
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    .wrapper{
+      border: 1px solid black;
+      height: 15em;
+      overflow-y: scroll;
+      width: 20em;
+    }
+    .texttitle{
+      text-align: center;
+      font-size: var(--font-size-h5);
+      margin: 5px
+    }
+    .textcontent{
+      margin: 15px 20px 0px 0px;
+    }
+    .between{
+      margin: 0px 30px 0px 30px;
+    }
+    .button{
+      margin-bottom: 20px;
+    }
+    .marginTL{
+      margin: 20px 0px 0px 50px;
+    }
+    .header{
+      background-color: #ccc;
+    }
+  </style>
+  <template>
+
+    <gl-form-panel-header>
+      <div class="horizontal layout header">
+        <div>ปีโควตา : 2559</div>
+        <div>ประเภทข้าว : ข้าวขาว</div>
+        <div>ครั้งที่ทำการคำนวณ</div>
+      </div>
+    </gl-form-panel-header>
+
+    <gl-form-panel>
+      <div class="horizontal center-justified layout">
+        <div class="vertical layout">
+        <div class="texttitle">รายชื่อบริษัททั้งหมดที่ทำการบันทึกประวัติเพื่อการคำนวณ</div>
+          <div class="wrapper">
+            <paper-listbox>
+              <paper-item>Item 1</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+              <paper-item>Item 2</paper-item>
+            </paper-listbox>
+          </div>
+        </div>
+
+        <div class="vertical center-justified layout between">
+          <paper-button class="button" raised>SELECT >></paper-button>
+          <paper-button raised><< UNSELECT</paper-button>
+        </div>
+
+        <div class="vertical layout">
+        <div class="texttitle">รายชื่อบริษัทที่จะใช้ในการคำนวณครั้งนี้</div>
+          <div class="wrapper">
+          </div>
+        </div>
+      </div>
+
+        <div class="vertical layout flex marginTL">
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดการส่งออกรวม</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดรวมการขอหนังสือรับรอง</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวณส่วนจัดสรร</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดรวมปริมาณที่ไม่ได้ขอใช้หนังสือรับรอง</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดรวมส่วนต่างปริมาณการส่งออกข้าว (ตามกรมศุลกากร)</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดรวมส่วนต่างมูลค่าการส่งออกข้าว (ตามกรมศุลกากร)</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ปริมาณโควตา 80%</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ปริมาณโควตา 10%</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+        </div>
+
+    </gl-form-panel>
+    <gl-form-panel-footer>
+      <div class="horizontal end-justified layout">
+          <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+          <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+      </div>
+    </gl-form-panel-footer>
+
+  </template>
+  <script>
+    Polymer({
+      is: "calculate-setting",
+
+    });
+  </script>
+</dom-module>

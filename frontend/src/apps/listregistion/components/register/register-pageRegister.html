@@ -1,0 +1,116 @@
+<link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
+<link rel="import" href="register-createMember.html">
+<link rel="import" href="register-member.html">
+<dom-module id="register-pageRegister">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    .title {
+        text-align: center;
+        font-size: var(--font-size-h4);
+        font-family: 'rsubold', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        margin: 20px 0px 20px 0px;
+    }
+    .searchBox{
+      padding: 5px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    .searchBorder{
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+</style>
+  <template>
+
+    <gl-form-panel set-border="0px">
+
+      <!-- <gl-form-panel-head set-padding="0px 0px 0px 0px"> -->
+        <!-- <div id="removePen" hidden>
+          <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+        </div> -->
+        <div id="changTitle" class="title" hidden>เพิ่มทะเบียนผู้ส่งออกข้าวไปต่างประเทศ</div>
+        <div id="changTitle2" class="title" hidden>ขึ้นทะเบียนผู้ส่งออกข้าวส่งออกไปจำหน่ายต่างประเทศ</div>
+            <div class="searchBox searchBorder">
+              <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+                <gl-combo-box id="seller_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="seller_id"></gl-combo-box>
+                <paper-button class="gl-btn-info" raised on-tap="_search">ค้นหา</paper-button>
+              </gl-grid-row>
+          </div>
+
+      <!-- </gl-form-panel-head> -->
+              <div id="formData" class="bd" hidden>
+                  <gl-form-panel>
+                      <iron-pages selected="{{pages}}">
+                          <!-- <register-createMember></register-createMember> -->
+                          <register-member data={{seller}}></register-member>
+                      </iron-pages>
+                  </gl-form-panel>
+              </div>
+
+        <gl-form-panel-footer>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+        </gl-form-panel-footer>
+    </gl-form-panel>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "register-pageRegister",
+      behaviors: [listEditBehavior],
+      properties: {
+        pages:{
+            type:Number,
+            notify:true,
+            value: 0
+        }
+      },
+      ready: function() {
+        this.$$('#changTitle').removeAttribute("hidden");
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      },
+      _search:function(){
+        this.$$('#formData').removeAttribute("hidden");
+        this.$$('#changTitle').setAttribute("hidden", "hidden");
+        this.$$('#changTitle2').removeAttribute("hidden");
+        this.$$('#removeButtom').removeAttribute("hidden");
+      },
+      save:function() {
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#formData').setAttribute("hidden", "hidden");
+        this.$$('#changTitle').removeAttribute("hidden");
+        this.$$('#changTitle2').setAttribute("hidden", "hidden");
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+      },
+      getDb:function (url,callback) {
+        // console.log(url);
+        axios.get(url)
+          .then(function(response){
+            callback(response.data);
+          }.bind(this))
+          .catch(function (error) {
+          }.bind(this));
+          // console.log(1);
+      },
+      attached: function() {
+        this.seller_id = this.seller_id || this.$.seller_id;
+        // console.log(this.seller_id);
+        this.getDb('http://localhost:3000/api/external/exporter/seller',(data)=>{
+          this.seller = data;
+          // console.log(this.seller);
+          this.seller_id.items = data;
+          // console.log(this.seller_id.items);
+        });
+      }
+
+      // editChange:function(e){
+      //   this.pages = 1;
+      //   this.$$('#removeButtom').removeAttribute("hidden");
+      //   this.$$('#removePen').setAttribute("hidden", "hidden");
+      // },
+
+    });
+  </script>
+</dom-module>

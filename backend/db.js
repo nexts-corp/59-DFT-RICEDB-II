@@ -5,9 +5,9 @@ function ConectDB(){
 
         r.connect( {host: 'rdb.codeunbug.com', port: 28015,db: 'g2g'}, function(err, conn) {
             if (err){
-                console.log('Error Connect');
+                console.log('... Connect db error');
             }else{
-                console.log('OK');
+                console.log('Connect db success ...');
                 callback(conn);
             }
             

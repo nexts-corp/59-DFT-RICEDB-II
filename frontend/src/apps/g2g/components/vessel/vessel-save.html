@@ -1,0 +1,198 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-label-input.html">
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<dom-module id="vessel-save">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+  .top{
+    margin-top: 30px;
+  }
+  .w{
+    text-align: center;
+  }
+  .text-center{
+    text-align: center;
+    font-size: var(--font-size-h4);
+    font-family: 'rsubold', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .width-dropdown{
+    width: 100%;
+  }
+  </style>
+
+  <template>
+    <gl-form-panel-body>
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="ผู้ส่งออก" value="[[data.seller_name_en]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Shipping Line" value="[[data.shipline_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="Vessel" value="[[data.ship_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Surveyor" value="[[data.surveyor_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Void No." value="[[data.ship_voy_no]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Lot No." value="[[data.ship_lot_no]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Booking No." value="[[data.book_no]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="B/L No." value="[[data.bl_no]]" ></gl-form-label-input>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Shipping Agent" value="[[data.carrier_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Tel." value="[[data.seller_phone]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="POL" value="[[data.load_port_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[data.etd_date]]
+          <vaadin-date-picker disabled label="ETD" value="[[data.etd_date]]"></vaadin-date-picker>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker disabled label="ETA" value="[[data.eta_date]]"></vaadin-date-picker>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="POD" value="[[data.dest_port_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Place of Delivery" value="[[data.deli_port_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="จำนวนตู้คอนเทนเนอร์" value="[[data.num_of_container]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Packing Date" value="[[data.packing_date]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Packing Time" value="[[data.packing_time]]" ></gl-form-label-input>
+        </gl-grid-col>
+
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="ตู้ละ (ตัน)" value="[[data.weight_per_container]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker disabled label="Production" value="[[data.product_date}}"></vaadin-date-picker>
+        </gl-grid-col>
+      </gl-grid-row>
+    </gl-form-panel-body>
+
+    <gl-form-panel-body>
+      <div class="text-center">รายละเอียดการส่งมอบ</div>
+    </gl-form-panel-body>
+
+    <gl-form-panel-body>
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Confirmation Letter" value="[[data.cl_no]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="ชนิดข้าว" value="[[data.type_rice_name_en]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Package (kg/PP Bag)" value="[[data.package_name]]" ></gl-form-label-input>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Price (USD/MT)" value="[[price_per_ton.price_per_ton]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="น้ำหนักกระสอบ (gram/bag)" value="[[data.package_weight_bag]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="จำนวน/ตัน" value="[[data.shm_det_quantity]]" ></gl-form-label-input>
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="MARKS" value="[[buyerMasks]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="Quantity (BAGS)" value="[[quantityBag]]" ></gl-form-label-input>
+        </gl-grid-col>
+      </gl-grid-row>
+
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="WEIGHT (M/T)" value="G.W. {{gw]]" ></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input  label="" value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
+        </gl-grid-col>
+      </gl-grid-row>
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
+
+        </gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]"></gl-grid-col>
+
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+          <div class="top">ORIGINALS</div>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+          <gl-form-label-input label="" class="w" value="[[data.origin_page}}"></gl-form-label-input>
+        </gl-grid-col>
+        <div class="top">/</div>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+          <gl-form-label-input label="" class="w" value="[[data.nn_page}}"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+          <div class="top">N/N</div>
+        </gl-grid-col>
+      </gl-grid-row>
+    </gl-form-panel-body>
+
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "vessel-save",
+      behaviors: [vesselBehavior, gl.behavior.core],
+      observers:[
+        'getPrice(contractId)',
+        'getCounty(contractId)',
+        'getconfirm(contractId)',
+        'check(data)'
+      ],
+      getPrice:function (contractId) {
+        var selected = this.data.cl_id;
+        this.getDb('http://localhost:3000/api/g2g/confirm/contract/id/'+contractId,(datacml)=>{
+          // console.log(datacml);
+          var cmls = datacml.filter(function (datacml) { return datacml.cl_id == selected });
+          var typeRicedb = this.data.type_rice_id;
+          //หาชนิดข้าว
+          var typeRice = cmls[0].cl_type_rice.filter(function (cmls) { return cmls.type_rice_id == typeRicedb});
+          var packages = this.data.package_id;
+          //หาขนาดแพ็คเก็ต
+          var packagefil = typeRice[0].package.filter(function (typeRice) { return typeRice.package_id == packages});
+          // console.log(packagefil[0].price_per_ton);
+          this.price_per_ton = packagefil[0];
+          this.quantityBag = ((parseFloat(this.price_per_ton.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price_per_ton.package_weight_bag)).toFixed(3);
+          this.toWords(this.quantityBag);
+          this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price_per_ton.package_weight_bag) + (parseFloat(this.price_per_ton.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
+          this.gw = this.sumGW.toFixed(3);
+
+        });
+      },
+      check:function (check) {
+        // console.log(check);
+      }
+    });
+  </script>
+</dom-module>

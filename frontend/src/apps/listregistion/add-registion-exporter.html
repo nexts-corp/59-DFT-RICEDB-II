@@ -1,13 +1,12 @@
-<link rel="import" href="components/content-panel.html">
+<link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="components/list-edit/list-registration.html">
+<link rel="import" href="components/register/register-pageRegister.html">
+<link rel="import" href="components/register/register-pageDetail.html">
+<link rel="import" href="components/register/register-fileup.html">
+<link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
 
-<link rel="import" href="components/register/register-member.html">
-<link rel="import" href="components/register/register-memberSave.html">
-<link rel="import" href="components/register/register-memberEdit.html">
-<link rel="import" href="components/register/register-page.html">
 
-
-<link rel="import" href="components/list-edit/list-registration-pause.html">
+<!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
 
 
 <dom-module id="listregistion-add-registion-exporter">
@@ -18,104 +17,113 @@
         }
 
         .header {
-          padding: 10px 0px 10px 10px;
-          background-color: var(--paper-grey-100);
-          color: var(--paper-grey-600);
-          font-size: var(--font-size-h4);
-          font-family: 'rsuregular', sans-serif;
+            padding: 10px 0px 10px 10px;
+            background-color: var(--paper-grey-100);
+            color: var(--paper-grey-600);
+            font-size: var(--font-size-h4);
+            font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        .registor{
-          margin: 20px;
+
+        .registor {
+            margin: 20px;
         }
+
         .title {
-          text-align: center;
-           font-size: var(--font-size-h3);
-           font-family: 'rsuregular', sans-serif;
-             -webkit-font-smoothing: antialiased;
+            text-align: center;
+            font-size: var(--font-size-h3);
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
-        .searchBox{
-          padding: 5px;
-          background-color: var(--gl-gray-lighter-color);
+
+        .searchBox {
+            padding: 5px;
+            background-color: var(--gl-gray-lighter-color);
         }
-        .elevation{
-          border-radius: 5px;
-          margin: 10px;
-          padding: 5px;
+
+        .elevation {
+            border-radius: 5px;
+            margin: 10px;
+            padding: 5px;
         }
-        .searchBorder{
-          border: 1px solid var(--gl-gray-light-color);
-          margin: 15px;
-          border-radius: 3px
+
+        .searchBorder {
+            border: 1px solid var(--gl-gray-light-color);
+            margin: 15px;
+            border-radius: 3px
         }
+
         paper-material {
-          background-color: var(--gl-white-color);
+            background-color: var(--gl-white-color);
         }
-        gl-search-input{
-          margin: 30px 0px 0px 0px;
+
+        gl-search-input {
+            margin: 30px 0px 0px 0px;
+            width: 60%;
         }
     </style>
     <template>
 
     <content-panel>
       <grid>
-        <paper-material elevation="1" class="elevation">
+        <!-- <paper-material elevation="1" class="elevation"> -->
 
 
         <div class="layout vertical registor">
-          <div class="flex ">
+          <div class="flex">
             <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" id="addRedRegExporter"> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
+              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
             </div>
           </div>
           <div class="flex title">
             ทะเบียนผู้ส่งออกข้าว
           </div>
-          <div class="flex searchBox searchBorder">
-            <div class="layout horizontal">
-              <div class="flex"></div>
-              <div class="flex-6">
-                <gl-search-input result="{{result}}"
-                                 search-label-name="บริษัท"
-                                 search-label-type="ประเภททะเบียน"
-                                 search-input="true"
-                                 search-input-type="true"
-                                 search-type="[[searchType]]">
-                </gl-search-input>
-              </div>
-              <div class="flex"></div>
+          <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-combo-box id="seller_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="seller_id"></gl-combo-box>
+              </gl-grid-col>
+              <paper-button class="gl-btn-info" raised on-tap="_result">ค้นหา</paper-button>
+            </gl-grid-row>
+
             </div>
           </div>
-          <div class="flex searchBorder">
-            <!-- <list-registration data={{dataRegistion}}>
+          <div id="formSearch" class="flex searchBorder" hidden>
+            <list-registration data={{sellerName}}>
               <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
+                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
+                <list item="exporter_date_approve" label="วันที่อนุมัติ" width="flex"></list>
               </items>
-            </list-registration> -->
+            </list-registration>
 
-            <list-registration-pause data={{dataRegistionPause}}>
-              <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
-              </items>
-            </list-registration-pause>
 
           </div>
         </div>
-        </paper-material>
+        <!-- </paper-material> -->
 
       </grid>
     <panel>
         <div class="left">
-          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter"><register-member></register-member></div>
-            <div name="detailRegExporter"><register-memberSave></register-memberSave></div>
-          </iron-pages>
+          <gl-tabs>
+            <items>
+                <list data="detail" label="รายละเอียด"></list>
+                <list data="file" label="แนบไฟล์"></list>
+            </items>
+            <section-content data="detail">
+              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                <div name="addRedRegExporter"><register-pageRegister></register-pageRegister></div>
+                <div name="detailRegExporter"><register-pageDetail></register-pageDetail></div>
+              </iron-pages>
+            </section-content>
+            <section-content data="file">
+              <register-fileup></register-fileup>
+            </section-content>
+          </gl-tabs>
+
         </div>
     </panel>
     </content-panel>
@@ -135,87 +143,6 @@
                     type: String,
                     value: "detailRegExporter"
                 },
-                dataRegistion: {
-                    type: Object,
-                    notify: true,
-                    value:
-                    [
-                      {
-                        id:1,
-                        regisExporters:"ข1003",
-                        companyName:"สำเภาทอง",
-                        licenceType:"ไม่เกิน 12 กก.",
-                        approvalDate:"18/09/255"
-                      },
-                      {
-                        id:2,
-                        regisExporters:"ข5/2559",
-                        companyName:"กรุงไทย พืชผล บจก.",
-                        licenceType:"ชายแดน",
-                        approvalDate:"18/09/2559"
-                      },
-                      {
-                        id:3,
-                        regisExporters:"ข2/2559",
-                        companyName:"โรงสีทรัพย์อนันต์",
-                        licenceType:"ชายแดน",
-                        approvalDate:"17/09/255"
-                      },
-                      {
-                        id:4,
-                        regisExporters:"ข003",
-                        companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                        licenceType:"ทั่วไป",
-                        approvalDate:"17/09/2559"
-                      }
-
-                    ]
-                },
-                dataRegistionPause:{
-                  type: Object,
-                  notify: true,
-                  value:
-                  [
-                    {
-                      id:1,
-                      regisExporters:"ข1003",
-                      companyName:"สำเภาทอง",
-                      licenceType:"ไม่เกิน 12 กก.",
-                      approvalDate:"18/09/255"
-                    },
-                    {
-                      id:2,
-                      regisExporters:"ข5/2559",
-                      companyName:"กรุงไทย พืชผล บจก.",
-                      licenceType:"ชายแดน",
-                      approvalDate:"18/09/2559"
-                    },
-                    {
-                      id:3,
-                      regisExporters:"ข2/2559",
-                      companyName:"โรงสีทรัพย์อนันต์",
-                      licenceType:"ชายแดน",
-                      approvalDate:"17/09/255"
-                    },
-                    {
-                      id:4,
-                      regisExporters:"ข003",
-                      companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                      licenceType:"ทั่วไป",
-                      approvalDate:"17/09/2559"
-                    }
-                  ]
-                },
-                searchType: {
-                    type: Object,
-                    value: [{
-                        id: 1,
-                        name: 'ทั้งหมด'
-                    }, {
-                        id: 2,
-                        name: 'ผู้ส่งออกที่ถูกระงับ'
-                    } ]
-                },
                 result: {
                     type: Object,
                     observer: '_result'
@@ -229,13 +156,10 @@
             attached: function() {
                 // this.layoutMain = this.glQuery('layoutMain');
             },
-            _result:function () {
-              // console.log(this.result);
-            },
             nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
+                // console.log(e.detail.level);
+                // console.log(e.detail.data);
+                // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
                 // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
@@ -246,9 +170,42 @@
                 this.dataSelect = e.detail.data;
             },
             _toggleDrawer: function(e) {
-              this.glQuery('contentPanel').changDrawer();
-              this.layerContent = e.target.id;
-              // console.log(e.target.id);
+                this.glQuery('contentPanel').changDrawer();
+                this.layerContent = e.target.id;
+                // console.log(e.target.id);
+            },
+            getDb: function(url, callback) {
+                // console.log(url);
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+                // console.log(1);
+            },
+            _result: function() {
+                // console.log(this.seller_id.value);
+                this.$$('#formSearch').removeAttribute("hidden");
+                var selectedItem = this.seller_id.value;
+                var emtype = [];
+                if (emtype != selectedItem) {
+                  var exporter = this.exporters.filter(function (exporter) { return exporter.seller_id == selectedItem });
+                  this.sellerName = exporter;
+                  // this.exporters = this.sellerName;
+                  // console.log(this.exporters);
+                }
+                else {
+                  alert("ไม่พบข้อมูลที่คุณหา");
+                }
+            },
+            attached: function() {
+                this.seller_id = this.seller_id || this.$.seller_id;
+                // console.log(this.seller_id);
+                this.getDb('http://localhost:3000/api/external/exporter/insert', (data) => {
+                    this.exporters = data;
+                    this.seller_id.items = data;
+                    // console.log(this.seller_id.items);
+                });
             }
         });
     </script>

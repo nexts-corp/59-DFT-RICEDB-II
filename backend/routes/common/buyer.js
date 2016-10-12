@@ -29,19 +29,46 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/:buyer_id', function (req, res, next) {
+router.get('/id/:buyer_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("buyer")
             .get(req.params.buyer_id)
             .merge(
-                { buyer_id: r.row('id') },
-                r.table("country").get(r.row("country_id"))
+            { buyer_id: r.row('id') },
+            r.table("country").get(r.row("country_id"))
             )
             .without('id')
             .run(conn, function (err, cursor) {
                 console.log(err);
                 if (!err) {
                     res.json(cursor);
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
+router.get('/:field_name/id/:value_id', function (req, res, next) {
+    db.query(function (conn) {
+        r.table("buyer")
+            .filter({ [req.params.field_name + "_id"]: req.params.value_id })
+            .merge(
+            {
+                buyer_id: r.row('id')
+            }
+            , r.table(req.params.field_name).get(req.params.value_id)
+            )
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
                 } else {
                     res.json(null);
                 }
