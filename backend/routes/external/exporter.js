@@ -95,7 +95,7 @@ router.get('/active', function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                    exporter_date_create: row('exporter_date_create').split('T')(0),
+                  //  exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -139,7 +139,7 @@ router.get('/unactive', function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                    exporter_date_create: row('exporter_date_create').split('T')(0),
+                   // exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -181,7 +181,7 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 exporter_id: r.row('id'),
                 exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_update')).toEpochTime()),
                 exporter_date_approve: r.row('exporter_date_approve').split('T')(0),
-                exporter_date_create: r.row('exporter_date_create').split('T')(0),
+               // exporter_date_create: r.row('exporter_date_create').split('T')(0),
                 exporter_date_update: r.row('exporter_date_update').split('T')(0)
             },
             r.db('external_f3').table("trader").get(r.row("trader_id"))
