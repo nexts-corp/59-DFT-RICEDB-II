@@ -446,10 +446,8 @@
               this.$$('#removeButtom').removeAttribute("hidden");
             },
             shipmentDelete:function (e) {
+              this.deleteDb(e.currentTarget.id);
               console.log(e.currentTarget.id);
-
-              this.deleteDb(this.snipmentDelete ={id:e.currentTarget.id});
-              console.log(this.snipmentDelete);
             },
             saveChangeShipment:function(e){
               console.log(this.data);
@@ -531,18 +529,18 @@
                           console.log(data);
                         })
             },
-            deleteDb:function (data) {
-              axios.delete('./g2g/shipment/detail/delete', data)
+            deleteDb:function (dataId) {
+              axios.delete('./g2g/shipment/detail/delete/id/'+dataId)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                          console.log(data);
+                          // console.log(dataId);
                           // this.glQuery('addContract').getChange();
                           // this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
-                          console.log(error);
+                          // console.log(error);
                         })
             },
             clickCancel: function(){
