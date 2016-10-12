@@ -1,9 +1,6 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="components/list-edit/list-registration.html">
-
-<link rel="import" href="components/register/register-member.html">
-<link rel="import" href="components/register/register-memberSave.html">
-<link rel="import" href="components/register/register-memberEdit.html">
+<link rel="import" href="components/renew/renew-memberSave.html">
 
 <link rel="import" href="components/list-edit/list-registration-pause.html">
 
@@ -52,13 +49,15 @@
         gl-search-input{
           margin: 30px 0px 0px 0px;
         }
+        .button{
+          margin: 10px;
+        }
     </style>
     <template>
 
     <content-panel>
       <grid>
         <!-- <paper-material elevation="1" class="elevation"> -->
-
 
         <div class="layout vertical registor">
           <div class="flex ">
@@ -70,29 +69,23 @@
             ทะเบียนผู้ส่งออกข้าวที่ถูกระงับ
           </div>
           <div class="flex searchBox searchBorder">
-            <div class="layout horizontal">
-              <div class="flex"></div>
-              <div class="flex-6">
-                <gl-search-input result="{{result}}"
-                                 search-label-name="บริษัท"
-                                 search-label-type="ประเภททะเบียน"
-                                 search-input="true"
-                                 search-input-type="true"
-                                 search-type="[[searchType]]">
-                </gl-search-input>
-              </div>
-              <div class="flex"></div>
-            </div>
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
+              </gl-grid-col>
+              <!-- <paper-button class="gl-btn-info" raised on-tap="_result">ค้นหา</paper-button> -->
+            </gl-grid-row>
           </div>
+
           <div class="flex searchBorder">
-
-
-            <list-registration-pause data={{dataRegistionPause}}>
+            <list-registration-pause data={{exporters}}>
               <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="licenceType" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="approvalDate" label="วันที่อนุมัติ" width="flex"></list>
+                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
+                <list item="exporter_date_approve" label="วันที่อนุมัติ" width="flex"></list>
               </items>
             </list-registration-pause>
 
@@ -104,8 +97,13 @@
     <panel>
         <div class="left">
           <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter"><register-member></register-member></div>
-            <div name="detailRegExporter"><register-memberSave></register-memberSave></div>
+            <div name="detailRegExporter">
+              <renew-memberSave exporter-id="[[exporterId]]"></renew-memberSave>
+              <div class="horizontal center-justified layout">
+                <paper-button raised class="gl-btn-success button">ยกเลิกการระงับ</paper-button>
+              </div>
+            </div>
+
           </iron-pages>
         </div>
     </panel>
@@ -126,55 +124,19 @@
                     type: String,
                     value: "detailRegExporter"
                 },
-                dataRegistionPause:{
-                  type: Object,
-                  notify: true,
-                  value:
-                  [
-                    {
-                      id:1,
-                      regisExporters:"ข1003",
-                      companyName:"สำเภาทอง",
-                      licenceType:"ไม่เกิน 12 กก.",
-                      approvalDate:"18/09/255"
-                    },
-                    {
-                      id:2,
-                      regisExporters:"ข5/2559",
-                      companyName:"กรุงไทย พืชผล บจก.",
-                      licenceType:"ชายแดน",
-                      approvalDate:"18/09/2559"
-                    },
-                    {
-                      id:3,
-                      regisExporters:"ข2/2559",
-                      companyName:"โรงสีทรัพย์อนันต์",
-                      licenceType:"ชายแดน",
-                      approvalDate:"17/09/255"
-                    },
-                    {
-                      id:4,
-                      regisExporters:"ข003",
-                      companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                      licenceType:"ทั่วไป",
-                      approvalDate:"17/09/2559"
-                    }
-                  ]
-                },
-                searchType: {
-                    type: Object,
-                    value: [{
-                        id: 1,
-                        name: 'ทั้งหมด'
-                    }, {
-                        id: 2,
-                        name: 'ผู้ส่งออกที่ถูกระงับ'
-                    } ]
-                },
                 result: {
                     type: Object,
                     observer: '_result'
+                },
+                exporterId:{
+                  type: String,
+                  observer: '_exporterIdChanged'
                 }
+            },
+            _exporterIdChanged:function(val){
+              if(val!=""){
+                this.layerContent = "detailRegExporter";
+              }
             },
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
@@ -204,6 +166,24 @@
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
               // console.log(e.target.id);
+            },
+            getDb: function(url, callback) {
+                // console.log(url);
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+                // console.log(1);
+            },
+            attached: function() {
+                this.exporter_id = this.exporter_id || this.$.exporter_id;
+                // console.log(this.exporter_id);
+                this.getDb('http://localhost:3000/api/external/exporter/unactive', (data) => {
+                    this.exporters = data;
+                    this.exporter_id.items = data;
+                    // console.log(this.exporter_id.items);
+                });
             }
         });
     </script>

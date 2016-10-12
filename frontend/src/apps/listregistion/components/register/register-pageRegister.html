@@ -33,9 +33,9 @@
             <div class="searchBox searchBorder">
               <gl-grid-row width="{{getWidth}}">
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-                <gl-combo-box id="seller_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-                    item-value-path="seller_id"></gl-combo-box>
-                <paper-button class="gl-btn-info" raised on-tap="_search">ค้นหา</paper-button>
+                <gl-combo-box id="trader_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="trader_id" value="{{dataTrader}}" on-value-changed="getTrader" on-keyup="_search"></gl-combo-box>
+                <!-- <paper-button class="gl-btn-info" raised on-tap="_search">ค้นหา</paper-button> -->
               </gl-grid-row>
           </div>
 
@@ -44,14 +44,11 @@
                   <gl-form-panel>
                       <iron-pages selected="{{pages}}">
                           <!-- <register-createMember></register-createMember> -->
-                          <register-member data={{seller}}></register-member>
+                          <register-member data={{trader}}></register-member>
                       </iron-pages>
                   </gl-form-panel>
               </div>
 
-        <gl-form-panel-footer>
-          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
-        </gl-form-panel-footer>
     </gl-form-panel>
 
 
@@ -65,24 +62,38 @@
             type:Number,
             notify:true,
             value: 0
+        },
+        dataTrader:{
+          type:String
         }
       },
       ready: function() {
         this.$$('#changTitle').removeAttribute("hidden");
-        this.$$('#removeButtom').setAttribute("hidden", "hidden");
       },
-      _search:function(){
-        this.$$('#formData').removeAttribute("hidden");
-        this.$$('#changTitle').setAttribute("hidden", "hidden");
-        this.$$('#changTitle2').removeAttribute("hidden");
-        this.$$('#removeButtom').removeAttribute("hidden");
+      getTrader:function (e) {
+        // console.log(e.detail.value);
+        this.dataTrader = e.detail.value;
+      },
+      _search:function(e){
+        // console.log(e);
+        if(e.keyCode==13){
+          // console.log(this.selectedItem);
+          this.getDb('./external/trader/id/'+this.dataTrader,(data)=>{
+            data['seller_agent'] = [];
+            this.trader = data;
+            //console.log(this.trader);
+          });
+          this.$$('#formData').removeAttribute("hidden");
+          this.$$('#changTitle').setAttribute("hidden", "hidden");
+          this.$$('#changTitle2').removeAttribute("hidden");
+        }
+
       },
       save:function() {
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#formData').setAttribute("hidden", "hidden");
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#changTitle2').setAttribute("hidden", "hidden");
-        this.$$('#removeButtom').setAttribute("hidden", "hidden");
       },
       getDb:function (url,callback) {
         // console.log(url);
@@ -95,16 +106,14 @@
           // console.log(1);
       },
       attached: function() {
-        this.seller_id = this.seller_id || this.$.seller_id;
+        this.trader_id = this.trader_id || this.$.trader_id;
         // console.log(this.seller_id);
-        this.getDb('http://localhost:3000/api/external/exporter/seller',(data)=>{
-          this.seller = data;
-          // console.log(this.seller);
-          this.seller_id.items = data;
+        this.getDb('http://localhost:3000/api/external/exporter/seller/not',(data)=>{
+
+          this.trader_id.items = data;
           // console.log(this.seller_id.items);
         });
       }
-
       // editChange:function(e){
       //   this.pages = 1;
       //   this.$$('#removeButtom').removeAttribute("hidden");

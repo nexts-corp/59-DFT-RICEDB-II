@@ -47,6 +47,7 @@ router.get(['/', '/list'], function (req, res, next) {
             .merge(function (row) {
                 return {
                     contract_id: row('id'),
+                    contract_date: row('contract_date').split('T')(0),
                     contract_type_rice: row('contract_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
@@ -59,7 +60,8 @@ router.get(['/', '/list'], function (req, res, next) {
                                 cl_id: cl('id'),
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
                                 cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
-                                cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4))
+                                cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4)),
+                                cl_date: cl('cl_date').split('T')(0)
                             }
                         })
                         .orderBy('cl_no')
@@ -119,7 +121,8 @@ router.get('/id/:contract_id', function (req, res, next) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
-                    })
+                    }),
+                    contract_date: row('contract_date').split('T')(0)
                 }
             })
             .merge(function (row) {
