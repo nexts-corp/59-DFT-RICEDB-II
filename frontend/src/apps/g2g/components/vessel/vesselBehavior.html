@@ -1,5 +1,6 @@
 <script>
   vesselBehavior = {
+
   ready: function() {
     console.log(1);
   },
@@ -14,23 +15,23 @@
   },
   getCounty: function(contractId) {
     // ผู้ขาย
-    this.seller_id = this.seller_id || this.$.seller_id;
-    this.getDb('./common/seller',(data)=>{
-        this.seller= data;
-        this.seller_id.items = data;
-    });
+    // this.seller_id = this.seller_id || this.$.seller_id;
+    // this.getDb('./common/seller',(data)=>{
+    //     this.seller= data;
+    //     this.seller_id.items = data;
+    // });
     //Shipping Agent
-    this.carrier_id = this.carrier_id || this.$.carrier_id;
-    this.getDb('./common/carrier',(data)=>{
-      //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
-        this.carrier_id.items = data;
-    });
-    //shipline_id
-    this.shipline_id = this.shipline_id || this.$.shipline_id;
-    this.getDb('./common/shipline/',(data)=>{
-      //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id shipline_id
-      this.shipline_id.items = data;
-    });
+    // this.carrier_id = this.carrier_id || this.$.carrier_id;
+    // this.getDb('./common/carrier',(data)=>{
+    //   //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
+    //     this.carrier_id.items = data;
+    // });
+    // //shipline_id
+    // this.shipline_id = this.shipline_id || this.$.shipline_id;
+    // this.getDb('./common/shipline/',(data)=>{
+    //   //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id shipline_id
+    //   this.shipline_id.items = data;
+    // });
 
     this.dest_port_id = this.dest_port_id || this.$.dest_port_id;
     this.deli_port_id = this.deli_port_id || this.$.deli_port_id;
@@ -52,12 +53,12 @@
 
     });
 
-    //get surveyor_id
-    this.surveyor_id = this.surveyor_id || this.$.surveyor_id;
-    this.getDb('./common/surveyor',(data)=>{
-      this.surveyor_id.items = data;
-      // console.log(this.cml);
-    });
+    // //get surveyor_id
+    // this.surveyor_id = this.surveyor_id || this.$.surveyor_id;
+    // this.getDb('./common/surveyor',(data)=>{
+    //   this.surveyor_id.items = data;
+    //   // console.log(this.cml);
+    // });
     //get buyer_masks
     this.getDb('./g2g/contract/id/'+contractId,(data)=>{
       this.buyerMasks = data.buyer_masks;
@@ -76,13 +77,13 @@
   getSellerPhone:function (e) {
     var selectedItem = e.detail.value;
     if (selectedItem) {
-      var seller = this.seller.filter(function (seller) { return seller.seller_id == selectedItem });
+      var seller = this.common.seller.filter(function (seller) { return seller.seller_id == selectedItem });
           // console.log(seller[0].seller_phone);
           this.seller_phone=seller[0].seller_phone;
           // console.log(this.shipment.seller_phone);
     }
   },
-  getShip:function (shipline_id) {
+  getShip:function (shipline_id,common) {
       this.ship_id = this.ship_id || this.$.ship_id;
       //เช็ค null or undifile
       // console.log(this.ship_id);
@@ -94,10 +95,11 @@
       }
       if(shipline_id){
         // console.log(shipline_id);
-        this.getDb('./common/ship/shipline/id/'+shipline_id,(data)=>{
-          // this.ship = data;
-            this.ship_id.items = data;
-        });
+        // console.log(common.value.shipInShipline);
+        var shipline = common.value.shipInShipline
+        var ships = shipline.filter(function (shipline) { return shipline.shipline_id == shipline_id });
+       this.shipInShipline = ships[0].ship;
+       console.log(ships[0].ship);
       }
 
     },
@@ -211,13 +213,19 @@
         //  str.replace(/\s+/g,' ');
     },
     testNum:function(ob,param){
-      // console.log(typeof ob.value);
-      if(typeof ob.value == String){
-        if(ob.path.split(".").length == 2){
-            ob.base[param]=parseFloat(ob.value);
-            // console.log(typeof ob.value);
+      //console.log(typeof ob.value);
+      if(typeof ob.value == "string"){
+        var pathChange = ob.path.split(".");
+        if(pathChange.length == 2){
+            if(pathChange[1]==param){
+              ob.base[param]=parseFloat(ob.value);
+              console.log(typeof ob.value);
+            }
         }
       }
+    },
+    toInteger: function(value) {
+      return parseInt(value);
     },
   };
 </script>
