@@ -1,0 +1,166 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="gl-grid-col">
+  
+    
+    
+    <template>
+        <style>
+            :host{
+
+                --data-responsive-display:none;
+
+                box-sizing: border-box;
+                -webkit-box-flex: 0;
+                -webkit-flex: 0 0 auto;
+                -ms-flex: 0 0 auto;
+                flex: 0 0 auto;
+                padding-right: 0.5rem;
+                padding-left: 0.5rem;
+
+                -webkit-box-flex: 1;
+                -webkit-flex-grow: 1;
+                -ms-flex-positive: 1;
+                flex-grow: 1;
+                -webkit-flex-basis: var(--data-responsive-element);
+                -ms-flex-preferred-size: var(--data-responsive-element);
+                flex-basis: var(--data-responsive-element);
+                max-width: var(--data-responsive-element);
+
+                display:var(--data-responsive-display);
+            } 
+
+        </style>
+        <content></content>
+    </template>
+    
+    
+    <script>
+        Polymer({
+            is:'gl-grid-col',
+            properties:{
+                xs:{
+                    type:String
+                },
+                sm:{
+                    type:String
+                },
+                md:{
+                    type:String
+                },
+                lg:{
+                    type:String
+                },
+                grid:{
+                    type:Array
+                },
+                colArr:{
+                    type:Array,
+                    value:['8.333%','16.667%','25%','33.333%','41.667%','50%','58.333%','66.667%','75%','83.333%','91.667%','100%']
+                },
+                width:{
+                    type:Number
+                },
+                hide:{
+                    type:Boolean,
+                    value:true
+                }
+            },
+            observers:['obWidth(width)'],
+            attached:function(){
+                this.changeSize(this.width);
+            },
+            obWidth:function(w){
+                this.changeSize(w);
+            },
+            changeSize:function(w){
+                if(typeof w != "undefined"){
+                    var size;
+                    var last;
+                    if(typeof this.grid == "undefined"){
+
+                        if(w>1200){
+                            size = this.lg;
+                        }else if(w>1024){
+                            size = this.md;
+                        }else if(w>768){
+                            size = this.sm;
+                        }else{
+                            if(typeof this.xs == "undefined"){
+                                if(typeof this.md == "undefined"){
+                                    if(typeof this.gl == "undefined"){
+                                        size = "12";
+                                    }else{
+                                        size = this.lg;
+                                    }
+                                }else{
+                                   size = this.md; 
+                                }
+                            }else{
+                                size = this.xs;
+                            }
+                        }
+
+                        size = parseInt(size);
+
+                    }else{
+
+                        for (i = 0; i < this.grid.length; i++) {
+                            if(i+1==this.grid.length){
+                                last = this.grid[i][1];
+                            }
+                            if (w > this.grid[i][0]) {
+                                size = this.grid[i][1];
+                                break;
+                            }
+                        }
+                        if(typeof size == "undefined"){
+                            if(typeof last == "undefined"){
+                                size = 12;
+                            }else{
+                                size = last;
+                            }
+                        }
+
+                    }
+
+        
+                    if(size == 0){
+                        this.customStyle['--data-responsive-display'] = "none";
+                    }else{
+                        this.customStyle['--data-responsive-display'] = "block";
+                    }
+
+
+                    this.customStyle['--data-responsive-element'] = this.colArr[size-1];
+                    this.updateStyles();
+                    
+                }
+                
+            },
+            ready:function(){
+
+
+                if(typeof this.grid != "undefined"){
+
+                    var grid = this.grid;
+
+                    grid.sort(sortFunction);
+
+                    function sortFunction(a, b) {
+                        if (a[0] === b[0]) {
+                            return 0;
+                        }
+                        else {
+                            return (a[0] > b[0]) ? -1 : 1;
+                        }
+                    }
+
+                    this.grid = grid;
+                }
+                
+            }
+            
+        });
+    </script>
+</dom-module>

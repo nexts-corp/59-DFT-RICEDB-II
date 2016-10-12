@@ -1,0 +1,109 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu-light.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="gl-form-input.html">
+<link rel="import" href="gl-form-textarea.html">
+<link rel="import" href="gl-form-dropdown-menu.html">
+<link rel="import" href="gl-form-label-input.html">
+<link rel="import" href="gl-form-label-textarea.html">
+<link rel="import" href="gl-form-panel.html">
+
+<dom-module id="gl-form">
+    <style>
+        .container{
+            padding: 10px;
+        }
+        h3{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <template>
+        <gl-form-panel>
+            <div>
+                <h4>gl-form-label</h4>
+                <div>
+                    <gl-form-label-input label="Username : " value="TestUsername"></gl-form-label-input>
+                </div>
+            </div>
+             <div>
+                <h4>gl-form-label</h4>
+                <div>
+                    <gl-form-input  label="this input requires some text" required auto-validate error-message="needs some text!"></gl-form-input>
+                </div>
+            </div>
+             <div>
+                <h4>gl-form-textarea</h4>
+                <div>
+                    <gl-form-textarea label="text-area : " required  error-message="needs some text!"></gl-form-textarea>
+                </div>
+            </div>
+             <div>
+                <h4>gl-form-dropdown-menu</h4>
+                <div>
+                <gl-form-dropdown-menu label="Dinosaurs" required>
+                   <paper-listbox class="dropdown-content">
+                        <paper-item rice-type="allosaurus">allosaurus</paper-item>
+                        <paper-item rice-type="brontosaurus">brontosaurus</paper-item>
+                        <paper-item rice-type="carcharodontosaurus">carcharodontosaurus</paper-item>
+                        <paper-item rice-type="diplodocus">diplodocus</paper-item>
+                    </paper-listbox>
+                </gl-form-dropdown-menu>
+                </div>
+            </div>
+        </gl-form-panel>
+        <!--<div class="container">
+            <h3>Use Dom-bind</h3>
+            <template is="dom-bind">
+               <gl-form-dropdown-menu label="Dinosaurs" required>
+                   <paper-listbox class="dropdown-content">
+                        <paper-item rice-type="allosaurus">allosaurus</paper-item>
+                        <paper-item rice-type="brontosaurus">brontosaurus</paper-item>
+                        <paper-item rice-type="carcharodontosaurus">carcharodontosaurus</paper-item>
+                        <paper-item rice-type="diplodocus">diplodocus</paper-item>
+                    </paper-listbox>
+               </gl-form-dropdown-menu>
+            </template>
+
+            <h3>Use Dom-repeat</h3>
+            <template is="dom-repeat" items="{{myData}}">
+                 <gl-form-dropdown-menu label="Dinosaurs" required>
+                   <paper-listbox class="dropdown-content" attr-for-selected="rice-type">
+                        <paper-item rice-type="allosaurus">allosaurus</paper-item>
+                        <paper-item rice-type="brontosaurus">brontosaurus</paper-item>
+                        <paper-item rice-type="carcharodontosaurus">carcharodontosaurus</paper-item>
+                        <paper-item rice-type="diplodocus">diplodocus</paper-item>
+                    </paper-listbox>
+               </gl-form-dropdown-menu>
+            </template>
+
+            <h3>Complete Module</h3>
+            <p>gl-form-input</p>
+            <gl-form-input  label="this input requires some text" required auto-validate error-message="needs some text!"></gl-form-input>
+             <gl-form-textarea label="text-area : " required  error-message="needs some text!"></gl-form-textarea>
+        </div>-->
+    </template>
+    <script>
+        Polymer({
+            is: 'gl-form',
+            ready : function(){
+                this.myData=[
+                    {
+                        data:'data : 1',
+                    },
+                    {
+                        data:'data : 2',
+                    },
+                    {
+                        data:'data : 3',
+                    }
+                ]
+            }
+        });   
+    </script>
+</dom-module>

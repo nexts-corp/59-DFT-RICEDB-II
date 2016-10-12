@@ -44,14 +44,14 @@ var schema = {
                         }
                     }
                 },
-                "required": ["type_rice_id", "type_rice_quantity","package"]
+                "required": ["type_rice_id", "type_rice_quantity", "package"]
             }
         },
-        "inct_id":{
-            "type":"string"
+        "inct_id": {
+            "type": "string"
         }
     },
-    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice","inct_id"]
+    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id"]
 };
 var validate = ajv.compile(schema);
 
@@ -62,6 +62,7 @@ router.get('/id/:cl_id', function (req, res, next) {
             .merge(function (row) {
                 return {
                     cl_id: row('id'),
+                    cl_date: row('cl_date').split('T')(0),
                     cl_type_rice: row('cl_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return {
@@ -96,6 +97,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             .merge(function (row) {
                 return {
                     cl_id: row('id'),
+                    cl_date: row('cl_date').split('T')(0),
                     cl_type_rice: row('cl_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return {
@@ -202,16 +204,16 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete', function (req, res, next) {
+router.delete('/delete/id/:cl_id', function (req, res, next) {
     //var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.body.id != '' || req.body.id != null) {
-        // result.id = req.body.id;
+    if (req.params.cl_id != '' || req.params.cl_id != null) {
+        result.id = req.params.cl_id;
         db.query(function (conn) {
             r.table("confirm_letter")
-                .get(req.body.id)
+                .get(req.params.cl_id)
                 .delete()
                 .run(conn)
                 .then(function (response) {

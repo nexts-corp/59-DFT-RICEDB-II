@@ -133,7 +133,13 @@ router.get('/id/:shm_id', function (req, res, next) {
                         .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
                         // .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
                         .merge(function (r) {
-                            return { shm_det_id: r('id') }
+                            return {
+                                shm_det_id: r('id'),
+                                eta_date: r('eta_date').split('T')(0),
+                                etd_date: r('etd_date').split('T')(0),
+                                packing_date:r('packing_date').split('T')(0),
+                                product_date:r('product_date').split('T')(0)
+                            }
                         })
                         .without('id')
                         .coerceTo('array'),
@@ -225,16 +231,16 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete', function (req, res, next) {
+router.delete('/delete/id/:shm_id', function (req, res, next) {
     //var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.body.id != '' || req.body.id != null) {
-        result.id = req.body.id;
+    if (req.params.shm_id != '' || req.params.shm_id != null) {
+        result.id = req.params.shm_id;
         db.query(function (conn) {
             r.table("shipment")
-                .get(req.body.id)
+                .get(req.params.shm_id)
                 .delete({ durability: "soft" })
                 .run(conn)
                 .then(function (response) {
@@ -243,7 +249,7 @@ router.delete('/delete', function (req, res, next) {
                         result.result = true;
                         db.query(function (conn) {
                             r.table("test")
-                                .filter({ shm_id: req.body.id })
+                                .filter({ shm_id: req.params.id })
                                 .delete({ durability: "soft" })
                                 .run(conn)
                                 .then(function (resp) {
