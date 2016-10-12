@@ -44,14 +44,14 @@ var schema = {
                         }
                     }
                 },
-                "required": ["type_rice_id", "type_rice_quantity","package"]
+                "required": ["type_rice_id", "type_rice_quantity", "package"]
             }
         },
-        "inct_id":{
-            "type":"string"
+        "inct_id": {
+            "type": "string"
         }
     },
-    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice","inct_id"]
+    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id"]
 };
 var validate = ajv.compile(schema);
 
@@ -62,6 +62,7 @@ router.get('/id/:cl_id', function (req, res, next) {
             .merge(function (row) {
                 return {
                     cl_id: row('id'),
+                    cl_date: row('cl_date').split('T')(0),
                     cl_type_rice: row('cl_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return {
@@ -96,6 +97,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             .merge(function (row) {
                 return {
                     cl_id: row('id'),
+                    cl_date: row('cl_date').split('T')(0),
                     cl_type_rice: row('cl_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return {
