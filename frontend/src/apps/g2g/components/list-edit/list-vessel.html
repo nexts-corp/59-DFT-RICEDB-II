@@ -449,12 +449,49 @@
               this.deleteDb(e.currentTarget.id);
               console.log(e.currentTarget.id);
             },
-            saveChangeShipment:function(e){
-              console.log(this.data);
-              this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
-              this.openToast();
-              this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
-            },
+            // saveChangeShipment:function(e){
+            //   var id = e.currentTarget.index;
+            //   console.log(this.data.shipment_detail[id]);
+            //   delete this.data.shipment_detail[id].shm_id;
+            //   delete this.data.shipment_detail[id].carrier_name;
+            //   delete this.data.shipment_detail[id].cl_name;
+            //   delete this.data.shipment_detail[id].cl_no;
+            //   delete this.data.shipment_detail[id].deli_port_code;
+            //   delete this.data.shipment_detail[id].deli_port_name;
+            //   delete this.data.shipment_detail[id].dest_port_code;
+            //   delete this.data.shipment_detail[id].dest_port_name;
+            //   // this.data.shipment_detail[id].eta_date=new Date (this.data.shipment_detail[id].eta_date);
+            //   // this.data.shipment_detail[id].etd_date=new Date (this.data.shipment_detail[id].eta_date);
+            //   delete this.data.shipment_detail[id].load_port_code;
+            //   delete this.data.shipment_detail[id].load_port_name;
+            //   delete this.data.shipment_detail[id].package_kg_per_bag;
+            //   delete this.data.shipment_detail[id].package_name;
+            //   delete this.data.shipment_detail[id].package_weight_bag;
+            //   // this.data.shipment_detail[id].packing_date=new Date (this.data.shipment_detail[id].packing_date);
+            //   // this.data.shipment_detail[id].product_date=new Date (this.data.shipment_detail[id].product_date);
+            //   delete this.data.shipment_detail[id].seller_address_en;
+            //   delete this.data.shipment_detail[id].seller_address_th;
+            //   delete this.data.shipment_detail[id].seller_email;
+            //   delete this.data.shipment_detail[id].seller_fax;
+            //   delete this.data.shipment_detail[id].seller_name_en;
+            //   delete this.data.shipment_detail[id].seller_name_th;
+            //   delete this.data.shipment_detail[id].seller_phone;
+            //   delete this.data.shipment_detail[id].seller_tax_id;
+            //   delete this.data.shipment_detail[id].ship_lot_no;
+            //   delete this.data.shipment_detail[id].ship_name;
+            //   delete this.data.shipment_detail[id].ship_voy_no;
+            //   delete this.data.shipment_detail[id].shipline_name;
+            //   delete this.data.shipment_detail[id].surveyor_name;
+            //   delete this.data.shipment_detail[id].type_rice_name_en;
+            //   delete this.data.shipment_detail[id].type_rice_name_th;
+            //   this.data.shipment_detail[id].id=this.data.shipment_detail[id].shm_det_id
+            //   delete this.data.shipment_detail[id].shm_det_id;
+            //   this.putDb(this.data.shipment_detail[e.currentTarget.index])
+            //
+            //   this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
+            //   this.openToast();
+            //   this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
+            // },
 
             clickInsert: function() {
                 var css = Polymer.dom(this.root).querySelector('#changeDivcss');
@@ -511,8 +548,9 @@
 
               // console.log(this.data);
               this.postDb(this.shipment);
-              this.clickCancel();
+
             },
+            //update
             postDb:function (data) {
               axios.post('./g2g/shipment/detail/insert', data)
               // axios.put('http://localhost:3000/api/g2g/shipment/update', data)
@@ -522,6 +560,23 @@
                           console.log(data);
                           // this.glQuery('addContract').getChange();
                           // this.glQuery('contentPanel').changDrawer();
+                          this.clickCancel();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                          console.log(data);
+                        })
+            },
+            putDb:function (data) {
+              axios.put('./g2g/shipment/detail/update', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          console.log(data);
+                          // this.glQuery('addContract').getChange();
+                          // this.glQuery('contentPanel').changDrawer();
+                          this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
