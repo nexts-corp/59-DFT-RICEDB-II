@@ -1,0 +1,43 @@
+
+<!-- build:import -->
+    <link rel="import" href="../bower_components/polymer/polymer.html">
+    <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<!-- endbuild -->
+
+<dom-module id="gl-form-label">
+    <style>
+        paper-material{
+            padding: 15px;
+        }
+       paper-textarea{
+          --paper-input-container-disabled:{
+              opacity: 1;
+              font-size: 10px;
+          }  
+       }
+    </style>
+    
+     <template>
+
+        <paper-textarea label="{{label}}" value="{{value}}" disabled></paper-textarea>
+
+     </template>
+ 
+  <script>
+      
+    Polymer({
+      is:'gl-form-label',
+      properties:{
+          label:{
+              type:String,
+              value:'Title'
+          },
+          value:{
+              type:String,
+              value:'Text'
+          }
+      }
+    });
+      
+  </script>
+</dom-module>

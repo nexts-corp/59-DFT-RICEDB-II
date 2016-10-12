@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script>
+        window.Polymer = {
+            dom: 'shadow',
+            lazyRegister: true
+        };
+    </script>
+    <link rel="import" href="../src/gl-grid-row.html">
+    <link rel="import" href="../src/gl-grid-col.html">
+    
+</head>
+<body>
+
+
+    <my-element></my-element>
+    <dom-module id="my-element">
+
+        <template>
+            <!--  xs>=768 sm>768 md>1024 lg>1200  -->
+            <div style="background-color:#3399ff;">
+                <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" xs="12" sm="6" md="4" lg="2">
+                        1
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="12" sm="6" md="4" lg="2">
+                        2
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="12" sm="6" md="4" lg="2">
+                        3
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="12" sm="6" md="4" lg="2">
+                        4
+                    </gl-grid-col>
+                </gl-grid-row>
+            </div>
+            <!--  Ex. [500,12]   Ans. width > 500px = 12col  -->
+            <div style="background-color:#ccc;">
+                <gl-grid-row>
+                    <gl-grid-col width="[[getWidth]]" grid="[[500,12],[1000,6]]">
+                        custom 1
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[500,12],[1000,6]]">
+                        custom 2
+                    </gl-grid-col>
+                </gl-grid-row>
+
+            </div>
+        </template>
+        <script>
+            Polymer({
+                is: 'my-element'
+            });
+        </script>
+    </dom-module>
+
+</body>
+</html>

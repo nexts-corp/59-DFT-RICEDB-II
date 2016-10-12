@@ -1,0 +1,52 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<dom-module id="gl-form-label-input">
+    <style is="custom-style">
+        paper-material{
+            padding: 15px;
+        }
+       paper-input{
+          --paper-input-container-disabled:{
+              opacity: 1;
+          }
+          --paper-input-container-underline:{
+              display: none;
+          } 
+       }
+    </style>
+    
+     <template>
+
+        <paper-input label="{{label}}" value="{{value}}" disabled></paper-input>
+
+     </template>
+ 
+  <script>
+      
+        Polymer({
+        is:'gl-form-label-input',
+        properties:{
+            label:{
+                type:String,
+                value:'Title'
+            },
+            value:{
+                type:String,
+                value:'Text'
+            },
+            fontSizeLabel:{
+                type:String,
+                value:'red'
+            },
+        },
+        ready:function(){
+            console.log('test');
+            console.log('fontsize:',this.fontSizeLabel);
+            this.customStyle['--gl-fontsize-label'] = this.fontSizeLabel;
+            // this.customStyle['--el-color-bglabel'] = this.colorBglabel;
+        }
+    });
+      
+  </script>
+</dom-module>
