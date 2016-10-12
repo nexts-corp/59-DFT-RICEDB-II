@@ -1,0 +1,65 @@
+<!-- build:import -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<!-- endbuild -->
+
+<dom-module id="gl-form-panel">
+   <template>
+      <style>
+          .header{
+              font-size: 25px;
+              padding-left: 20px;
+              padding-top: 13px;
+              padding-bottom: 10px;
+              background-color: var(--el-color-bglabel);
+              border-bottom: 1px solid dimgray;
+              color: var(--el-color-label);
+
+        }
+          .content{
+              font-size: 20px;
+              padding-top: 20px;
+              padding-bottom: 20px;
+              padding-left: 20px;
+              padding-right: 20px;
+          }
+          paper-material{
+             @apply(--paper-font-headline);
+/*             font-family: Arial, Helvetica, sans-serif;*/
+          }
+
+      </style>
+      <paper-material elevation="1">
+          <div class="header">
+              {{label}}
+          </div>
+          <div class="content">
+              <content></content>
+          </div>
+      </paper-material>
+
+
+   </template>
+    <script>
+        Polymer({
+            is:'gl-form-panel',
+            properties:{
+                label:{
+                    type:String,
+                    value:'gl-form-panel'
+                },
+                colorLabel:{
+                    type:String,
+                    value:'#000'
+                },
+                colorBglabel:{
+                    type:String,
+                    value:'#FFF'
+                }
+            },
+            ready:function(){
+                 this.customStyle['--el-color-label'] = this.colorLabel;
+                 this.customStyle['--el-color-bglabel'] = this.colorBglabel;
+            }
+        });
+    </script>
+</dom-module>
