@@ -51,7 +51,7 @@ router.get(['/', '/list'], function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                    exporter_date_create: row('exporter_date_create').split('T')(0),
+                    // exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -373,16 +373,17 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete', function (req, res, next) {
+
+router.delete('/delete/id/:exporter_id', function (req, res, next) {
     //var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.body.id != '' || req.body.id != null) {
-        // result.id = req.body.id;
+    if (req.params.exporter_id != '' || req.params.exporter_id != null) {
+        result.id = req.params.exporter_id;
         db.query(function (conn) {
             r.db('external_f3').table("exporter")
-                .get(req.body.id)
+                .get(req.params.exporter_id)
                 .delete()
                 .run(conn)
                 .then(function (response) {
@@ -408,7 +409,6 @@ router.delete('/delete', function (req, res, next) {
     //     res.json(result);
     // }
 });
-
 module.exports = router;
 
 

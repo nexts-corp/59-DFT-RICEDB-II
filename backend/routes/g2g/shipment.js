@@ -225,16 +225,16 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete', function (req, res, next) {
+router.delete('/delete/id/:shm_id', function (req, res, next) {
     //var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.body.id != '' || req.body.id != null) {
-        result.id = req.body.id;
+    if (req.params.shm_id != '' || req.params.shm_id != null) {
+        result.id = req.params.shm_id;
         db.query(function (conn) {
             r.table("shipment")
-                .get(req.body.id)
+                .get(req.params.shm_id)
                 .delete({ durability: "soft" })
                 .run(conn)
                 .then(function (response) {
@@ -243,7 +243,7 @@ router.delete('/delete', function (req, res, next) {
                         result.result = true;
                         db.query(function (conn) {
                             r.table("test")
-                                .filter({ shm_id: req.body.id })
+                                .filter({ shm_id: req.params.id })
                                 .delete({ durability: "soft" })
                                 .run(conn)
                                 .then(function (resp) {

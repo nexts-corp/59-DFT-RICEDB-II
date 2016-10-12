@@ -211,39 +211,5 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete', function (req, res, next) {
-    //var valid = validate(req.body);
-    var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.body.id != '' || req.body.id != null) {
-        // result.id = req.body.id;
-        db.query(function (conn) {
-            r.table("contract")
-                .get(req.body.id)
-                .delete()
-                .run(conn)
-                .then(function (response) {
-                    result.message = response;
-                    if (response.errors == 0) {
-                        result.result = true;
-                    }
-                    res.json(result);
-                    console.log(result);
-                })
-                .error(function (err) {
-                    result.message = err;
-                    res.json(result);
-                    console.log(result);
-                })
-        })
-    } else {
-        result.message = 'require field id';
-        res.json(result);
-    }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
-});
+
 module.exports = router;
