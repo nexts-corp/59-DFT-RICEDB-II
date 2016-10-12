@@ -61,6 +61,44 @@ router.get('/id/:country_id', function (req, res, next) {
             });
     });
 });
+router.get('/port', function (req, res, next) {
+    db.query(function (conn) {
+        r.table("country")
+            .merge(function (row) {
+                return { country_id: row('id') }
+            })
+            .map(function (m) {
+                return m.merge(function (me) {
+                    return {
+                        port: r.table('port')
+                        .filter({ country_id: me('country_id') })
+                        .merge(function(p){
+                            return {
+                                port_id:p('id')
+                            }
+                        })
+                        .without('id')
+                        .coerceTo('array')
+                    }
+                })
+            })
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 router.post('/insert', function (req, res, next) {
     var valid = validate(req.body);
     if (valid) {
