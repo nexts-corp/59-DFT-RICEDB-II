@@ -1,3 +1,4 @@
+<link rel="import" href="../vessel/vesselBehavior.html">
 <dom-module id="promise-confirm">
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-size gl-color">
         .top {
@@ -218,7 +219,8 @@
                 }
             },
             behaviors: [
-                gl.behavior.core
+                gl.behavior.core,
+                vesselBehavior
             ],
             observers: [
               'dataChange(data.cl_id)',
@@ -239,6 +241,7 @@
               //เปลี่ยนเป็น id
               // this.confirmLetter.cl_type_rice[0].type_rice_quantity = parseFloat(e.target.value);
               this.confirmLetter.id = this.confirmLetter.cl_id;
+              this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
               delete this.confirmLetter.cl_id
               delete this.confirmLetter.cl_total_quantity;
               for (var i = 0; i < this.confirmLetter.cl_type_rice.length; i++) {
@@ -346,12 +349,12 @@
             selectWithOutSelected:function () {
 
             },
-            testNum:function(ob,param){
-                    if(ob.path.split(".").length == 2){
-                        ob.base[param]=parseFloat(ob.value);
-
-                    }
-                }
+            // testNum:function(ob,param){
+            //         if(ob.path.split(".").length == 2){
+            //             ob.base[param]=parseFloat(ob.value);
+            //
+            //         }
+            //     }
         });
     </script>
 </dom-module>
