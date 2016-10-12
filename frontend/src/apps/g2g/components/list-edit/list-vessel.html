@@ -366,8 +366,8 @@
           <div class="bd">
             <gl-form-panel set-padding="10px 20px 10px 20px">
               <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-                <paper-icon-button icon="create" raised on-tap="editChange" index="[[index]]"></paper-icon-button>
-                <paper-icon-button icon="delete" raised on-tap="shipmentDelete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
+                <paper-icon-button icon="create" raised on-tap="editChange" title="Edit" index="[[index]]"></paper-icon-button>
+                <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
               </gl-form-panel-head>
 
 
@@ -387,7 +387,7 @@
               </iron-pages>
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
                 <div id="btn_Save_{{index}}" hidden>
-                  <paper-button  class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
+                  <paper-button  class="gl-btn-success" raised on-tap="saveChangeShipment" index="[[index]]">
                     <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
                 </div>
               </gl-form-panel-footer>
@@ -448,10 +448,10 @@
             shipmentDelete:function (e) {
               console.log(e.currentTarget.id);
 
-              this.deleteDb(this.snipmentDelete =[{shm_det_id:e.currentTarget.id}]);
+              this.deleteDb(this.snipmentDelete ={id:e.currentTarget.id});
               console.log(this.snipmentDelete);
             },
-            saveChange:function(e){
+            saveChangeShipment:function(e){
               console.log(this.data);
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
               this.openToast();

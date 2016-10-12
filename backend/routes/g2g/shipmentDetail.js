@@ -193,16 +193,16 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete', function (req, res, next) {
+router.delete('/delete/id/:shm_det_id', function (req, res, next) {
     //var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.body.id != '' || req.body.id != null) {
-        // result.id = req.body.id;
+    if (req.params.shm_det_id != '' || req.params.shm_det_id != null) {
+        result.id = req.params.shm_det_id;
         db.query(function (conn) {
             r.table("shipment_detail")
-                .get(req.body.id)
+                .get(req.params.shm_det_id)
                 .delete()
                 .run(conn)
                 .then(function (response) {

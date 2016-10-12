@@ -211,8 +211,12 @@
         //  str.replace(/\s+/g,' ');
     },
     testNum:function(ob,param){
-      if(ob.path.split(".").length == 2){
-          ob.base[param]=parseFloat(ob.value);
+      // console.log(typeof ob.value);
+      if(typeof ob.value == String){
+        if(ob.path.split(".").length == 2){
+            ob.base[param]=parseFloat(ob.value);
+            // console.log(typeof ob.value);
+        }
       }
     },
   };
