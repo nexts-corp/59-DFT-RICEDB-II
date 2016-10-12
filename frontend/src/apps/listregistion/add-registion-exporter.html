@@ -82,12 +82,12 @@
             <gl-grid-row width="{{getWidth}}">
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                <gl-combo-box id="seller_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-                    item-value-path="seller_id"></gl-combo-box>
+                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
               </gl-grid-col>
-              <paper-button class="gl-btn-info" raised on-tap="_result">ค้นหา</paper-button>
+              <!-- <paper-button class="gl-btn-info" raised on-tap="_result">ค้นหา</paper-button> -->
             </gl-grid-row>
-
+            <!-- {{exporterId}} -->
             </div>
           </div>
           <div id="formSearch" class="flex searchBorder" hidden>
@@ -116,7 +116,7 @@
             <section-content data="detail">
               <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                 <div name="addRedRegExporter"><register-pageRegister></register-pageRegister></div>
-                <div name="detailRegExporter"><register-pageDetail></register-pageDetail></div>
+                <div name="detailRegExporter"><register-pageDetail exporter-id="[[exporterId]]"></register-pageDetail></div>
               </iron-pages>
             </section-content>
             <section-content data="file">
@@ -146,7 +146,16 @@
                 result: {
                     type: Object,
                     observer: '_result'
+                },
+                exporterId:{
+                  type: String,
+                  observer: '_exporterIdChanged'
                 }
+            },
+            _exporterIdChanged:function(val){
+              if(val!=""){
+                this.layerContent = "detailRegExporter";
+              }
             },
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
@@ -186,10 +195,10 @@
             _result: function() {
                 // console.log(this.seller_id.value);
                 this.$$('#formSearch').removeAttribute("hidden");
-                var selectedItem = this.seller_id.value;
+                var selectedItem = this.exporter_id.value;
                 var emtype = [];
                 if (emtype != selectedItem) {
-                  var exporter = this.exporters.filter(function (exporter) { return exporter.seller_id == selectedItem });
+                  var exporter = this.exporters.filter(function (exporter) { return exporter.exporter_id == selectedItem });
                   this.sellerName = exporter;
                   // this.exporters = this.sellerName;
                   // console.log(this.exporters);
@@ -199,11 +208,11 @@
                 }
             },
             attached: function() {
-                this.seller_id = this.seller_id || this.$.seller_id;
+                this.exporter_id = this.exporter_id || this.$.exporter_id;
                 // console.log(this.seller_id);
-                this.getDb('http://localhost:3000/api/external/exporter/insert', (data) => {
+                this.getDb('http://localhost:3000/api/external/exporter/active', (data) => {
                     this.exporters = data;
-                    this.seller_id.items = data;
+                    this.exporter_id.items = data;
                     // console.log(this.seller_id.items);
                 });
             }
