@@ -13,56 +13,28 @@
       .catch(function (error) {
       }.bind(this));
   },
-  getCounty: function(contractId) {
-    // ผู้ขาย
-    // this.seller_id = this.seller_id || this.$.seller_id;
-    // this.getDb('./common/seller',(data)=>{
-    //     this.seller= data;
-    //     this.seller_id.items = data;
-    // });
-    //Shipping Agent
-    // this.carrier_id = this.carrier_id || this.$.carrier_id;
-    // this.getDb('./common/carrier',(data)=>{
-    //   //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
-    //     this.carrier_id.items = data;
-    // });
-    // //shipline_id
-    // this.shipline_id = this.shipline_id || this.$.shipline_id;
-    // this.getDb('./common/shipline/',(data)=>{
-    //   //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id shipline_id
-    //   this.shipline_id.items = data;
-    // });
-
-    this.dest_port_id = this.dest_port_id || this.$.dest_port_id;
-    this.deli_port_id = this.deli_port_id || this.$.deli_port_id;
+  getCounty(contractId){
     this.getDb('./g2g/contract/id/'+contractId,(data)=>{
-      this.county = data.country_id;
-      // console.log(this.county);
-      // get pod;
-      this.getDb('./common/port/country/id/'+this.county,(data)=>{
-        this.dest_port_id.items = data;
-        this.deli_port_id.items = data;
-        // console.log(this.port);dest_port_id
-      });
-    });
-    this.port_id = this.port_id || this.$.port_id;
-    // get pol
-    this.getDb('./common/port/country/id/TH',(data)=>{
-      this.port_id.items =  data;
-      // console.log(this.pol);
 
-    });
-
-    // //get surveyor_id
-    // this.surveyor_id = this.surveyor_id || this.$.surveyor_id;
-    // this.getDb('./common/surveyor',(data)=>{
-    //   this.surveyor_id.items = data;
-    //   // console.log(this.cml);
-    // });
-    //get buyer_masks
-    this.getDb('./g2g/contract/id/'+contractId,(data)=>{
+      county = data.country_id;
+        console.log(county);
+        //get buyer_masks
       this.buyerMasks = data.buyer_masks;
-      // console.log(this.buyerMasks);
+      // get pod;
+      console.log(this.common.countryport);
+      var countryport = this.common.countryport;
+      // get pol
+      var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
+       this.pol = pol;
+      var pod = countryport.filter(function (countryport) { return countryport.country_id == county });
+        this.pod = pod;
+        console.log(this.pod);
+      // this.getDb('./common/port/country/id/'+county,(data)=>{
+      //   // console.log(data);
+      //   this.common.dest_port_id = data;
+      //   this.common.deli_port_id = data;
+      //   // console.log(this.port);dest_port_id
+      // });
     });
   },
   getconfirm:function (contractId) {
@@ -87,6 +59,7 @@
       this.ship_id = this.ship_id || this.$.ship_id;
       //เช็ค null or undifile
       // console.log(this.ship_id);
+      // console.log(shipline_id);
       var shipline_id;
       if (typeof shipline_id === 'string'){
         shipline_id=shipline_id;
@@ -96,10 +69,10 @@
       if(shipline_id){
         // console.log(shipline_id);
         // console.log(common.value.shipInShipline);
-        var shipline = common.value.shipInShipline
+        var shipline = this.common.shipInShipline;
         var ships = shipline.filter(function (shipline) { return shipline.shipline_id == shipline_id });
        this.shipInShipline = ships[0].ship;
-       console.log(ships[0].ship);
+      //  console.log(ships[0].ship);
       }
 
     },

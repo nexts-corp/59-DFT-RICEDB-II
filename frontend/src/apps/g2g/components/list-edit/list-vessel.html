@@ -112,11 +112,11 @@
               <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
                 <!-- value="{{shipment.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
                 <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
-                    item-value-path="seller_id" value="{{shipment.0.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+                    item-value-path="seller_id"  items="{{common.seller}}" value="{{shipment.0.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
-                  item-value-path="shipline_id" value="{{shipment.0.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
+                  item-value-path="shipline_id" items="{{common.shipline}}"  value="{{shipment.0.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line"  placeholder="เลือก Shipping Line" required>
                 <paper-menu class="dropdown-content" attr-for-selected="shipline-id" selected="{{shipment.shipline_id}}" id="bs" name="bs">
                   <template is="dom-repeat" items="[[shipline]]">
@@ -127,7 +127,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="ship_id" label="Vessel" item-label-path="ship_name"
-                  item-value-path="ship_id" value="{{shipment.0.ship_id}}" on-value-changed="getShip"></gl-combo-box>
+                  item-value-path="ship_id" items="{{shipInShipline}}" value="{{shipment.0.ship_id}}" ></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Vessel"  error-message="กรุณาเลือก Vessel" placeholder="เลือก Vessel" required>
                 <paper-menu class="dropdown-content" attr-for-selected="ship-id" selected="{{shipment.ship_id}}" id="vesselName" name="vesselName">
                   <template is="dom-repeat" items="[[ship]]">
@@ -140,7 +140,7 @@
               <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
                 <!-- value="{{shipment.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
                 <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name"
-                    item-value-path="surveyor_id" value="{{shipment.0.surveyor_id}}"></gl-combo-box>
+                    item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{shipment.0.surveyor_id}}"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.0.ship_voy_no}}"
@@ -160,14 +160,14 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.0.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
               <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
-                  item-value-path="carrier_id" value="{{shipment.0.carrier_id}}"></gl-combo-box>
+                  item-value-path="carrier_id" items="{{common.carrier}}" value="{{shipment.0.carrier_id}}"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="Tel." error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
-                  item-value-path="port_id" value="{{shipment.0.load_port_id}}"></gl-combo-box>
+                  item-value-path="port_id" items="{{pol}}"  value="{{shipment.0.load_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="POL" error-message="กรุณาเลือก POL" placeholder="เลือก POL" required>
                 <paper-menu class="dropdown-content" attr-for-selected="pol-id" selected="{{shipment.0.load_port_id}}" id="load_port_id" name="load_port_id">
                   <template is="dom-repeat" items="[[pol]]">
@@ -189,7 +189,7 @@
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-                  item-value-path="port_id" value="{{shipment.0.dest_port_id}}"></gl-combo-box>
+                  item-value-path="port_id" items="{{pod}}" value="{{shipment.0.dest_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="POD" error-message="กรุณาเลือก POD"  placeholder="เลือกเมืองท่า" required>
                 <paper-menu class="dropdown-content" attr-for-selected="dest-port-id" selected="{{shipment.0.dest_port_id}}" id="cityEnd" name="cityEnd">
                   <template is="dom-repeat" items="[[port]]">
@@ -200,7 +200,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-                  item-value-path="port_id" value="{{shipment.0.deli_port_id}}"></gl-combo-box>
+                  item-value-path="port_id" items="{{pod}}" value="{{shipment.0.deli_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Place of Delivery"  error-message="กรุณาใส่รายละเอียด" placeholder="Place of Delivery" required>
                 <paper-menu class="dropdown-content" attr-for-selected="deli-port-id" selected="{{shipment.0.deli_port_id}}" id="cityEnd" name="cityEnd">
                   <template is="dom-repeat" items="[[port]]">
@@ -378,11 +378,11 @@
               <!-- เพิ่มคอมโพเน้นตรงนี้ -->
 
               <iron-pages selected="0" class$="iron-index-{{index}}">
-                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
-                  buyer-masks='[[buyerMasks]]' contract-id='[[contractId]]'>
+                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
+                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]'>
                 </vessel-save>
                 <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
-                  buyer-masks='[[buyerMasks]]' contract-id='[[contractId]]'>
+                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]'>
                 </vessel-edit>
               </iron-pages>
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
@@ -436,14 +436,27 @@
                 shipment:{
                   type:Object,
                   value:[{}]
+                },
+                common:{
+                  type:Object
                 }
             },
             observers: [
               'getCounty(contractId)',
-              'getconfirm(contractId)'
+              'getconfirm(contractId)',
+              'ccc(common)',
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
+            },
+            attached: function() {
+              // console.log("created-2");
+              this.fire('vessel-insert-common',{node:this});
+            },
+            ccc:function (common) {
+              // console.log("common.deli_port_id");
+              // console.log(common);
+              // console.log(this.common);
             },
             shipmentDelete:function (e) {
               this.deleteDb(e.currentTarget.id);

@@ -101,7 +101,12 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
-                                <vessel-page on-vessel-edit-common="vesselEditCommon" name="third" data="{{shipMent}}" shm-id="[[dataSelect.shm_id]]" contract-id="[[contractId]]" ></vessel-page>
+                                <vessel-page on-vessel-edit-common="vesselEditCommon"
+                                             on-vessel-insert-common="vesselInsertCommon"
+                                             name="third"
+                                             data="{{shipMent}}"
+                                             shm-id="[[dataSelect.shm_id]]"
+                                             contract-id="[[contractId]]" ></vessel-page>
                             </section-content>
                             <section-content name="file">
                                 <promise-fileup></promise-fileup>
@@ -143,6 +148,9 @@
                   value:{}
                 }
             },
+            observers:[
+              // 'getPortCountry(contractId)'
+            ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
                 this.glSetLayout('layout-main');
@@ -181,51 +189,53 @@
                 // console.log(this.cml);
               });
               // list port
-              // this.getDb('http://localhost:3000/api/common/port',(data)=>{
-              //   this.ports=data;
-              // });
-              // list country
-              // this.getDb('http://localhost:3000/api/common/country',(data)=>{
-              //   this.country=data;
-              // });
-              // list ship
-              // this.getDb('http://localhost:3000/api/common/ship',(data)=>{
-              //   this.ship=data;
-              // });
-              // list shipline
-              // this.getDb('http://localhost:3000/api/common/shipline',(data)=>{
-              //   this.shipline=data;
-              // });
-              // list carrier
-              // this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
-              //   this.carrier=data;
-              // });
-              // list buyer
-              // this.getDb('http://localhost:3000/api/common/buyer',(data)=>{
-              //   this.buyer=data;
-              // });
-              // list seller
-              // this.getDb('http://localhost:3000/api/common/seller',(data)=>{
-              //   this.seller=data;
-              // });
+              this.getDb('./common/port/',(data)=>{
+                this.common.countryport =  data;
+                // console.log(this.pol);
+
+              });
               // list incoterms
               this.getDb('./common/incoterms',(data)=>{
                 this.incoterms=data;
               });
+              // list incoterms
+              // this.getDb('./common/port',(data)=>{
+              //   this.common.port_id = data;
+              //   // console.log(this.port);dest_port_id
+              // });
+              // console.log(this.common);
             },
+            // getPortCountry:function (contractId) {
+            //   // console.log(this.dataSelect);
+            //   var county;
+            //   this.getDb('./g2g/contract/id/'+contractId,(data)=>{
+            //     // console.log(contractId);
+            //     county = data.country_id;
+            //       //get buyer_masks
+            //     this.common.buyerMasks = data.buyer_masks;
+            //     // get pod;
+            //     this.getDb('./common/port/country/id/'+county,(data)=>{
+            //       // console.log(data);
+            //       this.common.dest_port_id = data;
+            //       this.common.deli_port_id = data;
+            //       // console.log(this.port);dest_port_id
+            //     });
+            //   });
+            // },
             getChange:function () {
 
               this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
               })
-              // this.getDb2('./g2g/contract/list').then((res)=>{
-              //   console.log(res.data);
-              // });
 
             },
             vesselEditCommon:function (e) {
-              console.log(e.detail.node);
+              // console.log(e.detail.node);
 
+              e.detail.node.common=this.common;
+            },
+            vesselInsertCommon:function (e) {
+              // console.log(e.detail.node);
               e.detail.node.common=this.common;
             },
             attached: function() {
