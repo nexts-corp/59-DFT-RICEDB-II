@@ -19,6 +19,10 @@ var schema = {
             "type": "string",
             "format": "date-time"
         },
+        "exporter_date_update": {
+            "type": "string",
+            "format": "date-time"
+        },
         "trader_id": {
             "type": "string"
         },
@@ -33,7 +37,7 @@ var schema = {
             }
         }
     },
-    "required": ["exporter_no", "exporter_date_approve", "trader_id", "seller_agent"]
+    "required": ["exporter_no", "exporter_date_approve", "exporter_date_update", "trader_id", "seller_agent"]
 };
 var validate = ajv.compile(schema);
 
@@ -221,6 +225,7 @@ router.get('/seller', function (req, res, next) {
                 }
             })
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -251,6 +256,7 @@ router.get('/seller/not', function (req, res, next) {
             }).without("id")
             .filter(r.row.hasFields('exporter_no').not())
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -273,6 +279,7 @@ router.get('/seller/name/:seller_name', function (req, res, next) {
         r.db('external_f3').table("exporter")
             .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .filter(
             r.row('seller_name_th').match(req.params.seller_name)
             )
