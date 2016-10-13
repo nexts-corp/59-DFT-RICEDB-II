@@ -214,21 +214,24 @@
               'getTyperice(contractId)'
             ],
             getTyperice: function(contractId) {
-              this.getDb('http://localhost:3000/api/g2g/contract/id/'+contractId,(data)=>{
+              this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
                 // console.log(this.riceType);
               });
             },
             dataChange:function (clId) {
               //ดึง confirmLetter
-              this.getDb('http://localhost:3000/api/g2g/confirm/id/'+clId,(data)=>{
+              this.getDb('./g2g/confirm/id/'+clId,(data)=>{
                 this.confirmLetter = data;
               });
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
               // this.confirmLetter.cl_type_rice[0].type_rice_quantity = parseFloat(e.target.value);
+              // new Date (this.data.shipment_detail[id].packing_date)
 
+              this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
+              // console.log(this.confirmLetter.cl_date);
               this.confirmLetter.contract_id = this.contractId;
               this.postDb(this.confirmLetter)
               // console.log(this.confirmLetter);
