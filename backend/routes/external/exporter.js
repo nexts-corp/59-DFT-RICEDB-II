@@ -176,7 +176,6 @@ router.get('/unactive', function (req, res, next) {
             });
     })
 });
-
 router.get('/id/:exporter_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("exporter")
@@ -308,7 +307,6 @@ router.get('/seller/name/:seller_name', function (req, res, next) {
             });
     })
 });
-
 router.post('/insert', function (req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);
