@@ -15,8 +15,8 @@
 
 <link rel="import" href="data/db-gtog-contact.html">
 <link rel="import" href="test.html">
-
-
+<!-- <link rel="import" href="/components/vessel/shipment-insert.html"> -->
+<link rel="import" href="components/vessel/shipment-insert.html">
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <dom-module id="g2g-add-contract">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
@@ -37,7 +37,8 @@
 
             <content-panel>
 
-              <grid>
+              <grid>111
+                <shipment-insert></shipment-insert>515
                 <div class="horizontal end-justified layout">
                   <div class="button">841/[[contractId]]
                     <paper-button raised class="gl-btn-primary"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
@@ -93,7 +94,7 @@
                                                       incoterms=[[incoterms]]
                                                       on-confirm-mation-common="confirmMationCommon"></promise-confirm>
                                     <promise-insert name="secondaryHalf" package=[[package]] contract-id="[[contractId]]" incoterms=[[incoterms]]></promise-insert>
-                                    <period-insert name="thirdHalf" contract-id="[[contractId]]"></period-insert>
+                                    <!-- <shipment-insert name="thirdHalf"></shipment-insert> -->
                                 </iron-pages>
                             </section-content>
                             <section-content name="print">
@@ -107,13 +108,17 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
+                              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                 <vessel-page on-vessel-edit-common="vesselEditCommon"
                                              on-vessel-insert-common="vesselInsertCommon"
                                              name="third"
                                              data="{{shipMent}}"
                                              shm-id="[[dataSelect.shm_id]]"
                                              contract-id="[[contractId]]" ></vessel-page>
+                              <shipment-insert name="thirdHalf" contract-id="[[contractId]]" ></shipment-insert>
+                                </iron-pages>
                             </section-content>
+
                             <section-content name="file">
                                 <promise-fileup></promise-fileup>
                             </section-content>
@@ -130,7 +135,7 @@
             is: "g2g-add-contract",
             listeners: {
                 'nx-grid-tap': 'nxGridTap',
-                'nx-grid-dblclick': 'nxGridDblclick'
+                // 'nx-grid-dblclick': 'nxGridDblclick'
             },
             behaviors: [
                 gl.behavior.core,
@@ -255,8 +260,8 @@
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
-                if (this.layerContent === 'third') {
+                console.log(this.layerContent);
+                if (this.layerContent === 'third' || this.layerContent === 'thirdHalf' ) {
                     this.vesselPage = 1;
                 } else {
                     this.vesselPage = 0;
@@ -287,14 +292,14 @@
               this.getDb('./g2g/shipment/id/'+id,(data)=>{
                 this.shipMent = data;
                 // console.log(id);
-                console.log("shipMent");
+                // console.log("shipMent");
               });
             },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
-                console.log("confirmLetter");
+                // console.log("confirmLetter");
                 // console.log(this.confirmLetter);
 
               });
@@ -352,7 +357,7 @@
               // var resolvedPageUrl = this.resolveUrl(`components/period/period-page.html`);
               // this.importHref(resolvedPageUrl,null,null,true);
               //
-              // var resolvedPageUrl = this.resolveUrl(`components/period/period-insert.html`);
+              // var resolvedPageUrl = this.resolveUrl(`components/vessel/shipment-insert.html`);
               // this.importHref(resolvedPageUrl,null,null,true);
 
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-page.html`);
