@@ -36,12 +36,13 @@
     <db-gtog-contact></db-gtog-contact>
 
             <content-panel>
+
               <grid>
                 <div class="horizontal end-justified layout">
                   <div class="button">841/[[contractId]]
                     <paper-button raised class="gl-btn-primary"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
                   </div>
-
+                <button type="button" name="button" on-tap="loaddata">กด</button>
                 </div>
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
@@ -85,7 +86,13 @@
                             <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]] incoterms=[[incoterms]]></promise-confirm>
+                                    <promise-confirm
+                                                      name="secondary"
+                                                      confirm-letter="{{confirmLetter}}"
+                                                      contract-id="[[contractId]]"
+                                                      package=[[package]]
+                                                      incoterms=[[incoterms]]
+                                                      on-confirm-mation-common="confirmMationCommon"></promise-confirm>
                                     <promise-insert name="secondaryHalf" package=[[package]] contract-id="[[contractId]]" incoterms=[[incoterms]]></promise-insert>
                                     <period-insert name="thirdHalf" contract-id="[[contractId]]"></period-insert>
                                 </iron-pages>
@@ -194,10 +201,11 @@
                 // console.log(this.pol);
 
               });
-              // list incoterms
+              // list incoterms  ชนิดการจ่าย
               this.getDb('./common/incoterms',(data)=>{
                 this.incoterms=data;
               });
+              // list cml
               // list incoterms
               // this.getDb('./common/port',(data)=>{
               //   this.common.port_id = data;
@@ -222,6 +230,9 @@
             //     });
             //   });
             // },
+            loaddata:function () {
+              this.glQuery('layoutMain').openToastLoading();
+            },
             getChange:function () {
 
               this.getDb('./g2g/contract/list',(data)=>{
@@ -238,6 +249,11 @@
               // console.log(e.detail.node);
               e.detail.node.common=this.common;
             },
+            confirmMationCommon:function (e) {
+              // console.log(e.detail.node);
+
+              e.detail.node.common=this.confirmLetter;
+            },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
@@ -250,7 +266,7 @@
                     this.vesselPage = 0;
                 }
                 this.dataSelect = e.detail.data;
-                // console.log(this.dataSelect);
+                // console.log(this.dataSelect.cl_id);
                 if (typeof e.detail.data == 'undefined') {
                   // console.log(1);
                 }else {
@@ -258,7 +274,9 @@
                     this.idData = e.detail.data.buyer_id;
                     // console.log(this.idData);
                   }else {
-                    this.idData = e.detail.data.cl_id;
+                    // this.idData = e.detail.data.cl_id;
+                    // console.log(e.detail.data.cl_id);
+                    this.conFirmDeatil(e.detail.data.cl_id);
                   }
                   //เช็คว่าส่งค่า shm_id มาไหม
                   if (this.dataSelect.shm_id) {
@@ -269,9 +287,17 @@
             },
             shipMentDeatil:function (id) {
               // console.log(id);
-              this.getDb('http://localhost:3000/api/g2g/shipment/id/'+id,(data)=>{
+              this.glQuery('layoutMain').openToastLoading();
+              this.getDb('./g2g/shipment/id/'+id,(data)=>{
                 this.shipMent = data;
-                // console.log(this.shipMent);
+                console.log(111);
+              });
+            },
+            conFirmDeatil:function (cmlId) {
+              this.glQuery('layoutMain').openToastLoading();
+              this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
+                this.confirmLetter = data;
+                // console.log(this.confirmLetter);
               });
             },
             nxGridDblclick: function(e) {
@@ -285,14 +311,14 @@
               axios.get(url)
                 .then(function(response){
                   callback(response.data);
+                  this.glQuery('layoutMain').closeToastLoading(function(){
+                    this.glQuery('contentPanel').changDrawer();
+                  }.bind(this));
+
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
                 // console.log(1);
-            },
-
-            getDb2:function (url,callback) {
-              return axios.get(url);
             },
             postDb:function (url) {
               axios.get('/user', {

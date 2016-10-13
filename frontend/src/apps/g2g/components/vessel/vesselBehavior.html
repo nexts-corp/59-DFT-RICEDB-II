@@ -2,7 +2,7 @@
   vesselBehavior = {
 
   ready: function() {
-    console.log(1);
+    // console.log(1);
   },
   getDb:function (url,callback) {
     // console.log(url);
@@ -17,18 +17,18 @@
     this.getDb('./g2g/contract/id/'+contractId,(data)=>{
 
       county = data.country_id;
-        console.log(county);
+        // console.log(county);
         //get buyer_masks
       this.buyerMasks = data.buyer_masks;
       // get pod;
-      console.log(this.common.countryport);
+      // console.log(this.common.countryport);
       var countryport = this.common.countryport;
       // get pol
       var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
        this.pol = pol;
       var pod = countryport.filter(function (countryport) { return countryport.country_id == county });
         this.pod = pod;
-        console.log(this.pod);
+        // console.log(this.pod);
       // this.getDb('./common/port/country/id/'+county,(data)=>{
       //   // console.log(data);
       //   this.common.dest_port_id = data;

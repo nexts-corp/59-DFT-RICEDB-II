@@ -444,7 +444,6 @@
             observers: [
               'getCounty(contractId)',
               'getconfirm(contractId)',
-              'ccc(common)',
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
@@ -452,11 +451,6 @@
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
-            },
-            ccc:function (common) {
-              // console.log("common.deli_port_id");
-              // console.log(common);
-              // console.log(this.common);
             },
             shipmentDelete:function (e) {
               this.deleteDb(e.currentTarget.id);
@@ -536,41 +530,7 @@
               delete this.shipment.origin_page;
               delete this.shipment.shm_det_quantity;
               delete this.shipment.weight_per_container;
-              // {{shipment.0.shm_det_quantity}}
-              // console.log(this.shipment);
-              // console.log(this.shipment[0].carrier_id=this.shipment.carrier_id);
-              // this.push('data.shipment_detail', {
-              //   bl_no:this.shipment.bl_no,
-              //   book_no:this.shipment.book_no,
-              //   carrier_id:this.shipment.carrier_id,
-              //   cl_id:this.shipment.cl_id,
-              //   contract_id:this.contractId,
-              //   deli_port_id:this.shipment.deli_port_id,
-              //   dest_port_id:this.shipment.dest_port_id,
-              //   eta_date:this.shipment.eta_date,
-              //   etd_date:this.shipment.etd_date,
-              //   load_port_id:this.shipment.load_port_id,
-              //   nn_page:this.shipment.nn_page,
-              //   num_of_container:this.shipment.num_of_container,
-              //   origin_page:this.shipment.origin_page,
-              //   packing_date:this.shipment.packing_date+'T00:00:00.000Z',
-              //   packing_time:this.shipment.packing_time,
-              //   package_id:this.shipment.package_id,
-              //   product_date:this.shipment.product_date,
-              //   seller_id:this.shipment.seller_id,
-              //   seller_phone:this.seller_phone,
-              //   ship_id:this.shipment.ship_id,
-              //   ship_lot_no:this.shipment.ship_lot_no,
-              //   ship_voy_no:this.shipment.ship_voy_no,
-              //   shipline_id:this.shipment.shipline_id,
-              //   shm_det_quantity:this.shipment.shm_det_quantity,
-              //   surveyor_id:this.shipment.surveyor_id,
-              //   type_rice_id:this.shipment.type_rice_id,
-              //   weight_per_container:this.shipment.weight_per_container
-              // });
-              // console.log(this.data);
 
-              // console.log(this.data);
               this.postDb(this.shipment);
 
             },

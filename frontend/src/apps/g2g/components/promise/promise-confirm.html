@@ -223,19 +223,21 @@
                 vesselBehavior
             ],
             observers: [
-              'dataChange(data.cl_id)',
+              'dataChange(data)',
               'getTyperice(contractId)'
             ],
+            attached: function() {
+              console.log("created confirm-mation-common");
+              this.fire('confirm-mation-common',{node:this});
+            },
             getTyperice: function(contractId) {
               this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
+                console.log(12512);
               });
             },
-            dataChange:function (clId) {
-              //ดึง confirmLetter
-              this.getDb('./g2g/confirm/id/'+clId,(data)=>{
-                this.confirmLetter = data;
-              });
+            dataChange:function (data) {
+              console.log(data);
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
@@ -264,6 +266,8 @@
               axios.get(url)
                 .then(function(response){
                   callback(response.data);
+                  console.log('ดึงแล้ว');
+                  // this.glQuery('layoutMain').closeToastLoading();
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
