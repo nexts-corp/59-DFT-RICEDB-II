@@ -95,7 +95,7 @@ router.get('/active', function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                  //  exporter_date_create: row('exporter_date_create').split('T')(0),
+                    //  exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -139,7 +139,7 @@ router.get('/unactive', function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                   // exporter_date_create: row('exporter_date_create').split('T')(0),
+                    // exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -181,7 +181,7 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 exporter_id: r.row('id'),
                 exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_update')).toEpochTime()),
                 exporter_date_approve: r.row('exporter_date_approve').split('T')(0),
-               // exporter_date_create: r.row('exporter_date_create').split('T')(0),
+                // exporter_date_create: r.row('exporter_date_create').split('T')(0),
                 exporter_date_update: r.row('exporter_date_update').split('T')(0)
             },
             r.db('external_f3').table("trader").get(r.row("trader_id"))
@@ -209,16 +209,18 @@ router.get('/id/:exporter_id', function (req, res, next) {
 });
 router.get('/seller', function (req, res, next) {
     db.query(function (conn) {
-        r.db('external_f3').table("exporter")
-            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
+        r.db('external_f3').table("trader").outerJoin(
+            r.db('external_f3').table("exporter"),
+            function (trader, exporter) {
+                return exporter("trader_id").eq(trader("id"))
+            }).zip()
+            //.filter(r.row.hasFields('exporter_no'))
+            .merge(function (m) {
+                return {
+                    exporter_status: m.hasFields('exporter_no')
+                }
+            })
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
-            // .filter(
-            //     r.row('seller_name_th').match(req.params.seller_name)
-            // )
-            .pluck(
-            "seller_id", "seller_name_th", "seller_name_en", "seller_address_th",
-            "trader_id", "trader_no", "trader_name"
-            )
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
