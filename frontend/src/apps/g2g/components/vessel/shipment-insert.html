@@ -43,13 +43,13 @@
       properties: {
         shipMent: {
           type: Object,
-          value:[{}]
+          value:{}
         }
       },
 
       insertShipment:function () {
         this.shipMent.contract_id= this.contractId;
-        console.log(this.shipMent);
+      //  console.log(this.shipMent);
         this.postDb(this.shipMent);
       },
       postDb:function (data) {
@@ -57,7 +57,6 @@
                   .then(function (response) {
                     console.log("success");
                     console.log(response);
-                    console.log(data);
                     // this.glQuery('addContract').getChange();
                     // this.glQuery('contentPanel').changDrawer();
                   }.bind(this))
