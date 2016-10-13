@@ -323,8 +323,8 @@
             </gl-grid-col>
             <div class="top">/</div>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-              [[testNum(shipment.0.*,'nn_page')]]
-              <gl-form-input label="" class="w" value="{{shipment.0.nn_page}}"></gl-form-input>
+              [[testNum(shipment.*,'nn_page')]]
+              <gl-form-input label="" class="w" value="{{shipment.nn_page}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
               <div class="top">N/N</div>
@@ -447,12 +447,12 @@
             },
             shipmentDelete:function (e) {
               this.deleteDb(e.currentTarget.id);
-              console.log(e.currentTarget.id);
+              // console.log(e.currentTarget.id);
             },
             saveChangeShipment:function(e){
               var id = e.currentTarget.index;
-              console.log(this.data.shipment_detail[id]);
-              delete this.data.shipment_detail[id].shm_id;
+              // console.log(this.data.shipment_detail[id]);
+              // delete this.data.shipment_detail[id].shm_id;
               delete this.data.shipment_detail[id].carrier_name;
               delete this.data.shipment_detail[id].cl_name;
               delete this.data.shipment_detail[id].cl_no;
@@ -477,16 +477,17 @@
               delete this.data.shipment_detail[id].seller_name_th;
               delete this.data.shipment_detail[id].seller_phone;
               delete this.data.shipment_detail[id].seller_tax_id;
-              delete this.data.shipment_detail[id].ship_lot_no;
+              // delete this.data.shipment_detail[id].ship_lot_no;
               delete this.data.shipment_detail[id].ship_name;
-              delete this.data.shipment_detail[id].ship_voy_no;
+              // delete this.data.shipment_detail[id].ship_voy_no;
               delete this.data.shipment_detail[id].shipline_name;
               delete this.data.shipment_detail[id].surveyor_name;
               delete this.data.shipment_detail[id].type_rice_name_en;
               delete this.data.shipment_detail[id].type_rice_name_th;
               this.data.shipment_detail[id].id=this.data.shipment_detail[id].shm_det_id
               delete this.data.shipment_detail[id].shm_det_id;
-              this.putDb(this.data.shipment_detail[e.currentTarget.index])
+              console.log(this.data.shipment_detail[id]);
+              // this.putDb(this.data.shipment_detail[e.currentTarget.index])
 
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
               this.openToast();

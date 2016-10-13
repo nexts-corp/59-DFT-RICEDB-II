@@ -21,22 +21,23 @@
 
   <template>
     <gl-form-panel-body>
+      ///
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
-                item-value-path="seller_id" value="{{data.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+                item-value-path="seller_id" items="{{common.seller}}" value="{{data.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
-              item-value-path="shipline_id" value="{{data.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
+              item-value-path="shipline_id" items="{{common.shipline}}" value="{{data.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="ship_id" label="Vessel" item-label-path="ship_name"
-              item-value-path="ship_id" value="{{data.ship_id}}"></gl-combo-box>
+              item-value-path="ship_id" items="{{shipInShipline}}" value="{{data.ship_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name"
-                item-value-path="surveyor_id" value="{{data.surveyor_id}}"></gl-combo-box>
+                item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}"
@@ -55,7 +56,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
           <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
-              item-value-path="carrier_id" value="{{data.carrier_id}}"></gl-combo-box>
+              item-value-path="carrier_id" items="{{common.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="Tel." error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
@@ -82,7 +83,7 @@
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'num_of_container')]]
+          [[testNum(data.*,'num_of_container')]]{{data.num_of_container}}
             <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -94,7 +95,7 @@
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'weight_per_container')]]
+          [[testNum(data.*,'weight_per_container')]]{{data.weight_per_container}}
           <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
             value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
@@ -130,6 +131,7 @@
           <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)"  value="{{price.package_weight_bag}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <!-- [[testNum(data.*,'shm_det_quantity')]] -->
           [[testNum(data.*,'shm_det_quantity')]]
           <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
         </gl-grid-col>
@@ -163,13 +165,11 @@
           <div class="top">ORIGINALS</div>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          [[testNum(data.*,'origin_page')]]
           <gl-form-input label="" class="w padL" value="{{data.origin_page}}"></gl-form-input>
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          [[testNum(data.*,'nn_page')]]
-          <gl-form-input label="" class="w" value="{{data.nn_page}}"></gl-form-input>
+          <gl-form-input label="" class="w" value="{{data.nn_page|toInteger}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>
@@ -193,6 +193,13 @@
         data:{
           type:Object,
           notify: true,
+        },
+        propTest:{
+          type:String,
+          value:"first"
+        },
+        common:{
+          type:Object
         }
       },
       // listeners: {
@@ -201,12 +208,17 @@
 
       observers: [
         'getCounty(contractId)',
-        'getShip(data.shipline_id)',
+        'getShip(data.shipline_id,common.*)',
         'getconfirm(contractId)',
         'getCmlForRiceType(cml,data.cl_id)',
         'getRiceTypeForPackage(riceType,data.type_rice_id)',
         'getPackageForPrice(package,data.package_id)',
+        'checkData(common.*)'
       ],
+      attached: function() {
+        console.log("created");
+        this.fire('vessel-edit-common',{node:this});
+      },
       // getShip:function (data) {
       //   // console.log(data);
       // },
@@ -216,9 +228,10 @@
       //   // }
       //
       // }
-      // checkData:function () {
-      //   console.log(this.data.seller_id);
-      // },
+      checkData:function(ob) {
+        // console.log(ob);
+        // console.log(this.common);
+      },
     });
   </script>
 </dom-module>
