@@ -62,6 +62,12 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                 }
             })
             .without("reduction", "group")
+            .outerJoin(r.table("invoice"),
+            function (detail, invoice) {
+                return invoice("bl_no").eq(detail("bl_no"))
+            })
+            .without({ right: "id" }).zip()
+            .filter(r.row.hasFields('invoice_no').not())
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -104,6 +110,32 @@ router.get('/shipment/bl/no/:bl_no', function (req, res, next) {
             .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
             .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
+            .eqJoin("load_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        load_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        load_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("dest_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        dest_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        dest_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("deli_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        deli_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        deli_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

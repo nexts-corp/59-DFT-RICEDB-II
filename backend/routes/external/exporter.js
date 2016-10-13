@@ -19,6 +19,10 @@ var schema = {
             "type": "string",
             "format": "date-time"
         },
+        "exporter_date_update": {
+            "type": "string",
+            "format": "date-time"
+        },
         "trader_id": {
             "type": "string"
         },
@@ -33,7 +37,7 @@ var schema = {
             }
         }
     },
-    "required": ["exporter_no", "exporter_date_approve", "trader_id", "seller_agent"]
+    "required": ["exporter_no", "exporter_date_approve", "exporter_date_update", "trader_id", "seller_agent"]
 };
 var validate = ajv.compile(schema);
 
@@ -95,7 +99,7 @@ router.get('/active', function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                  //  exporter_date_create: row('exporter_date_create').split('T')(0),
+                    //  exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -139,7 +143,7 @@ router.get('/unactive', function (req, res, next) {
                     exporter_id: row('id'),
                     exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(row('exporter_date_update')).toEpochTime()),
                     exporter_date_approve: row('exporter_date_approve').split('T')(0),
-                   // exporter_date_create: row('exporter_date_create').split('T')(0),
+                    // exporter_date_create: row('exporter_date_create').split('T')(0),
                     exporter_date_update: row('exporter_date_update').split('T')(0)
                 }
             })
@@ -172,7 +176,6 @@ router.get('/unactive', function (req, res, next) {
             });
     })
 });
-
 router.get('/id/:exporter_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("exporter")
@@ -181,7 +184,7 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 exporter_id: r.row('id'),
                 exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_update')).toEpochTime()),
                 exporter_date_approve: r.row('exporter_date_approve').split('T')(0),
-               // exporter_date_create: r.row('exporter_date_create').split('T')(0),
+                // exporter_date_create: r.row('exporter_date_create').split('T')(0),
                 exporter_date_update: r.row('exporter_date_update').split('T')(0)
             },
             r.db('external_f3').table("trader").get(r.row("trader_id"))
@@ -209,16 +212,19 @@ router.get('/id/:exporter_id', function (req, res, next) {
 });
 router.get('/seller', function (req, res, next) {
     db.query(function (conn) {
-        r.db('external_f3').table("exporter")
-            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
+        r.db('external_f3').table("trader").outerJoin(
+            r.db('external_f3').table("exporter"),
+            function (trader, exporter) {
+                return exporter("trader_id").eq(trader("id"))
+            }).zip()
+            //.filter(r.row.hasFields('exporter_no'))
+            .merge(function (m) {
+                return {
+                    exporter_status: m.hasFields('exporter_no')
+                }
+            })
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
-            // .filter(
-            //     r.row('seller_name_th').match(req.params.seller_name)
-            // )
-            .pluck(
-            "seller_id", "seller_name_th", "seller_name_en", "seller_address_th",
-            "trader_id", "trader_no", "trader_name"
-            )
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -249,6 +255,7 @@ router.get('/seller/not', function (req, res, next) {
             }).without("id")
             .filter(r.row.hasFields('exporter_no').not())
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -271,6 +278,7 @@ router.get('/seller/name/:seller_name', function (req, res, next) {
         r.db('external_f3').table("exporter")
             .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .filter(
             r.row('seller_name_th').match(req.params.seller_name)
             )
@@ -299,7 +307,48 @@ router.get('/seller/name/:seller_name', function (req, res, next) {
             });
     })
 });
-
+router.get('/type/license', function (req, res, next) {
+    db.query(function (conn) {
+        r.db('external_f3').table('type_license')
+            .map(function (ma) {
+                return ma.merge(function (me) {
+                    return {
+                        type_lic_id: me('id'),
+                        seller: r.db('external_f3').table("trader").outerJoin(
+                            r.db('external_f3').table("exporter"),
+                            function (trader, exporter) {
+                                return exporter("trader_id").eq(trader("id"))
+                            }).zip()
+                            .filter({ type_lic_id: me('id') })
+                            .merge(function (m) {
+                                return {
+                                    exporter_status: m.hasFields('exporter_no'),
+                                    exporter_id: m('id')
+                                }
+                            })
+                            .without('id')
+                            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
+                            .coerceTo('array')
+                    }
+                })
+            })
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 router.post('/insert', function (req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);

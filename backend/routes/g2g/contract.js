@@ -214,5 +214,42 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-
+router.get('/shipment', function (req, res, next) {
+    db.query(function (conn) {
+        r.table("contract")
+            .merge(function (row) {
+                return { contract_id: row('id') }
+            })
+            .map(function (m) {
+                return m.merge(function (me) {
+                    return {
+                        shipment: r.table('shipment')
+                        .filter({ contract_id: me('contract_id') })
+                        .merge(function(p){
+                            return {
+                                shm_id:p('id')
+                            }
+                        })
+                        .without('id')
+                        .coerceTo('array')
+                    }
+                })
+            })
+            .without('id','contract_type_rice')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 module.exports = router;
