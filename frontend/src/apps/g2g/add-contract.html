@@ -273,11 +273,10 @@
                   if(e.detail.data.buyer_id ){
                     this.idData = e.detail.data.buyer_id;
                     // console.log(this.idData);
-                  }else {
+                  }else if (e.detail.data.cl_id){
                     // this.idData = e.detail.data.cl_id;
-                    // console.log(e.detail.data.cl_id);
                     this.conFirmDeatil(e.detail.data.cl_id);
-                  }
+                  }else
                   //เช็คว่าส่งค่า shm_id มาไหม
                   if (this.dataSelect.shm_id) {
                     // console.log(this.dataSelect.shm_id)
@@ -288,16 +287,20 @@
             shipMentDeatil:function (id) {
               // console.log(id);
               this.glQuery('layoutMain').openToastLoading();
+              // this.glQuery('contentPanel').changDrawer();
               this.getDb('./g2g/shipment/id/'+id,(data)=>{
                 this.shipMent = data;
-                console.log(111);
+                // console.log(id);
+                console.log("shipMent");
               });
             },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
+                console.log("confirmLetter");
                 // console.log(this.confirmLetter);
+
               });
             },
             nxGridDblclick: function(e) {
@@ -313,6 +316,7 @@
                   callback(response.data);
                   this.glQuery('layoutMain').closeToastLoading(function(){
                     this.glQuery('contentPanel').changDrawer();
+                    // console.log(url);
                   }.bind(this));
 
                 }.bind(this))
