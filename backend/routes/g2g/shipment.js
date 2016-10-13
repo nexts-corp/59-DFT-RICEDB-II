@@ -164,32 +164,33 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id == null) {
-            //result.id = req.body.id;
-            db.query(function (conn) {
-                r.table("shipment")
-                    //.get(req.body.id)
-                    .insert(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                            result.id = response.generated_keys;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'field "id" must do not have data';
-            res.json(result);
-        }
+        res.json(req.body);
+        // if (req.body.id == null) {
+        //     //result.id = req.body.id;
+        //     db.query(function (conn) {
+        //         r.table("shipment")
+        //             //.get(req.body.id)
+        //             .insert(req.body)
+        //             .run(conn)
+        //             .then(function (response) {
+        //                 result.message = response;
+        //                 if (response.errors == 0) {
+        //                     result.result = true;
+        //                     result.id = response.generated_keys;
+        //                 }
+        //                 res.json(result);
+        //                 console.log(result);
+        //             })
+        //             .error(function (err) {
+        //                 result.message = err;
+        //                 res.json(result);
+        //                 console.log(result);
+        //             })
+        //     })
+        // } else {
+        //     result.message = 'field "id" must do not have data';
+        //     res.json(result);
+        // }
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
