@@ -36,12 +36,12 @@
     <db-gtog-contact></db-gtog-contact>
 
             <content-panel>
+
               <grid>
                 <div class="horizontal end-justified layout">
                   <div class="button">841/[[contractId]]
                     <paper-button raised class="gl-btn-primary"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
                   </div>
-
                 </div>
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
@@ -85,7 +85,13 @@
                             <section-content name="detail">
                                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                                     <promise-detail name="primary" data="{{dataSelect}}" type-rice=[[typeRice]]></promise-detail>
-                                    <promise-confirm name="secondary" data="{{dataSelect}}" contract-id="[[contractId]]" package=[[package]] incoterms=[[incoterms]]></promise-confirm>
+                                    <promise-confirm
+                                                      name="secondary"
+                                                      confirm-letter="{{confirmLetter}}"
+                                                      contract-id="[[contractId]]"
+                                                      package=[[package]]
+                                                      incoterms=[[incoterms]]
+                                                      on-confirm-mation-common="confirmMationCommon"></promise-confirm>
                                     <promise-insert name="secondaryHalf" package=[[package]] contract-id="[[contractId]]" incoterms=[[incoterms]]></promise-insert>
                                     <period-insert name="thirdHalf" contract-id="[[contractId]]"></period-insert>
                                 </iron-pages>
@@ -101,7 +107,12 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
-                                <vessel-page on-vessel-edit-common="vesselEditCommon" name="third" data="{{shipMent}}" shm-id="[[dataSelect.shm_id]]" contract-id="[[contractId]]" ></vessel-page>
+                                <vessel-page on-vessel-edit-common="vesselEditCommon"
+                                             on-vessel-insert-common="vesselInsertCommon"
+                                             name="third"
+                                             data="{{shipMent}}"
+                                             shm-id="[[dataSelect.shm_id]]"
+                                             contract-id="[[contractId]]" ></vessel-page>
                             </section-content>
                             <section-content name="file">
                                 <promise-fileup></promise-fileup>
@@ -143,6 +154,9 @@
                   value:{}
                 }
             },
+            observers:[
+              // 'getPortCountry(contractId)'
+            ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
                 this.glSetLayout('layout-main');
@@ -181,52 +195,60 @@
                 // console.log(this.cml);
               });
               // list port
-              // this.getDb('http://localhost:3000/api/common/port',(data)=>{
-              //   this.ports=data;
-              // });
-              // list country
-              // this.getDb('http://localhost:3000/api/common/country',(data)=>{
-              //   this.country=data;
-              // });
-              // list ship
-              // this.getDb('http://localhost:3000/api/common/ship',(data)=>{
-              //   this.ship=data;
-              // });
-              // list shipline
-              // this.getDb('http://localhost:3000/api/common/shipline',(data)=>{
-              //   this.shipline=data;
-              // });
-              // list carrier
-              // this.getDb('http://localhost:3000/api/common/carrier',(data)=>{
-              //   this.carrier=data;
-              // });
-              // list buyer
-              // this.getDb('http://localhost:3000/api/common/buyer',(data)=>{
-              //   this.buyer=data;
-              // });
-              // list seller
-              // this.getDb('http://localhost:3000/api/common/seller',(data)=>{
-              //   this.seller=data;
-              // });
-              // list incoterms
+              this.getDb('./common/port/',(data)=>{
+                this.common.countryport =  data;
+                // console.log(this.pol);
+
+              });
+              // list incoterms  ชนิดการจ่าย
               this.getDb('./common/incoterms',(data)=>{
                 this.incoterms=data;
               });
+              // list cml
+              // list incoterms
+              // this.getDb('./common/port',(data)=>{
+              //   this.common.port_id = data;
+              //   // console.log(this.port);dest_port_id
+              // });
+              // console.log(this.common);
             },
+            // getPortCountry:function (contractId) {
+            //   // console.log(this.dataSelect);
+            //   var county;
+            //   this.getDb('./g2g/contract/id/'+contractId,(data)=>{
+            //     // console.log(contractId);
+            //     county = data.country_id;
+            //       //get buyer_masks
+            //     this.common.buyerMasks = data.buyer_masks;
+            //     // get pod;
+            //     this.getDb('./common/port/country/id/'+county,(data)=>{
+            //       // console.log(data);
+            //       this.common.dest_port_id = data;
+            //       this.common.deli_port_id = data;
+            //       // console.log(this.port);dest_port_id
+            //     });
+            //   });
+            // },
             getChange:function () {
 
               this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
               })
-              // this.getDb2('./g2g/contract/list').then((res)=>{
-              //   console.log(res.data);
-              // });
 
             },
             vesselEditCommon:function (e) {
-              console.log(e.detail.node);
+              // console.log(e.detail.node);
 
               e.detail.node.common=this.common;
+            },
+            vesselInsertCommon:function (e) {
+              // console.log(e.detail.node);
+              e.detail.node.common=this.common;
+            },
+            confirmMationCommon:function (e) {
+              // console.log(e.detail.node);
+
+              e.detail.node.common=this.confirmLetter;
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
@@ -240,16 +262,17 @@
                     this.vesselPage = 0;
                 }
                 this.dataSelect = e.detail.data;
-                // console.log(this.dataSelect);
+                // console.log(this.dataSelect.cl_id);
                 if (typeof e.detail.data == 'undefined') {
                   // console.log(1);
                 }else {
                   if(e.detail.data.buyer_id ){
                     this.idData = e.detail.data.buyer_id;
                     // console.log(this.idData);
-                  }else {
-                    this.idData = e.detail.data.cl_id;
-                  }
+                  }else if (e.detail.data.cl_id){
+                    // this.idData = e.detail.data.cl_id;
+                    this.conFirmDeatil(e.detail.data.cl_id);
+                  }else
                   //เช็คว่าส่งค่า shm_id มาไหม
                   if (this.dataSelect.shm_id) {
                     // console.log(this.dataSelect.shm_id)
@@ -259,9 +282,21 @@
             },
             shipMentDeatil:function (id) {
               // console.log(id);
-              this.getDb('http://localhost:3000/api/g2g/shipment/id/'+id,(data)=>{
+              this.glQuery('layoutMain').openToastLoading();
+              // this.glQuery('contentPanel').changDrawer();
+              this.getDb('./g2g/shipment/id/'+id,(data)=>{
                 this.shipMent = data;
-                // console.log(this.shipMent);
+                // console.log(id);
+                console.log("shipMent");
+              });
+            },
+            conFirmDeatil:function (cmlId) {
+              this.glQuery('layoutMain').openToastLoading();
+              this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
+                this.confirmLetter = data;
+                console.log("confirmLetter");
+                // console.log(this.confirmLetter);
+
               });
             },
             nxGridDblclick: function(e) {
@@ -275,14 +310,15 @@
               axios.get(url)
                 .then(function(response){
                   callback(response.data);
+                  this.glQuery('layoutMain').closeToastLoading(function(){
+                    this.glQuery('contentPanel').changDrawer();
+                    // console.log(url);
+                  }.bind(this));
+
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
                 // console.log(1);
-            },
-
-            getDb2:function (url,callback) {
-              return axios.get(url);
             },
             postDb:function (url) {
               axios.get('/user', {
@@ -313,11 +349,11 @@
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-print.html`);
               this.importHref(resolvedPageUrl,null,null,true);
 
-              var resolvedPageUrl = this.resolveUrl(`components/period/period-page.html`);
-              this.importHref(resolvedPageUrl,null,null,true);
-
-              var resolvedPageUrl = this.resolveUrl(`components/period/period-insert.html`);
-              this.importHref(resolvedPageUrl,null,null,true);
+              // var resolvedPageUrl = this.resolveUrl(`components/period/period-page.html`);
+              // this.importHref(resolvedPageUrl,null,null,true);
+              //
+              // var resolvedPageUrl = this.resolveUrl(`components/period/period-insert.html`);
+              // this.importHref(resolvedPageUrl,null,null,true);
 
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-page.html`);
               this.importHref(resolvedPageUrl,null,null,true);

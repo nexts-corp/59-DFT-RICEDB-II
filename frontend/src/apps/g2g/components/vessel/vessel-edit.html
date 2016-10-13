@@ -63,7 +63,7 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
-              item-value-path="port_id" value="{{data.load_port_id}}"></gl-combo-box>
+              item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="ETD" value="{{data.etd_date}}"></vaadin-date-picker>
@@ -74,16 +74,16 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-              item-value-path="port_id" value="{{data.dest_port_id}}"></gl-combo-box>
+              item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-              item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+              item-value-path="port_id" items="{{pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'num_of_container')]]{{data.num_of_container}}
+          [[testNum(data.*,'num_of_container')]]
             <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -95,7 +95,7 @@
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'weight_per_container')]]{{data.weight_per_container}}
+          [[testNum(data.*,'weight_per_container')]]
           <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
             value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
@@ -169,7 +169,7 @@
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w" value="{{data.nn_page|toInteger}}"></gl-form-input>
+          <gl-form-input label="" class="w" value="{{data.nn_page}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>
@@ -216,7 +216,7 @@
         'checkData(common.*)'
       ],
       attached: function() {
-        console.log("created");
+        // console.log("created");
         this.fire('vessel-edit-common',{node:this});
       },
       // getShip:function (data) {
