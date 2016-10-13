@@ -101,7 +101,7 @@
 
                         <panel-seleted-vessel>
                             <section-content name="print">
-                                <vessel-page name="third" data="{{shipMent}}" shm-id="[[dataSelect.shm_id]]" contract-id="[[contractId]]" ></vessel-page>
+                                <vessel-page on-vessel-edit-common="vesselEditCommon" name="third" data="{{shipMent}}" shm-id="[[dataSelect.shm_id]]" contract-id="[[contractId]]" ></vessel-page>
                             </section-content>
                             <section-content name="file">
                                 <promise-fileup></promise-fileup>
@@ -138,6 +138,10 @@
                     type:String,
                     value:''
                 },
+                common:{
+                  type:Object,
+                  value:{}
+                }
             },
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -154,6 +158,27 @@
               // list package
               this.getDb('./common/package',(data)=>{
                 this.package=data;
+              });
+              this.getDb('./common/seller',(data)=>{
+                  this.common.seller= data;
+                  // console.log(this.common.seller);
+              });
+              this.getDb('./common/carrier',(data)=>{
+                //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
+                  this.common.carrier= data;
+              });
+              //shipline_id
+              this.getDb('./common/shipline/',(data)=>{
+                this.common.shipline = data;
+              });
+              //ship in shipline
+              this.getDb('./common/shipline/ship',(data)=>{
+                this.common.shipInShipline = data;
+              });
+              //get surveyor_id
+              this.getDb('./common/surveyor',(data)=>{
+                this.common.surveyor = data;
+                // console.log(this.cml);
               });
               // list port
               // this.getDb('http://localhost:3000/api/common/port',(data)=>{
@@ -189,10 +214,19 @@
               });
             },
             getChange:function () {
+
               this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
               })
-              // console.log(11);
+              // this.getDb2('./g2g/contract/list').then((res)=>{
+              //   console.log(res.data);
+              // });
+
+            },
+            vesselEditCommon:function (e) {
+              console.log(e.detail.node);
+
+              e.detail.node.common=this.common;
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
@@ -245,6 +279,10 @@
                 .catch(function (error) {
                 }.bind(this));
                 // console.log(1);
+            },
+
+            getDb2:function (url,callback) {
+              return axios.get(url);
             },
             postDb:function (url) {
               axios.get('/user', {
