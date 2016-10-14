@@ -304,7 +304,7 @@
                 value="G.W. {{gw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.0.shm_det_quantity}}"></gl-form-label-input>
+              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
@@ -545,6 +545,9 @@
                           this.glQuery('addContract').shipMentDeatil(data[0].shm_id);
                           // this.glQuery('contentPanel').changDrawer();
                           this.shipment = [{}];
+                          this.quantityBag ='';
+                           this.sumGW ='';
+                           this.gw  ='';
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
