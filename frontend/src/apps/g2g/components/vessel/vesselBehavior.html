@@ -40,11 +40,15 @@
   getconfirm:function (contractId) {
     //get cl cl_id
     // this.cl_id = this.cl_id || this.$.cl_id;
-    this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-      this.cml = data;
-      // console.log(this.cml);
-      // this.cl_id.items = data;
-    });
+    // 'cl_type_rice' of undefined
+
+    if (typeof contractId != 'undefined'){
+      this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
+        this.cml = data;
+        // console.log(this.cml);
+        // this.cl_id.items = data;
+      });
+    }
   },
   getSellerPhone:function (e) {
     var selectedItem = e.detail.value;
@@ -78,7 +82,7 @@
     },
     getCmlForRiceType : function(e,id) {
     // var selectedItem = e.detail.value;
-    this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
+    // this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
     var selectedItem;
     if (typeof id === 'string'){
       selectedItem=id;
@@ -88,10 +92,15 @@
       // console.log(selectedItem+"object");
     }
      if (selectedItem) {
-       console.log(this.cml);
+       if (typeof this.cml != 'undefined'){
        var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
-      this.riceType = cmls[0].cl_type_rice;
-       this.type_rice_id.items = cmls[0].cl_type_rice;
+        if (typeof cmls[0] != 'undefined'){
+          //  console.log(typeof cmls[0].cl_type_rice != 'undefined');
+           console.log(2);
+           this.riceType = cmls[0].cl_type_rice;
+          //  this.type_rice_id.items = cmls[0].cl_type_rice;
+         }
+       }
       //  console.log(this.type_rice_id.items);
      }
    },
@@ -116,22 +125,27 @@
      getPackageForPrice:function (e,id) {
        //ถึงมาจาก _getRiceTypeForPackage
      var packageAl = this.package;
-     var selectedItem;
-     if (typeof id === 'string'){
-       selectedItem=id;
-       // console.log(selectedItem+"string");
-     }else {
-       selectedItem=e.detail.value;
-       // console.log(selectedItem+"object");
-     }
-     if (selectedItem) {
-       var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
-       this.price = prices[0];
-       this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
-       this.toWords(this.quantityBag);
-       this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
-       this.gw = this.sumGW.toFixed(3);
-     }
+     if (typeof packageAl != 'undefined'){
+       var selectedItem;
+       if (typeof id === 'string'){
+         selectedItem=id;
+         // console.log(selectedItem+"string");
+       }else {
+         selectedItem=e.detail.value;
+         // console.log(selectedItem+"object");
+       }
+       if (selectedItem) {
+
+         var prices = packageAl.filter(function (packageAl) { return packageAl.package_id == selectedItem });
+         this.price = prices[0];
+         if (typeof this.price != 'undefined'){
+           this.quantityBag = ((parseFloat(this.price.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price.package_weight_bag)).toFixed(3);
+           this.toWords(this.quantityBag);
+           this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price.package_weight_bag) + (parseFloat(this.price.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
+           this.gw = this.sumGW.toFixed(3);
+         }
+       }
+      }
     },
     toWords: function(num) {
         // Convert numbers to words

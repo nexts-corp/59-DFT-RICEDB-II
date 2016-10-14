@@ -254,7 +254,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
-                  item-value-path="type_rice_id" value="{{shipment.0.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+                  item-value-path="type_rice_id" items="{{riceType}}" value="{{shipment.0.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
               <!-- <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท"
                 on-iron-select="_getRiceTypeForPackage">
                 <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{shipment.0.type_rice_id}}">
@@ -443,7 +443,7 @@
             },
             observers: [
               'getCounty(contractId)',
-              'getconfirm(contractId)',
+              'getconfirm(data.contract_id)',
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");

@@ -117,7 +117,7 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="type_rice_id" label="ชนิดข้าว+e" item-label-path="type_rice_name_en"
-              item-value-path="type_rice_id" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+              item-value-path="type_rice_id" items="{{riceType}}" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
@@ -209,7 +209,7 @@
       observers: [
         'getCounty(contractId)',
         'getShip(data.shipline_id,common.*)',
-        'getconfirm(contractId)',
+        'getconfirm(data.contract_id)',
         'getCmlForRiceType(cml,data.cl_id)',
         'getRiceTypeForPackage(riceType,data.type_rice_id)',
         'getPackageForPrice(package,data.package_id)',
