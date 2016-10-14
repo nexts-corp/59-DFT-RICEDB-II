@@ -39,11 +39,11 @@
   },
   getconfirm:function (contractId) {
     //get cl cl_id
-    this.cl_id = this.cl_id || this.$.cl_id;
+    // this.cl_id = this.cl_id || this.$.cl_id;
     this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
       this.cml = data;
       // console.log(this.cml);
-      this.cl_id.items = data;
+      // this.cl_id.items = data;
     });
   },
   getSellerPhone:function (e) {
@@ -83,11 +83,12 @@
     if (typeof id === 'string'){
       selectedItem=id;
       // console.log(selectedItem+"string");
-    }else {
+    } else {
       selectedItem=e.detail.value;
       // console.log(selectedItem+"object");
     }
      if (selectedItem) {
+       console.log(this.cml);
        var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
       this.riceType = cmls[0].cl_type_rice;
        this.type_rice_id.items = cmls[0].cl_type_rice;

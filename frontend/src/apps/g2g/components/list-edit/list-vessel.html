@@ -242,7 +242,7 @@
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-                  item-value-path="cl_id" value="{{shipment.0.cl_id}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
+                  item-value-path="cl_id" value="{{shipment.0.cl_id}}" items="{{cml}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
               <!-- <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" error-message="Confirmation Letter" required
                 placeholder="Confirmation Letter" on-iron-select="_getCmlForRiceType">
                 <paper-menu class="dropdown-content" attr-for-selected="clNo" selected="{{shipment.0.cl_no}}">
@@ -530,7 +530,7 @@
               delete this.shipment.origin_page;
               delete this.shipment.shm_det_quantity;
               delete this.shipment.weight_per_container;
-
+              // console.log( this.shipment[0]);
               this.postDb(this.shipment);
 
             },
@@ -542,7 +542,7 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          // this.glQuery('addContract').getChange();
+                          this.glQuery('addContract').shipMentDeatil(data[0].shm_id);
                           // this.glQuery('contentPanel').changDrawer();
                           this.clickCancel();
                         }.bind(this))
@@ -559,7 +559,7 @@
                           console.log(response);
                           console.log(data);
                           // this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('contentPanel').changDrawer();
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
@@ -575,7 +575,7 @@
                           console.log(response);
                           // console.log(dataId);
                           // this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
