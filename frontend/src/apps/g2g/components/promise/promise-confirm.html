@@ -154,7 +154,7 @@
       </div>
 
       <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
               <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
                   <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
                       <template is="dom-repeat" items="[[incoterms]]">
@@ -223,17 +223,17 @@
               'getTyperice(contractId)'
             ],
             attached: function() {
-              console.log("created confirm-mation-common");
+              // console.log("created confirm-mation-common");
               this.fire('confirm-mation-common',{node:this});
             },
             getTyperice: function(contractId) {
               this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
-                console.log(12512);
+                // console.log(12512);
               });
             },
             dataChange:function (data) {
-              console.log(data);
+              // console.log(data);
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
