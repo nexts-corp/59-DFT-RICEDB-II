@@ -15,6 +15,9 @@ var schema = {
         "contract_id": {
             "type": "string"
         },
+        "cl_id": {
+            "type": "string"
+        },
         "shm_no": {
             "type": "string"
         },
@@ -22,7 +25,7 @@ var schema = {
             "type": "string"
         }
     },
-    "required": ["contract_id", "shm_no", "shm_name"]
+    "required": ["contract_id", "cl_id", "shm_no", "shm_name"]
 };
 var validate = ajv.compile(schema);
 
@@ -34,66 +37,6 @@ router.get('/id/:shm_id', function (req, res, next) {
             .merge(function (row) {
                 return {
                     shm_id: row('id'),
-                    // shipment_detail: row('shipment_detail').map(function (arr_shm_det) {
-                    //     return arr_shm_det.merge(function (row_shm_det) {
-                    //         return r.table('port').get(row_shm_det('load_port_id'))
-                    //             .merge(function (port) {
-                    //                 return {
-                    //                     load_port_name: port("port_name"),//r.row["right"]["port_name"]
-                    //                     load_port_code: port("port_code")
-                    //                 }
-                    //             })
-                    //             .without(["id", "port_name", "port_code", "country_id"])
-                    //     })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('port').get(row_shm_det('dest_port_id'))
-                    //                 .merge(function (port) {
-                    //                     return {
-                    //                         dest_port_name: port("port_name"),//r.row["right"]["port_name"]
-                    //                         dest_port_code: port("port_code")
-                    //                     }
-                    //                 })
-                    //                 .without(["id", "port_name", "port_code", "country_id"])
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('port').get(row_shm_det('deli_port_id'))
-                    //                 .merge(function (port) {
-                    //                     return {
-                    //                         deli_port_name: port("port_name"),//r.row["right"]["port_name"]
-                    //                         deli_port_code: port("port_code")
-                    //                     }
-                    //                 })
-                    //                 .without(["id", "port_name", "port_code", "country_id"])
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('confirm_letter').get(row_shm_det('cl_id'))
-                    //                 .without(["id", "cl_quality", "cl_type_rice", "cl_total_quantity", "cl_date"])
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('carrier').get(row_shm_det('carrier_id'))
-                    //                 .without("id")
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.db('external_f3').table("seller").get(row_shm_det('seller_id'))
-                    //                 .without(["id", "country_id"])
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('ship').get(row_shm_det('ship_id')).without("id")
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('shipline').get(row_shm_det('shipline_id')).without("id")
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('surveyor').get(row_shm_det('surveyor_id')).without("id")
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('type_rice').get(row_shm_det('type_rice_id')).without("id")
-                    //         })
-                    //         .merge(function (row_shm_det) {
-                    //             return r.table('package').get(row_shm_det('package_id')).without("id")
-                    //         })
-                    // }),
-                    // shm_quantity: row('shipment_detail').sum("shm_det_quantity")
                     shipment_detail: r.table("shipment_detail")
                         .filter({ "shm_id": row('id') })
                         .orderBy(r.desc('shm_det_quantity'))
@@ -121,9 +64,6 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 }
                             })
                         }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("cl_id", r.table("confirm_letter")).without({
-                            right: ["id", "cl_quality", "cl_type_rice", "cl_total_quantity", "cl_date"]
-                        }).zip()
                         .eqJoin("carrier_id", r.table("carrier")).without({ right: "id" }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
@@ -137,8 +77,8 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 shm_det_id: r('id'),
                                 eta_date: r('eta_date').split('T')(0),
                                 etd_date: r('etd_date').split('T')(0),
-                                packing_date:r('packing_date').split('T')(0),
-                                product_date:r('product_date').split('T')(0)
+                                packing_date: r('packing_date').split('T')(0),
+                                product_date: r('product_date').split('T')(0)
                             }
                         })
                         .without('id')
@@ -149,6 +89,31 @@ router.get('/id/:shm_id', function (req, res, next) {
                 }
             })
             .without('id')
+            .merge(function (m) {
+                return r.table("confirm_letter").get(m('cl_id')).without('id')
+                    .merge(function (mm) {
+                        return {
+                            cl_type_rice: mm('cl_type_rice')
+                                .merge(function (mmm) {
+                                    return r.table('type_rice').get(mmm('type_rice_id')).without('id')
+                                })
+                                .merge(function (mmm) {
+                                    return {
+                                        package: mmm('package').map(function (arr_package) {
+                                            return arr_package.merge(function (row_package) {
+                                                return r.table('package').get(row_package('package_id')).without('id')
+                                            })
+                                        })
+                                    }
+                                })
+                        }
+                    })
+
+            })
+            // .map(function(m){
+            //     return m('cl_type_rice').merge({xx:'xx'})
+            // })
+            //.eqJoin("cl_id", r.table("confirm_letter")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     res.json(cursor);

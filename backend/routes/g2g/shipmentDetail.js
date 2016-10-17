@@ -22,9 +22,9 @@ var schema = {
             "carrier_id": {
                 "type": "string"
             },
-            "cl_id": {
-                "type": "string"
-            },
+            // "cl_id": {
+            //     "type": "string"
+            // },
             "deli_port_id": {
                 "type": "string"
             },
@@ -99,7 +99,6 @@ var schema = {
         },
         "required": [
             "carrier_id",
-            "cl_id",
             "deli_port_id",
             "dest_port_id",
             "load_port_id",
