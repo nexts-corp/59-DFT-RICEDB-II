@@ -37,19 +37,6 @@
       // });
     });
   },
-  getconfirm:function (contractId) {
-    //get cl cl_id
-    // this.cl_id = this.cl_id || this.$.cl_id;
-    // 'cl_type_rice' of undefined
-
-    if (typeof contractId != 'undefined'){
-      this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-        this.cml = data;
-        // console.log(this.cml);
-        // this.cl_id.items = data;
-      });
-    }
-  },
   getSellerPhone:function (e) {
     var selectedItem = e.detail.value;
     if (selectedItem) {
@@ -80,31 +67,34 @@
       }
 
     },
-    getCmlForRiceType : function(e,id) {
-    // var selectedItem = e.detail.value;
-    // this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
-    var selectedItem;
-    if (typeof id === 'string'){
-      selectedItem=id;
-      // console.log(selectedItem+"string");
-    } else {
-      selectedItem=e.detail.value;
-      // console.log(selectedItem+"object");
-    }
-     if (selectedItem) {
-       if (typeof this.cml != 'undefined'){
-       var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
-        if (typeof cmls[0] != 'undefined'){
-          this.riceType = cmls[0].cl_type_rice;
-          //  this.type_rice_id.items = cmls[0].cl_type_rice;
-         }
-       }
-      //  console.log(this.type_rice_id.items);
-     }
-   },
+  //   getCmlForRiceType : function(e,id) {
+  //   // var selectedItem = e.detail.value;
+  //   // this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
+  //   var selectedItem;
+  //   if (typeof id === 'string'){
+  //     selectedItem=id;
+  //     // console.log(selectedItem+"string");
+  //   } else {
+  //     selectedItem=e.detail.value;
+  //     // console.log(selectedItem+"object");
+  //   }
+  //    if (selectedItem) {
+  //      if (typeof this.cml != 'undefined'){
+  //      var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
+  //       if (typeof cmls[0] != 'undefined'){
+  //         this.riceType = cmls[0].cl_type_rice;
+  //         //  this.type_rice_id.items = cmls[0].cl_type_rice;
+  //        }
+  //      }
+  //     //  console.log(this.type_rice_id.items);
+  //    }
+  //  },
    getRiceTypeForPackage : function (e,id) {
      // ต่อจาก getCmlForRiceType
-     this.package_id = this.package_id || this.$.package_id;
+    //  console.log("getRiceTypeForPackage");
+    //  console.log(e);
+    //  console.log(id);
+    //  this.package_id = this.package_id || this.$.package_id;
      var selectedItem;
      if (typeof id === 'string'){
        selectedItem=id;
@@ -113,11 +103,17 @@
        selectedItem=e.detail.value;
        // console.log(selectedItem+"object");
      }
-     if (selectedItem) {
-       var packages = this.riceType.filter(function (riceType) { return riceType.type_rice_id ==  selectedItem });
-       this.package = packages[0].package;
-       this.package_id.items = this.package;
-       // console.log(this.package_id.items);
+    //  console.log(selectedItem);
+    if (selectedItem) {
+      // console.log(this.clTypeRice);
+      if (typeof this.clTypeRice == 'undefined') {
+        var packages = this.data.cl_type_rice.filter(function (cl_type_rice) { return cl_type_rice.type_rice_id ==  selectedItem });
+      } else {
+        var packages = this.clTypeRice.filter(function (clTypeRice) { return clTypeRice.type_rice_id ==  selectedItem });
+      }
+      this.package = packages[0].package;
+      this.package_id = this.package;
+      // console.log(this.package_id);
      }
    },
      getPackageForPrice:function (e,id) {

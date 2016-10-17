@@ -20,7 +20,7 @@
   </style>
 
   <template>
-    <gl-form-panel-body>
+    <gl-form-panel-body>[[buyerMasks]]
 
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -112,16 +112,15 @@
     <gl-form-panel-body>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-              item-value-path="cl_id"  items="{{cml}}" value="{{data.cl_id}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
+          <gl-form-label-input  label="Confirmation Letter" value="[[clNo]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="type_rice_id" label="ชนิดข้าว+e" item-label-path="type_rice_name_en"
-              item-value-path="type_rice_id" items="{{riceType}}" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+          <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
+              item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-              item-value-path="package_id" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+              item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -209,9 +208,9 @@
       observers: [
         'getCounty(contractId)',
         'getShip(data.shipline_id,common.*)',
-        'getconfirm(data.contract_id)',
-        'getCmlForRiceType(cml,data.cl_id)',
-        'getRiceTypeForPackage(riceType,data.type_rice_id)',
+        // 'getconfirm(data.contract_id)',
+        // 'getCmlForRiceType(cml,data.cl_id)',
+        'getRiceTypeForPackage(clTypeRice,data.type_rice_id)',
         'getPackageForPrice(package,data.package_id)',
         'checkData(common.*)'
       ],
@@ -230,6 +229,7 @@
       // }
       checkData:function(ob) {
         // console.log(ob);
+        // console.log(this.data);
         // console.log(this.common);
       },
     });
