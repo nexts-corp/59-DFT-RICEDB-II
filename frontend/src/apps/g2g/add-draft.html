@@ -35,8 +35,7 @@
         <iron-pages selected="{{selected}}">
           <div>
             <draft-period></draft-period>
-            <paper-button  class="gl-btn-success" raised on-tap="saveChangeShipment" index="[[index]]">
-              <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+
           </div>
           <div>
             <list-draft data="{{dataPeriod}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}">
@@ -116,6 +115,10 @@
                 changePage: {
                     type: Number,
                     value: 0
+                },
+                common:{
+                  type:Object,
+                  value:{}
                 },
                 panalBl: {
                     type: Array,
@@ -204,13 +207,20 @@
                     }
                 }
             },
+            listeners: {
+              'draft-company-common': 'draftCompanyCommon',
+            },
             created: function() {
-                this.glSetTitle('งวดที่ 1');
+                this.glSetTitle('สัญญาการซื้อขาย');
                 this.glSetLayout('layout-main');
-
+                this.glQuery('adddraft',this);
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
+            },
+            draftCompanyCommon:function (e) {
+              console.log(e.detail.node);
+              // e.detail.node.common=this.common;
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
