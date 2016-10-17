@@ -20,7 +20,8 @@ var schema = {
                 "type": "string"
             },
             "carrier_id": {
-                "type": "string"
+                "type": "string",
+                "minLength": 36
             },
             // "cl_id": {
             //     "type": "string"
@@ -67,10 +68,12 @@ var schema = {
                 "format": "date-time"
             },
             "seller_id": {
-                "type": "string"
+                "type": "string",
+                "minLength": 36
             },
             "ship_id": {
-                "type": "string"
+                "type": "string",
+                "minLength": 36
             },
             "ship_lot_no": {
                 "type": "string"
@@ -79,16 +82,19 @@ var schema = {
                 "type": "string"
             },
             "shipline_id": {
-                "type": "string"
+                "type": "string",
+                "minLength": 36
             },
             "shm_det_quantity": {
                 "type": "number"
             },
             "shm_id": {
-                "type": "string"
+                "type": "string",
+                "minLength": 36
             },
             "surveyor_id": {
-                "type": "string"
+                "type": "string",
+                "minLength": 36
             },
             "type_rice_id": {
                 "type": "string"
