@@ -115,7 +115,7 @@
             </items>
             <section-content data="detail">
               <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <div name="addRedRegExporter"><register-pageRegister></register-pageRegister></div>
+                <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]"></register-pageRegister></div>
                 <div name="detailRegExporter"><register-pageDetail exporter-id="[[exporterId]]"></register-pageDetail></div>
               </iron-pages>
             </section-content>
@@ -150,6 +150,10 @@
                 exporterId:{
                   type: String,
                   observer: '_exporterIdChanged'
+                },
+                traderId:{
+                  type: String,
+                  observer: '_search'
                 }
             },
             _exporterIdChanged:function(val){
