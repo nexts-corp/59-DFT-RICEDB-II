@@ -67,28 +67,32 @@
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                     <gl-form-dropdown-menu label="ประเภทใบอนุญาติ" placeholder="เลือกประเภท" name="type_lic_name" value="{{getData}}">
-                      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_lic_id}}">
-                        <paper-item value="allSelecte">ทั้งหมด</paper-item>
-                        <template is="dom-repeat" items="[[license]]">
+                      <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
+                        <paper-item value="0">ทั้งหมด</paper-item>
+                        <paper-item value="1">ทั่วไป</paper-item>
+                        <paper-item value="2">ไม่เกิน 12 ก.ก.</paper-item>
+                        <paper-item value="3">ชายแดน</paper-item>
+                        <!-- <template is="dom-repeat" items="[[license]]">
                           <paper-item value="[[item.type_lic_id]]">[[item.type_lic_name]]</paper-item>
-                        </template>
-                      </paper-menu>
-                    </gl-form-dropdown-menu>
-                  </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                  <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="เลือกประเภท" name="member_name" value="{{getStatus}}">
-                    <paper-menu class="dropdown-content" attr-for-selected="value">
-                      <paper-item value="selectMember">เป็นสมาชิก</paper-item>
-                      <paper-item value="selectUnmember">ไม่เป็นสมาชิก</paper-item>
-                      <!-- <template is="dom-repeat" items="[[exportStatus]]">
+                        </template> -->
+    </paper-menu>
+    </gl-form-dropdown-menu>
+    </gl-grid-col>
+    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+        <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="เลือกประเภท" name="member_name" value="{{getStatus}}">
+            <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
+                <paper-item value="0">ทั้งหมด</paper-item>
+                <paper-item value="1">เป็นสมาชิก</paper-item>
+                <paper-item value="2">ไม่เป็นสมาชิก</paper-item>
+                <!-- <template is="dom-repeat" items="[[exportStatus]]">
                         <paper-item value="[[item.id]]" hidden>[[item.exporter_status]]</paper-item>
                       </template> -->
-                    </paper-menu>
-                  </gl-form-dropdown-menu>
-                </gl-grid-col>
-                <paper-button class="gl-btn-info" on-tap="_search" raised>ค้นหา</paper-button>
-              </gl-grid-row>
-            </div>
+            </paper-menu>
+        </gl-form-dropdown-menu>
+    </gl-grid-col>
+    <paper-button class="gl-btn-info" on-tap="_search" raised>ค้นหา</paper-button>
+    </gl-grid-row>
+    </div>
 
 
     <div class="flex title">
@@ -138,7 +142,10 @@
                     type: Object
                 },
                 getStatus: {
-                  type : Object
+                    type: Object
+                },
+                datas: {
+                    type: Object
                 }
             },
             created: function() {
@@ -150,55 +157,177 @@
                 // this.layoutMain = this.glQuery('layoutMain');
             },
             _search: function() {
-                this.getDb('http://localhost:3000/api/external/exporter/seller', (data) => {
-                    var datas = {};
-                    var seller = [];
-                    for (var i = 0; i < data.length; i++) {
-                        datas = data[i].exporter_status;
-                        if (datas == true) {
-                            datas = 'เป็นสมาชิก';
-                        } else if (datas == false) {
-                            datas = 'ไม่เป็นสมาชิก';
+                if (this.getData == "ทั้งหมด" && this.getStatus == "ทั้งหมด") {
+                    this.getDb('http://localhost:3000/api/external/exporter/seller', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
                         }
-                        data[i].exporter_status = datas;
-                    }
-                    if (this.getData == "ทั้งหมด") {
                         this.licenses = data;
-                    } else if (this.getData == "ทั่วไป") {
+                    });
+                }
+                else if (this.getData == "ทั้งหมด" && this.getStatus == "เป็นสมาชิก") {
+                  this.getDb('http://localhost:3000/api/external/exporter/status/true', (data) => {
+                      for (var i = 0; i < data.length; i++) {
+                          datas = data[i].exporter_status;
+                          if (datas == true) {
+                              datas = 'เป็นสมาชิก';
+                          } else if (datas == false) {
+                              datas = 'ไม่เป็นสมาชิก';
+                          }
+                          data[i].exporter_status = datas;
+                      }
+                      this.licenses = data;
+                  });
+                }
+                else if (this.getData == "ทั้งหมด" && this.getStatus == "ไม่เป็นสมาชิก") {
+                  this.getDb('http://localhost:3000/api/external/exporter/status/false', (data) => {
+                      for (var i = 0; i < data.length; i++) {
+                          datas = data[i].exporter_status;
+                          if (datas == true) {
+                              datas = 'เป็นสมาชิก';
+                          } else if (datas == false) {
+                              datas = 'ไม่เป็นสมาชิก';
+                          }
+                          data[i].exporter_status = datas;
+                      }
+                      this.licenses = data;
+                  });
+                }
+                else if (this.getData == "ทั่วไป" && this.getStatus == "ทั้งหมด") {
+                    this.getDb('./external/exporter/type/KK6', (data) => {
                         for (var i = 0; i < data.length; i++) {
-                            seller = data[i].type_lic_id;
-                            // console.log(seller);
-                            if (seller == "KK6") {
-                                this.licenses = data;
-                            } else {
-                              alert('ไม่มีข้อมูล');
-                              break;
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
                             }
+                            data[i].exporter_status = datas;
                         }
-                    } else if (this.getData == "ไม่เกิน 12 ก.ก.") {
+                        this.licenses = data;
+                    })
+                }
+                else if (this.getData == "ทั่วไป" && this.getStatus == "เป็นสมาชิก") {
+                    this.getDb('./external/exporter/type/KK6/status/true', (data) => {
                         for (var i = 0; i < data.length; i++) {
-                            seller = data[i].type_lic_id;
-                            // console.log(seller);
-                            if (seller == "KK7") {
-                                this.licenses = data;
-                            } else {
-                              alert('ไม่มีข้อมูล');
-                              break;
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
                             }
+                            data[i].exporter_status = datas;
                         }
-                    } else if (this.getData == "ชายแดน") {
+                        this.licenses = data;
+                    });
+                }
+                else if (this.getData == "ทั่วไป" && this.getStatus == "ไม่เป็นสมาชิก") {
+                    this.getDb('./external/exporter/type/KK6/status/false', (data) => {
                         for (var i = 0; i < data.length; i++) {
-                            seller = data[i].type_lic_id;
-                            console.log(seller);
-                            if (seller == "KK8") {
-                                this.licenses = data;
-                            } else {
-                              alert('ไม่มีข้อมูล');
-                              break;
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
                             }
+                            data[i].exporter_status = datas;
                         }
-                    }
-                });
+                        this.licenses = data;
+                    });
+                }
+                else if (this.getData == "ไม่เกิน 12 ก.ก." && this.getStatus == "ทั้งหมด") {
+                    this.getDb('./external/exporter/type/KK7', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
+                        }
+                        this.licenses = data;
+                    })
+                }
+                else if (this.getData == "ไม่เกิน 12 ก.ก." && this.getStatus == "เป็นสมาชิก") {
+                    this.getDb('./external/exporter/type/KK7/status/true', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
+                        }
+                        this.licenses = data;
+                    })
+                }
+                else if (this.getData == "ไม่เกิน 12 ก.ก." && this.getStatus == "ไม่เป็นสมาชิก") {
+                    this.getDb('./external/exporter/type/KK7/status/false', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
+                        }
+                        this.licenses = data;
+                    })
+                }
+                else if (this.getData == "ชายแดน" && this.getStatus == "ทั้งหมด") {
+                    this.getDb('./external/exporter/type/KK8', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
+                        }
+                        this.licenses = data;
+                        console.log('All');
+                    })
+                }
+                else if (this.getData == "ชายแดน" && this.getStatus == "เป็นสมาชิก") {
+                    this.getDb('./external/exporter/type/KK8/status/true', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
+                        }
+                        this.licenses = data;
+                        console.log('true');
+                    })
+                }
+                else if (this.getData == "ชายแดน" && this.getStatus == "ไม่เป็นสมาชิก") {
+                    this.getDb('./external/exporter/type/KK8/status/false', (data) => {
+                        for (var i = 0; i < data.length; i++) {
+                            datas = data[i].exporter_status;
+                            if (datas == true) {
+                                datas = 'เป็นสมาชิก';
+                            } else if (datas == false) {
+                                datas = 'ไม่เป็นสมาชิก';
+                            }
+                            data[i].exporter_status = datas;
+                        }
+                        this.licenses = data;
+                        console.log('false');
+                    })
+                }
             },
             nxGridTap: function(e) {
                 // console.log(e.detail.level);
