@@ -80,7 +80,7 @@
           </div>
 
           <div class="flex searchBorder">
-            <list-registration-pause data={{exporters}}>
+            <list-registration-pause data="{{exporters}}">
               <items type="primary">
                 <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
@@ -98,9 +98,9 @@
         <div class="left">
           <iron-pages selected="{{layerContent}}" attr-for-selected="name">
             <div name="detailRegExporter">
-              <renew-memberSave exporter-id="[[exporterId]]"></renew-memberSave>
+              <renew-memberSave exporter-id="[[exporterId]]" data={{dataSelect}}></renew-memberSave>
               <div class="horizontal center-justified layout">
-                <paper-button raised class="gl-btn-success button">ยกเลิกการระงับ</paper-button>
+                <paper-button raised class="gl-btn-success button" on-tap="_active">ยกเลิกการระงับ</paper-button>
               </div>
             </div>
 
@@ -180,10 +180,34 @@
                 this.exporter_id = this.exporter_id || this.$.exporter_id;
                 // console.log(this.exporter_id);
                 this.getDb('http://localhost:3000/api/external/exporter/unactive', (data) => {
-                    this.exporters = data;
                     this.exporter_id.items = data;
                     // console.log(this.exporter_id.items);
+                    this.exporters = data;
+                    // console.log(this.exporters);
                 });
+            },
+            _active: function(){
+              // console.log(this.dataSelect);
+              var datas = {
+                exporter_date_update: new Date,
+                exporter_date_approve:new Date,
+                exporter_no:this.dataSelect.exporter_no,
+                trader_id:this.dataSelect.trader_id,
+                seller_agent:this.dataSelect.seller_agent,
+                id : this.dataSelect.exporter_id
+              }
+              // console.log(datas);
+              axios.put('http://localhost:3000/api/external/exporter/update', datas)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          this.glQuery('addContract').getChange();
+                          this.glQuery('contentPanel').changDrawer();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
             }
         });
     </script>

@@ -18,8 +18,8 @@
               <div class="bd">
                   <gl-form-panel>
                       <iron-pages selected="{{pages}}">
-                          <register-memberSave exporter-id="{{exporterId}}"></register-memberSave>
-                          <register-memberEdit></register-memberEdit>
+                          <register-memberSave data="{{data}}"></register-memberSave>
+                          <register-memberEdit data="{{data}}"></register-memberEdit>
                       </iron-pages>
                   </gl-form-panel>
               </div>
@@ -34,12 +34,28 @@
   <script>
     Polymer({
       is: "register-pageDetail",
-      behaviors: [listEditBehavior],
+      behaviors: [gl.behavior.core],
       properties: {
         pages:{
             type:Number,
             notify:true,
             value: 0
+        },
+        exporterId:{
+          type:String,
+          observer:'_exporterIdChanged'
+        }
+      },
+      _exporterIdChanged:function(val){
+        if(val!=""){
+          axios.get('./external/exporter/id/'+val)
+          .then( (response)=>{
+            this.data = response.data;
+            this.glQuery('contentPanel').changDrawer();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         }
       },
       ready: function() {
@@ -51,7 +67,27 @@
         this.$$('#removePen').setAttribute("hidden", "hidden");
       },
       save:function(e) {
-        this.pages = 0;
+        var datas = {
+          id:this.data.exporter_id,
+          exporter_no:this.data.exporter_no,
+          exporter_date_approve:new Date (this.data.exporter_date_approve),
+          exporter_date_update:new Date (this.data.exporter_date_approve),
+          seller_agent:this.data.seller_agent,
+          trader_id:this.data.trader_id
+        }
+        // console.log(datas);
+        // console.log(this.exporterId);
+        axios.put('http://localhost:3000/api/external/exporter/update', datas)
+                  .then(function (response) {
+                    console.log("success");
+                    console.log(response);
+                    this.pages = 0;
+                    // this.glQuery('refreshPage').exporterIdChanged(exporterId);
+                  }.bind(this))
+                  .catch(function (error) {
+                    console.log("error");
+                    console.log(error);
+                  })
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removePen').removeAttribute("hidden");
       }
