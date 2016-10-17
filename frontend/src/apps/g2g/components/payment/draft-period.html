@@ -1,30 +1,92 @@
 <dom-module id="draft-period">
-  <style include="iron-flex iron-flex-factors iron-flex-alignment">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
     :host {
       display: block;
     }
+    .title {
+      margin-top: 30px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: var(--font-size-h3);
+    }
+    .combobox {
+      margin-top: 10px;
+    }
+    .topic {
+      text-align: right;
+      padding-top: 28px;
+      padding-right: 10px;
+      font-size: var(--font-size-h4);
+    }
   </style>
   <template>
-<div>
-  <div class="title">สัญญาการซื้อขาย</div>
-  <div class="layout vertical ">
-    <div class="flex">
-      ค้นหาบริษัทที่ทำสัญญา
-      <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-          item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
-    </div>
-    <div class="flex">
-      ค้นหางวดที่ต้องการดู
-      <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-          item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
-    </div>
-  </div>
-</div>
+
+
+    <div class="layout vertical ">
+      <div class="flex ">
+        <div class="title">ค้นหาสัญญาการซื้อขาย</div>
+      </div>
+      <div class="flex combobox">
+        <div class="layout horizontal">
+          <div class="flex-2"></div>
+            <div class="flex">
+              <div class="topic"> เลือกบริษัทที่ทำสัญญา : </div>
+            </div>
+            <div class="flex">
+              <gl-combo-box id="deli_port_id" label="Contracting Campany" item-label-path="port_name"
+                item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+            </div>
+            <div class="flex-2"></div>
+        </div>
+      </div>
+      <div class="flex combobox">
+        <div class="layout horizontal">
+          <div class="flex-2"></div>
+            <div class="flex">
+              <div class="topic"> เลือกงวดที่ต้องการดู : </div>
+            </div>
+            <div class="flex">
+              <gl-combo-box id="deli_port_id" label="Shipments" item-label-path="port_name"
+                item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+            </div>
+            <div class="flex-2"></div>
+        </div>
+      </div>
+
+      <div class="flex combobox">
+        <div class="layout horizontal">
+          <div class="flex-2"></div>
+            <div class="flex-2">
+              <div class="horizontal end-justified layout">
+                <div>
+                  <paper-button  class="gl-btn-info" raised >
+                  <iron-icon icon="search"></iron-icon>ค้นหา</paper-button>
+                </div>
+              </div>
+            </div>
+            <div class="flex-2"></div>
+        </div>
+
+        </div>
+  </div><!-- end layout vertical  -->
+
+
+
   </template>
   <script>
     Polymer({
       is: "draft-period",
+      propertyName: {
+        common:{
+          type:Object,
+          value:{}
+        },
+      },
 
+      attached: function() {
+        // console.log("created");
+        this.fire('draft-company-common',{node:this});
+      },
     });
   </script>
 </dom-module>
