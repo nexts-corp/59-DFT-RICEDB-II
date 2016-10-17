@@ -37,13 +37,14 @@
 
             <content-panel>
 
-              <grid>111
+              <grid>
 
-                <div class="horizontal end-justified layout">
-                  <div class="button">841/[[contractId]]
+                <!-- <div class="horizontal end-justified layout">
+                  <div class="button">
+                    841/[[contractId]]
                     <paper-button raised class="gl-btn-primary"><iron-icon icon="add"></iron-icon> เพิ่มสัญญาการค้า</paper-button>
                   </div>
-                </div>
+                </div> -->
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
                     <list item="buyer_name" label="ชื่อ" width="flex-2" type="string"></list>
@@ -59,14 +60,17 @@
                   </items>
                   <items type="secondaryHalf" item="sub">
                     <list item="" label="" width="flex" type="string"></list>
-                    <list item="period" label="+ เพิ่ม Confirmation Letter" width="flex-12" type="string"></list>
+                    <list item="period" label="+ Add Confirmation Letter" width="flex-12" type="string"></list>
                   </items>
                   <items type="third" item="shipment">
-                    <list item="shm_no" label="งวดการส่งมอบ" width="flex-9" type="string"></list>
+                    <list item="shm_no" label="Shipment No" width="flex-6" type="string"></list>
+                    <list item="shm_quantity" label="Tonne unit" width="flex-6" type="string"></list>
+                    <!-- <list item="" label="" width="flex" type="string"></list>
+                    <list item="" label="" width="flex" type="string"></list> -->
                   </items>
                   <items type="thirdHalf" item="shipment">
                     <list item="" label="" width="flex"></list>
-                    <list item="shm_no" label="+ เพิ่มงวด" width="flex-12" type="string"></list>
+                    <list item="shm_no" label="+ Add Shipment" width="flex-12" type="string"></list>
                   </items>
                   <template type="primary">
                     <input placeholder="text" value="primary">
@@ -171,40 +175,40 @@
               // list county
               this.getChange();
               // list riceType
-              this.getDb('./common/typeRice',(data)=>{
+              this.getDbforRefresh('./common/typeRice',(data)=>{
                 this.typeRice=data;
               });
               // list package
-              this.getDb('./common/package',(data)=>{
+              this.getDbforRefresh('./common/package',(data)=>{
                 this.package=data;
               });
-              this.getDb('./common/seller',(data)=>{
+              this.getDbforRefresh('./common/seller',(data)=>{
                   this.common.seller= data;
                   // console.log(this.common.seller);
               });
-              this.getDb('./common/carrier',(data)=>{
+              this.getDbforRefresh('./common/carrier',(data)=>{
                 //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
                   this.common.carrier= data;
               });
               //shipline_id
-              this.getDb('./common/shipline/',(data)=>{
+              this.getDbforRefresh('./common/shipline/',(data)=>{
                 this.common.shipline = data;
               });
               //ship in shipline
-              this.getDb('./common/shipline/ship',(data)=>{
+              this.getDbforRefresh('./common/shipline/ship',(data)=>{
                 this.common.shipInShipline = data;
               });
               //get surveyor_id
-              this.getDb('./common/surveyor',(data)=>{
+              this.getDbforRefresh('./common/surveyor',(data)=>{
                 this.common.surveyor = data;
               });
               // list port
-              this.getDb('./common/port/',(data)=>{
+              this.getDbforRefresh('./common/port/',(data)=>{
                 this.common.countryport =  data;
 
               });
               // list incoterms  ชนิดการจ่าย
-              this.getDb('./common/incoterms',(data)=>{
+              this.getDbforRefresh('./common/incoterms',(data)=>{
                 this.incoterms=data;
               });
               // list cml
@@ -234,7 +238,7 @@
             // },
             getChange:function () {
 
-              this.getDb('./g2g/contract/list',(data)=>{
+              this.getDbforRefresh('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
               })
 
@@ -307,6 +311,17 @@
                 // this.glChangePath('/gtog/add-period');
                 //this.layoutMain.changePath('/gtog/add-period');
                 // }
+            },
+            getDbforRefresh:function (url,callback) {
+              // console.log(url);
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+                // console.log(1);
             },
             getDb:function (url,callback) {
               // console.log(url);
