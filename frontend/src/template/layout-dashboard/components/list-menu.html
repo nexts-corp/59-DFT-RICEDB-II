@@ -6,6 +6,17 @@
     .bd{
       border: 1px solid #000;
     }
+    .getUrl{
+      background-color: red;
+    }
+    paper-icon-item ,paper-item{
+      cursor: pointer;
+
+      --paper-item-focused: {
+        background-color: var(--gl-info-color);
+        /*opacity: 0;*/
+      }
+    }
   </style>
   <template>
     <paper-menu>
@@ -58,54 +69,6 @@
               url:'/g2g/add-contract'
             },
             {
-              id:7,
-              nameMenu:'ระบบจ่ายชำระ',
-              url:'/g2g/add-draft'
-            },
-            {
-              id:2,
-              nameMenu:'ระบบการการขึ้นทะเบียน',
-              url:'/listregistion/add-registion-exporter',
-              subMenu:
-              [
-                {
-                  id:0,
-                  nameMenu:'ขึ้นทะเบียนผู้ส่งออกข้าวไปต่างประเทศ',
-                  url:'/listregistion/add-registion-exporter'
-                },
-                {
-                  id:1,
-                  nameMenu:'ต่ออายุทะเบียนผู้ส่งออกข้าวไปต่างประเทศ',
-                  url:'/listregistion/pause-registion-exporter'
-                },
-                {
-                  id:2,
-                  nameMenu:'รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว',
-                  url:'/listregistion/report-list-exporter-license'
-                },
-                {
-                  id:3,
-                  nameMenu:'รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท',
-                  url:'/listregistion/report-list-export-board'
-                },
-                {
-                  id:4,
-                  nameMenu:'รายชื่อและที่อยู่ของผู้ส่งออกข้าว',
-                  url:'/listregistion/report-list-exporter-address'
-                },
-                {
-                  id:5,
-                  nameMenu:'รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวส่งไปจำหน่ายต่างประเทศ',
-                  url:'/listregistion/report-list-export-company'
-                }
-              ]
-            },
-            {
-              id:3,
-              nameMenu:'WTO',
-              url:'/wto/'
-            },
-            {
               id:4,
               nameMenu:'EU',
               url:'/eu/add-eu-quota',
@@ -154,6 +117,56 @@
               ]
             },
             {
+              id:3,
+              nameMenu:'WTO',
+              url:'/wto/'
+            },
+            {
+              id:7,
+              nameMenu:'ระบบจ่ายชำระ',
+              url:'/g2g/add-draft'
+            },
+            {
+              id:2,
+              nameMenu:'ระบบการการขึ้นทะเบียน',
+              url:'/listregistion/add-registion-exporter',
+              subMenu:
+              [
+                {
+                  id:0,
+                  nameMenu:'ขึ้นทะเบียนผู้ส่งออกข้าวไปต่างประเทศ',
+                  url:'/listregistion/add-registion-exporter'
+                },
+                {
+                  id:1,
+                  nameMenu:'ต่ออายุทะเบียนผู้ส่งออกข้าวไปต่างประเทศ',
+                  url:'/listregistion/pause-registion-exporter'
+                },
+                {
+                  id:2,
+                  nameMenu:'รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว',
+                  url:'/listregistion/report-list-exporter-license'
+                },
+                {
+                  id:3,
+                  nameMenu:'รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท',
+                  url:'/listregistion/report-list-export-board'
+                },
+                {
+                  id:4,
+                  nameMenu:'รายชื่อและที่อยู่ของผู้ส่งออกข้าว',
+                  url:'/listregistion/report-list-exporter-address'
+                },
+                {
+                  id:5,
+                  nameMenu:'รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวส่งไปจำหน่ายต่างประเทศ',
+                  url:'/listregistion/report-list-export-company'
+                }
+              ]
+            },
+
+
+            {
               id:5,
               nameMenu:'เว็ป Thairiceinfo.go.th',
               url:'http://thairiceinfo.go.th/'
@@ -167,7 +180,12 @@
         this.glChangePath(url);
       },
       _getSub:function (e) {
-        // console.log(e);
+        var targetAttribute = e.currentTarget.getAttribute('aria-controls');
+        if (e.target.icon == 'expand-more') {
+          e.target.icon = 'chevron-right';
+        }else {
+          e.target.icon = 'expand-more'
+        }
       }
     });
   </script>

@@ -19,7 +19,7 @@
   }
   </style>
 
-  <template>
+  <template>[[buyerMasks]]
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -99,7 +99,7 @@
     <gl-form-panel-body>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="Confirmation Letter" value="[[data.cl_no]]" ></gl-form-label-input>
+          <gl-form-label-input  label="Confirmation Letter" value="[[clNo]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="ชนิดข้าว" value="[[data.type_rice_name_en]]" ></gl-form-label-input>
@@ -118,7 +118,7 @@
           <gl-form-label-input  label="จำนวน/ตัน" value="[[data.shm_det_quantity]]" ></gl-form-label-input>
         </gl-grid-col>
 
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[buyerMasks]]//1111
           <gl-form-label-input  label="MARKS" value="[[buyerMasks]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -167,18 +167,16 @@
       observers:[
         'getPrice(contractId)',
         // 'getCounty(contractId)',
-        'getconfirm(contractId)',
-        // 'check(data)'
+        // 'getconfirm(contractId)',
+        'check(data)'
       ],
       getPrice:function (contractId) {
-        var selected = this.data.cl_id;
-        this.getDb('http://localhost:3000/api/g2g/confirm/contract/id/'+contractId,(datacml)=>{
-          // console.log(datacml);
-          var cmls = datacml.filter(function (datacml) { return datacml.cl_id == selected });
-          var typeRicedb = this.data.type_rice_id;
           //หาชนิดข้าว
-          var typeRice = cmls[0].cl_type_rice.filter(function (cmls) { return cmls.type_rice_id == typeRicedb});
+          // console.log(this.data.type_rice_id);
+          var typeRiceb =this.data.type_rice_id
           var packages = this.data.package_id;
+          var typeRice = this.clTypeRice.filter(function (clTypeRice) { return clTypeRice.type_rice_id == typeRiceb});
+
           //หาขนาดแพ็คเก็ต
           var packagefil = typeRice[0].package.filter(function (typeRice) { return typeRice.package_id == packages});
           // console.log(packagefil[0].price_per_ton);
@@ -188,10 +186,9 @@
           this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price_per_ton.package_weight_bag) + (parseFloat(this.price_per_ton.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
           this.gw = this.sumGW.toFixed(3);
 
-        });
       },
       check:function (check) {
-        // console.log(check);
+        console.log(this.buyerMasks);
       }
     });
   </script>

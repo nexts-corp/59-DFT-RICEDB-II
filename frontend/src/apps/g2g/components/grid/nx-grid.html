@@ -82,12 +82,7 @@ paper-icon-item:hover {
   font-family: 'rsuregular', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-.headThird:not(:first-of-type) {
-  margin-left: 0px;
-  text-align: right;
-  padding-right: 0px;
-  /*color: blue;*/
-}
+
 
 .paper-menu-lv1 {
   --paper-menu-selected-item: {
@@ -223,8 +218,9 @@ paper-icon-item:hover {
   <template is="dom-repeat" as="itemThird" items="{{_getDataSub(itemPrimary,config.sub3)}}">
     <paper-icon-item  on-tap="_getBind" on-dblclick="_getBind" level="third" data="{{itemThird}}">
       <template is="dom-repeat" as="configThird" items="{{config.third}}">
-        <div class$="{{configThird.width}} cml" data="{{itemThird}}" >
-          {{_getItemSecondary(itemThird,configThird)}}
+        <div class$="{{configThird.width}} " data="{{itemThird}}" >
+            <numeral-js number="{{_getItemSecondary(itemThird,configThird)}}" format="0,0" print></numeral-js>
+
           <!-- width:{{configSecondary.width}} -->
         </div>
       </template>

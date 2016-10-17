@@ -241,20 +241,13 @@
         <gl-form-panel-body>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-                  item-value-path="cl_id" value="{{shipment.0.cl_id}}" items="{{cml}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
-              <!-- <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" error-message="Confirmation Letter" required
-                placeholder="Confirmation Letter" on-iron-select="_getCmlForRiceType">
-                <paper-menu class="dropdown-content" attr-for-selected="clNo" selected="{{shipment.0.cl_no}}">
-                  <template is="dom-repeat" items="[[cml]]">
-                    <paper-item cl-no="[[item.cl_no]]" id=[[item.cl_id]]>[[item.cl_no]]</paper-item>
-                  </template>
-                </paper-menu>
-              </gl-form-dropdown-menu> -->
+              <gl-form-label-input label="Confirmation Letter" value="{{data.cl_no}}"></gl-form-label-input>
+              <!-- <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
+                  item-value-path="cl_id" value="{{shipment.0.cl_id}}" items="{{cml}}" on-value-changed="getCmlForRiceType"></gl-combo-box> -->
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
-                  item-value-path="type_rice_id" items="{{riceType}}" value="{{shipment.0.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+                  item-value-path="type_rice_id" items="[[data.cl_type_rice]]" value="{{shipment.0.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
               <!-- <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท"
                 on-iron-select="_getRiceTypeForPackage">
                 <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{shipment.0.type_rice_id}}">
@@ -267,7 +260,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-                  item-value-path="package_id" value="{{shipment.0.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+                  item-value-path="package_id" items="[[package_id]]" value="{{shipment.0.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Package (kg/PP Bag)" error-message="กรุณาเลือกขนาดบรรจุภัณฑ์" required placeholder="เลือกประเภท"
                 on-iron-select="_getPackageForPrice">
                 <paper-menu class="dropdown-content" attr-for-selected="package-id" selected="{{shipment.0.package_id}}" id="package_id">
@@ -304,7 +297,7 @@
                 value="G.W. {{gw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.0.shm_det_quantity}}"></gl-form-label-input>
+              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
@@ -335,9 +328,9 @@
       </form>
 
       <gl-form-panel-footer>
-        <paper-button class="gl-btn-danger" raised index="[[index]" on-tap="clickCancel">
+        <paper-button class="gl-btn-danger" raised index="[[index]]" on-tap="clickCancel">
           </iron-icon>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" raised index="[[index]" on-tap="clickSubmit">
+        <paper-button class="gl-btn-success" raised index="[[index]]" on-tap="clickSubmit">
           </iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
@@ -379,10 +372,10 @@
 
               <iron-pages selected="0" class$="iron-index-{{index}}">
                 <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
-                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]'>
+                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-save>
                 <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
-                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]'>
+                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-edit>
               </iron-pages>
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
@@ -443,7 +436,6 @@
             },
             observers: [
               'getCounty(contractId)',
-              'getconfirm(data.contract_id)',
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
@@ -543,7 +535,11 @@
                           console.log(response);
                           console.log(data);
                           this.glQuery('addContract').shipMentDeatil(data[0].shm_id);
-                          // this.glQuery('contentPanel').changDrawer();
+                          // this.glQuery('addContract').getChange();
+                          this.shipment = [{}];
+                          this.quantityBag ='';
+                           this.sumGW ='';
+                           this.gw  ='';
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
@@ -558,7 +554,7 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          // this.glQuery('addContract').getChange();
+                          this.glQuery('addContract').getChange();
                           this.glQuery('contentPanel').changDrawer();
                           this.clickCancel();
                         }.bind(this))
