@@ -1,34 +1,36 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="calculate-setting">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-    .wrapper{
-      border: 1px solid black;
-      height: 15em;
-      overflow-y: scroll;
-      width: 20em;
-    }
-    .texttitle{
+    .title{
       text-align: center;
-      font-size: var(--font-size-h5);
-      margin: 5px
+      font-size: 22px;
     }
-    .textcontent{
-      margin: 15px 20px 0px 0px;
+    .flex-equal-justified {
+      @apply(--layout-horizontal);
+      @apply(--layout-justified);
     }
-    .between{
-      margin: 0px 30px 0px 30px;
+    .bg{
+      background-color: #F1F1F1;
+      padding: 10px;
     }
-    .button{
-      margin-bottom: 20px;
+    .font{
+      font-size: 18px;
     }
-    .marginTL{
-      margin: 20px 0px 0px 50px;
+    .container{
+      padding: 20px;
     }
-    .header{
-      background-color: #ccc;
+    .panel{
+      border: 1px solid var(--gl-gray-light-color);
+      padding: 5px;
+      border-radius: 3px;
+    }
+    .headerContent{
+      background-color: orange;
+      padding: 10px;
     }
   </style>
   <template>
+<<<<<<< HEAD
 
     <gl-form-panel-header>
       <div class="horizontal layout header">
@@ -48,22 +50,80 @@
               <paper-item><paper-checkbox checked></paper-checkbox>Item 1</paper-item>
               <paper-checkbox checked></paper-checkbox><paper-item>Item 1</paper-item>
             </paper-listbox>
+=======
+      <header>
+        <div class="title container">การคำนวณส่วนจัดสรร</div>
+       
+        <div class="bg font">
+          <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <div>ปีโควตา : 2559</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"> 
+              <div>ประเภทข้าว : ข้าวขาว</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">  
+              <div>ครั้งที่ทำการคำนวณ : 1</div>
+            </gl-grid-col> 
+          </gl-grid-row>
+>>>>>>> 8c396d78dd5a9e70229d8ea86743cdb3c709c56e
           </div>
-        </div>
 
-        <div class="vertical center-justified layout between">
-          <paper-button class="button" raised>SELECT >></paper-button>
-          <paper-button raised><< UNSELECT</paper-button>
+      </header>
+         <gl-form-panel set-padding = "0px 0px 20px 0px">
+           <div class="headerContent">ค้นหารายชื่อบริษัททั้งหมดที่ทำการบันทึกประวัติเพื่อคำนวณ</div>
+            <gl-form-panel-body set-border="0px">
+        <div>
+           <gl-grid-row width="{{getWidth}}">
+               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                 <vaadin-date-picker label="Pick a date"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+              </gl-grid-col>
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                 <vaadin-date-picker label="Pick a date"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                 <paper-button class="gl-btn-primary" raised>
+                    <iron-icon icon="search"></iron-icon>
+                 </paper-button>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+              </gl-grid-col>
+           </gl-grid-row>
         </div>
-
-        <div class="vertical layout">
-        <div class="texttitle">รายชื่อบริษัทที่จะใช้ในการคำนวณครั้งนี้</div>
-          <div class="wrapper">
+        <div class="container">
+        <paper-listbox class="panel">
+            <div class="bg"> 
+              <div class="flex-equal-justified">
+                <paper-checkbox checked="{{selectAll}}" style="padding:10px">Select All </paper-checkbox>
+                <paper-button raised on-tap="cal">คำนวณ</paper-button>       
+              </div>
+            </div> 
+            <div>
+              <template is="dom-repeat" items="{{companyName}}">
+                
+                <paper-item>
+                  <paper-checkbox id="CheckData" style="padding:5px" checked="{{item.check}}" on-input="changeCheck">{{item.name}}</paper-checkbox>
+                </paper-item>
+              </template> 
+            </div>
+            </paper-listbox>
+            </div>
+            </gl-form-panel-body>
+         </gl-form-panel>
+       
+        <div>
+          
           </div>
-        </div>
-      </div>
 
-        <div class="vertical layout flex marginTL">
+         <gl-form-panel set-padding = "0px 0px 20px 0px">
+           <div class="headerContent">รายละเอียดการจัดสรรโควตา</div>
+            <gl-form-panel-body set-border="0px">
+           <div class="vertical layout flex marginTL">
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดการส่งออกรวม</div>
             <div class="textcontent"> : </div>
@@ -113,19 +173,51 @@
             <div class="flex"></div>
           </div>
         </div>
+            </gl-form-panel-body>
+         </gl-form-panel>
 
-    </gl-form-panel>
-    <gl-form-panel-footer>
-      <div class="horizontal end-justified layout">
+        
+      </div>
+      <footer>
+        <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
           <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
-      </div>
-    </gl-form-panel-footer>
-
+        </div>
+      </footer>
   </template>
   <script>
     Polymer({
       is: "calculate-setting",
+      properties:{
+        companyName:{
+          type: Array,
+          value:[
+          {id:'1',name:'เอเชีย โกลเด้นไรซ์ บจก.',check:false},
+          {id:'2',name:'เอเคน อิเตอร์เนชั่นแนล',check:false},
+          {id:'3',name:'เอ็นพีเรียลคาร์เปท',check:false},
+          {id:'4',name:'เอส อาร์ ซี ฟูตล์',check:false},
+          {id:'5',name:'เอส ที เกรน บจก',check:false},
+          {id:'6',name:'ฮ่วยชวนค้าข้าว บจก',check:false},
+          {id:'7',name:'แอดวานซ์ไรซ์เทรดดิ้ง',check:false},
+          ]
+        },
+        selectAll:{
+          type: Boolean,
+          value: false,
+          observer: '_selectAllChanged'
+        }
+      },
+      cal:function(e){
+        const check = (item)=>{
+            return item.check == true;
+        }
+        console.log(this.companyName.filter(check));
+      },
+      _selectAllChanged:function(val){ 
+        this.companyName.map((item,index)=>{
+          this.set('companyName.'+index+'.check',val);
+        });
+      },
 
     });
   </script>

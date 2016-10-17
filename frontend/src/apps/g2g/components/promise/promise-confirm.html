@@ -68,16 +68,12 @@
     </style>
     <template>
       <form is="iron-form" id="confirmLitter" method="get">
-        <!-- <paper-icon-button
-  id = 'add-btn'
-  label = 'NAME'
-  required
-  icon = 'add'
-  on-click = '{{ toggle }}'
-></paper-icon-button> -->
         <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-input auto-validate error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="Confirmation Name" placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_name}}" name="cl_no"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
@@ -158,7 +154,7 @@
       </div>
 
       <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
               <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
                   <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
                       <template is="dom-repeat" items="[[incoterms]]">
@@ -223,19 +219,21 @@
                 vesselBehavior
             ],
             observers: [
-              'dataChange(data.cl_id)',
+              'dataChange(data)',
               'getTyperice(contractId)'
             ],
+            attached: function() {
+              // console.log("created confirm-mation-common");
+              this.fire('confirm-mation-common',{node:this});
+            },
             getTyperice: function(contractId) {
               this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
+                // console.log(12512);
               });
             },
-            dataChange:function (clId) {
-              //ดึง confirmLetter
-              this.getDb('./g2g/confirm/id/'+clId,(data)=>{
-                this.confirmLetter = data;
-              });
+            dataChange:function (data) {
+              // console.log(data);
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
@@ -264,6 +262,8 @@
               axios.get(url)
                 .then(function(response){
                   callback(response.data);
+                  console.log('ดึงแล้ว');
+                  // this.glQuery('layoutMain').closeToastLoading();
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));

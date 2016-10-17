@@ -20,8 +20,8 @@
   </style>
 
   <template>
-    <gl-form-panel-body>
-      ///
+    <gl-form-panel-body>[[buyerMasks]]
+
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
@@ -63,7 +63,7 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
-              item-value-path="port_id" value="{{data.load_port_id}}"></gl-combo-box>
+              item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="ETD" value="{{data.etd_date}}"></vaadin-date-picker>
@@ -74,16 +74,16 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-              item-value-path="port_id" value="{{data.dest_port_id}}"></gl-combo-box>
+              item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-              item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+              item-value-path="port_id" items="{{pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'num_of_container')]]{{data.num_of_container}}
+          [[testNum(data.*,'num_of_container')]]
             <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -95,7 +95,7 @@
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'weight_per_container')]]{{data.weight_per_container}}
+          [[testNum(data.*,'weight_per_container')]]
           <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
             value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
@@ -112,16 +112,15 @@
     <gl-form-panel-body>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-              item-value-path="cl_id" value="{{data.cl_id}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
+          <gl-form-label-input  label="Confirmation Letter" value="[[clNo]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="type_rice_id" label="ชนิดข้าว+e" item-label-path="type_rice_name_en"
-              item-value-path="type_rice_id" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+          <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
+              item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-              item-value-path="package_id" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+              item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -169,7 +168,7 @@
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w" value="{{data.nn_page|toInteger}}"></gl-form-input>
+          <gl-form-input label="" class="w" value="{{data.nn_page}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>
@@ -209,14 +208,14 @@
       observers: [
         'getCounty(contractId)',
         'getShip(data.shipline_id,common.*)',
-        'getconfirm(contractId)',
-        'getCmlForRiceType(cml,data.cl_id)',
-        'getRiceTypeForPackage(riceType,data.type_rice_id)',
+        // 'getconfirm(data.contract_id)',
+        // 'getCmlForRiceType(cml,data.cl_id)',
+        'getRiceTypeForPackage(clTypeRice,data.type_rice_id)',
         'getPackageForPrice(package,data.package_id)',
-        'checkData(common.*)'
+        // 'checkData(common.*)'
       ],
       attached: function() {
-        console.log("created");
+        // console.log("created");
         this.fire('vessel-edit-common',{node:this});
       },
       // getShip:function (data) {
@@ -228,10 +227,11 @@
       //   // }
       //
       // }
-      checkData:function(ob) {
-        // console.log(ob);
-        // console.log(this.common);
-      },
+      // checkData:function(ob) {
+      //   // console.log(ob);
+      //   console.log(this.buyerMasks);
+      //   console.log(this.common);
+      // },
     });
   </script>
 </dom-module>

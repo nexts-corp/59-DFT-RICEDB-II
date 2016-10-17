@@ -7,6 +7,7 @@
 </style>
 <!-- <link rel="import" href="components/icon-toggle.html"> -->
 <link rel="import" href="../layout-dashboard/components/list-menu.html">
+<link rel="import" href="./../../../bower_components/paper-spinner/paper-spinner.html">
 <dom-module id="layout-main">
     <style is="custom-style" include="iron-flex iron-flex-alignment">
 
@@ -55,6 +56,16 @@
         .gl-btn-success {
             width: auto;
         }
+        .setPosition {
+           position: fixed;
+           left: 50%;
+           width: 100%;
+           top: 50%;
+        }
+        .loading{
+            text-align: center;
+        }
+
     </style>
 
     <template>
@@ -95,7 +106,7 @@
                 ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล
               </div>
               <div class="lineMenu">
-                สัญญาการซื้อขาย 
+                สัญญาการซื้อขาย
               </div>
             </div>
           </paper-toolbar>
@@ -111,6 +122,17 @@
           </div>
         </paper-header-panel>
       </paper-drawer-panel>
+      <div class="setPosition">
+       <paper-toast class="setPosition" id="toastLoading" positionTarget duration="0" text="">
+           <div class="loading">
+               <paper-spinner active></paper-spinner>
+               <span style="padding-left:10px; position:relative; bottom: 6px;">
+                   กำลังโหลด
+               </span>
+               <!--<paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>-->
+           </div>
+       </paper-toast>
+      </div>
   </template>
     <script>
         Polymer({
@@ -160,6 +182,15 @@
             _changDrawer:function(){
               //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
               this.$.drawerDashboard.togglePanel();
+            },
+            openToastLoading:function(){
+                this.$.toastLoading.open();
+            },
+            closeToastLoading:function(callback){
+                this.async(function(){
+                    this.$.toastLoading.hide();
+                    callback();
+                }.bind(this),500);
             },
         });
     </script>

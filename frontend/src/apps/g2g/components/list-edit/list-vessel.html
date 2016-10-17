@@ -112,11 +112,11 @@
               <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
                 <!-- value="{{shipment.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
                 <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
-                    item-value-path="seller_id" value="{{shipment.0.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+                    item-value-path="seller_id"  items="{{common.seller}}" value="{{shipment.0.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
-                  item-value-path="shipline_id" value="{{shipment.0.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
+                  item-value-path="shipline_id" items="{{common.shipline}}"  value="{{shipment.0.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line"  placeholder="เลือก Shipping Line" required>
                 <paper-menu class="dropdown-content" attr-for-selected="shipline-id" selected="{{shipment.shipline_id}}" id="bs" name="bs">
                   <template is="dom-repeat" items="[[shipline]]">
@@ -127,7 +127,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="ship_id" label="Vessel" item-label-path="ship_name"
-                  item-value-path="ship_id" value="{{shipment.0.ship_id}}" on-value-changed="getShip"></gl-combo-box>
+                  item-value-path="ship_id" items="{{shipInShipline}}" value="{{shipment.0.ship_id}}" ></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Vessel"  error-message="กรุณาเลือก Vessel" placeholder="เลือก Vessel" required>
                 <paper-menu class="dropdown-content" attr-for-selected="ship-id" selected="{{shipment.ship_id}}" id="vesselName" name="vesselName">
                   <template is="dom-repeat" items="[[ship]]">
@@ -140,7 +140,7 @@
               <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
                 <!-- value="{{shipment.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
                 <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name"
-                    item-value-path="surveyor_id" value="{{shipment.0.surveyor_id}}"></gl-combo-box>
+                    item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{shipment.0.surveyor_id}}"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.0.ship_voy_no}}"
@@ -160,14 +160,14 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.0.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
               <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
-                  item-value-path="carrier_id" value="{{shipment.0.carrier_id}}"></gl-combo-box>
+                  item-value-path="carrier_id" items="{{common.carrier}}" value="{{shipment.0.carrier_id}}"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="Tel." error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
-                  item-value-path="port_id" value="{{shipment.0.load_port_id}}"></gl-combo-box>
+                  item-value-path="port_id" items="{{pol}}"  value="{{shipment.0.load_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="POL" error-message="กรุณาเลือก POL" placeholder="เลือก POL" required>
                 <paper-menu class="dropdown-content" attr-for-selected="pol-id" selected="{{shipment.0.load_port_id}}" id="load_port_id" name="load_port_id">
                   <template is="dom-repeat" items="[[pol]]">
@@ -189,7 +189,7 @@
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-                  item-value-path="port_id" value="{{shipment.0.dest_port_id}}"></gl-combo-box>
+                  item-value-path="port_id" items="{{pod}}" value="{{shipment.0.dest_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="POD" error-message="กรุณาเลือก POD"  placeholder="เลือกเมืองท่า" required>
                 <paper-menu class="dropdown-content" attr-for-selected="dest-port-id" selected="{{shipment.0.dest_port_id}}" id="cityEnd" name="cityEnd">
                   <template is="dom-repeat" items="[[port]]">
@@ -200,7 +200,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-                  item-value-path="port_id" value="{{shipment.0.deli_port_id}}"></gl-combo-box>
+                  item-value-path="port_id" items="{{pod}}" value="{{shipment.0.deli_port_id}}"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Place of Delivery"  error-message="กรุณาใส่รายละเอียด" placeholder="Place of Delivery" required>
                 <paper-menu class="dropdown-content" attr-for-selected="deli-port-id" selected="{{shipment.0.deli_port_id}}" id="cityEnd" name="cityEnd">
                   <template is="dom-repeat" items="[[port]]">
@@ -212,8 +212,8 @@
 
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[testNum(shipment.0.*,'num_of_container')]]
-                <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.0.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
+              [[testNum(shipment.*,'num_of_container')]]
+                <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="Packing Date" value="{{shipment.0.packing_date}}"></vaadin-date-picker>
@@ -224,9 +224,9 @@
 
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[testNum(shipment.0.*,'weight_per_container')]]
+              [[testNum(shipment.*,'weight_per_container')]]
               <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
-                value="{{shipment.0.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
+                value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="Production" value="{{shipment.0.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
@@ -241,20 +241,13 @@
         <gl-form-panel-body>
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-                  item-value-path="cl_id" value="{{shipment.0.cl_id}}" on-value-changed="getCmlForRiceType"></gl-combo-box>
-              <!-- <gl-form-dropdown-menu id="cml" class="width-dropdown" label="Confirmation Letter" error-message="Confirmation Letter" required
-                placeholder="Confirmation Letter" on-iron-select="_getCmlForRiceType">
-                <paper-menu class="dropdown-content" attr-for-selected="clNo" selected="{{shipment.0.cl_no}}">
-                  <template is="dom-repeat" items="[[cml]]">
-                    <paper-item cl-no="[[item.cl_no]]" id=[[item.cl_id]]>[[item.cl_no]]</paper-item>
-                  </template>
-                </paper-menu>
-              </gl-form-dropdown-menu> -->
+              <gl-form-label-input label="Confirmation Letter" value="{{data.cl_no}}"></gl-form-label-input>
+              <!-- <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
+                  item-value-path="cl_id" value="{{shipment.0.cl_id}}" items="{{cml}}" on-value-changed="getCmlForRiceType"></gl-combo-box> -->
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
-                  item-value-path="type_rice_id" value="{{shipment.0.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+                  item-value-path="type_rice_id" items="[[data.cl_type_rice]]" value="{{shipment.0.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
               <!-- <gl-form-dropdown-menu class="width-dropdown" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" required placeholder="เลือกประเภท"
                 on-iron-select="_getRiceTypeForPackage">
                 <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{shipment.0.type_rice_id}}">
@@ -267,7 +260,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-                  item-value-path="package_id" value="{{shipment.0.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+                  item-value-path="package_id" items="[[package_id]]" value="{{shipment.0.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
               <!-- <gl-form-dropdown-menu label="Package (kg/PP Bag)" error-message="กรุณาเลือกขนาดบรรจุภัณฑ์" required placeholder="เลือกประเภท"
                 on-iron-select="_getPackageForPrice">
                 <paper-menu class="dropdown-content" attr-for-selected="package-id" selected="{{shipment.0.package_id}}" id="package_id">
@@ -285,8 +278,8 @@
               <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)"  value="{{price.package_weight_bag}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[testNum(shipment.0.*,'shm_det_quantity')]]
-              <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.0.shm_det_quantity}}"></gl-form-input>
+              [[testNum(shipment.*,'shm_det_quantity')]]
+              <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -304,7 +297,7 @@
                 value="G.W. {{gw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.0.shm_det_quantity}}"></gl-form-label-input>
+              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
@@ -318,8 +311,8 @@
               <div class="top">ORIGINALS</div>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-              [[testNum(shipment.0.*,'origin_page')]]
-              <gl-form-input label="" class="w padL" value="{{shipment.0.origin_page}}"></gl-form-input>
+              [[testNum(shipment.*,'origin_page')]]
+              <gl-form-input label="" class="w padL" value="{{shipment.origin_page}}"></gl-form-input>
             </gl-grid-col>
             <div class="top">/</div>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
@@ -335,9 +328,9 @@
       </form>
 
       <gl-form-panel-footer>
-        <paper-button class="gl-btn-danger" raised index="[[index]" on-tap="clickCancel">
+        <paper-button class="gl-btn-danger" raised index="[[index]]" on-tap="clickCancel">
           </iron-icon>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" raised index="[[index]" on-tap="clickSubmit">
+        <paper-button class="gl-btn-success" raised index="[[index]]" on-tap="clickSubmit">
           </iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </div>
@@ -378,11 +371,11 @@
               <!-- เพิ่มคอมโพเน้นตรงนี้ -->
 
               <iron-pages selected="0" class$="iron-index-{{index}}">
-                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
-                  buyer-masks='[[buyerMasks]]' contract-id='[[contractId]]'>
+                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
+                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-save>
                 <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
-                  buyer-masks='[[buyerMasks]]' contract-id='[[contractId]]'>
+                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-edit>
               </iron-pages>
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
@@ -436,14 +429,20 @@
                 shipment:{
                   type:Object,
                   value:[{}]
+                },
+                common:{
+                  type:Object
                 }
             },
             observers: [
               'getCounty(contractId)',
-              'getconfirm(contractId)'
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
+            },
+            attached: function() {
+              // console.log("created-2");
+              this.fire('vessel-insert-common',{node:this});
             },
             shipmentDelete:function (e) {
               this.deleteDb(e.currentTarget.id);
@@ -486,8 +485,8 @@
               delete this.data.shipment_detail[id].type_rice_name_th;
               this.data.shipment_detail[id].id=this.data.shipment_detail[id].shm_det_id
               delete this.data.shipment_detail[id].shm_det_id;
-              console.log(this.data.shipment_detail[id]);
-              // this.putDb(this.data.shipment_detail[e.currentTarget.index])
+              // console.log(this.data.shipment_detail[id]);
+              this.putDb(this.data.shipment_detail[e.currentTarget.index])
 
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
               this.openToast();
@@ -512,42 +511,18 @@
               this.shipment[0].etd_date=new Date (this.shipment[0].etd_date);
               this.shipment[0].packing_date=new Date (this.shipment[0].packing_date);
               this.shipment[0].product_date=new Date (this.shipment[0].product_date);
-              this.shipment.shm_det_quantity=this.shipment[0].shm_det_quantity;
-              // {{shipment.0.shm_det_quantity}}
-              console.log(this.shipment);
-              // console.log(this.shipment[0].carrier_id=this.shipment.carrier_id);
-              // this.push('data.shipment_detail', {
-              //   bl_no:this.shipment.bl_no,
-              //   book_no:this.shipment.book_no,
-              //   carrier_id:this.shipment.carrier_id,
-              //   cl_id:this.shipment.cl_id,
-              //   contract_id:this.contractId,
-              //   deli_port_id:this.shipment.deli_port_id,
-              //   dest_port_id:this.shipment.dest_port_id,
-              //   eta_date:this.shipment.eta_date,
-              //   etd_date:this.shipment.etd_date,
-              //   load_port_id:this.shipment.load_port_id,
-              //   nn_page:this.shipment.nn_page,
-              //   num_of_container:this.shipment.num_of_container,
-              //   origin_page:this.shipment.origin_page,
-              //   packing_date:this.shipment.packing_date+'T00:00:00.000Z',
-              //   packing_time:this.shipment.packing_time,
-              //   package_id:this.shipment.package_id,
-              //   product_date:this.shipment.product_date,
-              //   seller_id:this.shipment.seller_id,
-              //   seller_phone:this.seller_phone,
-              //   ship_id:this.shipment.ship_id,
-              //   ship_lot_no:this.shipment.ship_lot_no,
-              //   ship_voy_no:this.shipment.ship_voy_no,
-              //   shipline_id:this.shipment.shipline_id,
-              //   shm_det_quantity:this.shipment.shm_det_quantity,
-              //   surveyor_id:this.shipment.surveyor_id,
-              //   type_rice_id:this.shipment.type_rice_id,
-              //   weight_per_container:this.shipment.weight_per_container
-              // });
-              // console.log(this.data);
-
-              // console.log(this.data);
+              // this.shipment.shm_det_quantity=this.shipment[0].shm_det_quantity;
+              this.shipment[0].nn_page=this.shipment.nn_page;
+              this.shipment[0].num_of_container=this.shipment.num_of_container;
+              this.shipment[0].origin_page=this.shipment.origin_page;
+              this.shipment[0].shm_det_quantity=this.shipment.shm_det_quantity;
+              this.shipment[0].weight_per_container=this.shipment.weight_per_container;
+              delete this.shipment.nn_page;
+              delete this.shipment.num_of_container;
+              delete this.shipment.origin_page;
+              delete this.shipment.shm_det_quantity;
+              delete this.shipment.weight_per_container;
+              // console.log( this.shipment[0]);
               this.postDb(this.shipment);
 
             },
@@ -559,8 +534,12 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
+                          this.glQuery('addContract').shipMentDeatil(data[0].shm_id);
                           // this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.shipment = [{}];
+                          this.quantityBag ='';
+                           this.sumGW ='';
+                           this.gw  ='';
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
@@ -575,8 +554,8 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          // this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('addContract').getChange();
+                          this.glQuery('contentPanel').changDrawer();
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
@@ -592,7 +571,7 @@
                           console.log(response);
                           // console.log(dataId);
                           // this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
