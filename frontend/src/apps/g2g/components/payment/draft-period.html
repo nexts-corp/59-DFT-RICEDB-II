@@ -33,7 +33,7 @@
               <div class="topic"> เลือกบริษัทที่ทำสัญญา : </div>
             </div>
             <div class="flex">
-              <gl-combo-box id="deli_port_id" label="Contracting company" item-label-path="port_name"
+              <gl-combo-box id="deli_port_id" label="Contracting Campany" item-label-path="port_name"
                 item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
             </div>
             <div class="flex-2"></div>
@@ -63,7 +63,6 @@
                   <iron-icon icon="search"></iron-icon>ค้นหา</paper-button>
                 </div>
               </div>
-
             </div>
             <div class="flex-2"></div>
         </div>
@@ -77,7 +76,17 @@
   <script>
     Polymer({
       is: "draft-period",
+      propertyName: {
+        common:{
+          type:Object,
+          value:{}
+        },
+      },
 
+      attached: function() {
+        // console.log("created");
+        this.fire('draft-company-common',{node:this});
+      },
     });
   </script>
 </dom-module>
