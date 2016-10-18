@@ -45,7 +45,8 @@ var dd = new Date();
 var y = dd.getFullYear();
 var m = dd.getMonth();
 var d = dd.getDate();
-var d1y = (y - 1) + '-' + (m < 9 ? '0' : '') + (m + 1) + '-' + (d < 10 ? '0' : '') + d + "T00:00:00.000Z";
+var tz = "T00:00:00.000Z";
+var d1y = (y - 1) + '-' + (m < 9 ? '0' : '') + (m + 1) + '-' + (d < 10 ? '0' : '') + d + tz;
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
@@ -250,14 +251,19 @@ router.get('/id/:exporter_id', function (req, res, next) {
     })
 });
 router.get('/get', function (req, res, next) {
-    var status = null;
-    console.log(req.query.status);
-    res.json(req.query.status);
-    if (req.query.status == "true") {
-        status = true;
-    } else if (req.query.status == "false") {
-        status = false;
+    var q = {}, d = {};
+    for (key in req.query) {
+        if (key.indexOf('date') > -1) {
+            d[key] = req.query[key];
+        } else {
+            q[key] = req.query[key];
+        }
     }
+    if (Object.getOwnPropertyNames(d).length !== 0) {
+        d = r.row('exporter_date_update').gt(d.date_start).and(r.row('exporter_date_update').lt(d.date_end));
+    }
+    console.log(d);
+    console.log(q);
     db.query(function (conn) {
         r.db('external_f3').table("trader").outerJoin(
             r.db('external_f3').table("exporter"),
@@ -276,12 +282,17 @@ router.get('/get', function (req, res, next) {
             .merge(function (m) {
                 return {
                     exporter_id: r.branch(m.hasFields('id'), m('id'), null),
-                    exporter_status: m.hasFields('exporter_no'),
-                    exporter_status_name: r.branch(m.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก')
+                    exporter_status: m.hasFields('exporter_no').coerceTo('string'),
+                    exporter_status_name: r.branch(m.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก'),
+                    exporter_date_approve: r.branch(m.hasFields('exporter_date_approve'), m('exporter_date_approve').split('T')(0), null),
+                    exporter_date_update: r.branch(m.hasFields('exporter_date_update'), m('exporter_date_update').split('T')(0), null),
+                    trader_date_approve: m('trader_date_approve').split('T')(0),
+                    trader_date_expire: m('trader_date_expire').split('T')(0)
                 }
             })
             .without('id')
-            .filter({ exporter_status: status })
+            .filter(q)
+            .filter(d)
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
             .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
@@ -299,6 +310,7 @@ router.get('/get', function (req, res, next) {
                 }
             });
     })
+
 });
 
 router.get('/type/:type_lic_id', function (req, res, next) {

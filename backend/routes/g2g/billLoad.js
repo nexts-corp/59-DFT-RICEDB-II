@@ -4,43 +4,6 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-var Ajv = require('ajv');
-var ajv = Ajv({ allErrors: true });
-var schema = {
-    //'type': 'object',
-    "properties": {
-        "id": {
-            "type": "string"
-        },
-        "contract_name": {
-            "type": "string"
-        },
-        "buyer_id": {
-            "type": "string"
-        },
-        "contract_date": {
-            "type": "string",
-            "format": "date-time"
-        },
-        "contract_desc": {
-            "type": "string"
-        },
-        "contract_type_rice": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "type_rice_id": { "type": "string" },
-                    "type_rice_quantity": { "type": "number" },
-                },
-                "required": ["type_rice_id", "type_rice_quantity"]
-            }
-        }
-    },
-    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice"]
-};
-var validate = ajv.compile(schema);
-
 router.get('/shipment/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
