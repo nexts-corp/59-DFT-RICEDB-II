@@ -103,7 +103,7 @@
           trader_id:this.trader.trader_id
         }
         console.log(datas);
-        axios.post('http://localhost:3000/api/external/exporter/insert', datas)
+        axios.post('./external/exporter/insert', datas)
             .then(function(response) {
                 console.log("success");
                 console.log(response);
@@ -133,7 +133,7 @@
       attached: function() {
         this.trader_id = this.trader_id || this.$.trader_id;
         // console.log(this.seller_id);
-        this.getDb('http://localhost:3000/api/external/exporter/seller/not',(data)=>{
+        this.getDb('./external/exporter/not',(data)=>{
 
           this.trader_id.items = data;
           // console.log(this.seller_id.items);
