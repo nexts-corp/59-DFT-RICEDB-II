@@ -84,25 +84,6 @@
     .hide {
       display: none;
     }
-    ul {
-      list-style: none; /* Remove list bullets */
-      padding: 0;
-      margin: 0;
-    }
-    li {
-        padding-left: 16px;
-        font-size: var(--font-size-h4);
-        color: red;
-    }
-    li:before {
-        content: "*"; /* Insert content that looks like bullets */
-        padding-right: 8px;
-    }
-    .textError {
-      border: 1px solid red;
-      border-radius: 5px;
-      background-color: #ffffff;
-    }
   </style>
   <template>
     <content id="primary" select="items[type=primary]"></content>
@@ -123,13 +104,9 @@
         </gl-form-panel-body>
 
         <gl-form-panel-body>
-          <div class="textError">
-            <ul id="error-[[contractId]]" >
-            </ul>
-          </div>
           <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
+              <gl-combo-box required  id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
                 class="requested"    item-value-path="seller_id"  items="{{common.seller}}" value="{{shipment.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -249,25 +226,23 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               [[testNum(shipment.*,'shm_det_quantity')]]
-              <gl-form-input label="จำนวน/ตัน" class="requested"  auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
+              <gl-form-input label="จำนวน/ตัน" class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[buyerMasks]]"></gl-form-label-input>
+              <gl-form-label-input label="MARKS" value="[[buyerMasks]]"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"
-                value="{{quantityBag}}"></gl-form-label-input>
+              <gl-form-label-input label="Quantity (BAGS)" value="{{quantityBag}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
 
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="WEIGHT (M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"
-                value="G.W. {{gw}}"></gl-form-label-input>
+              <gl-form-label-input label="WEIGHT (M/T)"  value="G.W. {{gw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
+              <gl-form-label-input label=""  value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
@@ -282,12 +257,12 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
               [[testNum(shipment.*,'origin_page')]]
-              <gl-form-input label="" class="w padL" class="requested"  value="{{shipment.origin_page}}"></gl-form-input>
+              <gl-form-input label="" class="w padL requested" required  value="{{shipment.origin_page}}"></gl-form-input>
             </gl-grid-col>
             <div class="top">/</div>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
               [[testNum(shipment.*,'nn_page')]]
-              <gl-form-input label="" class="w" class="requested"  value="{{shipment.nn_page}}"></gl-form-input>
+              <gl-form-input label="" class="w requested" required  value="{{shipment.nn_page}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
               <div class="top">N/N</div>
@@ -501,104 +476,27 @@
               this.shipment.etd_date=new Date (this.shipment.etd_date);
               this.shipment.packing_date=new Date (this.shipment.packing_date);
               this.shipment.product_date=new Date (this.shipment.product_date);
-              // book_no:""
-              // carrier_id:""
-              // deli_port_id:""
-              // dest_port_id:""
-              // eta_date:Invalid Date
-              // etd_date:Invalid Date
-              // load_port_id:""
-              // num_of_container:""
-              // package_id:""
-              // packing_date:Invalid Date
-              // packing_time:""
-              // product_date:Invalid Date
-              // seller_id:""
-              // ship_id:""
-              // ship_lot_no:""
-              // ship_voy_no:""
-              // shipline_id:""
-              // shm_det_quantity:""
-              // shm_id:"486e6163-324c-4994-a2b4-ef6af082e4b9"
-              // surveyor_id:""
-              // type_rice_id:""
-              // weight_per_container:""
-              console.log(this.shipment.book_no);
-              this.error = Polymer.dom(this.root).querySelector('#error-'+this.contractId);
-              console.log(this.error);
-              var requested = Polymer.dom(this.root).querySelectorAll('.requested');
-              console.log(requested);
-              requested.map((el)=>{
+
+              var requested = Polymer.dom(this.root).querySelectorAll(".requested");
+              // console.log(requested.length);
+              // เช็คค่าว่าง
+              var check = 0;
+              requested.reverse().map((el)=>{
                   if(el.value == undefined || el.value ==''){
-                    console.log(el);
+                    console.log(el.value);
                     el.focus();
+                    check += 1;
+                    // break;
                   }
-                  // console.log(el.value);
-                  // console.log(el.value == undefined || el.value =='');
-
               })
-              // if (this.shipment.carrier_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก Shipping Agent</li>";
-              // }
-              // if (this.shipment.deli_port_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก Place of Delivery</li>";
-              // }
-              // if (this.shipment.dest_port_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก POD</li>";
-              // }
-              // if (this.shipment.load_port_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก POL</li>";
-              // }
-              // if (this.shipment.package_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือกขนาด Package</li>";
-              // }
-              // if (this.shipment.seller_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก ผู้ส่งออก</li>";
-              // }
-              // if (this.shipment.ship_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก Vessel</li>";
-              // }
-              // if (this.shipment.book_no.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่ Booking No</li>";
-              // }
-              // if (this.shipment.shipline_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก Shipping Line</li>";
-              // }
-              // if (this.shipment.surveyor_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาเลือก Surveyor</li>";
-              // }
-              // if (this.shipment.type_rice_id.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่เลือก ชนิดข้าว</li>";
-              // }
-              // if (this.shipment.num_of_container.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่จำนวนตู้คอนเทนเนอร์</li>";
-              // }
-              //
-              // if (this.shipment.packing_time.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่ Packing Time</li>";
-              // }
-              //
-              // if (this.shipment.ship_lot_no.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่ Lot No</li>";
-              // }
-              // if (this.shipment.ship_voy_no.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่ Void No</li>";
-              // }
-              //
-              // if (this.shipment.shm_det_quantity.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่จำนวนตัน</li>";
-              // }
-              //
-              // if (this.shipment.weight_per_container.length < 1) {
-              //   this.error.innerHTML+="<li>กรุณาใส่น้ำหนักตู้คอนเทนเนอร์ื</li>";
-              // }
-
-
-
-
+              console.log(check);
+              //เช็คว่ายังเหลือค่าที่ไมไ่ด้เติมไหม ถา้ไม่ก็ส่งเลย
+              if (check <= 0) {
+                this.postDb(this.shipment);
+              }
 
               // console.log(this.contractId+'-error');
-              // this.postDb(this.shipment);
+              //
 
             },
             //update
