@@ -47,18 +47,7 @@
       text-transform: none;
       color: #eeff41;
     }
-    paper-toast {
-      --paper-toast-background-color: var(--paper-green-500);
-      /*height: 50px;*/
-      /*margin: 0px 0px 0px 0px;*/
-      /*padding: 0px 0px 0px 0px;*/
-      font-size: 16px;
-      width: 600px;
-      text-align: center;
-    }
-    paper-toast > div.content > iron-icon {
-      padding: 0px 10px 0px 0px;
-    }
+
     .mar-head {
       margin-left: 10px;
       margin-bottom: 10px;
@@ -291,16 +280,16 @@
     <template is="dom-repeat" as="itemPrimary" items="{{data.shipment_detail}}">
 
       <paper-icon-item class="fancy cleanBd bd">
-        <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+        <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse[[itemPrimary.shm_det_id]]" icon="chevron-right" item-icon></paper-icon-button>
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
           <div class$="[[configPrimary.width]]">
             <div class="fontPdLeft">
-              {{_getItemPrimary(itemPrimary,configPrimary)}}// [[itemPrimary.shm_id]]
+              {{_getItemPrimary(itemPrimary,configPrimary)}}
             </div>
           </div>
         </template>
       </paper-icon-item>
-      <iron-collapse id="collapse{{index}}">
+      <iron-collapse id="collapse[[itemPrimary.shm_det_id]]">
         <div class="collapse-content">
           <div class="bd">
             <gl-form-panel set-padding="10px 20px 10px 20px">
@@ -314,12 +303,11 @@
               </gl-form-panel-body>
 
               <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-
               <iron-pages selected="0" class$="iron-index-{{index}}">
-                <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
+                <vessel-save data="{{itemPrimary}}"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-save>
-                <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
+                <vessel-edit data="{{itemPrimary}}"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
               </iron-pages>
@@ -338,12 +326,7 @@
         </div>
       </iron-collapse>
     </template>
-    <paper-toast id="toastPass" class="fit-bottom">
-      <div class="content">
-        <iron-icon icon="check"></iron-icon>บันทึกข้อมูลเสร็จสิน
-        <paper-button on-tap="closeToast" class="yellow-button">ปิด</paper-button>
-      </div>
-    </paper-toast>
+
   </template>
   <script>
         Polymer({
@@ -458,7 +441,7 @@
               this.putDb(this.data.shipment_detail[e.currentTarget.index])
 
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
-              this.openToast();
+              this.glQuery('layoutMain').openToastSaveing();
               this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
             },
 
@@ -498,7 +481,7 @@
                 this.postDb(this.shipment);
               }
             },
-            //update
+            //insert
             postDb:function (data) {
               axios.post('./g2g/shipment/detail/insert', data)
               // axios.put('http://localhost:3000/api/g2g/shipment/update', data)
@@ -506,7 +489,7 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
+                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
                           this.shipment = {
                             seller_id:'',
                             shipline_id:'',
@@ -541,14 +524,16 @@
                           console.log(data);
                         })
             },
+            //update
             putDb:function (data) {
               axios.put('./g2g/shipment/detail/update', data)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
+                          // this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
                           this.clickCancel();
+                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
@@ -560,9 +545,9 @@
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                          // console.log(dataId);
+                          console.log(this.data.shm_id);
                           // this.glQuery('addContract').getChange();
-                          this.glQuery('contentPanel').changDrawer();
+                          // this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
