@@ -5,7 +5,7 @@
       <items type="primary">
         <list item="seller_name_en" label="ผู้ส่งออก" width="flex-2"></list>
         <list item="type_rice_name_en" label="ชนิดข้าว" width="flex-2"></list>
-        <list item="price" label="Price(USD/MT)" width="flex"></list>
+        <!-- <list item="price" label="Price(USD/MT)" width="flex"></list> -->
         <list item="shm_det_quantity" label="จำนวน/ตัน" width="flex"></list>
       </items>
     </list-vessel>
@@ -16,7 +16,7 @@
       properties: {
         data:{
           type: Object,
-          notify: true,
+          notify: true
         },
         contractId:{
           type:String,
@@ -27,6 +27,12 @@
           notify:true
         },
       },
+      observers:[
+        'check(data)'
+      ],
+      check:function (data) {
+        console.log(data);
+      }
     });
   </script>
 </dom-module>

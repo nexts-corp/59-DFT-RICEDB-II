@@ -83,19 +83,19 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           [[testNum(data.*,'num_of_container')]]
-            <gl-form-input label="จำนวนตู้คอนเทนเนอร์" class="requested"auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
+            <gl-form-input label="จำนวนตู้คอนเทนเนอร์" type="number" class="requested"auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="Packing Date"class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Packing Time"class="requested" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
+          <gl-form-input label="Packing Time"class="requested" type="time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           [[testNum(data.*,'weight_per_container')]]
-          <gl-form-input label="ตู้ละ (ตัน)"class="requested" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
+          <gl-form-input label="ตู้ละ (ตัน)"class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
             value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -131,7 +131,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- [[testNum(data.*,'shm_det_quantity')]] -->
           [[testNum(data.*,'shm_det_quantity')]]
-          <gl-form-input label="จำนวน/ตัน" class="requested" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
+          <gl-form-input label="จำนวน/ตัน" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -151,21 +151,20 @@
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,5]]"></gl-grid-col>
 
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]"></gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">ORIGINALS</div>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w padL requested" value="{{data.origin_page}}"></gl-form-input>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
+          [[testNum(data.*,'origin_page')]]
+          <gl-form-input label="" class="w padL requested" type="number" value="{{data.origin_page}}"></gl-form-input>
         </gl-grid-col>
         <div class="top">/</div>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w requested" value="{{data.nn_page}}"></gl-form-input>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
+          [[testNum(data.*,'nn_page')]]
+          <gl-form-input label="" class="w requested" type="number" value="{{data.nn_page}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>

@@ -3,6 +3,7 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
+<link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <dom-module id="list-vessel">
 
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -166,19 +167,19 @@
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               [[testNum(shipment.*,'num_of_container')]]
-                <gl-form-input label="จำนวนตู้คอนเทนเนอร์" class="requested"  auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
+                <gl-form-input label="จำนวนตู้คอนเทนเนอร์" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="Packing Date" class="requested"  value="{{shipment.packing_date}}"></vaadin-date-picker>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Packing Time" class="requested"  auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
+              <gl-form-input label="Packing Time" class="requested" type="time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
             </gl-grid-col>
 
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               [[testNum(shipment.*,'weight_per_container')]]
-              <gl-form-input label="ตู้ละ (ตัน)" class="requested"  auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
+              <gl-form-input label="ตู้ละ (ตัน)" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
                 value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -215,7 +216,7 @@
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               [[testNum(shipment.*,'shm_det_quantity')]]
-              <gl-form-input label="จำนวน/ตัน" class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
+              <gl-form-input label="จำนวน/ตัน" type="number" class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -235,23 +236,19 @@
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
-
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,5]]"></gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
               <div class="top">ORIGINALS</div>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
               [[testNum(shipment.*,'origin_page')]]
-              <gl-form-input label="" class="w padL requested" required  value="{{shipment.origin_page}}"></gl-form-input>
+              <gl-form-input label=""  type="number" class="w padL requested" required  value="{{shipment.origin_page}}"></gl-form-input>
             </gl-grid-col>
             <div class="top">/</div>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
+            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
               [[testNum(shipment.*,'nn_page')]]
-              <gl-form-input label="" class="w requested" required  value="{{shipment.nn_page}}"></gl-form-input>
+              <gl-form-input label="" type="number"  class="w requested" required  value="{{shipment.nn_page}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
               <div class="top">N/N</div>
@@ -287,6 +284,24 @@
               {{_getItemPrimary(itemPrimary,configPrimary)}}
             </div>
           </div>
+          <!-- <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js> -->
+          <!-- <template is="dom-if" if="[[checkTypeNumber(configPrimary)]]">
+            11111
+          </template> -->
+          <!-- <template is="dom-if" if="[[checkTypeNumber(configPrimary.type)]]">
+            <div class$="[[configPrimary.width]]">
+              <div class="fontPdLeft">
+                {{_getItemPrimary(itemPrimary,configPrimary)}}
+              </div>
+            </div>
+          </template>
+          <template is="dom-if" if="[[checkTypeNumber(configPrimary.type)]]">
+            <div class$="[[configPrimary.width]]">
+              <div class="fontPdLeft">
+                <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js>
+              </div>
+            </div>
+          </template> -->
         </template>
       </paper-icon-item>
       <iron-collapse id="collapse[[itemPrimary.shm_det_id]]">
@@ -397,7 +412,7 @@
             },
             shipmentDelete:function (e) {
               this.deleteDb(e.currentTarget.id);
-              // console.log(e.currentTarget.id);
+              this.glQuery('layoutMain').openToastDeleteing();
             },
             saveChangeShipment:function(e){
               var id = e.currentTarget.index;
@@ -458,6 +473,7 @@
               // console.log(this.data);
               // delete this.data.shm_id;
               // var eta_date=new Date (this.shipment.eta_date);//.concat('T00:00:00.000Z');
+              // console.log(this.shipment);
               this.shipment.shm_id=this.data.shm_id;
               this.shipment.eta_date=new Date (this.shipment.eta_date);
               this.shipment.etd_date=new Date (this.shipment.etd_date);
@@ -472,12 +488,12 @@
                     // console.log(el.value);
                     el.focus();
                     check += 1;
-                    // break;
                   }
               })
               // console.log(check);
               //เช็คว่ายังเหลือค่าที่ไมไ่ด้เติมไหม ถา้ไม่ก็ส่งเลย
               if (check <= 0) {
+                this.glQuery('layoutMain').openToastSaveing();
                 this.postDb(this.shipment);
               }
             },
@@ -546,8 +562,7 @@
                           console.log("success");
                           console.log(response);
                           console.log(this.data.shm_id);
-                          // this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'delete');
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
