@@ -13,31 +13,41 @@
       .catch(function (error) {
       }.bind(this));
   },
-  getCounty(contractId){
-    this.getDb('./g2g/contract/id/'+contractId,(data)=>{
+  getCounty(country,common){
+    // if (typeof common.country != 'undefined') {
+      // this.buyerMasks = common.buyerMasks;
+      // // console.log(this.buyerMasks);
+       var countryport = common.countryport;
 
-      county = data.country_id;
-        // console.log(county);
-        //get buyer_masks
-      this.buyerMasks = data.buyer_masks;
-      // get pod;
-      // console.log(this.common.countryport);
-      var countryport = this.common.countryport;
-      // get pol
-      var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
-       this.pol = pol;
-      var pod = countryport.filter(function (countryport) { return countryport.country_id == county });
-        this.pod = pod;
-        // console.log(this.pod);
-      // this.getDb('./common/port/country/id/'+county,(data)=>{
-      //   // console.log(data);
-      //   this.common.dest_port_id = data;
-      //   this.common.deli_port_id = data;
-      //   // console.log(this.port);dest_port_id
-      // });
-    });
+       var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
+         this.pol = pol;
+        //  console.log(this.pol);
+       var pod = countryport.filter(function (countryport) { return countryport.country_id == country });
+         this.pod = pod;
+
+
+        //  console.log(this.pod);
+    // }
+
+    // this.getDb('./g2g/contract/id/'+contractId,(data)=>{
+    //
+    //   county = data.country_id;
+    //     // console.log(county);
+    //     //get buyer_masks
+    //   this.buyerMasks = data.buyer_masks;
+    //   // get pod;
+    //   // console.log(this.common);
+    //   var countryport = this.common.countryport;
+    //   // get pol
+    //   var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
+    //    this.pol = pol;
+    //   var pod = countryport.filter(function (countryport) { return countryport.country_id == county });
+    //     this.pod = pod;
+    //
+    // });
   },
   getSellerPhone:function (e) {
+    // console.log("common"+this.common);
     var selectedItem = e.detail.value;
     if (selectedItem) {
       var seller = this.common.seller.filter(function (seller) { return seller.seller_id == selectedItem });
@@ -47,7 +57,6 @@
     }
   },
   getShip:function (shipline_id,common) {
-      this.ship_id = this.ship_id || this.$.ship_id;
       //เช็ค null or undifile
       // console.log(this.ship_id);
       // console.log(shipline_id);

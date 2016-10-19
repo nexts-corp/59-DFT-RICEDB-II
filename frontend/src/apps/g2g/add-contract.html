@@ -82,8 +82,12 @@
                     <input placeholder="text" value="third">
                   </template>
             </nx-grid>
+            <button type="button" name="button" on-tap="checkTrue">กด</button>
             </grid>
             <panel>
+                <template is="dom-if" if="[[loaded]]">
+
+
                 <div class="left">
                     <iron-pages selected="{{vesselPage}}">
                         <panel-seleted>
@@ -131,7 +135,9 @@
                         <!-- vesse -->
                     </iron-pages>
                 </div>
+                </template>
             </panel>
+
             </content-panel>
 
     </template>
@@ -162,6 +168,10 @@
                 common:{
                   type:Object,
                   value:{}
+                },
+                bmc:{
+                  type:Object,
+                  value:{}
                 }
             },
             observers:[
@@ -173,76 +183,51 @@
                 this.glQuery('addContract',this);
             },
             ready: function() {
+              // console.log(this.loaded);
               // list county
               this.getChange();
               // list riceType
-              this.getDbforRefresh('./common/typeRice',(data)=>{
+              this.getDb('./common/typeRice',(data)=>{
                 this.typeRice=data;
-              });
+              },false);
               // list package
-              this.getDbforRefresh('./common/package',(data)=>{
+              this.getDb('./common/package',(data)=>{
                 this.package=data;
-              });
-              this.getDbforRefresh('./common/seller',(data)=>{
+              },false);
+              this.getDb('./common/seller',(data)=>{
                   this.common.seller= data;
                   // console.log(this.common.seller);
-              });
-              this.getDbforRefresh('./common/carrier',(data)=>{
+              },false);
+              this.getDb('./common/carrier',(data)=>{
                 //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
                   this.common.carrier= data;
-              });
+              },false);
               //shipline_id
-              this.getDbforRefresh('./common/shipline/',(data)=>{
+              this.getDb('./common/shipline/',(data)=>{
                 this.common.shipline = data;
-              });
+              },false);
               //ship in shipline
-              this.getDbforRefresh('./common/shipline/ship',(data)=>{
+              this.getDb('./common/shipline/ship',(data)=>{
                 this.common.shipInShipline = data;
-              });
+              },false);
               //get surveyor_id
-              this.getDbforRefresh('./common/surveyor',(data)=>{
+              this.getDb('./common/surveyor',(data)=>{
                 this.common.surveyor = data;
-              });
+              },false);
               // list port
-              this.getDbforRefresh('./common/port/',(data)=>{
+              this.getDb('./common/port/',(data)=>{
                 this.common.countryport =  data;
 
-              });
+              },false);
               // list incoterms  ชนิดการจ่าย
-              this.getDbforRefresh('./common/incoterms',(data)=>{
+              this.getDb('./common/incoterms',(data)=>{
                 this.incoterms=data;
-              });
-              // list cml
-              // list incoterms
-              // this.getDb('./common/port',(data)=>{
-              //   this.common.port_id = data;
-              //   // console.log(this.port);dest_port_id
-              // });
-              // console.log(this.common);
+              },false);
             },
-            // getPortCountry:function (contractId) {
-            //   // console.log(this.dataSelect);
-            //   var county;
-            //   this.getDb('./g2g/contract/id/'+contractId,(data)=>{
-            //     // console.log(contractId);
-            //     county = data.country_id;
-            //       //get buyer_masks
-            //     this.common.buyerMasks = data.buyer_masks;
-            //     // get pod;
-            //     this.getDb('./common/port/country/id/'+county,(data)=>{
-            //       // console.log(data);
-            //       this.common.dest_port_id = data;
-            //       this.common.deli_port_id = data;
-            //       // console.log(this.port);dest_port_id
-            //     });
-            //   });
-            // },
             getChange:function () {
-
-              this.getDbforRefresh('./g2g/contract/list',(data)=>{
+              this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
-              })
-
+              },false)
             },
             vesselEditCommon:function (e) {
               // console.log(e.detail.node);
@@ -258,9 +243,6 @@
 
               e.detail.node.common=this.confirmLetter;
             },
-            attached: function() {
-                this.layoutMain = this.glQuery('layoutMain');
-            },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
                 // console.log(this.layerContent);
@@ -271,6 +253,7 @@
                 }
                 this.dataSelect = e.detail.data;
                 // console.log(this.dataSelect);
+                // this.buyerMasksAndCountry(this.dataSelect.contract_id);
                 if (typeof this.dataSelect == 'undefined') {
                   // console.log(1);
                 }else {
@@ -286,27 +269,28 @@
                       //เช็คว่าส่งค่า shm_id มาไหม
                       // console.log(321);
                     // console.log(this.dataSelect.shm_id);
-                    this.shipMentDeatil(this.dataSelect.shm_id);
+                    this.shipMentDeatil(this.dataSelect.shm_id,true);
                   }
                 }
             },
-            shipMentDeatil:function (id) {
+            shipMentDeatil:function (id,refresh) {
               // console.log(id);
               this.glQuery('layoutMain').openToastLoading();
               // this.glQuery('contentPanel').changDrawer();
               this.getDb('./g2g/shipment/id/'+id,(data)=>{
-                this.shipMent = data;
-                // console.log("shipMent");
+                this.getDb('./g2g/contract/id/'+data.contract_id,(data2)=>{
+                  data.country =  data2.country_id;
+                  data.buyerMasks =  data2.buyer_masks;
+                  this.shipMent = data;
+                },refresh);
               });
             },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
-                // console.log("confirmLetter");
                 // console.log(this.confirmLetter);
-
-              });
+              },true);
             },
             nxGridDblclick: function(e) {
                 // if (e.detail.level == 'primary') {
@@ -314,46 +298,25 @@
                 //this.layoutMain.changePath('/gtog/add-period');
                 // }
             },
-            getDbforRefresh:function (url,callback) {
+            getDb:function (url,callback,refresh) {
               // console.log(url);
               axios.get(url)
                 .then(function(response){
-                  callback(response.data);
+                    callback(response.data);
+                    this.glQuery('layoutMain').closeToastLoading(function(){
+                      if (refresh == true) {
+                        this.glQuery('contentPanel').changDrawer();
+                      }
+                    }.bind(this));
 
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
                 // console.log(1);
-            },
-            getDb:function (url,callback) {
-              // console.log(url);
-              axios.get(url)
-                .then(function(response){
-                  callback(response.data);
-                  this.glQuery('layoutMain').closeToastLoading(function(){
-                    this.glQuery('contentPanel').changDrawer();
-                    // console.log(url);
-                  }.bind(this));
-
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
-                // console.log(1);
-            },
-            postDb:function (url) {
-              axios.get('/user', {
-                params: {
-                  ID: 12345
-                }
-              })
-              .then(function (response) {
-                console.log(response);
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
             },
             attached:function(){
+              this.layoutMain = this.glQuery('layoutMain');
+
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-insert.html`);
               this.importHref(resolvedPageUrl,null,null,true);
 
@@ -369,16 +332,13 @@
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-print.html`);
               this.importHref(resolvedPageUrl,null,null,true);
 
-              // var resolvedPageUrl = this.resolveUrl(`components/period/period-page.html`);
-              // this.importHref(resolvedPageUrl,null,null,true);
-              //
-              // var resolvedPageUrl = this.resolveUrl(`components/vessel/shipment-insert.html`);
-              // this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-page.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-            }
 
-        });
+              this.async(()=>{this.loaded = true;},1000);
+
+            },
+
+        });;
     </script>
 </dom-module>

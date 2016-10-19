@@ -210,6 +210,15 @@
               'dataChange(data.cl_id)',
               'getTyperice(contractId)'
             ],
+            // created: function() {
+            //   console.log('created');
+            // },
+            // ready: function() {
+            //   console.log('ready');
+            // },
+            // attached: function() {
+            //   console.log('attached');
+            // },
             getTyperice: function(contractId) {
               this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
@@ -331,151 +340,3 @@
         });
     </script>
 </dom-module>
-
-<!-- <dom-module id="promise-insert">
-    <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-    .bg {
-        background-color: var(--paper-grey-200);
-        border: 1px solid black;
-        padding: 10px 0px 10px 10px;
-    }
-    </style>
-    <template>
-    <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input auto-validate error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}" name="cl_no"></gl-form-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
-      </gl-grid-col>
-
-    </gl-grid-row>
-
-    <template is="dom-repeat" items="{{confirmLetter.cl_type_rice}}">
-        <div class="bg top">
-          <gl-grid-row>
-            <gl-form-input value="{{item.type_rice_id}}" name="type_rice_id" hidden></gl-form-input>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
-                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
-                    <template is="dom-repeat" items="{{riceType.contract_type_rice}}">
-                      <paper-item value="{{item.type_rice_id}}">{{item.type_rice_name_th}}</paper-item>
-                    </template>
-                  </paper-menu>
-                </gl-form-dropdown-menu>
-              </gl-grid-col>
-
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-            [[testNum(item.*,'type_rice_quantity')]]
-            <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
-              value="{{item.type_rice_quantity}}"
-             name="type_rice_quantity"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-            <paper-icon-button id="[[index]]" class="icon-bin" icon="icons:delete" style="color: gray;" on-tap="dele"></paper-icon-button>
-          </gl-grid-col>
-        </gl-grid-row>
-      </div>
-    </template>
-
-
-
-    <div class="horizontal end-justified layout">
-    <paper-button raised class="gl-btn-primary" on-tap="addTypeRice">เพิ่มชนิดข้าว</paper-button>
-    </div>
-    <gl-grid-row>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-dropdown-menu label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
-              <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
-                  <template is="dom-repeat" items="[[incoterms]]">
-                    <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
-                  </template>
-              </paper-menu>
-          </gl-form-dropdown-menu>
-    </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-          <gl-form-textarea label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
-      </gl-grid-col>
-    </gl-grid-row>
-
-
-
-    <div class="horizontal end-justified layout">
-      <paper-button class="gl-btn-primary" raised on-tap="addConfirm">บันทึกข้อมูล</paper-button>
-    </div>
-    </template>
-    <script>
-        Polymer({
-            is: "promise-insert",
-            properties: {
-              confirmLetter: {
-                type: Object,
-                value:
-                {
-                cl_type_rice:[{}]
-                }
-              }
-            },
-            observers: [
-              'getTyperice(contractId)'
-            ],
-            getTyperice: function(contractId) {
-              this.getDb('http://localhost:3000/api/g2g/contract/'+contractId,(data)=>{
-                this.riceType = data;
-                // console.log(this.riceType.contract_type_rice);
-              });
-            },
-            addTypeRice:function () {
-              // console.log(1);
-              this.push('confirmLetter.cl_type_rice', {
-                type_rice_id: '',
-                type_rice_quantity: 0,
-                package:
-                  [
-                    {
-                      package_id: '',
-                      price_per_ton: 0,
-                      package_weight_bag: 0,
-                    }
-                  ]
-              });
-              // console.log(2);
-            },
-            addConfirm:function () {
-              // console.log(1);
-
-              this.confirmLetter.contract_id = this.contractId;
-              console.log(this.confirmLetter);
-              this.postDb(this.confirmLetter)
-            },
-            getDb:function (url,callback) {
-              axios.get(url)
-                .then(function(response){
-                  callback(response.data);
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
-            },
-            postDb:function (data) {
-              axios.post('http://localhost:3000/api/g2g/confirm/insert', data)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                          this.glQuery('addContract').getChange();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          console.log(error);
-                        })
-
-            },
-            testNum:function(ob,param){
-                    if(ob.path.split(".").length == 2){
-                        ob.base[param]=parseFloat(ob.value);
-
-                    }
-                }
-        });
-    </script>
-</dom-module> -->
