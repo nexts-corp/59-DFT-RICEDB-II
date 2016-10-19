@@ -107,7 +107,7 @@
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>-->
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-						<gl-form-input value="[[_sumAllocation(period.*,'quantityUpdate')]]" disabled></gl-form-input>
+						<gl-form-input label="ยอดปรับปรุงรวม" value="[[_sumAllocation(period.*,'quantityUpdate')]]" disabled></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 			</gl-form-panel-body>
@@ -129,20 +129,20 @@
             {
               id:'1',
               name: 'งวดที่ 1 (มกราคม)',
-              quantity: '500',
-              quantityUpdate:'500'
+              quantity: '449.50',
+              quantityUpdate:'449.50'
             },
             {
                id:'2',
               name: 'งวดที่ 2 (เมษายน)',
-              quantity: '200',
-              quantityUpdate:'200'
+              quantity: '224.75',
+              quantityUpdate:'224.75'
             },
             {
                id:'3',
               name: 'งวดที่ 3 (กรกฏาคม)',
-              quantity: '300',
-              quantityUpdate:'300'
+              quantity: '224.75',
+              quantityUpdate:'224.75'
             },
           ]
         
@@ -161,9 +161,9 @@
         var answer = 0;
         console.log(item.base);
         
-        item.base.map((item)=>{
-          console.log(item[key]);
-          answer += parseFloat(item[key]);
+        item.base.map((data)=>{
+          console.log(data[key]);
+          answer += parseFloat(data[key]);
         })
         console.log(answer);
         return answer;
