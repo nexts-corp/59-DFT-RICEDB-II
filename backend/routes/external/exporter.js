@@ -61,7 +61,7 @@ router.get('/', function (req, res, next) {
         }
 
         if (key.indexOf('date') > -1) {
-            d[key] = req.query[key];
+            d[key] = req.query[key] + tz;
         } else {
             q[key] = req.query[key];
         }
