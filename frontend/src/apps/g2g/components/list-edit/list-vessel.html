@@ -42,10 +42,11 @@
       text-align: left;
     }
     .fontPdRight{
-      padding: 10px 20px 10px 10px;
-      /*word-wrap: break-word;*/
+      padding: 10px 10px 10px 10px;
+      margin-right: 10px;
       text-align: right;
     }
+    /*.sss:last-of-type*/
     paper-item {
       cursor: pointer;
     }
@@ -83,10 +84,13 @@
   <template>
     <content id="primary" select="items[type=primary]"></content>
     <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,1]]">
         <gl-form-label-input  label="งวดที่" value$="[[data.shm_no]]" ></gl-form-label-input>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]">
+        <gl-form-label-input label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{data.shm_name}}"></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
         <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่ม</paper-button>
       </gl-grid-col>
