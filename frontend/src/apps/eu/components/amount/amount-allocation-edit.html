@@ -1,143 +1,172 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="amount-allocation-edit">
-  <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
-    .title{
-      background-color: orange;
-      color: white;
-      padding: 10px;
-    }
-    table.default {
-      border-collapse: collapse;
-      width: 100%
-    }
+	<style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+		.title {
+			background-color: orange;
+			color: white;
+			padding: 10px;
+		}
+		
+		table.default {
+			border-collapse: collapse;
+			width: 100%
+		}
+		
+		table.default,
+		th,
+		td {
+			border-bottom: 1px solid #ddd;
+		}
+		
+		th,
+		td {
+			padding: 15px;
+		}
+		
+		th {
+			text-align: center;
+			background-color: #F1F1F1;
+			white-space: nowrap;
+		}
+		
+		td {
+			text-align: left;
+			white-space: nowrap;
+		}
+		
+		tr:hover {
+			background-color: #F1F1F1;
+		}
+		
+		.number {
+			text-align: right;
+		}
+		
+		.textHeader {
+			padding: 20px;
+			text-align: center;
+			font-size: 22px;
+		}
+	</style>
+	<template>
+		<div class="textHeader">รายละเอียดการจัดสรรโควตา</div>
+		<gl-form-panel set-padding="0px 0px 20px 0px">
+			<div class="title">รายละเอียดการจัดสรรโควตา</div>
+			<gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<gl-form-input label="ปีโควต้า" value="2559" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<gl-form-input label="ประเภทข้าว" value="ข้าวขาว" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<gl-form-input label="การคำนวณครั้งที่" value="1" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+				</gl-grid-row>
 
-    table.default,
-    th,
-    td {
-      border-bottom: 1px solid #ddd;
-    }
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="3094001204" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<gl-form-input label="บริษัท" value="กมลกิจ บจก." id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+				</gl-grid-row>
 
-    th,
-    td {
-      padding: 15px;
-    }
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<!--<div>ยอดปรับปรุง</div>-->
+					</gl-grid-col>
+				</gl-grid-row>
 
-    th {
-      text-align: center;
-      background-color: #F1F1F1;
-      white-space: nowrap;
-    }
+				<template is="dom-repeat" items="{{period}}">
+         
+					<gl-grid-row width="{{getWidth}}">
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+							<gl-form-input label="{{item.name}}" value="{{item.quantity}}" id="" disabled name=""></gl-form-input>
+						</gl-grid-col>
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+							<gl-form-input label="ยอดปรับปรุง" always-float-label value="{{item.quantityUpdate}}"></gl-form-input>
+						</gl-grid-col>
+					</gl-grid-row>
 
-    td {
-      text-align: left;
-      white-space: nowrap;
-    }
+				</template>
+         
+         
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+						<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="[[_sumAllocation(period.*,'quantity')]]"></gl-form-input>
+						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>-->
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<gl-form-input value="[[_sumAllocation(period.*,'quantityUpdate')]]" disabled></gl-form-input>
+					</gl-grid-col>
+				</gl-grid-row>
+			</gl-form-panel-body>
+		</gl-form-panel>
 
-    tr:hover {
-      background-color: #F1F1F1;
-    }
-    .number{
-      text-align: right;
-    }
-    .textHeader{
-      padding:20px;
-      text-align: center;
-      font-size: 22px; 
-      
-    }
-  </style>
-  <template>
-    <div class="textHeader">รายละเอียดการจัดสรรโควตา</div>
-    <gl-form-panel set-padding = "0px 0px 20px 0px">
-      <div class="title">รายละเอียดการจัดสรรโควตา</div>
-      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
-        <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="ปีโควต้า" value="2559" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="ประเภทข้าว" value="ข้าวขาว" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="การคำนวณครั้งที่" value="1" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-        </gl-grid-row>
+		<div class="horizontal end-justified layout">
+			<paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+			<paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+		</div>
 
-         <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="3094001204" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="บริษัท" value="กมลกิจ บจก." id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-        </gl-grid-row>
-
-         <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <!--<div>ยอดปรับปรุง</div>-->
-           </gl-grid-col>
-        </gl-grid-row>
-
-         <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input label="ปริมาณ งวดที่ 1 (มกราคม)" value="449.50" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input label="ยอดปรับปรุง" always-float-label value="{{num1}}"></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-      
-        <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input label="ปริมาณ งวดที่ 2 (เมษายน)" value="224.75" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input label="ยอดปรับปรุง" always-float-label value="{{num2}}"></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input label="ปริมาณ งวดที่ 3 (กรกฏาคม)" value="224.75" id="" disabled name=""></gl-form-input>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input label="ยอดปรับปรุง" always-float-label value="{{num3}}"></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <!--<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name=""></gl-form-input>-->
-              <div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input value="[[_sumAllocation(num1,num2,num3)]]" disabled></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-      </gl-form-panel-body>
-    </gl-form-panel>
-
-    <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
-    </div>
-
-  </template>
-  <script>
+	</template>
+	<script>
     Polymer({
       is: "amount-allocation-edit",
-      _sumAllocation:function(num1,num2,num3){
-        var resault;
-        return resault =  parseFloat(num1)+parseFloat(num2)+parseFloat(num3);
+      properties:{
+        period:{
+          type: Array,
+          value:[
+            {
+              id:'1',
+              name: 'งวดที่ 1 (มกราคม)',
+              quantity: '500',
+              quantityUpdate:'500'
+            },
+            {
+               id:'2',
+              name: 'งวดที่ 2 (เมษายน)',
+              quantity: '200',
+              quantityUpdate:'200'
+            },
+            {
+               id:'3',
+              name: 'งวดที่ 3 (กรกฏาคม)',
+              quantity: '300',
+              quantityUpdate:'300'
+            },
+          ]
+        
+        },
+        oldAnswer:{
+          type: String
+        },
+        newAnswer:{
+          type: String
+        },
+        data:{
+          type: String
+        }
+      },
+      _sumAllocation:function(item,key){
+        var answer = 0;
+        console.log(item.base);
+        
+        item.base.map((item)=>{
+          console.log(item[key]);
+          answer += parseFloat(item[key]);
+        })
+        console.log(answer);
+        return answer;
       }
     });
   </script>

@@ -106,49 +106,49 @@
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดการส่งออกรวม</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการขอหนังสือรับรอง</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวณส่วนจัดสรร</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมปริมาณที่ไม่ได้ขอใช้หนังสือรับรอง</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมส่วนต่างปริมาณการส่งออกข้าว (ตามกรมศุลกากร)</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมส่วนต่างมูลค่าการส่งออกข้าว (ตามกรมศุลกากร)</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา 80%</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา 10%</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
         </div>
@@ -180,6 +180,9 @@
           {id:'7',name:'แอดวานซ์ไรซ์เทรดดิ้ง',check:false},
           ]
         },
+        resault:{
+          type: String
+        },
         selectAll:{
           type: Boolean,
           value: false,
@@ -187,9 +190,11 @@
         }
       },
       cal:function(e){
+        
         const check = (item)=>{
             return item.check == true;
         }
+        this.resault = '1';
         console.log(this.companyName.filter(check));
       },
       _selectAllChanged:function(val){ 
