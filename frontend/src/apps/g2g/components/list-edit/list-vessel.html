@@ -230,7 +230,7 @@
             </gl-grid-col>
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="MARKS" value="[[buyerMasks]]"></gl-form-label-input>
+              <gl-form-label-input label="MARKS" value="{{data.buyerMasks}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-form-label-input label="Quantity (BAGS)" value="{{quantityBag}}"></gl-form-label-input>
@@ -286,7 +286,8 @@
           [[item.label]]
         </div>
       </template>
-    </div>
+    </div>{{testpast}}
+
     <template is="dom-repeat" as="itemPrimary" items="{{data.shipment_detail}}">
 
       <paper-icon-item class="fancy cleanBd bd">
@@ -294,7 +295,7 @@
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
           <div class$="[[configPrimary.width]]">
             <div class="fontPdLeft">
-              {{_getItemPrimary(itemPrimary,configPrimary)}}
+              {{_getItemPrimary(itemPrimary,configPrimary)}}// [[itemPrimary.shm_id]]
             </div>
           </div>
         </template>
@@ -308,7 +309,6 @@
                 <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
               </gl-form-panel-head>
 
-
               <gl-form-panel-body>
                 <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
               </gl-form-panel-body>
@@ -317,10 +317,10 @@
 
               <iron-pages selected="0" class$="iron-index-{{index}}">
                 <vessel-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"
-                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
+                  buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-save>
                 <vessel-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]" port="[[port]]" shipline="[[shipline]]" pol="[[pol]]" cml="[[cml]]"
-                  buyer-masks='[[common.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
+                  buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
               </iron-pages>
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
@@ -344,7 +344,6 @@
         <paper-button on-tap="closeToast" class="yellow-button">ปิด</paper-button>
       </div>
     </paper-toast>
-
   </template>
   <script>
         Polymer({
@@ -396,11 +395,15 @@
                   }
                 },
                 common:{
-                  type:Object
+                  type:Object,
+                },
+                data:{
+                  type:Object,
+                  value:{buyerMasks:''}
                 }
             },
             observers: [
-              'getCounty(contractId)',
+              'getCounty(data.country,common)',
             ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
@@ -451,6 +454,7 @@
               this.data.shipment_detail[id].id=this.data.shipment_detail[id].shm_det_id
               delete this.data.shipment_detail[id].shm_det_id;
               // console.log(this.data.shipment_detail[id]);
+
               this.putDb(this.data.shipment_detail[e.currentTarget.index])
 
               this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
@@ -478,26 +482,21 @@
               this.shipment.product_date=new Date (this.shipment.product_date);
 
               var requested = Polymer.dom(this.root).querySelectorAll(".requested");
-              // console.log(requested.length);
               // เช็คค่าว่าง
               var check = 0;
               requested.reverse().map((el)=>{
                   if(el.value == undefined || el.value ==''){
-                    console.log(el.value);
+                    // console.log(el.value);
                     el.focus();
                     check += 1;
                     // break;
                   }
               })
-              console.log(check);
+              // console.log(check);
               //เช็คว่ายังเหลือค่าที่ไมไ่ด้เติมไหม ถา้ไม่ก็ส่งเลย
               if (check <= 0) {
                 this.postDb(this.shipment);
               }
-
-              // console.log(this.contractId+'-error');
-              //
-
             },
             //update
             postDb:function (data) {
@@ -507,8 +506,7 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          this.glQuery('addContract').shipMentDeatil(data.shm_id);
-                          this.glQuery('addContract').getChange();
+                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
                           this.shipment = {
                             seller_id:'',
                             shipline_id:'',
@@ -549,14 +547,12 @@
                           console.log("success");
                           console.log(response);
                           console.log(data);
-                          this.glQuery('addContract').getChange();
-                          this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
                           console.log(error);
-                          console.log(data);
                         })
             },
             deleteDb:function (dataId) {
