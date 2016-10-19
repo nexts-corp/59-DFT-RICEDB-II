@@ -21,86 +21,85 @@
 
   <template>
     <gl-form-panel-body>
-
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
-                item-value-path="seller_id" items="{{common.seller}}" value="{{data.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+              class="requested"  item-value-path="seller_id" items="{{common.seller}}" value="{{data.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
-              item-value-path="shipline_id" items="{{common.shipline}}" value="{{data.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
+            class="requested"  item-value-path="shipline_id" items="{{common.shipline}}" value="{{data.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="ship_id" label="Vessel" item-label-path="ship_name"
-              item-value-path="ship_id" items="{{shipInShipline}}" value="{{data.ship_id}}"></gl-combo-box>
+          class="requested"    item-value-path="ship_id" items="{{shipInShipline}}" value="{{data.ship_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name"
-                item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
+              class="requested"  item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}"
-            id="voidNo" name="voidNo"></gl-form-input>
+          class="requested"  id="voidNo" name="voidNo"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}"
-            id="lotNo" name="lotNo"></gl-form-input>
+          class="requested"  id="lotNo" name="lotNo"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Booking No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"  value="{{data.book_no}}" id="book_no" name="book_no"></gl-form-input>
+          <gl-form-input label="Booking No."class="requested" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"  value="{{data.book_no}}" id="book_no" name="book_no"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="B/L No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bl_no}}" id="bl_no" name="bl_no"></gl-form-input>
+          <gl-form-input label="B/L No."class="requested" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.bl_no}}" id="bl_no" name="bl_no"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
           <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
-              item-value-path="carrier_id" items="{{common.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
+            class="requested"  item-value-path="carrier_id" items="{{common.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input label="Tel." error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
-              item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
+          class="requested"    item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="ETD" value="{{data.etd_date}}"></vaadin-date-picker>
+          <vaadin-date-picker label="ETD"class="requested" value="{{data.etd_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="ETA" value="{{data.eta_date}}"></vaadin-date-picker>
+          <vaadin-date-picker label="ETA"class="requested" value="{{data.eta_date}}"></vaadin-date-picker>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-              item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
+          class="requested" item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-              item-value-path="port_id" items="{{pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
+          class="requested" item-value-path="port_id" items="{{pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           [[testNum(data.*,'num_of_container')]]
-            <gl-form-input label="จำนวนตู้คอนเทนเนอร์" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
+            <gl-form-input label="จำนวนตู้คอนเทนเนอร์" type="number" class="requested"auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Packing Date" value="{{data.packing_date}}"></vaadin-date-picker>
+          <vaadin-date-picker label="Packing Date"class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="Packing Time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
+          <gl-form-input label="Packing Time"class="requested" type="time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           [[testNum(data.*,'weight_per_container')]]
-          <gl-form-input label="ตู้ละ (ตัน)" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
+          <gl-form-input label="ตู้ละ (ตัน)"class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
             value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="Production" value="{{data.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
+          <vaadin-date-picker label="Production"class="requested" value="{{data.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
     </gl-form-panel-body>
@@ -116,11 +115,11 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
-              item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+          class="requested"    item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-              item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+          class="requested"    item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -132,43 +131,40 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- [[testNum(data.*,'shm_det_quantity')]] -->
           [[testNum(data.*,'shm_det_quantity')]]
-          <gl-form-input label="จำนวน/ตัน" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
+          <gl-form-input label="จำนวน/ตัน" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="MARKS" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="[[buyerMasks]]"></gl-form-label-input>
+          <gl-form-label-input label="MARKS"  value="[[buyerMasks]]"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Quantity (BAGS)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"
-            value="{{quantityBag}}"></gl-form-label-input>
+          <gl-form-label-input label="Quantity (BAGS)" value="{{quantityBag}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="WEIGHT (M/T)" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"
-            value="G.W. {{gw}}"></gl-form-label-input>
+          <gl-form-label-input label="WEIGHT (M/T)" value="G.W. {{gw}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
+          <gl-form-label-input label=""  value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,6]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,5]]"></gl-grid-col>
 
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]"></gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">ORIGINALS</div>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w padL" value="{{data.origin_page}}"></gl-form-input>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
+          [[testNum(data.*,'origin_page')]]
+          <gl-form-input label="" class="w padL requested" type="number" value="{{data.origin_page}}"></gl-form-input>
         </gl-grid-col>
         <div class="top">/</div>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <gl-form-input label="" class="w" value="{{data.nn_page}}"></gl-form-input>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
+          [[testNum(data.*,'nn_page')]]
+          <gl-form-input label="" class="w requested" type="number" value="{{data.nn_page}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>
@@ -206,32 +202,17 @@
       // },
 
       observers: [
-        'getCounty(contractId)',
+        'getCounty(country,common)',
         'getShip(data.shipline_id,common.*)',
-        // 'getconfirm(data.contract_id)',
-        // 'getCmlForRiceType(cml,data.cl_id)',
         'getRiceTypeForPackage(clTypeRice,data.type_rice_id)',
         'getPackageForPrice(package,data.package_id)',
-        // 'checkData(common.*)'
       ],
       attached: function() {
         // console.log("created");
+        //send to file add-contract
         this.fire('vessel-edit-common',{node:this});
       },
-      // getShip:function (data) {
-      //   // console.log(data);
-      // },
-      // regularTap:function (e) {
-      //   // if (e.detail.value.shipline_id == null) {
-      //   //   console.log(e.detail.value.shipline_id);
-      //   // }
-      //
-      // }
-      // checkData:function(ob) {
-      //   // console.log(ob);
-      //   console.log(this.buyerMasks);
-      //   console.log(this.common);
-      // },
+
     });
   </script>
 </dom-module>

@@ -124,10 +124,6 @@
                     type: String,
                     value: "detailRegExporter"
                 },
-                result: {
-                    type: Object,
-                    observer: '_result'
-                },
                 exporterId:{
                   type: String,
                   observer: '_exporterIdChanged'
@@ -141,13 +137,6 @@
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
-
-            },
-            attached: function() {
-                // this.layoutMain = this.glQuery('layoutMain');
-            },
-            _result:function () {
-              // console.log(this.result);
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
@@ -179,7 +168,7 @@
             attached: function() {
                 this.exporter_id = this.exporter_id || this.$.exporter_id;
                 // console.log(this.exporter_id);
-                this.getDb('http://localhost:3000/api/external/exporter/unactive', (data) => {
+                this.getDb('./external/exporter/?exporter_active=false', (data) => {
                     this.exporter_id.items = data;
                     // console.log(this.exporter_id.items);
                     this.exporters = data;
@@ -197,7 +186,7 @@
                 id : this.dataSelect.exporter_id
               }
               // console.log(datas);
-              axios.put('http://localhost:3000/api/external/exporter/update', datas)
+              axios.put('./external/exporter/update', datas)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);

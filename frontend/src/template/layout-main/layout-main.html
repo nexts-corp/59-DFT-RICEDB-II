@@ -61,11 +61,23 @@
            left: 50%;
            width: 100%;
            top: 50%;
+          font-size: 16px;
         }
-        .loading{
+        .loading {
             text-align: center;
         }
-
+        .get {
+          --paper-toast-background-color: var(--gl-primary-color);
+          border: 1px solid var(--gl-white-color);
+        }
+        .save {
+          --paper-toast-background-color: var(--gl-success-color);
+          border: 1px solid var(--gl-white-color);
+        }
+        .delete {
+          --paper-toast-background-color: var(--gl-danger-color);
+          border: 1px solid var(--gl-white-color);
+        }
     </style>
 
     <template>
@@ -123,7 +135,7 @@
         </paper-header-panel>
       </paper-drawer-panel>
       <div class="setPosition">
-       <paper-toast class="setPosition" id="toastLoading" positionTarget duration="0" text="">
+       <paper-toast class="setPosition get" id="toastLoading" positionTarget duration="0" text="">
            <div class="loading">
                <paper-spinner active></paper-spinner>
                <span style="padding-left:10px; position:relative; bottom: 6px;">
@@ -131,6 +143,22 @@
                </span>
                <!--<paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>-->
            </div>
+       </paper-toast>
+       <paper-toast class="setPosition save" id="toastSaveing" positionTarget duration="0" text="">
+         <div class="loading toastSaveing">
+           <paper-spinner active></paper-spinner>
+           <span style="padding-left:10px; position:relative; bottom: 6px;">
+               กำลังบันทึกข้อมูล
+           </span>
+         </div>
+       </paper-toast>
+       <paper-toast class="setPosition delete" id="toastDeleteing" positionTarget duration="0" text="">
+         <div class="loading toastDeleteing">
+           <paper-spinner active></paper-spinner>
+           <span style="padding-left:10px; position:relative; bottom: 6px;">
+               กำลังลบข้อมูล
+           </span>
+         </div>
        </paper-toast>
       </div>
   </template>
@@ -183,12 +211,38 @@
               //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
               this.$.drawerDashboard.togglePanel();
             },
+
             openToastLoading:function(){
                 this.$.toastLoading.open();
             },
+            openToastSaveing:function(){
+                this.$.toastSaveing.open();
+            },
+            openToastDeleteing:function(){
+                this.$.toastDeleteing.open();
+            },
+
             closeToastLoading:function(callback){
+              console.log("close-get");
                 this.async(function(){
+                    console.log("close-2-get");
                     this.$.toastLoading.hide();
+                    callback();
+                }.bind(this),500);
+            },
+            closeToastSaveing:function(callback){
+              console.log("close-save");
+                this.async(function(){
+                    console.log("close-2-save");
+                    this.$.toastSaveing.hide();
+                    callback();
+                }.bind(this),500);
+            },
+            closeToastDeleteing:function(callback){
+              console.log("close-delete");
+                this.async(function(){
+                    console.log("close-2-delete");
+                    this.$.toastDeleteing.hide();
                     callback();
                 }.bind(this),500);
             },

@@ -1,5 +1,5 @@
 <link rel="import" href="../g2g/components/content-panel.html">
-<link rel="import" href="components/list-edit/list-registration.html">
+<link rel="import" href="components/list-edit/list-report.html">
 
 
 <dom-module id="listregistion-report-list-exporter-address">
@@ -48,54 +48,43 @@
 
     <content-panel>
       <grid>
-        <!-- <paper-material elevation="1" class="elevation"> -->
-
 
         <div class="layout vertical registor">
 
           <div class="flex title">
               รายชื่อและที่อยู่ของผู้ส่งออกข้าว
           </div>
-          <div class="flex searchBox searchBorder">
-            <div class="layout horizontal">
-              <div class="flex"></div>
-              <div class="flex-6">
-                <gl-search-input result="{{result}}"
-                                 search-type="[[searchType]]"
-                                 search-data="true">
-                </gl-search-input>
-              </div>
-              <div class="flex"></div>
-            </div>
+          <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="จากวันที่" value="{{dataSelected.date_start}}" name="date_start"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="ถึงวันที่" value="{{dataSelected.date_end}}" name="date_end"></vaadin-date-picker>
+              </gl-grid-col>
+                <paper-button class="gl-btn-info top" on-tap="_search" raised>แสดงรายงาน</paper-button>
+            </gl-grid-row>
           </div>
           <div class="flex title">
               รายชื่อและที่อยู่ของผู้ส่งออกข้าว ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
-               ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
+               ระหว่างวันที่ [[dataSelected.date_start]] ถึง [[dataSelected.date_end]]
           </div>
           <div class="flex searchBorder">
-            <list-registration data={{dataRegistion}}>
+            <list-report data={{exporters}}>
               <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="address" label="ที่อยู่" width="flex"></list>
-                <list item="tel" label="โทรศัพท์" width="flex"></list>
-                <list item="fax" label="โทรสาร" width="flex"></list>
+                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                <list item="seller_address_th" label="ที่อยู่" width="flex"></list>
+                <list item="seller_phone" label="โทรศัพท์" width="flex"></list>
+                <list item="seller_fax" label="โทรสาร" width="flex"></list>
 
               </items>
-            </list-registration>
+            </list-report>
           </div>
         </div>
-        <!-- </paper-material> -->
 
       </grid>
-    <panel>
-        <div class="left">
-          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter">0</div>
-            <div name="detailRegExporter">1</div>
-          </iron-pages>
-        </div>
-    </panel>
     </content-panel>
     </template>
     <script>
@@ -104,87 +93,23 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
+            properties: {
+                dataSelected:{
+                  type:Object,
+                  value:{}
+                }
+            },
             behaviors: [
                 gl.behavior.core,
                 gl.behavior.locales
             ],
-            properties: {
-                layerContent: {
-                    type: String,
-                    value: "detailRegExporter"
-                },
-                dataRegistion: {
-                    type: Object,
-                    notify: true,
-                    value:
-                    [
-                      {
-                        id:1,
-                        regisExporters:"ข031",
-                        companyName:"สำเภาทอง",
-                        address:'823 ถ.ผังเมือง ต.สะเตง อ.เมือง จ.ยะลา',
-                        tel:'073-214967',
-                        fax:'073-214967'
-                      },
-                      {
-                        id:2,
-                        regisExporters:"ข5/2559",
-                        companyName:"กรุงไทย พืชผล บจก.",
-                        address:'79 ถนนงามวงศวาน เขตจตุจักรกรุงเทพ',
-                        tel:'02-561-8898',
-                        fax:'02-561-8898'
-                      },
-                      {
-                        id:3,
-                        regisExporters:"ข2/2559",
-                        companyName:"โรงสีทรัพย์อนันต์",
-                        address:'311 ม.11 ต.ฟากห้อย อ.อรัญประเทศ จ.สระแก้ว',
-                        tel:'073-214967',
-                        fax:'073-214967'
-                      },
-                      {
-                        id:4,
-                        regisExporters:"ข003",
-                        companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                        address:'823 ถ.ผังเมือง ต.สะเตง อ.เมือง จ.ยะลา',
-                        tel:'073-214967',
-                        fax:'073-214967'
-                      }
-
-                    ]
-                },
-                searchType: {
-                    type: Object,
-                    value: [{
-                        id: 1,
-                        name: 'ทั้งหมด'
-                    }, {
-                        id: 2,
-                        name: 'ผู้ส่งออกที่ถูกระงับ'
-                    } ]
-                },
-                result: {
-                    type: Object,
-                    observer: '_result'
-                }
-            },
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
 
             },
-            attached: function() {
-                // this.layoutMain = this.glQuery('layoutMain');
-            },
-            _result:function () {
-              console.log(this.result);
-            },
             nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
                     this.vesselPage = 1;
                 } else {
@@ -195,7 +120,32 @@
             _toggleDrawer: function(e) {
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
-              // console.log(e.target.id);
+            },
+            getDb: function(url, callback) {
+                // console.log(url);
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+                // console.log(1);
+            },
+            attached: function() {
+                this.getDb('./external/exporter', (data) => {
+                  this.exporters = data;
+                });
+            },
+            _search: function(){
+              var str='';
+              for( key in this.dataSelected){
+                  if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
+                    if(str==''){str += '?'}else{str += '&'}
+                    str += key+'='+this.dataSelected[key];
+                  }
+              }
+              this.getDb('./external/exporter'+str, (data) => {
+                this.exporters = JSON.parse(JSON.stringify(data));
+              })
             }
         });
     </script>
