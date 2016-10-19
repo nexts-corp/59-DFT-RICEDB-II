@@ -39,7 +39,12 @@
     .fontPdLeft {
       padding: 10px 0px 10px 10px;
       /*word-wrap: break-word;*/
-      text-align: center;
+      text-align: left;
+    }
+    .fontPdRight{
+      padding: 10px 20px 10px 10px;
+      /*word-wrap: break-word;*/
+      text-align: right;
     }
     paper-item {
       cursor: pointer;
@@ -279,29 +284,21 @@
       <paper-icon-item class="fancy cleanBd bd">
         <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse[[itemPrimary.shm_det_id]]" icon="chevron-right" item-icon></paper-icon-button>
         <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
-          <div class$="[[configPrimary.width]]">
-            <div class="fontPdLeft">
-              {{_getItemPrimary(itemPrimary,configPrimary)}}
-            </div>
-          </div>
-          <!-- <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js> -->
-          <!-- <template is="dom-if" if="[[checkTypeNumber(configPrimary)]]">
-            11111
-          </template> -->
-          <!-- <template is="dom-if" if="[[checkTypeNumber(configPrimary.type)]]">
+
+          <template is="dom-if" if="[[checkTypeString(configPrimary,itemPrimary)]]">
             <div class$="[[configPrimary.width]]">
               <div class="fontPdLeft">
                 {{_getItemPrimary(itemPrimary,configPrimary)}}
               </div>
             </div>
           </template>
-          <template is="dom-if" if="[[checkTypeNumber(configPrimary.type)]]">
-            <div class$="[[configPrimary.width]]">
-              <div class="fontPdLeft">
+          <template is="dom-if" if="[[checkTypeNumber(configPrimary,itemPrimary)]]">
+            <div class$="[[configPrimary.width]] number">
+              <div class="fontPdRight">
                 <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js>
               </div>
             </div>
-          </template> -->
+          </template>
         </template>
       </paper-icon-item>
       <iron-collapse id="collapse[[itemPrimary.shm_det_id]]">
