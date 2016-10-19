@@ -63,19 +63,19 @@
             <gl-grid-row width="{{getWidth}}">
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="เลือกประเภท" name="member_name" value="{{getStatus}}">
-                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
-                    <paper-item value="0">ทั้งหมด</paper-item>
-                    <paper-item value="1">เป็นสมาชิก</paper-item>
-                    <paper-item value="2">ไม่เป็นสมาชิก</paper-item>
+                <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="ทั้งหมด">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.exporter_status}}" name="exporter_status">
+                    <paper-item>ทั้งหมด</paper-item>
+                    <paper-item value="true">เป็นสมาชิก</paper-item>
+                    <paper-item value="false">ไม่เป็นสมาชิก</paper-item>
                   </paper-menu>
                 </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <vaadin-date-picker label="จากวันที่" value=""></vaadin-date-picker>
+                <vaadin-date-picker label="จากวันที่" value="{{dataSelected.date_start}}" name="date_start"></vaadin-date-picker>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <vaadin-date-picker label="ถึงวันที่" value=""></vaadin-date-picker>
+                <vaadin-date-picker label="ถึงวันที่" value="{{dataSelected.date_end}}" name="date_end"></vaadin-date-picker>
               </gl-grid-col>
             </gl-grid-row>
 
@@ -94,7 +94,7 @@
                ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
           </div>
           <div class="flex searchBorder">
-            <list-report data={{dataMember}}>
+            <list-report data={{exporters}}>
               <items type="primary">
                 <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
@@ -124,6 +124,12 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
+            properties: {
+                dataSelected:{
+                  type:Object,
+                  value:{}
+                }
+            },
             behaviors: [
                 gl.behavior.core,
                 gl.behavior.locales
@@ -152,18 +158,22 @@
                     }.bind(this))
                     .catch(function(error) {}.bind(this));
             },
+            attached: function() {
+                this.getDb('./external/exporter', (data) => {
+                  this.exporters = data;
+                });
+            },
             _search: function(){
-              if (this.getStatus == "ทั้งหมด") {
-                  this.getDb('./external/exporter', (data) => {
-                    // var datas = [];
-                    for (var i = 0; i < data.length; i++) {
-                      // console.log(data[i].seller_agent);
-                      // datas = data[i].seller_agent
-                      // console.log(datas);
-                    }
-                      this.dataMember = data;
-                  });
+              var str='';
+              for( key in this.dataSelected){
+                  if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
+                    if(str==''){str += '?'}else{str += '&'}
+                    str += key+'='+this.dataSelected[key];
+                  }
               }
+              this.getDb('./external/exporter'+str, (data) => {
+                this.exporters = JSON.parse(JSON.stringify(data));
+              })
             }
         });
     </script>
