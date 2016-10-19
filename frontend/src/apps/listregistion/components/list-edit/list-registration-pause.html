@@ -39,7 +39,7 @@
     <content id="primary" select="items[type=primary]"></content>
    <!-- Bl -->
    <div class="button">
-     <paper-checkbox on-tap="checkbox"> เลือกทั้งหมด</paper-checkbox> <paper-button raised class="gl-btn-success">ยกเลิกการระงับ</paper-button>
+     <paper-checkbox on-tap="checkbox"> เลือกทั้งหมด</paper-checkbox> <paper-button raised class="gl-btn-success" on-tap="_active">ยกเลิกการระงับ</paper-button>
    </div>
    <div class="header layout horizontal">
      <template is="dom-repeat" items="{{config.primary}}">
@@ -85,6 +85,29 @@
                 }
               }
               // console.log(Polymer.dom(this.root).querySelectorAll('#checkbox'));
+            },
+            _active: function(){
+              // console.log(this.dataSelect);
+              var datas = {
+                exporter_date_update: new Date,
+                exporter_date_approve:new Date,
+                exporter_no:this.dataSelect.exporter_no,
+                trader_id:this.dataSelect.trader_id,
+                seller_agent:this.dataSelect.seller_agent,
+                id : this.dataSelect.exporter_id
+              }
+              // console.log(datas);
+              axios.put('./external/exporter/update', datas)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          this.glQuery('addContract').getChange();
+                          this.glQuery('contentPanel').changDrawer();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
             }
         });
     </script>

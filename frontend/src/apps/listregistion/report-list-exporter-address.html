@@ -58,20 +58,20 @@
             <gl-grid-row width="{{getWidth}}">
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <vaadin-date-picker label="จากวันที่" value="{{startDate}}"></vaadin-date-picker>
+                <vaadin-date-picker label="จากวันที่" value="{{dataSelected.date_start}}" name="date_start"></vaadin-date-picker>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <vaadin-date-picker label="ถึงวันที่" value="{{endDate}}"></vaadin-date-picker>
+                <vaadin-date-picker label="ถึงวันที่" value="{{dataSelected.date_end}}" name="date_end"></vaadin-date-picker>
               </gl-grid-col>
                 <paper-button class="gl-btn-info top" on-tap="_search" raised>แสดงรายงาน</paper-button>
             </gl-grid-row>
           </div>
           <div class="flex title">
               รายชื่อและที่อยู่ของผู้ส่งออกข้าว ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
-               ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
+               ระหว่างวันที่ [[dataSelected.date_start]] ถึง [[dataSelected.date_end]]
           </div>
           <div class="flex searchBorder">
-            <list-report data={{exporter}}>
+            <list-report data={{exporters}}>
               <items type="primary">
                 <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
@@ -93,6 +93,12 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
+            properties: {
+                dataSelected:{
+                  type:Object,
+                  value:{}
+                }
+            },
             behaviors: [
                 gl.behavior.core,
                 gl.behavior.locales
@@ -101,9 +107,6 @@
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
 
-            },
-            _result:function () {
-              console.log(this.result);
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
@@ -129,8 +132,20 @@
             },
             attached: function() {
                 this.getDb('./external/exporter', (data) => {
-                  this.exporter = data;
+                  this.exporters = data;
                 });
+            },
+            _search: function(){
+              var str='';
+              for( key in this.dataSelected){
+                  if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
+                    if(str==''){str += '?'}else{str += '&'}
+                    str += key+'='+this.dataSelected[key];
+                  }
+              }
+              this.getDb('./external/exporter'+str, (data) => {
+                this.exporters = JSON.parse(JSON.stringify(data));
+              })
             }
         });
     </script>

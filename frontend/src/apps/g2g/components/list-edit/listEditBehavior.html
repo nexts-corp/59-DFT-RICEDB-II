@@ -63,6 +63,7 @@
       this.glQuery('contentPanel').changDrawer();
     },
     _getItemPrimary:function(item,config){
+      // console.log(item[config.item]);
         return item[config.item];
     },
     toggle: function(e) {
@@ -83,13 +84,13 @@
       this.$$(".iron-index-"+e.currentTarget.index).selected = 1;
       //console.log(Polymer.dom(this.root).querySelector("[iron-index="+e.currentTarget.index+"]"));
           //this.selectChoice = 1;
-      this.closeToast();
+      // this.closeToast();
 
       this.$$('#btn_Save_'+e.currentTarget.index).removeAttribute("hidden");
     },
      saveChange:function(e){
        this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
-       this.openToast();
+      //  this.openToast();
 
        var css = Polymer.dom(this.root).querySelector('#changeCss');
        if (css.classList.contains('show') == true) {
@@ -105,9 +106,9 @@
      openToast: function() {
       this.$.toastPass.open();
     },
-    closeToast:function () {
-      this.$.toastPass.hide();
-    },
+    // closeToast:function () {
+    //   this.$.toastPass.hide();
+    // },
     toggleDrawer: function() {
       this.glQuery('contentPanel').changDrawer();
     },
@@ -116,6 +117,16 @@
           data: e.currentTarget.data,
           level: e.currentTarget.getAttribute('level')
         });
-    }
+    },
+    checkTypeString:function(type,itemPrimary){
+      // console.log(11,type,itemPrimary);
+      // console.log(typeof itemPrimary[type.item]);
+      return typeof itemPrimary[type.item] === "string";
+    },
+    checkTypeNumber:function(type,itemPrimary){
+      // console.log(11,type,itemPrimary);
+      // console.log(itemPrimary[type.item]);
+      return typeof itemPrimary[type.item] === "number";
+    },
   };
 </script>
