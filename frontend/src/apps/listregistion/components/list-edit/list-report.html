@@ -1,4 +1,5 @@
 <link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
+<link rel="import" href="list-label.html">
 <dom-module id="list-report">
     <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .header {
@@ -48,7 +49,8 @@
       <paper-item on-tap="_getBind" level="detailRegExporter" data="{{itemPrimary}}">
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
             <div class$="[[configPrimary.width]] text">
-                {{_getItemPrimary(itemPrimary,configPrimary)}}
+                <!-- {{_getItemPrimary(itemPrimary,configPrimary)}} -->
+                <list-label item="[[itemPrimary]]" config="[[configPrimary]]"></list-label>
               </div>
             </div>
           </template>

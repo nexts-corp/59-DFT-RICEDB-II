@@ -1,5 +1,5 @@
 <link rel="import" href="../g2g/components/content-panel.html">
-<link rel="import" href="components/list-edit/list-registration.html">
+<link rel="import" href="components/list-edit/list-report.html">
 
 
 <dom-module id="listregistion-report-list-export-board">
@@ -8,7 +8,9 @@
         font-family: 'rsuregular', sans-serif;
         -webkit-font-smoothing: antialiased;
     }
-
+    .top{
+      margin-top: 30px;
+    }
         .header {
           padding: 10px 0px 10px 10px;
           background-color: var(--paper-grey-100);
@@ -43,53 +45,67 @@
         paper-material {
           background-color: var(--gl-white-color);
         }
+        vaadin-date-picker {
+          width: 70%;
+        }
     </style>
     <template>
 
     <content-panel>
       <grid>
-        <!-- <paper-material elevation="1" class="elevation"> -->
-
 
         <div class="layout vertical registor">
 
           <div class="flex title">
               รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท
           </div>
-          <div class="flex searchBox searchBorder">
-            <div class="layout horizontal">
-              <div class="flex"></div>
-              <div class="flex-6">
-                <gl-search-input result="{{result}}"
-                                 search-label-type2="สถานนะสมาชิกสมาคมผู้ส่งออก"
-                                 search-type2="[[searchType2]]"
-                                 search-input-type2="true"
-                                 search-data="true">
-                </gl-search-input>
-              </div>
-              <div class="flex"></div>
+          <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="เลือกประเภท" name="member_name" value="{{getStatus}}">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
+                    <paper-item value="0">ทั้งหมด</paper-item>
+                    <paper-item value="1">เป็นสมาชิก</paper-item>
+                    <paper-item value="2">ไม่เป็นสมาชิก</paper-item>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="จากวันที่" value=""></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="ถึงวันที่" value=""></vaadin-date-picker>
+              </gl-grid-col>
+            </gl-grid-row>
+
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <paper-button class="gl-btn-info top" on-tap="_search" raised>แสดงรายงาน</paper-button>
+              </gl-grid-col>
+            </gl-grid-row>
+
+
             </div>
-          </div>
           <div class="flex title">
               รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท<br>
                ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
                ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
           </div>
           <div class="flex searchBorder">
-            <list-registration data={{dataRegistion}}>
+            <list-report data={{dataMember}}>
               <items type="primary">
-                <list item="regisExporters" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="companyName" label="ชื่อบริษัท" width="flex"></list>
-                <list item="boardName" label="รายชื่อคณะกรรมการ" width="flex"></list>
-                <list item="memberRiceType" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list>
-                <list item="departmentPassDate" label="กรมอนนุมัติวันที่" width="flex"></list>
-                <list item="bookingPass" label="เลขที่หนังสืออนุญาติ ปกข." width="flex"></list>
-
+                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                <list item="seller_agent.agent_name" label="รายชื่อคณะกรรมการ" width="flex"></list>
+                <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list>
+                <list item="exporter_date_approve" label="กรมอนนุมัติวันที่" width="flex"></list>
+                <list item="trader_no" label="เลขที่หนังสืออนุญาติ ปกข." width="flex"></list>
               </items>
-            </list-registration>
+            </list-report>
           </div>
         </div>
-        <!-- </paper-material> -->
 
       </grid>
     <panel>
@@ -112,87 +128,12 @@
                 gl.behavior.core,
                 gl.behavior.locales
             ],
-            properties: {
-                layerContent: {
-                    type: String,
-                    value: "detailRegExporter"
-                },
-                dataRegistion: {
-                    type: Object,
-                    notify: true,
-                    value:
-                    [
-                      {
-                        id:1,
-                        regisExporters:"ข031",
-                        companyName:"สำเภาทอง",
-                        boardName:'นายสมพร ใจดี',
-                        memberRiceType:"ไม่เป็นสมาชิก",
-                        departmentPassDate: '16 มกราคม 2559',
-                        bookingPass:'ช-ยล002'
-                      },
-                      {
-                        id:2,
-                        regisExporters:"ข5/2559",
-                        companyName:"กรุงไทย พืชผล บจก.",
-                        boardName:'นางมานี สุขใจ',
-                        memberRiceType:"ไม่เป็นสมาชิก",
-                        departmentPassDate: '6 มีนาคม 2559',
-                        bookingPass:'ข.12/2557'
-                      },
-                      {
-                        id:3,
-                        regisExporters:"ข2/2559",
-                        companyName:"โรงสีทรัพย์อนันต์",
-                        boardName:'นายมานะ ดใจี',
-                        memberRiceType:"่เป็นสมาชิก",
-                        departmentPassDate: '16 มกราคม 2559',
-                        bookingPass:'ช-ยล002'
-                      },
-                      {
-                        id:4,
-                        regisExporters:"ข003",
-                        companyName:"รุสกี อิมปอร์ต เอ็กปอร์ต",
-                        boardName:'นายปิติ ชูใจ',
-                        memberRiceType:"่เป็นสมาชิก",
-                        departmentPassDate: '16 เมษายน 2559',
-                        bookingPass:'7/2558'
-                      }
-
-                    ]
-                },
-                searchType2: {
-                    type: Object,
-                    value: [{
-                        id: 1,
-                        name: 'เป็นสมาชิก'
-                    }, {
-                        id: 2,
-                        name: 'ไม่เป็นสมาชิก'
-                    } ]
-                },
-                result: {
-                    type: Object,
-                    observer: '_result'
-                }
-            },
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
-
-            },
-            attached: function() {
-                // this.layoutMain = this.glQuery('layoutMain');
-            },
-            _result:function () {
-              console.log(this.result);
             },
             nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
                     this.vesselPage = 1;
                 } else {
@@ -203,7 +144,26 @@
             _toggleDrawer: function(e) {
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
-              // console.log(e.target.id);
+            },
+            getDb: function(url, callback) {
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+            },
+            _search: function(){
+              if (this.getStatus == "ทั้งหมด") {
+                  this.getDb('./external/exporter', (data) => {
+                    // var datas = [];
+                    for (var i = 0; i < data.length; i++) {
+                      // console.log(data[i].seller_agent);
+                      // datas = data[i].seller_agent
+                      // console.log(datas);
+                    }
+                      this.dataMember = data;
+                  });
+              }
             }
         });
     </script>

@@ -1,0 +1,42 @@
+<dom-module id="list-label">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <template is="dom-repeat" items="[[result]]">
+      [[item]] &nbsp;&nbsp;&nbsp;
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "list-label",
+      ready:function(){
+        var result = [];
+        if(Array.isArray(this.item[this.config.item[0]])){
+          this.item[this.config.item[0]].map((list,i)=>{
+              result.push(i+1,list[this.config.item[1]]);
+          });
+        }else{
+          result.push(this.item[this.config.item[0]]);
+        }
+        this.result=result;
+        //console.log(result);
+
+      },
+      // _changeToVal:function(item,configItem,index){
+      //   var length = configItem.length;
+      //   if((length-1)==index){
+      //     if(length>1){
+      //       return this.item[configItem[0]][0][configItem[1]];
+      //     }else{
+      //       return this.item[configItem];
+      //     }
+      //   }
+      //
+      // }
+
+    });
+  </script>
+</dom-module>

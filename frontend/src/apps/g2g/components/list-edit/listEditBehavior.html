@@ -24,7 +24,8 @@
       var countPrimary =lists.length;
       for (var i = 0; i < countPrimary; i++) {
           var configPointer = {
-              item:lists[i].getAttribute('item'),
+              //item:lists[i].getAttribute('item'),
+              item:lists[i].getAttribute('item').split('.'),
               label:lists[i].getAttribute('label'),
               width:lists[i].getAttribute('width')
           };
@@ -89,7 +90,7 @@
      saveChange:function(e){
        this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
        this.openToast();
-        
+
        var css = Polymer.dom(this.root).querySelector('#changeCss');
        if (css.classList.contains('show') == true) {
            css.classList.remove("show");
