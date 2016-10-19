@@ -82,7 +82,6 @@
                     <input placeholder="text" value="third">
                   </template>
             </nx-grid>
-            <button type="button" name="button" on-tap="checkTrue">กด</button>
             </grid>
             <panel>
                 <template is="dom-if" if="[[loaded]]">
@@ -227,7 +226,7 @@
             getChange:function () {
               this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
-              },false)
+              },false,'get')
             },
             vesselEditCommon:function (e) {
               // console.log(e.detail.node);
@@ -269,20 +268,23 @@
                       //เช็คว่าส่งค่า shm_id มาไหม
                       // console.log(321);
                     // console.log(this.dataSelect.shm_id);
-                    this.shipMentDeatil(this.dataSelect.shm_id,true);
+                    this.shipMentDeatil(this.dataSelect.shm_id,true,'get');
                   }
                 }
             },
-            shipMentDeatil:function (id,refresh) {
-              // console.log(id);
-              this.glQuery('layoutMain').openToastLoading();
-              // this.glQuery('contentPanel').changDrawer();
+            shipMentDeatil:function (id,refresh,action) {
+              // get put delete
+              // console.log(action);
+              if (action == 'get') {
+                this.glQuery('layoutMain').openToastLoading();
+              }
+              //
               this.getDb('./g2g/shipment/id/'+id,(data)=>{
                 this.getDb('./g2g/contract/id/'+data.contract_id,(data2)=>{
                   data.country =  data2.country_id;
                   data.buyerMasks =  data2.buyer_masks;
                   this.shipMent = data;
-                },refresh);
+                },refresh,action);
               });
             },
             conFirmDeatil:function (cmlId) {
@@ -290,7 +292,7 @@
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
                 // console.log(this.confirmLetter);
-              },true);
+              },true,'get');
             },
             nxGridDblclick: function(e) {
                 // if (e.detail.level == 'primary') {
@@ -298,16 +300,41 @@
                 //this.layoutMain.changePath('/gtog/add-period');
                 // }
             },
-            getDb:function (url,callback,refresh) {
+            getDb:function (url,callback,refresh,action) {
               // console.log(url);
               axios.get(url)
                 .then(function(response){
                     callback(response.data);
-                    this.glQuery('layoutMain').closeToastLoading(function(){
-                      if (refresh == true) {
-                        this.glQuery('contentPanel').changDrawer();
+                    console.log(action);
+                      switch (action) {
+                          case 'get':
+                                    this.glQuery('layoutMain').closeToastLoading(function(){
+                                      if (refresh == true) {
+                                        console.log(action);
+                                        this.glQuery('contentPanel').changDrawer();
+                                      }
+                                    }.bind(this));
+                          break;
+                          // insert & updoate
+                          case 'put':
+                                    this.glQuery('layoutMain').closeToastSaveing(function(){
+                                      if (refresh == true) {
+                                        console.log(action);
+                                        this.glQuery('contentPanel').changDrawer();
+                                      }
+                                    }.bind(this));
+                          break;
+                          case 'delete':
+                                    this.glQuery('layoutMain').closeToastDeleteing(function(){
+                                      if (refresh == true) {
+                                        console.log(action);
+                                        this.glQuery('contentPanel').changDrawer();
+                                      }
+                                    }.bind(this));
+                          break;
+
                       }
-                    }.bind(this));
+
 
                 }.bind(this))
                 .catch(function (error) {

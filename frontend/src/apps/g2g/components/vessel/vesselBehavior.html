@@ -1,9 +1,6 @@
 <script>
   vesselBehavior = {
 
-  ready: function() {
-    // console.log(1);
-  },
   getDb:function (url,callback) {
     // console.log(url);
     axios.get(url)
@@ -14,9 +11,7 @@
       }.bind(this));
   },
   getCounty(country,common){
-    // if (typeof common.country != 'undefined') {
-      // this.buyerMasks = common.buyerMasks;
-      // // console.log(this.buyerMasks);
+
        var countryport = common.countryport;
 
        var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
@@ -25,26 +20,6 @@
        var pod = countryport.filter(function (countryport) { return countryport.country_id == country });
          this.pod = pod;
 
-
-        //  console.log(this.pod);
-    // }
-
-    // this.getDb('./g2g/contract/id/'+contractId,(data)=>{
-    //
-    //   county = data.country_id;
-    //     // console.log(county);
-    //     //get buyer_masks
-    //   this.buyerMasks = data.buyer_masks;
-    //   // get pod;
-    //   // console.log(this.common);
-    //   var countryport = this.common.countryport;
-    //   // get pol
-    //   var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
-    //    this.pol = pol;
-    //   var pod = countryport.filter(function (countryport) { return countryport.country_id == county });
-    //     this.pod = pod;
-    //
-    // });
   },
   getSellerPhone:function (e) {
     // console.log("common"+this.common);
@@ -76,34 +51,10 @@
       }
 
     },
-  //   getCmlForRiceType : function(e,id) {
-  //   // var selectedItem = e.detail.value;
-  //   // this.type_rice_id = this.type_rice_id || this.$.type_rice_id;
-  //   var selectedItem;
-  //   if (typeof id === 'string'){
-  //     selectedItem=id;
-  //     // console.log(selectedItem+"string");
-  //   } else {
-  //     selectedItem=e.detail.value;
-  //     // console.log(selectedItem+"object");
-  //   }
-  //    if (selectedItem) {
-  //      if (typeof this.cml != 'undefined'){
-  //      var cmls = this.cml.filter(function (cml) { return cml.cl_id == selectedItem });
-  //       if (typeof cmls[0] != 'undefined'){
-  //         this.riceType = cmls[0].cl_type_rice;
-  //         //  this.type_rice_id.items = cmls[0].cl_type_rice;
-  //        }
-  //      }
-  //     //  console.log(this.type_rice_id.items);
-  //    }
-  //  },
+
    getRiceTypeForPackage : function (e,id) {
      // ต่อจาก getCmlForRiceType
-    //  console.log("getRiceTypeForPackage");
-    //  console.log(e);
-    //  console.log(id);
-    //  this.package_id = this.package_id || this.$.package_id;
+
      var selectedItem;
      if (typeof id === 'string'){
        selectedItem=id;
