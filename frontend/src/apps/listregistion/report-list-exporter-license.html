@@ -8,7 +8,9 @@
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
+        .top{
+          margin-top: 30px;
+        }
         .header {
             padding: 10px 0px 10px 10px;
             background-color: var(--paper-grey-100);
@@ -17,37 +19,34 @@
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
         .registor {
             margin: 20px;
         }
-
         .title {
             text-align: center;
             font-size: var(--font-size-h3);
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-
         .searchBox {
             padding: 5px;
             background-color: var(--gl-gray-lighter-color);
         }
-
         .elevation {
             border-radius: 5px;
             margin: 10px;
             padding: 5px;
         }
-
         .searchBorder {
             border: 1px solid var(--gl-gray-light-color);
             margin: 15px;
             border-radius: 3px
         }
-
         paper-material {
             background-color: var(--gl-white-color);
+        }
+        vaadin-date-picker {
+          width: 70%;
         }
     </style>
     <template>
@@ -62,65 +61,74 @@
           <div class="flex title">
               รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว
           </div>
-            <div class="searchBox searchBorder">
-              <gl-grid-row width="{{getWidth}}">
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                    <gl-form-dropdown-menu label="ประเภทใบอนุญาติ" placeholder="เลือกประเภท" name="type_lic_name" value="{{getData}}">
-                      <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
-                        <paper-item value="0">ทั้งหมด</paper-item>
-                        <paper-item value="1">ทั่วไป</paper-item>
-                        <paper-item value="2">ไม่เกิน 12 ก.ก.</paper-item>
-                        <paper-item value="3">ชายแดน</paper-item>
-                        <!-- <template is="dom-repeat" items="[[license]]">
-                          <paper-item value="[[item.type_lic_id]]">[[item.type_lic_name]]</paper-item>
-                        </template> -->
-    </paper-menu>
-    </gl-form-dropdown-menu>
-    </gl-grid-col>
-    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-        <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="เลือกประเภท" name="member_name" value="{{getStatus}}">
-            <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
-                <paper-item value="0">ทั้งหมด</paper-item>
-                <paper-item value="1">เป็นสมาชิก</paper-item>
-                <paper-item value="2">ไม่เป็นสมาชิก</paper-item>
-                <!-- <template is="dom-repeat" items="[[exportStatus]]">
-                        <paper-item value="[[item.id]]" hidden>[[item.exporter_status]]</paper-item>
-                      </template> -->
-            </paper-menu>
-        </gl-form-dropdown-menu>
-    </gl-grid-col>
-    <paper-button class="gl-btn-info" on-tap="_search" raised>ค้นหา</paper-button>
-    </gl-grid-row>
-    </div>
+          <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <gl-form-dropdown-menu label="ประเภทใบอนุญาติ" placeholder="เลือกประเภท" name="type_lic_name" value="{{getData}}">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
+                    <paper-item value="0">ทั้งหมด</paper-item>
+                    <paper-item value="1">ทั่วไป</paper-item>
+                    <paper-item value="2">ไม่เกิน 12 ก.ก.</paper-item>
+                    <paper-item value="3">ชายแดน</paper-item>
+                    <!-- <template is="dom-repeat" items="[[license]]">
+                      <paper-item value="[[item.type_lic_id]]">[[item.type_lic_name]]</paper-item>
+                    </template> -->
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="เลือกประเภท" name="member_name" value="{{getStatus}}">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="0">
+                    <paper-item value="0">ทั้งหมด</paper-item>
+                    <paper-item value="1">เป็นสมาชิก</paper-item>
+                    <paper-item value="2">ไม่เป็นสมาชิก</paper-item>
+                    <!-- <template is="dom-repeat" items="[[exportStatus]]">
+                            <paper-item value="[[item.id]]" hidden>[[item.exporter_status]]</paper-item>
+                          </template> -->
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+            </gl-grid-row>
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="จากวันที่" value="{{startDate}}"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="ถึงวันที่" value="{{endDate}}"></vaadin-date-picker>
+              </gl-grid-col>
+            </gl-grid-row>
+
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <paper-button class="gl-btn-info top" on-tap="_search" raised>แสดงรายงาน</paper-button>
+              </gl-grid-col>
+            </gl-grid-row>
 
 
-    <div class="flex title">
-        รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br> ส่งไปจำหน่ายต่างประเทศ ระหว่างวันที่ [[result.searchStart]] ถึง [[result.searchEnd]]
-    </div>
-    <div class="flex searchBorder">
-        <list-report data={{licenses}}>
-            <items type="primary">
-                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
-                <list item="seller_tax_id" label="เลขประจำตัวผู้เสียภาษี" width="flex"></list>
-                <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="exporter_status" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก" width="flex"></list>
-            </items>
-        </list-report>
-    </div>
-    </div>
+            </div>
+
+
+            <div class="flex title">
+                รายชื่อผู้ได้รับหนังสืออนุญาติให้ประกอบการค้าข้าว ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br> ส่งไปจำหน่ายต่างประเทศ ระหว่างวันที่ [[startDate]] ถึง [[endDate]]
+            </div>
+            <div class="flex searchBorder">
+                <list-report data={{licenses}}>
+                    <items type="primary">
+                        <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                        <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                        <list item="seller_tax_id" label="เลขประจำตัวผู้เสียภาษี" width="flex"></list>
+                        <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
+                        <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก" width="flex"></list>
+                    </items>
+                </list-report>
+            </div>
+            </div>
     <!-- </paper-material> -->
 
-    </grid>
-    <!-- <panel>
-        <div class="left">
-          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter">0</div>
-            <div name="detailRegExporter">1</div>
-          </iron-pages>
-        </div>
-    </panel> -->
+      </grid>
     </content-panel>
     </template>
     <script>
@@ -134,10 +142,6 @@
                 gl.behavior.locales
             ],
             properties: {
-                // layerContent: {
-                //     type: String,
-                //     value: "detailRegExporter"
-                // },
                 getData: {
                     type: Object
                 },
@@ -146,6 +150,12 @@
                 },
                 datas: {
                     type: Object
+                },
+                startDate: {
+                  type: Object
+                },
+                endDate: {
+                  type: Object
                 }
             },
             created: function() {
@@ -153,188 +163,80 @@
                 this.glSetLayout('layout-registion');
 
             },
-            attached: function() {
-                // this.layoutMain = this.glQuery('layoutMain');
-            },
             _search: function() {
+              // console.log("จากวันที่ :" + this.startDate);
+              // console.log("ถึงวันที่ :" + this.endDate);
+              var start = {};
+              var end = {};
                 if (this.getData == "ทั้งหมด" && this.getStatus == "ทั้งหมด") {
-                    this.getDb('http://localhost:3000/api/external/exporter/seller', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
+                    this.getDb('./external/exporter', (data) => {
+                      for (var i = 0; i < data.length; i++) {
+                        start = data[i].exporter_date_update;
+                      }
                         this.licenses = data;
                     });
                 }
                 else if (this.getData == "ทั้งหมด" && this.getStatus == "เป็นสมาชิก") {
-                  this.getDb('http://localhost:3000/api/external/exporter/status/true', (data) => {
-                      for (var i = 0; i < data.length; i++) {
-                          datas = data[i].exporter_status;
-                          if (datas == true) {
-                              datas = 'เป็นสมาชิก';
-                          } else if (datas == false) {
-                              datas = 'ไม่เป็นสมาชิก';
-                          }
-                          data[i].exporter_status = datas;
-                      }
+                  this.getDb('./external/exporter/status/true', (data) => {
                       this.licenses = data;
                   });
                 }
                 else if (this.getData == "ทั้งหมด" && this.getStatus == "ไม่เป็นสมาชิก") {
-                  this.getDb('http://localhost:3000/api/external/exporter/status/false', (data) => {
-                      for (var i = 0; i < data.length; i++) {
-                          datas = data[i].exporter_status;
-                          if (datas == true) {
-                              datas = 'เป็นสมาชิก';
-                          } else if (datas == false) {
-                              datas = 'ไม่เป็นสมาชิก';
-                          }
-                          data[i].exporter_status = datas;
-                      }
+                  this.getDb('./external/exporter/status/false', (data) => {
                       this.licenses = data;
                   });
                 }
                 else if (this.getData == "ทั่วไป" && this.getStatus == "ทั้งหมด") {
                     this.getDb('./external/exporter/type/KK6', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
                     })
                 }
                 else if (this.getData == "ทั่วไป" && this.getStatus == "เป็นสมาชิก") {
                     this.getDb('./external/exporter/type/KK6/status/true', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
                     });
                 }
                 else if (this.getData == "ทั่วไป" && this.getStatus == "ไม่เป็นสมาชิก") {
                     this.getDb('./external/exporter/type/KK6/status/false', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
                     });
                 }
                 else if (this.getData == "ไม่เกิน 12 ก.ก." && this.getStatus == "ทั้งหมด") {
                     this.getDb('./external/exporter/type/KK7', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
                     })
                 }
                 else if (this.getData == "ไม่เกิน 12 ก.ก." && this.getStatus == "เป็นสมาชิก") {
                     this.getDb('./external/exporter/type/KK7/status/true', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
                     })
                 }
                 else if (this.getData == "ไม่เกิน 12 ก.ก." && this.getStatus == "ไม่เป็นสมาชิก") {
                     this.getDb('./external/exporter/type/KK7/status/false', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
                     })
                 }
                 else if (this.getData == "ชายแดน" && this.getStatus == "ทั้งหมด") {
                     this.getDb('./external/exporter/type/KK8', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
-                        console.log('All');
+                        // console.log('All');
                     })
                 }
                 else if (this.getData == "ชายแดน" && this.getStatus == "เป็นสมาชิก") {
                     this.getDb('./external/exporter/type/KK8/status/true', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
-                        console.log('true');
+                        // console.log('true');
                     })
                 }
                 else if (this.getData == "ชายแดน" && this.getStatus == "ไม่เป็นสมาชิก") {
                     this.getDb('./external/exporter/type/KK8/status/false', (data) => {
-                        for (var i = 0; i < data.length; i++) {
-                            datas = data[i].exporter_status;
-                            if (datas == true) {
-                                datas = 'เป็นสมาชิก';
-                            } else if (datas == false) {
-                                datas = 'ไม่เป็นสมาชิก';
-                            }
-                            data[i].exporter_status = datas;
-                        }
                         this.licenses = data;
-                        console.log('false');
+                        // console.log('false');
                     })
                 }
             },
             nxGridTap: function(e) {
-                // console.log(e.detail.level);
-                // console.log(e.detail.data);
-                // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
                     this.vesselPage = 1;
                 } else {
@@ -345,7 +247,6 @@
             _toggleDrawer: function(e) {
                 this.glQuery('contentPanel').changDrawer();
                 this.layerContent = e.target.id;
-                // console.log(e.target.id);
             },
             getDb: function(url, callback) {
                 axios.get(url)
@@ -353,11 +254,6 @@
                         callback(response.data);
                     }.bind(this))
                     .catch(function(error) {}.bind(this));
-            },
-            attached: function() {
-                this.getDb('http://localhost:3000/api/external/exporter/type/license', (data) => {
-                    this.license = data;
-                });
             }
         });
     </script>
