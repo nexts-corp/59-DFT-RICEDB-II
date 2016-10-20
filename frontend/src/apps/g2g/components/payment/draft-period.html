@@ -33,8 +33,8 @@
               <div class="topic"> เลือกบริษัทที่ทำสัญญา : </div>
             </div>
             <div class="flex">
-              <gl-combo-box id="deli_port_id" label="Contracting Campany" item-label-path="port_name"
-                item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+              <gl-combo-box id="deli_port_id" label="Contracting Campany" item-label-path="contract_name"
+                item-value-path="contract_id" items="{{contractingCampany}}" value="{{contractingid}}"></gl-combo-box>
             </div>
             <div class="flex-2"></div>
         </div>
@@ -46,8 +46,8 @@
               <div class="topic"> เลือกงวดที่ต้องการดู : </div>
             </div>
             <div class="flex">
-              <gl-combo-box id="deli_port_id" label="Shipments" item-label-path="port_name"
-                item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+              <gl-combo-box id="deli_port_id" label="Shipments" item-label-path="shm_no"
+                item-value-path="shm_id" items={{shipments}} value="{{data.deli_port_id}}"></gl-combo-box>
             </div>
             <div class="flex-2"></div>
         </div>
@@ -81,12 +81,36 @@
           type:Object,
           value:{}
         },
+        contractingCampany:{
+          type:Object,
+          value:{}
+        }
       },
-
+      observers:[
+        'check(data)',
+        'getShipments(contractingid)'
+      ],
       attached: function() {
         // console.log("created");
         this.fire('draft-company-common',{node:this});
       },
+      check:function (data) {
+        this.contractingCampany=data;
+        // console.log(this.contractingCampany);
+      },
+      getShipments:function (contractingid) {
+        // console.log(contractingid);
+        // console.log(this.contractingCampany);
+        var contractingCampany = this.contractingCampany;
+
+        if (typeof contractingCampany !== 'undefined') {
+          // console.log(contractingCampany);
+          var shipments = contractingCampany.filter(function (contractingCampany) { return contractingCampany.contract_id == contractingid });
+            this.shipments = shipments[0].shipment;
+            // console.log(this.shipments );
+        }
+
+      }
     });
   </script>
 </dom-module>

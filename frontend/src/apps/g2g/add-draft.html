@@ -34,7 +34,7 @@
       <grid>
         <iron-pages selected="{{selected}}">
           <div>
-            <draft-period></draft-period>
+            <draft-period data={{draft}}></draft-period>
 
           </div>
           <div>
@@ -215,12 +215,29 @@
                 this.glSetLayout('layout-main');
                 this.glQuery('adddraft',this);
             },
+            ready: function() {
+              this.getDb('./g2g/contract/shipment',(data)=>{
+                this.draft = data;
+                // console.log(this.draft);
+              });
+            },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
             draftCompanyCommon:function (e) {
               console.log(e.detail.node);
               // e.detail.node.common=this.common;
+            },
+            getDb:function (url,callback) {
+              // console.log(url);
+              axios.get(url)
+                .then(function(response){
+                  callback(response.data);
+
+                }.bind(this))
+                .catch(function (error) {
+                }.bind(this));
+                // console.log(1);
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
@@ -237,3 +254,19 @@
         });
     </script>
 </dom-module>
+<!--
+
+
+http://localhost:3000/api/g2g/shipment/id/486e6163-324c-4994-a2b4-ef6af082e4b9
+http://localhost:3000/api/g2g/contract/shipment
+
+http://localhost:3000/api/g2g/bl/shipment/id/88de2c87-3730-48ee-99fe-1d0e89199565
+
+http://localhost:3000/api/g2g/bl/no/11223344
+
+http://localhost:3000/api/g2g/invoice/shipment/id/88de2c87-3730-48ee-99fe-1d0e89199565
+
+http://localhost:3000/api/g2g/invoice/id/10cdea4e-8a4f-4115-8385-a0f48f68cc11
+
+
+-->
