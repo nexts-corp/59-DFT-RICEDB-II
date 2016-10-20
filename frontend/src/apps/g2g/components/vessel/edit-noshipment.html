@@ -1,0 +1,29 @@
+<dom-module id="edit-noshipment">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+        <gl-form-input label="Shipment Id"  error-message="กรุณาใส่รายละเอียด Shipment Id" required placeholder="Shipment Name" value="{{shipMent.shm_no}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,8]]">
+        <gl-form-input label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{shipMent.shm_name}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+    <gl-grid-row width="{{getWidth}}">
+     <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+    <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no" error-message="กรุณาเลือกรายละเอียด Confirmation Letter"
+        item-value-path="cl_id" value="{{shipMent.cl_id}}" items="{{cml}}" ></gl-combo-box>
+     </gl-grid-col>
+     </gl-grid-row>
+  </template>
+  <script >
+    Polymer({
+      is: "edit-noshipment",
+
+    });
+  </script>
+</dom-module>
