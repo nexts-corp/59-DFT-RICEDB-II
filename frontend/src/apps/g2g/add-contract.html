@@ -47,7 +47,7 @@
                 </div> -->
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
-                    <list item="buyer_name" label="ชื่อ" width="flex-2" type="string"></list>
+                    <list item="contract_name" label="ชื่อ" width="flex-2" type="string"></list>
                     <list item="contract_quantity_total" label="ทั้งหมด (ตัน) /" width="flex" type="number"></list>
                     <list item="contract_quantity_confirm" label="ทำสัญญาแล้ว (ตัน) /" width="flex" type="number"></list>
                     <list item="contract_quantity_balance" label="คงเหลือ (ตัน)" width="flex" type="number"></list>
@@ -184,7 +184,7 @@
             ready: function() {
               // console.log(this.loaded);
               // list county
-              this.getChange();
+              this.getChange(false,'get');
               // list riceType
               this.getDb('./common/typeRice',(data)=>{
                 this.typeRice=data;
@@ -223,10 +223,10 @@
                 this.incoterms=data;
               },false);
             },
-            getChange:function () {
+            getChange:function (refresh,action) {
               this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
-              },false,'get')
+              },refresh,action)
             },
             vesselEditCommon:function (e) {
               // console.log(e.detail.node);
@@ -251,12 +251,12 @@
                     this.vesselPage = 0;
                 }
                 this.dataSelect = e.detail.data;
-                // console.log(this.dataSelect);
+                console.log(this.dataSelect);
                 // this.buyerMasksAndCountry(this.dataSelect.contract_id);
                 if (typeof this.dataSelect == 'undefined') {
                   // console.log(1);
                 }else {
-                  if(this.dataSelectbuyer_id ){
+                  if(this.dataSelect.buyer_id ){
                     this.idData = this.dataSelect.buyer_id;
                     // console.log(this.idData);
                     // console.log(2);

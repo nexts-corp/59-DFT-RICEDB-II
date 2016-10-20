@@ -323,7 +323,7 @@
                 <vessel-save data="{{itemPrimary}}"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-save>
-                <vessel-edit data="{{itemPrimary}}"
+                <vessel-edit data="{{itemPrimary}}" on-vessel-edit-common="specialTap"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
               </iron-pages>
@@ -404,8 +404,15 @@
             observers: [
               'getCounty(data.country,common)',
             ],
+            // listeners:[
+            //   'vessel-edit-common': 'specialTap',
+            //
+            // ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
+            },
+            specialTap:function (e) {
+              console.log(e);
             },
             attached: function() {
               // console.log("created-2");

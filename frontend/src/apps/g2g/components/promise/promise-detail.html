@@ -167,17 +167,19 @@
                 // console.log(type_rice);
                 datas["contract_type_rice"] = type_rice;
                 datas["id"] = datas["contract_id"];
-                console.log(datas["contract_date"]);
+                // console.log(datas["contract_date"]);
                 datas["contract_date"]=new Date (datas["contract_date"]);
                 for (i = 0; i < rmKeys.length; i++) {
                     delete datas[rmKeys[i]];
                 }
                 // console.log(JSON.stringify(datas));
                 //  console.log(datas);
-                axios.put('http://localhost:3000/api/g2g/contract/update', datas)
+                this.glQuery('layoutMain').openToastSaveing();
+                axios.put('./g2g/contract/update', datas)
                     .then(function(response) {
                         console.log("success");
                         console.log(response);
+                        this.glQuery('addContract').getChange(false,'put');
                         // this.glQuery('addContract').getChange();
                         // this.glQuery('contentPanel').changDrawer();
                     })

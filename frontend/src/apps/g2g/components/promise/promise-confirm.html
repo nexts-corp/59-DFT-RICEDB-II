@@ -255,6 +255,7 @@
                 }
               }
               //
+              this.glQuery('layoutMain').openToastSaveing();
               this.postDb(this.confirmLetter)
               // console.log(this.confirmLetter);
             },
@@ -273,8 +274,8 @@
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                          this.glQuery('addContract').getChange();
-                          this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('addContract').getChange(false,'put');
+                          // this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
