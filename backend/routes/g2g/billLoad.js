@@ -8,20 +8,56 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
             .filter({ shm_id: req.params.shm_id })
-            .group("bl_no")
+            .group(function (g) {
+                return g.pluck(
+                    "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id","ship_voy_no"
+                )
+            })
             .ungroup()
-            .merge(function (m) {
+            .merge(function (me) {
                 return {
-                    bl_no: m('group'),
-                    shm_id: req.params.shm_id
+                    shm_id: me('group')('shm_id'),
+                    bl_no: me('group')('bl_no'),
+                    ship_id: me('group')('ship_id'),
+                    ship_voy_no: me('group')('ship_voy_no'),
+                    load_port_id: me('group')('load_port_id'),
+                    dest_port_id: me('group')('dest_port_id'),
+                    deli_port_id: me('group')('deli_port_id'),
+                    //quantity: me('reduction')
                 }
             })
-            .without("reduction", "group")
+            .without("group", "reduction")
             .outerJoin(r.table("invoice"),
             function (detail, invoice) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
             .without({ right: "id" }).zip()
+            .eqJoin("load_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        load_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        load_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("dest_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        dest_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        dest_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("deli_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        deli_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        deli_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
             .filter(r.row.hasFields('invoice_no').not())
             .run(conn, function (err, cursor) {
                 if (!err) {
@@ -115,7 +151,9 @@ router.get('/no/:bl_no', function (req, res, next) {
                     weight_gross: me('bl_detail').sum('weight_gross'),
                     weight_net: me('bl_detail').sum('weight_net'),
                     weight_tare: me('bl_detail').sum('weight_tare'),
-                    amount_usd: me('bl_detail').sum('amount_usd')
+                    amount_usd: me('bl_detail').sum('amount_usd'),
+                    cl_date:me('cl_date').split('T')(0),
+                    contract_date:me('contract_date').split('T')(0)
                 }
             })
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
