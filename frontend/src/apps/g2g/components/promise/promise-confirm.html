@@ -135,12 +135,16 @@
                     <gl-form-input disabled  placeholder="" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                   </td>
                   <td>
-                    <paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd"></paper-icon-button>
                     <paper-icon-button  id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
               </template>
-
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td><paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd" id="[[index]]"></paper-icon-button></td>
+                </tr>
 
 
             </table>
@@ -150,7 +154,7 @@
         </template>
 
       <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary">เพิ่ม</paper-button>
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary">เพิ่มชนิดข้าว</paper-button>
       </div>
 
       <gl-grid-row>
@@ -229,7 +233,7 @@
             getTyperice: function(contractId) {
               this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
-                // console.log(12512);
+                console.log(this.riceType);
               });
             },
             dataChange:function (data) {
@@ -237,10 +241,12 @@
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
-              // this.confirmLetter.cl_type_rice[0].type_rice_quantity = parseFloat(e.target.value);
-              this.confirmLetter.id = this.confirmLetter.cl_id;
+
+              console.log(this.confirmLetter.cl_id);
+                this.confirmLetter.id = this.confirmLetter.cl_id;
+
               this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
-              delete this.confirmLetter.cl_id
+              // delete this.confirmLetter.cl_id
               delete this.confirmLetter.cl_total_quantity;
               for (var i = 0; i < this.confirmLetter.cl_type_rice.length; i++) {
                 // console.log(this.confirmLetter.cl_type_rice[i].type_rice_quantity);
@@ -263,8 +269,7 @@
               axios.get(url)
                 .then(function(response){
                   callback(response.data);
-                  console.log('ดึงแล้ว');
-                  // this.glQuery('layoutMain').closeToastLoading();
+                  // console.log('ดึงแล้ว');
                 }.bind(this))
                 .catch(function (error) {
                 }.bind(this));
@@ -315,8 +320,10 @@
               return this.packageWeigthBag;
             },
             addPackage:function (e) {
-              var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
-              // console.log(table.node.id);
+            console.log(e.currentTarget.id);
+
+              var table = e.currentTarget.id;
+              // console.log(table.node);
               // console.log(this.confirmLetter.cl_type_rice[table.node.id]);
               var data = {
                       package_id: '',
@@ -324,7 +331,7 @@
                       package_weight_bag: 0,
                     };
                     // console.log(data);
-              this.push('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', data);
+              this.push('confirmLetter.cl_type_rice.'+[table]+'.package', data);
             },
             delePackage: function(e) {
               var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
@@ -346,9 +353,6 @@
               });
 
               return result;
-            },
-            selectWithOutSelected:function () {
-
             },
             // testNum:function(ob,param){
             //         if(ob.path.split(".").length == 2){
