@@ -99,7 +99,7 @@
     </gl-grid-row> -->
     <iron-pages selected="{{editShipment}}" attr-for-selected="name">
       <view-noshipment data="{{data}}" name="view"></view-noshipment>
-      <edit-noshipment data="{{data}}" name="edit"></edit-noshipment>
+      <edit-noshipment data="{{data}}" contract-id="{{contractId}}" name="edit"></edit-noshipment>
     </iron-pages>
       <paper-button raised on-tap="deleteShipment">ลบ Shipment No</paper-button>
 
@@ -416,7 +416,7 @@
                 },
                 editShipment:{
                   type:String,
-                  value:'view'
+                  value:'edit'
                 }
             },
             observers: [
@@ -583,13 +583,10 @@
                         })
             },
             deleteShipment:function () {
-              console.log(this.data.shm_id);
               this.deleteShipmentDb(this.data.shm_id);
               this.glQuery('layoutMain').openToastDeleteing();
-              console.log(213515121);
             },
             deleteShipmentDb:function (dataId) {
-              console.log('fff');
               axios.delete('./g2g/shipment/delete/id/'+dataId)
                         .then(function (response) {
                           console.log("success");

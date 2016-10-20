@@ -181,6 +181,7 @@
       </form>
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
+          <paper-button class="gl-btn-danger" raised on-tap="deleteConfirm">ลบคอมเฟริม</paper-button>
           <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
       </div>
     </template>
@@ -357,7 +358,23 @@
             },
             cancelDrawer:function () {
               this.glQuery('contentPanel').changDrawer();
-            }
+            },
+            deleteConfirm:function () {
+              // console.log(this.confirmLetter.cl_id);
+              this.deleteConfirmDb(this.confirmLetter.cl_id);
+            },
+            deleteConfirmDb:function (dataId) {
+              axios.delete('./g2g/confirm/delete/id/'+dataId)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          this.glQuery('addContract').getChange(true,'delete');
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          // console.log(error);
+                        })
+            },
             // testNum:function(ob,param){
             //         if(ob.path.split(".").length == 2){
             //             ob.base[param]=parseFloat(ob.value);
