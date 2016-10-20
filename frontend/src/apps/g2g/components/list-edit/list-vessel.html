@@ -90,12 +90,18 @@
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]">
         <gl-form-label-input label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{data.shm_name}}"></gl-form-label-input>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,2]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
-        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่ม</paper-button>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,2]]"></gl-grid-col>
+      <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
+      </gl-grid-col> -->
+    </gl-grid-row>
+    <gl-grid-row width="{{getWidth}}">
+
+      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,10]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
       </gl-grid-col>
     </gl-grid-row>
-
     <div id="changeDivcss" class="hide">
       <form is="iron-form" id="form" method="post" action="/form/handler">
         <gl-form-panel-body>
@@ -404,9 +410,16 @@
             observers: [
               'getCounty(data.country,common)',
             ],
+            // listeners:[
+            //   'vessel-edit-common': 'specialTap',
+            //
+            // ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
             },
+            // specialTap:function (e) {
+            //   console.log(e);
+            // },
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
