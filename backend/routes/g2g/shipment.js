@@ -206,7 +206,7 @@ router.delete('/delete/id/:shm_id', function (req, res, next) {
         db.query(function (conn) {
             r.table("shipment")
                 .get(req.params.shm_id)
-                .delete({ durability: "soft" })
+                .delete()
                 .run(conn)
                 .then(function (response) {
                     result.message = response;
@@ -215,7 +215,7 @@ router.delete('/delete/id/:shm_id', function (req, res, next) {
                         db.query(function (conn) {
                             r.table("test")
                                 .filter({ shm_id: req.params.id })
-                                .delete({ durability: "soft" })
+                                .delete()
                                 .run(conn)
                                 .then(function (resp) {
                                     //console.log('yyyyy');
