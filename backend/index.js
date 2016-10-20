@@ -7,6 +7,8 @@ var test = require('./routes/test');
 var g2g = require('./routes/g2g');
 var common = require('./routes/common');
 var ext_f3 = require('./routes/external');
+var eu = require('./routes/eu');
+
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -26,6 +28,7 @@ app.use(test);
 app.use('/g2g', g2g);
 app.use('/common', common);
 app.use('/external', ext_f3);
+app.use('/eu', eu);
 
 
 public.use('/api', app);
