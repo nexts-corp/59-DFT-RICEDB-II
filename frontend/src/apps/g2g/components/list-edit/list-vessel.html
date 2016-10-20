@@ -585,6 +585,7 @@
             deleteShipment:function () {
               console.log(this.data.shm_id);
               this.deleteShipmentDb(this.data.shm_id);
+              this.glQuery('layoutMain').openToastDeleteing();
               console.log(213515121);
             },
             deleteShipmentDb:function (dataId) {
@@ -595,7 +596,7 @@
                           console.log(response);
                           console.log(11);
                           // console.log(this.data.shm_id);
-                          // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'delete');
+                          this.glQuery('addContract').getChange(true,'delete');
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
