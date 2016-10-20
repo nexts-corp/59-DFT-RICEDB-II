@@ -101,6 +101,10 @@
                     value: {
                         name: false
                     }
+                },
+                success:{
+                  type:Boolean,
+                  value:false
                 }
             },
 
@@ -173,43 +177,25 @@
                     delete datas[rmKeys[i]];
                 }
                 // console.log(JSON.stringify(datas));
-                //  console.log(datas);
                 this.glQuery('layoutMain').openToastSaveing();
-                axios.put('./g2g/contract/update', datas)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        console.log(1212);
-                        this.glQuery('contentPanel').changDrawer();
-                        // this.glQuery('addContract').test();
-                        console.log(11);
-                        // this.glQuery('addContract').getChange();
-                        // this.glQuery('contentPanel').changDrawer();
-                    })
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                // var success =false;
+                this.postDb(datas)
+
             },
-            validate: function() {
-                if (
-                    (
-                        this.data.name != ""
-                        // this.data.id != "" &&
-                        // this.data.etd != "" &&
-                        // this.data.eta != ""
-                    ) &&
-                    (
-                        this.error.vessel == false
-                        // this.error.id == false &&
-                        // this.error.etd == false &&
-                        // this.error.eta == false
-                    )
-                ) {
-                    var queryELement = document.querySelector('dashboard-my-dashboard');
-                    queryELement.save(this.data, this.index);
-                }
-            }
+            postDb:function (data) {
+              axios.put('./g2g/contract/update', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                            this.glQuery('addContract').getChange(false,'put');
+                          // this.glQuery('contentPanel').changDrawer();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
+
+            },
         });
     </script>
 </dom-module>
