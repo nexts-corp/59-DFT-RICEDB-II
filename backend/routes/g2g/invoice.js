@@ -56,8 +56,13 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             function (detail, invoice) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
-            .without({ right: "id" }).zip()
+            .zip()
             .filter(r.row.hasFields('invoice_no'))
+            .merge(function (m) {
+                return {
+                    invoice_id: m('id')
+                }
+            }).without('id')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
