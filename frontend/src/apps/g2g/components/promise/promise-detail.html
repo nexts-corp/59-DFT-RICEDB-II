@@ -77,7 +77,7 @@
     </gl-grid-row>
 
     <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
     </div>
     </form>
@@ -179,7 +179,7 @@
                 // console.log(JSON.stringify(datas));
                 this.glQuery('layoutMain').openToastSaveing();
                 // var success =false;
-                this.postDb(datas)
+                this.postDb(datas);
 
             },
             postDb:function (data) {
@@ -194,8 +194,11 @@
                           console.log("error");
                           console.log(error);
                         })
-
             },
+            cancelDrawer:function () {
+              console.log(111);
+              this.glQuery('contentPanel').changDrawer();
+            }
         });
     </script>
 </dom-module>

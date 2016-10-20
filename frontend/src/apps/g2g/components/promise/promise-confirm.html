@@ -112,7 +112,7 @@
                 <th>Package (Kg/PP Bags)</th>
                 <th>Price (USD/MT)</th>
                 <th>Minimum Tare Weight</th>
-                <th></th>
+                <th>Action</th>
               </tr>
 
               <template is="dom-repeat" as="packageitem" items="[[item.package]]">
@@ -135,6 +135,7 @@
                     <gl-form-input disabled  placeholder="" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                   </td>
                   <td>
+                    <paper-icon-button icon="icons:"></paper-icon-button>
                     <paper-icon-button  id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
@@ -179,7 +180,7 @@
       </gl-grid-row>
       </form>
       <div class="horizontal end-justified layout">
-          <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+          <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
           <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
       </div>
     </template>
@@ -233,7 +234,7 @@
             getTyperice: function(contractId) {
               this.getDb('./g2g/contract/id/'+contractId,(data)=>{
                 this.riceType = data;
-                console.log(this.riceType);
+                // console.log(this.riceType);
               });
             },
             dataChange:function (data) {
@@ -242,7 +243,7 @@
             addConfirm:function () {
               //เปลี่ยนเป็น id
 
-              console.log(this.confirmLetter.cl_id);
+              // console.log(this.confirmLetter.cl_id);
                 this.confirmLetter.id = this.confirmLetter.cl_id;
 
               this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
@@ -320,7 +321,7 @@
               return this.packageWeigthBag;
             },
             addPackage:function (e) {
-            console.log(e.currentTarget.id);
+            // console.log(e.currentTarget.id);
 
               var table = e.currentTarget.id;
               // console.log(table.node);
@@ -354,6 +355,9 @@
 
               return result;
             },
+            cancelDrawer:function () {
+              this.glQuery('contentPanel').changDrawer();
+            }
             // testNum:function(ob,param){
             //         if(ob.path.split(".").length == 2){
             //             ob.base[param]=parseFloat(ob.value);
