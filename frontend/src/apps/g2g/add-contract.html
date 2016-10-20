@@ -33,7 +33,7 @@
         }
     </style>
     <template>
-    <db-gtog-contact></db-gtog-contact>
+
 
             <content-panel>
 
@@ -47,7 +47,7 @@
                 </div> -->
                 <nx-grid data="{{lastResponse}}" contract-id={{contractId}}>
                   <items type="primary">
-                    <list item="buyer_name" label="ชื่อ" width="flex-2" type="string"></list>
+                    <list item="contract_name" label="ชื่อ" width="flex-2" type="string"></list>
                     <list item="contract_quantity_total" label="ทั้งหมด (ตัน) /" width="flex" type="number"></list>
                     <list item="contract_quantity_confirm" label="ทำสัญญาแล้ว (ตัน) /" width="flex" type="number"></list>
                     <list item="contract_quantity_balance" label="คงเหลือ (ตัน)" width="flex" type="number"></list>
@@ -184,7 +184,7 @@
             ready: function() {
               // console.log(this.loaded);
               // list county
-              this.getChange();
+              this.getChange(false,'get');
               // list riceType
               this.getDb('./common/typeRice',(data)=>{
                 this.typeRice=data;
@@ -223,10 +223,14 @@
                 this.incoterms=data;
               },false);
             },
-            getChange:function () {
+            getChange:function (refresh,action) {
+              console.log('action ',action);
               this.getDb('./g2g/contract/list',(data)=>{
                 this.lastResponse=data;
-              },false,'get')
+              },refresh,action)
+            },
+            test:function () {
+              console.log('เข้าโวยยยยยยยยยย');
             },
             vesselEditCommon:function (e) {
               // console.log(e.detail.node);
@@ -256,7 +260,7 @@
                 if (typeof this.dataSelect == 'undefined') {
                   // console.log(1);
                 }else {
-                  if(this.dataSelectbuyer_id ){
+                  if(this.dataSelect.buyer_id ){
                     this.idData = this.dataSelect.buyer_id;
                     // console.log(this.idData);
                     // console.log(2);
@@ -287,6 +291,13 @@
                 },refresh,action);
               });
             },
+            getconfirm:function (contractId) {
+                this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
+                  this.cml = data;
+                  // console.log(this.cml);
+                  // this.cl_id.items = data;
+                });
+            },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
@@ -305,31 +316,31 @@
               axios.get(url)
                 .then(function(response){
                     callback(response.data);
-                    console.log(action);
+                    // console.log(action);
                       switch (action) {
                           case 'get':
                                     this.glQuery('layoutMain').closeToastLoading(function(){
-                                      if (refresh == true) {
-                                        console.log(action);
-                                        this.glQuery('contentPanel').changDrawer();
-                                      }
+                                      // if (refresh == true) {
+                                      //   this.glQuery('contentPanel').changDrawer();
+                                      // }
+                                      this.checkRefresh(refresh);
                                     }.bind(this));
                           break;
                           // insert & updoate
                           case 'put':
                                     this.glQuery('layoutMain').closeToastSaveing(function(){
-                                      if (refresh == true) {
-                                        console.log(action);
-                                        this.glQuery('contentPanel').changDrawer();
-                                      }
+                                      // if (refresh == true) {
+                                      //   this.glQuery('contentPanel').changDrawer();
+                                      // }
+                                      this.checkRefresh(refresh);
                                     }.bind(this));
                           break;
                           case 'delete':
                                     this.glQuery('layoutMain').closeToastDeleteing(function(){
-                                      if (refresh == true) {
-                                        console.log(action);
-                                        this.glQuery('contentPanel').changDrawer();
-                                      }
+                                      // if (refresh == true) {
+                                      //   this.glQuery('contentPanel').changDrawer();
+                                      // }
+                                      this.checkRefresh(refresh);
                                     }.bind(this));
                           break;
 
@@ -340,6 +351,11 @@
                 .catch(function (error) {
                 }.bind(this));
                 // console.log(1);
+            },
+            checkRefresh:function (refresh) {
+              if (refresh == true) {
+                this.glQuery('contentPanel').changDrawer();
+              }
             },
             attached:function(){
               this.layoutMain = this.glQuery('layoutMain');

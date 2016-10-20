@@ -4,6 +4,8 @@
 <link rel="import" href="../vessel/vessel-save.html">
 <link rel="import" href="../vessel/vessel-edit.html">
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
+<link rel="import" href="../vessel/view-noshipment.html">
+<link rel="import" href="../vessel/edit-noshipment.html">
 <dom-module id="list-vessel">
 
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -83,19 +85,31 @@
   </style>
   <template>
     <content id="primary" select="items[type=primary]"></content>
-    <gl-grid-row width="{{getWidth}}">
+    <!-- <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,1]]">
         <gl-form-label-input  label="งวดที่" value$="[[data.shm_no]]" ></gl-form-label-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]">
         <gl-form-label-input label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{data.shm_name}}"></gl-form-label-input>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,2]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
-        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่ม</paper-button>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
+      </gl-grid-col>
+    </gl-grid-row> -->
+    <iron-pages selected="{{editShipment}}" attr-for-selected="name">
+      <view-noshipment data="{{data}}" name="view"></view-noshipment>
+      <edit-noshipment data="{{data}}" contract-id="{{contractId}}" name="edit"></edit-noshipment>
+    </iron-pages>
+      <paper-button raised on-tap="deleteShipment">ลบ Shipment No</paper-button>
+
+    <gl-grid-row width="{{getWidth}}">
+
+      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,10]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
       </gl-grid-col>
     </gl-grid-row>
-
     <div id="changeDivcss" class="hide">
       <form is="iron-form" id="form" method="post" action="/form/handler">
         <gl-form-panel-body>
@@ -399,14 +413,25 @@
                 data:{
                   type:Object,
                   value:{buyerMasks:''}
+                },
+                editShipment:{
+                  type:String,
+                  value:'edit'
                 }
             },
             observers: [
               'getCounty(data.country,common)',
             ],
+            // listeners:[
+            //   'vessel-edit-common': 'specialTap',
+            //
+            // ],
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
             },
+            // specialTap:function (e) {
+            //   console.log(e);
+            // },
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
@@ -557,6 +582,25 @@
                           console.log(error);
                         })
             },
+            deleteShipment:function () {
+              this.deleteShipmentDb(this.data.shm_id);
+              this.glQuery('layoutMain').openToastDeleteing();
+            },
+            deleteShipmentDb:function (dataId) {
+              axios.delete('./g2g/shipment/delete/id/'+dataId)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          console.log(11);
+                          // console.log(this.data.shm_id);
+                          this.glQuery('addContract').getChange(true,'delete');
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          // console.log(error);
+                        })
+            },
+            //delete shipment detail
             deleteDb:function (dataId) {
               axios.delete('./g2g/shipment/detail/delete/id/'+dataId)
                         .then(function (response) {

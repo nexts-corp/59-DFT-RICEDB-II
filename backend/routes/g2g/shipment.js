@@ -206,25 +206,24 @@ router.delete('/delete/id/:shm_id', function (req, res, next) {
         db.query(function (conn) {
             r.table("shipment")
                 .get(req.params.shm_id)
-                .delete({ durability: "soft" })
+                .delete()
                 .run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
-                        db.query(function (conn) {
-                            r.table("test")
-                                .filter({ shm_id: req.params.id })
-                                .delete({ durability: "soft" })
-                                .run(conn)
-                                .then(function (resp) {
-                                    //console.log('yyyyy');
-                                    console.log(result);
-                                    res.json(result);
-                                })
-                        })
-                        // res.json(req.result);
-                        // console.log('xxxx');
+                        // db.query(function (conn) {
+                        //     r.table("shipment_detail")
+                        //         .filter({ shm_id: req.params.id })
+                        //         .delete()
+                        //         .run(conn)
+                        //         .then(function (resp) {
+                        //             //console.log('yyyyy');
+                        //             console.log(result);
+                        //             res.json(result);
+                        //         })
+                        // })
+                        res.json(result);
                     }
                 })
                 .error(function (err) {

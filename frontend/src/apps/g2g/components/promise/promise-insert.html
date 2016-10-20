@@ -104,7 +104,7 @@
                 <th>Package (Kg/PP Bags)</th>
                 <th>Price (USD/MT)</th>
                 <th>Minimum Tare Weight</th>
-                <th></th>
+                <th>Action</th>
               </tr>
 
               <template is="dom-repeat" as="packageitem" items="[[item.package]]">
@@ -125,12 +125,17 @@
                     <gl-form-input disabled  placeholder="" auto-validate error-message="กรุณาใส่ราคา" required value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                   </td>
                   <td>
-                    <paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd"></paper-icon-button>
+                    <paper-icon-button icon="" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd"></paper-icon-button>
                     <paper-icon-button  id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                   </td>
                 </tr>
               </template>
-
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd" id="[[index]]"></paper-icon-button></td>
+              </tr>
 
 
             </table>

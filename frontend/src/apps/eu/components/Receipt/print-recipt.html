@@ -113,10 +113,10 @@
                         </div>
                         <div>
                             <label id="label1">กรณีใช้ยอดเงิน : </label>
-                            <paper-radio-group aria-labelledby="label1">
-                                <paper-radio-button name="a" value="normalPay">แบบปกติ</paper-radio-button>
-                                <paper-radio-button name="b" value="quotaPay">แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)</paper-radio-button>
-                                <paper-radio-button name="c" value="overPay">แบบจ่ายเงินเกิน (ออกใบเสร็จ)</paper-radio-button>
+                            <paper-radio-group aria-labelledby="label1" on-tap="_getPay">
+                                <paper-radio-button name="a" value="0">แบบปกติ</paper-radio-button>
+                                <paper-radio-button name="b" value="1">แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)</paper-radio-button>
+                                <paper-radio-button name="c" value="2">แบบจ่ายเงินเกิน (ออกใบเสร็จ)</paper-radio-button>
                             </paper-radio-group>
                         </div>
                     </div>
@@ -128,8 +128,14 @@
                 <div class="headerContent">
                     ชำระเงินแบบ : 
                 </div>
-                <div class="container">    
-                  <quota-pay></quota-pay>
+                <div class="container">
+					<iron-pages selected="{{selectPage}}">
+						<section><normal-pay></normal-pay></section>
+						<section><quota-pay></quota-pay></section>
+						<section><over-pay></over-pay></section>
+					</iron-pages>
+					    
+                  <!--<quota-pay></quota-pay>-->
                 </div>
             </div>
         </section>
@@ -175,7 +181,20 @@
                           ]  
                       }
                 },
-            }
+				selectPage:{
+					type: String,
+				}
+            },
+			_getPay:function(e){
+				this.selectPage = e.target.value;
+				console.log(this.selectPage);
+				/*if(e.target.value == '0')
+					this.this.selectPage.name = 'แบบปกติ';
+				else if (e.target.value == '1')
+					this.this.selectPage.name = 'แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)';
+				else if (e.target.value == '2')
+					this.this.selectPage.name = 'แบบจ่ายเงินเกิน (ออกใบเสร็จ)';*/
+			}
         });
     </script>
 </dom-module>
