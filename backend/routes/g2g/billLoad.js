@@ -145,20 +145,29 @@ router.get('/no/:bl_no', function (req, res, next) {
             }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
             .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
+            (0)
             .run(conn, function (err, cursor) {
+                //console.log(err);
                 if (!err) {
-                    cursor.toArray(function (err, result) {
-                        if (!err) {
-                            //console.log(JSON.stringify(result, null, 2));
-                            res.json(result);
-                        } else {
-                            res.json(null);
-                        }
-                    });
+                    res.json(cursor);
                 } else {
                     res.json(null);
                 }
             });
+            // .run(conn, function (err, cursor) {
+            //     if (!err) {
+            //         cursor.toArray(function (err, result) {
+            //             if (!err) {
+            //                 //console.log(JSON.stringify(result, null, 2));
+            //                 res.json(result);
+            //             } else {
+            //                 res.json(null);
+            //             }
+            //         });
+            //     } else {
+            //         res.json(null);
+            //     }
+            // });
     })
 });
 

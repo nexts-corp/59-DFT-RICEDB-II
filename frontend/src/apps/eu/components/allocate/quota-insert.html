@@ -149,19 +149,10 @@
          console.log(this.answer);
        },
       _addPeriod:function(){
-        this.push('Period',{percent:0,proportion:0});
+        this.push('Period',{percent:'',proportion:0});
       },
       _delPeriod:function(e){
         this.splice('Period',this.Period.indexOf(e.currentTarget.item),1);
-      },
-      _getValue:function(e){
-        var oldData = this.answer;
-        console.log('1:',oldData);
-        var mod = parseInt(e.target.value)/100;
-        this.answer = parseInt(this.sum)*mod;
-        this.answer = parseInt(oldData) - parseInt(this.answer);
-        console.log('2:',this.answer);        
-        this.$.test.textContent  = this.answer;
       },
       _mathProportion:function(percent,item){
         item.proportion = (parseFloat(this.sum)*parseFloat(percent))/100;
