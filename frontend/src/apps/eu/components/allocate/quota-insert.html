@@ -55,18 +55,19 @@
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-            <gl-form-input label="ปีโควต้า" auto-validate error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="2559" id="" disabled name=""></gl-form-input>
+            <gl-form-input label="ปีโควต้า" auto-validate error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}" id="" name=""></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
              <gl-form-dropdown-menu label="ประเภทข้าว">
-                <paper-listbox class="dropdown-content">
-                    <paper-item>ข้าวขาว</paper-item>
-                    <paper-item>ข้าวหัก</paper-item>
+                <paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
+                    <paper-item rice-type-id="0">ข้าวขาว</paper-item>
+                    <paper-item rice-type-id="1">ข้าวหัก</paper-item>
                 </paper-listbox>
             </gl-form-dropdown-menu>
+    
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="ยอดรวม" on-blur="_getSumValue" value="{{sum}}"></gl-form-input>
+            <gl-form-input label="ยอดรวม" value="{{sum}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
         </gl-grid-row>
@@ -83,6 +84,7 @@
                   <td>งวดที่ : {{getIndex(index)}}</td>
                     <!--{{item.proportion}}-->
                   <td>
+                    [[testNum(item.*,'percent')]]
                     <gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
                   </td>
                   <td><gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{_mathProportion(item.percent,item)}}" on-input="inputProportionChange" index="{{index}}" required placeholder="กรุณาใส่จำนวน" id="{{index}}" no-label-float></gl-form-input></td>
@@ -90,6 +92,7 @@
                     <paper-button on-tap="_delPeriod" item="{{item}}"><iron-icon icon="delete"></iron-icon></paper-button>
                   </td>
               </tr>
+                  
            </template>
           <tr>
             <td colspan="4"> 
@@ -113,7 +116,7 @@
         <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
     </div>
-
+  
   </template>
   <script>
     Polymer({
@@ -123,54 +126,83 @@
           type: Array,
           value: []
         },
-        count:{
-          type: Number,
-          value: 0
+        quota:{
+          type: Object,
+          value: 
+          {
+              'id':'2558',
+              'period':[
+              {
+                'name':'งวดที่ 1',
+                'percent': 50,
+                'quantity':500
+              },
+              ],
+              'type_rice_id':'0',
+          }
+        },
+        year:{
+          type: String,
+          value: '2559'
+        },
+        typeRice:{
+          type: String
         },
         sum:{
           type: Number
         },
-        answer:{
-          type: Number
-        },
-        data:{
-          type: Object,
-          value: function(){
-            return {
-              valueMain:'1234'};
-            }
-        }
        },
        getIndex:function(index){
          return parseInt(index)+1;
        },
-       _getSumValue:function(){
-         this.answer = this.sum;
-         console.log(this.answer);
-       },
       _addPeriod:function(){
-        this.push('Period',{percent:'',proportion:0});
+        this.push('Period',{percent:'',quantity:0});
       },
       _delPeriod:function(e){
-        this.splice('Period',this.Period.indexOf(e.currentTarget.item),1);
+        if (confirm("ต้องการลบข้อมูลหรือไม่ ?") == true) {
+          this.splice('Period',this.Period.indexOf(e.currentTarget.item),1);
+        } 
       },
       _mathProportion:function(percent,item){
-        item.proportion = (parseFloat(this.sum)*parseFloat(percent))/100;
-        console.log(this.Period);
-        return item.proportion;
+        item.quantity = (parseFloat(this.sum)*parseFloat(percent))/100;
+        //console.log(this.Period);
+        return item.quantity;
       },
       _crossCheck:function(data){
         var sum = 0;
         data.base.map((item)=>{
-          if(typeof item.proportion!="undefined"){
-            sum += item.proportion;
+          if(typeof item.quantity!="undefined"){
+            sum += item.quantity;
           }
         });
         return sum;
       },
       inputProportionChange:function(e){
-        this.set('Period.'+e.target.index+'.proportion',parseFloat(e.target.value));
+        this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
+      },
+      _saveData:function(){
+        
+        console.log(
+          {
+            id:parseInt(this.year),
+            period:this.Period,
+            type_rice_id:this.typeRice
+          }
+        );
+      },
+      testNum:function(ob,param){
+          //console.log(typeof ob.value);
+          if(typeof ob.value == "string"){
+            var pathChange = ob.path.split(".");
+            if(pathChange.length == 2){
+                if(pathChange[1]==param){
+                  ob.base[param]=parseFloat(ob.value);
+                  // console.log(typeof ob.value);
+                }
+            }
+          }
       }
+      
       
 
     });
