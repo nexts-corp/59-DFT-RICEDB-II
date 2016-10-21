@@ -137,6 +137,7 @@
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
+                this.glQuery('pauseExporter',this);
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
@@ -166,14 +167,14 @@
                 // console.log(1);
             },
             attached: function() {
-                this.exporter_id = this.exporter_id || this.$.exporter_id;
-                // console.log(this.exporter_id);
-                this.getDb('./external/exporter/?exporter_active=false', (data) => {
-                    this.exporter_id.items = data;
-                    // console.log(this.exporter_id.items);
-                    this.exporters = data;
-                    // console.log(this.exporters);
-                });
+                this.getExporters();
+            },
+            getExporters: function(){
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
+              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+                  this.exporter_id.items = data;
+                  this.exporters = data;
+              });
             },
             _active: function(){
               // console.log(this.dataSelect);
@@ -190,8 +191,8 @@
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                          this.glQuery('addContract').getChange();
                           this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('pauseExporter').getExporters();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");

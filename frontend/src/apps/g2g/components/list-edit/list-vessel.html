@@ -255,7 +255,10 @@
               <gl-form-label-input label="WEIGHT (M/T)"  value="G.W. {{gw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label=""  value="N.W. {{shipment.shm_det_quantity}}"></gl-form-label-input>
+              <gl-form-label-input label=""  value="N.W. {{nw}}"></gl-form-label-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-form-label-input label=""  value="T.W. {{tw}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
@@ -421,6 +424,7 @@
             },
             observers: [
               'getCounty(data.country,common)',
+              'calc(shipment.shm_det_quantity)'
             ],
             // listeners:[
             //   'vessel-edit-common': 'specialTap',
@@ -558,6 +562,9 @@
                           this.quantityBag ='';
                            this.sumGW ='';
                            this.gw  ='';
+                           this.sumNw ='';
+                           this.nw ='';
+                           this.tw ='';
                           this.clickCancel();
                         }.bind(this))
                         .catch(function (error) {
