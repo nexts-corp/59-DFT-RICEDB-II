@@ -102,7 +102,8 @@
           seller_agent:this.trader.seller_agent,
           trader_id:this.trader.trader_id
         }
-        console.log(datas);
+        // console.log(datas);
+        this.glQuery('layoutRegistion').openToastSaveing();
         axios.post('./external/exporter/insert', datas)
             .then(function(response) {
                 console.log("success");
@@ -113,7 +114,12 @@
                 this.$$('#formData').setAttribute("hidden", "hidden");
                 this.$$('#changTitle').removeAttribute("hidden");
                 this.$$('#changTitle2').setAttribute("hidden", "hidden");
-                alert('บันทึกสำเร็จ');
+                this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                  // if (refresh == true) {
+                  //   console.log(action);
+                  //   this.glQuery('contentPanel').changDrawer();
+                  // }
+                }.bind(this));
             }.bind(this))
             .catch(function(error) {
                 console.log("error");

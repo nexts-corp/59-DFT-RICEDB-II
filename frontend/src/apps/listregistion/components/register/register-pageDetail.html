@@ -75,6 +75,7 @@
           seller_agent:this.data.seller_agent,
           trader_id:this.data.trader_id
         }
+        this.glQuery('layoutRegistion').openToastSaveing();
         // console.log(datas);
         // console.log(this.exporterId);
         axios.put('./external/exporter/update', datas)
@@ -82,6 +83,12 @@
                     console.log("success");
                     console.log(response);
                     this.pages = 0;
+                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                      // if (refresh == true) {
+                      //   console.log(action);
+                      //   this.glQuery('contentPanel').changDrawer();
+                      // }
+                    }.bind(this));
                     // this.glQuery('refreshPage').exporterIdChanged(exporterId);
                   }.bind(this))
                   .catch(function (error) {
@@ -90,6 +97,10 @@
                   })
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removePen').removeAttribute("hidden");
+      },
+      test:function(){
+        this.glQuery('contentPanel').changDrawer();
+
       }
     });
   </script>
