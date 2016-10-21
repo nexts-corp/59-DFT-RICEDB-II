@@ -1,6 +1,7 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../../../../../bower_components/gl-styles/gl-table.html">
 <dom-module id="bill-create">
-  <style include="iron-flex iron-flex-alignment gl-color gl-size">
+  <style include="iron-flex iron-flex-alignment gl-color gl-size gl-table" >
   .text{
     text-align: center;
     font-size: var(--font-size-large);
@@ -9,7 +10,7 @@
   <template>
 
     <gl-form-panel-body>
-
+      {{data}}
       <div class="text">NEW COMMERCIAL INOVICE</div>
 
         <gl-grid-row width="{{getWidth}}">
@@ -58,6 +59,22 @@
           </gl-grid-col>
         </gl-grid-row>
 
+        <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
+        <table class="gl-table-default">
+             <thead>
+                 <tr>
+                   content...dfsdf
+                 </tr>
+             </thead>
+             <tbody>
+                 <tr>
+                   content...sdfsdf
+                 </tr>
+             </tbody>
+         </table>
+       </gl-grid-col>
+     </gl-grid-row>
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
             <gl-form-textarea rows="2" value="" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
@@ -113,7 +130,10 @@
   <script>
     Polymer({
       is: "bill-create",
-
+      observers:['check(data)'],
+      check:function (data) {
+        console.log(data);
+      }
     });
   </script>
 </dom-module>
