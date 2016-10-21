@@ -46,13 +46,13 @@
               <div class="topic"> เลือกงวดที่ต้องการดู : </div>
             </div>
             <div class="flex">
-              <gl-combo-box id="deli_port_id" label="Shipments" item-label-path="shm_no"
-                item-value-path="shm_id" items={{shipments}} value="{{data.deli_port_id}}"></gl-combo-box>
+              <gl-combo-box id="shipmentId" label="Shipments" item-label-path="shm_no"
+                item-value-path="shm_id" items={{shipments}} value="{{shipmentId}}"></gl-combo-box>
             </div>
             <div class="flex-2"></div>
         </div>
       </div>
-
+<!-- {{shipmentIdClick}} -->
       <div class="flex combobox">
         <div class="layout horizontal">
           <div class="flex-2"></div>
@@ -60,7 +60,7 @@
               <div class="horizontal end-justified layout">
                 <div>
                   <paper-button  class="gl-btn-info" raised >
-                  <iron-icon icon="search"></iron-icon>ค้นหา</paper-button>
+                  <iron-icon icon="search" on-tap="searchDraft"></iron-icon>ค้นหา</paper-button>
                 </div>
               </div>
             </div>
@@ -77,23 +77,19 @@
     Polymer({
       is: "draft-period",
       propertyName: {
-        common:{
-          type:Object,
-          value:{}
-        },
         contractingCampany:{
           type:Object,
           value:{}
-        }
+        },
+        shipmentId:{
+          type:String,
+          notify:true
+        },
       },
       observers:[
         'check(data)',
-        'getShipments(contractingid)'
+        'getShipments(contractingid)',
       ],
-      attached: function() {
-        // console.log("created");
-        this.fire('draft-company-common',{node:this});
-      },
       check:function (data) {
         this.contractingCampany=data;
         // console.log(this.contractingCampany);
@@ -110,6 +106,11 @@
             // console.log(this.shipments );
         }
 
+      },
+      searchDraft:function () {
+        // this.shipmentIdClick = this.$.shipmentId.value;
+        this.fire('shipment', this.$.shipmentId.value);
+        // console.log(this.shipmentIdClick);
       }
     });
   </script>
