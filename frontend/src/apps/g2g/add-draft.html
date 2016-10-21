@@ -120,9 +120,10 @@
                   type:Object,
                   value:{}
                 },
-                shipmentIdClick:{
-                  type:String,
+                blShipment:{
+                  type:Object,
                 },
+
                 panalBl: {
                     type: Array,
                     value: [
@@ -210,11 +211,18 @@
                     }
                 }
             },
-            // observers:[
-            //   'check(shipmentIdClick)'
-            // ],
+            observers:[
+              'cheangpage(blShipment)'
+            ],
             checkshipment:function (e) {
               console.log("check",e.detail);
+              this.getDb('./g2g/bl/shipment/id/'+e.detail,(data)=>{
+                this.blShipment = data;
+                console.log(this.blShipment);
+              });
+            },
+            cheangpage:function (blShipment) {
+              this.selected = 1;
             },
             created: function() {
                 this.glSetTitle('สัญญาการซื้อขาย');
