@@ -33,8 +33,8 @@
               <div class="topic"> เลือกบริษัทที่ทำสัญญา : </div>
             </div>
             <div class="flex">
-              <gl-combo-box id="deli_port_id" label="Contracting Campany" item-label-path="port_name"
-                item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+              <gl-combo-box id="deli_port_id" label="Contracting Campany" item-label-path="contract_name"
+                item-value-path="contract_id" items="{{contractingCampany}}" value="{{contractingid}}"></gl-combo-box>
             </div>
             <div class="flex-2"></div>
         </div>
@@ -46,13 +46,13 @@
               <div class="topic"> เลือกงวดที่ต้องการดู : </div>
             </div>
             <div class="flex">
-              <gl-combo-box id="deli_port_id" label="Shipments" item-label-path="port_name"
-                item-value-path="port_id" value="{{data.deli_port_id}}"></gl-combo-box>
+              <gl-combo-box id="shipmentId" label="Shipments" item-label-path="shm_no"
+                item-value-path="shm_id" items={{shipments}} value="{{shipmentId}}"></gl-combo-box>
             </div>
             <div class="flex-2"></div>
         </div>
       </div>
-
+<!-- {{shipmentIdClick}} -->
       <div class="flex combobox">
         <div class="layout horizontal">
           <div class="flex-2"></div>
@@ -60,7 +60,7 @@
               <div class="horizontal end-justified layout">
                 <div>
                   <paper-button  class="gl-btn-info" raised >
-                  <iron-icon icon="search"></iron-icon>ค้นหา</paper-button>
+                  <iron-icon icon="search" on-tap="searchDraft"></iron-icon>ค้นหา</paper-button>
                 </div>
               </div>
             </div>
@@ -77,16 +77,41 @@
     Polymer({
       is: "draft-period",
       propertyName: {
-        common:{
+        contractingCampany:{
           type:Object,
           value:{}
         },
+        shipmentId:{
+          type:String,
+          notify:true
+        },
       },
+      observers:[
+        'check(data)',
+        'getShipments(contractingid)',
+      ],
+      check:function (data) {
+        this.contractingCampany=data;
+        // console.log(this.contractingCampany);
+      },
+      getShipments:function (contractingid) {
+        // console.log(contractingid);
+        // console.log(this.contractingCampany);
+        var contractingCampany = this.contractingCampany;
 
-      attached: function() {
-        // console.log("created");
-        this.fire('draft-company-common',{node:this});
+        if (typeof contractingCampany !== 'undefined') {
+          // console.log(contractingCampany);
+          var shipments = contractingCampany.filter(function (contractingCampany) { return contractingCampany.contract_id == contractingid });
+            this.shipments = shipments[0].shipment;
+            // console.log(this.shipments );
+        }
+
       },
+      searchDraft:function () {
+        // this.shipmentIdClick = this.$.shipmentId.value;
+        this.fire('shipment', this.$.shipmentId.value);
+        // console.log(this.shipmentIdClick);
+      }
     });
   </script>
 </dom-module>
