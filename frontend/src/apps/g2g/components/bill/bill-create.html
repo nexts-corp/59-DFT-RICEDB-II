@@ -1,15 +1,17 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../../../../../bower_components/gl-styles/gl-table.html">
 <dom-module id="bill-create">
-  <style include="iron-flex iron-flex-alignment gl-color gl-size">
+  <style include="iron-flex iron-flex-alignment gl-color gl-size gl-table" >
   .text{
     text-align: center;
     font-size: var(--font-size-large);
   }
+
   </style>
   <template>
 
     <gl-form-panel-body>
-
+      {{data}}
       <div class="text">NEW COMMERCIAL INOVICE</div>
 
         <gl-grid-row width="{{getWidth}}">
@@ -23,29 +25,29 @@
         </gl-grid-row>
 
         <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-            <gl-form-textarea rows="2" value="" placeholder="ใส่รายละเอียด" label="Invoice of :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
+            <gl-form-label-textarea value="[[quantity]] BAGS OF [[nameRice]] CURRENT NEW CROP, [[data.cl_quality]]" placeholder="ใส่รายละเอียด" label="Invoice of :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-label-textarea>
           </gl-grid-col>
         </gl-grid-row>
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="EVER LOYAL V.1449-018E" label="Shippped per :"></gl-form-input>
+            <gl-form-label-input value="[[data.ship_name]]" label="Shippped per :"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="BANGKOK PORT, THAILAND" label="Port of loading :"></gl-form-input>
+            <gl-form-label-input value="[[data.load_port_name]],[[data.load_country_name_en]]" label="Port of loading :"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="YUEYANG (CHENG LING JI)" label="Port of Discharge :"></gl-form-input>
+            <gl-form-label-input value="[[data.deli_port_name]],[[data.deli_country_fullname_en]]" label="Port of Discharge :"></gl-form-input>
           </gl-grid-col>
         </gl-grid-row>
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="YUEYANG (CHENG LING JI)" label="Place of Delivery :"></gl-form-input>
+            <gl-form-label-input value="[[data.dest_port_name]],[[data.dest_country_fullname_en]]" label="Place of Delivery :"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="SITGBKYU66708" label="Bill of Lading Number :"></gl-form-input>
+            <gl-form-label-input value="[[data.bl_no]]" label="Bill of Lading Number :"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <vaadin-date-picker label="Dated" value="2015-09-21"></vaadin-date-picker>
@@ -54,16 +56,45 @@
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-            <gl-form-label-textarea value="COFCO CORPORATION, 17F, COFCO FORTUNE PLAZA, NO.8 CHAO YANG MEN SOUTH STREET, CHAO YANG,BEIJING,THE PEOPLES REPUBLIC OF CHINA" label="By order and Account of :"></gl-form-textarea>
+            <gl-form-label-textarea value="[[data.buyer_address]]" label="By order and Account of :"></gl-form-textarea>
           </gl-grid-col>
         </gl-grid-row>
+
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
             <gl-form-textarea rows="2" value="" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
           </gl-grid-col>
         </gl-grid-row>
-
+        <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
+          <table class="gl-table-default">
+                  <thead class="table-head">
+                      <tr>
+                          <th>Marks & Nos.</th>
+                          <th>Quantity</th>
+                          <th>Descriptions</th>
+                          <th>Amount</th>
+                      </tr>
+                  </thead>
+                  <tbody class="table-body">
+                    <template is="dom-repeat" items="[[data.bl_detail]]">
+                      <tr>
+                          <td>[[data.buyer_masks]]</td>
+                          <td>[[item.quantity]]</td>
+                          <td>
+                            [[item.type_rice_desc_en]] CURRENT NEW CROP,DOUBLE POLISHED AND SORTEXED QUALITY.<br>
+                            PACKING: INSTRONG EXPORT SEA WORTHY NEWSINGLE PP BAGS OF [[item.package_kg_per_bag]] KILOGRAMS NET WITH MINIMUM TARE WEIGHT TO BE AT [[item.package_weight_bag]] GRAM/BAG.
+                            TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE OF CHARGE BY THE SELLER ALONG WITH THE SHIPMENT. <br>
+                            PRICE : USD [[item.price_per_ton]] PER METRIC TON, [[DATA.inct_id]] ชื่อม fob เต็ม BANGKOK  OR [[data.load_port_name]] AT BUYER'S OPTION.
+                          </td>
+                          <td>USD  [[item.amount_usd]]</td>
+                      </tr>
+                    </template>
+                  </tbody>
+              </table>
+       </gl-grid-col>
+      </gl-grid-row>
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-label-input value="RED COFCO" label="Marks & Nos."></gl-form-input>
@@ -113,7 +144,25 @@
   <script>
     Polymer({
       is: "bill-create",
+      properties: {
+        nameRice: {
+          type: String,
+          value:''
+        }
+      },
+      observers:['check(data)'],
+      check:function (data) {
+        console.log(data);
+        var sss = data.cl_type_rice;
+        sss.map((el)=>{
+                  // console.log(typeof el.type_rice_desc_en);
+                  if (typeof el.type_rice_desc_en !== 'undefined') {
+                    this.nameRice += el.type_rice_desc_en+', ';
+                  }
 
+              })
+        // console.log(this.nameRice);
+      }
     });
   </script>
 </dom-module>
