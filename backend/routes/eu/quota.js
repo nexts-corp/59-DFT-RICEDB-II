@@ -7,7 +7,7 @@ var db = require('../../db.js');
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 
-router.get(['/', '/list'], function (req, res, next) {
+router.get(['/'], function (req, res, next) {
     db.query(function (conn) {
             
             statemant = r.db('eu').table('quota');
@@ -74,7 +74,7 @@ var schema = {
 var validate = ajv.compile(schema);
 
 
-router.post(['/', '/insert'], function (req, res, next) {
+router.post(['/'], function (req, res, next) {
     
     var valid = validate(req.body);
     
@@ -93,13 +93,13 @@ router.post(['/', '/insert'], function (req, res, next) {
 
         });
     }else{
-        res.json({error:"Nylon Server : พังแล้ว"}); 
+        res.json({error:"schema"}); 
     }
 
     
 });
 
-router.put(['/', '/edit'], function (req, res, next) {
+router.put(['/'], function (req, res, next) {
     
     var valid = validate(req.body);
 
@@ -118,9 +118,27 @@ router.put(['/', '/edit'], function (req, res, next) {
 
         });
     }else{
-        res.json({error:"Nylon Server : พังแล้ว"}); 
+        res.json({error:"schema"}); 
     }
 
+    
+});
+
+
+router.delete(['/'], function (req, res, next) {
+  
+        db.query(function (conn) {
+
+            r.db('eu').table('quota').get(parseInt(req.query.id)).delete()
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    res.json(cursor);
+                } else {
+                    res.json(null);
+                }
+            });
+
+        });
     
 });
 
