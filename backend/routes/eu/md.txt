@@ -1,0 +1,42 @@
+r.db('eu').table('quota').merge(function(row){
+  return {type_rice:row('type_rice').merge(function(type_rice){
+    return (r.db('eu').table('type_rice').get(type_rice('type_rice_id')).without('id'))
+  })}
+})
+
+
+r.db('eu').table('quota').get("2558").merge(function(row){
+  return {type_rice:row('type_rice').filter({type_rice_id:"4b23b3af-e292-4ac7-8154-c51363cc5ea7"}).merge(function(type_rice){
+    return (r.db('eu').table('type_rice').get(type_rice('type_rice_id')).without('id'))
+  })}
+})
+
+
+
+r.db('eu').table('quota').get("2558").do(function(x){
+  return r.branch(
+   x.eq(null) ,
+    null,
+    
+    
+    
+ r.db('eu').table('quota').filter(
+  function(row){
+    return row('id').eq('2558').and(
+      row('type_rice').contains(
+        function(type_rice){
+          return type_rice('type_rice_id').eq('4b23b3af-e292-4ac7-8154-c51363cc5ea7')
+        }
+      )
+  )}
+    ).do(function(y){
+      return "y"
+    })
+
+    
+    
+  )
+});
+
+
+  r.db('eu').table('quota').do(function(x){return 's'})
