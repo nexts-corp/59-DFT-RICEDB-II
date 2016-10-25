@@ -2,59 +2,66 @@
 <link rel="import" href="invoice-save.html">
 <link rel="import" href="invoice-edit.html">
 <dom-module id="invoice-page">
-  <style include="gl-color gl-size">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
+  .text {
+    text-align: center;
+    font-size: var(--font-size-large);
+  }
 
-  </style>
-  <template>
-513513513
-    <gl-form-panel set-border="0px">
+</style>
+<template>
+  <div >
 
-      <gl-form-panel-head set-padding="0px 0px 0px 0px">
-        <div id="removePen" hidden>
-          <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
-        </div>
-      </gl-form-panel-head>
+  </div>
+  <div id="removePen" hidden class="horizontal end-justified layout">
+    <paper-icon-button id="editInvoice" icon="create" on-tap="editChange"></paper-icon-button>
+  </div>
+  <!-- <gl-form-panel set-border="0px"> -->
+    <div class="text">NEW COMMERCIAL INOVICE</div>
+  <gl-form-panel-head label="" set-padding="10px" set-border="1px">
+  </gl-form-panel-head>
+  <gl-form-panel-body>
+    <iron-pages selected="{{pages}}">
 
-              <div class="bd">
-                  <gl-form-panel>
-                      <iron-pages selected="{{pages}}">
-                          <invoice-save></invoice-save>
-                          <invoice-edit></invoice-edit>
-                      </iron-pages>
-                  </gl-form-panel>
-              </div>
-
-        <gl-form-panel-footer>
-          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
-        </gl-form-panel-footer>
-    </gl-form-panel>
+      <invoice-save data={{data}}></invoice-save>
+      <invoice-edit data={{data}}></invoice-edit>
+    </iron-pages>
+  </gl-form-panel-body>
 
 
-  </template>
-  <script>
-    Polymer({
-      is: "invoice-page",
-      behaviors: [listEditBehavior],
-      properties: {
-        pages:{
-            type:Number,
-            notify:true,
-            value: 0
-        }
-      },
-      ready: function() {
-        this.$$('#removePen').removeAttribute("hidden");
-      },
-      editChange:function(e){
-        this.pages = 1;
-        this.$$('#removeButtom').removeAttribute("hidden");
-        this.$$('#removePen').setAttribute("hidden", "hidden");
-      },
-      save:function(e) {
-        this.pages = 0;
-        this.$$('#removeButtom').setAttribute("hidden", "hidden");
-        this.$$('#removePen').removeAttribute("hidden");
-      }
-    });
-  </script>
+  <gl-form-panel-footer>
+    <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+  </gl-form-panel-footer>
+  <!-- </gl-form-panel> -->
+
+
+</template>
+<script>
+Polymer({
+  is: "invoice-page",
+  behaviors: [listEditBehavior],
+  properties: {
+    pages:{
+      type:Number,
+      value: 0
+    },
+    data:{
+      type:Object
+    }
+  },
+  ready: function() {
+    this.$$('#removePen').removeAttribute("hidden");
+  },
+  editChange:function(e){
+    this.pages = 1;
+    this.$$('#removeButtom').removeAttribute("hidden");
+    this.$$('#removePen').setAttribute("hidden", "hidden");
+  },
+  save:function(e) {
+    this.pages = 0;
+    this.$$('#removeButtom').setAttribute("hidden", "hidden");
+    this.$$('#removePen').removeAttribute("hidden");
+  }
+});
+</script>
 </dom-module>

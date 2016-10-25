@@ -62,7 +62,7 @@
                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                   <bill-create name="primary" data="{{blDetail}}"></bill-create>
                   <!-- <invoice-save></invoice-save> -->
-                  <invoice-page name="secondary" data="{{dataSelect}}"></invoice-page>
+                  <invoice-page name="secondary" data="{{InDetail}}"></invoice-page>
                 </iron-pages>
               </section-content>
               <section-content name="file">
@@ -255,6 +255,13 @@
                 // console.log(this.blDetail);
               });
             },
+            getInvoiceDetail:function (invoice_id) {
+              // console.log(blShipment);
+              this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
+                this.InDetail = data;
+                console.log(this.InDetail);
+              });
+            },
             getDb:function (url,callback) {
               // console.log(url);
               axios.get(url)
@@ -281,6 +288,11 @@
                 if (typeof this.dataSelect.bl_no !== 'undefined' ) {
                     this.getBlNo(this.dataSelect.bl_no);
                 }
+                if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
+                  console.log(11);
+                    this.getInvoiceDetail(this.dataSelect.invoice_id);
+                }
+                // console.log(this.dataSelect.invoice_id);
             }
         });
     </script>
