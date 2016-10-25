@@ -265,14 +265,18 @@
         // console.log(data);
         // console.log(data.cl_quality.toUpperCase());
         this.cl_quality = data.cl_quality.toUpperCase();
-        var sss = data.cl_type_rice;
-        sss.map((el)=>{
-                  // console.log(typeof el.type_rice_desc_en);
-                  if (typeof el.type_rice_desc_en !== 'undefined') {
-                    this.nameRice += el.type_rice_desc_en+', ';
-                  }
+        var rice = data.cl_type_rice;
+        // console.log(this.nameRice.length);
+        if (this.nameRice.length == 0){
+          rice.map((el)=>{
+                    // console.log(typeof el.type_rice_desc_en);
+                    if (typeof el.type_rice_desc_en !== 'undefined') {
+                      this.nameRice += el.type_rice_desc_en+', ';
+                    }
 
-              })
+                })
+        }
+
         // console.log(this.nameRice);
       },
       checkPrice:function (data) {

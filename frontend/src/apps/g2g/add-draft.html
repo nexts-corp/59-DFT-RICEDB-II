@@ -35,16 +35,16 @@
         <!-- <bill-create></bill-create> -->
         <iron-pages selected="{{selected}}">
           <div>
-            <draft-period data="{{draft}}" on-shipment="checkshipment"></draft-period>
+            <draft-period data="{{draft}}" on-shipment="getshipment"></draft-period>
 
           </div>
           <div>
-            <list-draft data="{{blShipment}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}">
+            <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
               <items type="primary">
                 <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
               </items>
               <items type="secondary">
-                <list item="invoiceNo" label="Invoice No." width="flex"></list>
+                <list item="invoice_no" label="Invoice No." width="flex"></list>
               </items>
               <items type="third">
                 <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
@@ -230,10 +230,18 @@
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
-            checkshipment:function (e) {
+            getshipment:function (e) {
               // console.log("check",e.detail);
               this.getDb('./g2g/bl/shipment/id/'+e.detail,(data)=>{
                 this.blShipment = data;
+                // console.log(this.blShipment);
+              });
+              this.getinvoice(e);
+            },
+            getinvoice:function (e) {
+              // console.log("check",e.detail);
+              this.getDb('./g2g/invoice/shipment/id/'+e.detail,(data)=>{
+                this.invoiceShipment = data;
                 // console.log(this.blShipment);
               });
             },
