@@ -1,6 +1,8 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="./components/list-edit/list-quota.html">
 <link rel="import" href="./components/allocate/quota-insert.html">
+<link rel="import" href="./components/allocate/quota-update.html">
+
 <link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
 
 
@@ -93,10 +95,10 @@
             </div>
           </div>-->
           <div class="flex searchBorder">
-            <list-quota data={{dataRegistion}}>
+            <list-quota data={{dataYear}}>
               <items type="primary">
                 <!--<list item="quotaYear" label="ปีโควตา" width="flex"></list>-->
-                <list item="riceType" label="ประเภทข้าว" width="flex"></list>
+                <list item="type_rice_id" label="ประเภทข้าว" width="flex"></list>
                 <list item="shipment1" label="งวดที่ 1 (มกราคม)" width="flex"></list>
                 <list item="shipment2" label="งวดที่ 2 (เมษายน)" width="flex"></list>
                 <list item="shipment3" label="งวดที่ 3 (กรกฏาคม)" width="flex"></list>
@@ -124,7 +126,10 @@
               </iron-pages>
             </section-content>
           </gl-tabs>-->
-            <quota-insert></quota-insert>
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                <div name="addRedRegExporter"><quota-insert></quota-insert></div>
+                <div name="detailRegExporter"><quota-update data="{{dataSelect}}"></quota-update></div>
+              </iron-pages>
         </div>
     </panel>
     </content-panel>
@@ -182,6 +187,9 @@
             attached: function() {
                 // this.layoutMain = this.glQuery('layoutMain');
             },
+            ready: function(){
+              this._getDb();
+            },
             _result:function () {
               // console.log(this.result);
             },
@@ -190,17 +198,19 @@
               // console.log(e.detail.data);
               // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
+                console.log(this.layerContent);
                 if (this.layerContent === 'third') {
                     this.vesselPage = 1;
                 } else {
                     this.vesselPage = 0;
                 }
                 this.dataSelect = e.detail.data;
+                //console.log(this.dataSelect);
             },
             _toggleDrawer: function(e) {
+              this.layerContent = 'addRedRegExporter';
               this.glQuery('contentPanel').changDrawer();
-              this.layerContent = e.target.id;
+              //this.layerContent = e.target.id;
               // console.log(e.target.id);
             },
             test:function(){
@@ -220,7 +230,20 @@
                 //this.glQuery('toastLoading').hide();
                 console.log(error);
               });
-            }
+            },
+            _getDb:function(){
+              axios.get('./eu/quota/')
+              .then((response)=>{
+                console.log("success");
+                this.dataYear = response.data;
+                //console.log(response.data);
+                //console.log(this.dataYear);
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+              });
+            }  
         });
     </script>
 </dom-module>

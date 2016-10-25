@@ -71,6 +71,11 @@
         Polymer({
             is: "list-registration-pause",
             behaviors: [listEditBehavior,gl.behavior.core],
+            properties: {
+              data: {
+                type: Object
+              }
+            },
             checkbox:function (e) {
                var i;
               if(e.target.checked == true){
@@ -108,6 +113,22 @@
                           console.log("error");
                           console.log(error);
                         })
+            },
+            getDb: function(url, callback) {
+                // console.log(url);
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+                // console.log(1);
+            },
+            attached: function() {
+                this.exporter_id = this.exporter_id || this.$.exporter_id;
+                // console.log(this.exporter_id);
+                this.getDb('./external/exporter/?exporter_active=false', (data) => {
+                    console.log(data);
+                });
             }
         });
     </script>

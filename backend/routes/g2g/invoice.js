@@ -235,6 +235,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                     }).without({ right: ["id", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
                     .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
                     .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
+                    .eqJoin("inct_id", r.table("incoterms")).without({ right: "id" }).zip()
                     (0)
             })
             .merge(function (m) {

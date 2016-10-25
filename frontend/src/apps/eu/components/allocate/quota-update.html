@@ -1,5 +1,5 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
-<dom-module id="quota-insert">
+<dom-module id="quota-update">
   <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
     .title{
       background-color: orange;
@@ -119,7 +119,7 @@
   </template>
   <script>
     Polymer({
-      is: "quota-insert",
+      is: "quota-update",
        properties: {
         Period: {
           type: Array,
@@ -193,7 +193,7 @@
           type_rice_id:this.typeRice
         }
         //console.log(datas);
-        axios.post('/eu/quota/insert',datas)
+        axios.put('/eu/quota/edit',datas)
         .then((response)=>{
           console.log("success");
           console.log(response);
