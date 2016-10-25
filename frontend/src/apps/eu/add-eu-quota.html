@@ -3,6 +3,10 @@
 <link rel="import" href="./components/allocate/quota-insert.html">
 <link rel="import" href="./components/allocate/quota-update.html">
 
+<link rel="import" href="./../../../bower_components/gl-styles/gl-table.html">
+
+<link rel="import" href="./../../components/list-report/list-report.html">
+
 <link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
 
 
@@ -10,7 +14,7 @@
 
 
 <dom-module id="eu-add-eu-quota">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -61,8 +65,6 @@
 
     <content-panel>
       <grid>
-        <!-- <paper-material elevation="1" class="elevation"> -->
-
 
         <div class="layout vertical registor">
           <div class="flex">
@@ -76,56 +78,55 @@
           <div class="layout horizontal">
             <div class="container flex-equal-justified">
               <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
-                  <paper-listbox class="dropdown-content">
-                    <paper-item>2558</paper-item>
-                    <paper-item>2557</paper-item>
-                    <paper-item>2556</paper-item>
-                    <paper-item>2555</paper-item>
+                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
+                    <template is="dom-repeat" items="{{getData}}">
+                      <paper-item year="{{item.id}}">{{item.id}}</paper-item>
+                    </template>
                   </paper-listbox>
               </gl-form-dropdown-menu>
             </div>
           </div>
-          <!--<div class="flex searchBox searchBorder">
-            <div class="layout horizontal">
-              <!--<div class="flex-5"></div>-->
-              <!--<div class="flex-2">
 
-              </div>
-              <div class="flex"></div>
-            </div>
-          </div>-->
-          <div class="flex searchBorder">
-            <list-quota data={{dataYear}}>
+          <!--<div class="flex searchBorder">
+            <list-quota data={{dataList}}>
               <items type="primary">
-                <!--<list item="quotaYear" label="ปีโควตา" width="flex"></list>-->
                 <list item="type_rice_id" label="ประเภทข้าว" width="flex"></list>
-                <list item="shipment1" label="งวดที่ 1 (มกราคม)" width="flex"></list>
-                <list item="shipment2" label="งวดที่ 2 (เมษายน)" width="flex"></list>
-                <list item="shipment3" label="งวดที่ 3 (กรกฏาคม)" width="flex"></list>
-                <list item="sumQuota" label="ปริมาณโควตารวม" width="flex"></list>
-                <!--<list item="edit" label="แก้ไข" width="flex"></list>-->
+                <list item="period.quantity" label="งวด" width="flex"></list>
               </items>
             </list-quota>
+          </div>-->
 
-
-          </div>
+          <table class="gl-table-default">
+            <thead>
+                <tr>
+                  <!--<template is="dom-repeat" items="{{getData}}">
+                    <template is="dom-repeat" items="{{item.type_rice}}">
+                      <th>ประเภทข้าว</th>
+                      <th>ยอดรวม (งวด)</th>
+                    </template>
+                  </template>-->
+                  <th>ประเภทข้าว</th>
+                  <th>ยอดรวม (งวด) </th>
+                </tr>
+            </thead>
+            <tbody>
+              <template is="dom-repeat" items="{{getData}}">
+               
+                  <template is="dom-repeat" items="{{item.type_rice}}">
+                    <tr id="{{index}}" on-tap="_sendData" data="[[item]]">
+                      <td>{{item.type_rice_id}}</td>
+                      <td>{{item.amount}}</td>
+                    </tr>
+                  </template>
+                
+              </template>
+            </tbody>
+        </table>
         </div>
-        <!-- </paper-material> -->
         <button on-click="test">ss</button>
       </grid>
     <panel>
         <div class="left">
-          <!--<gl-tabs>
-            <items>
-                <list data="detail" label="การกำหนดปีโควตา"></list>
-            </items>
-            <section-content data="detail">
-              <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <div name="addRedRegExporter"><quota-insert></quota-insert></div>
-                <div name="detailRegExporter"><quota-insert></quota-insert></div>
-              </iron-pages>
-            </section-content>
-          </gl-tabs>-->
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                 <div name="addRedRegExporter"><quota-insert></quota-insert></div>
                 <div name="detailRegExporter"><quota-update data="{{dataSelect}}"></quota-update></div>
@@ -144,35 +145,14 @@
                 gl.behavior.core,
                 gl.behavior.locales
             ],
+            observers:['_yearChanged(selectYear)'],
             properties: {
                 layerContent: {
                     type: String,
                     value: "detailRegExporter"
                 },
-                dataRegistion: {
-                    type: Object,
-                    notify: true,
-                    value:
-                    [
-                      {
-                        id:1,
-                        // quotaYear:"2558",
-                        riceType:"ข้าวขาว",
-                        shipment1:"20000.00",
-                        shipment2:"10000.00",
-                        shipment3:"10000.00",
-                        sumQuota:"40000.00"
-                      },
-                      {
-                        id:2,
-                        // quotaYear:"2558",
-                        riceType:"ข้าวหัก",
-                        shipment1:"15000.00",
-                        shipment2:"-",
-                        shipment3:"15000.00",
-                        sumQuota:"30000.00"
-                      }
-                    ]
+                getData:{
+                  type: Object
                 },
                 result: {
                     type: Object,
@@ -188,15 +168,13 @@
                 // this.layoutMain = this.glQuery('layoutMain');
             },
             ready: function(){
-              this._getDb();
+              this._getYear();
+              //this._getDb();
             },
             _result:function () {
               // console.log(this.result);
             },
             nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
                 this.layerContent = e.detail.level;
                 console.log(this.layerContent);
                 if (this.layerContent === 'third') {
@@ -204,14 +182,15 @@
                 } else {
                     this.vesselPage = 0;
                 }
+
                 this.dataSelect = e.detail.data;
-                //console.log(this.dataSelect);
+
             },
             _toggleDrawer: function(e) {
               this.layerContent = 'addRedRegExporter';
               this.glQuery('contentPanel').changDrawer();
               //this.layerContent = e.target.id;
-              // console.log(e.target.id);
+              //console.log(e.target.id);
             },
             test:function(){
               this.glQuery('layoutEu').openToastLoading();
@@ -224,26 +203,45 @@
                   this.glQuery('contentPanel').changDrawer();
                 }.bind(this));
 
-                
+      
               }.bind(this))
               .catch(function (error) {
                 //this.glQuery('toastLoading').hide();
-                console.log(error);
+                //console.log(error);
               });
             },
-            _getDb:function(){
-              axios.get('./eu/quota/')
+            _getDb:function(year){
+              console.log(year);
+              axios.get('./eu/quota?id='+year)
               .then((response)=>{
-                console.log("success");
-                this.dataYear = response.data;
-                //console.log(response.data);
-                //console.log(this.dataYear);
+                console.log("success!!");
+                console.log(response.data);
               })
               .catch((error)=>{
                 console.log("error");
                 console.log(error);
               });
-            }  
+            },
+            _getYear:function(){
+              axios.get('./eu/quota/')
+              .then((response)=>{
+                console.log("success");
+                console.log(response.data);
+                this.getData = response.data;
+                
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+              });
+               // console.log();
+            },
+            _yearChanged:function(val){
+              this._getDb(val);
+            },
+            _sendData:function(e){
+              console.log(e.currentTarget.data);
+            }
         });
     </script>
 </dom-module>
