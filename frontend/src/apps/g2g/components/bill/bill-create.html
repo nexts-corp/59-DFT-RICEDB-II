@@ -22,7 +22,7 @@
     text-align: right;
     /*color: red;*/
   }
-  .table-foor:{
+  .table-foor > tr > td {
     padding: 15px;
   }
   </style>
@@ -223,7 +223,7 @@
                         <br>
                         (US.DOLLARS [[priceWords]] ONLY)
                         <br> UNDER THE SELLS AND PURCHASE CONTRACT NO.[[data.contract_name]] BETWEEN [[data.buyer_fullname]]
-                      AND DEPARTMENT OF FOREIGN TRADE, MINISTRY OF COMMERCE OF THAILAND DATED [[data.contract_date]]. <br>
+                      AND DEPARTMENT OF FOREIGN TRADE, MINISTRY OF COMMERCE OF THAILAND DATED [[contractDate]]. <br>
                       PAYMENT BY T/T TO : KRUNG THAI BANK PUBLIC COMPANY LIMITED, BANGKOK, THAILAND <br>
                       SWIFT CODE : KRTHTHBK <br>
                       NAME ACCOUNT: DEPARTMENT OF FOREIGN TRADE <br>
@@ -236,44 +236,7 @@
               </table>
        </gl-grid-col>
       </gl-grid-row>
-        <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="RED COFCO" label="Marks & Nos."></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="20,000  BAGS" label="Quantity"></gl-form-input>
-          </gl-grid-col>
-        </gl-grid-row>
 
-        <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-            <gl-form-textarea rows="2" value="" placeholder="ใส่รายละเอียด" label="Descriptions" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
-          </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="1,000.00  METRIC" label="NET WEIGHT :"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="1,003.200  METRIC TONS" label="GROSS WEIGHT :"></gl-form-input>
-          </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="3.200  METRIC" label="TARE :"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="USD  392,000" label="Amount"></gl-form-input>
-          </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-            <gl-form-textarea rows="2" value="" label="(US.DOLLARS THREE HUNDRED AND NINETEY - TWO THOUSAND ONLY)" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
-          </gl-grid-col>
-        </gl-grid-row>
 
       <gl-form-panel-footer set-padding="20px 0px 0px 20px">
             <paper-button class="gl-btn-primary" raised>สร้าง</paper-button>
@@ -312,6 +275,16 @@
       checkPrice:function (data) {
         console.log(data.base.amount_usd);
         this.toWords(data.base.amount_usd);
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"
+                          ];
+        // console.log(Number(this.data.contract_date.substring(5, 7))-1);
+        var monthNum= Number(this.data.contract_date.substring(5, 7))-1;
+        console.log(monthNames[monthNum]);
+        // console.log(this.data.contract_date.substring(0, 4));
+        // console.log(this.data.contract_date.substring(8, 10));
+        // console.log(this.data.contract_date.substring(8, 10),monthNames[monthNum],this.data.contract_date.substring(0, 4));
+        this.contractDate = this.data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+this.data.contract_date.substring(0, 4);
       },
       toWords: function(num) {
           // Convert numbers to words
