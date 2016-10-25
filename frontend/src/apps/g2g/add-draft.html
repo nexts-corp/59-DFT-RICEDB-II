@@ -35,16 +35,16 @@
         <!-- <bill-create></bill-create> -->
         <iron-pages selected="{{selected}}">
           <div>
-            <draft-period data="{{draft}}" on-shipment="checkshipment"></draft-period>
+            <draft-period data="{{draft}}" on-shipment="getshipment"></draft-period>
 
           </div>
           <div>
-            <list-draft data="{{blShipment}}" datainvoice="{{dataInvoice}}" dataround="{{dataRound}}">
+            <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
               <items type="primary">
                 <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
               </items>
               <items type="secondary">
-                <list item="invoiceNo" label="Invoice No." width="flex"></list>
+                <list item="invoice_no" label="Invoice No." width="flex"></list>
               </items>
               <items type="third">
                 <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
@@ -62,7 +62,7 @@
                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                   <bill-create name="primary" data="{{blDetail}}"></bill-create>
                   <!-- <invoice-save></invoice-save> -->
-                  <invoice-page name="secondary" data="{{dataSelect}}"></invoice-page>
+                  <invoice-page name="secondary" data="{{InDetail}}"></invoice-page>
                 </iron-pages>
               </section-content>
               <section-content name="file">
@@ -230,10 +230,18 @@
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
-            checkshipment:function (e) {
+            getshipment:function (e) {
               // console.log("check",e.detail);
               this.getDb('./g2g/bl/shipment/id/'+e.detail,(data)=>{
                 this.blShipment = data;
+                // console.log(this.blShipment);
+              });
+              this.getinvoice(e);
+            },
+            getinvoice:function (e) {
+              // console.log("check",e.detail);
+              this.getDb('./g2g/invoice/shipment/id/'+e.detail,(data)=>{
+                this.invoiceShipment = data;
                 // console.log(this.blShipment);
               });
             },
@@ -245,6 +253,13 @@
               this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
                 this.blDetail = data;
                 // console.log(this.blDetail);
+              });
+            },
+            getInvoiceDetail:function (invoice_id) {
+              // console.log(blShipment);
+              this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
+                this.InDetail = data;
+                console.log(this.InDetail);
               });
             },
             getDb:function (url,callback) {
@@ -273,6 +288,11 @@
                 if (typeof this.dataSelect.bl_no !== 'undefined' ) {
                     this.getBlNo(this.dataSelect.bl_no);
                 }
+                if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
+                  console.log(11);
+                    this.getInvoiceDetail(this.dataSelect.invoice_id);
+                }
+                // console.log(this.dataSelect.invoice_id);
             }
         });
     </script>

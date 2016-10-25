@@ -29,17 +29,16 @@
   <template>
 
     <gl-form-panel-body>
-      {{data.quantity}}
-      [[data.bl_no]]
+
       <div class="text">NEW COMMERCIAL INOVICE</div>
 
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" auto-validate required value="C123456"></gl-form-input>
+            <gl-form-input label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" auto-validate required value="{{mkInvoce.invoice_no}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,0],[500,8]]"></gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <vaadin-date-picker id="invoiceData" label="Date" value="2015-09-21"></vaadin-date-picker>
+            <vaadin-date-picker id="invoiceData" label="Date" value="{{mkInvoce.invoice_date}}"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
 
@@ -57,19 +56,19 @@
             <gl-form-label-input value="[[data.load_port_name]],[[data.load_country_name_en]]" label="Port of loading :"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="[[data.deli_port_name]],[[data.deli_country_fullname_en]]" label="Port of Discharge :"></gl-form-input>
+            <gl-form-label-textarea value="[[data.deli_port_name]],[[data.deli_country_fullname_en]]" label="Port of Discharge :"></gl-form-label-textarea>
           </gl-grid-col>
         </gl-grid-row>
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-label-input value="[[data.dest_port_name]],[[data.dest_country_fullname_en]]" label="Place of Delivery :"></gl-form-input>
+            <gl-form-label-textarea value="[[data.dest_port_name]],[[data.dest_country_fullname_en]]" label="Place of Delivery :"></gl-form-label-textarea>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-label-input value="[[data.bl_no]]" label="Bill of Lading Number :"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker label="Dated" value="2015-09-21"></vaadin-date-picker>
+            <vaadin-date-picker disabled label="Dated" value="2015-09-21"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
 
@@ -82,7 +81,7 @@
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
-            <gl-form-textarea rows="2" value="" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
+            <gl-form-textarea rows="2" value="{{mkInvoce.made_out_to}}" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
           </gl-grid-col>
         </gl-grid-row>
           <br>
@@ -106,7 +105,7 @@
                             [[item.type_rice_desc_en]] CURRENT NEW CROP,DOUBLE POLISHED AND SORTEXED QUALITY.<br>
                             PACKING: INSTRONG EXPORT SEA WORTHY NEWSINGLE PP BAGS OF [[item.package_kg_per_bag]] KILOGRAMS NET WITH MINIMUM TARE WEIGHT TO BE AT [[item.package_weight_bag]] GRAM/BAG.
                             TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE OF CHARGE BY THE SELLER ALONG WITH THE SHIPMENT. <br>
-                            PRICE : USD [[item.price_per_ton]] PER METRIC TON, [[DATA.inct_id]] ชื่อม fob เต็ม BANGKOK  OR [[data.load_port_name]] AT BUYER'S OPTION.<br>
+                            PRICE : USD [[item.price_per_ton]] PER METRIC TON, [[data.inct_id]] [[data.inct_name]] BANGKOK  OR [[data.load_port_name]] AT BUYER'S OPTION.<br>
                             <gl-grid-row width="{{getWidth}}">
                               <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,1]]">
                               </gl-grid-col>
@@ -239,7 +238,7 @@
 
 
       <gl-form-panel-footer set-padding="20px 0px 0px 20px">
-            <paper-button class="gl-btn-primary" raised>สร้าง</paper-button>
+            <paper-button class="gl-btn-primary" raised on-tap="btnCreateInvoice">สร้าง</paper-button>
       </gl-form-panel-footer>
 
     </gl-form-panel-body>
@@ -255,36 +254,65 @@
         },
         cl_quality:{
           type: String,
+        },
+        mkInvoce:{
+          type: Object,
+          value:{}
         }
       },
       observers:['check(data)'],
       check:function (data) {
-        console.log(data);
-        console.log(data.cl_quality.toUpperCase());
+        // console.log(data);
+        // console.log(data.cl_quality.toUpperCase());
         this.cl_quality = data.cl_quality.toUpperCase();
-        var sss = data.cl_type_rice;
-        sss.map((el)=>{
-                  // console.log(typeof el.type_rice_desc_en);
-                  if (typeof el.type_rice_desc_en !== 'undefined') {
-                    this.nameRice += el.type_rice_desc_en+', ';
-                  }
+        var rice = data.cl_type_rice;
+        // console.log(this.nameRice.length);
+        if (this.nameRice.length == 0){
+          rice.map((el)=>{
+                    // console.log(typeof el.type_rice_desc_en);
+                    if (typeof el.type_rice_desc_en !== 'undefined') {
+                      this.nameRice += el.type_rice_desc_en+', ';
+                    }
 
-              })
+                })
+        }
+
         // console.log(this.nameRice);
       },
       checkPrice:function (data) {
-        console.log(data.base.amount_usd);
+        // console.log(data.base.amount_usd);
         this.toWords(data.base.amount_usd);
         var monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"
                           ];
         // console.log(Number(this.data.contract_date.substring(5, 7))-1);
         var monthNum= Number(this.data.contract_date.substring(5, 7))-1;
-        console.log(monthNames[monthNum]);
+        // console.log(monthNames[monthNum]);
         // console.log(this.data.contract_date.substring(0, 4));
         // console.log(this.data.contract_date.substring(8, 10));
         // console.log(this.data.contract_date.substring(8, 10),monthNames[monthNum],this.data.contract_date.substring(0, 4));
         this.contractDate = this.data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+this.data.contract_date.substring(0, 4);
+      },
+      btnCreateInvoice:function () {
+        this.mkInvoce.bl_no= this.data.bl_no;
+        this.mkInvoce.invoice_date = new Date (this.mkInvoce.invoice_date)
+        // console.log(this.mkInvoce);
+        this.postDb(this.mkInvoce);
+      },
+      postDb:function (data) {
+        axios.post('./g2g/invoice/insert', data)
+                  .then(function (response) {
+                    console.log("success");
+                    console.log(response);
+                    console.log(data);
+                    // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
+
+                  }.bind(this))
+                  .catch(function (error) {
+                    console.log("error");
+                    console.log(error);
+                    console.log(data);
+                  })
       },
       toWords: function(num) {
           // Convert numbers to words
