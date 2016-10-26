@@ -61,8 +61,7 @@
               <section-content name="detail">
                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                   <bill-create name="primary" data="{{blDetail}}"></bill-create>
-                  <!-- <invoice-save></invoice-save> -->
-                  <invoice-page name="secondary" data="{{InDetail}}"></invoice-page>
+                  <invoice-page name="secondary" data="{{inDetail}}"></invoice-page>
                 </iron-pages>
               </section-content>
               <section-content name="file">
@@ -124,7 +123,10 @@
                 blShipment:{
                   type:Object,
                 },
-                InDetail:{
+                blDetail:{
+                  type:Object,
+                },
+                inDetail:{
                   type:Object,
                 },
                 dataRound: {
@@ -197,31 +199,32 @@
               this.selected = 1;
             },
             getBlNo:function (blShipment) {
-              // console.log(blShipment);
+              console.log(blShipment);
               this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
                 this.blDetail = data;
-                console.log(this.blDetail);
-                console.log(2222);
+                // console.log(this.blDetail);
+                // console.log(1111);
               });
             },
             getInvoiceDetail:function (invoice_id) {
-              console.log(invoice_id);
+              // console.log(invoice_id);
               this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
-                this.InDetail = data;
-                console.log(data);
-                console.log(11111);
+                this.inDetail = data;
+                //  console.log(this.inDetail);
               });
-              console.log("pass");
+              // console.log("pass");
             },
             getDb:function (url,callback) {
               // console.log(url);
               axios.get(url)
-                .then(function(response){
+                .then((response)=>{
+                  // console.log(response);
                   callback(response.data);
 
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
+                })
+                .catch((error)=> {
+                  console.log(error);
+                });
                 // console.log(1);
             },
             nxGridTap: function(e) {
