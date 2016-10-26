@@ -80,21 +80,13 @@ Polymer({
     },
   },
   observers:['check(data)'],
-  ready: function() {
-    // this.$$('#removePen').removeAttribute("hidden");
-    // this.ishidden = !this.ishidden;
-  },
   check:function (data) {
     var rice = data.cl_type_rice;
     // console.log(rice);
     // console.log(this.nameRice.length);
     if (this.nameRice.length == 0) {
       rice.map((el)=>{
-        // console.log(typeof el.type_rice_desc_en !== 'undefined');
-        // console.log(el.type_rice_desc_en);
-          // if (typeof el.type_rice_desc_en !== 'undefined') {
             this.nameRice += el.type_rice_desc_en+', ';
-          // }
       });
     }
   // console.log(this.nameRice);
@@ -127,7 +119,7 @@ Polymer({
     this.putDb(this.saveData);
   },
   deleteChange:function () {
-    console.log(this.data.invoice_id);
+    // console.log(this.data.invoice_id);
     this.deleteDb(this.data.invoice_id)
   },
   putDb:function (data) {
@@ -141,7 +133,6 @@ Polymer({
                 // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
               })
               .catch((error)=> {
-                console.log("error");
                 console.log(error);
               })
   },
@@ -154,8 +145,7 @@ Polymer({
                 this.glQuery('adddraft').getInvoice(this.data.shm_id,true,'delete');
               })
               .catch((error)=> {
-                console.log("error");
-                // console.log(error);
+                console.log(error);
               })
   },
 });
