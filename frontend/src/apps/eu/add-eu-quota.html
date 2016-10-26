@@ -60,6 +60,12 @@
         .container{
           margin-left: 30px;
         }
+        th{
+          text-align:center;
+        }
+        td{
+           text-align:center;
+        }
     </style>
     <template>
 
@@ -79,9 +85,10 @@
             <div class="container flex-equal-justified">
               <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
                   <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
-                    <template is="dom-repeat" items="{{getData}}">
+                    <!--<template is="dom-repeat" items="{{getData}}">
                       <paper-item year="{{item.id}}">{{item.id}}</paper-item>
-                    </template>
+                    </template>-->
+                      <paper-item year="{{getYear.id}}">{{getYear.id}}</paper-item>
                   </paper-listbox>
               </gl-form-dropdown-menu>
             </div>
@@ -99,27 +106,17 @@
           <table class="gl-table-default">
             <thead>
                 <tr>
-                  <!--<template is="dom-repeat" items="{{getData}}">
-                    <template is="dom-repeat" items="{{item.type_rice}}">
-                      <th>ประเภทข้าว</th>
-                      <th>ยอดรวม (งวด)</th>
-                    </template>
-                  </template>-->
                   <th>ประเภทข้าว</th>
                   <th>ยอดรวม (งวด) </th>
                 </tr>
             </thead>
             <tbody>
-              <template is="dom-repeat" items="{{getData}}">
-               
-                  <template is="dom-repeat" items="{{item.type_rice}}">
-                    <tr id="{{index}}" on-tap="_sendData" data="[[item]]">
-                      <td>{{item.type_rice_id}}</td>
+                  <template is="dom-repeat" items="{{getData.type_rice}}">
+                    <tr on-tap="_toggleDrawer" id="detailRegExporter" data="[[item]]">
+                      <td>{{item.type_rice_name_th}}</td>
                       <td>{{item.amount}}</td>
                     </tr>
                   </template>
-                
-              </template>
             </tbody>
         </table>
         </div>
@@ -129,7 +126,7 @@
         <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                 <div name="addRedRegExporter"><quota-insert></quota-insert></div>
-                <div name="detailRegExporter"><quota-update data="{{dataSelect}}"></quota-update></div>
+                <div name="detailRegExporter"><quota-update data="{{sendData}}" data-year="{{sendYear}}"></quota-update></div>
               </iron-pages>
         </div>
     </panel>
@@ -154,6 +151,15 @@
                 getData:{
                   type: Object
                 },
+                sendData:{
+                  type: Object
+                },
+                sendYear:{
+                  type: Object
+                },
+                getYear:{
+                  type: Object
+                },
                 result: {
                     type: Object,
                     observer: '_result'
@@ -168,8 +174,15 @@
                 // this.layoutMain = this.glQuery('layoutMain');
             },
             ready: function(){
-              this._getYear();
-              //this._getDb();
+              axios.get('./eu/quota?id=2558')
+              .then((response)=>{
+                console.log("success");
+                this.getYear = response.data;
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+              });
             },
             _result:function () {
               // console.log(this.result);
@@ -189,8 +202,10 @@
             _toggleDrawer: function(e) {
               this.layerContent = 'addRedRegExporter';
               this.glQuery('contentPanel').changDrawer();
-              //this.layerContent = e.target.id;
-              //console.log(e.target.id);
+              this.layerContent = e.currentTarget.id;
+              this.sendData = e.currentTarget.data;
+              //console.log(e.currentTarget.id);
+              //console.log(this.sendData);
             },
             test:function(){
               this.glQuery('layoutEu').openToastLoading();
@@ -216,31 +231,19 @@
               .then((response)=>{
                 console.log("success!!");
                 console.log(response.data);
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error);
-              });
-            },
-            _getYear:function(){
-              axios.get('./eu/quota/')
-              .then((response)=>{
-                console.log("success");
-                console.log(response.data);
                 this.getData = response.data;
-                
               })
               .catch((error)=>{
                 console.log("error");
                 console.log(error);
               });
-               // console.log();
             },
             _yearChanged:function(val){
               this._getDb(val);
+              this.sendYear = val;
             },
             _sendData:function(e){
-              console.log(e.currentTarget.data);
+              //console.log(e.currentTarget.data);
             }
         });
     </script>
