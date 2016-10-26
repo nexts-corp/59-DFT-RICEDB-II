@@ -180,24 +180,30 @@
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
-            getshipment:function (e) {
+            getshipment:function (e,refresh,action) {
               // console.log("check",e.detail);
-              var id = e.detail;
+              var id;
+              if (typeof e === 'object') {
+                id = e.detail;
+              }else {
+                id = e;
+              }
+              // console.log(id);
               this.getDb('./g2g/bl/shipment/id/'+id,(data)=>{
                 this.blShipment = data;
                 // console.log(this.blShipment);
-              });
-              this.getInvoice(id);
+              },refresh,action);
+              this.getInvoice(id,refresh,action);
             },
-            testss:function (data) {
-              console.log('เข้าโวยยย',data);
-            },
-            getInvoice:function (id) {
-
+            getInvoice:function (id,refresh,action) {
+              console.log(id,refresh,action);
               this.getDb('./g2g/invoice/shipment/id/'+id,(data)=>{
                 this.invoiceShipment = data;
                 // console.log(this.blShipment);
-              });
+              },refresh,action);
+            },
+            testss:function (data) {
+              console.log('เข้าโวยยย',data);
             },
             cheangpage:function (blShipment) {
               this.selected = 1;
@@ -224,12 +230,11 @@
               // console.log(url);
               axios.get(url)
                 .then((response)=>{
-                  console.log(refresh," ",action);
+                  // console.log(refresh," ",action);
                     callback(response.data);
                     // console.log(action);
                       switch (action) {
                           case 'get':
-                          console.log(111);
                                     this.glQuery('layoutMain').closeToastLoading(()=>{
                                       this.checkRefresh(refresh);
                                     });
@@ -250,7 +255,6 @@
                 .catch((error)=> {
                   console.log(error);
                 });
-                // console.log(1);
             },
             checkRefresh:function (refresh) {
               if (refresh == true) {
@@ -269,7 +273,8 @@
                 }
                 // console.log(this.dataSelect);
                 this.dataSelect = e.detail.data;
-                if (typeof this.dataSelect.bl_no !== 'undefined' && typeof this.dataSelect.invoice_id === 'undefined' ) {
+                if (typeof this.dataSelect.bl_no !== 'undefined' &&
+                    typeof this.dataSelect.invoice_id === 'undefined' ) {
                   // console.log('bl_no');
                     this.getBlNo(this.dataSelect.bl_no);
                 }

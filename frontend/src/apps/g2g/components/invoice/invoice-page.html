@@ -7,14 +7,29 @@
     text-align: center;
     font-size: var(--font-size-large);
   }
-
+  paper-icon-button.pink {
+  margin: 5px 5px 5px 5px;
+ }
+ paper-icon-button.pink:hover {
+   background-color: var(--paper-grey-200);
+   border-radius: 5px;
+   box-shadow: inset 0 0 3px 3px rgba(0,0,0,.2);
+   /*background-color: var(--paper-pink-500);
+   color: white;*/
+ }
 </style>
 <template>
 
 
-  <div id="removePen" hidden class="horizontal end-justified layout">
-    <paper-icon-button id="editInvoice" icon="create" on-tap="editChange"></paper-icon-button>
+  <div id="removePen" hidden$="{{compute(ishidden)}}" class="horizontal end-justified layout" >
+    <div class="dd" hidden$="{{compute(ishidden)}}">
+        <paper-icon-button id="editInvoice" class="pink" icon="create" on-tap="editChange" ></paper-icon-button>
+    </div>
+    <paper-icon-button id="deleteInvoice" class="pink" icon="delete" on-tap="deleteChange"></paper-icon-button>
   </div>
+  <paper-tooltip for="editInvoice" position="bottom" animation-delay="0">Edit Invoice</paper-tooltip>
+  <paper-tooltip for="deleteInvoice" position="bottom" animation-delay="0">Delete Invoice</paper-tooltip>
+  <hr>
   <!-- <gl-form-panel set-border="0px"> -->
     <div class="text">NEW COMMERCIAL INOVICE</div>
   <gl-form-panel-head label="" set-padding="10px" set-border="1px">
@@ -22,9 +37,7 @@
     <iron-pages selected="{{pages}}">
         <invoice-save data="{{data}}" name-rice="[[nameRice]]"></invoice-save>
         <invoice-edit data="{{data}}" name-rice="[[nameRice]]"></invoice-edit>
-
-
-      </iron-pages>
+    </iron-pages>
 
 
 
@@ -51,6 +64,10 @@ Polymer({
       type: String,
       value:''
     },
+    ishidden: {
+      type: Boolean,
+      value: false
+    },
     saveData:{
       type:Object,
       value:{
@@ -64,7 +81,8 @@ Polymer({
   },
   observers:['check(data)'],
   ready: function() {
-    this.$$('#removePen').removeAttribute("hidden");
+    // this.$$('#removePen').removeAttribute("hidden");
+    // this.ishidden = !this.ishidden;
   },
   check:function (data) {
     var rice = data.cl_type_rice;
@@ -82,16 +100,23 @@ Polymer({
   // console.log(this.nameRice);
     // this.mockUpdata = data;
   },
+  compute: function() {
+    // console.log("computing...");
+    // console.log(this.ishidden);
+    return this.ishidden;
+  },
   editChange:function(e){
+     this.ishidden = !this.ishidden;
     this.pages = 1;
     this.$$('#removeButtom').removeAttribute("hidden");
-    this.$$('#removePen').setAttribute("hidden", "hidden");
+    // this.$$('#removePen').setAttribute("hidden", "hidden");
   },
   saveEdit:function(e) {
+     this.ishidden = !this.ishidden;
     // console.log(this.data);
     this.pages = 0;
     this.$$('#removeButtom').setAttribute("hidden", "hidden");
-    this.$$('#removePen').removeAttribute("hidden");
+    // this.$$('#removePen').removeAttribute("hidden");
 
     this.saveData.id = this.data.invoice_id;
     this.saveData.bl_no = this.data.bl_no;
@@ -101,19 +126,36 @@ Polymer({
     // console.log(this.saveData);
     this.putDb(this.saveData);
   },
+  deleteChange:function () {
+    console.log(this.data.invoice_id);
+    this.deleteDb(this.data.invoice_id)
+  },
   putDb:function (data) {
     axios.put('./g2g/invoice/update', data)
-              .then(function (response) {
+              .then((response)=> {
                 console.log("success");
                 console.log(response);
                 console.log(data);
-                this.glQuery('adddraft').getInvoice(this.data.shm_id);
+                this.glQuery('adddraft').getInvoice(this.data.shm_id,false,'put');
                 // this.clickCancel();
                 // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-              }.bind(this))
-              .catch(function (error) {
+              })
+              .catch((error)=> {
                 console.log("error");
                 console.log(error);
+              })
+  },
+  deleteDb:function (dataId) {
+    axios.delete('./g2g/invoice/delete/id/'+dataId)
+              .then((response)=> {
+                console.log("success");
+                console.log(response);
+                console.log(dataId);
+                this.glQuery('adddraft').getInvoice(this.data.shm_id,true,'delete');
+              })
+              .catch((error)=> {
+                console.log("error");
+                // console.log(error);
               })
   },
 });
