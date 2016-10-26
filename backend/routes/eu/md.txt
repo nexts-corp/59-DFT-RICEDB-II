@@ -1,42 +1,95 @@
-r.db('eu').table('quota').merge(function(row){
-  return {type_rice:row('type_rice').merge(function(type_rice){
-    return (r.db('eu').table('type_rice').get(type_rice('type_rice_id')).without('id'))
-  })}
-})
-
-
-r.db('eu').table('quota').get("2558").merge(function(row){
-  return {type_rice:row('type_rice').filter({type_rice_id:"4b23b3af-e292-4ac7-8154-c51363cc5ea7"}).merge(function(type_rice){
-    return (r.db('eu').table('type_rice').get(type_rice('type_rice_id')).without('id'))
-  })}
-})
-
-
-
-r.db('eu').table('quota').get("2558").do(function(x){
+r.db('eu').table('quota').get("2559").do(function(x){
   return r.branch(
    x.eq(null) ,
-    null,
     
-    
+    r.db('eu').table('quota').insert(
+      
+      {      "id":  "2559" ,
+"type_rice": [
+{
+"amount": 200 ,
+"period": [
+{
+"percent": 50 ,
+"quantity": 100
+} ,
+{
+"percent": 50 ,
+"quantity": 100
+}
+] ,
+"type_rice_id":  "4b23b3af-e292-4ac7-8154-c51363cc5ea7"
+}]}
+      
+    )
+    ,
+
     
  r.db('eu').table('quota').filter(
   function(row){
-    return row('id').eq('2558').and(
+    return row('id').eq('2559').and(
       row('type_rice').contains(
         function(type_rice){
-          return type_rice('type_rice_id').eq('4b23b3af-e292-4ac7-8154-c51363cc5ea7')
+          return type_rice('type_rice_id').eq('4b23b3af-e292-4ac7-8154-c51363cc5ea8')
         }
       )
   )}
-    ).do(function(y){
-      return "y"
+    ).coerceTo('array')
+    .do(function(y){
+      return r.branch(y.eq([]),
+   
+        
+        r.db('eu').table('quota').get('2559').update(function(z){
+          return {type_rice:z('type_rice').append(
+            
+            {
+"amount": 200 ,
+"period": [
+{
+"percent": 50 ,
+"quantity": 100
+} ,
+{
+"percent": 50 ,
+"quantity": 100
+}
+] ,
+"type_rice_id":  "4b23b3af-e292-4ac7-8154-c51363cc5ea8"
+}
+            
+            
+          )}
+        })
+        
+        ,{error:"type_rice exist"})
     })
-
     
     
   )
 });
 
 
-  r.db('eu').table('quota').do(function(x){return 's'})
+
+
+
+
+
+
+
+{
+	"id":"2558",
+	"type_rice":{
+		"amount":1234,
+		"period":[
+			{
+				"percent":1,
+				"quantity":4
+			},
+			{
+				"percent":2,
+				"quantity":3
+			}
+		],
+		"type_rice_id":"xxxx"
+	}
+}
