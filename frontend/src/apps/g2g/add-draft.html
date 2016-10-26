@@ -61,8 +61,7 @@
               <section-content name="detail">
                 <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                   <bill-create name="primary" data="{{blDetail}}"></bill-create>
-                  <!-- <invoice-save></invoice-save> -->
-                  <invoice-page name="secondary" data="{{InDetail}}"></invoice-page>
+                  <invoice-page name="secondary" data="{{inDetail}}"></invoice-page>
                 </iron-pages>
               </section-content>
               <section-content name="file">
@@ -124,7 +123,10 @@
                 blShipment:{
                   type:Object,
                 },
-                InDetail:{
+                blDetail:{
+                  type:Object,
+                },
+                inDetail:{
                   type:Object,
                 },
                 dataRound: {
@@ -180,15 +182,19 @@
             },
             getshipment:function (e) {
               // console.log("check",e.detail);
-              this.getDb('./g2g/bl/shipment/id/'+e.detail,(data)=>{
+              var id = e.detail;
+              this.getDb('./g2g/bl/shipment/id/'+id,(data)=>{
                 this.blShipment = data;
                 // console.log(this.blShipment);
               });
-              this.getinvoice(e);
+              this.getInvoice(id);
             },
-            getinvoice:function (e) {
-              // console.log("check",e.detail);
-              this.getDb('./g2g/invoice/shipment/id/'+e.detail,(data)=>{
+            testss:function (data) {
+              console.log('เข้าโวยยย',data);
+            },
+            getInvoice:function (id) {
+
+              this.getDb('./g2g/invoice/shipment/id/'+id,(data)=>{
                 this.invoiceShipment = data;
                 // console.log(this.blShipment);
               });
@@ -198,31 +204,58 @@
             },
             getBlNo:function (blShipment) {
               // console.log(blShipment);
+              this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
                 this.blDetail = data;
-                console.log(this.blDetail);
-                console.log(2222);
-              });
+                // console.log(this.blDetail);
+                // console.log(1111);
+              },false,'get');
             },
             getInvoiceDetail:function (invoice_id) {
-              console.log(invoice_id);
+              // console.log(invoice_id);
+              this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
-                this.InDetail = data;
-                console.log(data);
-                console.log(11111);
-              });
-              console.log("pass");
+                this.inDetail = data;
+                //  console.log(this.inDetail);
+              },false,'get');
+              // console.log("pass");
             },
-            getDb:function (url,callback) {
+            getDb:function (url,callback,refresh,action) {
               // console.log(url);
               axios.get(url)
-                .then(function(response){
-                  callback(response.data);
-
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
+                .then((response)=>{
+                  console.log(refresh," ",action);
+                    callback(response.data);
+                    // console.log(action);
+                      switch (action) {
+                          case 'get':
+                          console.log(111);
+                                    this.glQuery('layoutMain').closeToastLoading(()=>{
+                                      this.checkRefresh(refresh);
+                                    });
+                          break;
+                          // insert & updoate
+                          case 'put':
+                                    this.glQuery('layoutMain').closeToastSaveing(()=>{
+                                      this.checkRefresh(refresh);
+                                    });
+                          break;
+                          case 'delete':
+                                    this.glQuery('layoutMain').closeToastDeleteing(()=>{
+                                      this.checkRefresh(refresh);
+                                    });
+                          break;
+                      }
+                })
+                .catch((error)=> {
+                  console.log(error);
+                });
                 // console.log(1);
+            },
+            checkRefresh:function (refresh) {
+              if (refresh == true) {
+                this.glQuery('contentPanel').changDrawer();
+              }
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);

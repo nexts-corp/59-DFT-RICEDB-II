@@ -314,42 +314,31 @@
             getDb:function (url,callback,refresh,action) {
               // console.log(url);
               axios.get(url)
-                .then(function(response){
+                .then((response)=>{
                     callback(response.data);
                     // console.log(action);
                       switch (action) {
                           case 'get':
                                     this.glQuery('layoutMain').closeToastLoading(function(){
-                                      // if (refresh == true) {
-                                      //   this.glQuery('contentPanel').changDrawer();
-                                      // }
-                                      this.checkRefresh(refresh);
+                                    this.checkRefresh(refresh);
                                     }.bind(this));
                           break;
                           // insert & updoate
                           case 'put':
                                     this.glQuery('layoutMain').closeToastSaveing(function(){
-                                      // if (refresh == true) {
-                                      //   this.glQuery('contentPanel').changDrawer();
-                                      // }
                                       this.checkRefresh(refresh);
                                     }.bind(this));
                           break;
                           case 'delete':
                                     this.glQuery('layoutMain').closeToastDeleteing(function(){
-                                      // if (refresh == true) {
-                                      //   this.glQuery('contentPanel').changDrawer();
-                                      // }
                                       this.checkRefresh(refresh);
                                     }.bind(this));
                           break;
-
                       }
-
-
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
+                })
+                .catch((error)=> {
+                  console.log(error);
+                });
                 // console.log(1);
             },
             checkRefresh:function (refresh) {

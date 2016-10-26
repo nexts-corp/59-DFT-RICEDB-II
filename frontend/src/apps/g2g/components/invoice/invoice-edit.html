@@ -28,7 +28,7 @@
   </style>
   <template>
 <!-- <gl-form-panel-body> -->
-[[datas]]//{{data}}//[[test]]
+
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
         <gl-form-input label="NO :"  value="{{data.invoice_no}}"></gl-form-input>
@@ -240,19 +240,8 @@
       is: "invoice-edit",
       observers:['check(data)'],
       check:function (data) {
-        console.log(data);
+        // console.log(data);
         this.cl_quality = data.cl_quality.toUpperCase();
-        var rice = data.cl_type_rice;
-        // console.log(this.nameRice.length);
-        if (this.nameRice.length == 0){
-          rice.map((el)=>{
-                    // console.log(typeof el.type_rice_desc_en);
-                    if (typeof el.type_rice_desc_en !== 'undefined') {
-                      this.nameRice += el.type_rice_desc_en+', ';
-                    }
-
-                })
-        }
       },
       checkPrice:function (data) {
         // console.log(data.base.amount_usd);

@@ -19,16 +19,17 @@
     <div class="text">NEW COMMERCIAL INOVICE</div>
   <gl-form-panel-head label="" set-padding="10px" set-border="1px">
   </gl-form-panel-head>
-    [[test]]
-      <iron-pages selected="{{pages}}">
-        <invoice-save data="{{data}}"  test="[[test]]" datas="{{mockUpdata}}"></invoice-save>
-        <invoice-edit data="{{data}}" test="[[test]]" datas="{{mockUpdata}}"></invoice-edit>
+    <iron-pages selected="{{pages}}">
+        <invoice-save data="{{data}}" name-rice="[[nameRice]]"></invoice-save>
+        <invoice-edit data="{{data}}" name-rice="[[nameRice]]"></invoice-edit>
+
+
       </iron-pages>
 
 
 
   <gl-form-panel-footer>
-    <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+    <paper-button id="removeButtom" class="gl-btn-success" on-tap="saveEdit" raised hidden>บันทึก</paper-button>
   </gl-form-panel-footer>
   <!-- </gl-form-panel> -->
 
@@ -37,7 +38,7 @@
 <script>
 Polymer({
   is: "invoice-page",
-  behaviors: [listEditBehavior],
+  behaviors: [listEditBehavior,  gl.behavior.core,],
   properties: {
     pages:{
       type:Number,
@@ -46,33 +47,75 @@ Polymer({
     data:{
       type:Object
     },
-    test:{
-      type:String,
-      value:'152d5d12ff'
+    nameRice: {
+      type: String,
+      value:''
     },
-    mockUpdata:{
-      type:Object
-    }
+    saveData:{
+      type:Object,
+      value:{
+              id:'',
+              bl_no:'',
+              invoice_date:'',
+              invoice_no:'',
+              made_out_to:'',
+            }
+    },
   },
-  observes:['check(data)'],
+  observers:['check(data)'],
   ready: function() {
     this.$$('#removePen').removeAttribute("hidden");
   },
   check:function (data) {
-    console.log(data);
-    console.log(1212);
-    this.mockUpdata = data;
+    var rice = data.cl_type_rice;
+    // console.log(rice);
+    // console.log(this.nameRice.length);
+    if (this.nameRice.length == 0) {
+      rice.map((el)=>{
+        // console.log(typeof el.type_rice_desc_en !== 'undefined');
+        // console.log(el.type_rice_desc_en);
+          // if (typeof el.type_rice_desc_en !== 'undefined') {
+            this.nameRice += el.type_rice_desc_en+', ';
+          // }
+      });
+    }
+  // console.log(this.nameRice);
+    // this.mockUpdata = data;
   },
   editChange:function(e){
     this.pages = 1;
     this.$$('#removeButtom').removeAttribute("hidden");
     this.$$('#removePen').setAttribute("hidden", "hidden");
   },
-  save:function(e) {
+  saveEdit:function(e) {
+    // console.log(this.data);
     this.pages = 0;
     this.$$('#removeButtom').setAttribute("hidden", "hidden");
     this.$$('#removePen').removeAttribute("hidden");
-  }
+
+    this.saveData.id = this.data.invoice_id;
+    this.saveData.bl_no = this.data.bl_no;
+    this.saveData.invoice_date =new Date(this.data.invoice_date);
+    this.saveData.invoice_no = this.data.invoice_no;
+    this.saveData.made_out_to = this.data.made_out_to;
+    // console.log(this.saveData);
+    this.putDb(this.saveData);
+  },
+  putDb:function (data) {
+    axios.put('./g2g/invoice/update', data)
+              .then(function (response) {
+                console.log("success");
+                console.log(response);
+                console.log(data);
+                this.glQuery('adddraft').getInvoice(this.data.shm_id);
+                // this.clickCancel();
+                // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
+              }.bind(this))
+              .catch(function (error) {
+                console.log("error");
+                console.log(error);
+              })
+  },
 });
 </script>
 </dom-module>
