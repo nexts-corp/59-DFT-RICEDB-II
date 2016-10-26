@@ -10,9 +10,8 @@
 
 </style>
 <template>
-  <div >
 
-  </div>
+
   <div id="removePen" hidden class="horizontal end-justified layout">
     <paper-icon-button id="editInvoice" icon="create" on-tap="editChange"></paper-icon-button>
   </div>
@@ -20,13 +19,12 @@
     <div class="text">NEW COMMERCIAL INOVICE</div>
   <gl-form-panel-head label="" set-padding="10px" set-border="1px">
   </gl-form-panel-head>
-  <gl-form-panel-body>
-    <iron-pages selected="{{pages}}">
 
-      <invoice-save data={{data}}></invoice-save>
-      <invoice-edit data={{data}}></invoice-edit>
-    </iron-pages>
-  </gl-form-panel-body>
+      <iron-pages selected="{{pages}}">
+        <invoice-save data={{data}}></invoice-save>
+        <invoice-edit data={{data}}></invoice-edit>
+      </iron-pages>
+
 
 
   <gl-form-panel-footer>
@@ -49,8 +47,12 @@ Polymer({
       type:Object
     }
   },
+  observes:['check(data)'],
   ready: function() {
     this.$$('#removePen').removeAttribute("hidden");
+  },
+  check:function (data) {
+    console.log(data);
   },
   editChange:function(e){
     this.pages = 1;
