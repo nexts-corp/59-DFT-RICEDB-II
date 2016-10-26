@@ -7,9 +7,25 @@ var db = require('../../db.js');
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 
+
+
+router.get(['/year'], function (req, res, next) {
+    console.log('dd');
+    db.query(function (conn) {
+        var statement = r.db('eu').table('quota').map(function(x){ return x('id') }).coerceTo('array');
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({error:"error"});
+            }
+        });
+    });
+});
+
+
 router.get(['/'], function (req, res, next) {
     db.query(function (conn) {
-        console.log(typeof req.query.id);
         var params = req.query;
         var statemant = r.db('eu').table('quota').get(params.id).merge(function (row) {
             return {
@@ -33,7 +49,6 @@ router.get(['/'], function (req, res, next) {
 
 
 router.post(['/'], function (req, res, next) {
-    console.log(req.body.type_rice);
     db.query(function (conn) {
         var statement = r.db('eu').table('quota').get(req.body.id).do(function (x) {
             return r.branch(
