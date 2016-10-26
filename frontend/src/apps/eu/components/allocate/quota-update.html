@@ -55,13 +55,13 @@
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-            <gl-form-input label="ปีโควต้า" auto-validate error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}" id="" name=""></gl-form-input>
+            <gl-form-input label="ปีโควต้า" auto-validate error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{dataYear}}" id="" name=""></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
              <gl-form-dropdown-menu label="ประเภทข้าว">
                 <paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
-                    <paper-item rice-type-id="0">ข้าวขาว</paper-item>
-                    <paper-item rice-type-id="1">ข้าวหัก</paper-item>
+                    <paper-item rice-type-id="4b23b3af-e292-4ac7-8154-c51363cc5ea7">ข้าวขาว</paper-item>
+                    <paper-item rice-type-id="513aa18a-e0d9-4408-9ec2-62fa271958e5">ข้าวหัก</paper-item>
                 </paper-listbox>
             </gl-form-dropdown-menu>
     
@@ -141,8 +141,10 @@
           }
         },
         year:{
-          type: String,
-          value: '2559'
+          type: String
+        },
+        amount:{
+          type: String
         },
         dataYear:{
           type: String
@@ -188,12 +190,16 @@
       },
       _saveData:function(){
         datas = {
-          id:parseInt(this.year),
-          period:this.Period,
-          type_rice_id:this.typeRice
+          id:this.dataYear,
+          type_rice:
+            {
+              amount:parseInt(this.sum),
+              period:this.Period,
+              type_rice_id:this.typeRice
+            }
         }
-        //console.log(datas);
-        axios.put('/eu/quota/edit',datas)
+        console.log(datas);
+      /*  axios.put('/eu/quota/edit',datas)
         .then((response)=>{
           console.log("success");
           console.log(response);
@@ -201,7 +207,7 @@
         .catch((error)=>{
           console.log("error");
           console.log(error);
-        });
+        });*/
       },
       testNum:function(ob,param){
           //console.log(typeof ob.value);
@@ -217,8 +223,12 @@
       },
       _getData:function(data){
         console.log(data);
-        this.year = data.id;
+        this.typeRice = data.type_rice_id;
+        this.sum = data.amount;
         this.Period = data.period;
+        //this.year = data.id;
+        /*this.year = data.id;
+        this.Period = data.period;*/
       }
       
 
