@@ -28,8 +28,7 @@
   </style>
   <template>
 
-      {{data}}
-
+<!-- <gl-form-panel-body> -->
 
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -235,14 +234,14 @@
               </table>
        </gl-grid-col>
       </gl-grid-row>
-<hr>
+
       <div  class="horizontal end-justified layout">
         <paper-button class="gl-btn-primary" raised>พิมพ์</paper-button>
       </div>
 
 
 
-
+<!-- </gl-form-panel-body>  -->
 
   </template>
   <script>
@@ -251,17 +250,6 @@
         observers:['check(data)'],
         check:function (data) {
           this.cl_quality = data.cl_quality.toUpperCase();
-          var rice = data.cl_type_rice;
-          // console.log(this.nameRice.length);
-          if (this.nameRice.length == 0){
-            rice.map((el)=>{
-                      // console.log(typeof el.type_rice_desc_en);
-                      if (typeof el.type_rice_desc_en !== 'undefined') {
-                        this.nameRice += el.type_rice_desc_en+', ';
-                      }
-
-                  })
-          }
         },
         checkPrice:function (data) {
           // console.log(data.base.amount_usd);

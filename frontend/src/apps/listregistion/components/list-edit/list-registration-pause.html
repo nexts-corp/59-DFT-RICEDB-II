@@ -39,7 +39,7 @@
     <content id="primary" select="items[type=primary]"></content>
    <!-- Bl -->
    <div class="button">
-     <paper-checkbox on-tap="checkbox"> เลือกทั้งหมด</paper-checkbox> <paper-button raised class="gl-btn-success" on-tap="_active">ยกเลิกการระงับ</paper-button>
+     <paper-checkbox checked={{selectDataAll}}> เลือกทั้งหมด</paper-checkbox> <paper-button raised class="gl-btn-success" on-tap="_active">ยกเลิกการระงับ</paper-button>
    </div>
    <div class="header layout horizontal">
      <template is="dom-repeat" items="{{config.primary}}">
@@ -53,7 +53,7 @@
     <template is="dom-repeat" as="itemPrimary" items="{{data}}">
       <paper-item on-tap="_getBind" level="detailRegExporter" data="{{itemPrimary}}">
         <div>
-            <paper-checkbox id=[[index]] name="pause" class="checkbox"></paper-checkbox>
+            <paper-checkbox name="pause" checked={{itemPrimary.check}} class="checkbox"></paper-checkbox>
         </div>
           <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
             <div class$="[[configPrimary.width]] text"  on-tap="_toggleDrawer">
@@ -72,63 +72,74 @@
             is: "list-registration-pause",
             behaviors: [listEditBehavior,gl.behavior.core],
             properties: {
-              data: {
-                type: Object
+              data:{
+                type: Array,
+                value: []
+              },
+              selectDataAll: {
+                type: Boolean,
+                value: false,
+                observer: '_changeselectDataAll'
               }
             },
-            checkbox:function (e) {
-               var i;
-              if(e.target.checked == true){
-                for(i=0;i< this.data.length; i++){
-                  Polymer.dom(this.root).querySelectorAll('.checkbox')[i].setAttribute('checked','checked');
-                }
-              }
-              else {
-                console.log('not select');
-                for(i=0;i< this.data.length; i++){
-                   Polymer.dom(this.root).querySelectorAll('.checkbox')[i].removeAttribute('checked');
-                }
-              }
-              // console.log(Polymer.dom(this.root).querySelectorAll('#checkbox'));
+            _changeselectDataAll:function (val) {
+              // console.log(this.data);
+              this.data.map((item,index)=>{
+                this.set('data.'+index+'.check',val);
+              });
             },
             _active: function(){
-              // console.log(this.dataSelect);
-              var datas = {
-                exporter_date_update: new Date,
-                exporter_date_approve:new Date,
-                exporter_no:this.dataSelect.exporter_no,
-                trader_id:this.dataSelect.trader_id,
-                seller_agent:this.dataSelect.seller_agent,
-                id : this.dataSelect.exporter_id
+              const check = (item)=>{
+                  return item.check == true;
               }
-              // console.log(datas);
+              // console.log(this.data.filter(check));
+              this.data.filter(check).map((datas)=>{
+                datas.id = datas.exporter_id;
+                datas.exporter_date_update = new Date;
+                datas.exporter_date_approve = new Date;
+                delete datas.exporter_id;
+                delete datas.country_fullname_en;
+                delete datas.country_id;
+                delete datas.country_name_en;
+                delete datas.country_name_th;
+                delete datas.exporter_active;
+                delete datas.exporter_status;
+                delete datas.exporter_status_name;
+                delete datas.seller_address_en;
+                delete datas.seller_address_th;
+                delete datas.seller_id;
+                delete datas.seller_email;
+                delete datas.seller_fax;
+                delete datas.seller_name_en;
+                delete datas.seller_name_th;
+                delete datas.seller_phone;
+                delete datas.seller_tax_id;
+                delete datas.trader_date_approve;
+                delete datas.trader_date_expire;
+                delete datas.trader_distric;
+                delete datas.trader_name;
+                delete datas.trader_no;
+                delete datas.trader_office;
+                delete datas.trader_province;
+                delete datas.type_lic_fullname;
+                delete datas.type_lic_id;
+                delete datas.type_lic_name;
+                delete datas.check;
+                // console.log(datas);
+                this.updateExporter(datas);
+              });
+            },
+            updateExporter:function (datas) {
               axios.put('./external/exporter/update', datas)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                          this.glQuery('addContract').getChange();
-                          this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('pauseExporter').getExporters();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
                           console.log(error);
                         })
-            },
-            getDb: function(url, callback) {
-                // console.log(url);
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-                // console.log(1);
-            },
-            attached: function() {
-                this.exporter_id = this.exporter_id || this.$.exporter_id;
-                // console.log(this.exporter_id);
-                this.getDb('./external/exporter/?exporter_active=false', (data) => {
-                    console.log(data);
-                });
             }
         });
     </script>

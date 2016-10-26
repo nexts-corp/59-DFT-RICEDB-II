@@ -51,6 +51,7 @@
     </header>
     <gl-form-panel set-padding = "0px 0px 20px 0px">
       <div class="title">รายละเอียดการจัดสรรโควตา</div>
+      insert
       <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
@@ -60,8 +61,8 @@
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
              <gl-form-dropdown-menu label="ประเภทข้าว">
                 <paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
-                    <paper-item rice-type-id="0">ข้าวขาว</paper-item>
-                    <paper-item rice-type-id="1">ข้าวหัก</paper-item>
+                    <paper-item rice-type-id="4b23b3af-e292-4ac7-8154-c51363cc5ea7">ข้าวขาว</paper-item>
+                    <paper-item rice-type-id="513aa18a-e0d9-4408-9ec2-62fa271958e5">ข้าวหัก</paper-item>
                 </paper-listbox>
             </gl-form-dropdown-menu>
     
@@ -156,7 +157,7 @@
         data:{
           type: Object,
           observer: '_getData'
-        }
+        },
        },
        getIndex:function(index){
          return parseInt(index)+1;
@@ -188,11 +189,15 @@
       },
       _saveData:function(){
         datas = {
-          id:parseInt(this.year),
-          period:this.Period,
-          type_rice_id:this.typeRice
+          id:this.year,
+          type_rice:
+            {
+              amount:parseInt(this.sum),
+              period:this.Period,
+              type_rice_id:this.typeRice
+            }
         }
-        //console.log(datas);
+        console.log(datas);
         axios.post('/eu/quota/insert',datas)
         .then((response)=>{
           console.log("success");

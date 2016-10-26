@@ -247,6 +247,9 @@
   <script>
     Polymer({
       is: "bill-create",
+      behaviors: [
+          gl.behavior.core,
+      ],
       properties: {
         nameRice: {
           type: String,
@@ -273,11 +276,9 @@
                     if (typeof el.type_rice_desc_en !== 'undefined') {
                       this.nameRice += el.type_rice_desc_en+', ';
                     }
-
-                })
+          })
         }
 
-        // console.log(this.nameRice);
       },
       checkPrice:function (data) {
         // console.log(data.base.amount_usd);
@@ -295,20 +296,24 @@
       },
       btnCreateInvoice:function () {
         this.mkInvoce.bl_no= this.data.bl_no;
-        this.mkInvoce.invoice_date = new Date (this.mkInvoce.invoice_date)
-        // console.log(this.mkInvoce);
+        this.mkInvoce.invoice_date = new Date (this.mkInvoce.invoice_date);
+        console.log(this.data.shm_id);
+        this.glQuery('layoutMain').openToastSaveing();
+        console.log(this.mkInvoce);
         this.postDb(this.mkInvoce);
       },
       postDb:function (data) {
         axios.post('./g2g/invoice/insert', data)
-                  .then(function (response) {
+                  .then ((response)=> {
                     console.log("success");
                     console.log(response);
                     console.log(data);
+                    console.log();
+                    this.glQuery('adddraft').getshipment(this.data.shm_id,true,'put');
                     // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
 
-                  }.bind(this))
-                  .catch(function (error) {
+                  })
+                  .catch((error)=> {
                     console.log("error");
                     console.log(error);
                     console.log(data);

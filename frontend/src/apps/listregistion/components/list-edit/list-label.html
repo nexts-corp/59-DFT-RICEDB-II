@@ -3,7 +3,7 @@
   </style>
   <template>
     <template is="dom-repeat" items="[[result]]">
-      [[item]] &nbsp;&nbsp;&nbsp;
+      <p>[[item]]</p>
     </template>
   </template>
   <script>
@@ -17,8 +17,10 @@
       _itemChanged:function(){
         var result = [];
         if(Array.isArray(this.item[this.config.item[0]])){
-          this.item[this.config.item[0]].map((list,i)=>{
-              result.push(i+1,list[this.config.item[1]]);
+          var i = 0;
+          this.item[this.config.item[0]].map((list)=>{
+            i++;
+              result.push(i+") "+list[this.config.item[1]]);
           });
         }else{
           result.push(this.item[this.config.item[0]]);

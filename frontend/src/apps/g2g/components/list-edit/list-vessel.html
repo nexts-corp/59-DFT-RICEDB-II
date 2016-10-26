@@ -97,10 +97,14 @@
         <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
       </gl-grid-col>
     </gl-grid-row> -->
+    <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+            <!--content-->
+
     <iron-pages selected="{{editShipment}}" attr-for-selected="name">
       <view-noshipment data="{{data}}" name="view"></view-noshipment>
       <edit-noshipment data="{{data}}" contract-id="{{contractId}}" name="edit"></edit-noshipment>
     </iron-pages>
+        </gl-form-panel-body>
       <paper-button raised on-tap="deleteShipment">ลบ Shipment No</paper-button>
 
     <gl-grid-row width="{{getWidth}}">
@@ -419,7 +423,7 @@
                 },
                 editShipment:{
                   type:String,
-                  value:'edit'
+                  value:'view'
                 }
             },
             observers: [
