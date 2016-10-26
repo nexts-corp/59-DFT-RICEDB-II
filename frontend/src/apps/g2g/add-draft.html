@@ -182,15 +182,19 @@
             },
             getshipment:function (e) {
               // console.log("check",e.detail);
-              this.getDb('./g2g/bl/shipment/id/'+e.detail,(data)=>{
+              var id = e.detail;
+              this.getDb('./g2g/bl/shipment/id/'+id,(data)=>{
                 this.blShipment = data;
                 // console.log(this.blShipment);
               });
-              this.getinvoice(e);
+              this.getInvoice(id);
             },
-            getinvoice:function (e) {
-              // console.log("check",e.detail);
-              this.getDb('./g2g/invoice/shipment/id/'+e.detail,(data)=>{
+            testss:function (data) {
+              console.log('เข้าโวยยย',data);
+            },
+            getInvoice:function (id) {
+            
+              this.getDb('./g2g/invoice/shipment/id/'+id,(data)=>{
                 this.invoiceShipment = data;
                 // console.log(this.blShipment);
               });
@@ -199,7 +203,7 @@
               this.selected = 1;
             },
             getBlNo:function (blShipment) {
-              console.log(blShipment);
+              // console.log(blShipment);
               this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
                 this.blDetail = data;
                 // console.log(this.blDetail);

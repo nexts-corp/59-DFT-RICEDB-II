@@ -28,7 +28,6 @@
   </style>
   <template>
 
-      [[datas]]//{{data}}//[[test]]
 <!-- <gl-form-panel-body> -->
 
         <gl-grid-row width="{{getWidth}}">
@@ -248,28 +247,9 @@
   <script>
     Polymer({
       is: "invoice-save",
-      properties: {
-        nameRice: {
-          type: String
-        }
-      },
         observers:['check(data)'],
         check:function (data) {
           this.cl_quality = data.cl_quality.toUpperCase();
-          var rice = data.cl_type_rice;
-          console.log(rice);
-          console.log(typeof this.nameRice !== 'undefined');
-          if (typeof this.nameRice !== 'undefined') {
-            if (this.nameRice.length == 0){
-              rice.map((el)=>{
-                        console.log(el.type_rice_desc_en);
-                        if (typeof el.type_rice_desc_en !== 'undefined') {
-                          this.nameRice += el.type_rice_desc_en+', ';
-                        }
-
-                    })
-            }
-          }
         },
         checkPrice:function (data) {
           // console.log(data.base.amount_usd);
