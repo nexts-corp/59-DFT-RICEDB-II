@@ -124,7 +124,9 @@
                 blShipment:{
                   type:Object,
                 },
-
+                InDetail:{
+                  type:Object,
+                },
                 dataRound: {
                     type: Object,
                     notify: true,
@@ -198,15 +200,18 @@
               // console.log(blShipment);
               this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
                 this.blDetail = data;
-                // console.log(this.blDetail);
+                console.log(this.blDetail);
+                console.log(2222);
               });
             },
             getInvoiceDetail:function (invoice_id) {
-              // console.log(blShipment);
+              console.log(invoice_id);
               this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
                 this.InDetail = data;
-                console.log(this.InDetail);
+                console.log(data);
+                console.log(11111);
               });
+              console.log("pass");
             },
             getDb:function (url,callback) {
               // console.log(url);
@@ -231,11 +236,12 @@
                 }
                 // console.log(this.dataSelect);
                 this.dataSelect = e.detail.data;
-                if (typeof this.dataSelect.bl_no !== 'undefined' ) {
+                if (typeof this.dataSelect.bl_no !== 'undefined' && typeof this.dataSelect.invoice_id === 'undefined' ) {
+                  // console.log('bl_no');
                     this.getBlNo(this.dataSelect.bl_no);
                 }
                 if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
-                  console.log(11);
+                  // console.log("invoice_id");
                     this.getInvoiceDetail(this.dataSelect.invoice_id);
                 }
                 // console.log(this.dataSelect.invoice_id);
