@@ -10,14 +10,13 @@ var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 
 
 router.get(['/year'], function (req, res, next) {
-    console.log('dd');
     db.query(function (conn) {
-        var statement = r.db('eu').table('quota').map(function(x){ return x('id') }).coerceTo('array');
+        var statement = r.db('eu').table('quota').map(function (x) { return x('id') }).coerceTo('array');
         statement.run(conn, function (err, cursor) {
             if (!err) {
                 res.json(cursor);
             } else {
-                res.json({error:"error"});
+                res.json({ error: "error" });
             }
         });
     });
@@ -71,15 +70,15 @@ router.post(['/'], function (req, res, next) {
                         )
                     }
                 ).coerceTo('array')
-                .do(function (y) {
-                    return r.branch(y.eq([]),
-                        r.db('eu').table('quota').get(req.body.id).update(function (z) {
-                            return {
-                                type_rice: z('type_rice').append(req.body.type_rice)
-                            }
-                        })
-                        , { error: "type_rice exist" })
-                })
+                    .do(function (y) {
+                        return r.branch(y.eq([]),
+                            r.db('eu').table('quota').get(req.body.id).update(function (z) {
+                                return {
+                                    type_rice: z('type_rice').append(req.body.type_rice)
+                                }
+                            })
+                            , { error: "type_rice exist" })
+                    })
             )
         });
 
@@ -87,7 +86,35 @@ router.post(['/'], function (req, res, next) {
             if (!err) {
                 res.json(cursor);
             } else {
-                res.json({error:"error"});
+                res.json({ error: "error" });
+            }
+        });
+    });
+});
+
+
+router.delete(['/'], function (req, res, next) {
+    db.query(function (conn) {
+        var params = req.query;
+        var statement = r.db('eu').table('quota').get(params.id)("type_rice").count().do(function (result) {
+            return r.branch(result.eq(1),
+                r.db('eu').table('quota').get(params.id).delete()
+                ,
+                r.db('eu').table('quota').get(params.id).update(function (row) {
+                    return {
+                        type_rice: row('type_rice').filter(function (type_rice) {
+                            return type_rice('type_rice_id').eq(params.type_rice_id).not()
+                        })
+                    };
+                })
+            )
+        })
+
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
             }
         });
     });
