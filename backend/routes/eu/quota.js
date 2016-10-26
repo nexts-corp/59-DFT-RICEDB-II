@@ -9,150 +9,77 @@ var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 
 router.get(['/'], function (req, res, next) {
     db.query(function (conn) {
-            
-            var params = req.query;
-            var statemant = r.db('eu').table('quota').get(params.id).merge(function(row){
-                return {type_rice:row('type_rice').merge(function(type_rice){
+        console.log(typeof req.query.id);
+        var params = req.query;
+        var statemant = r.db('eu').table('quota').get(params.id).merge(function (row) {
+            return {
+                type_rice: row('type_rice').merge(function (type_rice) {
                     return (r.db('eu').table('type_rice').get(type_rice('type_rice_id')).without('id'))
-                })}
-            })
+                })
+            }
+        })
 
-            // if(typeof params != "undefined"){
-            //     for(var key in params){
-            //         if(key=="id")
-            //         params[key] = parseInt(params[key]);
-            //     }
-            //     statemant = statemant.filter(params);
-            // }
-            
-            statemant.run(conn, function (err, cursor) {
-                if (!err) {
-                    console.log(cursor);
-                    res.json(cursor);
-                    // cursor.toArray(function (err, result) {
-                    //     if (!err) {
-                    //         res.json(result);
-                    //     } else {
-                    //         res.json(null);
-                    //     }
-                    // });
-                } else {
-                    res.json(null);
-                }
-            });
+        statemant.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json(null);
+            }
+        });
     })
 });
 
 
 
-// var schema = {
 
-//     "properties": {
-//         "id": {
-//             "type": "number"
-//         },
-//         "period": {
-//             "type": "array",
-//             "properties":{
-//                 "percent":{
-//                     "type": "number"
-//                 },
-//                 "quantity":{
-//                     "type": "number"
-//                 }
-//             },
-//             "required": [
-//                 "percent",
-//                 "quantity"
-//             ]
-//         },
-//         "type_rice_id": {
-//             "type": "string"
-//         }
-//     },
-//     "required": [
-//         "id",
-//         "period",
-//         "type_rice_id"
-//     ]
-// };
+router.post(['/'], function (req, res, next) {
+    console.log(req.body.type_rice);
+    db.query(function (conn) {
+        var statement = r.db('eu').table('quota').get(req.body.id).do(function (x) {
+            return r.branch(
+                x.eq(null),
+                r.db('eu').table('quota').insert(
+                    {
+                        "id": req.body.id,
+                        "type_rice": [req.body.type_rice]
+                    }
+                )
+                ,
+                r.db('eu').table('quota').filter(
+                    function (row) {
+                        return row('id').eq(req.body.id).and(
+                            row('type_rice').contains(
+                                function (type_rice) {
+                                    return type_rice('type_rice_id').eq(req.body.type_rice.type_rice_id)
+                                }
+                            )
+                        )
+                    }
+                ).coerceTo('array')
+                .do(function (y) {
+                    return r.branch(y.eq([]),
+                        r.db('eu').table('quota').get(req.body.id).update(function (z) {
+                            return {
+                                type_rice: z('type_rice').append(req.body.type_rice)
+                            }
+                        })
+                        , { error: "type_rice exist" })
+                })
+            )
+        });
 
-// var validate = ajv.compile(schema);
-
-
-// router.post(['/'], function (req, res, next) {
-
-//     //if(r.db('eu').table('quota').get(req.body.id))
-
-//     r.do(r.db('eu').table('quota').get(req.body.id),function(x){
-//         console.log('1');
-//     });
-    
-//     // var valid = validate(req.body);
-    
-//     // if(valid){
-//     //     console.log(req.body);
-//     //     db.query(function (conn) {
-
-//     //         r.db('eu').table('quota').insert(req.body)
-//     //         .run(conn, function (err, cursor) {
-//     //             if (!err) {
-//     //                 res.json(cursor);
-//     //             } else {
-//     //                 res.json(null);
-//     //             }
-//     //         });
-
-//     //     });
-//     // }else{
-//     //     res.json({error:"schema"}); 
-//     // }
-
-    
-// });
-
-// router.put(['/'], function (req, res, next) {
-    
-//     var valid = validate(req.body);
-
-//     if(valid){
-//         db.query(function (conn) {
-
-//             r.db('eu').table('quota').get(req.body.id).update(req.body)
-//             .run(conn, function (err, cursor) {
-//                 if (!err) {
-//                     console.log(req.body);
-//                     res.json(req.body);
-//                 } else {
-//                     res.json(null);
-//                 }
-//             });
-
-//         });
-//     }else{
-//         res.json({error:"schema"}); 
-//     }
-
-    
-// });
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({error:"error"});
+            }
+        });
+    });
+});
 
 
-// router.delete(['/'], function (req, res, next) {
-  
-//         db.query(function (conn) {
 
-//             r.db('eu').table('quota').get(parseInt(req.query.id)).delete()
-//             .run(conn, function (err, cursor) {
-//                 if (!err) {
-//                     res.json(cursor);
-//                 } else {
-//                     res.json(null);
-//                 }
-//             });
-
-//         });
-    
-// });
 
 module.exports = router;
 
