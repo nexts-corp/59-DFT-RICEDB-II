@@ -1,0 +1,251 @@
+<link rel="import" href="listEditBehavior.html">
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../period/period-save.html">
+<link rel="import" href="../period/period-edit.html">
+
+<dom-module id="list-period">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
+        .header {
+            text-align: center;
+            padding: 10px 0px 10px 10px;
+            background-color: var(--paper-grey-100);
+            color: var(--paper-grey-600);
+            word-wrap: break-word;
+        }
+
+        .cleanBd {
+            padding: 0px;
+        }
+
+        .top {
+            margin-top: 10px;
+        }
+
+        .bd {
+            border-bottom: 1px solid #ccc;
+        }
+
+        .fontPdLeft {
+            /*padding: 10px 0px 10px 10px;*/
+            text-align: center;
+            word-wrap: break-word;
+        }
+        .title {
+          margin: 10px 0px 10px 10px;
+            font-size: var(--font-size-h3);
+            font-family: 'rsubold', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .box{
+          border: 1px solid black;
+          padding: 0px 0px 0px 10px;
+        }
+        paper-icon-item {
+            cursor: pointer;
+            --paper-item-focused: {
+                background-color: var(--paper-blue-100);
+            }
+        }
+
+        paper-icon-item:hover {
+            background-color: var(--paper-blue-100);
+        }
+
+        .yellow-button {
+            text-transform: none;
+            color: #eeff41;
+        }
+
+        paper-toast {
+            --paper-toast-background-color: var(--paper-green-500);
+            /*height: 50px;*/
+            /*margin: 0px 0px 0px 0px;*/
+            /*padding: 0px 0px 0px 0px;*/
+            font-size: 16px;
+            width: 600px;
+            text-align: center;
+        }
+
+        paper-toast > div.content > iron-icon {
+            padding: 0px 10px 0px 0px;
+        }
+
+        .mar-head {
+            margin-left: 10px;
+            margin-bottom: 10px;
+        }
+
+        #changeDivcss {
+            background-color: var(--paper-grey-100);
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+
+    <template>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+        <gl-form-input class="mar-head" auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9]{1,7}" required  label="งวดที่" placeholder="ใส่ได้เฉพาะตัวเลขเท่านั้น" value$="{{data.period}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,1]]">
+        <paper-button class="gl-btn-primary" raised on-tap="click" hidden>เพิ่ม</paper-button>
+      </gl-grid-col>
+    </gl-grid-row>
+[[contractId]]
+    <div id="changeDivcss" class="hide">
+      <form is="iron-form" id="addPort" >
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <gl-form-input name="cityPort" auto-validate error-message="กรุณาใส่เมืองท่าปลายทาง" required label="เมืองท่าปลายทาง" value="" placeholder="ใส่รายละเอียด" id="" name=""></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+            <gl-form-input name="ton" auto-validate error-message="กรุณาใส่จำนวนตัน" required label="จำนวน/ตัน" value="" placeholder="ใส่รายละเอียด" id="" name=""></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,12]]">
+            <gl-form-textarea name="notifyParty" rows="3" label="NOTIFY PARTY" placeholder="ใส่รายละเอียด" auto-validate error-message="กรุณาใส่รายละเอียด" required value="[[data.notifyParty]]" id="notifyParty" name="notifyParty"></gl-form-textarea>
+          </gl-grid-col>
+        </gl-grid-row>
+
+          <div class="title">Shipping Line</div>
+        <div class="box">
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,4]]">
+                <gl-form-input name="shippingLine" auto-validate error-message="กรุณาใส่Shipping line" required no-label-float value="" placeholder="กรอกShipping Line" id="" name=""></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,1]]">
+              <paper-button raised class="gl-btn-primary">เพิ่ม</paper-button>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
+      </form>
+
+      <div class="horizontal end-justified layout">
+        <paper-button  class="gl-btn-danger" raised>ยกเลิก</paper-button>
+        <paper-button  class="gl-btn-success" on-tap="_submit" raised>บันทึก</paper-button>
+      </div>
+    </div>
+
+    <content id="primary" select="items[type=primary]"></content>
+    <content id="secondary" select="items[type=secondary]"></content>
+
+    <div class="layout horizontal top">
+      <template is="dom-repeat" items="{{config.primary}}">
+        <div class$="[[item.width]] header">
+          [[item.label]]
+        </div>
+      </template>
+    </div>
+    <template is="dom-repeat" as="itemPrimary" items="{{data.city}}">
+      <paper-icon-item class="fancy cleanBd bd" >
+        <paper-icon-button on-tap="_toggleSub" aria-controls$="collapse{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+        <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+          <div class$="[[configPrimary.width]]">
+            <div class="fontPdLeft">
+              {{_getItemPrimary(itemPrimary,configPrimary)}}
+            </div>
+          </div>
+        </template>
+    </paper-icon-item>
+    <iron-collapse id="collapse{{index}}">
+        <div class="collapse-content">
+            <div class="bd">
+                <gl-form-panel>
+                    <gl-form-panel-head label="[[itemPrimary.cityDestination]]" font-size=20px; set-border="1px">
+                        <paper-button class="gl-btn-success" raised on-tap="saveChange" index="[[index]]">
+                            <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+                        <paper-button class="gl-btn-warning" raised on-tap="editChange" index="[[index]]">
+                            <iron-icon class="gl-icon-size" icon="create"></iron-icon>แก้ไข</paper-button>
+                        <paper-button class="gl-btn-danger" raised on-tap="" index="[[index]]">
+                            <iron-icon class="gl-icon-size" icon="delete"></iron-icon>ลบ</paper-button>
+                    </gl-form-panel-head>
+
+                    <iron-pages selected="0" class$="iron-index-{{index}}">
+                        <period-save data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-save>
+                        <period-edit data="{{itemPrimary}}" id="[[itemPrimary.collapse]]"></period-edit>
+                    </iron-pages>
+                </gl-form-panel>
+            </div>
+
+        </div>
+    </iron-collapse>
+    </template>
+
+    <paper-toast id="toastPass" class="fit-bottom">
+        <div class="content">
+            <iron-icon icon="check"></iron-icon>บันทึกข้อมูลเสร็จสิน
+            <paper-button on-tap="closeToast" class="yellow-button">ปิด</paper-button>
+        </div>
+    </paper-toast>
+
+
+
+
+    </template>
+    <script>
+        Polymer({
+            is: "list-period",
+            behaviors: [listEditBehavior],
+            properties: {
+                data: {
+                    type: Object,
+                    notify: true,
+                    value: function() {
+                        return [];
+                    }
+                }
+            },
+            listeners: {
+                'iron-form-submit': 'submitData',
+            },
+            _submit: function(event) {
+                this.$.addPort.submit();
+            },
+            submitData: function(event) {
+                console.log(JSON.stringify(event.detail));
+                this.click();
+            },
+            checkdata: function() {
+                console.log(this.data);
+            },
+            checkDom: function(e) {
+                var id = e.target.id;
+                console.log(id);
+                // this.$$.id;
+                console.log(this.$$.collapsel1);
+            },
+            ready: function() {
+              // this.$$('#changeButtomcss').setAttribute("hidden", "hidden");
+            },
+            click: function() {
+                var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+                // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
+                // console.log(css
+                if (css.classList.contains('hide') == true) {
+                    css.classList.remove("hide");
+                    css.classList.add("show");
+                } else {
+                    css.classList.remove("show");
+                    css.classList.add("hide");
+                }
+            },
+            validate: function() {
+                var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+                css.classList.remove("show");
+                css.classList.add("hide");
+            }
+
+
+        });
+    </script>
+</dom-module>

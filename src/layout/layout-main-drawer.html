@@ -7,20 +7,58 @@
 
 <dom-module id="layout-main-drawer">
     <template>
+    <style>
+        *{
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        app-toolbar{
+            color: white;
+            background-color: orange;
+            font-size: 22px;
+        }
+        iron-image{
+            margin-right: 10px;
+        }
+    </style>
         <div class="menu">
-				<app-toolbar>Menu</app-toolbar>
+				<app-toolbar>
+                     <iron-image src="./../../images/manifest/icon-32.png">
+                     </iron-image>
+                        Menu
+                     </app-toolbar>
 				<div role="listbox">
-					<paper-icon-item on-tap="selectPage" path="/page1" focused>
-						<iron-icon icon="inbox" item-icon></iron-icon>
-						page1
+					<paper-icon-item on-tap="selectPage" path="/quota" focused>
+						<iron-icon icon="star" item-icon></iron-icon>
+						รายการจัดสรรปีโควตา
 					</paper-icon-item>
 					<paper-icon-item on-tap="selectPage" path="/page2">
 						<iron-icon icon="star" item-icon></iron-icon>
-						page2
+						น้ำเข้าข้อมูลเพื่อการคำนวณ
 					</paper-icon-item>
-                    <paper-icon-item on-tap="selectPage" path="/quota">
+                    <paper-icon-item on-tap="selectPage" path="/calculate-allocation">
 						<iron-icon icon="star" item-icon></iron-icon>
-						quota
+						การคำนวณส่วนจัดสรร
+					</paper-icon-item>
+                     <paper-icon-item on-tap="selectPage" path="/amount-allocation">
+						<iron-icon icon="star" item-icon></iron-icon>
+						ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท
+					</paper-icon-item>
+                     <paper-icon-item on-tap="selectPage" path="/confirm-allocate">
+						<iron-icon icon="star" item-icon></iron-icon>
+						ยืนยันส่วนจัดสรร
+					</paper-icon-item>
+                     <paper-icon-item on-tap="selectPage" path="/quota">
+						<iron-icon icon="star" item-icon></iron-icon>
+						ปริมาณการใช้สิทธิโควตา
+					</paper-icon-item>
+                     <paper-icon-item on-tap="selectPage" path="/quota">
+						<iron-icon icon="star" item-icon></iron-icon>
+						การโอนส่วนจัดสรร
+					</paper-icon-item>
+                    <paper-icon-item on-tap="selectPage" path="/extra-fee">
+						<iron-icon icon="star" item-icon></iron-icon>
+						รับชำระเงินและออกใบเสร็จ
 					</paper-icon-item>
 				</div>
 			</div>

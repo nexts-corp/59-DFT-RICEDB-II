@@ -20,6 +20,7 @@
 	<style>
 		#drawer{
 			z-index: 1;
+			--app-drawer-width: 400px;
 		}
 	</style>
 		<app-drawer id="drawer">
@@ -32,7 +33,16 @@
 			</app-header>
 			<content></content>
 		</app-header-layout>
-
+		
+		<paper-toast class="setPosition" id="toastLoading" positionTarget duration="0" text="">
+            <div class="loading">
+                <paper-spinner active></paper-spinner>
+                <span style="padding-left:10px; position:relative; bottom: 6px;">
+                    กำลังโหลด
+                </span>
+                <!--<paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>-->
+            </div>
+        </paper-toast>
 	</template>
 
 
@@ -41,7 +51,16 @@
             is:'layout-main',
 			_toggleDrawer:function(){
 				this.$.drawer.toggle();
-			}
+			},
+			openToastLoading:function(){
+                this.$.toastLoading.open();
+            },
+            closeToastLoading:function(callback){
+                this.async(function(){
+                    this.$.toastLoading.hide();
+                    callback();
+                }.bind(this),500);
+            },
         });
     </script>
 </dom-module>
