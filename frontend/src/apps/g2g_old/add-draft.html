@@ -1,0 +1,305 @@
+<link rel="import" href="panel-seleted-perriod.html">
+<link rel="import" href="panel-seleted-payment.html">
+<link rel="import" href="components/grid/nx-grid.html">
+<link rel="import" href="components/content-panel.html">
+<link rel="import" href="components/list-edit/list-draft.html">
+<link rel="import" href="components/bill/bill-create.html">
+<link rel="import" href="components/bill/bill-fileup.html">
+<link rel="import" href="components/payment/payment-pay.html">
+<link rel="import" href="components/invoice/invoice-page.html">
+<link rel="import" href="components/payment/draft-period.html">
+
+<link rel="import" href="./components/payment/payment-detail.html">
+
+<link rel="import" href="data/db-gtog-contact.html">
+
+
+<dom-module id="g2g-add-draft">
+  <style is="custom-style" include="gl-color">
+    * {
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .left {
+      margin: 0px 10px 0px 10px;
+      /*border: 1px solid #000;*/
+    }
+  </style>
+  <template>
+    <db-gtog-contact></db-gtog-contact>
+    <!-- <gl-search-input result="{{result}}"></gl-search-input>
+    {{result.name}} // {{result.searchType}} -->
+    <content-panel>
+      <grid>
+        <!-- <bill-create></bill-create> -->
+        <iron-pages selected="{{selected}}">
+          <div>
+            <draft-period data="{{draft}}" on-shipment="getshipment"></draft-period>
+
+          </div>
+          <div>
+            <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
+              <items type="primary">
+                <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
+              </items>
+              <items type="secondary">
+                <list item="invoice_no" label="Invoice No." width="flex"></list>
+              </items>
+              <items type="third">
+                <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
+              </items>
+            </list-draft>
+          </div>
+        </iron-pages>
+
+      </grid>
+      <panel>
+        <div class="left">
+          <iron-pages selected="{{changePage}}">
+            <panel-seleted-perriod>
+              <section-content name="detail">
+                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                  <bill-create name="primary" data="{{blDetail}}"></bill-create>
+                  <invoice-page name="secondary" data="{{inDetail}}"></invoice-page>
+                </iron-pages>
+              </section-content>
+              <section-content name="file">
+                <bill-fileup></bill-fileup>
+              </section-content>
+            </panel-seleted-perriod>
+
+            <!-- payment -->
+
+            <panel-seleted-payment>
+                <section-content name="detail">
+                  <payment-detail></payment-detail>
+                </section-content>
+                <section-content name="print">
+                  <payment-pay></payment-pay>
+                </section-content>
+                <section-content name="file">
+                  3
+                </section-content>
+            </panel-seleted-payment>
+            <!-- payment -->
+        </iron-pages>
+          <!-- <gl-tabs get-data="{{panalBl}}">
+            <section-content name="NEW">
+              <bill-create></bill-create>
+            </section-content>
+          </gl-tabs> -->
+        </div>
+      </panel>
+    </content-panel>
+  </template>
+  <script>
+        Polymer({
+            is: "g2g-add-draft",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap',
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            properties: {
+                layerContent: {
+                    type: String,
+                    value: "primary"
+                },
+                selected:{
+                    type:Number,
+                    value:0
+                },
+                changePage: {
+                    type: Number,
+                    value: 0
+                },
+                common:{
+                  type:Object,
+                  value:{}
+                },
+                blShipment:{
+                  type:Object,
+                },
+                blDetail:{
+                  type:Object,
+                },
+                inDetail:{
+                  type:Object,
+                },
+                dataRound: {
+                    type: Object,
+                    notify: true,
+                    value: function() {
+                        return [
+                          {
+                            id: 1,
+                            round:'1',
+                            blNos: [
+                              {
+                                id:1,
+                                blNo:'C123456'
+                              },
+                              {
+                                id:2,
+                                blNo:'C123457'
+                              }
+                            ]
+                          },
+                          {
+                            id: 2,
+                            round:'2',
+                            blNos: [
+                              {
+                                id:1,
+                                blNo:'C123458'
+                              }
+                            ]
+                          }
+                      ]
+                    }
+                }
+            },
+            observers:[
+              'cheangpage(blShipment)'
+            ],
+
+            created: function() {
+                this.glSetTitle('สัญญาการซื้อขาย');
+                this.glSetLayout('layout-main');
+                this.glQuery('adddraft',this);
+            },
+            ready: function() {
+              this.getDb('./g2g/contract/shipment',(data)=>{
+                this.draft = data;
+                // console.log(this.draft);
+              });
+            },
+            attached: function() {
+                this.layoutMain = this.glQuery('layoutMain');
+            },
+            getshipment:function (e,refresh,action) {
+              // console.log("check",e.detail);
+              var id;
+              if (typeof e === 'object') {
+                id = e.detail;
+              }else {
+                id = e;
+              }
+              // console.log(id);
+              this.getDb('./g2g/bl/shipment/id/'+id,(data)=>{
+                this.blShipment = data;
+                // console.log(this.blShipment);
+              },refresh,action);
+              this.getInvoice(id,refresh,action);
+            },
+            getInvoice:function (id,refresh,action) {
+              console.log(id,refresh,action);
+              this.getDb('./g2g/invoice/shipment/id/'+id,(data)=>{
+                this.invoiceShipment = data;
+                // console.log(this.blShipment);
+              },refresh,action);
+            },
+            testss:function (data) {
+              console.log('เข้าโวยยย',data);
+            },
+            cheangpage:function (blShipment) {
+              this.selected = 1;
+            },
+            getBlNo:function (blShipment) {
+              // console.log(blShipment);
+              this.glQuery('layoutMain').openToastLoading();
+              this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
+                this.blDetail = data;
+                // console.log(this.blDetail);
+                // console.log(1111);
+              },false,'get');
+            },
+            getInvoiceDetail:function (invoice_id) {
+              // console.log(invoice_id);
+              this.glQuery('layoutMain').openToastLoading();
+              this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
+                this.inDetail = data;
+                //  console.log(this.inDetail);
+              },false,'get');
+              // console.log("pass");
+            },
+            getDb:function (url,callback,refresh,action) {
+              // console.log(url);
+              axios.get(url)
+                .then((response)=>{
+                  // console.log(refresh," ",action);
+                    callback(response.data);
+                    // console.log(action);
+                      switch (action) {
+                          case 'get':
+                                    this.glQuery('layoutMain').closeToastLoading(()=>{
+                                      this.checkRefresh(refresh);
+                                    });
+                          break;
+                          // insert & updoate
+                          case 'put':
+                                    this.glQuery('layoutMain').closeToastSaveing(()=>{
+                                      this.checkRefresh(refresh);
+                                    });
+                          break;
+                          case 'delete':
+                                    this.glQuery('layoutMain').closeToastDeleteing(()=>{
+                                      this.checkRefresh(refresh);
+                                    });
+                          break;
+                      }
+                })
+                .catch((error)=> {
+                  console.log(error);
+                });
+            },
+            checkRefresh:function (refresh) {
+              if (refresh == true) {
+                this.glQuery('contentPanel').changDrawer();
+              }
+            },
+            nxGridTap: function(e) {
+              // console.log(e.detail.level);
+              // console.log(e.detail.data);
+                this.layerContent = e.detail.level;
+                // console.log(this.layerContent);
+                if (this.layerContent === 'third') {
+                    this.changePage = 1;
+                } else {
+                    this.changePage = 0;
+                }
+                // console.log(this.dataSelect);
+                this.dataSelect = e.detail.data;
+                if (typeof this.dataSelect.bl_no !== 'undefined' &&
+                    typeof this.dataSelect.invoice_id === 'undefined' ) {
+                  // console.log('bl_no');
+                    this.getBlNo(this.dataSelect.bl_no);
+                }
+                if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
+                  // console.log("invoice_id");
+                    this.getInvoiceDetail(this.dataSelect.invoice_id);
+                }
+                // console.log(this.dataSelect.invoice_id);
+            }
+        });
+    </script>
+</dom-module>
+<!--
+
+
+http://localhost:3000/api/g2g/shipment/id/486e6163-324c-4994-a2b4-ef6af082e4b9
+http://localhost:3000/api/g2g/contract/shipment
+
+http://localhost:3000/api/g2g/bl/shipment/id/88de2c87-3730-48ee-99fe-1d0e89199565
+
+http://localhost:3000/api/g2g/bl/no/11223344
+
+http://localhost:3000/api/g2g/invoice/shipment/id/88de2c87-3730-48ee-99fe-1d0e89199565
+
+http://localhost:3000/api/g2g/invoice/id/10cdea4e-8a4f-4115-8385-a0f48f68cc11
+
+
+-->

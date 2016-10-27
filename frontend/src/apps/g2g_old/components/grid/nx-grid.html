@@ -1,0 +1,425 @@
+<link rel="import" href="nx-grid-component.html">
+<link rel="import" href="/bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/gl-form/gl-form-label-input.html">
+<link rel="import" href="/bower_components/numeral-js/numeral-js.html">
+<dom-module id="nx-grid">
+<style is="custom-style" include="iron-flex iron-flex-factors gl-size">
+.header {
+  padding: 10px 0px 10px 10px;
+  background-color: var(--paper-grey-100);
+  color: var(--paper-grey-600);
+}
+paper-icon-item {
+  cursor: pointer;
+
+  --paper-item-focused: {
+    background-color: var(--gl-info-color);
+    /*opacity: 0;*/
+  }
+  /*--paper-item-selected:{
+    background-color: var(--gl-info-color);
+  }*/
+}
+.borderHeader{
+    border-top: 1px solid var(--paper-grey-300);
+    border-bottom: 1px solid var(--paper-grey-300);
+}
+paper-icon-item:hover {
+  background-color: var(--gl-info-color);
+}
+.sublist paper-item {
+  /*padding-left: 30px;*/
+}
+
+.cml:first-of-type {
+  /*margin-left: 60px;*/
+  text-align: left;
+  /*color: red;*/
+}
+
+.cml:not(:first-of-type) {
+  text-align: right;
+  /*color: blue;*/
+}
+
+.headLabel {
+  text-align: left;
+  margin-left: 10%;
+  /*color: red;*/
+  font-size: var(--font-size-h4);
+}
+
+.headLabel:not(:first-of-type) {
+  margin-left: 0px;
+  text-align: right;
+  padding-right: 25px;
+  /*color: blue;*/
+}
+.headsecondary {
+  text-align: left;
+  /*margin-left: 10%;*/
+  padding-right: 25px;
+  /*color: red;*/
+  font-size: var(--font-size-h4);
+  color: var(--gl-gray-darker-color);
+  font-family: 'rsuregular', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.headsecondary:not(:first-of-type) {
+  margin-left: 0px;
+  text-align: right;
+  padding-right: 0px;
+  /*color: blue;*/
+}
+.headThird {
+  /*border-bottom: 1px solid #000;*/
+  text-align: left;
+  /*margin-left: 10%;*/
+  padding-right: 25px;
+  font-size: var(--font-size-h4);
+  color: var(--gl-gray-darker-color);
+  font-family: 'rsuregular', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.paper-menu-lv1 {
+  --paper-menu-selected-item: {
+    font-weight: normal;
+  }
+  ;
+}
+
+.paper-menu-lv2 {
+  --paper-menu-selected-item: {
+    font-weight: normal;
+  }
+  ;
+}
+
+.paper-icon-item {
+  --paper-icon-item: {
+    border-bottom: 1px solid #ccc;
+  }
+}
+</style>
+
+<template>
+  <content id="primary" select="items[type=primary]"></content>
+  <content id="secondary" select="items[type=secondary]"></content>
+  <content id="secondaryHalf" select="items[type=secondaryHalf]"></content>
+  <content id="third" select="items[type=third]"></content>
+  <content id="thirdHalf" select="items[type=thirdHalf]"></content>
+  <content select="template[type=primary]"></content>
+  <content select="template[type=secondary]"></content>
+  <content select="template[type=secondaryHalf]"></content>
+  <content select="template[type=third]"></content>
+  <content select="template[type=thirdHalf]"></content>
+
+  <div class="horizontal-section">
+    <div class="header layout horizontal">
+      <!-- Head primary Level 1 -->
+      <!-- <div style="width:55px headLabel">&nbsp;</div> -->
+      <template is="dom-repeat" as="itemConfigPrimary" items="{{config.primary}}">
+        <div class$="{{itemConfigPrimary.width}} headLabel">{{itemConfigPrimary.label}}
+          <!-- width:{{itemConfigPrimary.width}} -->
+        </div>
+      </template>
+    </div>
+    <paper-menu attr-for-item-title="label" multi style="padding-top:0px" class="paper-menu-lv1">
+      <template is="dom-repeat" as="itemPrimary" items="{{data}}">
+        <paper-icon-item class="paper-icon-item" on-tap="_getBind" on-dblclick="_getBind" level="primary" data="{{itemPrimary}}">
+          <paper-icon-button on-tap="_toggleSub" contract-id$="{{itemPrimary.contract_id}}" data-sub="sub-{{index}}" index="{{index}}" icon="chevron-right" item-icon></paper-icon-button>
+          <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+            <template is="dom-if" if="[[_checkTypeString(configPrimary.type)]]">
+              <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
+                {{_getItemPrimary(itemPrimary,configPrimary)}}
+              </div>
+            </template>
+            <template is="dom-if" if="[[_checkTypeNumber(configPrimary.type)]]">
+              <div class$="{{configPrimary.width}} cml" on-tap="toggleDrawer">
+                <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js>
+              </div>
+            </template>
+
+          </template>
+        </paper-icon-item>
+        <paper-submenu id="sub-{{index}}" label$="{{index}}">
+
+
+    <paper-menu class="menu-content sublist paper-menu-lv2" style="padding:0px;" selected="100">
+      <paper-item disabled class="borderHeader">
+        <!-- Head secondary -->
+        <template is="dom-repeat" as="itemConfigSecondary" items="{{config.secondary}}">
+          <div class$="{{itemConfigSecondary.width}} headsecondary">
+            {{itemConfigSecondary.label}}
+            <!-- width:{{itemConfigSecondary.width}} -->
+          </div>
+        </template>
+      </paper-item>
+      <template is="dom-repeat" as="itemSecondary" items="{{_getDataSub(itemPrimary,config.sub)}}">
+        <!-- <paper-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
+        <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
+        <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
+        {{_getItemSecondary(itemSecondary,configSecondary)}} -->
+        <!-- width:{{configSecondary.width}} -->
+        <!-- </div>
+      </template>
+      <paper-item> -->
+      <paper-icon-item on-tap="_getBind" on-dblclick="_getBind" level="secondary" data="{{itemSecondary}}">
+        <!-- Head secondary -->
+        <template is="dom-repeat" as="configSecondary" items="{{config.secondary}}">
+          <!-- <div class$="{{configSecondary.width}} cml subTitle" data="{{itemSecondary}}" on-tap="toggleDrawer">
+            {{_getItemSecondary(itemSecondary,configSecondary)}} -->
+            <!-- width:{{configSecondary.width}} -->
+          <!-- </div> -->
+          <template is="dom-if" if="[[_checkTypeString(configSecondary.type)]]">
+            <div class$="{{configSecondary.width}} cml">
+              {{_getItemSecondary(itemSecondary,configSecondary)}}
+            </div>
+          </template>
+          <template is="dom-if" if="[[_checkTypeNumber(configSecondary.type)]]">
+            <div class$="{{configSecondary.width}} cml" >
+              <numeral-js number="{{_getItemSecondary(itemSecondary,configSecondary)}}" format="0,0" print></numeral-js>
+            </div>
+          </template>
+        </template>
+      </paper-icon-item>
+    </template>
+    <!-- เพิ่มข้อมูล -->
+    <paper-item class="borderHeader" on-tap="_getBind" level="secondaryHalf" on-tap="toggleDrawer">
+      <!-- Head secondary -->
+      <template is="dom-repeat" as="itemConfigSecondaryHalf" items="{{config.secondaryHalf}}">
+        <div class$="{{itemConfigSecondaryHalf.width}}" on-tap="toggleDrawer">
+          {{itemConfigSecondaryHalf.label}}
+          <!-- width:{{itemConfigSecondary.width}} -->
+        </div>
+      </template>
+    </paper-item>
+    <!-- เพิ่มข้อมูล -->
+    <!--<paper-item class="testclass">
+    <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
+  </paper-item>-->
+</paper-menu>
+
+<!-- จบอันแรก  -->
+<!-- อันที่2 -->
+<paper-menu class="menu-content sublist paper-menu-lv2 " style="padding:0px;" selected="100">
+  <paper-item disabled class="borderHeader">
+    <!-- Head secondary -->
+    <template is="dom-repeat" as="itemConfigThird" items="{{config.third}}">
+      <div class$="{{itemConfigThird.width}} headThird">
+        {{itemConfigThird.label}}
+        <!-- width:{{itemConfigSecondary.width}} -->
+      </div>
+    </template>
+  </paper-item>
+  <template is="dom-repeat" as="itemThird" items="{{_getDataSub(itemPrimary,config.sub3)}}">
+    <paper-icon-item  on-tap="_getBind" on-dblclick="_getBind" level="third" data="{{itemThird}}">
+      <template is="dom-repeat" as="configThird" items="{{config.third}}">
+        <div class$="{{configThird.width}} " data="{{itemThird}}" >
+            <numeral-js number="{{_getItemSecondary(itemThird,configThird)}}" format="0,0" print></numeral-js>
+
+          <!-- width:{{configSecondary.width}} -->
+        </div>
+      </template>
+      <paper-icon-item>
+      </template>
+      <!-- เพิ่มข้อมูล -->
+      <paper-item class="borderHeader" on-tap="_getBind" level="thirdHalf">
+        <!-- Head secondary -->
+        <template is="dom-repeat" as="itemConfigthirdHalf" items="{{config.thirdHalf}}">
+          <div class$="{{itemConfigthirdHalf.width}}" on-tap="toggleDrawer">
+            {{itemConfigthirdHalf.label}}
+            <!-- width:{{itemConfigSecondary.width}} -->
+          </div>
+        </template>
+      </paper-item>
+      <!-- เพิ่มข้อมูล -->
+      <!--<paper-item class="testclass">
+      <nx-grid-component temp="{{tempSecondary}}"></nx-grid-component>
+    </paper-item>-->
+  </paper-menu>
+</paper-submenu>
+<!-- จบอันแรก  -->
+</template>
+</paper-menu>
+<!--<div>
+<nx-grid-component temp="{{tempPrimary}}"></nx-grid-component>
+</div>-->
+</div>
+</template>
+
+<script>
+var nxGridRender = [];
+Polymer({
+  is: 'nx-grid',
+  behaviors: [Polymer.Templatizer, gl.behavior.core],
+  properties: {
+    seleted: {
+      type: Object,
+      notify: true
+    },
+    config: {
+      type: Object
+    },
+    contractId:{
+      type:String,
+      notify:true
+    }
+  },
+  toggleDrawer: function() {
+    this.glQuery('contentPanel').changDrawer();
+    // this.glQuery('layoutMain').openToastLoading();
+  },
+  ready: function() {
+
+    var templatePrimary = Polymer.dom(this).querySelector('template[type=primary]');
+    this.tempPrimary = templatePrimary;
+
+    var templateSecondary = Polymer.dom(this).querySelector('template[type=secondary]');
+    this.tempSecondary = templateSecondary;
+
+    var templateSecondaryHalf = Polymer.dom(this).querySelector('template[type=secondaryHalf]');
+    this.tempSecondaryHalf = templateSecondaryHalf;
+
+    var templateThird = Polymer.dom(this).querySelector('template[type=third]');
+    this.tempThird = templateThird;
+
+    var templateThirdHalf = Polymer.dom(this).querySelector('template[type=thirdHalf]');
+    this.tempThirdHalf = templateThirdHalf;
+
+    //เพิ่มตัวแปล
+    var config = {
+      primary: [],
+      secondary: [],
+      secondaryHalf: [],
+      third: [],
+      thirdHalf: []
+    };
+
+    var items = Polymer.dom(this.$.primary).getDistributedNodes();
+    var lists = Polymer.dom(items[0]).querySelectorAll('list');
+
+    for (var i = 0; i < lists.length; i++) {
+
+      var configPointer = {
+        item: lists[i].getAttribute('item'),
+        label: lists[i].getAttribute('label'),
+        width: lists[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
+      };
+      // console.log(configPointer);
+      config.primary.push(configPointer);
+    }
+
+    var items2 = Polymer.dom(this.$.secondary).getDistributedNodes();
+    var lists2 = Polymer.dom(items2[0]).querySelectorAll('list');
+    // console.log(lists2);
+    for (var i = 0; i < lists2.length; i++) {
+
+      var configPointer2 = {
+        item: lists2[i].getAttribute('item'),
+        label: lists2[i].getAttribute('label'),
+        width: lists2[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
+      };
+
+      config.secondary.push(configPointer2);
+    }
+    //เพิ่อข้อมูล
+    var items22 = Polymer.dom(this.$.secondaryHalf).getDistributedNodes();
+    var lists22 = Polymer.dom(items22[0]).querySelectorAll('list');
+
+    for (var i = 0; i < lists22.length; i++) {
+
+      var configPointer22 = {
+        item: lists22[i].getAttribute('item'),
+        label: lists22[i].getAttribute('label'),
+        width: lists22[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
+      };
+
+      config.secondaryHalf.push(configPointer22);
+    }
+
+    var items3 = Polymer.dom(this.$.third).getDistributedNodes();
+    var lists3 = Polymer.dom(items3[0]).querySelectorAll('list');
+
+    for (var i = 0; i < lists3.length; i++) {
+
+      var configPointer3 = {
+        item: lists3[i].getAttribute('item'),
+        label: lists3[i].getAttribute('label'),
+        width: lists3[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
+      };
+
+      config.third.push(configPointer3);
+    }
+
+    //เพิ่มงวด
+    var items33 = Polymer.dom(this.$.thirdHalf).getDistributedNodes();
+    var lists33 = Polymer.dom(items33[0]).querySelectorAll('list');
+
+    for (var i = 0; i < lists33.length; i++) {
+
+      var configPointer33 = {
+        item: lists33[i].getAttribute('item'),
+        label: lists33[i].getAttribute('label'),
+        width: lists33[i].getAttribute('width'),
+        type: lists[i].getAttribute('type')
+      };
+
+      config.thirdHalf.push(configPointer33);
+    }
+    //จบเพิ่มงวด
+    config.sub = Polymer.dom(this.$.secondary).getDistributedNodes()[0].getAttribute('item');
+    config.sub3 = Polymer.dom(this.$.third).getDistributedNodes()[0].getAttribute('item');
+
+    this.config = config;
+    // console.log(this.config);
+  },
+  _toggleSub: function(e) {
+    // console.log(e.target.getAttribute("contract-id"));
+    this.contractId = e.target.getAttribute("contract-id");
+    // console.log(this.contractId);
+    this.$$('#' + e.currentTarget.dataSub).toggle();
+    if (e.target.icon == 'expand-more') {
+      e.currentTarget.icon = 'chevron-right';
+    } else {
+      e.currentTarget.icon = 'expand-more';
+      Polymer.dom(this.root).querySelectorAll('.sublist')[e.currentTarget.index].select(0);
+    }
+  },
+  _getItemPrimary: function(item, config) {
+    return item[config.item];
+  },
+  _getDataSub: function(item, sub) {
+    return item[sub];
+  },
+  _getItemSecondary: function(item, config) {
+    return item[config.item];
+  },
+  _getBind: function(e) {
+    if (e.target.is != "paper-icon-button") {
+      this.fire('nx-grid-' + e.type, {
+        data: e.currentTarget.data,
+        level: e.currentTarget.getAttribute('level')
+      });
+    }
+
+  },
+  _checkTypeString:function(type){
+    return type === 'string';
+  },
+  _checkTypeNumber:function(type){
+    return type === 'number';
+  },
+  attached: function() {
+    // console.log(this.config.primary);
+  },
+});
+</script>
+</dom-module>
