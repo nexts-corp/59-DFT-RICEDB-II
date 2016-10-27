@@ -60,8 +60,9 @@
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
              <gl-form-dropdown-menu label="ประเภทข้าว">
                 <paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
-                    <paper-item rice-type-id="4b23b3af-e292-4ac7-8154-c51363cc5ea7">ข้าวขาว</paper-item>
-                    <paper-item rice-type-id="513aa18a-e0d9-4408-9ec2-62fa271958e5">ข้าวหัก</paper-item>
+                  <template is="dom-repeat" items="{{getTypeRice}}">
+                    <paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+                  </template>
                 </paper-listbox>
             </gl-form-dropdown-menu>
     
@@ -85,9 +86,10 @@
                     <!--{{item.proportion}}-->
                   <td>
                     [[testNum(item.*,'percent')]]
+                    [[testNum(item.*,'quantity')]]
                     <gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
                   </td>
-                  <td><gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{_mathProportion(item.percent,item)}}" on-input="inputProportionChange" index="{{index}}" required placeholder="กรุณาใส่จำนวน" id="{{index}}" no-label-float></gl-form-input></td>
+                  <td><gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{item.quantity}}" required placeholder="กรุณาใส่จำนวน" id="{{index}}" no-label-float></gl-form-input></td>
                   <td>
                     <paper-button on-tap="_delPeriod" item="{{item}}"><iron-icon icon="delete"></iron-icon></paper-button>
                   </td>
@@ -113,13 +115,19 @@
     </gl-form-panel>
 
     <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+        
+        <paper-button raised on-tap="_deleteData"><iron-icon icon="delete"></iron-icon>delete</paper-button>
+        <paper-button class="gl-btn-danger" on-tap="_close" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_updateData" raised>บันทึก</paper-button>
     </div>
   </template>
   <script>
     Polymer({
       is: "quota-update",
+       behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+       ],
        properties: {
         Period: {
           type: Array,
@@ -158,7 +166,22 @@
         data:{
           type: Object,
           observer: '_getData'
+        },
+        getTypeRice:{
+          type: Array
         }
+       },
+       ready:function(){
+          axios.get('./eu/type_rice/')
+          .then((response)=>{
+            console.log("success!!");
+            console.log(response.data);
+            this.getTypeRice = response.data;
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error);
+          });
        },
        getIndex:function(index){
          return parseInt(index)+1;
@@ -188,7 +211,7 @@
       inputProportionChange:function(e){
         this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
       },
-      _saveData:function(){
+      _updateData:function(){
         datas = {
           id:this.dataYear,
           type_rice:
@@ -198,8 +221,17 @@
               type_rice_id:this.typeRice
             }
         }
-        console.log(datas);
-      /*  axios.put('/eu/quota/edit',datas)
+
+        this.fire('eu-update-data',datas)
+      },
+      _deleteData:function(){
+        //console.log('_deleteData');
+        axios.delete('/eu/quota',{
+          params:{
+            id:this.dataYear,
+            type_rice_id:this.typeRice
+          }
+        })
         .then((response)=>{
           console.log("success");
           console.log(response);
@@ -207,7 +239,7 @@
         .catch((error)=>{
           console.log("error");
           console.log(error);
-        });*/
+        });
       },
       testNum:function(ob,param){
           //console.log(typeof ob.value);
@@ -226,9 +258,20 @@
         this.typeRice = data.type_rice_id;
         this.sum = data.amount;
         this.Period = data.period;
+      
         //this.year = data.id;
         /*this.year = data.id;
         this.Period = data.period;*/
+      },
+      _close:function(){
+        console.log('close');
+        this.glQuery('contentPanel').changDrawer();
+      },
+      _mathData:function(){
+        
+        this.Period.map((data,i)=>{
+          this.set('Period.'+ i +'.quantity',(parseFloat(this.sum)*parseFloat(data.percent))/100);
+        })
       }
       
 
