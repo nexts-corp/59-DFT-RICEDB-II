@@ -112,6 +112,8 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                         .pluck("id", "shm_id", "package_id", "seller_id", "shm_det_quantity", "type_rice_id")
                         .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
                         .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_date", "cl_name", "cl_quality"] }).zip()
+                        .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
+                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .merge(function (m1) {
                             return {
                                 shm_det_id: m1('id'),
@@ -123,7 +125,15 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                                         return f('package_id').eq(m1('package_id'))
                                     })(0)
                                     .pluck('price_per_ton')
-                                    .values()(0)
+                                    .values()(0),
+                                weight_gross: m1('shm_det_quantity').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
+                                weight_net: m1('shm_det_quantity').mul(m1('package_kg_per_bag')).div(1000),
+                                weight_tare: m1('shm_det_quantity').mul(m1('package_weight_bag').div(1000)).div(1000)
+                            }
+                        })
+                        .merge(function (m2) {
+                            return {
+                                amount_usd: m2('price_per_ton').mul(m2('weight_net'))
                             }
                         })
                         .without('id', 'cl_type_rice')
@@ -134,10 +144,16 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                     ship_id: m('group_ship')('ship_id')(0),
                     shipline_id: m('group_ship')('shipline_id')(0),
                     ship_lot_no: m('group_ship')('ship_lot_no')(0),
-                    ship_voy_no: m('group_ship')('ship_voy_no')(0)
+                    ship_voy_no: m('group_ship')('ship_voy_no')(0),
+                    weight_gross: m('shipment_detail').sum('weight_gross'),
+                    weight_net: m('shipment_detail').sum('weight_net'),
+                    weight_tare: m('shipment_detail').sum('weight_tare'),
+                    amount_usd: m('shipment_detail').sum('amount_usd'),
                 }
             })
             .without("group_ship")
+            .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
