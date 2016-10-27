@@ -93,6 +93,30 @@ router.post(['/'], function (req, res, next) {
 });
 
 
+
+router.put(['/'], function (req, res, next) {
+    db.query(function (conn) {
+        var statement = r.db('eu').table('quota').get(req.body.id)
+            .update(function (row) {
+                return {
+                    type_rice: row('type_rice').filter(function (type_rice) {
+                        return type_rice('type_rice_id').eq(req.body.type_rice.type_rice_id).not()
+                    })
+                    .append(req.body.type_rice)
+                };
+            });
+
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+    });
+});
+
+
 router.delete(['/'], function (req, res, next) {
     db.query(function (conn) {
         var params = req.query;
