@@ -95,7 +95,9 @@ router.get('/', function (req, res, next) {
                     exporter_date_approve: r.branch(m.hasFields('exporter_date_approve'), m('exporter_date_approve').split('T')(0), null),
                     exporter_date_update: r.branch(m.hasFields('exporter_date_update'), m('exporter_date_update').split('T')(0), null),
                     trader_date_approve: m('trader_date_approve').split('T')(0),
-                    trader_date_expire: m('trader_date_expire').split('T')(0)
+                    trader_date_expire: m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
+                    trader_date_active: r.now().toISO8601().lt(m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
+                    //r.time(m('trader_date_approve').split('T')(0).split('-')(0).coerceTo('number'), r.december, 31, 0, 0, 0, '+07:00').toISO8601()
                 }
             })
             .without('id')
