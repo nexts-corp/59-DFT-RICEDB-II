@@ -67,7 +67,7 @@ var schema = {
                 "type": "string",
                 "format": "date-time"
             },
-            "seller_id": {
+            "exporter_id": {
                 "type": "string",
                 "minLength": 36
             },
@@ -110,7 +110,7 @@ var schema = {
             "load_port_id",
             "num_of_container",
             "package_id",
-            "seller_id",
+            "exporter_id",
             "ship_id",
             "shipline_id",
             "shm_det_quantity",
