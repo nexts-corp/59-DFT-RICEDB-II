@@ -1,0 +1,47 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+ 
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+
+
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+
+<link rel="import" href="./layout-main-toolbar.html">
+
+<link rel="import" href="./layout-main-drawer.html">
+
+
+<dom-module id="layout-main">
+	<template>
+	<style>
+		#drawer{
+			z-index: 1;
+		}
+	</style>
+		<app-drawer id="drawer">
+			<layout-main-drawer on-toggle-drawer="_toggleDrawer"></layout-main-drawer>
+		</app-drawer>
+
+		<app-header-layout>
+			<app-header fixed condenses effects="waterfall">
+				<layout-main-toolbar on-toggle-drawer="_toggleDrawer"></layout-main-toolbar>
+			</app-header>
+			<content></content>
+		</app-header-layout>
+
+	</template>
+
+
+	<script>
+        Polymer({
+            is:'layout-main',
+			_toggleDrawer:function(){
+				this.$.drawer.toggle();
+			}
+        });
+    </script>
+</dom-module>
