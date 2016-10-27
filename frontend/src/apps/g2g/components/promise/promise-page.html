@@ -1,0 +1,36 @@
+<link rel="import" href="../list-edit/list-confirm.html">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
+  :host {
+    padding: 50px;
+  }
+  .selectConfirm {
+    padding: 20px;
+  }
+</style>
+<dom-module id="promise-page">
+  <template>
+
+    <div class="selectConfirm">
+      <list-confirm data="{{data}}">
+        <items type="primary">
+          <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
+          <list item="cl_quantity_total" label="ทำสัญญาแล้ว (ตัน)/" width="flex" type="string"></list>
+          <list item="cl_quantity_sent" label="ส่งแล้ว (ตัน)/" width="flex" type="string"></list>
+          <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ (ตัน)" width="flex" type="string"></list>
+        </items>
+      </list-confirm>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "promise-page",
+      listeners: {
+          'select': 'selectedConfirm',
+      },
+      selectedConfirm:function (e) {
+        console.log(e);
+      }
+    });
+  </script>
+</dom-module>

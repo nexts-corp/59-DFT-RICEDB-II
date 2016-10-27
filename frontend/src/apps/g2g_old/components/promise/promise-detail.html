@@ -1,0 +1,204 @@
+<dom-module id="promise-detail">
+
+    <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+        .bg {
+            background-color: var(--paper-grey-200);
+            border: 1px solid black;
+            padding: 10px 0px 10px 10px;
+        }
+
+        paper-button {
+            margin-top: 10px;
+        }
+
+        .icon-bin {
+            margin-top: 10px;
+        }
+
+        .bottom {
+            margin-bottom: 10px;
+        }
+    </style>
+
+
+    <template>
+    <form is="iron-form" id="insertPromiseDetail">
+      <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input class="bottom" auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+          </gl-grid-col>
+          <gl-form-input value="{{data.contract_id}}" name="contract_id" hidden></gl-form-input>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <vaadin-date-picker label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+          </gl-grid-col>
+        </gl-grid-row>
+
+        <template is="dom-repeat" items="{{data.contract_type_rice}}">
+            <div class="bg top">
+              <gl-grid-row>
+                <gl-form-input value="{{item.type_rice_id}}" name="type_rice_id" hidden></gl-form-input>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
+                      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
+                        <template is="dom-repeat" items="[[typeRice]]">
+                          <paper-item value="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
+                        </template>
+
+    </paper-menu>
+    </gl-form-dropdown-menu>
+    </gl-grid-col>
+
+    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+        <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
+    </gl-grid-col>
+    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+        <paper-icon-button id="[[index]]" class="icon-bin" icon="icons:delete" title="ลบชนิดข้าว" style="color: gray;" on-tap="dele"></paper-icon-button>
+    </gl-grid-col>
+    </gl-grid-row>
+    </div>
+    </template>
+
+    <div class="horizontal end-justified layout">
+        <paper-button raised on-tap="addNewData" class="gl-btn-primary">เพิ่ม</paper-button>
+    </div>
+
+
+    <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+            <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
+            <gl-form-textarea rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.buyer_address}}" name="buyer_address"></gl-form-textarea>
+        </gl-grid-col>
+    </gl-grid-row>
+    <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+            <gl-form-textarea rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+        </gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+        <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+    </div>
+    </form>
+    </template>
+
+    <script>
+        Polymer({
+            is: "promise-detail",
+            behaviors: [
+                gl.behavior.core
+            ],
+            properties: {
+                data: {
+                    type: Object,
+                    value: {
+                        name: ''
+                    }
+                },
+                error: {
+                    type: Object,
+                    value: {
+                        name: false
+                    }
+                },
+                success:{
+                  type:Boolean,
+                  value:false
+                }
+            },
+
+            addNewData: function() {
+                this.push('data.contract_type_rice', {
+                    type_rice_id: '',
+                    type_rice_name_en: '',
+                    type_rice_name_th: '',
+                    type_rice_quantity: '',
+                });
+                // console.log(this.data);
+            },
+            dele: function(e) {
+                // console.log(e.currentTarget.id);
+                // var index = this.data.contract_type_rice.indexOf(data);
+                this.splice('data.contract_type_rice', e.currentTarget.id, 1);
+            },
+            listeners: {
+                'iron-form-submit': '_submitData'
+            },
+            _saveData: function(event) {
+                this.$.insertPromiseDetail.submit();
+                // console.log(this.data);
+            },
+            _submitData: function(event) {
+                // console.log(JSON.stringify(event.detail));
+                //console.log(event.detail);
+                // this.result = event.detail
+                var keys = ["type_rice_id", "type_rice_quantity"];
+                var rmKeys = ["buyer_address", "type_rice_name", "contract_id"];
+                var datas = event.detail;
+                var type_rice = [];
+                for (key in datas) {
+                    if (keys.indexOf(key) > -1) {
+                        //  console.log(key + " "+datas[key]);
+                        //   console.log(datas[key].constructor === Array);
+                        if (datas[key].constructor === Array) {
+                            for (key2 in datas[key]) {
+                                if (!type_rice.hasOwnProperty(key2)) {
+                                    type_rice[key2] = {};
+                                }
+                                if (key == "type_rice_quantity")
+                                    type_rice[key2][key] = parseFloat(datas[key][key2]);
+                                else
+                                    type_rice[key2][key] = datas[key][key2];
+                                // if(!type_rice[key2].hasOwnProperty(key)){
+                                //     type_rice[key2][key] = datas[key][key2];
+                                // }
+                                //  type_rice[key2][key] = datas[key][key2];
+                                // console.log("key2=> "+key2+" "+datas[key][key2]);
+                            }
+                        } else {
+                            if (!type_rice.hasOwnProperty(0)) {
+                                type_rice[0] = {};
+                            }
+                            if (key == "type_rice_quantity")
+                                type_rice[0][key] = parseFloat(datas[key]);
+                            else
+                                type_rice[0][key] = datas[key];
+                        }
+                        delete datas[key];
+                    }
+                }
+                // console.log(type_rice);
+                datas["contract_type_rice"] = type_rice;
+                datas["id"] = datas["contract_id"];
+                // console.log(datas["contract_date"]);
+                datas["contract_date"]=new Date (datas["contract_date"]);
+                for (i = 0; i < rmKeys.length; i++) {
+                    delete datas[rmKeys[i]];
+                }
+                // console.log(JSON.stringify(datas));
+                this.glQuery('layoutMain').openToastSaveing();
+                // var success =false;
+                this.postDb(datas);
+
+            },
+            postDb:function (data) {
+              axios.put('./g2g/contract/update', data)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                            this.glQuery('addContract').getChange(false,'put');
+                          // this.glQuery('contentPanel').changDrawer();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
+            },
+            cancelDrawer:function () {
+              console.log(111);
+              this.glQuery('contentPanel').changDrawer();
+            }
+        });
+    </script>
+</dom-module>

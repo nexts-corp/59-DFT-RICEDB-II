@@ -1,0 +1,95 @@
+<link rel="import" href="../../components/grid/nx-grid.html">
+<link rel="import" href="../../components/my-panel.html">
+<link rel="import" href="../../components/re-port.html">
+
+<dom-module id="payment-trader">
+  <style  is="custom-style" include="iron-flex iron-flex-factors">
+    .button{
+          position: relative;
+          top : 10px;
+          left : 55%;
+          background-color: white;
+      }
+      .content1{
+          overflow-x:auto;
+          border: 2px solid black;
+          width: 650px;
+      }
+  </style>
+  <template>
+          <paper-material style="margin-top:10px;" elevation="1">
+
+                 <gl-form-panel label="รายละเอียดการรับเงินค่าข้าว ครั้งที่ 1 จำนวนเงิน xxxxxxx บาท">
+                  <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                        <gl-form-label label="Invoice No" value="[[data.invoiceNo]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                        <gl-form-label label="ชื่อเรือ" value="[[data.vesselName]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                        <gl-form-label label="ค่าธรรมเนี่ยมธนาคารต่างประเทศ USD" value="[[data.foreignBankChargesFee]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                        <paper-textarea label="เฉลี่ยค่าธรรมเนียมลำละ" value="[[data.feePerVessel]]"></paper-textarea>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="ลำที่" value="[[data.vesselOrder]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="จำนวน (ตัน)" value="[[data.numberPerTon]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="ตัวละ USD" value="[[data.eachUsd]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="มูลค่า USD" value="[[data.valueUse]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="อัตตราแลกเปลี่ยน" value="[[data.exchangeRate]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="ค่าธรรมเนี่ยม บาท" value="[[data.fee]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="รวมค่าธรรมเนี่ยม" value="[[data.sumFee]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <gl-form-label label="จำนวนเรื่อทั้งหมด" value="[[data.sumVessel]]"></gl-form-label>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" xs="6" sm="4" md="4" lg="2">
+                      <paper-textarea label="จำนวนผู้เข้าสอบ" value="[[data.examiner]]"></paper-textarea>
+                    </gl-grid-col>
+
+                  </gl-grid-row>
+
+                  <gl-grid-row>
+                    <gl-grid-col width="[[getWidth]]" xs="12" sm="12" md="12" lg="12" style="padding-top:10px;">
+                         <div id="tableReport" class="content1">
+                             <re-port data="[[data.company]]"></re-port>
+                         </div>
+
+                    </gl-grid-col>
+                  </gl-grid-row>
+                  <gl-grid-row>
+                    <div class="button">
+                        <div>
+                            <paper-button raised style="width:20px;height:40px"><p style="font-size:16px;">ยกเลิก</p></paper-button>
+                            <paper-button raised style="width:20px;height:40px"><p style="font-size:16px;">บันทึก</p></paper-button>
+                        </div>
+                    </div>
+                  </gl-grid-row>
+                </gl-form-panel>
+            </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: "payment-trader",
+      properties: {
+        data: {
+          type: Object,
+        }
+      }
+    });
+  </script>
+</dom-module>
