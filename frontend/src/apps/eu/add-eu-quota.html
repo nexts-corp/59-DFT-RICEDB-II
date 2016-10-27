@@ -2,6 +2,7 @@
 <link rel="import" href="./components/list-edit/list-quota.html">
 <link rel="import" href="./components/allocate/quota-insert.html">
 <link rel="import" href="./components/allocate/quota-update.html">
+<link rel="import" href="./../../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="./../../../bower_components/gl-styles/gl-table.html">
 
@@ -61,10 +62,10 @@
           margin-left: 30px;
         }
         th{
-          text-align:center;
+          /*text-align:center;*/
         }
         td{
-           text-align:center;
+           /*text-align:center;*/
         }
     </style>
     <template>
@@ -85,10 +86,10 @@
             <div class="container flex-equal-justified">
               <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
                   <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
-                    <!--<template is="dom-repeat" items="{{getData}}">
-                      <paper-item year="{{item.id}}">{{item.id}}</paper-item>
-                    </template>-->
-                      <paper-item year="{{getYear.id}}">{{getYear.id}}</paper-item>
+                    <template is="dom-repeat" items="{{getYear}}">
+                      <paper-item year="{{item}}">{{item}}</paper-item>
+                    </template>
+                      <!--<paper-item year="{{getYear.id}}">{{getYear.id}}</paper-item>-->
                   </paper-listbox>
               </gl-form-dropdown-menu>
             </div>
@@ -108,6 +109,7 @@
                 <tr>
                   <th>ประเภทข้าว</th>
                   <th>ยอดรวม (งวด) </th>
+                  <th>งวด</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,6 +117,11 @@
                     <tr on-tap="_toggleDrawer" id="detailRegExporter" data="[[item]]">
                       <td>{{item.type_rice_name_th}}</td>
                       <td>{{item.amount}}</td>
+                      <td>
+                      <template is="dom-repeat" items="{{item.period}}">
+                            งวดที่ {{index}} &nbsp;&nbsp;&nbsp; ปริมาณ : {{item.quantity}}<br>
+                      </template>
+                      </td>
                     </tr>
                   </template>
             </tbody>
@@ -126,7 +133,7 @@
         <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
                 <div name="addRedRegExporter"><quota-insert></quota-insert></div>
-                <div name="detailRegExporter"><quota-update data="{{sendData}}" data-year="{{sendYear}}"></quota-update></div>
+                <div name="detailRegExporter"><quota-update on-eu-update-data="_updateData" data="{{sendData}}" data-year="{{sendYear}}"></quota-update></div>
               </iron-pages>
         </div>
     </panel>
@@ -174,7 +181,7 @@
                 // this.layoutMain = this.glQuery('layoutMain');
             },
             ready: function(){
-              axios.get('./eu/quota?id=2558')
+              axios.get('./eu/quota/year')
               .then((response)=>{
                 console.log("success");
                 this.getYear = response.data;
@@ -244,6 +251,20 @@
             },
             _sendData:function(e){
               //console.log(e.currentTarget.data);
+            },
+            _updateData:function(e){
+              console.log(e.detail);
+              axios.put('/eu/quota',e.detail)
+              .then((response)=>{
+                console.log("success");
+                console.log(response);
+                this._getDb(this.selectYear);
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+              });
+
             }
         });
     </script>

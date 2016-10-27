@@ -65,6 +65,8 @@ router.get('/id/:shm_id', function (req, res, next) {
                             })
                         }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("carrier_id", r.table("carrier")).without({ right: "id" }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
                         .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
