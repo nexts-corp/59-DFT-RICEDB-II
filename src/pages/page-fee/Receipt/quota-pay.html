@@ -1,0 +1,153 @@
+
+<dom-module id="quota-pay">
+    <style>
+        .container{
+            padding: 10px;
+        }
+		.header {
+			font-size: 18px;
+		}
+		
+		table.gl-table-default {
+			border-collapse: collapse;
+			width: 100%;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+		
+		table.gl-table-default,
+		th,
+		td {
+			border-bottom: 1px solid #ddd;
+		}
+		
+		th,
+		td {
+			padding: 15px;
+		}
+		
+		th {
+			text-align: center;
+			background-color: #F1F1F1;
+		}
+		
+		td {
+			text-align: center;
+		}
+		
+		tr:hover {
+			background-color: #F1F1F1;
+		}
+		
+		.searchBorder {
+			border: 1px solid var(--gl-gray-light-color);
+			margin: 15px;
+			border-radius: 3px
+		}
+    </style>
+    <template>
+       <div class="content">
+			<div class="flex searchBorder">
+				<div style="overflow-x:auto;">
+					<table class="gl-table-default">
+						<tr>
+							<template is="dom-repeat" items="{{dataAmount.header}}">
+								<th>{{item}}</th>
+							</template>
+						</tr>
+						<tr>
+							<template is="dom-repeat" items={{dataAmount.row1}}>
+								<td id="addRedRegExporter">{{item}}</td>
+							</template>
+						</tr>
+						<tr>
+							<template is="dom-repeat" items={{dataAmount.row2}}>
+								<td id="addRedRegExporter">{{item}}</td>
+							</template>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+        <div class="container">
+        <div class="header container">
+			ชำระแบบใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)
+		</div>
+            <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-form-label-input label="จำนวนเงินตามคำขอ EC : " value="300,000.00"></gl-form-label-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-form-label-input label="เงินคงเหลือจาก EC ที่ยกเลิก: " value="225,000.00"></gl-form-label-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                </gl-grid-col>
+            </gl-grid-row>
+
+             <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-form-input label="จำนวนเงินที่ต้องการใช้จากใบเสร็จ/ EC ที่ยกเลิก" value="0.00"></gl-form-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-form-label-input label="จำนวนเงินที่ต้องชำระ: " value="300,000.00"></gl-form-label-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                </gl-grid-col>
+            </gl-grid-row>
+
+             <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                </gl-grid-col>
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+                    <gl-form-textarea label="หมายเหตุ" ></gl-form-textarea>
+                </gl-grid-col>
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                </gl-grid-col>
+            </gl-grid-row>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'quota-pay',
+              properties:{
+                  dataAmount:{
+                    type: Object,
+                    value:
+                      {
+                        header:[
+                          'ชื่อฟอร์ม',
+                          'เลขที่คำขอ EC',
+                          'เลขที่หนังสือรับรอง',
+                          'ผู้รับมอบ',
+                          'ปริมาณ (ตัน)',
+                          'จำนวนเงินต่อตัน',
+                          'รวมเงินทั้งหมด (บาท)'
+                        ],
+                        row1:[
+                            'EC ข้าวในโควต้า EU',
+                            '20160701-0001',
+                            '012/2016',
+                            'นายสมพร มานะ',
+                            '120.00',
+                            '2,500.00',
+                            '300,000.00'
+                          ],
+                          row2:[
+                            'EC ข้าวในโควต้า EU',
+                            '20160701-0002',
+                            '013/2016',
+                            'นายสมพร มานะ',
+                            '100.00',
+                            '2,500.00',
+                            '250,000.00'
+                          ]  
+                      }
+                },
+            }
+        });
+    </script>
+</dom-module>

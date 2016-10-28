@@ -1,0 +1,198 @@
+<!--<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="./components/list-edit/list-quota.html">
+<link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
+<link rel="import" href="components/calculate/calculate-setting.html">-->
+
+
+<!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
+
+
+<dom-module id="page-calculate">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+        * {
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+          padding: 10px 0px 10px 10px;
+          background-color: var(--paper-grey-100);
+          color: var(--paper-grey-600);
+          font-size: var(--font-size-h4);
+          font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .registor{
+          margin: 20px;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+        .searchBox{
+          padding: 5px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+        .elevation{
+          border-radius: 5px;
+          margin: 10px;
+          padding: 5px;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px;
+        }
+        paper-material {
+          background-color: var(--gl-white-color);
+        }
+        gl-search-input{
+          margin: 30px 0px 0px 0px;
+        }
+        .container{
+          margin-left: 30px;
+        }
+        .fontContent{
+          font-size: var(--font-size-h4);
+          /*text-decoration: blink;*/
+          padding: 15px;
+          margin-top: 20px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+          table.gl-table-default{
+               border-collapse: collapse;
+               width: 100%;
+               overflow-x:auto;
+               /*white-space: nowrap;*/
+           }
+           table.gl-table-default,th,td{
+               border-bottom: 1px solid #ddd;
+           }
+           th,td{
+               padding: 15px;
+           }
+           th{
+              text-align: left;
+              background-color: #F1F1F1;
+           }
+           td{
+               text-align: left;
+           }
+           tr:hover{
+               background-color: #F1F1F1;
+           }
+    </style>
+    <template>
+
+    <content-panel>
+      <grid>
+        <div class="layout vertical registor">
+          <div class="flex">
+            <div class="layout horizontal end-justified">
+              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter">ตั้งค่าการคำนวณโควตา</paper-button>
+            </div>
+          </div>
+          <div class="flex title">
+            การคำนวณส่วนจัดสรร
+          </div>
+          <div class="fontContent">
+              การคำนวณส่วนจัดสรรข้าวขาวภายใต้โควตาภาษีสหภาพยุโรป
+          </div>
+          <div class="container">
+           <gl-form-dropdown-menu label="ปีโควตา">
+            <paper-listbox class="dropdown-content">
+              <paper-item>2558</paper-item>
+              <paper-item>2557</paper-item>
+              <paper-item>2556</paper-item>
+              <paper-item>2555</paper-item>
+            </paper-listbox>
+          </gl-form-dropdown-menu>
+          </div>
+          
+          <div style="overflow-x:auto;">
+          <table class="gl-table-default">
+              <tr>
+                  <th>คำนวณครั้งที่</th>
+                  <th>ปีโควตา</th>
+                  <th>ประเภทข้าว</th>
+                  <th>ยอดรวมการส่งออก</th>
+                  <th>ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวนส่วนจัดสรร</th>
+                  <th>ยอดรวมการขอหนังสือรับรอง</th>
+                  <th>ยอดรวมส่วนต่างปริมาณการส่งข้าว(ตามกรมศุลการกร)</th>
+                  <th>ยอดรวมส่วนต่างมูลค่าการส่งข้าว(ตามกรมศุลการกร)</th>
+                  <th>ปริมาณโควตา 80%</th>
+                  <th>ปริมาณโควตา 10%</th>
+                  <th>จัดการ</th>
+              </tr>
+              <tr>
+                  <td>1</td>
+                  <td>2559</td>
+                  <td>ข้าวขาว</td>
+                  <td>178,450.14</td>
+                  <td>64,364.66</td>
+                  <td>119,343.15</td>
+                  <td>-5,318,061.14</td>
+                  <td>-77,706,431,185.66</td>
+                  <td>21,455.00</td>
+                  <td>-</td>
+                  <td></td>
+              </tr>
+          </table>
+          </div>
+        </div>
+        <!-- </paper-material> -->
+
+        <div class="layout horizontal end-justified">
+          <paper-button raised class="gl-btn-primary">ดำเนินการคำนวณโควตา</paper-button>
+        </div>
+
+      </grid>
+    <panel>
+        <div class="left">
+          <calculate-setting></calculate-setting>
+        </div>
+    </panel>
+    </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "page-calculate",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            properties: {
+                layerContent: {
+                    type: String,
+                    value: "detailRegExporter"
+                },
+                result: {
+                    type: Object,
+                    observer: '_result'
+                }
+            },
+            _result:function () {
+              // console.log(this.result);
+            },
+            nxGridTap: function(e) {
+              // console.log(e.detail.level);
+              // console.log(e.detail.data);
+              // console.log(this.layerContent );
+                this.layerContent = e.detail.level;
+                // console.log(this.layerContent);
+                if (this.layerContent === 'third') {
+                    this.vesselPage = 1;
+                } else {
+                    this.vesselPage = 0;
+                }
+                this.dataSelect = e.detail.data;
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent = e.target.id;
+              // console.log(e.target.id);
+            }
+        });
+    </script>
+</dom-module>
