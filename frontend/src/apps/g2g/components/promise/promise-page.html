@@ -10,12 +10,12 @@
     /*color: red;*/
   }
   .addconfirm {
-    /*float: right;*/
+    margin-top: 20px;
   }
 </style>
   <template>
     <iron-pages selected="{{layerConfirm}}">
-      <div>
+      <div id="listitem">
         <div class="addconfirm horizontal end-justified layout">
           <paper-button raised class="gl-btn-primary" on-tap="createConfirm">Create Confirmation Letter</paper-button>
         </div>
@@ -54,9 +54,11 @@
         <panel-seleted>
 
          <section-content name="detail">
-           <promise-insert package=[[package]]
+           <promise-insert
+                           contract-id="[[data.contract_id]]"
+                           package="[[package]]"
                            rice-type="[[riceType]]"
-                           incoterms=[[incoterms]]></promise-insert>
+                           incoterms="[[incoterms]]"></promise-insert>
          </section-content>
          <section-content name="print">
              <vessel-print></vessel-print>
@@ -93,14 +95,9 @@
       },
 
       check:function (confirmLetter) {
-        // console.log(confirmLetter);
-        // console.log(this.layerConfirm);
-        this.layerConfirm = 1;
-        // console.log(confirmLetter.contract_id);
-        // this.getDb('./g2g/contract/id/'+confirmLetter.contract_id,(data)=>{
-        //   this.riceType = data;
-        //   console.log(this.riceType);
-        // });
+         if( confirmLetter != null){
+           this.layerConfirm = 1;
+         }
       },
       createConfirm:function () {
         this.layerConfirm = 2;

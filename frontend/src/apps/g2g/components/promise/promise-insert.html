@@ -170,7 +170,7 @@
       </gl-grid-row>
       </form>
       <div class="horizontal end-justified layout">
-          <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+          <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
           <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
       </div>
     </template>
@@ -214,15 +214,7 @@
             observers: [
               'dataChange(data.cl_id)',
             ],
-            // created: function() {
-            //   console.log('created');
-            // },
-            // ready: function() {
-            //   console.log('ready');
-            // },
-            // attached: function() {
-            //   console.log('attached');
-            // },
+
             dataChange:function (clId) {
               //ดึง confirmLetter
               this.getDb('./g2g/confirm/id/'+clId,(data)=>{
@@ -246,7 +238,7 @@
                           console.log("success");
                           console.log(response);
                           this.glQuery('addContract').getChange();
-                          // this.glQuery('contentPanel').changDrawer();
+                          this.backPage();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
@@ -318,8 +310,13 @@
 
               return result;
             },
-            selectWithOutSelected:function () {
-
+            cancelDrawer:function () {
+              this.backPage();
+            },
+            backPage:function () {
+              this.fire('select', {
+                data: 'fin',
+              });
             },
             testNum:function(ob,param){
                     if(ob.path.split(".").length == 2){
