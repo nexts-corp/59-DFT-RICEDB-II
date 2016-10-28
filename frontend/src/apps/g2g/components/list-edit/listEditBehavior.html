@@ -113,6 +113,10 @@
       this.glQuery('contentPanel').changDrawer();
     },
     _getBind: function(e) {
+      // console.log(e.currentTarget.data);
+      this.fire('select', {
+          data: e.currentTarget.data
+        });
       this.fire('nx-grid-' + e.type, {
           data: e.currentTarget.data,
           level: e.currentTarget.getAttribute('level')

@@ -1,36 +1,126 @@
 <link rel="import" href="../list-edit/list-confirm.html">
+
+<dom-module id="promise-page">
 <style include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
   :host {
-    padding: 50px;
+    /*padding-top: 20px;*/
   }
-  .selectConfirm {
-    padding: 20px;
+  .selectconfirm {
+    padding-top: 10px;
+    /*color: red;*/
+  }
+  .addconfirm {
+    /*float: right;*/
   }
 </style>
-<dom-module id="promise-page">
   <template>
+    <iron-pages selected="{{layerConfirm}}">
+      <div>
+        <div class="addconfirm horizontal end-justified layout">
+          <paper-button raised class="gl-btn-primary" on-tap="createConfirm">Create Confirmation Letter</paper-button>
+        </div>
+        <div class="selectconfirm">
+          <list-confirm data="{{data.confirm_letter}}">
+            <items type="primary">
+              <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
+              <list item="cl_quantity_total" label="ทำสัญญาแล้ว (ตัน)" width="flex" type="string"></list>
+              <list item="cl_quantity_sent" label="ส่งแล้ว (ตัน)" width="flex" type="string"></list>
+              <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ (ตัน)" width="flex" type="string"></list>
+            </items>
+          </list-confirm>
+        </div>
+      </div>
+      <div>
+        <panel-seleted>
 
-    <div class="selectConfirm">
-      <list-confirm data="{{data}}">
-        <items type="primary">
-          <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
-          <list item="cl_quantity_total" label="ทำสัญญาแล้ว (ตัน)/" width="flex" type="string"></list>
-          <list item="cl_quantity_sent" label="ส่งแล้ว (ตัน)/" width="flex" type="string"></list>
-          <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ (ตัน)" width="flex" type="string"></list>
-        </items>
-      </list-confirm>
-    </div>
+         <section-content name="detail">
+           <promise-confirm
+                             confirm-letter="[[confirmLetter]]"
+                             rice-type="[[riceType]]"
+                             package="[[package]]"
+                             incoterms="[[incoterms]]"
+                             on-confirm-mation-common="confirmMationCommon"></promise-confirm>
+         </section-content>
+         <section-content name="print">
+             <vessel-print></vessel-print>
+         </section-content>
+         <section-content name="file">
+             <promise-fileup></promise-fileup>
+         </section-content>
+       </panel-seleted>
+
+      </div>
+      <div>
+        <panel-seleted>
+
+         <section-content name="detail">
+           <promise-insert package=[[package]]
+                           rice-type="[[riceType]]"
+                           incoterms=[[incoterms]]></promise-insert>
+         </section-content>
+         <section-content name="print">
+             <vessel-print></vessel-print>
+         </section-content>
+         <section-content name="file">
+             <promise-fileup></promise-fileup>
+         </section-content>
+       </panel-seleted>
+
+      </div>
+    </iron-pages>
+
+
 
   </template>
   <script>
     Polymer({
       is: "promise-page",
-      listeners: {
-          'select': 'selectedConfirm',
+      properties: {
+        layerConfirm: {
+          type: Number,
+          value:0
+        }
       },
-      selectedConfirm:function (e) {
-        console.log(e);
-      }
+      listeners: {
+          'select': 'selectedPage',
+      },
+      observers:[
+        'check(confirmLetter)',
+        'getRicetype(data.contract_id)'
+      ],
+      selectedPage:function (e) {
+        this.layerConfirm = 0;
+      },
+
+      check:function (confirmLetter) {
+        // console.log(confirmLetter);
+        // console.log(this.layerConfirm);
+        this.layerConfirm = 1;
+        // console.log(confirmLetter.contract_id);
+        // this.getDb('./g2g/contract/id/'+confirmLetter.contract_id,(data)=>{
+        //   this.riceType = data;
+        //   console.log(this.riceType);
+        // });
+      },
+      createConfirm:function () {
+        this.layerConfirm = 2;
+      },
+      getRicetype:function (contractId) {
+        // console.log(data);
+        this.getDb('./g2g/contract/id/'+contractId,(data)=>{
+          this.riceType = data.contract_type_rice;
+          // console.log(this.riceType);
+        });
+      },
+      getDb:function (url,callback) {
+        axios.get(url)
+          .then(function(response){
+            callback(response.data);
+            // console.log('ดึงแล้ว');
+          }.bind(this))
+          .catch(function (error) {
+          }.bind(this));
+      },
     });
   </script>
 </dom-module>

@@ -106,13 +106,14 @@
           </div>
 
         </grid>
-      <panel><iron-pages selected="{{layerContent}}" attr-for-selected="name">
+      <panel>
+        <iron-pages selected="{{layerContent}}" attr-for-selected="name">
 
 
               <div name="primary">
                 <panel-seleted>
                   <section-content name="detail">
-                    <promise-detail data="{{dataContract}}" type-rice=[[typeRice]]></promise-detail>
+                    <promise-detail data="{{dataContract}}"></promise-detail>
                   </section-content>
                   <section-content name="print">
                       <vessel-print></vessel-print>
@@ -123,7 +124,11 @@
                 </panel-seleted>
               </div>
               <div name="secondary">
-                <promise-page data="[[dataContract.confirm_letter]]"></promise-page>
+                <promise-page data="[[dataContract]]"
+                              confirm-letter="[[confirmLetter]]"
+                              package="[[package]]"
+                              incoterms="[[incoterms]]"
+                ></promise-page>
                 <!-- <panel-seleted>
 
                   <section-content name="detail">
@@ -155,6 +160,7 @@
             listeners: {
                 // 'nx-grid-tap': 'nxGridTap',
                 // 'nx-grid-dblclick': 'nxGridDblclick'
+                'select': 'selectedConfirm',
             },
             behaviors: [
                 gl.behavior.core,
@@ -260,9 +266,6 @@
                 ]
                 };
 
-
-
-
             },
             getChange:function (refresh,action) {
               // console.log('action ',action);
@@ -271,6 +274,10 @@
                 // console.log(  this.contract);
                 // dataContract
               },refresh,action)
+            },
+            selectedConfirm:function (e) {
+              // console.log(e.detail.data.cl_id);
+              this.conFirmDeatil(e.detail.data.cl_id);
             },
             computeContract:function (para) {
                 // console.log(para.base.contract_quantity_balance);
@@ -349,7 +356,7 @@
             getconfirm:function (contractId) {
                 this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
                   this.cml = data;
-                  // console.log(this.cml);
+                  console.log(this.cml);
                   // this.cl_id.items = data;
                 });
             },
@@ -358,7 +365,8 @@
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
                 // console.log(this.confirmLetter);
-              },true,'get');
+              },false,'get');
+              // console.log(this.confirmLetter);
             },
             getDb:function (url,callback,refresh,action) {
               // console.log(url);

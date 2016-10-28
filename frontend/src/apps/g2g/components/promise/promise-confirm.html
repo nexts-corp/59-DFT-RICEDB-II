@@ -91,7 +91,7 @@
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
-                    <template is="dom-repeat" items="[[riceType.contract_type_rice]]">
+                    <template is="dom-repeat" items="[[riceType]]">
                       <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                     </template>
                   </paper-menu>
@@ -230,17 +230,10 @@
             ],
             observers: [
               'dataChange(data)',
-              'getTyperice(contractId)'
             ],
             attached: function() {
               // console.log("created confirm-mation-common");
               this.fire('confirm-mation-common',{node:this});
-            },
-            getTyperice: function(contractId) {
-              this.getDb('./g2g/contract/id/'+contractId,(data)=>{
-                this.riceType = data;
-                // console.log(this.riceType);
-              });
             },
             dataChange:function (data) {
               // console.log(data);
@@ -272,15 +265,6 @@
               this.postDb(this.confirmLetter)
               // console.log(this.confirmLetter);
             },
-            getDb:function (url,callback) {
-              axios.get(url)
-                .then(function(response){
-                  callback(response.data);
-                  // console.log('ดึงแล้ว');
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
-            },
             postDb:function (data) {
               axios.put('./g2g/confirm/update', data)
                         .then(function (response) {
@@ -288,6 +272,9 @@
                           console.log(response);
                           this.glQuery('addContract').getChange(false,'put');
                           // this.glQuery('contentPanel').changDrawer();
+                          // this.fire('select', {
+                          //   data: 'fin',
+                          // });
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");

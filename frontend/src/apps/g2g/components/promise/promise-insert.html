@@ -80,7 +80,7 @@
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
-                    <template is="dom-repeat" items="[[riceType.contract_type_rice]]">
+                    <template is="dom-repeat" items="[[riceType]]">
                       <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                     </template>
                   </paper-menu>
@@ -213,7 +213,6 @@
             ],
             observers: [
               'dataChange(data.cl_id)',
-              'getTyperice(contractId)'
             ],
             // created: function() {
             //   console.log('created');
@@ -224,12 +223,6 @@
             // attached: function() {
             //   console.log('attached');
             // },
-            getTyperice: function(contractId) {
-              this.getDb('./g2g/contract/id/'+contractId,(data)=>{
-                this.riceType = data;
-                // console.log(this.riceType);
-              });
-            },
             dataChange:function (clId) {
               //ดึง confirmLetter
               this.getDb('./g2g/confirm/id/'+clId,(data)=>{
@@ -247,21 +240,13 @@
               this.postDb(this.confirmLetter)
               // console.log(this.confirmLetter);
             },
-            getDb:function (url,callback) {
-              axios.get(url)
-                .then(function(response){
-                  callback(response.data);
-                }.bind(this))
-                .catch(function (error) {
-                }.bind(this));
-            },
             postDb:function (data) {
               axios.post('http://localhost:3000/api/g2g/confirm/insert', data)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
                           this.glQuery('addContract').getChange();
-                          this.glQuery('contentPanel').changDrawer();
+                          // this.glQuery('contentPanel').changDrawer();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
