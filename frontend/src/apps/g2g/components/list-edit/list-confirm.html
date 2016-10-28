@@ -4,7 +4,7 @@
   .header {
     padding: 10px 0px 0px 10px;
     background-color: var(--paper-grey-100);
-    color: var(--paper-grey-600);
+    color: var(--gl-gray-darker-color);
     font-size: var(--font-size-h4);
     padding: 5px;
     text-align: center;
@@ -12,8 +12,13 @@
     font-family: 'rsuregular', sans-serif;
       -webkit-font-smoothing: antialiased;
   }
+  #listitem {
+    border-left: 1px solid var(--gl-gray-lighter-color);
+    border-right: 1px solid var(--gl-gray-lighter-color);
+  }
   paper-item {
     cursor:pointer;
+    border-bottom: 1px solid var(--gl-gray-lighter-color);
     --paper-item-focused: {
       background-color: var(--gl-info-color);
     }
@@ -24,7 +29,7 @@
   paper-item:hover {
     background-color: var(--gl-info-color);
   }
-  .name{
+  .name {
     float: left;
   }
   numeral-js{
@@ -40,7 +45,7 @@
            </div>
        </template>
       </div>
-      <paper-listbox>
+      <div id="listitem">
        <template is="dom-repeat" as="itemPrimary" items="{{data}}">
          <paper-item level="detailRegExporter" data="{{itemPrimary}}" on-tap="_getBind">
              <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
@@ -60,7 +65,7 @@
 
          </paper-item>
        </template>
-     </paper-listbox>
+     </div>
   </template>
   <script>
     Polymer({

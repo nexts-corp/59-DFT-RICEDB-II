@@ -272,9 +272,7 @@
                           console.log(response);
                           this.glQuery('addContract').getChange(false,'put');
                           // this.glQuery('contentPanel').changDrawer();
-                          // this.fire('select', {
-                          //   data: 'fin',
-                          // });
+                          this.backPage();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
@@ -349,7 +347,7 @@
               return result;
             },
             cancelDrawer:function () {
-              this.glQuery('contentPanel').changDrawer();
+              this.backPage();
             },
             deleteConfirm:function () {
               // console.log(this.confirmLetter.cl_id);
@@ -360,13 +358,19 @@
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
-                          this.glQuery('addContract').getChange(true,'delete');
+                          this.glQuery('addContract').getChange(false,'delete');
+                          this.backPage();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
                           // console.log(error);
                         })
             },
+            backPage:function () {
+              this.fire('select', {
+                data: 'fin',
+              });
+            }
             // testNum:function(ob,param){
             //         if(ob.path.split(".").length == 2){
             //             ob.base[param]=parseFloat(ob.value);
