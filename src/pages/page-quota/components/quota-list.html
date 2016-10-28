@@ -1,0 +1,48 @@
+
+<dom-module id="quota-list">
+    <template>
+        <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
+
+        </style>
+        <div>
+            <table class="gl-table-default">
+            <thead>
+                <tr>
+                  <th>ประเภทข้าว</th>
+                  <th>ยอดรวม (งวด) </th>
+                  <th>งวด</th>
+                  <th>ปริมาณ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template is="dom-repeat" items="{{data.type_rice}}">
+                <tr on-tap="_selectData" data="{{item}}" id="detailRegExporter" data="[[item]]">
+                    <td>{{item.type_rice_name_th}}</td>
+                    <td>{{item.amount}}</td>
+                    <td>
+                    <template is="dom-repeat" items="{{item.period}}">
+                        งวดที่ {{index}} <br>
+                    </template>
+                    </td>
+                    <td>
+                     <template is="dom-repeat" items="{{item.period}}">
+                        ปริมาณ : {{item.quantity}} <br>
+                    </template>    
+                    </td>
+                </tr>
+                </template>
+            </tbody>
+        </table>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'quota-list',
+            _selectData:function(e){
+                console.log(e.currentTarget.data);
+                this.fire('data-select',e.currentTarget.data);
+                
+            }
+        });
+    </script>
+</dom-module>

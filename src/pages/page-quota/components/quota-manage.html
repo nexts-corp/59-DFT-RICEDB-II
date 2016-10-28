@@ -1,0 +1,275 @@
+<dom-module id="quota-manage">
+	<template>
+		<style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size gl-table">
+			.title {
+				background-color: orange;
+				padding: 8px 10px 8px 10px;
+				color: white;
+				font-size: 18px;
+				text-align: left;
+			}
+			
+			* {
+				text-align: left;
+			}
+			
+			.number {
+				text-align: right;
+			}
+			
+			header {
+				text-align: center;
+				font-size: 24px;
+				padding: 20px 20px 5px 20px;
+			}
+			.container{
+                padding: 20px;
+            }
+			gl-form-panel-body {
+				padding: 10px;
+			}
+            th,td{
+                text-align: center;
+            }
+
+		</style>
+		<div>
+			<header>
+				การกำหนดปีโควตา
+			</header>
+			<section>
+				<gl-form-panel set-padding="0px 0px 20px 0px">
+					<div class="title">รายละเอียดการจัดสรรโควตา</div>
+					<gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
+						<gl-grid-row width="{{getWidth}}">
+							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+								<gl-form-input label="ปีโควต้า" auto-validate error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
+									id="" name="" disabled$="{{checkStatus(status)}}"></gl-form-input>
+							</gl-grid-col>
+							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+								<gl-form-dropdown-menu label="ประเภทข้าว">
+									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
+										<template is="dom-repeat" items="{{getTypeRice}}">
+											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+										</template>
+										<!--<paper-item rice-type-id="513aa18a-e0d9-4408-9ec2-62fa271958e5">ข้าวหัก</paper-item>-->
+									</paper-listbox>
+								</gl-form-dropdown-menu>
+
+							</gl-grid-col>
+							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+								<gl-form-input label="ยอดรวม" value="{{sum}}"></gl-form-input>
+							</gl-grid-col>
+							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+						</gl-grid-row>
+
+						<article style="margin-top:10px;">
+							<table class="gl-table-default" id="[[index]]">
+                                <thead>
+								<tr>
+									<th>จำนวนงวด</th>
+									<th>สัดส่วน % </th>
+									<th>คำนวณ</th>
+									<th></th>
+								</tr>
+                                </thead>
+                                <tbody>
+								<template is="dom-repeat" items="{{Period}}">
+									<tr>
+										<td>งวดที่ : {{getIndex(index)}}</td>
+										<!--{{item.proportion}}-->
+										<td>
+											[[testNum(item.*,'percent')]]
+											<gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
+										</td>
+										<td>
+											<gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{item.quantity}}" on-input="inputProportionChange"
+												index="{{index}}" required placeholder="กรุณาใส่จำนวน" id="{{index}}" no-label-float></gl-form-input>
+										</td>
+										<td>
+											<paper-button on-tap="_delPeriod" item="{{item}}">
+												<iron-icon icon="delete"></iron-icon>
+											</paper-button>
+										</td>
+									</tr>
+                                 </tbody>
+								</template>
+                                 <tbody>
+								<tr>
+									<td colspan="4">
+										<paper-button on-tap="_addPeriod">
+											<iron-icon icon="add"></iron-icon> เพิ่มงวด</paper-button>
+									</td>
+								</tr>
+                                 </tbody>
+                                <thead>
+								<tr>
+									<th colspan="3">ปริมาณโควต้ารวม : {{_crossCheck(Period.*)}}</th>
+									<th>
+										<paper-button raised on-tap="_mathData">คำนวณ</paper-button>
+									</th>
+								</tr>
+                                </thead>
+							</table>
+						</article>
+
+					</gl-form-panel-body>
+				</gl-form-panel>
+			</section>
+
+            <section>
+                <div class="horizontal end-justified layout">
+                    <paper-button class="gl-btn-danger" raised on-tap="_deleteData"><iron-icon icon="delete"></iron-icon>delete</paper-button>
+                    <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+                    <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+                </div>
+            </section>
+            
+		</div>
+	</template>
+	<script>
+        Polymer({
+            is: 'quota-manage',
+               properties: {
+                Period: {
+                type: Array,
+                value: []
+                },
+                quota:{
+                type: Object,
+                value: 
+                {
+                    'id':'2558',
+                    'period':[
+                    {
+                        'name':'งวดที่ 1',
+                        'percent': 50,
+                        'quantity':500
+                    },
+                    ],
+                    'type_rice_id':'0',
+                }
+                },
+                year:{
+                type: String,
+                value: '2559'
+                },
+                dataYear:{
+                type: String
+                },
+                typeRice:{
+                type: String
+                },
+                sum:{
+                type: Number
+                },
+                getTypeRice:{
+                type: Array
+                },
+                data:{
+                    type: Object,
+                    observer: '_getData'
+                }
+            },
+            ready:function(){
+                this._getTypeRice();
+            },
+            getIndex:function(index){
+                return parseInt(index)+1;
+            },
+            _addPeriod:function(){
+                this.push('Period',{percent:'',quantity:''});
+            },
+            _delPeriod:function(e){
+                if (confirm("ต้องการลบข้อมูลหรือไม่ ?") == true) {
+                this.splice('Period',this.Period.indexOf(e.currentTarget.item),1);
+                } 
+            },
+            _mathProportion:function(percent,item){
+                item.quantity = (parseFloat(this.sum)*parseFloat(percent))/100;
+                //console.log(this.Period);
+                return item.quantity;
+            },
+            _crossCheck:function(data){
+                var sum = 0;
+                data.base.map((item)=>{
+                if(typeof item.quantity!="undefined"){
+                    sum += item.quantity;
+                }
+                });
+                return sum;
+            },
+            inputProportionChange:function(e){
+                this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
+            },
+            _mathData:function(){                
+                this.Period.map((data,i)=>{
+                this.set('Period.'+ i +'.quantity',(parseFloat(this.sum)*parseFloat(data.percent))/100);
+                })
+            },
+            _saveData:function(){
+                var datas = {
+                id:this.year,
+                type_rice:
+                    {
+                    amount:parseInt(this.sum),
+                    period:this.Period,
+                    type_rice_id:this.typeRice
+                    }
+                }
+                if(this.status == 'post')
+                    this.fire('post-data',datas); 
+                else if (this.status == 'update')
+                    this.fire('put-data',datas);       
+                /*console.log(datas);
+                axios.post('/eu/quota',datas)
+                .then((response)=>{
+                console.log("success");
+                console.log(response);
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });*/
+            },
+            testNum:function(ob,param){
+                //console.log(typeof ob.value);
+                if(typeof ob.value == "string"){
+                    var pathChange = ob.path.split(".");
+                    if(pathChange.length == 2){
+                        if(pathChange[1]==param){
+                        ob.base[param]=parseFloat(ob.value);
+                        // console.log(typeof ob.value);
+                        }
+                    }
+                }
+            },
+            _getData:function(data){
+                //console.log(data);
+                this.Period = data.period;
+                this.year = data.year;
+                this.sum = data.amount;
+                this.typeRice = data.type_rice_id;
+            },
+            _getTypeRice:function(){
+                axios.get('./eu/type_rice/')
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getTypeRice = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            _deleteData:function(){
+                
+            }
+            checkStatus:function(status){
+                return status=='update';
+            }
+        });
+    </script>
+</dom-module>

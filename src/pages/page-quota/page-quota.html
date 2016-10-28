@@ -1,128 +1,112 @@
+<link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./components/quota-list.html">
+<link rel="import" href="./components/quota-manage.html">
+<link rel="import" href="./components/quota-insert.html">
+
 
 <dom-module id="page-quota">
-  <template>
-     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
-            * {
-            font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
+	<template>
+		<style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
+			* {
+				font-family: 'rsuregular', sans-serif;
+				-webkit-font-smoothing: antialiased;
+			}
+			
+			.header {
+				padding: 10px 0px 10px 10px;
+				background-color: var(--paper-grey-100);
+				color: var(--paper-grey-600);
+				font-size: var(--font-size-h4);
+				font-family: 'rsuregular', sans-serif;
+				-webkit-font-smoothing: antialiased;
+			}
+			
+			.registor {
+				margin: 20px;
+			}
+			
+			.title {
+				text-align: center;
+				font-size: var(--font-size-h3);
+				font-family: 'rsuregular', sans-serif;
+				-webkit-font-smoothing: antialiased;
+			}
+			
+			.searchBox {
+				padding: 5px;
+				background-color: var(--gl-gray-lighter-color);
+			}
+			
+			.elevation {
+				border-radius: 5px;
+				margin: 10px;
+				padding: 5px;
+			}
+			
+			.searchBorder {
+				border: 1px solid var(--gl-gray-light-color);
+				margin: 15px;
+				border-radius: 3px
+			}
+			
+			paper-material {
+				background-color: var(--gl-white-color);
+			}
+			
+			gl-search-input {
+				margin: 30px 0px 0px 0px;
+			}
+			
+			.container {
+				margin-left: 30px;
+			}
+		</style>
 
-        .header {
-          padding: 10px 0px 10px 10px;
-          background-color: var(--paper-grey-100);
-          color: var(--paper-grey-600);
-          font-size: var(--font-size-h4);
-          font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        .registor{
-          margin: 20px;
-        }
-        .title {
-          text-align: center;
-           font-size: var(--font-size-h3);
-           font-family: 'rsuregular', sans-serif;
-             -webkit-font-smoothing: antialiased;
-        }
-        .searchBox{
-          padding: 5px;
-          background-color: var(--gl-gray-lighter-color);
-        }
-        .elevation{
-          border-radius: 5px;
-          margin: 10px;
-          padding: 5px;
-        }
-        .searchBorder{
-          border: 1px solid var(--gl-gray-light-color);
-          margin: 15px;
-          border-radius: 3px
-        }
-        paper-material {
-          background-color: var(--gl-white-color);
-        }
-        gl-search-input{
-          margin: 30px 0px 0px 0px;
-        }
-        .container{
-          margin-left: 30px;
-        }
-    </style>
-      <content-panel>
-      <grid>
+		<div class="layout vertical registor">
 
-        <div class="layout vertical registor">
-          <div class="flex">
-            <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่ม</paper-button>
-            </div>
-          </div>
-          <div class="flex title">
-            รายการจัดสรรปีโควตา
-          </div>
-          <div class="layout horizontal">
-            <div class="container flex-equal-justified">
-              <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
-                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
-                    <template is="dom-repeat" items="{{getYear}}">
-                      <paper-item year="{{item}}">{{item}}</paper-item>
-                    </template>
-                      <!--<paper-item year="{{getYear.id}}">{{getYear.id}}</paper-item>-->
-                  </paper-listbox>
-              </gl-form-dropdown-menu>
-            </div>
-          </div>
-          <div style="padding:22px">
-          <table class="gl-table-default">
-            <thead>
-                <tr>
-                  <th>ประเภทข้าว</th>
-                  <th>ยอดรวม (งวด) </th>
-                  <th>งวด</th>
-                </tr>
-            </thead>
-            <tbody>
-                  <template is="dom-repeat" items="{{getData.type_rice}}">
-                    <tr on-tap="_toggleDrawer" id="detailRegExporter" data="[[item]]">
-                      <td>{{item.type_rice_name_th}}</td>
-                      <td>{{item.amount}}</td>
-                      <td>
-                      <template is="dom-repeat" items="{{item.period}}">
-                            งวดที่ {{index}} &nbsp;&nbsp;&nbsp; ปริมาณ : {{item.quantity}}<br>
-                      </template>
-                      </td>
-                    </tr>
-                  </template>
-            </tbody>
-        </table>
-        </div>
-        </div>
-        <button on-click="test">ss</button>
-      </grid>
-    <panel>
-        <div class="left">
-            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                <div name="addRedRegExporter"><quota-insert></quota-insert></div>
-                <div name="detailRegExporter"><quota-update on-eu-update-data="_updateData" data="{{sendData}}" data-year="{{sendYear}}"></quota-update></div>
-              </iron-pages>
-        </div>
-    </panel>
-    </content-panel>
-  </template>
-  <script>
+			<div class="flex">
+				<div class="layout horizontal end-justified">
+					<paper-button raised class="gl-btn-primary" on-tap="_insertData" id="addRedRegExporter">
+						<iron-icon icon="add"></iron-icon> เพิ่ม</paper-button>
+				</div>
+			</div>
+
+			<div class="flex title">
+				รายการจัดสรรปีโควตา
+			</div>
+
+			<div class="layout horizontal">
+				<div class="container flex-equal-justified">
+					<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+						<paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
+							<template is="dom-repeat" items="{{getYear}}">
+								<paper-item year="{{item}}">{{item}}</paper-item>
+							</template>
+						</paper-listbox>
+					</gl-form-dropdown-menu>
+				</div>
+			</div>
+
+			<div style="padding:22px">
+				<quota-list data="{{dataList}}" on-data-select="_onDataSelect"></quota-list>
+			</div>
+
+		</div>
+
+		<button on-click="test">ss</button>
+
+		<panel-right>
+			<quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"></quota-manage>
+		</panel-right>
+	</template>
+	<script>
     Polymer({
       is: 'page-quota',
-      listeners: {
-        'nx-grid-tap': 'nxGridTap'
-      },
       observers:['_yearChanged(selectYear)'],
       properties: {
           layerContent: {
               type: String,
               value: "detailRegExporter"
-          },
-          getData:{
-            type: Object
           },
           sendData:{
             type: Object
@@ -139,88 +123,131 @@
           }
       },
       ready: function(){
-        axios.get('./eu/quota/year')
-        .then((response)=>{
-          console.log("success");
-          this.getYear = response.data;
-          console.log(this.getYear);
-        })
-        .catch((error)=>{
+        this.layerContent = "addRedRegExporter";
+        this._getYear();
+      },
+        _insertData:function(){
+          this.dataSelect = {
+            amount:'',
+            period:[],
+            type_rice_id:'',
+            year:''
+          }
+
+          this.status = 'post';
+          this.$$("panel-right").toggle();
+        },
+        _toggleDrawer: function(e) {
+          this.layerContent = 'addRedRegExporter';
+          this.$$('panel-right').toggle();
+          
+          this.layerContent = e.currentTarget.id;
+          this.sendData = e.currentTarget.data;
+          //console.log(e.currentTarget.id);
+          //console.log(this.sendData);
+        },
+        test:function(){
+          /*this.glQuery('layoutEu').openToastLoading();
+
+          axios.get('http://localhost:3000/api/common/ship/')
+          .then(function (response) {
+            console.log(response);
+
+            this.glQuery('layoutEu').closeToastLoading(function(){
+              this.glQuery('contentPanel').changDrawer();
+            }.bind(this));
+
+  
+          }.bind(this))
+          .catch(function (error) {
+            //this.glQuery('toastLoading').hide();
+            //console.log(error);
+          });*/
+          this.$$('panel-right').toggle()
+          //this.$$('panel-right').test("1234");
+          console.log( this.$$('panel-right').test());
+          this.fire('test');
+        },
+        _getYear:function(){
+          axios.get('./eu/quota/year')
+          .then((response)=>{
+            console.log("success");
+            this.getYear = response.data;
+            //console.log(this.getYear);
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error);
+          });
+        },
+        _getDatalist:function(year){
+          axios.get('./eu/quota?id='+year)
+          .then((response)=>{
+            console.log("success!!");
+            //console.log(response.data);
+            this.dataList = response.data;
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error);
+          });
+        },
+        _yearChanged:function(val){
+          this._getDatalist(val);
+          this.sendYear = val;
+        },
+        _sendData:function(e){
+          //console.log(e.currentTarget.data);
+        },
+        _postData:function(e){
+          //console.log('post-data:',e.detail);
+          axios.post('/eu/quota',e.detail)
+          .then((response)=>{
+            console.log("success");
+            console.log(response);
+            this._getYear();
+            this._getDatalist(this.selectYear);
+          })
+          .catch((error)=>{
           console.log("error");
           console.log(error);
-        });
-      },
-        nxGridTap: function(e) {
-                this.layerContent = e.detail.level;
-                console.log(this.layerContent);
-                if (this.layerContent === 'third') {
-                    this.vesselPage = 1;
-                } else {
-                    this.vesselPage = 0;
-                }
-
-                this.dataSelect = e.detail.data;
-
-            },
-            _toggleDrawer: function(e) {
-              this.layerContent = 'addRedRegExporter';
-              this.glQuery('contentPanel').changDrawer();
-              this.layerContent = e.currentTarget.id;
-              this.sendData = e.currentTarget.data;
-              //console.log(e.currentTarget.id);
-              //console.log(this.sendData);
-            },
-           /* test:function(){
-              this.glQuery('layoutEu').openToastLoading();
-
-              axios.get('http://localhost:3000/api/common/ship/')
-              .then(function (response) {
-                console.log(response);
-
-                this.glQuery('layoutEu').closeToastLoading(function(){
-                  this.glQuery('contentPanel').changDrawer();
-                }.bind(this));
-
-      
-              }.bind(this))
-              .catch(function (error) {
-                //this.glQuery('toastLoading').hide();
-                //console.log(error);
-              });
-            },*/
-            _getDb:function(year){
-              console.log(year);
-              axios.get('./eu/quota?id='+year)
-              .then((response)=>{
-                console.log("success!!");
-                console.log(response.data);
-                this.getData = response.data;
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error);
-              });
-            },
-            _yearChanged:function(val){
-              this._getDb(val);
-              this.sendYear = val;
-            },
-            _sendData:function(e){
-              //console.log(e.currentTarget.data);
-            },
-            _updateData:function(e){
-              //console.log(e.detail);
-              axios.put('/eu/quota',e.detail)
-              .then((response)=>{
-                console.log("success");
-                console.log(response);
-                this._getDb(this.selectYear);
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error);
-              });
-            }
+          });
+        },
+        _putData:function(e){
+         //console.log('put-data: ',e.detail);
+          axios.put('/eu/quota',e.detail)
+          .then((response)=>{
+            console.log("success");
+            console.log(response);
+            this._getYear();
+            this._getDatalist(this.selectYear);
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error);
+          });
+        },
+        _updateData:function(e){
+          //console.log(e.detail);
+          axios.put('/eu/quota',e.detail)
+          .then((response)=>{
+            console.log("success");
+            console.log(response);
+            this._getDatalist(this.selectYear);
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error);
+          });
+        },
+        _onDataSelect:function(e){
+          this.status = 'update';
+           this.$$('panel-right').toggle();
+           var data = e.detail;
+           data.year = this.selectYear;
+           this.dataSelect = data;
+           console.log('dataSelect',this.dataSelect);
+        } 
     });
   </script>
 </dom-module>
