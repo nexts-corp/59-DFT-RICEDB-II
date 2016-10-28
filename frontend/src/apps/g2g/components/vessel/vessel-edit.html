@@ -23,8 +23,11 @@
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="exporter_id" label="ผู้ส่งออก" item-label-path="seller_name"
-              class="requested"  item-value-path="exporter_id" items="{{common.seller}}" value="{{data.exporter_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+          <gl-combo-box required  id="exporter_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
+            class="requested"    item-value-path="exporter_id"  items="{{common.seller}}" value="{{data.exporter_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+          <gl-form-label-input label="Tel." error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
@@ -57,9 +60,7 @@
           <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
             class="requested"  item-value-path="carrier_id" items="{{common.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Tel." error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
-        </gl-grid-col>
+
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
           class="requested"    item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
@@ -144,10 +145,13 @@
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="WEIGHT (M/T)" value="G.W. {{gw}}"></gl-form-label-input>
+          <gl-form-label-input label="G.W. WEIGHT (M/T)"  value="{{gw}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label=""  value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
+          <gl-form-label-input label="N.W. WEIGHT (M/T)"  value="{{nw}}"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="T.W. WEIGHT (M/T)"  value="{{tw}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
@@ -206,12 +210,19 @@
         'getShip(data.shipline_id,common.*)',
         'getRiceTypeForPackage(clTypeRice,data.type_rice_id)',
         'getPackageForPrice(package,data.package_id)',
+        'check(common.seller)',
+        'calc(contractId)',
       ],
       attached: function() {
         // console.log("created");
         //send to file add-contract
         this.fire('vessel-edit-common',{node:this});
       },
+      check:function (data) {
+        data.map((el)=>{
+          console.log(el);
+        });
+      }
 
     });
   </script>
