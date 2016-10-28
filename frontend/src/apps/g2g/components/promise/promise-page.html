@@ -22,7 +22,8 @@
         <div class="selectconfirm">
           <list-confirm data="{{data.confirm_letter}}">
             <items type="primary">
-              <list item="cl_no" label="Confirmation Letter" width="flex-2" type="string"></list>
+              <list item="cl_no" label="Confirmation Letter No." width="flex" type="string"></list>
+              <list item="cl_name" label="Confirmation Letter Name" width="flex-2" type="string"></list>
               <list item="cl_quantity_total" label="ทำสัญญาแล้ว (ตัน)" width="flex" type="string"></list>
               <list item="cl_quantity_sent" label="ส่งแล้ว (ตัน)" width="flex" type="string"></list>
               <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ (ตัน)" width="flex" type="string"></list>
@@ -38,8 +39,7 @@
                              confirm-letter="[[confirmLetter]]"
                              rice-type="[[riceType]]"
                              package="[[package]]"
-                             incoterms="[[incoterms]]"
-                             on-confirm-mation-common="confirmMationCommon"></promise-confirm>
+                             incoterms="[[incoterms]]"></promise-confirm>
          </section-content>
          <section-content name="print">
              <vessel-print></vessel-print>
@@ -103,7 +103,7 @@
         this.layerConfirm = 2;
       },
       getRicetype:function (contractId) {
-        // console.log(data);
+        // console.log(contractId);
         this.getDb('./g2g/contract/id/'+contractId,(data)=>{
           this.riceType = data.contract_type_rice;
           // console.log(this.riceType);

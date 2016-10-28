@@ -1,11 +1,8 @@
 <link rel="import" href="panel-seleted.html"> ้
-<link rel="import" href="panel-seleted-vessel.html">
-<link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
 
-<!-- <link rel="import" href="/components/vessel/shipment-insert.html"> -->
-<link rel="import" href="components/vessel/shipment-insert.html">
 <link rel="import" href="components/promise/promise-page.html">
+<link rel="import" href="components/vessel/shipment-page.html">
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <link rel="import" href="../../../bower_components/chart-elements/chart-elements.html">
 <dom-module id="g2g-add-contract">
@@ -91,7 +88,7 @@
                      <div class="card-actions horizontal end-justified layout">
                        <paper-button on-tap="editContract" data="[[item]]">Contract</paper-button>
                        <paper-button on-tap="editConfirm" data="[[item]]">ConfirmMation Litter</paper-button>
-                       <paper-button>Shipment</paper-button>
+                       <paper-button on-tap="editShipment" data="[[item]]">Shipment</paper-button>
                        <paper-button>Payment</paper-button>
                      </div>
                    </paper-card>
@@ -129,21 +126,13 @@
                               package="[[package]]"
                               incoterms="[[incoterms]]"
                 ></promise-page>
-                <!-- <panel-seleted>
 
-                  <section-content name="detail">
-
-                  </section-content>
-                  <section-content name="print">
-                      <vessel-print></vessel-print>
-                  </section-content>
-                  <section-content name="file">
-                      <promise-fileup></promise-fileup>
-                  </section-content>
-                </panel-seleted> -->
               </div>
               <div name="third">
-333333333
+                <shipment-page data="[[dataContract]]"
+                               ship-ment="[[shipMent]]"
+
+                ></shipment-page>
               </div>
             </iron-pages>
 
@@ -160,7 +149,9 @@
             listeners: {
                 // 'nx-grid-tap': 'nxGridTap',
                 // 'nx-grid-dblclick': 'nxGridDblclick'
-                'select': 'selectedConfirm',
+                'select': 'selecteddata',
+                'vessel-insert-common': 'shipmentCommon',
+                'vessel-edit-common' : 'shipmentCommon',
             },
             behaviors: [
                 gl.behavior.core,
@@ -208,7 +199,7 @@
               this.getDb('./common/package',(data)=>{
                 this.package=data;
               },false);
-              this.getDb('./common/seller',(data)=>{
+              this.getDb('./external/exporter?exporter_active=true&trader_active=true',(data)=>{
                   this.common.seller= data;
                   // console.log(this.common.seller);
               },false);
@@ -275,9 +266,14 @@
                 // dataContract
               },refresh,action)
             },
-            selectedConfirm:function (e) {
-              // console.log(e.detail.data.cl_id);
-              this.conFirmDeatil(e.detail.data.cl_id);
+            selecteddata:function (e) {
+              // console.log(e.detail.data.shm_id);
+              if (e.detail.data.shm_id == undefined) {
+                this.conFirmDeatil(e.detail.data.cl_id);
+              } else {
+                this.shipMentDeatil(e.detail.data.shm_id,false,'get');
+              }
+              //
             },
             computeContract:function (para) {
                 // console.log(para.base.contract_quantity_balance);
@@ -325,38 +321,21 @@
               this.dataContract = e.currentTarget.data;
               this.glQuery('contentPanel').changDrawer();
             },
-            vesselEditCommon:function (e) {
+            editShipment:function (e) {
+              this.layerContent="third";
+              // console.log(e.currentTarget.data);
+              this.dataContract = e.currentTarget.data;
+              this.glQuery('contentPanel').changDrawer();
+            },
+            shipmentCommon:function (e) {
               // console.log(e.detail.node);
+              e.detail.node.common=this.common;
+            },
 
-              e.detail.node.common=this.common;
-            },
-            vesselInsertCommon:function (e) {
-              // console.log(e.detail.node);
-              e.detail.node.common=this.common;
-            },
-            confirmMationCommon:function (e) {
-              // console.log(e.detail.node);
-              e.detail.node.common=this.confirmLetter;
-            },
-            shipMentDeatil:function (id,refresh,action) {
-              // get put delete
-              // console.log(action);
-              if (action == 'get') {
-                this.glQuery('layoutMain').openToastLoading();
-              }
-              //
-              this.getDb('./g2g/shipment/id/'+id,(data)=>{
-                this.getDb('./g2g/contract/id/'+data.contract_id,(data2)=>{
-                  data.country =  data2.country_id;
-                  data.buyerMasks =  data2.buyer_masks;
-                  this.shipMent = data;
-                },refresh,action);
-              });
-            },
             getconfirm:function (contractId) {
                 this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
                   this.cml = data;
-                  console.log(this.cml);
+                  // console.log(this.cml);
                   // this.cl_id.items = data;
                 });
             },
@@ -367,6 +346,23 @@
                 // console.log(this.confirmLetter);
               },false,'get');
               // console.log(this.confirmLetter);
+            },
+            shipMentDeatil:function (id,refresh,action) {
+              // get put delete
+              console.log('เข้ากระบวนการลบ 1');
+              console.log(id);
+              if (action == 'get') {
+                this.glQuery('layoutMain').openToastLoading();
+              }
+              console.log('=>',id,refresh,action);
+              this.getDb('./g2g/shipment/id/'+id,(data)=>{
+                this.getDb('./g2g/contract/id/'+data.contract_id,(data2)=>{
+                  data.country =  data2.country_id;
+                  data.buyerMasks =  data2.buyer_masks;
+                  this.shipMent = data;
+                  // console.log('this.shipMen =>',this.shipMent);
+                },refresh,action);
+              });
             },
             getDb:function (url,callback,refresh,action) {
               // console.log(url);

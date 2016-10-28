@@ -123,8 +123,11 @@
         <gl-form-panel-body>
           <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box required  id="seller_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
-                class="requested"    item-value-path="seller_id"  items="{{common.seller}}" value="{{shipment.seller_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+              <gl-combo-box required  id="exporter_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
+                class="requested"    item-value-path="exporter_id"  items="{{common.seller}}" value="{{shipment.exporter_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+              <gl-form-label-input label="Tel."class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
@@ -167,9 +170,7 @@
               <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
               class="requested"     item-value-path="carrier_id" items="{{common.carrier}}" value="{{shipment.carrier_id}}"></gl-combo-box>
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Tel."class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
-            </gl-grid-col>
+
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
               class="requested"     item-value-path="port_id" items="{{pol}}"  value="{{shipment.load_port_id}}"></gl-combo-box>
@@ -256,13 +257,13 @@
 
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="WEIGHT (M/T)"  value="G.W. {{gw}}"></gl-form-label-input>
+              <gl-form-label-input label="G.W. WEIGHT (M/T)"  value="G.W. {{gw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label=""  value="N.W. {{nw}}"></gl-form-label-input>
+              <gl-form-label-input label="N.W. WEIGHT (M/T)"  value="N.W. {{nw}}"></gl-form-label-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label=""  value="T.W. {{tw}}"></gl-form-label-input>
+              <gl-form-label-input label="T.W. WEIGHT (M/T)"  value="T.W. {{tw}}"></gl-form-label-input>
             </gl-grid-col>
           </gl-grid-row>
           <gl-grid-row>
@@ -342,10 +343,10 @@
               <!-- เพิ่มคอมโพเน้นตรงนี้ -->
               <iron-pages selected="0" class$="iron-index-{{index}}">
                 <vessel-save data="{{itemPrimary}}"
-                  buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
+                  buyer-masks='[[data.buyerMasks]]' contract-id='[[data.contract_id]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
                 </vessel-save>
                 <vessel-edit data="{{itemPrimary}}"
-                  buyer-masks='[[data.buyerMasks]]' contract-id='[[contractId]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
+                  buyer-masks='[[data.buyerMasks]]' contract-id='[[data.contract_id]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
               </iron-pages>
               <gl-form-panel-footer set-padding="10px 20px 0px 20px">
@@ -390,7 +391,7 @@
                 shipment:{
                   type:Object,
                   value:{
-                    seller_id:'',
+                    exporter_id:'',
                     shipline_id:'',
                     ship_id:'',
                     surveyor_id:'',
@@ -428,7 +429,7 @@
             },
             observers: [
               'getCounty(data.country,common)',
-              'calc(shipment.shm_det_quantity)'
+              'calc(shipment.shm_det_quantity)',
             ],
             // listeners:[
             //   'vessel-edit-common': 'specialTap',
@@ -437,9 +438,6 @@
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
             },
-            // specialTap:function (e) {
-            //   console.log(e);
-            // },
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
@@ -526,22 +524,24 @@
               })
               // console.log(check);
               //เช็คว่ายังเหลือค่าที่ไมไ่ด้เติมไหม ถา้ไม่ก็ส่งเลย
+              // console.log(this.shipment);
               if (check <= 0) {
                 this.glQuery('layoutMain').openToastSaveing();
                 this.postDb(this.shipment);
+                // console.log(11);
               }
             },
             //insert
             postDb:function (data) {
               axios.post('./g2g/shipment/detail/insert', data)
               // axios.put('http://localhost:3000/api/g2g/shipment/update', data)
-                        .then(function (response) {
+                        .then( (response)=> {
                           console.log("success");
                           console.log(response);
                           console.log(data);
                           this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
                           this.shipment = {
-                            seller_id:'',
+                            exporter_id:'',
                             shipline_id:'',
                             ship_id:'',
                             surveyor_id:'',
@@ -570,8 +570,8 @@
                            this.nw ='';
                            this.tw ='';
                           this.clickCancel();
-                        }.bind(this))
-                        .catch(function (error) {
+                        })
+                        .catch( (error)=> {
                           console.log("error");
                           console.log(error);
                           console.log(data);
@@ -580,33 +580,34 @@
             //update
             putDb:function (data) {
               axios.put('./g2g/shipment/detail/update', data)
-                        .then(function (response) {
+                        .then( (response)=> {
                           console.log("success");
                           console.log(response);
                           console.log(data);
                           // this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
                           this.clickCancel();
                           this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-                        }.bind(this))
-                        .catch(function (error) {
+                        })
+                        .catch( (error)=> {
                           console.log("error");
                           console.log(error);
                         })
             },
             deleteShipment:function () {
               this.deleteShipmentDb(this.data.shm_id);
+              // console.log(this.data.shm_id);
               this.glQuery('layoutMain').openToastDeleteing();
             },
             deleteShipmentDb:function (dataId) {
               axios.delete('./g2g/shipment/delete/id/'+dataId)
-                        .then(function (response) {
+                        .then((response)=> {
                           console.log("success");
                           console.log(response);
-                          console.log(11);
+                          console.log('delete');
                           // console.log(this.data.shm_id);
-                          this.glQuery('addContract').getChange(true,'delete');
-                        }.bind(this))
-                        .catch(function (error) {
+                          this.glQuery('addContract').getChange(false,'delete');
+                        })
+                        .catch( (error)=> {
                           console.log("error");
                           // console.log(error);
                         })
@@ -614,13 +615,15 @@
             //delete shipment detail
             deleteDb:function (dataId) {
               axios.delete('./g2g/shipment/detail/delete/id/'+dataId)
-                        .then(function (response) {
+                        .then( (response)=> {
                           console.log("success");
                           console.log(response);
                           console.log(this.data.shm_id);
-                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'delete');
-                        }.bind(this))
-                        .catch(function (error) {
+                          console.log('ก่อนลบ');
+                          this.glQuery('addContract').shipMentDeatil(this.data.shm_id,false,'delete');
+                          console.log('หลังลบ');
+                        })
+                        .catch( (error)=> {
                           console.log("error");
                           // console.log(error);
                         })
