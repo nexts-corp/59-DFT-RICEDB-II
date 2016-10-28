@@ -12,7 +12,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 return {
                     trader_id: row('id'),
                     trader_date_approve: row('trader_date_approve').split('T')(0),
-                    trader_date_expire: row('trader_date_expire').split('T')(0)
+                    trader_date_expire: row('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
+                    trader_active: r.now().toISO8601().lt(row('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
                 }
             })
             .without('id')
@@ -42,7 +43,8 @@ router.get('/id/:trader_id', function (req, res, next) {
             .merge({
                 trader_id: r.row('id'),
                 trader_date_approve: r.row('trader_date_approve').split('T')(0),
-                trader_date_expire: r.row('trader_date_expire').split('T')(0)
+                trader_date_expire: r.row('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
+                trader_active: r.now().toISO8601().lt(r.row('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
             },
             r.db('external_f3').table("seller").get(r.row("seller_id")),
             r.db('external_f3').table("type_license").get(r.row("type_lic_id")),
@@ -91,35 +93,115 @@ router.get('/seller', function (req, res, next) {
             });
     })
 });
-router.get('/field/:field_name/:value_id', function (req, res, next) {
-    db.query(function (conn) {
-        r.db('external_f3').table("trader")
-            .filter({ [req.params.field_name + "_id"]: req.params.value_id })
-            .merge(
-            {
-                trader_id: r.row('id')
-            }
-            , r.table(req.params.field_name).get(req.params.value_id)
-            )
-            .without('id')
-            .run(conn, function (err, cursor) {
-                if (!err) {
-                    cursor.toArray(function (err, result) {
-                        if (!err) {
-                            console.log(JSON.stringify(result, null, 2));
-                            res.json(result);
-                        } else {
-                            res.json(null);
+
+router.post('/insert', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        //console.log(req.body);
+        if (req.body.id == null) {
+            //result.id = req.body.id;
+            db.query(function (conn) {
+                r.db('external_f3').table("trader")
+                    //.get(req.body.id)
+                    .insert(req.body)
+                    .run(conn)
+                    .then(function (response) {
+                        result.message = response;
+                        if (response.errors == 0) {
+                            result.result = true;
+                            result.id = response.generated_keys;
                         }
-                    });
-                } else {
-                    res.json(null);
-                }
-            });
-    })
+                        res.json(result);
+                        console.log(result);
+                    })
+                    .error(function (err) {
+                        result.message = err;
+                        res.json(result);
+                        console.log(result);
+                    })
+            })
+        } else {
+            result.message = 'field "id" must do not have data';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
 });
-
-
+router.put('/update', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        //console.log(req.body);
+        if (req.body.id != '' || req.body.id != null) {
+            result.id = req.body.id;
+            db.query(function (conn) {
+                r.db('external_f3').table("trader")
+                    .get(req.body.id)
+                    .update(req.body)
+                    .run(conn)
+                    .then(function (response) {
+                        result.message = response;
+                        if (response.errors == 0) {
+                            result.result = true;
+                        }
+                        res.json(result);
+                        console.log(result);
+                    })
+                    .error(function (err) {
+                        result.message = err;
+                        res.json(result);
+                        console.log(result);
+                    })
+            })
+        } else {
+            result.message = 'require field id';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.delete('/delete/id/:trader_id', function (req, res, next) {
+    //var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    //  if (valid) {
+    //console.log(req.body);
+    if (req.params.trader_id != '' || req.params.trader_id != null) {
+        result.id = req.params.trader_id;
+        db.query(function (conn) {
+            r.db('external_f3').table("trader")
+                .get(req.params.trader_id)
+                .delete()
+                .run(conn)
+                .then(function (response) {
+                    result.message = response;
+                    if (response.errors == 0) {
+                        result.result = true;
+                    }
+                    res.json(result);
+                    console.log(result);
+                })
+                .error(function (err) {
+                    result.message = err;
+                    res.json(result);
+                    console.log(result);
+                })
+        })
+    } else {
+        result.message = 'require field id';
+        res.json(result);
+    }
+    // } else {
+    //     result.message = ajv.errorsText(validate.errors);
+    //     res.json(result);
+    // }
+});
 module.exports = router;
 
 

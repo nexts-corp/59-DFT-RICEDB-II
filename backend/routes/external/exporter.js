@@ -141,7 +141,6 @@ router.get('/id/:exporter_id', function (req, res, next) {
                         trader_date_approve: m('trader_date_approve').split('T')(0),
                         trader_date_expire: m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
                         trader_active: r.now().toISO8601().lt(m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
-
                     }
                 }),
             r.db('external_f3').table("seller").get(r.row("seller_id")),
