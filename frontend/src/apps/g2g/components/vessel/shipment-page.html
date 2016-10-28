@@ -1,0 +1,107 @@
+<!-- <link rel="import" href="../list-edit/list-confirm.html"> -->
+
+<dom-module id="shipment-page">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
+  :host {
+    /*padding-top: 20px;*/
+  }
+  .selectconfirm {
+    padding-top: 10px;
+    /*color: red;*/
+  }
+  .addconfirm {
+    margin-top: 20px;
+  }
+</style>
+  <template>
+
+
+    <iron-pages selected="{{layerConfirm}}">
+      <div id="listitem">
+        <div class="addconfirm horizontal end-justified layout">
+          <paper-button raised class="gl-btn-primary" on-tap="createShipment">Create Shipment</paper-button>
+        </div>
+        <div class="selectconfirm">
+          <list-confirm data="{{data.shipment}}">
+            <items type="primary">
+              <list item="shm_no" label="Shipment No" width="flex-2" type="string"></list>
+              <list item="shm_name" label="Shipment Name" width="flex-4" type="string"></list>
+              <list item="shm_quantity" label="M/T" width="flex-6" type="string"></list>
+            </items>
+          </list-confirm>
+        </div>
+      </div>
+      <div>
+        <panel-seleted>
+
+         <section-content name="detail">
+           <vessel-page data="{{shipMent}}"
+                        shm-id="[[dataSelect.shm_id]]"
+                        contract-id="[[contractId]]" ></vessel-page>
+         </section-content>
+         <section-content name="print">
+             <vessel-print></vessel-print>
+         </section-content>
+         <section-content name="file">
+             <promise-fileup></promise-fileup>
+         </section-content>
+       </panel-seleted>
+
+      </div>
+      <div>
+        <panel-seleted>
+
+         <section-content name="detail">
+           <vessel-page on-vessel-edit-common="vesselEditCommon"
+                        on-vessel-insert-common="vesselInsertCommon"
+                        name="third"
+                        data="{{shipMent}}"
+                        shm-id="[[dataSelect.shm_id]]"
+                        contract-id="[[contractId]]" ></vessel-page>
+         </section-content>
+         <section-content name="print">
+             <vessel-print></vessel-print>
+         </section-content>
+         <section-content name="file">
+             <promise-fileup></promise-fileup>
+         </section-content>
+       </panel-seleted>
+
+      </div>
+    </iron-pages>
+
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "shipment-page",
+      properties: {
+        layerConfirm: {
+          type: Number,
+          value:0
+        }
+      },
+      listeners: {
+          'select': 'selectedPage',
+      },
+      observers:[
+        'check(shipMent)',
+        // 'getRicetype(data.contract_id)'
+      ],
+      selectedPage:function (e) {
+        this.layerConfirm = 0;
+      },
+
+      check:function (shipMent) {
+        console.log(shipMent);
+         if( shipMent != null){
+           this.layerConfirm = 1;
+         }
+      },
+      createShipment:function () {
+        this.layerConfirm = 2;
+      },
+    });
+  </script>
+</dom-module>
