@@ -32,7 +32,6 @@ var validate = ajv.compile(schema);
 router.get('/', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
-            //.filter({ shm_id: req.params.shm_id })
             .group(function (g) {
                 return g.pluck(
                     "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "ship_voy_no"
@@ -58,6 +57,10 @@ router.get('/', function (req, res, next) {
             })
             .zip()
             .filter(r.row.hasFields('invoice_no'))
+            // .filter(function (f) {
+            //     return r.table('payment').getAll(f('invoice_id').coerceTo('array'),{index:'invoice_id'})
+            //     })
+            // })
             .merge(function (m) {
                 return {
                     invoice_id: m('id')
