@@ -165,8 +165,8 @@
       behaviors: [vesselBehavior, gl.behavior.core],
       observers:[
         'getPrice(contractId)',
-        'calc(contractId)',
-        // 'check(contractId)'
+        // 'calc(data.shm_det_quantity)',
+        // 'check(data.shm_det_quantity)'
       ],
       getPrice:function (contractId) {
           //หาชนิดข้าว
@@ -180,10 +180,12 @@
           // console.log(packagefil[0].price_per_ton);
           this.price = packagefil[0];
 
+        this.calc(this.data.shm_det_quantity);
       },
-      // check:function (check) {
-      //   console.log(check);
-      // }
+      check:function (check) {
+        // console.log(this.data.shm_det_quantity);
+
+      }
     });
   </script>
 </dom-module>
