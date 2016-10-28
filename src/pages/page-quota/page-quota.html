@@ -96,7 +96,8 @@
 		<button on-click="test">ss</button>
 
 		<panel-right>
-			<quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"></quota-manage>
+			<quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"
+      on-delete-data="_deleteData"></quota-manage>
 		</panel-right>
 	</template>
 	<script>
@@ -233,6 +234,25 @@
           .then((response)=>{
             console.log("success");
             console.log(response);
+            this._getDatalist(this.selectYear);
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error);
+          });
+        },
+        _deleteData:function(e){
+          console.log(e.detail);
+          axios.delete('/eu/quota',{
+          params:{
+            id:e.detail.year,
+            type_rice_id:e.detail.type_rice_id
+          }
+          })
+          .then((response)=>{
+            console.log("success");
+            console.log(response);
+            this._getYear();
             this._getDatalist(this.selectYear);
           })
           .catch((error)=>{
