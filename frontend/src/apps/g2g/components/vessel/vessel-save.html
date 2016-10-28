@@ -25,6 +25,9 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="ผู้ส่งออก" value="[[data.seller_name_en]]" ></gl-form-label-input>
         </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+          <gl-form-label-input  label="Tel." value="[[data.seller_phone]]" ></gl-form-label-input>
+        </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="Shipping Line" value="[[data.shipline_name]]" ></gl-form-label-input>
         </gl-grid-col>
@@ -49,9 +52,6 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="Shipping Agent" value="[[data.carrier_name]]" ></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="Tel." value="[[data.seller_phone]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="POL" value="[[data.load_port_name]]" ></gl-form-label-input>
@@ -109,7 +109,7 @@
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="Price (USD/MT)" value="[[price_per_ton.price_per_ton]]" ></gl-form-label-input>
+          <gl-form-label-input  label="Price (USD/MT)" value="[[price.price_per_ton]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="น้ำหนักกระสอบ (gram/bag)" value="[[data.package_weight_bag]]" ></gl-form-label-input>
@@ -128,10 +128,13 @@
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="WEIGHT (M/T)" value="G.W. {{gw]]" ></gl-form-label-input>
+          <gl-form-label-input label="G.W. WEIGHT (M/T)"  value="{{gw}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="" value="N.W. {{data.shm_det_quantity}}"></gl-form-label-input>
+          <gl-form-label-input label="N.W. WEIGHT (M/T)"  value="{{nw}}"></gl-form-label-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-label-input label="T.W. WEIGHT (M/T)"  value="{{tw}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
@@ -164,7 +167,8 @@
         'getPrice(contractId)',
         // 'getCounty(common)',
         // 'getconfirm(contractId)',
-        'check(data)'
+        'calc(contractId)',
+        'check(contractId)'
       ],
       getPrice:function (contractId) {
           //หาชนิดข้าว
@@ -176,15 +180,11 @@
           //หาขนาดแพ็คเก็ต
           var packagefil = typeRice[0].package.filter(function (typeRice) { return typeRice.package_id == packages});
           // console.log(packagefil[0].price_per_ton);
-          this.price_per_ton = packagefil[0];
-          this.quantityBag = ((parseFloat(this.price_per_ton.package_kg_per_bag) * parseFloat(1000)) / parseFloat(this.price_per_ton.package_weight_bag)).toFixed(3);
-          this.toWords(this.quantityBag);
-          this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(this.price_per_ton.package_weight_bag) + (parseFloat(this.price_per_ton.package_kg_per_bag) / parseFloat(1000))) / parseFloat(1000)));
-          this.gw = this.sumGW.toFixed(3);
+          this.price = packagefil[0];
 
       },
       check:function (check) {
-        // console/.log(this.buyerMasks);
+        console.log(check);
       }
     });
   </script>

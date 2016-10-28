@@ -150,6 +150,7 @@
                 // 'nx-grid-tap': 'nxGridTap',
                 // 'nx-grid-dblclick': 'nxGridDblclick'
                 'select': 'selecteddata',
+                'vessel-insert-common': 'shipmentCommon'
             },
             behaviors: [
                 gl.behavior.core,
@@ -197,9 +198,9 @@
               this.getDb('./common/package',(data)=>{
                 this.package=data;
               },false);
-              this.getDb('./common/seller',(data)=>{
+              this.getDb('./external/exporter?exporter_active=true&trader_active=true',(data)=>{
                   this.common.seller= data;
-                  // console.log(this.common.seller);
+                  console.log(this.common.seller);
               },false);
               this.getDb('./common/carrier',(data)=>{
                 //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
@@ -330,10 +331,10 @@
             //
             //   e.detail.node.common=this.common;
             // },
-            // vesselInsertCommon:function (e) {
-            //   // console.log(e.detail.node);
-            //   e.detail.node.common=this.common;
-            // },
+            shipmentCommon:function (e) {
+              // console.log(e.detail.node);
+              e.detail.node.common=this.common;
+            },
 
             getconfirm:function (contractId) {
                 this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
