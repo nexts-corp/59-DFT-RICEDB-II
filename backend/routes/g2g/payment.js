@@ -109,10 +109,12 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                     shipment_detail: r.table('shipment_detail')
                         .filter({ bl_no: m('bl_no') })
                         .coerceTo('array')
-                        .pluck("id", "shm_id", "package_id", "seller_id", "shm_det_quantity", "type_rice_id")
+                        .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
                         .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
                         .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_date", "cl_name", "cl_quality"] }).zip()
                         .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .merge(function (m1) {
                             return {
