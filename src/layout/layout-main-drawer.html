@@ -16,6 +16,12 @@
             color: white;
             background-color: orange;
             font-size: 22px;
+            user-drag: none; 
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
         iron-image,iron-icon{
             padding-right: 10px;
@@ -25,7 +31,11 @@
             cursor:pointer;
             font-weight:bold;
         }
-        
+        paper-icon-item>div{
+            position: absolute;
+            top: 4px;
+            right: 10px;
+        }
     </style>
         <div class="menu">
 				<app-toolbar>
@@ -38,8 +48,11 @@
 					<paper-icon-item on-tap="selectPage" path="/quota" focused>
 						<iron-icon icon="chevron-right" item-icon></iron-icon>
 						รายการจัดสรรปีโควตา
+                        <div>
+                             <paper-spinner active></paper-spinner>
+                        </div>
 					</paper-icon-item>
-					<paper-icon-item on-tap="selectPage" path="/page2">
+					<paper-icon-item on-tap="selectPage" path="">
 						<iron-icon icon="chevron-right" item-icon></iron-icon>
 						น้ำเข้าข้อมูลเพื่อการคำนวณ
 					</paper-icon-item>
@@ -50,6 +63,9 @@
                      <paper-icon-item on-tap="selectPage" path="/amount">
 						<iron-icon icon="chevron-right" item-icon></iron-icon>
 						ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท
+                         <div class="position">
+                             <paper-spinner active></paper-spinner>
+                        </div>
 					</paper-icon-item>
                      <paper-icon-item on-tap="selectPage" path="/confirm">
 						<iron-icon icon="chevron-right" item-icon></iron-icon>

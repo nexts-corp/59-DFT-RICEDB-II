@@ -85,8 +85,16 @@
 		.toastWarning{
 			background-color: #f0ad4e;
 		}
-		.toastError{
+		.toastError,.toastConnectError{
 			background-color: #d9534f;
+		
+		}
+		.toastConnectError{
+			width: 100%;
+			text-align: center;
+		}
+		.toastConnectError>span{
+			font-size: 16px;
 		}
 		iron-icon{
 			height: auto;
@@ -114,6 +122,11 @@
                 </span>
         </paper-toast>
 		
+		<paper-toast class="toastConnectError" id="toastErrorConnect" duration="0">
+			<span>Network error... Please check npm.</span>
+			<paper-button on-tap="closeopenToastConnectError" style="color:yellow;">Close now!</paper-button>
+		</paper-toast>
+
 		<paper-toast class$="{{status.class}}" id="toastStatus">
 			<iron-icon icon="{{status.icon}}"></iron-icon>
 			<span>
@@ -156,14 +169,17 @@
 					this.closeToastLoading();
 				}
 				if(e.detail.status == 'success'){
-					this.closeToastLoading();
+					this.closeToastLoading(e.detail.callback);
 					//Polymer.dom(this.root).setAttribute('class', 'toastSuccess')
 					this.status = {
 						class : 'toastSuccess',
 						icon : 'done',
-						content : e.detail.text
+						content : e.detail.text || 'โหลดข้อมูลสำเร็จ'
 					}
-					this.openToastStatus();
+					
+				}
+				if(e.detail.status == 'connectError'){
+					this.$.toastErrorConnect.open();
 				}
 			},
 			openToastLoading:function(){
@@ -171,10 +187,18 @@
             },
             closeToastLoading:function(callback){
                 this.async(function(){
+					console.log('async');
                     this.$.toastLoading.hide();
-                    //callback();
+					this.openToastStatus();
+					callback();
                 }.bind(this),500);
             },
+			openToastConnectError:function(){
+				this.$.toastErrorConnect.open();
+			},
+			closeopenToastConnectError:function(){
+				this.$.toastErrorConnect.hide();
+			},
 			openToastStatus:function(){
 				this.$.toastStatus.open();
 			}
