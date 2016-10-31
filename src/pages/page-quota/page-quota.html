@@ -93,7 +93,7 @@
 
 		</div>
 
-		<button on-click="test">ss</button>
+		<!--<button on-click="test">ss</button>-->
 
 		<panel-right>
 			<quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"
@@ -126,6 +126,7 @@
       ready: function(){
         this.layerContent = "addRedRegExporter";
         this._getYear();
+        this.textToast = 'โหลดข้อมูลสำเร็จ';
       },
         _insertData:function(){
           this.dataSelect = {
@@ -164,10 +165,10 @@
             //this.glQuery('toastLoading').hide();
             //console.log(error);
           });*/
-          this.$$('panel-right').toggle()
+          //this.$$('panel-right').toggle()
           //this.$$('panel-right').test("1234");
-          console.log( this.$$('panel-right').test());
-          this.fire('test');
+          //console.log( this.$$('panel-right').test());
+         
         },
         _getYear:function(){
           axios.get('./eu/quota/year')
@@ -182,9 +183,13 @@
           });
         },
         _getDatalist:function(year){
+          this.fire('toast',{status:'load'});
           axios.get('./eu/quota?id='+year)
           .then((response)=>{
             console.log("success!!");
+            this.fire('toast',{status:'loadSuccess'});
+            this.fire('toast',{status:'success',text:this.textToast});
+            this.textToast = 'โหลดข้อมูลสำเร็จ';
             //console.log(response.data);
             this.dataList = response.data;
           })
@@ -202,9 +207,11 @@
         },
         _postData:function(e){
           //console.log('post-data:',e.detail);
+           this.fire('toast',{status:'load'});
           axios.post('/eu/quota',e.detail)
           .then((response)=>{
             console.log("success");
+            this.textToast = 'บันทึกข้อมูลสำเร็จ';
             console.log(response);
             this._getYear();
             this._getDatalist(this.selectYear);
@@ -216,9 +223,11 @@
         },
         _putData:function(e){
          //console.log('put-data: ',e.detail);
+         this.fire('toast',{status:'load'});
           axios.put('/eu/quota',e.detail)
           .then((response)=>{
             console.log("success");
+            this.textToast = 'แก้ไขข้อมูลสำเร็จ';
             console.log(response);
             this._getYear();
             this._getDatalist(this.selectYear);
@@ -228,21 +237,9 @@
             console.log(error);
           });
         },
-        _updateData:function(e){
-          //console.log(e.detail);
-          axios.put('/eu/quota',e.detail)
-          .then((response)=>{
-            console.log("success");
-            console.log(response);
-            this._getDatalist(this.selectYear);
-          })
-          .catch((error)=>{
-            console.log("error");
-            console.log(error);
-          });
-        },
         _deleteData:function(e){
           console.log(e.detail);
+          this.fire('toast',{status:'load'});
           axios.delete('/eu/quota',{
           params:{
             id:e.detail.year,
@@ -251,6 +248,7 @@
           })
           .then((response)=>{
             console.log("success");
+            this.textToast = 'ลบข้อมูลสำเร็จ';
             console.log(response);
             this._getYear();
             this._getDatalist(this.selectYear);

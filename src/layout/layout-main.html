@@ -35,10 +35,6 @@
 			filter: alpha(opacity=70);
 		}
 
-
-
-
-
 		.offline>.flex-container{
 			display: -webkit-flex;
     		display: flex;
@@ -66,7 +62,37 @@
 		paper-spinner{
 			--paper-spinner-stroke-width: 3px;
 		}
-		
+
+		.toastLoading, .toastSuccess, .toastWarning, .toastError{
+			width: 100%;
+			text-align: center;
+			font-size: 22px;
+			font-family: 'rsubold', sans-serif;
+        	-webkit-font-smoothing: antialiased;
+			color: white;
+		}
+		.toastLoading>span{
+			padding-left:10px; 
+			position:relative; 
+			bottom: 6px;
+		}
+		.toastSuccess{
+			background-color: #5cb85c;
+		}
+		.toastSuccess>span{
+			padding-left:10px;
+		}
+		.toastWarning{
+			background-color: #f0ad4e;
+		}
+		.toastError{
+			background-color: #d9534f;
+		}
+		iron-icon{
+			height: auto;
+			width: 30px;
+			margin-bottom: 5px;
+		}
 
 	</style>
 	<div blur$="{{offline}}">
@@ -78,18 +104,22 @@
 			<app-header fixed condenses effects="waterfall">
 				<layout-main-toolbar on-toggle-drawer="_toggleDrawer"></layout-main-toolbar>
 			</app-header>
-			<content on-test="openToastLoading"></content>
+			<content on-toast="_toastManage"></content>
 		</app-header-layout>
 		
-		<paper-toast class="setPosition" id="toastLoading" positionTarget duration="0" text="">
-            <div class="loading">
+		<paper-toast class="toastLoading" id="toastLoading" positionTarget duration="0" text="">
                 <paper-spinner active></paper-spinner>
-                <span style="padding-left:10px; position:relative; bottom: 6px;">
-                    กำลังโหลด
+                <span>
+                    กำลังโหลด... 
                 </span>
-                <!--<paper-button onclick="toast1.toggle()" class="yellow-button">Close now!</paper-button>-->
-            </div>
         </paper-toast>
+		
+		<paper-toast class$="{{status.class}}" id="toastStatus">
+			<iron-icon icon="{{status.icon}}"></iron-icon>
+			<span>
+				{{status.content}}
+			</span>
+		</paper-toast>
 		
 	</div>
 	<div class="offline" hidden$="{{!offline}}">
@@ -116,15 +146,38 @@
 			_toggleDrawer:function(){
 				this.$.drawer.toggle();
 			},
+			_toastManage:function(e){
+				this.data = e.detail.status;
+				//console.log(e.detail.status);
+				if(e.detail.status == 'load'){
+					this.openToastLoading();
+				}
+				else if(e.detail.status == 'loadSuccess'){
+					this.closeToastLoading();
+				}
+				if(e.detail.status == 'success'){
+					this.closeToastLoading();
+					//Polymer.dom(this.root).setAttribute('class', 'toastSuccess')
+					this.status = {
+						class : 'toastSuccess',
+						icon : 'done',
+						content : e.detail.text
+					}
+					this.openToastStatus();
+				}
+			},
 			openToastLoading:function(){
                 this.$.toastLoading.open();
             },
             closeToastLoading:function(callback){
                 this.async(function(){
                     this.$.toastLoading.hide();
-                    callback();
+                    //callback();
                 }.bind(this),500);
             },
+			openToastStatus:function(){
+				this.$.toastStatus.open();
+			}
         });
     </script>
 </dom-module>

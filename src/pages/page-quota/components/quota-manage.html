@@ -31,7 +31,10 @@
             th,td{
                 text-align: center;
             }
-
+            .flex-equal-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+            }
 		</style>
 		<div>
 			<header>
@@ -48,7 +51,7 @@
 									id="" name="" disabled$="{{checkStatus(status)}}"></gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-dropdown-menu label="ประเภทข้าว">
+								<gl-form-dropdown-menu label="ประเภทข้าว" disabled$="{{checkStatus(status)}}">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
@@ -97,17 +100,25 @@
 								</template>
                                  <tbody>
 								<tr>
-									<td colspan="4">
-										<paper-button on-tap="_addPeriod">
-											<iron-icon icon="add"></iron-icon> เพิ่มงวด</paper-button>
+                                    <td>	
+                                        <paper-button on-tap="_addPeriod">
+											<iron-icon icon="add"></iron-icon> เพิ่มงวด
+                                        </paper-button>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+									<td>
+									
 									</td>
 								</tr>
                                  </tbody>
                                 <thead>
 								<tr>
-									<th colspan="3">ปริมาณโควต้ารวม : {{_crossCheck(Period.*)}}</th>
+									<th>ปริมาณโควต้ารวม : {{_crossCheck(Period.*)}}</th>
+                                    <th></th>
+                                    <th></th>
 									<th>
-										<paper-button raised on-tap="_mathData">คำนวณ</paper-button>
+										<paper-button on-tap="_mathData">คำนวณ</paper-button>
 									</th>
 								</tr>
                                 </thead>
@@ -119,10 +130,15 @@
 			</section>
 
             <section>
-                <div class="horizontal end-justified layout">
-                    <paper-button class="gl-btn-danger" raised on-tap="_deleteData"><iron-icon icon="delete"></iron-icon>delete</paper-button>
-                    <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-                    <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+                <div class="horizontal flex-equal-justified">
+                    <div style="margin-left:10px;">
+                        <paper-button on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
+                    </div>
+                    <div style="margin-right:10px;">
+                        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+                        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+                    </div>
+                 
                 </div>
             </section>
             
