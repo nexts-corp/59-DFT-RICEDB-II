@@ -155,7 +155,7 @@ router.get('/id/:contract_id', function (req, res, next) {
                                             }).and(f('contract_id').eq(row('id')))
                                         })
                                         .coerceTo('array')
-                                        .pluck("cl_type_rice")
+                                         .pluck("cl_type_rice")
                                         .map(function (m) {
                                             return m('cl_type_rice').merge(function (mer) {
                                                 return r.branch(mer('type_rice_id').eq(limit('type_rice_id')), mer('type_rice_quantity'), 0)
