@@ -96,7 +96,7 @@ router.get('/id/:cl_id', function (req, res, next) {
 router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.table("confirm_letter")
-            .filter({ "contract_id": req.params.contract_id })
+            .filter({ "contract_id": req.params.contract_id, "cl_status": true })
             .merge(function (row) {
                 return {
                     cl_id: row('id'),
