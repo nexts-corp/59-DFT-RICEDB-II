@@ -1,0 +1,89 @@
+<link rel="import" href="listEditBehavior.html">
+<dom-module id="list-shipment-no">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+  .header {
+    padding: 10px 0px 0px 10px;
+    background-color: var(--paper-grey-100);
+    color: var(--gl-gray-darker-color);
+    font-size: var(--font-size-h4);
+    padding: 5px;
+    text-align: center;
+
+    font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+  }
+  #listitem {
+    border-left: 1px solid var(--gl-gray-lighter-color);
+    border-right: 1px solid var(--gl-gray-lighter-color);
+  }
+  paper-item {
+    cursor:pointer;
+    border-bottom: 1px solid var(--gl-gray-lighter-color);
+    --paper-item-focused: {
+      background-color: var(--gl-info-color);
+    }
+    --paper-item-selected:{
+      background-color: var(--gl-info-color);
+    }
+  }
+  paper-item:hover {
+    background-color: var(--gl-info-color);
+  }
+  .name {
+    float: left;
+  }
+  numeral-js{
+    float: right;
+  }
+  .status {
+    text-align:center;
+  }
+</style>
+  <template>
+      <content id="primary" select="items[type=primary]"></content>
+      <div class="header layout horizontal">
+        <template is="dom-repeat" items="{{config.primary}}">
+           <div  class$="[[item.width]]">
+              [[item.label]]
+           </div>
+       </template>
+      </div>
+      <div id="listitem">
+       <template is="dom-repeat" as="itemPrimary" items="{{data}}">
+         <paper-item level="detailRegExporter" data="{{itemPrimary}}" on-tap="_getBind">
+             <template is="dom-repeat" as="configPrimary" items="{{config.primary}}">
+               <template is="dom-if" if="[[checkTypeString(configPrimary,itemPrimary)]]">
+                 <div class$="[[configPrimary.width]] name">
+                   <!-- <div class=""> -->
+                     {{_getItemPrimary(itemPrimary,configPrimary)}}
+                   <!-- </div> -->
+                 </div>
+               </template>
+               <template is="dom-if" if="[[checkTypeNumber(configPrimary,itemPrimary)]]">
+                 <div class$="[[configPrimary.width]] number">
+                     <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js>
+                 </div>
+               </template>
+               <!-- <template is="dom-if" if="[[checkContract(configPrimary,itemPrimary)]]">
+                 <div class$="[[configPrimary.width]] status">
+                     อนุมัติแล้ว
+                 </div>
+               </template>
+               <template is="dom-if" if="[[checkContractfalse(configPrimary,itemPrimary)]]">
+                 <div class$="[[configPrimary.width]] status">
+                    ยังไม่อนุมัติ
+                 </div>
+               </template> -->
+             </template>
+
+         </paper-item>
+       </template>
+     </div>
+  </template>
+  <script>
+    Polymer({
+      is: "list-shipment-no",
+      behaviors: [listEditBehavior,gl.behavior.core]
+    });
+  </script>
+</dom-module>
