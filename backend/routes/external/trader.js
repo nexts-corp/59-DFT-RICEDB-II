@@ -38,7 +38,7 @@ var schema = {
             "type": "string"
         }
     },
-    "required": ["seller_id", "trader_date_approve", "trader_no", "trader_name", "type_lic_id"]
+    "required": ["trader_date_approve"]
 };
 var validate = ajv.compile(schema);
 
