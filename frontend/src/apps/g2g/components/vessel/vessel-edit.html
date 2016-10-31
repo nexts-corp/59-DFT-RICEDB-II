@@ -209,8 +209,9 @@
         'getCounty(country,common)',
         'getShip(data.shipline_id,common.*)',
         'getRiceTypeForPackage(clTypeRice,data.type_rice_id)',
-        'getPackageForPrice(package,data.package_id)',
-        'check(common.seller)',
+        // 'getPackageForPrice(package,data.package_id)',
+        // 'check(data.shm_det_quantity)',
+        'getPrice(contractId)',
         'calc(data.shm_det_quantity)',
         // 'shipment(data.shm_det_quantity)'
       ],
@@ -218,10 +219,19 @@
         //send to file add-contract
         this.fire('vessel-edit-common',{node:this});
       },
-      check:function (data) {
-        // data.map((el)=>{
-        //   console.log(el);
-        // });
+      getPrice:function (contractId) {
+          //หาชนิดข้าว
+          // console.log(this.data.type_rice_id);
+          var typeRiceb =this.data.type_rice_id
+          var packages = this.data.package_id;
+          var typeRice = this.clTypeRice.filter(function (clTypeRice) { return clTypeRice.type_rice_id == typeRiceb});
+
+          //หาขนาดแพ็คเก็ต
+          var packagefil = typeRice[0].package.filter(function (typeRice) { return typeRice.package_id == packages});
+          // console.log(packagefil[0].price_per_ton);
+          this.price = packagefil[0];
+
+        this.calc(this.data.shm_det_quantity);
       },
 
     });
