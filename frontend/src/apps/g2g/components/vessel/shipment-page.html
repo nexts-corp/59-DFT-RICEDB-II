@@ -56,14 +56,11 @@
 
       </div>
       <div>
+        <!-- create shipMent -->
         <panel-seleted>
 
          <section-content name="detail">
-           <vessel-page
-                        name="third"
-                        data="{{shipMent}}"
-                        shm-id="[[dataSelect.shm_id]]"
-                        contract-id="[[contractId]]" ></vessel-page>
+           <edit-noshipment contract-id="[[data.contract_id]]" insert="{{insert}}"></edit-noshipment>
          </section-content>
          <section-content name="print">
              <vessel-print></vessel-print>
@@ -87,18 +84,20 @@
           type: Number,
           value:0
         }
+        ,insert:{
+          type:Boolean,
+          value:true
+        }
       },
       listeners: {
           'select': 'selectedPage',
       },
       observers:[
         'check(shipMent)',
-        // 'getRicetype(data.contract_id)'
       ],
       selectedPage:function (e) {
         this.layerConfirm = 0;
       },
-
       check:function (shipMent) {
         // console.log(shipMent);
          if( shipMent != null){

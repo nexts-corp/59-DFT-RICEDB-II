@@ -48,7 +48,7 @@
     </gl-form-dropdown-menu>
     </gl-grid-col>
 
-    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(item.*,'type_rice_quantity')]]
         <gl-form-input auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
     </gl-grid-col>
     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
@@ -60,7 +60,7 @@
     </template>
 
     <div class="horizontal end-justified layout">
-        <paper-button raised on-tap="addNewData" class="gl-btn-primary">เพิ่ม</paper-button>
+        <paper-button raised on-tap="addNewData" class="gl-btn-primary">Add Rice Type</paper-button>
     </div>
 
 
@@ -77,6 +77,8 @@
     </gl-grid-row>
 
     <div class="horizontal end-justified layout">
+      <!-- [[data.contract_status]] -->
+        <paper-button class="gl-btn-danger" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
         <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
     </div>
@@ -96,6 +98,15 @@
                         name: ''
                     }
                 },
+                Newdata:{
+                  type:Object,
+                  value: {
+                    contract_name:'',
+                    buyer_id:'',
+                    contract_date:'',
+                    contract_type_rice:'',
+                  }
+                },
                 error: {
                     type: Object,
                     value: {
@@ -107,7 +118,9 @@
                   value:false
                 }
             },
-
+            confirmDrawer:function () {
+              console.log(this.data.contract_status = false);
+            },
             addNewData: function() {
                 this.push('data.contract_type_rice', {
                     type_rice_id: '',
@@ -122,66 +135,27 @@
                 // var index = this.data.contract_type_rice.indexOf(data);
                 this.splice('data.contract_type_rice', e.currentTarget.id, 1);
             },
-            listeners: {
-                'iron-form-submit': '_submitData'
-            },
-            _saveData: function(event) {
-                this.$.insertPromiseDetail.submit();
-                // console.log(this.data);
-            },
-            _submitData: function(event) {
-                // console.log(JSON.stringify(event.detail));
-                //console.log(event.detail);
-                // this.result = event.detail
-                var keys = ["type_rice_id", "type_rice_quantity"];
-                var rmKeys = ["buyer_address", "type_rice_name", "contract_id"];
-                var datas = event.detail;
-                var type_rice = [];
-                for (key in datas) {
-                    if (keys.indexOf(key) > -1) {
-                        //  console.log(key + " "+datas[key]);
-                        //   console.log(datas[key].constructor === Array);
-                        if (datas[key].constructor === Array) {
-                            for (key2 in datas[key]) {
-                                if (!type_rice.hasOwnProperty(key2)) {
-                                    type_rice[key2] = {};
-                                }
-                                if (key == "type_rice_quantity")
-                                    type_rice[key2][key] = parseFloat(datas[key][key2]);
-                                else
-                                    type_rice[key2][key] = datas[key][key2];
-                                // if(!type_rice[key2].hasOwnProperty(key)){
-                                //     type_rice[key2][key] = datas[key][key2];
-                                // }
-                                //  type_rice[key2][key] = datas[key][key2];
-                                // console.log("key2=> "+key2+" "+datas[key][key2]);
-                            }
-                        } else {
-                            if (!type_rice.hasOwnProperty(0)) {
-                                type_rice[0] = {};
-                            }
-                            if (key == "type_rice_quantity")
-                                type_rice[0][key] = parseFloat(datas[key]);
-                            else
-                                type_rice[0][key] = datas[key];
-                        }
-                        delete datas[key];
-                    }
-                }
-                // console.log(type_rice);
-                datas["contract_type_rice"] = type_rice;
-                datas["id"] = datas["contract_id"];
-                // console.log(datas["contract_date"]);
-                datas["contract_date"]=new Date (datas["contract_date"]);
-                for (i = 0; i < rmKeys.length; i++) {
-                    delete datas[rmKeys[i]];
-                }
-                // console.log(JSON.stringify(datas));
-                this.glQuery('layoutMain').openToastSaveing();
-                // var success =false;
-                this.postDb(datas);
 
+            _saveData: function(event) {
+                // this.$.insertPromiseDetail.submit();
+                // console.log(this.data);
+              //  this.data
+              for (var i = 0; i < this.data.contract_type_rice.length; i++) {
+                    delete this.data.contract_type_rice[i].type_rice_desc_en;
+                    delete this.data.contract_type_rice[i].type_rice_name_en;
+                    delete this.data.contract_type_rice[i].type_rice_name_th;
+              }
+              this.Newdata.id=this.data.contract_id;
+              this.Newdata.contract_name=this.data.contract_name;
+              this.Newdata.buyer_id=this.data.buyer_id;
+              this.Newdata.contract_date=new Date (this.data.contract_date);
+              this.Newdata.contract_type_rice=this.data.contract_type_rice;
+              this.Newdata.contract_status=this.data.contract_status;
+              console.log(this.Newdata);
+              this.glQuery('layoutMain').openToastSaveing();
+                this.postDb(this.Newdata);
             },
+
             postDb:function (data) {
               axios.put('./g2g/contract/update', data)
                         .then(function (response) {
@@ -195,10 +169,18 @@
                           console.log(error);
                         })
             },
-            cancelDrawer:function () {
-              console.log(111);
-              this.glQuery('contentPanel').changDrawer();
-            }
+            changeString2Num:function(ob,param){
+              //console.log(typeof ob.value);
+              if(typeof ob.value == "string"){
+                var pathChange = ob.path.split(".");
+                if(pathChange.length == 2){
+                    if(pathChange[1]==param){
+                      ob.base[param]=parseFloat(ob.value);
+                      // console.log(typeof ob.value);
+                    }
+                }
+              }
+            },
         });
     </script>
 </dom-module>
