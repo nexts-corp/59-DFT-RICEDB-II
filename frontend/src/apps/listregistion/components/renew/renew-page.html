@@ -4,11 +4,23 @@
 <link rel="import" href="../register/register-member.html">
 <dom-module id="renew-page">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-
+  .title {
+    text-align: center;
+     font-size: var(--font-size-h3);
+     font-family: 'rsuregular', sans-serif;
+       -webkit-font-smoothing: antialiased;
+       color: red;
+  }
   </style>
   <template>
 
     <gl-form-panel set-border="0px">
+
+      <div class="horizontal center-justified layout">
+        <div id="titleExporter" class="title">ผู้ส่งออกถูกระงับ</div>
+        <div id="titleTrader" class="title">คน. หมดอายุ</div>
+        <div id="titleSeller" class="title">ยังไม่ลงทะเบียนเป็นผู้ส่งออก</div>
+      </div>
 
       <gl-form-panel-head set-padding="0px 0px 0px 0px">
         <div id="removePen" hidden>
@@ -20,14 +32,13 @@
                       <iron-pages selected="{{pages}}">
                           <renew-memberShow data="{{data}}"></renew-memberShow>
                           <renew-memberEdit data="{{data}}"></renew-memberEdit>
-                          <register-member data={{data}}></register-member>
                       </iron-pages>
                   </gl-form-panel>
               </div>
               {{_checkStatus(data.exporter_active,data.exporter_status,data.trader_active)}}
               <div class="horizontal center-justified layout">
                 <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_active" hidden>ยกเลิกการระงับ</paper-button>
-                <paper-button id="buttomRegister" raised class="gl-btn-primary button" on-tap="_register" hidden>ลงทะเบียนผู้ส่งออก</paper-button>
+                <!-- <paper-button id="buttomRegister" raised class="gl-btn-primary button" on-tap="_register" hidden>ลงทะเบียนผู้ส่งออก</paper-button> -->
                 <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_retrader" hidden>ต้องต่อ คน. ก่อน</paper-button>
               </div>
 
@@ -54,6 +65,7 @@
         }
       },
       _exporterIdChanged:function(val){
+        // console.log(val);
         if(val!=""){
           axios.get('./external/exporter/id/'+val)
           .then( (response)=>{
@@ -63,6 +75,9 @@
           .catch(function (error) {
             console.log(error);
           });
+        }
+        else if(val == Object){
+          console.log("เจอแล้วจ้า!!!");
         }
       },
       editChange:function(e){
@@ -106,36 +121,46 @@
       _checkStatus:function(ac,st,ta){
         if (ac == true && st == true && ta == true) {
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
-          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
           this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#titleExporter').setAttribute("hidden", "hidden");
+          this.$$('#titleTrader').setAttribute("hidden", "hidden");
           this.$$('#removePen').removeAttribute("hidden");
+          this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
         else if (ac == false && st == true && ta == true) {
-          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').removeAttribute("hidden");
           this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#titleExporter').removeAttribute("hidden");
+          this.$$('#titleTrader').setAttribute("hidden", "hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
         else if (ac == false && st == true && ta == false) {
-          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
           this.$$('#buttomTrader').removeAttribute("hidden");
+          this.$$('#titleExporter').setAttribute("hidden", "hidden");
+          this.$$('#titleTrader').removeAttribute("hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
         else if (ac == true && st == true && ta == false) {
-          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
           this.$$('#buttomTrader').removeAttribute("hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.$$('#titleExporter').setAttribute("hidden", "hidden");
+          this.$$('#titleTrader').removeAttribute("hidden");
+          this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
-        else if(ac == null){
+        else if(st == false){
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
-          this.$$('#buttomRegister').removeAttribute("hidden");
+          this.$$('#titleSeller').removeAttribute("hidden");
           this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#titleExporter').setAttribute("hidden", "hidden");
+          this.$$('#titleTrader').setAttribute("hidden", "hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
         }
       },
@@ -150,28 +175,41 @@
           id : this.data.exporter_id
         }
         // console.log(datas);
+        this.glQuery('layoutRegistion').openToastSaveing();
         axios.put('./external/exporter/update', datas)
                   .then(function (response) {
                     console.log("success");
                     console.log(response);
                     this.glQuery('contentPanel').changDrawer();
                     this.glQuery('reExporter').getExporters();
+                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                    }.bind(this));
                   }.bind(this))
                   .catch(function (error) {
                     console.log("error");
                     console.log(error);
                   })
       },
-      _register:function(){
-        this.pages = 2;
-        this.$$('#buttomRegister').setAttribute("hidden", "hidden");
-      },
       _retrader:function(){
         var datas= {
           id: this.data.trader_id,
           trader_date_approve: new Date
         }
-        console.log(datas);
+        // console.log(datas);
+        this.glQuery('layoutRegistion').openToastSaveing();
+        axios.put('./external/trader/update', datas)
+                  .then(function (response) {
+                    console.log("success");
+                    console.log(response);
+                    this.glQuery('contentPanel').changDrawer();
+                    this.glQuery('reExporter').getExporters();
+                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                    }.bind(this));
+                  }.bind(this))
+                  .catch(function (error) {
+                    console.log("error");
+                    console.log(error);
+                  })
       }
     });
   </script>
