@@ -94,10 +94,6 @@
       </gl-grid-row>
     </form>
 
-    <div class="horizontal center-justified layout">
-      <paper-button class="gl-btn-success" on-tap="_register" raised>บันทึก</paper-button>
-    </div>
-
   </template>
   <script>
     Polymer({
@@ -110,27 +106,6 @@
           type:Object,
           notify:true
         }
-      },
-      _register:function(){
-        var datas = {
-          exporter_no:this.data.exporter_no,
-          exporter_date_approve:new Date,
-          exporter_date_update:new Date,
-          seller_agent:this.data.seller_agent,
-          trader_id:this.data.trader_id
-        }
-        // console.log(datas);
-        axios.post('./external/exporter/insert', datas)
-            .then(function(response) {
-                console.log("success");
-                console.log(response);
-                this.glQuery('contentPanel').changDrawer();
-                this.glQuery('reExporter').getExporters();
-            }.bind(this))
-            .catch(function(error) {
-                console.log("error");
-                console.log(error);
-            })
       },
       _addAgent:function() {
         // console.log(this.data.seller_agent=[{agent_name:'สวัสดี'}]);

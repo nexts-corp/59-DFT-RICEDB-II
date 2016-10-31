@@ -1,6 +1,7 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="components/list-edit/list-report.html">
 <link rel="import" href="components/renew/renew-page.html">
+<link rel="import" href="components/register/register-pageRegister.html">
 
 
 <dom-module id="listregistion-report-exporter">
@@ -60,9 +61,12 @@
       <grid>
 
         <div class="layout vertical registor">
+          <div class="layout horizontal end-justified">
+            <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
+          </div>
 
           <div class="flex title">
-              ทะเบียนผู้ส่งออกข้าวไปต่างประเทศ
+              ค้นหาผู้ส่งออกข้าวไปต่างประเทศ
           </div>
           <div class="searchBox searchBorder">
             <gl-grid-row width="{{getWidth}}">
@@ -72,6 +76,13 @@
                     item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
               </gl-grid-col>
             </gl-grid-row>
+          </div>
+
+          <div class="flex title">
+              รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท
+          </div>
+
+          <div class="searchBox searchBorder">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -109,14 +120,8 @@
                 <paper-button class="gl-btn-info top" on-tap="_search" raised>แสดงรายงาน</paper-button>
               </gl-grid-col>
             </gl-grid-row>
-
-
             </div>
-          <div class="flex title">
-              รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท<br>
-               ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
-               ระหว่างวันที่ [[dataSelected.date_start]] ถึง [[dataSelected.date_end]]
-          </div>
+
           <div class="flex searchBorder">
             <list-report data={{exporters}}>
               <items type="primary">
@@ -136,6 +141,7 @@
       <panel>
           <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]"></register-pageRegister></div>
               <div name="detailRegExporter">
                 <renew-page exporter-id="[[exporterId]]" data={{dataSelect}}></renew-page>
               </div>
@@ -164,6 +170,10 @@
               exporterId:{
                 type: String,
                 observer: '_exporterIdChanged'
+              },
+              traderId:{
+                type: String,
+                observer: '_search'
               }
             },
             _exporterIdChanged:function(val){
@@ -196,6 +206,7 @@
             },
             attached: function() {
               this.getExporters();
+              this.getIsExporters();
             },
             getDb: function(url, callback) {
                 axios.get(url)
@@ -205,11 +216,15 @@
                     .catch(function(error) {}.bind(this));
             },
             getExporters: function() {
-              this.exporter_id = this.exporter_id || this.$.exporter_id;
                 this.getDb('./external/exporter', (data) => {
                   this.exporters = data;
-                  this.exporter_id.items = data;
                 });
+            },
+            getIsExporters:function(){
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
+              this.getDb('./external/exporter?exporter_status=true', (data) => {
+                this.exporter_id.items = data;
+              });
             },
             _search: function(){
               var str='';

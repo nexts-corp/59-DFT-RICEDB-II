@@ -146,6 +146,35 @@ router.get('/id/:contract_id', function (req, res, next) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
+                            .merge(function (limit) {
+                                return {
+                                    type_rice_quantity_confirm: r.table('confirm_letter')
+                                        .filter(function (f) {
+                                            return f('cl_type_rice').contains(function (c) {
+                                                return c('type_rice_id').eq(limit('type_rice_id'))
+                                            }).and(f('contract_id').eq(row('id')))
+                                        })
+                                        .coerceTo('array')
+                                         .pluck("cl_type_rice")
+                                        .map(function (m) {
+                                            return m('cl_type_rice').merge(function (mer) {
+                                                return r.branch(mer('type_rice_id').eq(limit('type_rice_id')), mer('type_rice_quantity'), 0)
+                                            })
+                                        })
+                                        .reduce(function (left, right) {
+                                            return left.add(right);
+                                        }).default(0)
+                                        .reduce(function (left, right) {
+                                            return left.add(right);
+                                        }).default(0)
+                                }
+                            })
+                            .merge(function (limit) {
+                                return {
+                                    type_rice_quantity_limit: limit('type_rice_quantity').sub(limit('type_rice_quantity_confirm'))
+                                }
+                            })
+
                     }),
                     contract_date: row('contract_date').split('T')(0)
                 }
