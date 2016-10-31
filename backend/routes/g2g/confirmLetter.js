@@ -49,6 +49,9 @@ var schema = {
         },
         "inct_id": {
             "type": "string"
+        },
+        "cl_status": {
+            "type": "boolean"
         }
     },
     "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id"]

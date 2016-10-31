@@ -61,15 +61,18 @@ var schema = {
                                     "type": "string"
                                 }
                             },
-                            "required": ["invoice_date", "invoice_fe"]
+                            "required": ["invoice_date", "invoice_fe", "invoice_no", "shm_det_id"]
                         }
                     },
                 },
-                "required": ["type_rice_id", "type_rice_quantity"]
+                "required": ["invoice_id", "invoice_detail"]
             }
+        },
+        "pay_status": {
+            "type": "boolean"
         }
     },
-    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to"]
+    "required": ["fe_foreign", "fe_internal", "fe_other", "pay_date_receipt", "pay_no", "rate_bank", "rate_tt", "invoice"]
 };
 var validate = ajv.compile(schema);
 router.get('/id/:pay_id', function (req, res, next) {
@@ -350,7 +353,7 @@ router.post('/insert', function (req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function (conn) {
-                r.table("invoice")
+                r.table("payment")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -387,7 +390,7 @@ router.put('/update', function (req, res, next) {
         if (req.body.id != '' || req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("invoice")
+                r.table("payment")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -414,16 +417,16 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:invoice_id', function (req, res, next) {
+router.delete('/delete/id/:payment_id', function (req, res, next) {
     //var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.params.invoice_id != '' || req.params.invoice_id != null) {
-        result.id = req.params.invoice_id;
+    if (req.params.payment_id != '' || req.params.payment_id != null) {
+        result.id = req.params.payment_id;
         db.query(function (conn) {
-            r.table("invoice")
-                .get(req.params.invoice_id)
+            r.table("payment")
+                .get(req.params.payment_id)
                 .delete()
                 .run(conn)
                 .then(function (response) {
