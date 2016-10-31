@@ -1,3 +1,4 @@
+<!-- <link rel="import" href="../vessel/vesselBehavior.html"> -->
 <dom-module id="promise-insert">
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-size gl-color">
         .top {
@@ -59,6 +60,9 @@
           color: gray;
           /*--paper-icon-button-ink-color: var(--paper-indigo-500);*/
         }
+        paper-button.green[active] {
+          background-color: var(--paper-red-500);
+        }
     </style>
     <template>
       <form is="iron-form" id="confirmLitter" method="get">
@@ -89,9 +93,8 @@
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
                 [[testNum(item.*,'type_rice_quantity')]]
-                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
-                  value="{{item.type_rice_quantity}}"
-                 name="type_rice_quantity"></gl-form-input>
+                <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่จำนวนตัน" required
+                  value="{{item.type_rice_quantity}}" name="type_rice_quantity"></gl-form-input>
 
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
@@ -169,8 +172,11 @@
           </gl-grid-col>
       </gl-grid-row>
       </form>
+      <paper-toggle-button>Toggle</paper-toggle-button>
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
+          <!-- <paper-button toggles raised>toggles</paper-button> -->
+          <paper-button class="gl-btn-info" toggles raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
           <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
       </div>
     </template>
@@ -191,6 +197,7 @@
                   type: Object,
                   value:
                     {
+                      cl_status:false,
                       cl_type_rice:[
                         {
                           type_rice_id: 'WH-05',
@@ -209,7 +216,7 @@
                 }
             },
             behaviors: [
-                gl.behavior.core
+              gl.behavior.core,
             ],
             observers: [
               'dataChange(data.cl_id)',
@@ -229,8 +236,8 @@
               this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
               // console.log(this.confirmLetter.cl_date);
               this.confirmLetter.contract_id = this.contractId;
-              this.postDb(this.confirmLetter)
-              // console.log(this.confirmLetter);
+              this.postDb(this.confirmLetter);
+              console.log(this.confirmLetter);
             },
             postDb:function (data) {
               axios.post('http://localhost:3000/api/g2g/confirm/insert', data)
@@ -320,11 +327,17 @@
               });
             },
             testNum:function(ob,param){
-                    if(ob.path.split(".").length == 2){
-                        ob.base[param]=parseFloat(ob.value);
-
+              if(typeof ob.value == "string"){
+                var pathChange = ob.path.split(".");
+                if(pathChange.length == 2){
+                    if(pathChange[1]==param){
+                      ob.base[param]=parseFloat(ob.value);
+                      // console.log(typeof ob.value);
                     }
                 }
+              }
+            }
+
         });
     </script>
 </dom-module>

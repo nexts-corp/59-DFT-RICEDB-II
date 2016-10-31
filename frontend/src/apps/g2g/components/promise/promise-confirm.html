@@ -147,17 +147,16 @@
                   </td>
                 </tr>
               </template>
+              <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
                 <tr>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td>
-                    <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
                     <paper-icon-button class="approve" icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd" id="[[index]]"></paper-icon-button>
-                    </template>
-                  </td>
+                  </td>  
                 </tr>
-
+              </template>
 
             </table>
 
@@ -194,7 +193,8 @@
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ย้อนกลับ</paper-button>
           <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
-          <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
+            <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
+            <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
           </template>
       </div>
     </template>
