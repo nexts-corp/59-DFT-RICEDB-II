@@ -94,6 +94,21 @@
        }
       }
     },
+    calc:function(ton,action){
+      console.log(ton,action);
+      var pack = this.price;
+      if (typeof pack != 'undefined' || action == 'edit') {
+        // console.log(pack.package_kg_per_bag);
+        console.log('openr');
+        this.quantityBag = ((parseFloat(ton) * parseFloat(1000)) / parseFloat(pack.package_kg_per_bag));
+           this.toWords(this.quantityBag);
+           this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(pack.package_kg_per_bag) + (parseFloat(pack.package_weight_bag) / parseFloat(1000))) / parseFloat(1000)));
+           this.gw = this.sumGW.toFixed(3);
+           this.sumNw =  (parseFloat(this.quantityBag)*parseFloat(pack.package_weight_bag))/parseFloat(1000);
+           this.nw = this.sumNw.toFixed(3);
+           this.tw = (parseFloat(this.quantityBag)*(parseFloat(pack.package_weight_bag)/parseFloat(1000)))/parseFloat(1000);
+      }
+    },
     toWords: function(num) {
         // Convert numbers to words
         // copyright 25th July 2006, by Stephen Chapman http://javascript.about.com
@@ -162,19 +177,6 @@
     toInteger: function(value) {
       return parseInt(value);
     },
-    calc:function(ton){
-      // console.log(ton);
-      var pack = this.price;
-      if (typeof pack != 'undefined') {
-        // console.log(pack.package_kg_per_bag);
-        this.quantityBag = ((parseFloat(ton) * parseFloat(1000)) / parseFloat(pack.package_kg_per_bag));
-           this.toWords(this.quantityBag);
-           this.sumGW = ((parseFloat(this.quantityBag) * (parseFloat(pack.package_kg_per_bag) + (parseFloat(pack.package_weight_bag) / parseFloat(1000))) / parseFloat(1000)));
-           this.gw = this.sumGW.toFixed(3);
-           this.sumNw =  (parseFloat(this.quantityBag)*parseFloat(pack.package_weight_bag))/parseFloat(1000);
-           this.nw = this.sumNw.toFixed(3);
-           this.tw = (parseFloat(this.quantityBag)*(parseFloat(pack.package_weight_bag)/parseFloat(1000)))/parseFloat(1000);
-      }
-    }
+
   };
 </script>
