@@ -87,7 +87,7 @@
                      </div>
                      <div class="card-actions horizontal end-justified layout">
                        <paper-button on-tap="editContract" data="[[item]]">Contract</paper-button>
-                       <paper-button on-tap="editConfirm" data="[[item]]">ConfirmMation Litter</paper-button>
+                       <paper-button on-tap="editConfirm" data="[[item]]">ConfirmMation Letter</paper-button>
                        <paper-button on-tap="editShipment" data="[[item]]">Shipment</paper-button>
                        <paper-button>Payment</paper-button>
                      </div>
@@ -110,7 +110,7 @@
               <div name="primary">
                 <panel-seleted>
                   <section-content name="detail">
-                    <promise-detail data="{{dataContract}}"></promise-detail>
+                    <promise-detail data="{{dataContract}}" type-rice={{typeRice}}></promise-detail>
                   </section-content>
                   <section-content name="print">
                       <vessel-print></vessel-print>
@@ -262,7 +262,6 @@
               // console.log('action ',action);
               this.getDb('./g2g/contract/list',(data)=>{
                 this.contracts=data;
-                // console.log(  this.contract);
                 // dataContract
               },refresh,action)
             },
