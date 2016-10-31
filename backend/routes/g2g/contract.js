@@ -47,6 +47,7 @@ var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.table("contract")
+            .filter({ contract_status: true })
             .merge(function (row) {
                 return {
                     contract_id: row('id'),
@@ -62,8 +63,8 @@ router.get(['/', '/list'], function (req, res, next) {
                             return {
                                 cl_id: cl('id'),
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
-                                cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
-                                cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4)),
+                                // cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
+                                // cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4)),
                                 cl_date: cl('cl_date').split('T')(0)
                             }
                         })
@@ -87,10 +88,18 @@ router.get(['/', '/list'], function (req, res, next) {
             })
             .merge(function (row) {
                 return {
-                    //contract_quantity_sent: row('confirm_letter').sum('cl_quantity_sent'),
-                    contract_quantity_confirm: row('confirm_letter').sum('cl_quantity_total'),
+                    contract_quantity_confirm: row('confirm_letter')
+                        .filter(function (f) {
+                            return f('cl_status').eq(true)
+                        })
+                        .sum('cl_quantity_total'),
                     contract_quantity_total: row('contract_type_rice').sum('type_rice_quantity'),
-                    contract_quantity_balance: row('contract_type_rice').sum('type_rice_quantity').sub(row('confirm_letter').sum('cl_quantity_total'))
+                    contract_quantity_balance: row('contract_type_rice').sum('type_rice_quantity').sub(
+                        row('confirm_letter')
+                            .filter(function (f) {
+                                return f('cl_status').eq(true)
+                            }).sum('cl_quantity_total')
+                    )
                 }
             })
             .without('id')
@@ -227,18 +236,18 @@ router.get('/shipment', function (req, res, next) {
                 return m.merge(function (me) {
                     return {
                         shipment: r.table('shipment')
-                        .filter({ contract_id: me('contract_id') })
-                        .merge(function(p){
-                            return {
-                                shm_id:p('id')
-                            }
-                        })
-                        .without('id')
-                        .coerceTo('array')
+                            .filter({ contract_id: me('contract_id') })
+                            .merge(function (p) {
+                                return {
+                                    shm_id: p('id')
+                                }
+                            })
+                            .without('id')
+                            .coerceTo('array')
                     }
                 })
             })
-            .without('id','contract_type_rice')
+            .without('id', 'contract_type_rice')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

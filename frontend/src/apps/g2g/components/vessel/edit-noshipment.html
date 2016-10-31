@@ -1,5 +1,5 @@
 <dom-module id="edit-noshipment">
-  <style>
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
     :host {
       display: block;
     }
@@ -19,8 +19,10 @@
         item-value-path="cl_id" value="{{data.cl_id}}" items="{{cml}}" ></gl-combo-box>
      </gl-grid-col>
      </gl-grid-row>
+     <div class="horizontal end-justified layout">
+       <paper-button raised on-tap="checkInsertOrUpdate" class="gl-btn-success">Save</paper-button>
+     </div>
 
-     <paper-button raised on-tap="update">อัพเดต</paper-button>
   </template>
   <script >
     Polymer({
@@ -30,12 +32,19 @@
         updateShipment: {
           type: Object,
           value:{}
+        },
+        data:{
+          type: Object,
+          value:{
+              contract_id:''
+          }
         }
       },
       observers:[
         'getconfirm(contractId)'
       ],
       getconfirm:function (contractId) {
+        // console.log("contractId =>",contractId);
       if (typeof contractId != 'undefined'){
           this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
             this.cml = data;
@@ -44,21 +53,32 @@
           });
         }
       },
-
+      checkInsertOrUpdate:function () {
+        console.log(this.insert == true);
+        if (this.insert != true) {
+            this.update();
+        }else {
+          // console.log(this.contractId);
+            this.insertShipment();
+        }
+      },
       insertShipment:function () {
-        this.shipMent.contract_id= this.contractId;
-      //  console.log(this.shipMent);
-        this.postDb(this.shipMent);
+        this.data.contract_id= this.contractId;
+      //  console.log(this.data);
+        this.postDb(this.data);
       },
       postDb:function (data) {
         axios.post('./g2g/shipment/insert', data)
-                  .then(function (response) {
+                  .then( (response)=> {
                     console.log("success");
                     console.log(response);
-                    this.glQuery('addContract').getChange();
-                    this.glQuery('contentPanel').changDrawer();
-                  }.bind(this))
-                  .catch(function (error) {
+                    // this.glQuery('addContract').getChange();
+                    // this.glQuery('contentPanel').changDrawer();
+                    this.fire('shipmentedit', {
+                      data: 'editFin'
+                    });
+                  })
+                  .catch( (error)=> {
                     console.log("error");
                     console.log(error);
                   })
@@ -66,12 +86,12 @@
       getDb:function (url,callback) {
         // console.log(url);
         axios.get(url)
-          .then(function(response){
+          .then((response)=>{
             callback(response.data);
 
-          }.bind(this))
-          .catch(function (error) {
-          }.bind(this));
+          })
+          .catch( (error)=> {
+          });
           // console.log(1);
       },
       update:function () {
@@ -82,16 +102,20 @@
         this.updateShipment.shm_no = this.data.shm_no;
         this.updateShipment.cl_id = this.data.cl_id;
         this.glQuery('layoutMain').openToastSaveing();
+        // console.log(  this.updateShipment);
         this.putDb(this.updateShipment);
       },
       putDb:function (data) {
         axios.put('./g2g/shipment/update', data)
-                  .then(function (response) {
+                  .then( (response)=> {
                     console.log("success");
                     console.log(response);
                     console.log(data);
                     this.glQuery('addContract').getChange(false,'put');
-                  }.bind(this))
+                    this.fire('shipmentedit', {
+                      data: 'editFin'
+                    });
+                  })
                   .catch(function (error) {
                     console.log("error");
                     console.log(error);

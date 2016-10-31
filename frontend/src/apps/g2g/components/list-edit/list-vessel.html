@@ -84,28 +84,19 @@
     }
   </style>
   <template>
-    <content id="primary" select="items[type=primary]"></content>
-    <!-- <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,1]]">
-        <gl-form-label-input  label="งวดที่" value$="[[data.shm_no]]" ></gl-form-label-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,7]]">
-        <gl-form-label-input label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{data.shm_name}}"></gl-form-label-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,2]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
-        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
-      </gl-grid-col>
-    </gl-grid-row> -->
-    <gl-form-panel-body label="" set-padding="10px" set-border="1px">
-            <!--content-->
+    <div class="horizontal end-justified layout">
+      <paper-button raised on-tap="editShipment" class="gl-btn-info">Edit Shipment</paper-button>
+      <paper-button raised on-tap="deleteShipment"class="gl-btn-danger">Delete Shipment</paper-button>
+    </div>
 
-    <iron-pages selected="{{editShipment}}" attr-for-selected="name">
-      <view-noshipment data="{{data}}" name="view"></view-noshipment>
-      <edit-noshipment data="{{data}}" contract-id="{{contractId}}" name="edit"></edit-noshipment>
-    </iron-pages>
-        </gl-form-panel-body>
-      <paper-button raised on-tap="deleteShipment">ลบ Shipment No</paper-button>
+    <content id="primary" select="items[type=primary]"></content>
+
+
+    <iron-pages selected="{{pageEditShipment}}" attr-for-selected="name">
+      <div name="view">
+        <view-noshipment data="{{data}}" ></view-noshipment>
+
+
 
     <gl-grid-row width="{{getWidth}}">
 
@@ -364,6 +355,13 @@
         </div>
       </iron-collapse>
     </template>
+  </div>
+  <div name="edit">
+    <edit-noshipment data="{{data}}" contract-id="[[data.contract_id]]" ></edit-noshipment>
+  </div>
+
+
+  </iron-pages>
 
   </template>
   <script>
@@ -422,7 +420,7 @@
                   type:Object,
                   value:{buyerMasks:''}
                 },
-                editShipment:{
+                pageEditShipment:{
                   type:String,
                   value:'view'
                 }
@@ -431,16 +429,33 @@
               'getCounty(data.country,common)',
               'calc(shipment.shm_det_quantity)',
             ],
-            // listeners:[
-            //   'vessel-edit-common': 'specialTap',
-            //
-            // ],
+            listeners: {
+              //  'tap': 'regularTap',
+              //  'special.tap': 'specialTap',
+               'shipmentedit':'finEdit'
+             },
+
+             regularTap: function(e) {
+               alert("Thank you for tapping");
+             },
+
+             specialTap: function(e) {
+               alert("It was special tapping");
+             },
+
             ready: function() {
               this.$$('#removeButtom').removeAttribute("hidden");
             },
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
+            },
+            editShipment:function () {
+              this.pageEditShipment = 'edit';
+            },
+            finEdit:function (e) {
+              this.pageEditShipment = 'view';
+              console.log(e);
             },
             shipmentDelete:function (e) {
               this.deleteDb(e.currentTarget.id);
