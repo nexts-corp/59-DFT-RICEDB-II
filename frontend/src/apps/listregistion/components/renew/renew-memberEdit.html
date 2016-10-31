@@ -1,6 +1,6 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-label-input.html">
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
-<dom-module id="renew-memberSave">
+<dom-module id="renew-memberEdit">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .title {
         text-align: center;
@@ -67,24 +67,24 @@
           <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" value="{{data.seller_tax_id}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value=""></gl-form-label-input>
+          <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value="{{data.exporter_status_name}}"></gl-form-label-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="ประเภทอนุญาติ :" value="{{data.type_lic_name}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="เลขประจำตัวผู้ส่งออกข้าว :" value="{{data.exporter_no}}"></gl-form-label-input>
+          <gl-form-input label="เลขประจำตัวผู้ส่งออกข้าว :" value="{{data.exporter_no}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่อนุมัติ :" value="{{data.exporter_date_approve}}" disabled></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่อนุมัติ :" value="{{data.exporter_date_approve}}"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <template is="dom-repeat" items="[[data.seller_agent]]">
-            <gl-form-label-input  label="ชื่อคณะกรรมการ :" value="{{item.agent_name}}"></gl-form-label-input>
+          <template is="dom-repeat" items="{{data.seller_agent}}">
+            <gl-form-input  label="ชื่อคณะกรรมการ :" value="{{item.agent_name}}"></gl-form-input>
           </template>
         </gl-grid-col>
       </gl-grid-row>
@@ -96,29 +96,14 @@
   </template>
   <script>
     Polymer({
-      is: "renew-memberSave",
+      is: "renew-memberEdit",
       behaviors: [
           gl.behavior.core
       ],
       properties:{
-        exporterId:{
-          type:String,
-          observer:'_exporterIdChanged'
-        },
         data:{
-          type:Object
-        }
-      },
-      _exporterIdChanged:function(val){
-        if(val!=""){
-          axios.get('./external/exporter/id/'+val)
-          .then( (response)=>{
-            this.data = response.data;
-            this.glQuery('contentPanel').changDrawer();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+          type:Object,
+          notify: true
         }
       }
     });

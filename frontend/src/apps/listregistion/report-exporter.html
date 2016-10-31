@@ -1,8 +1,9 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="components/list-edit/list-report.html">
+<link rel="import" href="components/renew/renew-page.html">
 
 
-<dom-module id="listregistion-report-list-export-board">
+<dom-module id="listregistion-report-exporter">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     * {
         font-family: 'rsuregular', sans-serif;
@@ -11,43 +12,47 @@
     .top{
       margin-top: 30px;
     }
-        .header {
-          padding: 10px 0px 10px 10px;
-          background-color: var(--paper-grey-100);
-          color: var(--paper-grey-600);
-          font-size: var(--font-size-h4);
-          font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        .registor{
-          margin: 20px;
-        }
-        .title {
-          text-align: center;
-           font-size: var(--font-size-h3);
-           font-family: 'rsuregular', sans-serif;
-             -webkit-font-smoothing: antialiased;
-        }
-        .searchBox{
-          padding: 5px;
-          background-color: var(--gl-gray-lighter-color);
-        }
-        .elevation{
-          border-radius: 5px;
-          margin: 10px;
-          padding: 5px;
-        }
-        .searchBorder{
-          border: 1px solid var(--gl-gray-light-color);
-          margin: 15px;
-          border-radius: 3px
-        }
-        paper-material {
-          background-color: var(--gl-white-color);
-        }
-        vaadin-date-picker {
-          width: 70%;
-        }
+    .header {
+    padding: 10px 0px 10px 10px;
+    background-color: var(--paper-grey-100);
+    color: var(--paper-grey-600);
+    font-size: var(--font-size-h4);
+    font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .registor{
+      margin: 20px;
+    }
+    .title {
+      text-align: center;
+       font-size: var(--font-size-h3);
+       font-family: 'rsuregular', sans-serif;
+         -webkit-font-smoothing: antialiased;
+    }
+    .searchBox{
+      padding: 5px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    .elevation{
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+    }
+    .searchBorder{
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+    paper-material {
+      background-color: var(--gl-white-color);
+    }
+    vaadin-date-picker {
+      width: 70%;
+    }
+    gl-search-input {
+        margin: 30px 0px 0px 0px;
+        width: 60%;
+    }
     </style>
     <template>
 
@@ -57,11 +62,28 @@
         <div class="layout vertical registor">
 
           <div class="flex title">
-              รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท
+              ทะเบียนผู้ส่งออกข้าวไปต่างประเทศ
           </div>
           <div class="searchBox searchBorder">
             <gl-grid-row width="{{getWidth}}">
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
+              </gl-grid-col>
+            </gl-grid-row>
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <gl-form-dropdown-menu label="ประเภทใบอนุญาติ" placeholder="ทั้งหมด">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.type_lic_id}}" name="type_lic_id">
+                    <paper-item>ทั้งหมด</paper-item>
+                    <paper-item value="KK6">ทั่วไป</paper-item>
+                    <paper-item value="KK7">ไม่เกิน 12 ก.ก.</paper-item>
+                    <paper-item value="KK8">ชายแดน</paper-item>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 <gl-form-dropdown-menu label="สถานนะสมาชิกสมาคมผู้ส่งออก" placeholder="ทั้งหมด">
                   <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.exporter_status}}" name="exporter_status">
@@ -71,6 +93,9 @@
                   </paper-menu>
                 </gl-form-dropdown-menu>
               </gl-grid-col>
+            </gl-grid-row>
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 <vaadin-date-picker label="จากวันที่" value="{{dataSelected.date_start}}" name="date_start"></vaadin-date-picker>
               </gl-grid-col>
@@ -78,7 +103,6 @@
                 <vaadin-date-picker label="ถึงวันที่" value="{{dataSelected.date_end}}" name="date_end"></vaadin-date-picker>
               </gl-grid-col>
             </gl-grid-row>
-
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -100,35 +124,52 @@
                 <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
                 <list item="seller_agent.agent_name" label="รายชื่อคณะกรรมการ" width="flex"></list>
                 <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list>
-                <list item="exporter_date_approve" label="กรมอนนุมัติวันที่" width="flex"></list>
-                <list item="trader_no" label="เลขที่หนังสืออนุญาติ ปกข." width="flex"></list>
+                <list item="seller_tax_id" label="เลขประจำตัวผู้เสียภาษี" width="flex"></list>
+                <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
               </items>
             </list-report>
           </div>
         </div>
 
       </grid>
-    <panel>
-        <div class="left">
-          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-            <div name="addRedRegExporter">0</div>
-            <div name="detailRegExporter">1</div>
-          </iron-pages>
-        </div>
-    </panel>
+
+      <panel>
+          <div class="left">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="detailRegExporter">
+                <renew-page exporter-id="[[exporterId]]" data={{dataSelect}}></renew-page>
+              </div>
+
+            </iron-pages>
+          </div>
+      </panel>
+
     </content-panel>
     </template>
     <script>
         Polymer({
-            is: "listregistion-report-list-export-board",
+            is: "listregistion-report-exporter",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
             properties: {
-                dataSelected:{
-                  type:Object,
-                  value:{}
-                }
+              layerContent: {
+                  type: String,
+                  value: "detailRegExporter"
+              },
+              dataSelected:{
+                type:Object,
+                value:{}
+              },
+              exporterId:{
+                type: String,
+                observer: '_exporterIdChanged'
+              }
+            },
+            _exporterIdChanged:function(val){
+              if(val!=""){
+                this.layerContent = "detailRegExporter";
+              }
             },
             behaviors: [
                 gl.behavior.core,
@@ -137,6 +178,7 @@
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
                 this.glSetLayout('layout-registion');
+                this.glQuery('reExporter',this);
             },
             nxGridTap: function(e) {
                 this.layerContent = e.detail.level;
@@ -145,11 +187,15 @@
                 } else {
                     this.vesselPage = 0;
                 }
+                e.detail.data.seller_agent = e.detail.data.seller_agent || [];
                 this.dataSelect = e.detail.data;
             },
             _toggleDrawer: function(e) {
               this.glQuery('contentPanel').changDrawer();
               this.layerContent = e.target.id;
+            },
+            attached: function() {
+              this.getExporters();
             },
             getDb: function(url, callback) {
                 axios.get(url)
@@ -158,16 +204,14 @@
                     }.bind(this))
                     .catch(function(error) {}.bind(this));
             },
-            attached: function() {
+            getExporters: function() {
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
                 this.getDb('./external/exporter', (data) => {
                   this.exporters = data;
+                  this.exporter_id.items = data;
                 });
             },
             _search: function(){
-              // if (this.dataSelected.date_start != '' && this.dataSelected.date_start != undefined &&
-              // this.dataSelected.date_end != '' && this.dataSelected.date_end != undefined) {
-              //   console.log('ผ่านนะครับ');
-              // }else{alert('กรุณาเลือกวันที่ให้ครบ');}
               var str='';
               for( key in this.dataSelected){
                   if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
