@@ -24,6 +24,9 @@ var schema = {
         },
         "made_out_to": {
             "type": "string"
+        },
+        "invoice_status": {
+            "type": "boolean"
         }
     },
     "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to"]
@@ -56,11 +59,7 @@ router.get('/', function (req, res, next) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
             .zip()
-            .filter(r.row.hasFields('invoice_no'))
-            // .filter(function (f) {
-            //     return r.table('payment').getAll(f('invoice_id').coerceTo('array'),{index:'invoice_id'})
-            //     })
-            // })
+            .filter(r.row.hasFields('invoice_no').and(r.row('invoice_status').eq(false)))
             .merge(function (m) {
                 return {
                     invoice_id: m('id')

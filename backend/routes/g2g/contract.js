@@ -35,6 +35,9 @@ var schema = {
                 },
                 "required": ["type_rice_id", "type_rice_quantity"]
             }
+        },
+        "contract_status": {
+            "type": "boolean"
         }
     },
     "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice"]
