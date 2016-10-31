@@ -77,7 +77,7 @@
                        <div class="layout vertical">
                            <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_total]]" format="0,0" print></numeral-js>  </div>
                            <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_confirm]]" format="0,0" print></numeral-js>  </div>
-                           <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_balance]]" format="0,0" print></numeral-js>  </div>
+                           <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_confirm_balance]]" format="0,0" print></numeral-js>  </div>
                        </div>
                        <div class="layout vertical">
                            <div class="flex nomalFont total"> ตัน</div>
@@ -110,7 +110,7 @@
               <div name="primary">
                 <panel-seleted>
                   <section-content name="detail">
-                    <promise-detail data="{{dataContract}}" type-rice={{typeRice}}></promise-detail>
+                    <promise-detail data="{{dataContract}}" type-rice="{{typeRice}}"></promise-detail>
                   </section-content>
                   <section-content name="print">
                       <vessel-print></vessel-print>
@@ -275,9 +275,7 @@
               //
             },
             computeContract:function (para) {
-                // console.log(para.base.contract_quantity_balance);
-                // console.log(para.base.contract_quantity_confirm);
-                // console.log(para.base.contract_quantity_total);
+                
                 this.dataContractChart = {
                       labels: [
                         // "ทั้งหมด (ตัน)",
@@ -289,7 +287,7 @@
                           data: [
                                 //  para.base.contract_quantity_total,
                                  para.base.contract_quantity_confirm,
-                                 para.base.contract_quantity_balance
+                                 para.base.contract_quantity_confirm_balance
                                ],
                           backgroundColor: [
                             "#FF6384",
