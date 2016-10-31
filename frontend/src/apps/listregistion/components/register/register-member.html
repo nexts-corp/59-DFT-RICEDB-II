@@ -65,13 +65,14 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" value="{{data.seller_tax_id}}"></gl-form-label-input>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value="{{data.exporter_status_name}}"></gl-form-label-input>
-        </gl-grid-col>
-
+        </gl-grid-col> -->
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-label-input  label="ประเภทอนุญาติ :" value="{{data.type_lic_name}}"></gl-form-label-input>
         </gl-grid-col>
+      </gl-grid-row>
+      <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input label="เลขประจำตัวผู้ส่งออกข้าว :" value="{{data.exporter_no}}"></gl-form-input>
         </gl-grid-col>
@@ -90,9 +91,12 @@
             <gl-form-input placeholder="ชื่อคณะกรรมการ" auto-validate error-message="กรุณาใส่ชื่อคณะกรรมการ" required value="{{item.agent_name}}" no-label-float></gl-form-input>
           </template>
         </gl-grid-col>
-
       </gl-grid-row>
     </form>
+
+    <div class="horizontal center-justified layout">
+      <paper-button class="gl-btn-success" on-tap="_register" raised>บันทึก</paper-button>
+    </div>
 
   </template>
   <script>
@@ -107,33 +111,26 @@
           notify:true
         }
       },
-      _saveData:function(){
+      _register:function(){
         var datas = {
           exporter_no:this.data.exporter_no,
-          exporter_date_approve:new Date (this.data.exporter_date_approve),
-          exporter_date_update:new Date (this.data.exporter_date_approve),
+          exporter_date_approve:new Date,
+          exporter_date_update:new Date,
           seller_agent:this.data.seller_agent,
           trader_id:this.data.trader_id
         }
-        console.log(datas);
-        axios.post('http://localhost:3000/api/external/exporter/insert', datas)
+        // console.log(datas);
+        axios.post('./external/exporter/insert', datas)
             .then(function(response) {
                 console.log("success");
                 console.log(response);
-                // this.glQuery('addContract').getChange();
                 this.glQuery('contentPanel').changDrawer();
+                this.glQuery('reExporter').getExporters();
             }.bind(this))
             .catch(function(error) {
                 console.log("error");
                 console.log(error);
             })
-
-        // console.log({
-        //   exporter_no:this.data.exporter_no,
-        //   exporter_date_approve:this.data.exporter_date_approve,
-        //   seller_agent:this.data.seller_agent
-        // });
-        // this.$$('#removeButtom').setAttribute("hidden", "hidden");
       },
       _addAgent:function() {
         // console.log(this.data.seller_agent=[{agent_name:'สวัสดี'}]);

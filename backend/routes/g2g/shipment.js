@@ -23,6 +23,9 @@ var schema = {
         },
         "shm_name": {
             "type": "string"
+        },
+        "shm_status": {
+            "type": "boolean"
         }
     },
     "required": ["contract_id", "cl_id", "shm_no", "shm_name"]
