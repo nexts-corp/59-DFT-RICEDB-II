@@ -1,0 +1,178 @@
+<link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
+<link rel="import" href="renew-memberShow.html">
+<link rel="import" href="renew-memberEdit.html">
+<link rel="import" href="../register/register-member.html">
+<dom-module id="renew-page">
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+
+  </style>
+  <template>
+
+    <gl-form-panel set-border="0px">
+
+      <gl-form-panel-head set-padding="0px 0px 0px 0px">
+        <div id="removePen" hidden>
+          <paper-icon-button icon="create" on-tap="editChange"></paper-icon-button>
+        </div>
+      </gl-form-panel-head>
+              <div class="bd">
+                  <gl-form-panel>
+                      <iron-pages selected="{{pages}}">
+                          <renew-memberShow data="{{data}}"></renew-memberShow>
+                          <renew-memberEdit data="{{data}}"></renew-memberEdit>
+                          <register-member data={{data}}></register-member>
+                      </iron-pages>
+                  </gl-form-panel>
+              </div>
+              {{_checkStatus(data.exporter_active,data.exporter_status,data.trader_active)}}
+              <div class="horizontal center-justified layout">
+                <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_active" hidden>ยกเลิกการระงับ</paper-button>
+                <paper-button id="buttomRegister" raised class="gl-btn-primary button" on-tap="_register" hidden>ลงทะเบียนผู้ส่งออก</paper-button>
+                <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_retrader" hidden>ต้องต่อ คน. ก่อน</paper-button>
+              </div>
+
+        <gl-form-panel-footer>
+          <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised hidden>บันทึก</paper-button>
+        </gl-form-panel-footer>
+    </gl-form-panel>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "renew-page",
+      behaviors: [gl.behavior.core],
+      properties: {
+        pages:{
+            type:Number,
+            notify:true,
+            value: 0
+        },
+        exporterId:{
+          type:String,
+          observer:'_exporterIdChanged'
+        }
+      },
+      _exporterIdChanged:function(val){
+        if(val!=""){
+          axios.get('./external/exporter/id/'+val)
+          .then( (response)=>{
+            this.data = response.data;
+            this.glQuery('contentPanel').changDrawer();
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        }
+      },
+      editChange:function(e){
+        this.pages = 1;
+        this.$$('#removeButtom').removeAttribute("hidden");
+        this.$$('#removePen').setAttribute("hidden", "hidden");
+      },
+      save:function(e) {
+        var datas = {
+          id:this.data.exporter_id,
+          exporter_no:this.data.exporter_no,
+          exporter_date_approve:new Date (this.data.exporter_date_approve),
+          exporter_date_update:new Date (this.data.exporter_date_approve),
+          seller_agent:this.data.seller_agent,
+          trader_id:this.data.trader_id
+        }
+        this.glQuery('layoutRegistion').openToastSaveing();
+        // console.log(datas);
+        // console.log(this.exporterId);
+        axios.put('./external/exporter/update', datas)
+                  .then(function (response) {
+                    console.log("success");
+                    console.log(response);
+                    this.glQuery('reExporter').getExporters();
+                    this.pages = 0;
+                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                      // if (refresh == true) {
+                      //   console.log(action);
+                      //   this.glQuery('contentPanel').changDrawer();
+                      // }
+                    }.bind(this));
+                    // this.glQuery('refreshPage').exporterIdChanged(exporterId);
+                  }.bind(this))
+                  .catch(function (error) {
+                    console.log("error");
+                    console.log(error);
+                  })
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#removePen').removeAttribute("hidden");
+      },
+      _checkStatus:function(ac,st,ta){
+        if (ac == true && st == true && ta == true) {
+          this.$$('#buttomActive').setAttribute("hidden", "hidden");
+          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
+          this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#removePen').removeAttribute("hidden");
+          this.pages = 0;
+        }
+        else if (ac == false && st == true && ta == true) {
+          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
+          this.$$('#buttomActive').removeAttribute("hidden");
+          this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.pages = 0;
+        }
+        else if (ac == false && st == true && ta == false) {
+          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
+          this.$$('#buttomActive').setAttribute("hidden", "hidden");
+          this.$$('#buttomTrader').removeAttribute("hidden");
+          this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.pages = 0;
+        }
+        else if (ac == true && st == true && ta == false) {
+          this.$$('#buttomRegister').setAttribute("hidden", "hidden");
+          this.$$('#buttomActive').setAttribute("hidden", "hidden");
+          this.$$('#buttomTrader').removeAttribute("hidden");
+          this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.pages = 0;
+        }
+        else if(ac == null){
+          this.$$('#buttomActive').setAttribute("hidden", "hidden");
+          this.$$('#buttomRegister').removeAttribute("hidden");
+          this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#removePen').setAttribute("hidden", "hidden");
+        }
+      },
+      _active: function(){
+        // console.log(this.data);
+        var datas = {
+          exporter_date_update: new Date,
+          exporter_date_approve:new Date,
+          exporter_no:this.data.exporter_no,
+          trader_id:this.data.trader_id,
+          seller_agent:this.data.seller_agent,
+          id : this.data.exporter_id
+        }
+        // console.log(datas);
+        axios.put('./external/exporter/update', datas)
+                  .then(function (response) {
+                    console.log("success");
+                    console.log(response);
+                    this.glQuery('contentPanel').changDrawer();
+                    this.glQuery('reExporter').getExporters();
+                  }.bind(this))
+                  .catch(function (error) {
+                    console.log("error");
+                    console.log(error);
+                  })
+      },
+      _register:function(){
+        this.pages = 2;
+        this.$$('#buttomRegister').setAttribute("hidden", "hidden");
+      },
+      _retrader:function(){
+        var datas= {
+          id: this.data.trader_id,
+          trader_date_approve: new Date
+        }
+        console.log(datas);
+      }
+    });
+  </script>
+</dom-module>
