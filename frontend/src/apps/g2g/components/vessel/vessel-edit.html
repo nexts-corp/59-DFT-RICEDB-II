@@ -275,9 +275,7 @@
         delete this.data.seller_name_th;
         delete this.data.seller_phone;
         delete this.data.seller_tax_id;
-        // delete this.data.ship_lot_no;
         delete this.data.ship_name;
-        // delete this.data.ship_voy_no;
         delete this.data.shipline_name;
         delete this.data.surveyor_name;
         delete this.data.type_rice_name_en;
@@ -291,8 +289,12 @@
         delete this.data.trader_no;
         delete this.data.trader_office;
         delete this.data.trader_province;
-        console.log(this.data);
-        // this.fire('vessel-edit-common',{node:this});
+        delete this.data.seller_agent;
+        // console.log(this.data);
+        this.fire('save-Data-shipmentDetail',{
+          data:this.data,
+          index:this.index
+        });
       }
 
     });
