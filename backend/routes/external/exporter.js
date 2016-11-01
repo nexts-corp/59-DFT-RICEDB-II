@@ -102,8 +102,8 @@ router.get('/', function (req, res, next) {
             })
             .merge(function (m) {
                 return {
-                    exporter_active_name: r.branch(m('exporter_active').eq(true), 'ปกติ', 'ถูกระงับ'),
-                    trader_active_name: r.branch(m('trader_active').eq(true), 'ปกติ', 'ถูกระงับ')
+                    exporter_active_name: r.branch(m('exporter_active').eq(null), null, m('exporter_active').eq(true),'ปกติ','ถูกระงับ'),
+                    trader_active_name: r.branch(m('trader_active').eq(true), 'ปกติ', 'หมดอายุ')
                 }
             })
             .without('id')
