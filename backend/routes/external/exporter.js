@@ -100,6 +100,12 @@ router.get('/', function (req, res, next) {
                     //r.time(m('trader_date_approve').split('T')(0).split('-')(0).coerceTo('number'), r.december, 31, 0, 0, 0, '+07:00').toISO8601()
                 }
             })
+            .merge(function (m) {
+                return {
+                    exporter_active_name: r.branch(m.exporter_active.eq(true), 'ปกติ', 'โดนระงับ'),
+                    trader_active_name: r.branch(m.trader_active.eq(true), 'ปกติ', 'โดนระงับ')
+                }
+            })
             .without('id')
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
             .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
