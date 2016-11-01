@@ -23,9 +23,19 @@
 
     <template>
     <form is="iron-form" id="insertPromiseDetail">
+      <div class="horizontal end-justified layout">
+          <!-- <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]"> -->
+            <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editConfirm" ></paper-icon-button>
+            <paper-tooltip for="editConfirm" offset="0">Edit Confirmmation Letter</paper-tooltip>
+          <!-- </template> -->
+
+        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="shipmentDelete" on-tap="deleteConfirm"></paper-icon-button>
+
+        <paper-tooltip for="deleteConfirm" offset="0">Delete Confirmmation Letter</paper-tooltip>
+      </div>
       <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input class="bottom" auto-validate error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+            <gl-form-input class="bottom" error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
           </gl-grid-col>
           <gl-form-input value="{{data.contract_id}}" name="contract_id" hidden></gl-form-input>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
