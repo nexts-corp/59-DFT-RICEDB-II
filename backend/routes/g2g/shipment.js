@@ -102,13 +102,30 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 .merge(function (mmm) {
                                     return r.table('type_rice').get(mmm('type_rice_id')).without('id')
                                 })
+                                .merge(function (limit) {
+                                    return {
+                                        type_rice_quantity_confirm: r.table('shipment_detail')
+                                            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
+                                            .filter({
+                                                cl_id: m('cl_id'),
+                                                //shm_id: m('shm_id'),
+                                                type_rice_id: limit('type_rice_id')
+                                            })
+                                            .coerceTo('array')
+                                            .getField('shm_det_quantity')
+                                            .reduce(function (left, right) {
+                                                return left.add(right);
+                                            }).default(0)
+                                    }
+                                })
                                 .merge(function (mmm) {
                                     return {
                                         package: mmm('package').map(function (arr_package) {
                                             return arr_package.merge(function (row_package) {
                                                 return r.table('package').get(row_package('package_id')).without('id')
                                             })
-                                        })
+                                        }),
+                                        type_rice_quantity_limit: mmm('type_rice_quantity').sub(mmm('type_rice_quantity_confirm'))
                                     }
                                 })
                         }
