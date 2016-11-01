@@ -1,0 +1,38 @@
+<script>
+  g2gModelBehavior = {
+      properties: {
+        checkInput:{
+          type:Boolean,
+          value:true
+        },
+        checkBtn:{
+          type:Boolean,
+          value:false
+        }
+      },
+      editInput:function () {
+        this.checkInput = !this.checkInput;
+        this.checkBtn = !this.checkBtn;
+      },
+      checkBtnView:function (data) {
+        return data == true;
+      },
+      //approve function
+      approve:function (data) {
+        console.log(data);
+        return data = !data;
+      },
+      changeString2Num:function(ob,param){
+        //console.log(typeof ob.value);
+        if(typeof ob.value == "string"){
+          var pathChange = ob.path.split(".");
+          if(pathChange.length == 2){
+              if(pathChange[1]==param){
+                ob.base[param]=parseFloat(ob.value);
+                // console.log(typeof ob.value);
+              }
+          }
+        }
+      },
+    };
+  </script>
