@@ -65,7 +65,8 @@ router.get(['/', '/list'], function (req, res, next) {
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
                                 // cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
                                 // cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4)),
-                                cl_date: cl('cl_date').split('T')(0)
+                                cl_date: cl('cl_date').split('T')(0),
+                                cl_status_name: r.branch(cl('cl_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
                             }
                         })
                         .orderBy('cl_no')
@@ -78,7 +79,8 @@ router.get(['/', '/list'], function (req, res, next) {
                                 shm_id: shm('id'),
                                 shm_quantity: r.table("shipment_detail")
                                     .filter({ "shm_id": shm('id') })
-                                    .sum("shm_det_quantity")
+                                    .sum("shm_det_quantity"),
+                                shm_status_name: r.branch(shm('shm_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
                             }
                         })
                         .orderBy('shm_no')
@@ -169,11 +171,11 @@ router.get('/id/:contract_id', function (req, res, next) {
                                         }).default(0)
                                 }
                             })
-                        .merge(function (limit) {
-                            return {
-                                type_rice_quantity_limit: limit('type_rice_quantity').sub(limit('type_rice_quantity_confirm'))
-                            }
-                        })
+                            .merge(function (limit) {
+                                return {
+                                    type_rice_quantity_limit: limit('type_rice_quantity').sub(limit('type_rice_quantity_confirm'))
+                                }
+                            })
 
                     }),
                     contract_date: row('contract_date').split('T')(0)
