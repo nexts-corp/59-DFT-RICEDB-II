@@ -23,15 +23,17 @@ var db = require('../../db.js');
 // });
 
 
-router.get(['/download'], function (req, res, next) {
+router.get(['/download/:key'], function (req, res, next) {
 
     db.query(function (conn) {
-        r.db('files').table('files').get('97cb832b-7424-4b16-83ca-a496f2c8ffa6')
+        r.db('files').table('files').get(req.params.key)
         .run(conn, function (err, cursor) {
             if (!err) {
                 res.writeHead(200, {
                     'Content-Type': cursor.type,
-                    'Content-Length': cursor.contents.length
+                    'Content-Length': cursor.contents.length,
+                    'Content-Disposition':'filename='+cursor.name
+                    //'Content-Disposition':'attachment; filename='+cursor.name
                 });
                 res.end(cursor.contents);
             } else {
