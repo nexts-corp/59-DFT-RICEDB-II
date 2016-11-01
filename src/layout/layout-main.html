@@ -105,7 +105,7 @@
 	</style>
 	<div blur$="{{offline}}">
 		<app-drawer id="drawer">
-			<layout-main-drawer on-toggle-drawer="_toggleDrawer"></layout-main-drawer>
+			<layout-main-drawer path="{{path}}" on-toggle-drawer="_toggleDrawer"></layout-main-drawer>
 		</app-drawer>
 
 		<app-header-layout>
@@ -123,7 +123,7 @@
         </paper-toast>
 		
 		<paper-toast class="toastConnectError" id="toastErrorConnect" duration="0">
-			<span>Network error... Please check npm.</span>
+			<span>{{status.content}}</span>
 			<paper-button on-tap="closeopenToastConnectError" style="color:yellow;">Close now!</paper-button>
 		</paper-toast>
 
@@ -170,6 +170,7 @@
 				}
 				if(e.detail.status == 'success'){
 					this.closeToastLoading(e.detail.callback);
+					console.log(e.detail.text);
 					//Polymer.dom(this.root).setAttribute('class', 'toastSuccess')
 					this.status = {
 						class : 'toastSuccess',
@@ -177,8 +178,13 @@
 						content : e.detail.text || 'โหลดข้อมูลสำเร็จ'
 					}
 					
+					
 				}
 				if(e.detail.status == 'connectError'){
+					console.log(e.detail.text);
+					this.status = {
+						content : e.detail.text
+					}
 					this.$.toastErrorConnect.open();
 				}
 			},

@@ -20,7 +20,7 @@
                     <td>{{item.amount}}</td>
                     <td>
                     <template is="dom-repeat" items="{{item.period}}">
-                        งวดที่ {{index}} <br>
+                        งวดที่ [[_setIndex(index)]] <br>
                     </template>
                     </td>
                     <td>
@@ -37,6 +37,10 @@
     <script>
         Polymer({
             is: 'quota-list',
+            _setIndex:function(item){
+                return item = item+1;
+                
+            },
             _selectData:function(e){
                 console.log(e.currentTarget.data);
                 this.fire('data-select',e.currentTarget.data);

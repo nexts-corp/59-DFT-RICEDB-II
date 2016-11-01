@@ -13,7 +13,7 @@
             data="{{routeData}}"
             tail="{{subroute}}"></app-route>
 
-        <nylon-init selected="[[page]]" on-nylon-change-page="_changePage"></nylon-init>
+        <nylon-init selected="[[page]]" on-send-element-layout-main-drawer="_onSendElementLayoutMainDrawer" on-nylon-change-page="_changePage"></nylon-init>
         <a id="changePath" href="#" style="display:none">link change path</a>
     </template>
     <script>
@@ -27,6 +27,10 @@
                 },
                 route: {
                     observer:'_routeChange'
+                },
+                triggleLoaded:{
+                    type: Boolean,
+                    value: false
                 }
             },
             observers: [
@@ -39,7 +43,11 @@
                 if (page != null) {
                     this.importHref(
                         this.resolveUrl('/src/pages/page-' + page + '/page-' + page + '.html'),
-                        null, null, true
+                        ()=>{
+                            if(this.elementLayoutMainDrawer){
+                                this.elementLayoutMainDrawer._loaded();
+                            }
+                        }, null, true
                     );
                 }
             },
@@ -49,6 +57,9 @@
             },
             _routeChange:function(val){
                 //console.log(val);
+            },
+            _onSendElementLayoutMainDrawer:function(e){
+                this.elementLayoutMainDrawer = e.detail;
             }
             
         });

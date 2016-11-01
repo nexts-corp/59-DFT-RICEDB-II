@@ -45,7 +45,18 @@
                         Menu
                      </app-toolbar>
 				<div role="listbox">
-					<paper-icon-item on-tap="selectPage" path="/quota" focused>
+                    
+                    <template is="dom-repeat" items="{{listMenu}}">
+                        <paper-icon-item on-tap="selectPage" path$="{{item.path}}" focused  index="{{index}}">
+                            <iron-icon icon="chevron-right" item-icon></iron-icon>
+                            {{item.name}}
+                            <div hidden$="{{!item.loading}}">
+                                <paper-spinner active></paper-spinner>
+                            </div>
+					    </paper-icon-item>
+                    </template>
+                    
+					<!--<paper-icon-item on-tap="selectPage" path="/quota" focused>
 						<iron-icon icon="chevron-right" item-icon></iron-icon>
 						รายการจัดสรรปีโควตา
                         <div>
@@ -82,19 +93,80 @@
                     <paper-icon-item on-tap="selectPage" path="/fee">
 						<iron-icon icon="chevron-right" item-icon></iron-icon>
 						รับชำระเงินและออกใบเสร็จ
-					</paper-icon-item>
+					</paper-icon-item>-->
 				</div>
 			</div>
     </template>
     <script>
         Polymer({
             is: 'layout-main-drawer',
+            properties:{
+                listMenu:{
+                    type:Array,
+                    value:[
+                        {
+                            name: 'รายการจัดสรรปีโควตา',
+                            path: '/quota'
+                        },
+                        {
+                            name: 'น้ำเข้าข้อมูลเพื่อการคำนวณ',
+                            path: ''
+                        },
+                        {
+                            name: 'การคำนวณส่วนจัดสรร',
+                            path: '/calculate'
+                        },
+                        {
+                            name: 'ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท',
+                            path: '/amount'
+                        },
+                        {
+                            name: 'ยืนยันส่วนจัดสรร',
+                            path: '/confirm'
+                        },
+                        {
+                            name: 'ปริมาณการใช้สิทธิโควตา',
+                            path: ''
+                        },
+                        {
+                            name: 'การโอนส่วนจัดสรร',
+                            path: ''
+                        },
+                        {
+                            name: 'รับชำระเงินและออกใบเสร็จ',
+                            path: '/fee'
+                        }
+                    ]
+                },
+                sendElement:{
+                    type:'Boolean',
+                    value: false
+                }
+            },
+            
             selectPage:function(e){
-                this.fire('nylon-change-page',{
-                    path:e.currentTarget.getAttribute('path') 
-                });
-                this.fire('toggle-drawer');
-                //this.$.drawer.toggle();
+                if((('/'+this.path) != e.currentTarget.getAttribute('path')) && (e.currentTarget.getAttribute('path')!='')){
+                    this.set('listMenu.'+e.currentTarget.index+'.loading',true);
+                    if(!this.sendElement){
+                        this.fire('send-element-layout-main-drawer',this);
+                        this.sendElement = true;
+                    }
+                    this.fire('nylon-change-page',{
+                        path:e.currentTarget.getAttribute('path') 
+                    });
+                }else{
+                    this.fire('toggle-drawer');
+                }
+                
+            },
+            _loaded:function(){
+                this.async(()=>{
+                    this.listMenu.map((item,i)=>{
+                        this.set('listMenu.'+i+'.loading',false);
+                    });
+                    this.fire('toggle-drawer');
+                },1000)
+                
             }
         });
     </script>
