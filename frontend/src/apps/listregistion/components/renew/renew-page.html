@@ -14,8 +14,11 @@
   </style>
   <template>
 
-    <gl-form-panel set-border="0px">
+    <div class="horizontal end-justified layout button">
+      <div><paper-icon-button icon="close" on-tap="toggleDrawer" title="ปิดหน้าต่างนี้"></paper-icon-button> </div>
+    </div>
 
+    <gl-form-panel set-border="0px">
       <div class="horizontal center-justified layout">
         <div id="titleExporter" class="title">ผู้ส่งออกถูกระงับ</div>
         <div id="titleTrader" class="title">คน. หมดอายุ</div>
@@ -39,7 +42,7 @@
               <div class="horizontal center-justified layout">
                 <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_active" hidden>ยกเลิกการระงับ</paper-button>
                 <!-- <paper-button id="buttomRegister" raised class="gl-btn-primary button" on-tap="_register" hidden>ลงทะเบียนผู้ส่งออก</paper-button> -->
-                <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_retrader" hidden>ต้องต่อ คน. ก่อน</paper-button>
+                <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_retrader" hidden>ต่ออายุ คน.</paper-button>
               </div>
 
         <gl-form-panel-footer>
@@ -75,9 +78,6 @@
           .catch(function (error) {
             console.log(error);
           });
-        }
-        else if(val == Object){
-          console.log("เจอแล้วจ้า!!!");
         }
       },
       editChange:function(e){
@@ -128,12 +128,12 @@
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
-        else if (ac == false && st == true && ta == true) {
-          this.$$('#buttomActive').removeAttribute("hidden");
-          this.$$('#buttomTrader').setAttribute("hidden", "hidden");
-          this.$$('#titleExporter').removeAttribute("hidden");
-          this.$$('#titleTrader').setAttribute("hidden", "hidden");
+        else if (ac == true && st == true && ta == false) {
+          this.$$('#buttomActive').setAttribute("hidden", "hidden");
+          this.$$('#buttomTrader').removeAttribute("hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
+          this.$$('#titleExporter').setAttribute("hidden", "hidden");
+          this.$$('#titleTrader').removeAttribute("hidden");
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
@@ -146,19 +146,19 @@
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
-        else if (ac == true && st == true && ta == false) {
-          this.$$('#buttomActive').setAttribute("hidden", "hidden");
-          this.$$('#buttomTrader').removeAttribute("hidden");
+        else if (ac == false && st == true && ta == true) {
+          this.$$('#buttomActive').removeAttribute("hidden");
+          this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#titleExporter').removeAttribute("hidden");
+          this.$$('#titleTrader').setAttribute("hidden", "hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
-          this.$$('#titleExporter').setAttribute("hidden", "hidden");
-          this.$$('#titleTrader').removeAttribute("hidden");
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.pages = 0;
         }
         else if(st == false){
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
-          this.$$('#titleSeller').removeAttribute("hidden");
           this.$$('#buttomTrader').setAttribute("hidden", "hidden");
+          this.$$('#titleSeller').removeAttribute("hidden");
           this.$$('#titleExporter').setAttribute("hidden", "hidden");
           this.$$('#titleTrader').setAttribute("hidden", "hidden");
           this.$$('#removePen').setAttribute("hidden", "hidden");
@@ -210,6 +210,9 @@
                     console.log("error");
                     console.log(error);
                   })
+      },
+      toggleDrawer:function(){
+          this.glQuery('contentPanel').changDrawer();
       }
     });
   </script>

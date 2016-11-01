@@ -26,72 +26,77 @@
     }
   </style>
   <template>
-    <form is="iron-form" id="insertMember">
-      <gl-grid-row width="{{getWidth}}">
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี :" value="{{data.trader_no}}"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="ชื่อบริษัท :" value="{{data.seller_name_th}}"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="ชื่อบริษัท (อังกฤษ) :" value="{{data.seller_name_en}}"></gl-form-label-input>
-        </gl-grid-col>
-      </gl-grid-row>
+      <form is="iron-form" id="insertMember">
+        <gl-form-panel-head set-padding="0px" set-border="1px">
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี :" value="{{data.trader_no}}"></gl-form-label-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input label="ชื่อบริษัท :" value="{{data.seller_name_th}}"></gl-form-label-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="ชื่อบริษัท (อังกฤษ) :" value="{{data.seller_name_en}}"></gl-form-label-input>
+          </gl-grid-col>
+        </gl-grid-row>
 
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
-          <gl-form-label-textarea label="ที่อยู่ :" value="{{data.seller_address_th}}"></gl-form-label-textarea>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
-          <gl-form-label-textarea label="ที่อยู่ (อังกฤษ) :" value="{{data.seller_address_en}}"></gl-form-label-textarea>
-        </gl-grid-col>
-      </gl-grid-row>
+        <gl-grid-row>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+            <gl-form-label-textarea label="ที่อยู่ :" value="{{data.seller_address_th}}"></gl-form-label-textarea>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,8]]">
+            <gl-form-label-textarea label="ที่อยู่ (อังกฤษ) :" value="{{data.seller_address_en}}"></gl-form-label-textarea>
+          </gl-grid-col>
+        </gl-grid-row>
 
-      <gl-grid-row>
-        <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="รหัสไปรษณีย์ :" value=""></gl-form-label-input>
-        </gl-grid-col> -->
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="หมายเลขโทรศัพท์ :" value="{{data.seller_phone}}"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="FAX :" value="{{data.seller_fax}}"></gl-form-label-input>
-        </gl-grid-col>
+        <gl-grid-row>
+          <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="รหัสไปรษณีย์ :" value=""></gl-form-label-input>
+          </gl-grid-col> -->
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="หมายเลขโทรศัพท์ :" value="{{data.seller_phone}}"></gl-form-label-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="FAX :" value="{{data.seller_fax}}"></gl-form-label-input>
+          </gl-grid-col>
 
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="E-Mail Address :" value="{{data.seller_email}}"></gl-form-label-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" value="{{data.seller_tax_id}}"></gl-form-label-input>
-        </gl-grid-col>
-        <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value="{{data.exporter_status_name}}"></gl-form-label-input>
-        </gl-grid-col> -->
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="ประเภทอนุญาติ :" value="{{data.type_lic_name}}"></gl-form-label-input>
-        </gl-grid-col>
-      </gl-grid-row>
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input label="เลขประจำตัวผู้ส่งออกข้าว :" value="{{data.exporter_no}}"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่อนุมัติ :" value="{{data.exporter_date_approve}}"></vaadin-date-picker>
-        </gl-grid-col>
-      </gl-grid-row>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="E-Mail Address :" value="{{data.seller_email}}"></gl-form-label-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="เลขที่หนังสืออนุญาต ปกข. :" value="{{data.seller_tax_id}}"></gl-form-label-input>
+          </gl-grid-col>
+          <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="สถานะเป็นสมาชิกผู้ส่งออกข้าว :" value="{{data.exporter_status_name}}"></gl-form-label-input>
+          </gl-grid-col> -->
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-label-input  label="ประเภทอนุญาติ :" value="{{data.type_lic_name}}"></gl-form-label-input>
+          </gl-grid-col>
+        </gl-grid-row>
+      </gl-form-panel-head>
+      
+      <gl-form-panel-body set-padding="0px" set-border="1px">
+        <gl-grid-row>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input label="เลขประจำตัวผู้ส่งออกข้าว :" placeholder="ใส่เลขประจำตัวผู้ส่งออก" value="{{data.exporter_no}}"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <vaadin-date-picker label="วันที่อนุมัติ :" value="{{data.exporter_date_approve}}"></vaadin-date-picker>
+          </gl-grid-col>
+        </gl-grid-row>
 
-      <div class="horizontal layout">
-        <div class="text">ชื่อคณะกรรมการ</div>
-        <paper-icon-button icon="icons:add-circle" on-tap="_addAgent"></paper-icon-button>
-      </div>
-      <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <template is="dom-repeat" items="{{data.seller_agent}}">
-            <gl-form-input placeholder="ชื่อคณะกรรมการ" auto-validate error-message="กรุณาใส่ชื่อคณะกรรมการ" required value="{{item.agent_name}}" no-label-float></gl-form-input>
-          </template>
-        </gl-grid-col>
-      </gl-grid-row>
+        <div class="horizontal layout">
+          <div class="text">ชื่อคณะกรรมการ</div>
+          <paper-icon-button icon="icons:add-circle" on-tap="_addAgent"></paper-icon-button>
+        </div>
+        <gl-grid-row>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <template is="dom-repeat" items="{{data.seller_agent}}">
+              <gl-form-input placeholder="ชื่อคณะกรรมการ" auto-validate error-message="กรุณาใส่ชื่อคณะกรรมการ" required value="{{item.agent_name}}" no-label-float></gl-form-input>
+            </template>
+          </gl-grid-col>
+        </gl-grid-row>
+      </gl-form-panel-body>
     </form>
 
   </template>

@@ -1,11 +1,9 @@
 <link rel="import" href="../g2g/components/content-panel.html">
-<link rel="import" href="components/list-edit/list-registration.html">
+<link rel="import" href="components/list-edit/list-dit.html">
 <link rel="import" href="components/renew/renew-memberShow.html">
 
-<link rel="import" href="components/list-edit/list-registration-pause.html">
 
-
-<dom-module id="listregistion-pause-registion-exporter">
+<dom-module id="listregistion-dit-exporter">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
@@ -73,7 +71,7 @@
             </div>
           </div>
           <div class="flex title">
-            ทะเบียนผู้ส่งออกข้าวที่ถูกระงับ
+            ทะเบียนผู้ส่งออกเลขคน. หมดอายุ
           </div>
           <div class="flex searchBox searchBorder">
             <gl-grid-row width="{{getWidth}}">
@@ -88,15 +86,14 @@
           </div>
 
           <div class="flex searchBorder">
-            <list-registration-pause data="{{exporters}}">
+            <list-dit data="{{exporters}}">
               <items type="primary">
                 <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
                 <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="exporter_date_approve" label="วันที่อนุมัติ" width="flex"></list>
-                <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
+                <list item="trader_date_approve" label="วันที่อนุมัติ" width="flex"></list>
               </items>
-            </list-registration-pause>
+            </list-dit>
 
           </div>
         </div>
@@ -109,10 +106,9 @@
             <div name="detailRegExporter">
               <renew-memberShow exporter-id="[[exporterId]]" data={{dataSelect}}></renew-memberShow>
               <div class="horizontal center-justified layout">
-                <paper-button raised class="gl-btn-success button" on-tap="_active">ยกเลิกการระงับ</paper-button>
+                <paper-button raised class="gl-btn-success button" on-tap="_retrader">ต่ออายุ</paper-button>
               </div>
             </div>
-
           </iron-pages>
         </div>
     </panel>
@@ -120,7 +116,7 @@
     </template>
     <script>
         Polymer({
-            is: "listregistion-pause-registion-exporter",
+            is: "listregistion-dit-exporter",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
@@ -180,7 +176,15 @@
             },
             getExporters: function(){
               this.exporter_id = this.exporter_id || this.$.exporter_id;
-              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+              this.getDb('./external/exporter/?trader_active=false', (data) => {
+                data.map((status)=>{
+                  if (status.trader_active == true) {
+                    status.trader_active = "ปกติ";
+                  }
+                  else if (status.trader_active == false) {
+                    status.trader_active = "ถูกระงับ";
+                  }
+                });
                   this.exporter_id.items = data;
                   this.exporters = data;
                   for (var i = 0; i < this.exporters.length; i++) {
@@ -188,18 +192,16 @@
                   }
               });
             },
-            _active: function(){
-              // console.log(this.dataSelect);
-              var datas = {
-                exporter_date_update: new Date,
-                exporter_date_approve:new Date,
-                exporter_no:this.dataSelect.exporter_no,
-                trader_id:this.dataSelect.trader_id,
-                seller_agent:this.dataSelect.seller_agent,
-                id : this.dataSelect.exporter_id
+            _retrader: function(){
+              var datas= {
+                id: this.dataSelect.trader_id,
+                trader_date_approve: new Date
               }
               // console.log(datas);
-              axios.put('./external/exporter/update', datas)
+              this._updateTrader(datas);
+            },
+            _updateTrader:function(datas){
+              axios.put('./external/trader/update', datas)
                         .then(function (response) {
                           console.log("success");
                           console.log(response);
