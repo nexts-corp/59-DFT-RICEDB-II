@@ -82,13 +82,26 @@
     .hide {
       display: none;
     }
+    paper-icon-button.crud {
+    margin: 5px 5px 5px 5px;
+   }
+   paper-icon-button.crud:hover {
+     background-color: var(--paper-grey-200);
+     border-radius: 5px;
+     box-shadow: inset 0 0 3px 3px rgba(0,0,0,.2);
+   }
   </style>
   <template>
     <div class="horizontal end-justified layout">
-      <paper-button raised on-tap="editShipment" class="gl-btn-info">Edit Shipment</paper-button>
-      <paper-button raised on-tap="deleteShipment"class="gl-btn-danger">Delete Shipment</paper-button>
-    </div>
+        <!-- <template is="dom-if" if="[[!data.contract_status]]"> -->
+          <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment" ></paper-icon-button>
+          <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
+        <!-- </template> -->
 
+      <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment"></paper-icon-button>
+
+      <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
+    </div>
     <content id="primary" select="items[type=primary]"></content>
 
 
@@ -321,33 +334,12 @@
       <iron-collapse id="collapse[[itemPrimary.shm_det_id]]">
         <div class="collapse-content">
           <div class="bd">
-            <gl-form-panel set-padding="10px 20px 10px 20px">
-              <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-                <paper-icon-button icon="create" raised on-tap="editChange" title="Edit" index="[[index]]"></paper-icon-button>
-                <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
-              </gl-form-panel-head>
 
-              <gl-form-panel-body>
-                <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
-              </gl-form-panel-body>
-
-              <!-- เพิ่มคอมโพเน้นตรงนี้ -->
-              <iron-pages selected="0" class$="iron-index-{{index}}">
-                <vessel-save data="{{itemPrimary}}"
-                  buyer-masks='[[data.buyerMasks]]' contract-id='[[data.contract_id]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}'>
-                </vessel-save>
-                <vessel-edit data="{{itemPrimary}}"
+                <vessel-edit data="{{itemPrimary}}" index="[[index]]"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[data.contract_id]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
-              </iron-pages>
-              <gl-form-panel-footer set-padding="10px 20px 0px 20px">
-                <div id="btn_Save_{{index}}" hidden>
-                  <paper-button  class="gl-btn-success" raised on-tap="saveChangeShipment" index="[[index]]">
-                    <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
-                </div>
-              </gl-form-panel-footer>
+              <!-- </iron-pages> -->
 
-            </gl-form-panel>
           </div>
 
 
@@ -367,7 +359,12 @@
   <script>
         Polymer({
             is: "list-vessel",
-            behaviors: [listEditBehavior,vesselBehavior, gl.behavior.core],
+            behaviors: [
+              g2gModelBehavior,
+              listEditBehavior,
+              vesselBehavior,
+              gl.behavior.core
+            ],
             properties: {
                 county:{
                     type:String,
@@ -430,17 +427,8 @@
               'calc(shipment.shm_det_quantity)',
             ],
             listeners: {
-              //  'tap': 'regularTap',
-              //  'special.tap': 'specialTap',
-               'shipmentedit':'finEdit'
-             },
-
-             regularTap: function(e) {
-               alert("Thank you for tapping");
-             },
-
-             specialTap: function(e) {
-               alert("It was special tapping");
+               'shipmentedit':'finEdit',
+               'save-Data-shipmentDetail':'_saveChangeShipment'
              },
 
             ready: function() {
@@ -461,50 +449,20 @@
               this.deleteDb(e.currentTarget.id);
               this.glQuery('layoutMain').openToastDeleteing();
             },
-            saveChangeShipment:function(e){
-              var id = e.currentTarget.index;
-              // console.log(this.data.shipment_detail[id]);
-              // delete this.data.shipment_detail[id].shm_id;
-              delete this.data.shipment_detail[id].carrier_name;
-              delete this.data.shipment_detail[id].cl_name;
-              delete this.data.shipment_detail[id].cl_no;
-              delete this.data.shipment_detail[id].deli_port_code;
-              delete this.data.shipment_detail[id].deli_port_name;
-              delete this.data.shipment_detail[id].dest_port_code;
-              delete this.data.shipment_detail[id].dest_port_name;
-              this.data.shipment_detail[id].eta_date=new Date (this.data.shipment_detail[id].eta_date);
-              this.data.shipment_detail[id].etd_date=new Date (this.data.shipment_detail[id].eta_date);
-              delete this.data.shipment_detail[id].load_port_code;
-              delete this.data.shipment_detail[id].load_port_name;
-              delete this.data.shipment_detail[id].package_kg_per_bag;
-              delete this.data.shipment_detail[id].package_name;
-              delete this.data.shipment_detail[id].package_weight_bag;
-              this.data.shipment_detail[id].packing_date=new Date (this.data.shipment_detail[id].packing_date);
-              this.data.shipment_detail[id].product_date=new Date (this.data.shipment_detail[id].product_date);
-              delete this.data.shipment_detail[id].seller_address_en;
-              delete this.data.shipment_detail[id].seller_address_th;
-              delete this.data.shipment_detail[id].seller_email;
-              delete this.data.shipment_detail[id].seller_fax;
-              delete this.data.shipment_detail[id].seller_name_en;
-              delete this.data.shipment_detail[id].seller_name_th;
-              delete this.data.shipment_detail[id].seller_phone;
-              delete this.data.shipment_detail[id].seller_tax_id;
-              // delete this.data.shipment_detail[id].ship_lot_no;
-              delete this.data.shipment_detail[id].ship_name;
-              // delete this.data.shipment_detail[id].ship_voy_no;
-              delete this.data.shipment_detail[id].shipline_name;
-              delete this.data.shipment_detail[id].surveyor_name;
-              delete this.data.shipment_detail[id].type_rice_name_en;
-              delete this.data.shipment_detail[id].type_rice_name_th;
-              this.data.shipment_detail[id].id=this.data.shipment_detail[id].shm_det_id
-              delete this.data.shipment_detail[id].shm_det_id;
-              // console.log(this.data.shipment_detail[id]);
+            _saveChangeShipment:function(e){
+              // console.log(e.detail);
+              // console.log(e.detail.index);
+              // console.log(e.detail.data);
+              // console.log(this.data.shipment_detail[e.detail.index]=e.detail.data);
+              // this.putDb(this.data.shipment_detail[e.detail.index]=e.detail.data);
+              var data = this.data.shipment_detail[e.detail.index]=e.detail.data;
+              this.update('./g2g/shipment/detail/update', data,() => {
+                // this.clickCancel();
+                // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
+                // this.editInput();
+               });
 
-              this.putDb(this.data.shipment_detail[e.currentTarget.index])
-
-              this.$$(".iron-index-"+e.currentTarget.index).selected = 0;
               this.glQuery('layoutMain').openToastSaveing();
-              this.$$('#btn_Save_'+e.currentTarget.index).setAttribute("hidden", "hidden");
             },
 
             clickInsert: function() {
@@ -542,7 +500,7 @@
               // console.log(this.shipment);
               if (check <= 0) {
                 this.glQuery('layoutMain').openToastSaveing();
-                this.postDb(this.shipment);
+                // this.postDb(this.shipment);
                 // console.log(11);
               }
             },
@@ -590,22 +548,6 @@
                           console.log("error");
                           console.log(error);
                           console.log(data);
-                        })
-            },
-            //update
-            putDb:function (data) {
-              axios.put('./g2g/shipment/detail/update', data)
-                        .then( (response)=> {
-                          console.log("success");
-                          console.log(response);
-                          console.log(data);
-                          // this.glQuery('addContract').shipMentDeatil(data.shm_id,false);
-                          this.clickCancel();
-                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-                        })
-                        .catch( (error)=> {
-                          console.log("error");
-                          console.log(error);
                         })
             },
             deleteShipment:function () {

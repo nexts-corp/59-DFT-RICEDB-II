@@ -65,7 +65,8 @@ router.get(['/', '/list'], function (req, res, next) {
                                 cl_quantity_total: cl('cl_type_rice').sum('type_rice_quantity'),
                                 // cl_quantity_sent: cl('cl_type_rice').sum('type_rice_quantity').div(4),
                                 // cl_quantity_balance: cl('cl_type_rice').sum('type_rice_quantity').sub(cl('cl_type_rice').sum('type_rice_quantity').div(4)),
-                                cl_date: cl('cl_date').split('T')(0)
+                                cl_date: cl('cl_date').split('T')(0),
+                                cl_status_name: r.branch(cl('cl_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
                             }
                         })
                         .orderBy('cl_no')
@@ -78,7 +79,8 @@ router.get(['/', '/list'], function (req, res, next) {
                                 shm_id: shm('id'),
                                 shm_quantity: r.table("shipment_detail")
                                     .filter({ "shm_id": shm('id') })
-                                    .sum("shm_det_quantity")
+                                    .sum("shm_det_quantity"),
+                                shm_status_name: r.branch(shm('shm_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
                             }
                         })
                         .orderBy('shm_no')
@@ -155,7 +157,7 @@ router.get('/id/:contract_id', function (req, res, next) {
                                             }).and(f('contract_id').eq(row('id')))
                                         })
                                         .coerceTo('array')
-                                         .pluck("cl_type_rice")
+                                        .pluck("cl_type_rice")
                                         .map(function (m) {
                                             return m('cl_type_rice').merge(function (mer) {
                                                 return r.branch(mer('type_rice_id').eq(limit('type_rice_id')), mer('type_rice_quantity'), 0)
@@ -163,7 +165,7 @@ router.get('/id/:contract_id', function (req, res, next) {
                                         })
                                         .reduce(function (left, right) {
                                             return left.add(right);
-                                        }).default(0)
+                                        }).default([])
                                         .reduce(function (left, right) {
                                             return left.add(right);
                                         }).default(0)

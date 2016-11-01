@@ -92,7 +92,7 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
-                [[testNum(item.*,'type_rice_quantity')]]
+                [[changeString2Num(item.*,'type_rice_quantity')]]
                 <gl-form-input label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่จำนวนตัน" required
                   value="{{item.type_rice_quantity}}" name="type_rice_quantity"></gl-form-input>
 
@@ -121,7 +121,7 @@
                     </paper-menu>
                   </gl-form-dropdown-menu>
                   </td>
-                  <td> [[testNum(packageitem.*,'price_per_ton')]]
+                  <td> [[changeString2Num(packageitem.*,'price_per_ton')]]
                     <gl-form-input placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                   </td>
                   <td>
@@ -172,11 +172,8 @@
           </gl-grid-col>
       </gl-grid-row>
       </form>
-      <paper-toggle-button>Toggle</paper-toggle-button>
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
-          <!-- <paper-button toggles raised>toggles</paper-button> -->
-          <paper-button class="gl-btn-info" toggles raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
           <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
       </div>
     </template>
@@ -217,42 +214,21 @@
             },
             behaviors: [
               gl.behavior.core,
+              g2gModelBehavior
             ],
-            observers: [
-              'dataChange(data.cl_id)',
-            ],
-
-            dataChange:function (clId) {
-              //ดึง confirmLetter
-              this.getDb('./g2g/confirm/id/'+clId,(data)=>{
-                this.confirmLetter = data;
-              });
-            },
             addConfirm:function () {
               //เปลี่ยนเป็น id
-              // this.confirmLetter.cl_type_rice[0].type_rice_quantity = parseFloat(e.target.value);
-              // new Date (this.data.shipment_detail[id].packing_date)
 
               this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
               // console.log(this.confirmLetter.cl_date);
               this.confirmLetter.contract_id = this.contractId;
-              this.postDb(this.confirmLetter);
-              console.log(this.confirmLetter);
-            },
-            postDb:function (data) {
-              axios.post('http://localhost:3000/api/g2g/confirm/insert', data)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                          this.glQuery('addContract').getChange();
-                          this.glQuery('contentPanel').changDrawer();
-                          this.backPage();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          console.log(error);
-                        })
-
+              // this.postDb(this.confirmLetter);
+              // console.log(this.confirmLetter);
+              this.insert('./g2g/confirm/insert',this.confirmLetter, () => {
+                this.glQuery('addContract').getChange(false,'put');
+                this.glQuery('contentPanel').changDrawer();
+                this.backPage();
+               });
             },
             calcWeight: function(data) {
 
@@ -326,17 +302,6 @@
                 data: 'fin',
               });
             },
-            testNum:function(ob,param){
-              if(typeof ob.value == "string"){
-                var pathChange = ob.path.split(".");
-                if(pathChange.length == 2){
-                    if(pathChange[1]==param){
-                      ob.base[param]=parseFloat(ob.value);
-                      // console.log(typeof ob.value);
-                    }
-                }
-              }
-            }
 
         });
     </script>
