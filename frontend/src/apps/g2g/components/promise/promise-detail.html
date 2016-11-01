@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/g2gModelBehavior.html">
 <dom-module id="promise-detail">
 
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
@@ -32,10 +33,10 @@
     <template>
     <form is="iron-form" id="insertPromiseDetail">
       <div class="horizontal end-justified layout">
-          <!-- <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]"> -->
+          <template is="dom-if" if="[[!data.contract_status]]">
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Contract</paper-tooltip>
-          <!-- </template> -->
+          </template>
 
         <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="shipmentDelete" on-tap="deleteConfirm"></paper-icon-button>
 
@@ -43,10 +44,10 @@
       </div>
       <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input class="bottom approve" disabled error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+            <gl-form-input class="bottom approve" disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker class="approve"  disabled label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+            <vaadin-date-picker disabled="[[checkInput]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
 
@@ -55,7 +56,7 @@
               <gl-grid-row>
 
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-dropdown-menu class="approve"  disabled label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
+                    <gl-form-dropdown-menu disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
                       <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
                         <template is="dom-repeat" items="[[typeRice]]">
                           <paper-item value="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
@@ -66,16 +67,18 @@
     </gl-grid-col>
 
     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(item.*,'type_rice_quantity')]]
-        <gl-form-input  auto-validate class="approve"  disabled error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
+        <gl-form-input  auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
     </gl-grid-col>
     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+    <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
         <paper-icon-button id="[[index]]" class="icon-bin" icon="icons:delete" title="ลบชนิดข้าว" style="color: gray;" on-tap="dele"></paper-icon-button>
+    </template>
     </gl-grid-col>
     </gl-grid-row>
     </div>
     </template>
-      <template is="dom-if" if="[[checkf(checkBtn)]]">
+      <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
         <div class="horizontal end-justified layout">
             <paper-button raised on-tap="addNewData" class="gl-btn-primary">Add Rice Type</paper-button>
         </div>
@@ -84,20 +87,27 @@
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
             <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
-            <gl-form-textarea rows="2" class="approve"  disabled label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.buyer_address}}" name="buyer_address"></gl-form-textarea>
+            <gl-form-textarea rows="2" disabled="[[checkInput]]" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.buyer_address}}" name="buyer_address"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-            <gl-form-textarea class="approve"  disabled rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+            <gl-form-textarea disabled="[[checkInput]]" rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
 
     <div class="horizontal end-justified layout">
       <!-- [[data.contract_status]] -->
         <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
-        <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
-        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+        <template is="dom-if" if="[[!data.contract_status]]">
+          <template is="dom-if" if="[[!checkBtnView(checkBtn)]]">
+            <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
+          </template>
+        </template>
+        <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
+          <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+        </template>
+
     </div>
     </form>
     </template>
@@ -106,7 +116,8 @@
         Polymer({
             is: "promise-detail",
             behaviors: [
-                gl.behavior.core
+                gl.behavior.core,
+                g2gModelBehavior
             ],
             properties: {
                 data: {
@@ -124,28 +135,13 @@
                     contract_type_rice:'',
                   }
                 },
-                checkBtn:{
-                  type:Boolean,
-                  value:false
-                }
             },
-            editInput:function () {
-              console.log(1);
-
-              this.async(()=> {
-                var approve = Polymer.dom(this.root).querySelectorAll('.approve');
-                approve.map((el)=>{
-                  el.removeAttribute("disabled");
-                });
-              });
-
-              this.checkBtn = !this.checkBtn;
-            },
-            disabledInput:function () {
-              var approve = Polymer.dom(this.root).querySelectorAll('.approve');
-              approve.map((el)=>{
-                el.setAttribute("disabled", "");
-              });
+            // observers
+            checkbb:function () {
+              // this.glQuery('addContract').getDb('./g2g/contract/list',(data)=>{
+              //   this.contracts=data;
+              //   console.log(this.contracts);
+              // },true,'put')
             },
             checkf:function (data) {
               return data == true;
@@ -161,7 +157,7 @@
                     type_rice_quantity: '',
                 });
                 // console.log(this.data);
-                this.editInput();
+                // this.editInput();
             },
             dele: function(e) {
                 // console.log(e.currentTarget.id);
@@ -185,7 +181,7 @@
               this.Newdata.contract_type_rice=this.data.contract_type_rice;
               this.Newdata.contract_status=this.data.contract_status;
               this.Newdata.contract_desc=this.data.contract_desc;
-              console.log(this.Newdata);
+              // console.log(this.Newdata);
               this.glQuery('layoutMain').openToastSaveing();
                 this.postDb(this.Newdata);
             },
@@ -196,25 +192,14 @@
                           console.log("success");
                           console.log(response);
                             this.glQuery('addContract').getChange(false,'put');
-                          this.disabledInput();
+                            this.editInput();
                         }.bind(this))
                         .catch(function (error) {
                           console.log("error");
                           console.log(error);
                         })
             },
-            changeString2Num:function(ob,param){
-              //console.log(typeof ob.value);
-              if(typeof ob.value == "string"){
-                var pathChange = ob.path.split(".");
-                if(pathChange.length == 2){
-                    if(pathChange[1]==param){
-                      ob.base[param]=parseFloat(ob.value);
-                      // console.log(typeof ob.value);
-                    }
-                }
-              }
-            },
+
         });
     </script>
 </dom-module>
