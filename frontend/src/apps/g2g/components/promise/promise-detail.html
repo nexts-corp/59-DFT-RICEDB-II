@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/g2gModelBehavior.html">
+<!-- <link rel="import" href="../../data/g2gModelBehavior.html"> -->
 <dom-module id="promise-detail">
 
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
@@ -38,7 +38,7 @@
             <paper-tooltip for="editConfirm" offset="0">Edit Contract</paper-tooltip>
           </template>
 
-        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="shipmentDelete" on-tap="deleteConfirm"></paper-icon-button>
+        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
 
         <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
       </div>
@@ -98,14 +98,14 @@
 
     <div class="horizontal end-justified layout">
       <!-- [[data.contract_status]] -->
-        <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
-        <template is="dom-if" if="[[!data.contract_status]]">
+        <!-- <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button> -->
+        <template is="dom-if" if="[[!checkBtnView(data.contract_status)]]">
           <template is="dom-if" if="[[!checkBtnView(checkBtn)]]">
             <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
           </template>
         </template>
         <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
-          <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+          <paper-button class="gl-btn-success" on-tap="saveData" raised>บันทึก</paper-button>
         </template>
 
     </div>
@@ -145,7 +145,8 @@
             },
             confirmDrawer:function () {
               this.data.contract_status = this.approve(this.data.contract_status);
-              console.log(this.data.contract_status);
+              // console.log(this.data.contract_status);
+              this.saveData();
             },
             addNewData: function() {
                 this.push('data.contract_type_rice', {
@@ -154,18 +155,13 @@
                     type_rice_name_th: '',
                     type_rice_quantity: '',
                 });
-                // console.log(this.data);
-                // this.editInput();
             },
             dele: function(e) {
-                // console.log(e.currentTarget.id);
                 // var index = this.data.contract_type_rice.indexOf(data);
                 this.splice('data.contract_type_rice', e.currentTarget.id, 1);
             },
 
-            _saveData: function() {
-                // this.$.insertPromiseDetail.submit();
-                // console.log(this.data);
+            saveData: function() {
               //  this.data
               for (var i = 0; i < this.data.contract_type_rice.length; i++) {
                     delete this.data.contract_type_rice[i].type_rice_desc_en;
@@ -181,22 +177,14 @@
               this.Newdata.contract_desc=this.data.contract_desc;
               // console.log(this.Newdata);
               this.glQuery('layoutMain').openToastSaveing();
-                this.postDb(this.Newdata);
+                this.update('./g2g/contract/update',this.Newdata, () => {
+                  this.glQuery('addContract').getChange(false,'put');
+                  this.editInput();
+                 });
             },
-
-            postDb:function (data) {
-              axios.put('./g2g/contract/update', data)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                            this.glQuery('addContract').getChange(false,'put');
-                            this.editInput();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          console.log(error);
-                        })
-            },
+            deleteContract:function () {
+              console.log(1);
+            }
 
         });
     </script>

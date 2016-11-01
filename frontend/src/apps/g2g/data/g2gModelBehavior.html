@@ -13,6 +13,7 @@
       editInput:function () {
         this.checkInput = !this.checkInput;
         this.checkBtn = !this.checkBtn;
+        // this.async(()=> {});
       },
       checkBtnView:function (data) {
         return data == true;
@@ -21,6 +22,66 @@
       approve:function (data) {
         console.log(data);
         return data = !data;
+      },
+      // CRUD
+      //Insert
+      // Exsameple
+      // this.insert('./g2g/confirm/insert',this.confirmLetter, () => {
+      //   this.glQuery('addContract').getChange(false,'put');
+      //   this.glQuery('contentPanel').changDrawer();
+      //   this.backPage();
+      //  });
+      insert:function (url,data,actionInpage) {
+        axios.post(url, data)
+                  .then((response)=> {
+                    console.log("success");
+                    console.log(response);
+                    actionInpage();
+                  })
+                  .catch((error)=> {
+                    console.log("error");
+                    console.log(error);
+                  })
+
+      },
+      // UPDATE
+      // Exsameple
+      // this.update('./g2g/contract/update',this.Newdata, () => {
+      //   this.glQuery('addContract').getChange(false,'put');
+      //   this.editInput();
+      //  });
+      update:function (url,data,actionInpage) {
+        axios.put(url, data)
+                  .then((response) => {
+                    console.log("success");
+                    console.log(response);
+                    // this.actionInpage();
+                    actionInpage();
+                  })
+                  .catch((error)=> {
+                    console.log("error");
+                    console.log(error);
+                  })
+      },
+      //DELETE
+      // Exsameple
+      // this.delete('./g2g/confirm/delete/id/',this.confirmLetter.cl_id, () => {
+      //   this.glQuery('addContract').getChange(false,'delete');
+      //   this.glQuery('contentPanel').changDrawer();
+      //   this.editInput();
+      //   this.backPage();
+      //  });
+      delete:function (url,dataId,actionInpage) {
+        axios.delete(url+dataId)
+                  .then(function (response) {
+                    console.log("success");
+                    console.log(response);
+                    actionInpage();
+                  }.bind(this))
+                  .catch(function (error) {
+                    console.log("error");
+                    // console.log(error);
+                  })
       },
       changeString2Num:function(ob,param){
         //console.log(typeof ob.value);

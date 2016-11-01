@@ -1,4 +1,5 @@
 <link rel="import" href="../vessel/vesselBehavior.html">
+<!-- <link rel="import" href="../../data/g2gModelBehavior.html"> -->
 <dom-module id="promise-confirm">
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-size gl-color">
         .top {
@@ -72,26 +73,26 @@
     </style>
     <template>
       <div class="horizontal end-justified layout">
-          <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
-            <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editConfirm" ></paper-icon-button>
+          <template is="dom-if" if="[[!checkBtnView(confirmLetter.cl_status)]]">
+            <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Confirmmation Letter</paper-tooltip>
           </template>
 
-        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="shipmentDelete" on-tap="deleteConfirm"></paper-icon-button>
+        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteConfirm" ></paper-icon-button>
 
         <paper-tooltip for="deleteConfirm" offset="0">Delete Confirmmation Letter</paper-tooltip>
       </div>
-      <!-- disabled -->
+      <!-- disabled="[[checkInput]]" -->
       <form is="iron-form" id="confirmLitter" method="get">
         <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input class="approve"  disabled error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}"></gl-form-input>
+              <gl-form-input  disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input class="approve" disabled error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="Confirmation Name" placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_name}}"></gl-form-input>
+              <gl-form-input disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="Confirmation Name" placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_name}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker class="approve"  disabled label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
+              <vaadin-date-picker  disabled="[[checkInput]]" label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
             </gl-grid-col>
         </gl-grid-row>
 
@@ -101,7 +102,7 @@
           <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                <gl-form-dropdown-menu id class="approve"  disabled label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
+                <gl-form-dropdown-menu id  disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
                     <template is="dom-repeat" items="[[riceType]]">
                       <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
@@ -111,17 +112,15 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
-                [[testNum(item.*,'type_rice_quantity')]]
-                <gl-form-input class="approve"  disabled label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+                [[changeString2Num(item.*,'type_rice_quantity')]]
+                <gl-form-input  disabled="[[checkInput]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                   value="{{item.type_rice_quantity}}"
                  name="type_rice_quantity"></gl-form-input>
 
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-              <template is="dom-if" if="[[checkApprove(checkBtn)]]">
-                <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
+              <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
                   <paper-icon-button id="[[index]]" icon="icons:delete" title='ลบชนิดข้าว' style="color: gray;" on-tap="deleteRiceType"></paper-icon-button>
-                </template>
               </template>
             </gl-grid-row>
 
@@ -136,7 +135,7 @@
               <template is="dom-repeat" as="packageitem" items="[[item.package]]">
                 <tr >
                   <td>
-                    <gl-form-dropdown-menu class="approve"  disabled error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
+                    <gl-form-dropdown-menu  disabled="[[checkInput]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
                     <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{packageitem.package_id}}" name="package_id" >
                       <template is="dom-repeat" items="[[package]]">
                         <paper-item package-id="{{item.package_id}}" >[[item.package_name]]</paper-item>
@@ -144,24 +143,21 @@
                     </paper-menu>
                   </gl-form-dropdown-menu>
                   </td>
-                  <td> [[testNum(packageitem.*,'price_per_ton')]]
-                    <gl-form-input class="approve"  disabled placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  <td> [[changeString2Num(packageitem.*,'price_per_ton')]]
+                    <gl-form-input  disabled="[[checkInput]]" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                   </td>
                   <td>
                     <gl-form-input disabled placeholder=""  value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                   </td>
                   <td>
-                    <template is="dom-if" if="[[checkApprove(checkBtn)]]">
-                      <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
+                    <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
                         <paper-icon-button icon="icons:"></paper-icon-button>
-                        <paper-icon-button class="approve" disabled id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
-                      </template>
+                        <paper-icon-button disabled="[[checkInput]]" id="[[index]]" icon="icons:delete" title='ลบขนาดบรรจุภัณฑ์'style="color: gray;" on-tap="delePackage"></paper-icon-button>
                     </template>
                   </td>
                 </tr>
               </template>
-              <template is="dom-if" if="[[checkApprove(checkBtn)]]">
-                <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
+              <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
                   <tr>
                     <td></td>
                     <td></td>
@@ -170,7 +166,6 @@
                       <paper-icon-button icon="add" title='เพิ่มขนาดบรรจุภัณฑ์' on-tap="addPackage" class="iconAdd" id="[[index]]"></paper-icon-button>
                     </td>
                   </tr>
-                </template>
               </template>
 
             </table>
@@ -178,16 +173,14 @@
             </div>
 
         </template>
-        <template is="dom-if" if="[[checkApprove(checkBtn)]]">
-          <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
+        <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
             <div class="horizontal end-justified layout">
                 <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary">เพิ่มชนิดข้าว</paper-button>
             </div>
-          </template>
         </template>
       <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-              <gl-form-dropdown-menu class="approve"  disabled label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
+              <gl-form-dropdown-menu  disabled="[[checkInput]]" label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
                   <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
                       <template is="dom-repeat" items="[[incoterms]]">
                         <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
@@ -198,19 +191,23 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-label-input class="approve"  disabled auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-label-input>
+              <gl-form-label-input  disabled="[[checkInput]]" auto-validate error-message="กรุณาใส่ยอดรวม" pattern="[0-9,.,,]{1,9}" required label="Total Quantity" placeholder="ใส่รายละเอียด" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-label-input>
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-              <gl-form-textarea class="approve"  disabled label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
+              <gl-form-textarea  disabled="[[checkInput]]" label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
           </gl-grid-col>
       </gl-grid-row>
       </form>
 
       <div class="horizontal end-justified layout">
           <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ย้อนกลับ</paper-button>
-          <template is="dom-if" if="[[checkApprove(confirmLetter.cl_status)]]">
+          <template is="dom-if" if="[[!checkBtnView(confirmLetter.cl_status)]]">
+            <template is="dom-if" if="[[!checkBtnView(checkBtn)]]">
             <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
+            </template>
+          </template>
+          <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
             <paper-button class="gl-btn-success" on-tap="addConfirm" raised>บันทึก</paper-button>
           </template>
       </div>
@@ -224,14 +221,6 @@
                 },
                 riceType:{
                     type: Object
-                },
-                checkApp:{
-                    type:Boolean,
-                    value:false
-                },
-                checkBtn:{
-                    type:Boolean,
-                    value:true
                 },
                 confirmLetter:{
                     type: Object,
@@ -257,12 +246,11 @@
             },
             behaviors: [
                 gl.behavior.core,
-                vesselBehavior
+                vesselBehavior,
+                g2gModelBehavior
             ],
             observers: [
               'dataChange(data)',
-              // 'editConfirm(checkApp)',
-              // 'approve(confirmLetter.cl_status)'
               'check(confirmLetter.cl_type_rice.*)'
             ],
             check:function (data) {
@@ -272,35 +260,15 @@
               // console.log("created confirm-mation-common");
               this.fire('confirm-mation-common',{node:this});
             },
-            approve:function (data) {
-              // console.log(data);
-              if (data == true) {
-                this.async(()=> {
-                   this.async(()=> {
-                    // access sibling or parent elements here
-                        var approve = Polymer.dom(this.root).querySelectorAll('.approve');
-                        approve.map((el)=>{
-                          el.setAttribute("disabled", "");
-                        });
-                    });
-                });
-              } else {
-                var approve = Polymer.dom(this.root).querySelectorAll('.approve');
-                approve.map((el)=>{
-                  el.removeAttribute("disabled");
-                });
-              }
-
+            confirmDrawer:function () {
+              this.confirmLetter.cl_status = this.approve(this.confirmLetter.cl_status);
+              this.editInput();
+              this.addConfirm();
+              this.glQuery('contentPanel').changDrawer();
             },
             editConfirm:function (data) {
-              console.log( this.checkApp );
-              this.approve(this.checkApp);
-              this.checkBtn = !this.checkBtn;
-              this.checkApp = !this.checkApp;
-            },
-            checkApprove:function (check) {
-              // console.log(check == true);
-              return check != true;
+              // console.log(1);
+              this.editInput();
             },
             addConfirm:function () {
               //เปลี่ยนเป็น id
@@ -326,23 +294,12 @@
               }
               //
               this.glQuery('layoutMain').openToastSaveing();
-              this.postDb(this.confirmLetter)
-              // console.log(this.confirmLetter);
-            },
-            postDb:function (data) {
-              axios.put('./g2g/confirm/update', data)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                          this.glQuery('addContract').getChange(false,'put');
-                          this.glQuery('contentPanel').changDrawer();
-                          this.backPage();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          console.log(error);
-                        })
-
+              // this.postDb(this.confirmLetter);
+              this.update('./g2g/confirm/update',this.confirmLetter, () => {
+                  this.glQuery('addContract').getChange(false,'put');
+                  this.backPage();
+                  this.editInput();
+               });
             },
             calcWeight: function(data) {
 
@@ -388,15 +345,10 @@
                     };
                     // console.log(data);
               this.push('confirmLetter.cl_type_rice.'+[table]+'.package', data);
-              // เอา disabled ออก
-              this.async(()=>{
-                this.approve(false);
-              });
             },
             delePackage: function(e) {
               var table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
-              // console.log(table.node.id);
-              // console.log(e.target.id);
+
                 // var index = this.data.confirmItem.indexOf(data);
                 // console.log('confirmLetter.cl_type_rice.'+[table.node.id]+'.package');
                 this.splice('confirmLetter.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
@@ -419,33 +371,19 @@
             },
             deleteConfirm:function () {
               // console.log(this.confirmLetter.cl_id);
-              this.deleteConfirmDb(this.confirmLetter.cl_id);
-            },
-            deleteConfirmDb:function (dataId) {
-              axios.delete('./g2g/confirm/delete/id/'+dataId)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                          this.glQuery('addContract').getChange(false,'delete');
-                          this.glQuery('contentPanel').changDrawer();
-                          this.backPage();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          // console.log(error);
-                        })
+              // this.deleteConfirmDb(this.confirmLetter.cl_id);
+              this.delete('./g2g/confirm/delete/id/',this.confirmLetter.cl_id, () => {
+                this.glQuery('addContract').getChange(false,'delete');
+                this.glQuery('contentPanel').changDrawer();
+                this.editInput();
+                this.backPage();
+               });
             },
             backPage:function () {
               this.fire('select', {
                 data: 'fin',
               });
             }
-            // testNum:function(ob,param){
-            //         if(ob.path.split(".").length == 2){
-            //             ob.base[param]=parseFloat(ob.value);
-            //
-            //         }
-            //     }
         });
     </script>
 </dom-module>
