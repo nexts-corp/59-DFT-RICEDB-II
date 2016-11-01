@@ -155,7 +155,7 @@ router.get('/id/:contract_id', function (req, res, next) {
                                             }).and(f('contract_id').eq(row('id')))
                                         })
                                         .coerceTo('array')
-                                         .pluck("cl_type_rice")
+                                        .pluck("cl_type_rice")
                                         .map(function (m) {
                                             return m('cl_type_rice').merge(function (mer) {
                                                 return r.branch(mer('type_rice_id').eq(limit('type_rice_id')), mer('type_rice_quantity'), 0)
@@ -163,17 +163,17 @@ router.get('/id/:contract_id', function (req, res, next) {
                                         })
                                         .reduce(function (left, right) {
                                             return left.add(right);
-                                        }).default(0)
+                                        }).default([])
                                         .reduce(function (left, right) {
                                             return left.add(right);
                                         }).default(0)
                                 }
                             })
-                            .merge(function (limit) {
-                                return {
-                                    type_rice_quantity_limit: limit('type_rice_quantity').sub(limit('type_rice_quantity_confirm'))
-                                }
-                            })
+                        .merge(function (limit) {
+                            return {
+                                type_rice_quantity_limit: limit('type_rice_quantity').sub(limit('type_rice_quantity_confirm'))
+                            }
+                        })
 
                     }),
                     contract_date: row('contract_date').split('T')(0)
