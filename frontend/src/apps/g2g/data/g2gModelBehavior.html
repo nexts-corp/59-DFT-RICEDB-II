@@ -24,6 +24,26 @@
         return data = !data;
       },
       // CRUD
+      //Insert
+      // Exsameple
+      // this.insert('./g2g/confirm/insert',this.confirmLetter, () => {
+      //   this.glQuery('addContract').getChange(false,'put');
+      //   this.glQuery('contentPanel').changDrawer();
+      //   this.backPage();
+      //  });
+      insert:function (url,data,actionInpage) {
+        axios.post(url, data)
+                  .then((response)=> {
+                    console.log("success");
+                    console.log(response);
+                    actionInpage();
+                  })
+                  .catch((error)=> {
+                    console.log("error");
+                    console.log(error);
+                  })
+
+      },
       // UPDATE
       // Exsameple
       // this.update('./g2g/contract/update',this.Newdata, () => {
