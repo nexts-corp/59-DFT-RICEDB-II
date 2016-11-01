@@ -21,6 +21,9 @@
     }
 </style>
   <template>
+    <div class="horizontal end-justified layout button">
+      <div><paper-icon-button icon="close" on-tap="toggleDrawer" title="ปิดหน้าต่างนี้"></paper-icon-button> </div>
+    </div>
 
     <gl-form-panel set-border="0px">
 
@@ -51,6 +54,7 @@
               </div>
 
               <div class="horizontal end-justified layout">
+                <paper-button id="removeButtomC" class="gl-btn-success" on-tap="_cancel" raised>ยกเลิก</paper-button>
                 <paper-button id="removeButtom" class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
               </div>
 
@@ -76,6 +80,7 @@
       ready: function() {
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#removeButtomC').setAttribute("hidden", "hidden");
       },
       getTrader:function (e) {
         // console.log(e.detail.value);
@@ -89,11 +94,19 @@
             this.trader = data;
             this.$$('#formData').removeAttribute("hidden");
             this.$$('#removeButtom').removeAttribute("hidden");
+            this.$$('#removeButtomC').removeAttribute("hidden");
             this.$$('#changTitle').setAttribute("hidden", "hidden");
             this.$$('#changTitle2').removeAttribute("hidden");
             //console.log(this.trader);
           });
         }
+      },
+      _cancel:function() {
+        this.$$('#removeButtom').setAttribute("hidden", "hidden");
+        this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+        this.$$('#formData').setAttribute("hidden", "hidden");
+        this.$$('#changTitle').removeAttribute("hidden");
+        this.$$('#changTitle2').setAttribute("hidden", "hidden");
       },
       _saveData:function(e) {
         // console.log(this.trader);
@@ -113,6 +126,7 @@
                 // this.glQuery('addContract').getChange();
                 // this.glQuery('contentPanel').changDrawer();
                 this.$$('#removeButtom').setAttribute("hidden", "hidden");
+                this.$$('#removeButtomC').setAttribute("hidden", "hidden");
                 this.$$('#formData').setAttribute("hidden", "hidden");
                 this.$$('#changTitle').removeAttribute("hidden");
                 this.$$('#changTitle2').setAttribute("hidden", "hidden");
