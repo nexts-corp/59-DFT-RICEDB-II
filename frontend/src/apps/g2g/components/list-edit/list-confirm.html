@@ -29,14 +29,11 @@
   paper-item:hover {
     background-color: var(--gl-info-color);
   }
-  .name {
-    float: left;
-  }
-  numeral-js{
+  /*.name:first-of-type {
+    background: red;
+}*/
+  numeral-js {
     float: right;
-  }
-  .status {
-    text-align:center;
   }
 </style>
   <template>
@@ -62,16 +59,6 @@
                <template is="dom-if" if="[[checkTypeNumber(configPrimary,itemPrimary)]]">
                  <div class$="[[configPrimary.width]] number">
                      <numeral-js number="{{_getItemPrimary(itemPrimary,configPrimary)}}" format="0,0" print></numeral-js>
-                 </div>
-               </template>
-               <template is="dom-if" if="[[checkContract(configPrimary,itemPrimary)]]">
-                 <div class$="[[configPrimary.width]] status">
-                     อนุมัติแล้ว
-                 </div>
-               </template>
-               <template is="dom-if" if="[[checkContractfalse(configPrimary,itemPrimary)]]">
-                 <div class$="[[configPrimary.width]] status">
-                    ยังไม่อนุมัติ
                  </div>
                </template>
              </template>
