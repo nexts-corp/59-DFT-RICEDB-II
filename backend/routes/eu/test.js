@@ -4,8 +4,8 @@ var router = express.Router();
 var fs = require('fs');
 var path = require('path');
 var multiparty = require('multiparty');
+var stream = require('stream');
 
-var filePath = path.join(__dirname, 'image.png');
 
 var r = require('rethinkdb');
 var db = require('../../db.js');
@@ -32,10 +32,20 @@ router.get(['/download/:key'], function (req, res, next) {
                 res.writeHead(200, {
                     'Content-Type': cursor.type,
                     'Content-Length': cursor.contents.length,
-                    'Content-Disposition':'filename='+cursor.name
-                    //'Content-Disposition':'attachment; filename='+cursor.name
+                    //'Content-Disposition':'filename='+cursor.name
+                    'Content-Disposition':'attachment; filename='+cursor.name
                 });
-                res.end(cursor.contents);
+                //cursor.contents.pipe(res);
+                //res.end(cursor.contents);
+               // var buffer = new Buffer( cursor.contents );
+                var bufferStream = new stream.PassThrough();
+                bufferStream.end( cursor.contents  );
+                bufferStream.pipe( res );
+
+
+
+
+
             } else {
                 res.json({ error: "error" });
             }
