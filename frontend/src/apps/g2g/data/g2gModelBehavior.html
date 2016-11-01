@@ -22,6 +22,22 @@
         console.log(data);
         return data = !data;
       },
+      // CRUD
+      // UPDATE
+      update:function (url,data,actionInpage) {
+        axios.put(url, data)
+                  .then((response) => {
+                    console.log("success");
+                    console.log(response);
+                    // this.actionInpage();
+                    actionInpage();
+                  })
+                  .catch((error)=> {
+                    console.log("error");
+                    console.log(error);
+                  })
+      },
+      //DELETE
       changeString2Num:function(ob,param){
         //console.log(typeof ob.value);
         if(typeof ob.value == "string"){
