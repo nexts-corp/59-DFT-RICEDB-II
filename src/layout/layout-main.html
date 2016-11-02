@@ -17,7 +17,7 @@
 
 <dom-module id="layout-main">
 	<template>
-	<style>
+	<style is="custom-style" include="gl-color gl-size">
 		#drawer{
 			z-index: 1;
 			--app-drawer-width: 400px;
@@ -62,8 +62,7 @@
 		paper-spinner{
 			--paper-spinner-stroke-width: 3px;
 		}
-
-		.toastLoading, .toastSuccess, .toastWarning, .toastError{
+		.toastLoading, .toastSuccess, .toastWarning, .toastError,.toastDialog{
 			width: 100%;
 			text-align: center;
 			font-size: 22px;
@@ -87,11 +86,13 @@
 		}
 		.toastError,.toastConnectError{
 			background-color: #d9534f;
-		
 		}
-		.toastConnectError{
+		.toastConnectError,.toastDialog{
 			width: 100%;
 			text-align: center;
+		}
+		.toastDialog{
+			background-color: #337ab7;
 		}
 		.toastConnectError>span{
 			font-size: 16px;
@@ -101,6 +102,23 @@
 			width: 30px;
 			margin-bottom: 5px;
 		}
+		paper-button{
+			height: 30px;
+			width: 10px !important;
+			font-size: 16px !important;
+			border-radius: 2px;
+
+		}
+		/*paper-button:hover{
+			background-color: #f0ad4e;
+		}*/
+		.btYes{
+			background-color: #5cb85c;
+		}
+		.btNo{
+			background-color: #d9534f;
+		}
+
 
 	</style>
 	<div blur$="{{offline}}">
@@ -122,9 +140,17 @@
                 </span>
         </paper-toast>
 		
+		<paper-toast class="toastDialog" id="toastDialog" duration="0">
+			<span>{{status.content}}</span>
+			<div style="padding: 10px 20px 10px 20px;">
+				<paper-button class="btYes" on-tap="resultToastDialog" confirm>Yes</paper-button>
+				<paper-button class="btNo" on-tap="resultToastDialog">No</paper-button>
+			</div>
+		</paper-toast>
+
 		<paper-toast class="toastConnectError" id="toastErrorConnect" duration="0">
 			<span>{{status.content}}</span>
-			<paper-button on-tap="closeopenToastConnectError" style="color:yellow;">Close now!</paper-button>
+			<paper-button on-tap="closeToastConnectError" style="color:yellow;">Close now!</paper-button>
 		</paper-toast>
 
 		<paper-toast class$="{{status.class}}" id="toastStatus">
@@ -177,8 +203,6 @@
 						icon : 'done',
 						content : e.detail.text || 'โหลดข้อมูลสำเร็จ'
 					}
-					
-					
 				}
 				if(e.detail.status == 'connectError'){
 					console.log(e.detail.text);
@@ -186,6 +210,15 @@
 						content : e.detail.text
 					}
 					this.$.toastErrorConnect.open();
+				}
+				if(e.detail.status == 'openDialog'){
+					this.status = {
+						class : 'toastDialog',
+						icon : 'done',
+						content : e.detail.text || 'โหลดข้อมูลสำเร็จ'
+					}
+
+					this.openToastDialog(e.detail)
 				}
 			},
 			openToastLoading:function(){
@@ -199,10 +232,26 @@
 					callback();
                 }.bind(this),500);
             },
+			openToastDialog:function(detail){
+				this.$.toastDialog.open();
+				this.detailToastDialog = detail;
+			},
+			resultToastDialog:function(e){
+				
+				var result = true;
+				if(e.currentTarget.getAttribute('confirm')==null){
+					result = false;
+				}
+				this.detailToastDialog.confirmed(result,this.detailToastDialog.data);
+				this.closeToastDialog();
+			},
+			closeToastDialog:function(){
+				this.$.toastDialog.hide();
+			},
 			openToastConnectError:function(){
 				this.$.toastErrorConnect.open();
 			},
-			closeopenToastConnectError:function(){
+			closeToastConnectError:function(){
 				this.$.toastErrorConnect.hide();
 			},
 			openToastStatus:function(){

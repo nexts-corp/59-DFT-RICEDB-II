@@ -72,6 +72,7 @@
                                 <thead>
 								<tr>
 									<th>จำนวนงวด</th>
+                                    <th>เดือน</th>
 									<th>สัดส่วน % </th>
 									<th>คำนวณ</th>
 									<th></th>
@@ -81,6 +82,9 @@
 								<template is="dom-repeat" items="{{Period}}">
 									<tr>
 										<td>งวดที่ : {{getIndex(index)}}</td>
+                                        <td>
+                                            <gl-form-input value="{{item.month}}" auto-validate error-message="กรุณากรอกเดือน" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
+                                        </td>
 										<!--{{item.proportion}}-->
 										<td>
 											[[testNum(item.*,'percent')]]
@@ -107,6 +111,7 @@
                                     </td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
 									<td>
 									
 									</td>
@@ -114,7 +119,7 @@
                                  </tbody>
                                 <thead>
 								<tr>
-									<th>ปริมาณโควต้ารวม : {{_crossCheck(Period.*)}}</th>
+									<th colspan="2">ปริมาณโควต้ารวม : {{_crossCheck(Period.*)}}</th>
                                     <th></th>
                                     <th></th>
 									<th>
@@ -152,36 +157,9 @@
                 type: Array,
                 value: []
                 },
-                quota:{
-                type: Object,
-                value: 
-                {
-                    'id':'2558',
-                    'period':[
-                    {
-                        'name':'งวดที่ 1',
-                        'percent': 50,
-                        'quantity':500
-                    },
-                    ],
-                    'type_rice_id':'0',
-                }
-                },
                 year:{
                 type: String,
                 value: '2559'
-                },
-                dataYear:{
-                type: String
-                },
-                typeRice:{
-                type: String
-                },
-                sum:{
-                type: Number
-                },
-                getTypeRice:{
-                type: Array
                 },
                 data:{
                     type: Object,
@@ -231,23 +209,14 @@
                     {
                     amount:parseInt(this.sum),
                     period:this.Period,
-                    type_rice_id:this.typeRice
+                    type_rice_id:this.typeRice,
                     }
                 }
-                if(this.status == 'post')
+                console.log(datas);
+               if(this.status == 'post')
                     this.fire('post-data',datas); 
                 else if (this.status == 'update')
-                    this.fire('put-data',datas);       
-                /*console.log(datas);
-                axios.post('/eu/quota',datas)
-                .then((response)=>{
-                console.log("success");
-                console.log(response);
-                })
-                .catch((error)=>{
-                console.log("error");
-                console.log(error);
-                });*/
+                    this.fire('put-data',datas);      
             },
             testNum:function(ob,param){
                 //console.log(typeof ob.value);

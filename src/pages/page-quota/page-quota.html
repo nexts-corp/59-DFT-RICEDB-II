@@ -260,8 +260,11 @@
           });
         },
         _deleteData:function(e){
-          console.log(e.detail);
-          this.fire('toast',{status:'load'});
+          this.fire('toast',{status:'openDialog',text:'ต้องการลบข้อมูลใช่หรือไม่ ?',confirmed:this._testza,data:e.detail})
+        },
+        _testza:function(result,data){
+          console.log(result,data);
+          /*this.fire('toast',{status:'load'});
           axios.delete('/eu/quota',{
           params:{
             id:e.detail.year,
@@ -278,7 +281,7 @@
           .catch((error)=>{
             console.log("error");
             console.log(error);
-          });
+          });*/
         },
         _onDataSelect:function(e){
           this.status = 'update';
