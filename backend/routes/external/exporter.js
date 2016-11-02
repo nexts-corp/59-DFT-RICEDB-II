@@ -25,19 +25,9 @@ var schema = {
         },
         "trader_id": {
             "type": "string"
-        },
-        "seller_agent": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "agent_name": { "type": "string" }
-                },
-                "required": ["agent_name"]
-            }
         }
     },
-    "required": ["exporter_no", "exporter_date_approve", "exporter_date_update", "trader_id", "seller_agent"]
+    "required": ["exporter_no", "exporter_date_approve", "exporter_date_update", "trader_id"]
 };
 var validate = ajv.compile(schema);
 
