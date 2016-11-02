@@ -48,11 +48,11 @@
         'getconfirm(contractId)'
       ],
       getconfirm:function (contractId) {
-        console.log("contractId =>",contractId);
+        // console.log("contractId =>",contractId);
       if (typeof contractId != 'undefined'){
          this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
            this.cml = data;
-            console.log(this.cml);
+            // console.log(this.cml);
             this.cl_id.items = data;
          });
        }
@@ -72,28 +72,13 @@
       //  console.log(this.data);
         // this.postDb(this.data);
         this.insert('./g2g/shipment/insert',this.data, () => {
+          //shipment-page.html
           this.fire('shipment-list', {
             data: 'editFin'
           });
           this.glQuery('addContract').getChange(false,'put');
           // console.log(11);
          });
-      },
-      postDb:function (data) {
-        axios.post('./g2g/shipment/insert', data)
-                  .then( (response)=> {
-                    console.log("success");
-                    console.log(response);
-                    // this.glQuery('addContract').getChange();
-                    // this.glQuery('contentPanel').changDrawer();
-                    this.fire('shipmentedit', {
-                      data: 'editFin'
-                    });
-                  })
-                  .catch( (error)=> {
-                    console.log("error");
-                    console.log(error);
-                  })
       },
       getDb:function (url,callback) {
         // console.log(url);
@@ -116,6 +101,12 @@
         this.glQuery('layoutMain').openToastSaveing();
         // console.log(  this.updateShipment);
         this.putDb(this.updateShipment);
+        // this.update('./g2g/shipment/update',this.updateShipment, () => {
+        //   // this.glQuery('addContract').getChange(false,'put');
+        //   // this.fire('shipmentedit', {
+        //   //   data: 'editFin'
+        //   // });
+        //  });
       },
       putDb:function (data) {
         axios.put('./g2g/shipment/update', data)
@@ -124,9 +115,9 @@
                     console.log(response);
                     console.log(data);
                     this.glQuery('addContract').getChange(false,'put');
-                    this.fire('shipmentedit', {
-                      data: 'editFin'
-                    });
+                      this.fire('shipmentedit', {
+                        data: 'editFin'
+                      });
                   })
                   .catch(function (error) {
                     console.log("error");
