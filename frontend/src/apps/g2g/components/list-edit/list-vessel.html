@@ -116,7 +116,7 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,10]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
-        <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="clickInsert" >เพิ่มผู้ส่งออก</paper-button>
+        <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="displayInsert" >เพิ่มผู้ส่งออก</paper-button>
       </gl-grid-col>
     </gl-grid-row>
     <div id="changeDivcss" hidden="[[!btnAdd]]">
@@ -294,7 +294,7 @@
 
 
       <gl-form-panel-footer>
-        <paper-button class="gl-btn-danger" raised index="[[index]]" on-tap="clickCancel">
+        <paper-button class="gl-btn-danger" raised index="[[index]]" on-tap="displayInsert">
           </iron-icon>ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" raised index="[[index]]" on-tap="clickSubmit">
           </iron-icon>บันทึก</paper-button>
@@ -350,9 +350,9 @@
     </div>
     <div class="horizontal end-justified layout">
         <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
-          <!-- <template is="dom-if" if="[[!checkBtnView(checkBtn)]]"> -->
-          <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันผู้ส่งออก</paper-button>
-          <!-- </template> -->
+          <template is="dom-if" if="[[!checkBtnView(checkBtn)]]">
+          <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
+          </template>
         </template>
     </div>
   </div>
@@ -432,6 +432,16 @@
                 pageEditShipment:{
                   type:String,
                   value:'view'
+                },
+                updateShipment:{
+                  type:Object,
+                  value:{
+                    id:'',
+                    shm_name:'',
+                    contract_id:'',
+                    shm_no:'',
+                    shm_status:'',
+                  }
                 }
             },
             observers: [
@@ -456,25 +466,21 @@
             },
             finEdit:function (e) {
               this.pageEditShipment = 'view';
-              console.log(e);
+              // console.log(e);
             },
             _shipmentDetailDelete:function (e) {
               // this.deleteDb(e.currentTarget.id);
-              console.log(e.detail.data);
+              // console.log(e.detail.data);
               this.delete('./g2g/shipment/detail/delete/id/',e.detail.data, () => {
                 this.glQuery('addContract').getChange(false,'delete');
                });
               this.glQuery('layoutMain').openToastDeleteing();
             },
             _saveChangeShipment:function(e){
-              // console.log(e.detail);
-              // console.log(e.detail.index);
-              // console.log(e.detail.data);
               // console.log(this.data.shipment_detail[e.detail.index]=e.detail.data);
-              // this.putDb(this.data.shipment_detail[e.detail.index]=e.detail.data);
               var data = this.data.shipment_detail[e.detail.index]=e.detail.data;
               this.update('./g2g/shipment/detail/update', data,() => {
-                // this.clickCancel();
+                // this.displayInsert();
                 this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
                 this.editInput();
                });
@@ -482,21 +488,10 @@
               this.glQuery('layoutMain').openToastSaveing();
             },
 
-            clickInsert: function() {
-                // var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-                // if (css.classList.contains('hide') == true) {
-                    // css.classList.remove("hide");
-                    // css.classList.add("show");
-                    // this.$$('#removeButtom').setAttribute("hidden", "hidden");
+            displayInsert: function() {
                     this.btnAdd= !this.btnAdd;
-                // }
             },
             clickSubmit: function(){
-              // this.data.id = this.data.shm_id;
-              // console.log(this.data);
-              // delete this.data.shm_id;
-              // var eta_date=new Date (this.shipment.eta_date);//.concat('T00:00:00.000Z');
-              // console.log(this.shipment);
               this.shipment.shm_id=this.data.shm_id;
               this.shipment.eta_date=new Date (this.shipment.eta_date);
               this.shipment.etd_date=new Date (this.shipment.etd_date);
@@ -515,7 +510,6 @@
               })
               // console.log(check);
               //เช็คว่ายังเหลือค่าที่ไมไ่ด้เติมไหม ถา้ไม่ก็ส่งเลย
-              // console.log(this.shipment);
               if (check <= 0) {
                 this.glQuery('layoutMain').openToastSaveing();
                 this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
@@ -549,12 +543,12 @@
                    this.sumNw ='';
                    this.nw ='';
                    this.tw ='';
-                  this.clickCancel();
+                  this.displayInsert();
                  });
               }
             },
             deleteShipment:function (e) {
-              console.log(this.data.shm_id);
+              // console.log(this.data.shm_id);
               // this.deleteShipmentDb(e.detail.data);
 
               this.glQuery('layoutMain').openToastDeleteing();
@@ -566,14 +560,24 @@
                 this.glQuery('addContract').getChange(true,'delete');
                });
             },
+            approveShipment:function () {
+              this.data.shm_status = !this.data.shm_status ;
+                // console.log(this.data.shm_status);
 
-            clickCancel: function(){
-              // var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-              // if (css.classList.contains('show') == true) {
-              //     css.classList.remove("show");
-              //     css.classList.add("hide");
-                  this.btnAdd= !this.btnAdd;
-              // }
+                this.updateShipment.id = this.data.shm_id;
+                this.updateShipment.shm_name = this.data.shm_name;
+                this.updateShipment.contract_id = this.data.contract_id;
+                this.updateShipment.shm_no = this.data.shm_no;
+                this.updateShipment.cl_id = this.data.cl_id;
+                this.updateShipment.shm_status = this.data.shm_status;
+                // console.log(this.updateShipment);
+                this.update('./g2g/shipment/update',this.updateShipment, () => {
+                  this.glQuery('addContract').getChange(false,'put');
+                    this.fire('select', {
+                      data: 'editFin'
+                    });
+
+                 });
             },
         });
     </script>
