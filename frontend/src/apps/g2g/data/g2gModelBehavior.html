@@ -47,6 +47,23 @@
                   })
 
       },
+      //READ
+      // Exsameple
+      // this.read('./common/buyer',(data)=>{
+      //   this.buyyer=data;
+      // },false,'put');
+      read:function (url,callback,refresh,action) {
+        axios.get(url)
+              .then((response)=> {
+                console.log("success");
+                callback(response.data);
+                // actionInpage();
+              })
+              .catch((error)=> {
+                console.log("error");
+                console.log(error);
+              })
+      },
       // UPDATE
       // Exsameple
       // this.update('./g2g/contract/update',this.Newdata, () => {

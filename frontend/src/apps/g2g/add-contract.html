@@ -5,6 +5,8 @@
 <link rel="import" href="components/vessel/shipment-page.html">
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <link rel="import" href="../../../bower_components/chart-elements/chart-elements.html">
+<link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="components/promise/promise-detail-insert.html">
 <dom-module id="g2g-add-contract">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
         * {
@@ -16,6 +18,14 @@
             width: 600px;
             /*height: 462px;*/
             margin: 5px 15px 15px 10px;
+          }
+          --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+          --paper-fab:{
+            background-color: var(--paper-light-blue-500);
+            position: absolute;
+            right:   30px;
+            bottom:   20px;
+            /*margin-top:55%;*/
           }
         }
         .left {
@@ -95,7 +105,7 @@
                 </template>
                 <paper-card class="horizontal layout center center-justified">
                   <div class="card-content">[[layerContent]]
-                    <paper-button raised class="gl-large gl-btn-primary">Create New Contract</paper-button>
+                    <!-- <paper-button raised class="gl-large gl-btn-primary" on-tap="createContract">Create New Contract</paper-button> -->
                   </div>
                 </paper-card>
              </div>
@@ -131,8 +141,10 @@
               <div name="third">
                 <shipment-page data="[[dataContract]]"
                                ship-ment="[[shipMent]]"
-
                 ></shipment-page>
+              </div>
+              <div name="four">
+                <promise-detail-insert buyyer="[[buyyer]]" type-rice="[[typeRice]]"></promise-detail-insert>
               </div>
             </iron-pages>
 
@@ -141,7 +153,8 @@
       </panel>
 
       </content-panel>
-
+      <paper-fab icon="add" title="heart" id="addContract" on-tap="createContract"></paper-fab>
+      <paper-tooltip for="addContract" offset="0">Create Contract</paper-tooltip>
     </template>
     <script>
         Polymer({
@@ -155,7 +168,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                g2gModelBehavior
             ],
             properties: {
                 layerContent: {
@@ -189,7 +203,10 @@
             },
             ready: function() {
               // console.log(this.loaded);
-              // list county
+              this.read('./common/buyer',(data)=>{
+                this.buyyer=data;
+              },false,'put');
+
               this.getChange(false,'get');
               // list riceType
               this.getDb('./common/typeRice',(data)=>{
@@ -305,6 +322,10 @@
             },
             test:function () {
               console.log('เข้าโวยยยยยยยยยย');
+            },
+            createContract:function () {
+              this.layerContent='four';
+              this.glQuery('contentPanel').changDrawer();
             },
             editContract:function (e) {
               this.layerContent="primary";
