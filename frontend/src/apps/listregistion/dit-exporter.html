@@ -106,7 +106,7 @@
             <div name="detailRegExporter">
               <renew-memberShow exporter-id="[[exporterId]]" data={{dataSelect}}></renew-memberShow>
               <div class="horizontal center-justified layout">
-                <paper-button raised class="gl-btn-success button" on-tap="_retrader">ต่ออายุ</paper-button>
+                <paper-button raised class="gl-btn-danger button" on-tap="_retrader">ต่ออายุ คน.</paper-button>
               </div>
             </div>
           </iron-pages>
@@ -173,23 +173,23 @@
             },
             attached: function() {
                 this.getExporters();
+                this.getIdExporters();
             },
             getExporters: function(){
-              this.exporter_id = this.exporter_id || this.$.exporter_id;
               this.getDb('./external/exporter/?trader_active=false', (data) => {
-                data.map((status)=>{
-                  if (status.trader_active == true) {
-                    status.trader_active = "ปกติ";
-                  }
-                  else if (status.trader_active == false) {
-                    status.trader_active = "ถูกระงับ";
-                  }
-                });
-                  this.exporter_id.items = data;
                   this.exporters = data;
                   for (var i = 0; i < this.exporters.length; i++) {
                     this.exporters[i]['check'] = false;
                   }
+              });
+            },
+            getIdExporters: function(){
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
+              this.getDb('./external/exporter/?trader_active=false', (data) => {
+                data.map((type)=>{
+                  type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+                });
+                  this.exporter_id.items = data;
               });
             },
             _retrader: function(){

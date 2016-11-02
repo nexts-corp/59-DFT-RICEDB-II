@@ -235,7 +235,7 @@
             },
             attached: function() {
               this.getExporters();
-              this.getIsExporters();
+              this.getIdExporters();
             },
             getDb: function(url, callback) {
                 axios.get(url)
@@ -255,7 +255,7 @@
                   this.exporters = data;
                 });
             },
-            getIsExporters:function(){
+            getIdExporters:function(){
               this.exporter_id = this.exporter_id || this.$.exporter_id;
               this.getDb('./external/exporter?exporter_status=true', (data) => {
                 data.map((type)=>{

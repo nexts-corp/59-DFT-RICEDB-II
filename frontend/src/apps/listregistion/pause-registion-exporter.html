@@ -177,15 +177,23 @@
             },
             attached: function() {
                 this.getExporters();
+                this.getIdExporters();
             },
             getExporters: function(){
-              this.exporter_id = this.exporter_id || this.$.exporter_id;
               this.getDb('./external/exporter/?exporter_active=false', (data) => {
-                  this.exporter_id.items = data;
                   this.exporters = data;
                   for (var i = 0; i < this.exporters.length; i++) {
                     this.exporters[i]['check'] = false;
                   }
+              });
+            },
+            getIdExporters: function(){
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
+              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+                data.map((type)=>{
+                  type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+                });
+                  this.exporter_id.items = data;
               });
             },
             _active: function(){
