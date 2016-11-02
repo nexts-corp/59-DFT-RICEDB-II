@@ -61,7 +61,7 @@
         <panel-seleted>
 
          <section-content name="detail">
-           <edit-noshipment contract-id="[[data.contract_id]]" insert="{{insert}}"></edit-noshipment>
+           <edit-noshipment contract-id="[[data.contract_id]]" insert-page="{{insert}}"></edit-noshipment>
          </section-content>
          <section-content name="print">
              <vessel-print></vessel-print>
@@ -92,11 +92,13 @@
       },
       listeners: {
           'select': 'selectedPage',
+          'shipment-list':'selectedPage'
       },
       observers:[
         'check(shipMent)',
       ],
       selectedPage:function (e) {
+        console.log(1111);
         this.layerConfirm = 0;
       },
       check:function (shipMent) {

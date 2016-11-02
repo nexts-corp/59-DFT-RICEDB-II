@@ -422,7 +422,8 @@
             ],
             listeners: {
                'shipmentedit':'finEdit',
-               'save-Data-shipmentDetail':'_saveChangeShipment'
+               'save-Data-shipmentDetail':'_saveChangeShipment',
+               'delete-Data-shipmentDetail':'_shipmentDetailDelete'
              },
 
             ready: function() {
@@ -439,8 +440,12 @@
               this.pageEditShipment = 'view';
               console.log(e);
             },
-            shipmentDelete:function (e) {
-              this.deleteDb(e.currentTarget.id);
+            _shipmentDetailDelete:function (e) {
+              // this.deleteDb(e.currentTarget.id);
+              console.log(e.detail.data);
+              this.delete('./g2g/shipment/detail/delete/id/',e.detail.data, () => {
+                this.glQuery('addContract').getChange(false,'delete');
+               });
               this.glQuery('layoutMain').openToastDeleteing();
             },
             _saveChangeShipment:function(e){
@@ -544,28 +549,26 @@
                           console.log(data);
                         })
             },
-            deleteShipment:function () {
-              // this.deleteShipmentDb(this.data.shm_id);
-              this.delete('./g2g/shipment/delete/id/',this.data.shm_id, () => {
-                this.glQuery('addContract').getChange(false,'delete');
-               });
-              // console.log(this.data.shm_id);
+            _deleteShipment:function (e) {
+              // this.deleteShipmentDb(e.detail.data);
+
+              console.log(this.data.shm_id);
               this.glQuery('layoutMain').openToastDeleteing();
             },
-            // deleteShipmentDb:function (dataId) {
-            //   axios.delete('./g2g/shipment/delete/id/'+dataId)
-            //             .then((response)=> {
-            //               console.log("success");
-            //               console.log(response);
-            //               console.log('delete');
-            //               // console.log(this.data.shm_id);
-            //               this.glQuery('addContract').getChange(false,'delete');
-            //             })
-            //             .catch( (error)=> {
-            //               console.log("error");
-            //               // console.log(error);
-            //             })
-            // },
+            deleteShipmentDb:function (dataId) {
+              axios.delete('./g2g/shipment/delete/id/'+dataId)
+                        .then((response)=> {
+                          console.log("success");
+                          console.log(response);
+                          console.log('delete');
+                          // console.log(this.data.shm_id);
+                          this.glQuery('addContract').getChange(false,'delete');
+                        })
+                        .catch( (error)=> {
+                          console.log("error");
+                          // console.log(error);
+                        })
+            },
             //delete shipment detail
             deleteDb:function (dataId) {
               axios.delete('./g2g/shipment/detail/delete/id/'+dataId)

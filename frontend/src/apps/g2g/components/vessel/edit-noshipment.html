@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/g2gModelBehavior.html">
 <dom-module id="edit-noshipment">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
     :host {
@@ -27,7 +28,10 @@
   <script >
     Polymer({
       is: "edit-noshipment",
-      behaviors: [ gl.behavior.core],
+      behaviors: [
+          gl.behavior.core,
+          g2gModelBehavior
+      ],
       properties: {
         updateShipment: {
           type: Object,
@@ -44,18 +48,18 @@
         'getconfirm(contractId)'
       ],
       getconfirm:function (contractId) {
-        // console.log("contractId =>",contractId);
-      //if (typeof contractId != 'undefined'){
-      //    this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-       //     this.cml = data;
-            // console.log(this.cml);
-            // this.cl_id.items = data;
-      //    });
-     //   }
+        console.log("contractId =>",contractId);
+      if (typeof contractId != 'undefined'){
+         this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
+           this.cml = data;
+            console.log(this.cml);
+            this.cl_id.items = data;
+         });
+       }
       },
       checkInsertOrUpdate:function () {
-        console.log(this.insert == true);
-        if (this.insert != true) {
+        // console.log(this.insert == true);
+        if (this.insertPage != true) {
             this.update();
         }else {
           // console.log(this.contractId);
@@ -64,8 +68,16 @@
       },
       insertShipment:function () {
         this.data.contract_id= this.contractId;
+        this.data.shm_status = false;
       //  console.log(this.data);
-        this.postDb(this.data);
+        // this.postDb(this.data);
+        this.insert('./g2g/shipment/insert',this.data, () => {
+          this.fire('shipment-list', {
+            data: 'editFin'
+          });
+          this.glQuery('addContract').getChange(false,'put');
+          // console.log(11);
+         });
       },
       postDb:function (data) {
         axios.post('./g2g/shipment/insert', data)

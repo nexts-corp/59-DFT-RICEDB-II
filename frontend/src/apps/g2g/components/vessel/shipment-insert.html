@@ -60,19 +60,20 @@
         'getconfirm(contractId)'
       ],
       getconfirm:function (contractId) {
-      //if (typeof contractId != 'undefined'){
-      //    this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-        //    this.cml = data;
+      if (typeof contractId != 'undefined'){
+         this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
+           this.cml = data;
             // console.log(this.cml);
-            // this.cl_id.items = data;
-        //  });
-        //}
+            this.cl_id.items = data;
+         });
+        }
       },
 
       insertShipment:function () {
         this.shipMent.contract_id= this.contractId;
-      //  console.log(this.shipMent);
-        this.postDb(this.shipMent);
+        this.shipMent.shm_status = false;
+       console.log(this.shipMent);
+        // this.postDb(this.shipMent);
       },
       postDb:function (data) {
         axios.post('./g2g/shipment/insert', data)
