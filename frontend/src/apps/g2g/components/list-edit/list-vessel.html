@@ -499,92 +499,55 @@
               // console.log(this.shipment);
               if (check <= 0) {
                 this.glQuery('layoutMain').openToastSaveing();
-                // this.postDb(this.shipment);
-                // console.log(11);
+                this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
+                  this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
+                  this.shipment = {
+                    exporter_id:'',
+                    shipline_id:'',
+                    ship_id:'',
+                    surveyor_id:'',
+                    ship_voy_no:'',
+                    ship_lot_no:'',
+                    book_no:'',
+                    bl_no:'',
+                    carrier_id:'',
+                    load_port_id:'',
+                    etd_date:'',
+                    eta_date:'',
+                    dest_port_id:'',
+                    deli_port_id:'',
+                    num_of_container:'',
+                    packing_date:'',
+                    packing_time:'',
+                    weight_per_container:'',
+                    product_date:'',
+                    type_rice_id:'',
+                    package_id:'',
+                    shm_det_quantity:'',};
+                  this.quantityBag ='';
+                   this.sumGW ='';
+                   this.gw  ='';
+                   this.sumNw ='';
+                   this.nw ='';
+                   this.tw ='';
+                  this.clickCancel();
+                 });
               }
             },
-            //insert
-            postDb:function (data) {
-              axios.post('./g2g/shipment/detail/insert', data)
-              // axios.put('http://localhost:3000/api/g2g/shipment/update', data)
-                        .then( (response)=> {
-                          console.log("success");
-                          console.log(response);
-                          console.log(data);
-                          this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-                          this.shipment = {
-                            exporter_id:'',
-                            shipline_id:'',
-                            ship_id:'',
-                            surveyor_id:'',
-                            ship_voy_no:'',
-                            ship_lot_no:'',
-                            book_no:'',
-                            bl_no:'',
-                            carrier_id:'',
-                            load_port_id:'',
-                            etd_date:'',
-                            eta_date:'',
-                            dest_port_id:'',
-                            deli_port_id:'',
-                            num_of_container:'',
-                            packing_date:'',
-                            packing_time:'',
-                            weight_per_container:'',
-                            product_date:'',
-                            type_rice_id:'',
-                            package_id:'',
-                            shm_det_quantity:'',};
-                          this.quantityBag ='';
-                           this.sumGW ='';
-                           this.gw  ='';
-                           this.sumNw ='';
-                           this.nw ='';
-                           this.tw ='';
-                          this.clickCancel();
-                        })
-                        .catch( (error)=> {
-                          console.log("error");
-                          console.log(error);
-                          console.log(data);
-                        })
-            },
-            _deleteShipment:function (e) {
+            deleteShipment:function (e) {
+              console.log(this.data.shm_id);
               // this.deleteShipmentDb(e.detail.data);
 
-              console.log(this.data.shm_id);
               this.glQuery('layoutMain').openToastDeleteing();
+              this.delete('./g2g/shipment/delete/id/',this.data.shm_id, () => {
+
+                this.fire('shipment-list', {
+                  data: 'editFin'
+                });
+                this.glQuery('addContract').getChange(true,'delete');
+               });
             },
-            deleteShipmentDb:function (dataId) {
-              axios.delete('./g2g/shipment/delete/id/'+dataId)
-                        .then((response)=> {
-                          console.log("success");
-                          console.log(response);
-                          console.log('delete');
-                          // console.log(this.data.shm_id);
-                          this.glQuery('addContract').getChange(false,'delete');
-                        })
-                        .catch( (error)=> {
-                          console.log("error");
-                          // console.log(error);
-                        })
-            },
-            //delete shipment detail
-            deleteDb:function (dataId) {
-              axios.delete('./g2g/shipment/detail/delete/id/'+dataId)
-                        .then( (response)=> {
-                          console.log("success");
-                          console.log(response);
-                          console.log(this.data.shm_id);
-                          console.log('ก่อนลบ');
-                          this.glQuery('addContract').shipMentDeatil(this.data.shm_id,false,'delete');
-                          console.log('หลังลบ');
-                        })
-                        .catch( (error)=> {
-                          console.log("error");
-                          // console.log(error);
-                        })
-            },
+
             clickCancel: function(){
               var css = Polymer.dom(this.root).querySelector('#changeDivcss');
               if (css.classList.contains('show') == true) {
