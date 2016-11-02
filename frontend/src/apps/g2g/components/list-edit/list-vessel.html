@@ -55,7 +55,12 @@
       text-transform: none;
       color: #eeff41;
     }
-
+    .title{
+      text-align: center;
+      font-size: var(--font-size-h4);
+      font-family: 'rsubold', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
     .mar-head {
       margin-left: 10px;
       margin-bottom: 10px;
@@ -90,14 +95,13 @@
   </style>
   <template>
     <div class="horizontal end-justified layout">
-        <!-- <template is="dom-if" if="[[!data.contract_status]]"> -->
+        <template is="dom-if" if="[[!data.shm_status]]">
           <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment" ></paper-icon-button>
           <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
-        <!-- </template> -->
+          <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment"></paper-icon-button>
+          <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
+        </template>
 
-      <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment"></paper-icon-button>
-
-      <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
     </div>
     <content id="primary" select="items[type=primary]"></content>
 
@@ -112,10 +116,10 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,10]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
-        <paper-button id="removeButtom" class="gl-btn-primary" raised on-tap="clickInsert" hidden>เพิ่มผู้ส่งออก</paper-button>
+        <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="clickInsert" >เพิ่มผู้ส่งออก</paper-button>
       </gl-grid-col>
     </gl-grid-row>
-    <div id="changeDivcss" class="hide">
+    <div id="changeDivcss" hidden="[[!btnAdd]]">
 
         <gl-form-panel-body>
           <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
@@ -331,7 +335,7 @@
         <div class="collapse-content">
           <div class="bd">
 
-                <vessel-edit data="{{itemPrimary}}" index="[[index]]"
+                <vessel-edit data="{{itemPrimary}}" index="[[index]]" approve="[[data.shm_status]]"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[data.contract_id]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
               <!-- </iron-pages> -->
@@ -373,6 +377,10 @@
                 county:{
                     type:String,
                     value:'TH'
+                },
+                btnAdd:{
+                    type:Boolean,
+                    value:false
                 },
                 shipline:{
                   type:Object,
@@ -435,10 +443,10 @@
                'save-Data-shipmentDetail':'_saveChangeShipment',
                'delete-Data-shipmentDetail':'_shipmentDetailDelete'
              },
-
-            ready: function() {
-              this.$$('#removeButtom').removeAttribute("hidden");
-            },
+            //
+            // ready: function() {
+            //   this.$$('#removeButtom').removeAttribute("hidden");
+            // },
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
@@ -475,12 +483,13 @@
             },
 
             clickInsert: function() {
-                var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-                if (css.classList.contains('hide') == true) {
-                    css.classList.remove("hide");
-                    css.classList.add("show");
-                    this.$$('#removeButtom').setAttribute("hidden", "hidden");
-                }
+                // var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+                // if (css.classList.contains('hide') == true) {
+                    // css.classList.remove("hide");
+                    // css.classList.add("show");
+                    // this.$$('#removeButtom').setAttribute("hidden", "hidden");
+                    this.btnAdd= !this.btnAdd;
+                // }
             },
             clickSubmit: function(){
               // this.data.id = this.data.shm_id;
@@ -559,12 +568,12 @@
             },
 
             clickCancel: function(){
-              var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-              if (css.classList.contains('show') == true) {
-                  css.classList.remove("show");
-                  css.classList.add("hide");
-                  this.$$('#removeButtom').removeAttribute("hidden");
-              }
+              // var css = Polymer.dom(this.root).querySelector('#changeDivcss');
+              // if (css.classList.contains('show') == true) {
+              //     css.classList.remove("show");
+              //     css.classList.add("hide");
+                  this.btnAdd= !this.btnAdd;
+              // }
             },
         });
     </script>
