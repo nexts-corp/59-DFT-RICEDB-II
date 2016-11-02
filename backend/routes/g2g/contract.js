@@ -47,7 +47,7 @@ var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.table("contract")
-            .filter({ contract_status: true })
+            //.filter({ contract_status: true })
             .merge(function (row) {
                 return {
                     contract_id: row('id'),

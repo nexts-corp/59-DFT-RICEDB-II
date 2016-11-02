@@ -136,7 +136,7 @@ router.get('/id/:pay_id', function (req, res, next) {
                                                     amount_usd: m2('price_per_ton').mul(m2('weight_net'))
                                                 }
                                             })
-                                            .without('id', 'cl_type_rice')
+                                             .without('id', 'cl_type_rice')
                                     }
                                 })
                                 .merge(function (m) {
@@ -159,11 +159,6 @@ router.get('/id/:pay_id', function (req, res, next) {
                                 .merge(function (m) {
                                     return r.table("ship").get(m('ship_id')).without('id'),
                                         r.table("shipline").get(m('shipline_id')).without('id')
-                                })
-                                .merge(function (m) {
-                                    return {
-
-                                    }
                                 })
                         })
                     })
