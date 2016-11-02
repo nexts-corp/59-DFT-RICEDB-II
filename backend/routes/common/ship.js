@@ -48,58 +48,5 @@ router.get('/id/:ship_id', function (req, res, next) {
             });
     })
 });
-// router.get('/shipline/:shipline_id', function (req, res, next) {
-//     db.query(function (conn) {
-//         r.table("ship")
-//             .filter({ "shipline_id": req.params.shipline_id })
-//             .merge({
-//                 ship_id: r.row('id')
-//             },
-//                 r.table("shipline").get(r.row("shipline_id"))
-//             )
-//             .without('id')
-//             .run(conn, function (err, cursor) {
-//                 console.log(err);
-//                 if (!err) {
-//                     cursor.toArray(function (err, result) {
-//                         if (!err) {
-//                             //console.log(JSON.stringify(result, null, 2));
-//                             res.json(result);
-//                         } else {
-//                             res.json(null);
-//                         }
-//                     });
-//                 } else {
-//                     res.json(null);
-//                 }
-//             });
-//     })
-// });
-router.get('/:field_name/id/:value_id', function (req, res, next) {
-    db.query(function (conn) {
-        r.table("ship")
-            .filter({ [req.params.field_name + "_id"]: req.params.value_id })
-            .merge(
-            {
-                ship_id: r.row('id')
-            }
-            , r.table(req.params.field_name).get(req.params.value_id)
-            )
-            .without('id')
-            .run(conn, function (err, cursor) {
-                if (!err) {
-                    cursor.toArray(function (err, result) {
-                        if (!err) {
-                            console.log(JSON.stringify(result, null, 2));
-                            res.json(result);
-                        } else {
-                            res.json(null);
-                        }
-                    });
-                } else {
-                    res.json(null);
-                }
-            });
-    })
-});
+
 module.exports = router;
