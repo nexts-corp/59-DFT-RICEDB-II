@@ -27,10 +27,13 @@
 
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px">
-      <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-        <paper-icon-button icon="create" raised on-tap="editInput" title="Edit" index="[[index]]"></paper-icon-button>
-        <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
-      </gl-form-panel-head>
+      <template is="dom-if" if="[[!checkBtnView(approve)]]">
+        <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
+          <paper-icon-button icon="create" raised on-tap="editInput" title="Edit" index="[[index]]"></paper-icon-button>
+          <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
+        </gl-form-panel-head>
+      </template>
+
 
       <gl-form-panel-body>
         <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
