@@ -58,9 +58,10 @@
     <template>
       <content-panel>
         <grid>
-          <div class="horizontal center-justified layout">
-            <div id="content" class="layout vertical wrap">
-              <div id="head">
+          <div class=" center-justified layout">
+            <div id="content" class="layout vertical center-justified wrap">
+              <div id="head "class="center-justified  horizontal layout wrap">
+
                  <paper-card class="statistic" heading="Statistic" alt="Statistic">
                    <div class="card-content layout horizontal">
                      <chart-line data="[[chart]]"></chart-line>
@@ -71,9 +72,12 @@
                  </paper-card>
               </div>
               <div id="body">
-                <paper-material elevation="1">
+                <!-- <paper-material elevation="1">
                   Contract
-                </paper-material>
+                </paper-material> -->
+                <div class="center-justified  horizontal layout wrap">
+
+
                 <template is="dom-repeat" items="[[contracts]]">
                   <paper-card heading="[[item.contract_name]]" alt="[[item.contract_name]]">
                      <div class="card-content horizontal layout">
@@ -103,11 +107,13 @@
                      </div>
                    </paper-card>
                 </template>
-                <paper-card class="horizontal layout center center-justified">
+                <!-- <paper-card class="horizontal layout center center-justified">
                   <div class="card-content">[[layerContent]]
-                    <!-- <paper-button raised class="gl-large gl-btn-primary" on-tap="createContract">Create New Contract</paper-button> -->
+                    <paper-button raised class="gl-large gl-btn-primary" on-tap="createContract">Create New Contract</paper-button>
                   </div>
-                </paper-card>
+                </paper-card> -->
+                </div>
+
              </div>
             </div>
           </div>
@@ -120,7 +126,7 @@
               <div name="primary">
                 <panel-seleted>
                   <section-content name="detail">
-                    <promise-detail data="{{dataContract}}" type-rice="{{typeRice}}"></promise-detail>
+                    <promise-detail data="{{dataContract}}" type-rice="{{typeRice}}" buyyer="[[buyyer]]"></promise-detail>
                   </section-content>
                   <section-content name="print">
                       <vessel-print></vessel-print>
@@ -206,7 +212,6 @@
               this.read('./common/buyer',(data)=>{
                 this.buyyer=data;
               },false,'put');
-
               this.getChange(false,'get');
               // list riceType
               this.getDb('./common/typeRice',(data)=>{
@@ -239,13 +244,11 @@
               // list port
               this.getDb('./common/port/',(data)=>{
                 this.common.countryport =  data;
-
               },false);
               // list incoterms  ชนิดการจ่าย
               this.getDb('./common/incoterms',(data)=>{
                 this.incoterms=data;
               },false);
-
               this.chart = {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [
@@ -273,7 +276,6 @@
                   }
                 ]
                 };
-
             },
             getChange:function (refresh,action) {
               // console.log('action ',action);
@@ -292,7 +294,6 @@
               //
             },
             computeContract:function (para) {
-
                 this.dataContractChart = {
                       labels: [
                         // "ทั้งหมด (ตัน)",
@@ -349,7 +350,6 @@
               // console.log(e.detail.node);
               e.detail.node.common=this.common;
             },
-
             // getconfirm:function (contractId) {
             //     this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
             //       this.cml = data;
@@ -419,29 +419,20 @@
             },
             attached:function(){
               this.layoutMain = this.glQuery('layoutMain');
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-insert.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-confirm.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-detail.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-fileup.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-print.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-page.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               this.async(()=>{this.loaded = true;},1000);
-
             },
-
         });;
     </script>
 </dom-module>
