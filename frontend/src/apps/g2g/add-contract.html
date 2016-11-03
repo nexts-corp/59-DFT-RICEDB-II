@@ -147,6 +147,8 @@
               <div name="third">
                 <shipment-page data="[[dataContract]]"
                                ship-ment="[[shipMent]]"
+                               confirm-letter="[[cml]]"
+
                 ></shipment-page>
               </div>
               <div name="four">
@@ -171,6 +173,7 @@
                 'select': 'selecteddata',
                 'vessel-insert-common': 'shipmentCommon',
                 'vessel-edit-common' : 'shipmentCommon',
+                'get-confirm-new':'_getCml'
             },
             behaviors: [
                 gl.behavior.core,
@@ -200,7 +203,7 @@
                 }
             },
             observers:[
-              // 'getPortCountry(contractId)'
+              '_getCml(dataContract.contract_id)'
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -350,13 +353,26 @@
               // console.log(e.detail.node);
               e.detail.node.common=this.common;
             },
-            // getconfirm:function (contractId) {
-            //     this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-            //       this.cml = data;
-            //       // console.log(this.cml);
-            //       // this.cl_id.items = data;
-            //     });
-            // },
+            _getCml:function (e) {
+              // console.log(typeof e === 'string');
+              var contractId;
+              if (typeof e === 'string') {
+                  contractId = e;
+              } else {
+                contractId = e.detail.contract_id;
+              }
+              // console.log(contractId);
+              if (contractId != null) {
+                // this.async(()=>{
+                  this.read('./g2g/confirm/contract/id/'+contractId,(data)=>{
+                    // console.log('data =>', data);
+                    this.cml = data;
+                  },false,'put');
+                  // console.log('this.cml =>',this.cml);
+                // },1000);
+              }
+
+            },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
