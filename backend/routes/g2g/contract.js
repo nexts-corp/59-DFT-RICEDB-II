@@ -271,23 +271,25 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:contract_id', function (req, res, next) {
+router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    if (req.params.contract_id != '' && req.params.contract_id != null) {
-        result.id = req.params.contract_id;
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
         db.query(function (conn) {
-            var statement = r.table("contract").get(req.params.contract_id).do(function (result) {
-                return r.branch(result('contract_status').eq(false)
-                    , r.table("contract").get(req.params.contract_id).delete()
-                    , r.table("contract").get(req.params.contract_id))
+            var q = r.table("contract").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('contract_status').eq(false)
+                    , r.table("contract").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
             })
-            statement.run(conn)
+            q.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
-                        res.json(result);
                     }
+                    res.json(result);
                 })
                 .error(function (err) {
                     result.message = err;

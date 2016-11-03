@@ -207,25 +207,25 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:cl_id', function (req, res, next) {
-    //var valid = validate(req.body);
+router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.params.cl_id != '' && req.params.cl_id != null) {
-        result.id = req.params.cl_id;
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
         db.query(function (conn) {
-            r.table("confirm_letter")
-                .get(req.params.cl_id)
-                .delete()
-                .run(conn)
+            var q = r.table("confirm_letter").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('cl_status').eq(false)
+                    , r.table("confirm_letter").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
+            })
+            q.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
                     }
                     res.json(result);
-                    console.log(result);
                 })
                 .error(function (err) {
                     result.message = err;
@@ -237,9 +237,40 @@ router.delete('/delete/id/:cl_id', function (req, res, next) {
         result.message = 'require field id';
         res.json(result);
     }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
 });
+// router.delete('/delete/id/:cl_id', function (req, res, next) {
+//     //var valid = validate(req.body);
+//     var result = { result: false, message: null, id: null };
+//     //  if (valid) {
+//     //console.log(req.body);
+//     if (req.params.cl_id != '' && req.params.cl_id != null) {
+//         result.id = req.params.cl_id;
+//         db.query(function (conn) {
+//             r.table("confirm_letter")
+//                 .get(req.params.cl_id)
+//                 .delete()
+//                 .run(conn)
+//                 .then(function (response) {
+//                     result.message = response;
+//                     if (response.errors == 0) {
+//                         result.result = true;
+//                     }
+//                     res.json(result);
+//                     console.log(result);
+//                 })
+//                 .error(function (err) {
+//                     result.message = err;
+//                     res.json(result);
+//                     console.log(result);
+//                 })
+//         })
+//     } else {
+//         result.message = 'require field id';
+//         res.json(result);
+//     }
+//     // } else {
+//     //     result.message = ajv.errorsText(validate.errors);
+//     //     res.json(result);
+//     // }
+// });
 module.exports = router;
