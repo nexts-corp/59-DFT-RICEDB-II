@@ -216,7 +216,7 @@
                 value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker label="Production" class="requested"  value="{{shipment.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
+              <vaadin-date-picker label="Production Date" class="requested"  value="{{shipment.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
             </gl-grid-col>
           </gl-grid-row>
         </gl-form-panel-body>
@@ -349,6 +349,7 @@
     </template>
     </div>
     <div class="horizontal end-justified layout">
+        <paper-button class="gl-btn-danger" raised on-tap="backPage">ย้อนกลับ</paper-button>
         <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
           <template is="dom-if" if="[[!checkBtnView(checkBtn)]]">
           <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
@@ -586,13 +587,17 @@
                 this.updateShipment.shm_status = this.data.shm_status;
                 // console.log(this.updateShipment);
                 this.update('./g2g/shipment/update',this.updateShipment, () => {
-                  this.glQuery('addContract').getChange(false,'put');
+                  this.glQuery('addContract').getChange(true,'put');
                     this.fire('select', {
                       data: 'editFin'
                     });
 
                  });
             },
+            backPage:function () {
+              //shipment-page
+              this.fire('select',{data:'backPage'});
+            }
         });
     </script>
 </dom-module>

@@ -36,11 +36,11 @@
           <template is="dom-if" if="[[!data.contract_status]]">
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Contract</paper-tooltip>
+            <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
+            <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
           </template>
 
-        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
 
-        <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
       </div>
       <gl-grid-row width="{{getWidth}}">
         <gl-combo-box id="buyer_id" disabled="[[checkInput]]" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
@@ -195,6 +195,10 @@
             },
             deleteContract:function () {
               console.log(1);
+              this.delete('./g2g/contract/delete/id/',this.data.contract_id, () => {
+                this.glQuery('addContract').getChange(false,'delete');
+                this.glQuery('contentPanel').changDrawer();
+               });
             }
 
         });
