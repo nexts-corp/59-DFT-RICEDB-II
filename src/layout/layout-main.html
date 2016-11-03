@@ -4,8 +4,6 @@
 <link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
-
-
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
@@ -17,7 +15,7 @@
 
 <dom-module id="layout-main">
 	<template>
-	<style is="custom-style" include="gl-color gl-size">
+	<style is="custom-style" include="gl-color gl-size gl-toast">
 		#drawer{
 			z-index: 1;
 			--app-drawer-width: 400px;
@@ -133,7 +131,7 @@
 			<content on-toast="_toastManage"></content>
 		</app-header-layout>
 		
-		<paper-toast class="toastLoading" id="toastLoading" positionTarget duration="0" text="">
+		<paper-toast class="gl-toast-loading" id="toastLoading" positionTarget duration="0" text="">
                 <paper-spinner active></paper-spinner>
                 <span>
                     กำลังโหลด... 
@@ -201,7 +199,7 @@
 					console.log(e.detail.text);
 					//Polymer.dom(this.root).setAttribute('class', 'toastSuccess')
 					this.status = {
-						class : 'toastSuccess',
+						class : 'gl-toast-success',
 						icon : 'done',
 						content : e.detail.text || 'โหลดข้อมูลสำเร็จ'
 					}
