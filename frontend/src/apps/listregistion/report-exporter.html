@@ -36,6 +36,7 @@
        font-family: 'rsuregular', sans-serif;
          -webkit-font-smoothing: antialiased;
       margin-top: 25px;
+      margin-left: 20px;
     }
     .searchBox{
       padding: 5px;
@@ -72,23 +73,18 @@
           <!-- <div class="flex title">
               ค้นหาผู้ส่งออกข้าวไปต่างประเทศ
           </div> -->
-          <div class="searchBox searchBorder">
-            <gl-grid-row width="{{getWidth}}">
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-                <div class="textSearch">ค้นหาผู้ส่งออกข้าวไปต่างประเทศ
-                <iron-icon icon="icons:search"></iron-icon></div>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-                    item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
-              </gl-grid-col>
-            </gl-grid-row>
-          </div>
-
           <div class="flex title">
               รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท
           </div>
 
           <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="exporter_id" value="{{dataSelected.exporter_id}}" name="exporter_id"></gl-combo-box>
+              </gl-grid-col>
+            </gl-grid-row>
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -142,25 +138,52 @@
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <paper-button class="gl-btn-info buttonSearch" on-tap="_search" raised>แสดงรายงาน</paper-button>
+                <paper-button class="gl-btn-info buttonSearch" on-tap="_search" raised>ค้นหา</paper-button>
               </gl-grid-col>
             </gl-grid-row>
-            </div>
-
-          <div class="flex searchBorder">
-            <list-report data={{exporters}}>
-              <items type="primary">
-                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="seller_tax_id" label="เลขประจำตัวผู้เสียภาษี" width="flex"></list>
-                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
-                <list item="type_lic_name" label="ประเภทใบอนุญาต" width="flex"></list>
-                <list item="exporter_status_name" label="สถานะสมาชิกสมาคมผู้ส่งออกฯ" width="flex"></list>
-                <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
-                <list item="exporter_active_name" label="สถานะผู้ส่งออก" width="flex"></list>
-                <!-- <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list> -->
-              </items>
-            </list-report>
           </div>
+
+          <div class="horizontal layout">
+            <!-- <div class="textSearch">ค้นหาผู้ส่งออกฯ<iron-icon icon="icons:search"></iron-icon></div>
+            <gl-combo-box style="width:25%;" id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                item-value-path="exporter_id" value="{{dataSelected.exporter_id}}" name="exporter_id" on-value-changed="_search"></gl-combo-box> -->
+            <div class="flex"></div>
+            <!-- <div class="horizontal layout"> -->
+              <iron-icon style="margin-top:25px;" icon="print"></iron-icon>
+              <gl-form-dropdown-menu style="width:20%;" placeholder="เลือกประเภทรายงาน" name="report">
+                <paper-menu class="dropdown-content" attr-for-selected="report" selected="{{report}}">
+                  <paper-item></paper-item>
+                  <paper-item id="reEx" report="reportExporter" src="/report/reportExporter.pdf">รายชื่อผู้ได้รับหนังสืออนุญาต</paper-item>
+                  <paper-item id="reCom"report="reportNameCompany" src="/report/reportNameCompany.pdf">รายชื่อบริษัทส่งออกข้าวฯ</paper-item>
+                  <paper-item id="reAdd"report="reportAddress" src="/report/reportAddress.pdf">รายชื่อและที่อยู่ของผู้ส่งออกข้าว</paper-item>
+                  <paper-item id="reName"report="reportNameExporter" src="/report/reportNameExporter.pdf">รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ</paper-item>
+                </paper-menu>
+              </gl-form-dropdown-menu>
+              <paper-button class="gl-btn-info" on-tap="_print" raised>พิมพ์รายงาน</paper-button>
+            <!-- </div> -->
+          </div>
+
+          <div id="found" hidden>
+            <div class="flex searchBorder">
+              <list-report data={{exporters}}>
+                <items type="primary">
+                  <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                  <list item="seller_tax_id" label="เลขประจำตัวผู้เสียภาษี" width="flex"></list>
+                  <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                  <list item="type_lic_name" label="ประเภทใบอนุญาต" width="flex"></list>
+                  <list item="exporter_status_name" label="สถานะสมาชิกสมาคมผู้ส่งออกฯ" width="flex"></list>
+                  <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
+                  <list item="exporter_active_name" label="สถานะผู้ส่งออก" width="flex"></list>
+                  <!-- <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list> -->
+                </items>
+              </list-report>
+            </div>
+          </div>
+        </div>
+        <div id="notfound" hidden>
+        <div class="horizontal center-justified layout searchBorder">
+          ไม่พบข้อมูลที่ค้นหา
+        </div>
         </div>
 
         </paper-material>
@@ -172,7 +195,7 @@
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
               <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]"></register-pageRegister></div>
               <div name="detailRegExporter">
-                <renew-page exporter-id="[[exporterId]]" data={{dataSelect}}></renew-page>
+                <renew-page data={{dataSelect}}></renew-page>
               </div>
 
             </iron-pages>
@@ -206,6 +229,7 @@
               }
             },
             _exporterIdChanged:function(val){
+              // console.log(val);
               if(val!=""){
                 this.layerContent = "detailRegExporter";
               }
@@ -237,6 +261,10 @@
               this.getExporters();
               this.getIdExporters();
             },
+            ready: function() {
+              this.$$('#found').removeAttribute("hidden");
+              this.$$('#notfound').setAttribute("hidden", "hidden");
+            },
             getDb: function(url, callback) {
                 axios.get(url)
                     .then(function(response) {
@@ -265,6 +293,7 @@
               });
             },
             _search: function(){
+              // console.log(this.dataSelected);
               var str='';
               for( key in this.dataSelected){
                   if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
@@ -279,8 +308,38 @@
                     empty.exporter_active_name = "-";
                   }
                 });
-                this.exporters = data;
+                if (data == '') {
+                  // alert('ไม่พบข้อมูลที่ค้นหา');
+                  this.$$('#notfound').removeAttribute("hidden");
+                  this.$$('#found').setAttribute("hidden", "hidden");
+                }
+                else if (data != '') {
+                  this.exporters = data;
+                  this.$$('#found').removeAttribute("hidden");
+                  this.$$('#notfound').setAttribute("hidden", "hidden");
+                }
               })
+            },
+            _print:function(e) {
+              if (this.report == 'reportExporter') {
+                window.location = this.resolveUrl(this.$$('#reEx').getAttribute("src"));
+                // console.log('รายชื่อผู้ได้รับหนังสืออนุญาต');
+              }
+              else if (this.report == 'reportNameCompany') {
+                window.location = this.resolveUrl(this.$$('#reCom').getAttribute("src"));
+                // console.log('รายชื่อบริษัทส่งออกข้าวฯ');
+              }
+              else if (this.report == 'reportAddress') {
+                window.location = this.resolveUrl(this.$$('#reAdd').getAttribute("src"));
+                // console.log('รายชื่อและที่อยู่ของผู้ส่งออกข้าว');
+              }
+              else if (this.report == 'reportNameExporter') {
+                window.location = this.resolveUrl(this.$$('#reName').getAttribute("src"));
+                // console.log('รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ');
+              }
+            },
+            importTextData:function() {
+              var test = "Hi Ice";
             }
         });
     </script>
