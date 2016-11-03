@@ -76,7 +76,7 @@
         </div>
 
     <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">//{{data.buyer_address}}
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
             <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
             <gl-form-textarea disabled rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
         </gl-grid-col>
@@ -168,9 +168,12 @@
 
               this.glQuery('layoutMain').openToastSaveing();
                 this.insert('./g2g/contract/insert',this.Newdata, () => {
-                  this.glQuery('addContract').getChange(false,'put');
+                  this.glQuery('addContract').getChange(true,'put');
                  });
             },
+            cancelDrawer:function () {
+              this.glQuery('contentPanel').changDrawer();
+            }
 
         });
     </script>
