@@ -212,14 +212,9 @@
                   type:Object,
                   value:{}
                 },
-                chartDatas:{
-                  type:Array,
-                  value:[]
-                },
             },
             observers:[
               '_getCml(dataContract.contract_id)',
-              '_chartData(contracts)'
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -311,45 +306,6 @@
                 this.shipMentDeatil(e.detail.data.shm_id,false,'get');
               }
               //
-            },
-            _chartData:function (data) {
-              // console.log(data);
-              data.map((el,index)=>{
-                this.push('chartDatas', {
-                  contract_quantity_confirm: el.contract_quantity_confirm,
-                  contract_quantity_confirm_balance: el.contract_quantity_confirm_balance,
-                });
-                // console.log(index);
-              });
-              // console.log(this.chartDatas);
-              // console.log(para.base.contract_quantity_confirm);
-              // console.log(para.base.contract_quantity_confirm_balance);
-              //   this.dataContractChart = {
-              //         labels: [
-              //           // "ทั้งหมด (ตัน)",
-              //           "ทำสัญญาแล้ว (ตัน)",
-              //           "คงเหลือ (ตัน)"
-              //         ],
-              //         datasets: [
-              //           {
-              //             data: [
-              //                   //  para.base.contract_quantity_total,
-              //                    para.base.contract_quantity_confirm,
-              //                    para.base.contract_quantity_confirm_balance
-              //                  ],
-              //             backgroundColor: [
-              //               "#FF6384",
-              //               "#36A2EB",
-              //               "#FFCE56"
-              //             ],
-              //             hoverBackgroundColor: [
-              //               "#FF6384",
-              //               "#36A2EB",
-              //               "#FFCE56"
-              //             ]
-              //           }]
-              //       };
-              //   // console.log("vy");
             },
             _computeChart:function (confirm,balance){
               // console.log(confirm,balance);
