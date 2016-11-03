@@ -40,7 +40,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice","contract_status"]
+    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice", "contract_status"]
 };
 var validate = ajv.compile(schema);
 
@@ -241,7 +241,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("contract")
@@ -273,13 +273,15 @@ router.put('/update', function (req, res, next) {
 });
 router.delete('/delete/id/:contract_id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    if (req.params.contract_id != '' || req.params.contract_id != null) {
+    if (req.params.contract_id != '' && req.params.contract_id != null) {
         result.id = req.params.contract_id;
         db.query(function (conn) {
-            r.table("contract")
-                .get(req.params.contract_id)
-                .delete()
-                .run(conn)
+            var statement = r.table("contract").get(req.params.contract_id).do(function (result) {
+                return r.branch(result('contract_status').eq(false)
+                    , r.table("contract").get(req.params.contract_id).delete()
+                    , r.table("contract").get(req.params.contract_id))
+            })
+            statement.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {

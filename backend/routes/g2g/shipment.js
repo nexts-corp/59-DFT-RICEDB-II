@@ -188,7 +188,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("shipment")
@@ -223,7 +223,7 @@ router.delete('/delete/id/:shm_id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.params.shm_id != '' || req.params.shm_id != null) {
+    if (req.params.shm_id != '' && req.params.shm_id != null) {
         result.id = req.params.shm_id;
         db.query(function (conn) {
             r.table("shipment")

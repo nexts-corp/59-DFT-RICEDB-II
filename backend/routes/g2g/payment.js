@@ -79,6 +79,12 @@ router.get('/', function (req, res, next) {
     db.query(function (conn) {
         r.table('payment')
             .filter({ pay_status: false })
+            .merge(function(m){
+                return {
+                    pay_id:m('id')
+                }
+            })
+            .without('id')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -402,7 +408,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("payment")
@@ -437,7 +443,7 @@ router.delete('/delete/id/:payment_id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.params.payment_id != '' || req.params.payment_id != null) {
+    if (req.params.payment_id != '' && req.params.payment_id != null) {
         result.id = req.params.payment_id;
         db.query(function (conn) {
             r.table("payment")
