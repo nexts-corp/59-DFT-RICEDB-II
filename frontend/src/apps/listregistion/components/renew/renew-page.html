@@ -176,29 +176,31 @@
       },
       _active: function(){
         // console.log(this.data);
-        var datas = {
-          exporter_date_update: new Date,
-          exporter_date_approve:new Date,
-          exporter_no:this.data.exporter_no,
-          trader_id:this.data.trader_id,
-          seller_agent:this.data.seller_agent,
-          id : this.data.exporter_id
+        if (confirm("คุณต้องการจะยกเลิกการระงับใช่ไหม?") == true) {
+          var datas = {
+            exporter_date_update: new Date,
+            exporter_date_approve:new Date,
+            exporter_no:this.data.exporter_no,
+            trader_id:this.data.trader_id,
+            seller_agent:this.data.seller_agent,
+            id : this.data.exporter_id
+          }
+          // console.log(datas);
+          this.glQuery('layoutRegistion').openToastSaveing();
+          axios.put('./external/exporter/update', datas)
+                    .then(function (response) {
+                      console.log("success");
+                      console.log(response);
+                      this.glQuery('contentPanel').changDrawer();
+                      this.glQuery('reExporter').getExporters();
+                      this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                      }.bind(this));
+                    }.bind(this))
+                    .catch(function (error) {
+                      console.log("error");
+                      console.log(error);
+                    })
         }
-        // console.log(datas);
-        this.glQuery('layoutRegistion').openToastSaveing();
-        axios.put('./external/exporter/update', datas)
-                  .then(function (response) {
-                    console.log("success");
-                    console.log(response);
-                    this.glQuery('contentPanel').changDrawer();
-                    this.glQuery('reExporter').getExporters();
-                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                    }.bind(this));
-                  }.bind(this))
-                  .catch(function (error) {
-                    console.log("error");
-                    console.log(error);
-                  })
       },
       _retrader:function(){
         var datas= {
