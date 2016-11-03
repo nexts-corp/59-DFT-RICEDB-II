@@ -168,7 +168,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("shipment_detail")
@@ -203,7 +203,7 @@ router.delete('/delete/id/:shm_det_id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.params.shm_det_id != '' || req.params.shm_det_id != null) {
+    if (req.params.shm_det_id != '' && req.params.shm_det_id != null) {
         result.id = req.params.shm_det_id;
         db.query(function (conn) {
             r.table("shipment_detail")

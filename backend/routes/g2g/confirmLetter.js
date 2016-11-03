@@ -177,7 +177,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("confirm_letter")
@@ -212,7 +212,7 @@ router.delete('/delete/id/:cl_id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.params.cl_id != '' || req.params.cl_id != null) {
+    if (req.params.cl_id != '' && req.params.cl_id != null) {
         result.id = req.params.cl_id;
         db.query(function (conn) {
             r.table("confirm_letter")
