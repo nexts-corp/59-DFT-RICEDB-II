@@ -204,7 +204,7 @@
           <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ย้อนกลับ</paper-button>
           <template is="dom-if" if="[[!checkBtnView(confirmLetter.cl_status)]]">
             <template is="dom-if" if="[[!checkBtnView(checkBtn)]]">
-            <paper-button class="gl-btn-info" raised on-tap="confirmDrawer">ยืนยันสัญญา</paper-button>
+            <paper-button class="gl-btn-info" raised on-tap="confirmApprove">ยืนยันสัญญา</paper-button>
             </template>
           </template>
           <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
@@ -260,11 +260,14 @@
               // console.log("created confirm-mation-common");
               this.fire('confirm-mation-common',{node:this});
             },
-            confirmDrawer:function () {
+            confirmApprove:function () {
               this.confirmLetter.cl_status = this.approve(this.confirmLetter.cl_status);
               this.editInput();
               this.addConfirm();
               this.glQuery('contentPanel').changDrawer();
+              // // edit-noshipment.html
+              // // console.log(this.confirmLetter);
+              // this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
             },
             editConfirm:function (data) {
               // console.log(1);
@@ -297,6 +300,11 @@
               // this.postDb(this.confirmLetter);
               this.update('./g2g/confirm/update',this.confirmLetter, () => {
                   this.glQuery('addContract').getChange(false,'put');
+                  // edit-noshipment.html
+                  // console.log(this.confirmLetter);
+                  if(this.confirmLetter.cl_status == true) {
+                    this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
+                  }
                   this.backPage();
                   this.editInput();
                });
