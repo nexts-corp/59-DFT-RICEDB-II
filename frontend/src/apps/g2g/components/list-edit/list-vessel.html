@@ -190,11 +190,11 @@
 
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-                class="requested"   item-value-path="port_id" items="{{pod}}" value="{{shipment.dest_port_id}}"></gl-combo-box>
+                class="requested"   item-value-path="port_id" items="{{pod}}" value="{{shipment.dest_port_id}}" on-value-changed="_getPlace"></gl-combo-box>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-              class="requested"     item-value-path="port_id" items="{{pod}}" value="{{shipment.deli_port_id}}"></gl-combo-box>
+              class="requested"     item-value-path="port_id" items="{{pod}}" value="{{shipment.deli_port_id}}" ></gl-combo-box>
             </gl-grid-col>
 
 
@@ -447,6 +447,8 @@
             observers: [
               'getCounty(data.country,common)',
               'calc(shipment.shm_det_quantity)',
+              '_genBl(shipment.book_no)',
+              // '_getPlace(shipment.deli_port_id)'
             ],
             listeners: {
                'shipmentedit':'finEdit',
@@ -468,6 +470,18 @@
               this.pageEditShipment = 'view';
               // console.log(e);
             },
+            _genBl:function (data) {
+              this.shipment.bl_no = data;
+              // console.log('this.shipment.bl_no =>',this.shipment.bl_no);
+              this.notifyPath('shipment.bl_no');
+            },
+            _getPlace:function (data) {
+              // console.log(data.detail.value);
+              this.shipment.deli_port_id = data.detail.value;
+              console.log("this.shipment.deli_port_id =>", this.shipment.deli_port_id );
+              this.notifyPath('shipment.deli_port_id');
+            },
+
             _shipmentDetailDelete:function (e) {
               // this.deleteDb(e.currentTarget.id);
               // console.log(e.detail.data);
