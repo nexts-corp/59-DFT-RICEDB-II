@@ -1,11 +1,5 @@
-<!--<link rel="import" href="../g2g/components/content-panel.html">
-<link rel="import" href="./components/list-edit/list-quota.html">
-<link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
-<link rel="import" href="components/calculate/calculate-setting.html">-->
 
-
-<!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
-
+<link rel="import" href="./../components/panel-right/panel-right.html">
 
 <dom-module id="page-calculate">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -149,49 +143,33 @@
         </div>
 
       </grid>
-    <panel>
-        <div class="left">
-          <calculate-setting></calculate-setting>
-        </div>
-    </panel>
+      <panel-right>
+          <template is="dom-if" if="[[rendered]]">
+            <calculate-setting></calculate-setting>
+          </template>
+        </panel-right>
     </content-panel>
     </template>
     <script>
         Polymer({
             is: "page-calculate",
-            listeners: {
-                'nx-grid-tap': 'nxGridTap'
-            },
             properties: {
                 layerContent: {
                     type: String,
                     value: "detailRegExporter"
                 },
-                result: {
-                    type: Object,
-                    observer: '_result'
-                }
             },
-            _result:function () {
-              // console.log(this.result);
-            },
-            nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
-                this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
-                if (this.layerContent === 'third') {
-                    this.vesselPage = 1;
-                } else {
-                    this.vesselPage = 0;
-                }
-                this.dataSelect = e.detail.data;
+            ready: function(){
+               Polymer.RenderStatus.afterNextRender(this,function(){
+                this.importHref(this.resolveUrl('./components/calculate-setting.html'), (e)=>{
+                    this.rendered = true;
+                }, (e)=> {
+                    console.log('error')
+                });
+              }); 
             },
             _toggleDrawer: function(e) {
-              this.glQuery('contentPanel').changDrawer();
-              this.layerContent = e.target.id;
-              // console.log(e.target.id);
+              this.$$("panel-right").toggle();
             }
         });
     </script>

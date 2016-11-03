@@ -1,14 +1,4 @@
-<!--<link rel="import" href="../g2g/components/content-panel.html">
-<link rel="import" href="./../listregistion/components/list-edit/list-registration.html">
-<link rel="import" href="./../listregistion/components/register/register-pageRegister.html">
-<link rel="import" href="./../listregistion/components/register/register-pageDetail.html">
-<link rel="import" href="./../listregistion/components/register/register-fileup.html">
-<link rel="import" href="./../../../bower_components/gl-form/gl-tabs.html">
-<link rel="import" href="./components/Receipt/print-recipt.html">-->
-
-
-<!-- <link rel="import" href="components/list-edit/list-registration-pause.html"> -->
-
+<link rel="import" href="./../components/panel-right/panel-right.html">
 
 <dom-module id="page-fee">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -212,12 +202,11 @@
         <!-- </paper-material> -->
 
       </grid>
-    <panel>
-        <div class="left">
-         <print-recipt></print-recipt>
-
-        </div>
-    </panel>
+        <panel-right>
+            <template is="dom-if" if="[[rendered]]">
+               <print-recipt></print-recipt>
+            </template>
+		</panel-right>
     </content-panel>
     </template>
     <script>
@@ -272,32 +261,19 @@
                         id: 2,
                         name: 'ผู้ส่งออกที่ถูกระงับ'
                     } ]
-                },
-                result: {
-                    type: Object,
-                    observer: '_result'
                 }
             },
-            _result:function () {
-              console.log(this.result);
-            },
-            nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
-                this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
-                if (this.layerContent === 'third') {
-                    this.vesselPage = 1;
-                } else {
-                    this.vesselPage = 0;
-                }
-                this.dataSelect = e.detail.data;
+            ready:function(){
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                this.importHref(this.resolveUrl('./components/print-recipt.html'), (e)=>{
+                    this.rendered = true;
+                }, (e)=> {
+                    console.log('error')
+                });
+                });
             },
             _toggleDrawer: function(e) {
-              this.glQuery('contentPanel').changDrawer();
-              this.layerContent = e.target.id;
-              // console.log(e.target.id);
+                this.$$('panel-right').toggle();
             }
         });
     </script>

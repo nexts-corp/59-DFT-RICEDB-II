@@ -83,7 +83,7 @@
 									<tr>
 										<td>งวดที่ : {{getIndex(index)}}</td>
                                         <td>
-                                            <gl-form-input value="{{item.month}}" auto-validate error-message="กรุณากรอกเดือน" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
+                                            <!--<gl-form-input value="{{item.month}}" auto-validate error-message="กรุณากรอกเดือน" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>-->
                                         </td>
 										<!--{{item.proportion}}-->
 										<td>
@@ -182,8 +182,8 @@
             },
             _mathProportion:function(percent,item){
                 item.quantity = (parseFloat(this.sum)*parseFloat(percent))/100;
-                //console.log(this.Period);
-                return item.quantity;
+                //console.log(parseFloat(item.quantity));
+                return parseFloat(item.quantity);
             },
             _crossCheck:function(data){
                 var sum = 0;
@@ -216,7 +216,7 @@
                if(this.status == 'post')
                     this.fire('post-data',datas); 
                 else if (this.status == 'update')
-                    this.fire('put-data',datas);      
+                    this.fire('put-data',datas); 
             },
             testNum:function(ob,param){
                 //console.log(typeof ob.value);

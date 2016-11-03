@@ -1,4 +1,4 @@
-
+<link rel="import" href="./../components/panel-right/panel-right.html">
 <dom-module id="page-confirm">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         * {
@@ -250,19 +250,17 @@
                 <!-- </paper-material> -->
 
             </grid>
-            <panel>
-                <div class="left">
-                   <confirm-allocate-edit></confirm-allocate>
-                </div>
-            </panel>
+            
         </content-panel>
+        <panel-right>
+            <template is="dom-if" if="[[rendered]]">
+               <confirm-allocate-edit></confirm-allocate-edit>
+            </template>
+		</panel-right>
     </template>
     <script>
         Polymer({
             is: "page-confirm",
-            listeners: {
-                'nx-grid-tap': 'nxGridTap'
-            },
             properties: {
                 layerContent: {
                     type: String,
@@ -305,31 +303,19 @@
                         name: 'ผู้ส่งออกที่ถูกระงับ'
                     } ]
                 },
-                result: {
-                    type: Object,
-                    observer: '_result'
-                }
+            
             },
-            _result:function () {
-              console.log(this.result);
-            },
-            nxGridTap: function(e) {
-              // console.log(e.detail.level);
-              // console.log(e.detail.data);
-              // console.log(this.layerContent );
-                this.layerContent = e.detail.level;
-                // console.log(this.layerContent);
-                if (this.layerContent === 'third') {
-                    this.vesselPage = 1;
-                } else {
-                    this.vesselPage = 0;
-                }
-                this.dataSelect = e.detail.data;
+            ready:function(){         
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e)=>{
+                    this.rendered = true;
+                }, (e)=> {
+                    console.log('error')
+                });
+                });
             },
             _toggleDrawer: function(e) {
-              this.glQuery('contentPanel').changDrawer();
-              this.layerContent = e.target.id;
-              // console.log(e.target.id);
+                 this.$$('panel-right').toggle();
             }
         });
     </script>
