@@ -72,9 +72,35 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["fe_foreign", "fe_internal", "fe_other", "pay_date_receipt", "pay_no", "rate_bank", "rate_tt", "invoice"]
+    "required": ["fe_foreign", "fe_internal", "fe_other", "pay_date_receipt", "pay_no", "rate_bank", "rate_tt", "invoice", "pay_status"]
 };
 var validate = ajv.compile(schema);
+router.get('/', function (req, res, next) {
+    db.query(function (conn) {
+        r.table('payment')
+            .filter({ pay_status: false })
+            .merge(function(m){
+                return {
+                    pay_id:m('id')
+                }
+            })
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+})
 router.get('/id/:pay_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('payment')
@@ -159,11 +185,6 @@ router.get('/id/:pay_id', function (req, res, next) {
                                 .merge(function (m) {
                                     return r.table("ship").get(m('ship_id')).without('id'),
                                         r.table("shipline").get(m('shipline_id')).without('id')
-                                })
-                                .merge(function (m) {
-                                    return {
-
-                                    }
                                 })
                         })
                     })
@@ -387,7 +408,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("payment")
@@ -417,24 +438,25 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:payment_id', function (req, res, next) {
-    //var valid = validate(req.body);
+router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.params.payment_id != '' || req.params.payment_id != null) {
-        result.id = req.params.payment_id;
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
         db.query(function (conn) {
-            r.table("payment")
-                .get(req.params.payment_id)
-                .delete()
-                .run(conn)
+            var q = r.table("payment").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('pay_status').eq(false)
+                    , r.table("payment").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
+            })
+            q.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
-                        res.json(result);
                     }
+                    res.json(result);
                 })
                 .error(function (err) {
                     result.message = err;
@@ -446,10 +468,6 @@ router.delete('/delete/id/:payment_id', function (req, res, next) {
         result.message = 'require field id';
         res.json(result);
     }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
 });
 module.exports = router;
 

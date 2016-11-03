@@ -40,14 +40,14 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice"]
+    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice", "contract_status"]
 };
 var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.table("contract")
-            .filter({ contract_status: true })
+            //.filter({ contract_status: true })
             .merge(function (row) {
                 return {
                     contract_id: row('id'),
@@ -120,6 +120,7 @@ router.get(['/', '/list'], function (req, res, next) {
             .without('id')
             .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
             .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
+            .orderBy('contract_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -240,7 +241,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("contract")
@@ -267,6 +268,37 @@ router.put('/update', function (req, res, next) {
         }
     } else {
         result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.delete('/delete/id/:id', function (req, res, next) {
+    var result = { result: false, message: null, id: null };
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
+        db.query(function (conn) {
+            var q = r.table("contract").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('contract_status').eq(false)
+                    , r.table("contract").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
+            })
+            q.run(conn)
+                .then(function (response) {
+                    result.message = response;
+                    if (response.errors == 0) {
+                        result.result = true;
+                    }
+                    res.json(result);
+                })
+                .error(function (err) {
+                    result.message = err;
+                    res.json(result);
+                    console.log(result);
+                })
+        })
+    } else {
+        result.message = 'require field id';
         res.json(result);
     }
 });

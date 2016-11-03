@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/g2gModelBehavior.html">
 <dom-module id="edit-noshipment">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-color">
     :host {
@@ -16,10 +17,11 @@
     <gl-grid-row width="{{getWidth}}">
      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
     <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no" error-message="กรุณาเลือกรายละเอียด Confirmation Letter"
-        item-value-path="cl_id" value="{{data.cl_id}}" items="{{cml}}" ></gl-combo-box>
+        item-value-path="cl_id" value="{{data.cl_id}}" items="{{confirmLetter}}" ></gl-combo-box>
      </gl-grid-col>
      </gl-grid-row>
      <div class="horizontal end-justified layout">
+       <paper-button class="gl-btn-danger" raised on-tap="backPage">ย้อนกลับ</paper-button>
        <paper-button raised on-tap="checkInsertOrUpdate" class="gl-btn-success">Save</paper-button>
      </div>
 
@@ -27,7 +29,10 @@
   <script >
     Polymer({
       is: "edit-noshipment",
-      behaviors: [ gl.behavior.core],
+      behaviors: [
+          gl.behavior.core,
+          g2gModelBehavior
+      ],
       properties: {
         updateShipment: {
           type: Object,
@@ -41,21 +46,11 @@
         }
       },
       observers:[
-        'getconfirm(contractId)'
+        // 'getconfirm(contractId)'
       ],
-      getconfirm:function (contractId) {
-        // console.log("contractId =>",contractId);
-      //if (typeof contractId != 'undefined'){
-      //    this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-       //     this.cml = data;
-            // console.log(this.cml);
-            // this.cl_id.items = data;
-      //    });
-     //   }
-      },
       checkInsertOrUpdate:function () {
-        console.log(this.insert == true);
-        if (this.insert != true) {
+        // console.log(this.insert == true);
+        if (this.insertPage != true) {
             this.update();
         }else {
           // console.log(this.contractId);
@@ -64,35 +59,16 @@
       },
       insertShipment:function () {
         this.data.contract_id= this.contractId;
+        this.data.shm_status = false;
       //  console.log(this.data);
-        this.postDb(this.data);
-      },
-      postDb:function (data) {
-        axios.post('./g2g/shipment/insert', data)
-                  .then( (response)=> {
-                    console.log("success");
-                    console.log(response);
-                    // this.glQuery('addContract').getChange();
-                    // this.glQuery('contentPanel').changDrawer();
-                    this.fire('shipmentedit', {
-                      data: 'editFin'
-                    });
-                  })
-                  .catch( (error)=> {
-                    console.log("error");
-                    console.log(error);
-                  })
-      },
-      getDb:function (url,callback) {
-        // console.log(url);
-        axios.get(url)
-          .then((response)=>{
-            callback(response.data);
-
-          })
-          .catch( (error)=> {
+        // this.postDb(this.data);
+        this.insert('./g2g/shipment/insert',this.data, () => {
+          //shipment-page.html
+          this.fire('shipment-list', {
+            data: 'editFin'
           });
-          // console.log(1);
+          this.glQuery('addContract').getChange(true,'put');
+         });
       },
       update:function () {
 
@@ -101,9 +77,16 @@
         this.updateShipment.contract_id = this.data.contract_id;
         this.updateShipment.shm_no = this.data.shm_no;
         this.updateShipment.cl_id = this.data.cl_id;
+        this.updateShipment.shm_status = this.data.shm_status;
         this.glQuery('layoutMain').openToastSaveing();
         // console.log(  this.updateShipment);
         this.putDb(this.updateShipment);
+        // this.update('./g2g/shipment/update',this.updateShipment, () => {
+        //   // this.glQuery('addContract').getChange(false,'put');
+        //   // this.fire('shipmentedit', {
+        //   //   data: 'editFin'
+        //   // });
+        //  });
       },
       putDb:function (data) {
         axios.put('./g2g/shipment/update', data)
@@ -112,15 +95,19 @@
                     console.log(response);
                     console.log(data);
                     this.glQuery('addContract').getChange(false,'put');
-                    this.fire('shipmentedit', {
-                      data: 'editFin'
-                    });
+                      this.fire('shipmentedit', {
+                        data: 'editFin'
+                      });
                   })
                   .catch(function (error) {
                     console.log("error");
                     console.log(error);
                   })
       },
+      backPage:function () {
+        //list-vessel
+        this.fire('shipmentedit',{data:'backPage'});
+      }
     });
   </script>
 </dom-module>

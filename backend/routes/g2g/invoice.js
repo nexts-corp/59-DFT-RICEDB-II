@@ -29,7 +29,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to"]
+    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to", "invoice_status"]
 };
 var validate = ajv.compile(schema);
 router.get('/', function (req, res, next) {
@@ -91,9 +91,10 @@ router.get('/', function (req, res, next) {
             }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
             .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
-            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
+            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip().filter(r.row('shm_status').eq(true))
             .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
             .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
+            .orderBy('invoice_no')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -378,7 +379,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("invoice")
@@ -408,24 +409,25 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:invoice_id', function (req, res, next) {
-    //var valid = validate(req.body);
+router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.params.invoice_id != '' || req.params.invoice_id != null) {
-        result.id = req.params.invoice_id;
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
         db.query(function (conn) {
-            r.table("invoice")
-                .get(req.params.invoice_id)
-                .delete()
-                .run(conn)
+            var q = r.table("invoice").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('invoice_status').eq(false)
+                    , r.table("invoice").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
+            })
+            q.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
-                        res.json(result);
                     }
+                    res.json(result);
                 })
                 .error(function (err) {
                     result.message = err;
@@ -437,10 +439,6 @@ router.delete('/delete/id/:invoice_id', function (req, res, next) {
         result.message = 'require field id';
         res.json(result);
     }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
 });
 module.exports = router;
 

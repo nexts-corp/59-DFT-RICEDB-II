@@ -10,6 +10,9 @@
           value:false
         }
       },
+      test:function () {
+        console.log('ถึงแล้วววว');
+      },
       editInput:function () {
         this.checkInput = !this.checkInput;
         this.checkBtn = !this.checkBtn;
@@ -20,7 +23,7 @@
       },
       //approve function
       approve:function (data) {
-        console.log(data);
+        // console.log(data);
         return data = !data;
       },
       // CRUD
@@ -43,6 +46,23 @@
                     console.log(error);
                   })
 
+      },
+      //READ
+      // Exsameple
+      // this.read('./common/buyer',(data)=>{
+      //   this.buyyer=data;
+      // },false,'put');
+      read:function (url,callback,refresh,action) {
+        axios.get(url)
+              .then((response)=> {
+                console.log("success");
+                // actionInpage();
+                callback(response.data);
+              })
+              .catch((error)=> {
+                console.log("error");
+                console.log(error);
+              })
       },
       // UPDATE
       // Exsameple

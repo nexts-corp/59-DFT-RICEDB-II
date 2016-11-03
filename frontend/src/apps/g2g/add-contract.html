@@ -5,6 +5,8 @@
 <link rel="import" href="components/vessel/shipment-page.html">
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <link rel="import" href="../../../bower_components/chart-elements/chart-elements.html">
+<link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="components/promise/promise-detail-insert.html">
 <dom-module id="g2g-add-contract">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
         * {
@@ -16,6 +18,14 @@
             width: 600px;
             /*height: 462px;*/
             margin: 5px 15px 15px 10px;
+          }
+          --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+          --paper-fab:{
+            background-color: var(--paper-light-blue-500);
+            position: relative;
+            right:   -93%;
+            bottom:   -370px;
+            /*margin-top:55%;*/
           }
         }
         .left {
@@ -48,9 +58,10 @@
     <template>
       <content-panel>
         <grid>
-          <div class="horizontal center-justified layout">
-            <div id="content" class="layout vertical wrap">
-              <div id="head">
+          <div class=" center-justified layout">
+            <div id="content" class="layout vertical center-justified wrap">
+              <div id="head "class="center-justified  horizontal layout wrap">
+
                  <paper-card class="statistic" heading="Statistic" alt="Statistic">
                    <div class="card-content layout horizontal">
                      <chart-line data="[[chart]]"></chart-line>
@@ -61,14 +72,16 @@
                  </paper-card>
               </div>
               <div id="body">
-                <paper-material elevation="1">
+                <!-- <paper-material elevation="1">
                   Contract
-                </paper-material>
+                </paper-material> -->
+                <div class="center-justified  horizontal layout wrap">
+
+
                 <template is="dom-repeat" items="[[contracts]]">
                   <paper-card heading="[[item.contract_name]]" alt="[[item.contract_name]]">
                      <div class="card-content horizontal layout">
-                       [[computeContract(item.*)]]
-                       <chart-pie data="[[dataContractChart]]"></chart-pie>
+                      <chart-pie data="[[_computeChart(item.contract_quantity_confirm,item.contract_quantity_confirm_balance)]]"></chart-pie>
                        <div class="layout vertical">
                            <div class="flex nomalFont">ทั้งหมด</div>
                            <div class="flex nomalFont">ทำสัญญาแล้ว</div>
@@ -93,11 +106,13 @@
                      </div>
                    </paper-card>
                 </template>
-                <paper-card class="horizontal layout center center-justified">
+                <!-- <paper-card class="horizontal layout center center-justified">
                   <div class="card-content">[[layerContent]]
-                    <paper-button raised class="gl-large gl-btn-primary">Create New Contract</paper-button>
+                    <paper-button raised class="gl-large gl-btn-primary" on-tap="createContract">Create New Contract</paper-button>
                   </div>
-                </paper-card>
+                </paper-card> -->
+                </div>
+
              </div>
             </div>
           </div>
@@ -108,9 +123,9 @@
 
 
               <div name="primary">
-                <panel-seleted>
+                <panel-seleted title="Contract">
                   <section-content name="detail">
-                    <promise-detail data="{{dataContract}}" type-rice="{{typeRice}}"></promise-detail>
+                    <promise-detail data="{{dataContract}}" type-rice="{{typeRice}}" buyyer="[[buyyer]]"></promise-detail>
                   </section-content>
                   <section-content name="print">
                       <vessel-print></vessel-print>
@@ -131,8 +146,22 @@
               <div name="third">
                 <shipment-page data="[[dataContract]]"
                                ship-ment="[[shipMent]]"
+                               confirm-letter="[[cml]]"
 
                 ></shipment-page>
+              </div>
+              <div name="four">
+                <panel-seleted title="Contract">
+                  <section-content name="detail">
+                    <promise-detail-insert buyyer="[[buyyer]]" type-rice="[[typeRice]]"></promise-detail-insert>
+                  </section-content>
+                  <section-content name="print">
+                      <vessel-print></vessel-print>
+                  </section-content>
+                  <section-content name="file">
+                      <promise-fileup></promise-fileup>
+                  </section-content>
+                </panel-seleted>
               </div>
             </iron-pages>
 
@@ -141,7 +170,8 @@
       </panel>
 
       </content-panel>
-
+      <paper-fab icon="add" title="heart" id="addContract" on-tap="createContract"></paper-fab>
+      <paper-tooltip for="addContract" offset="0">Create Contract</paper-tooltip>
     </template>
     <script>
         Polymer({
@@ -152,10 +182,12 @@
                 'select': 'selecteddata',
                 'vessel-insert-common': 'shipmentCommon',
                 'vessel-edit-common' : 'shipmentCommon',
+                'get-confirm-new':'_getCml'
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                g2gModelBehavior
             ],
             properties: {
                 layerContent: {
@@ -177,10 +209,10 @@
                 bmc:{
                   type:Object,
                   value:{}
-                }
+                },
             },
             observers:[
-              // 'getPortCountry(contractId)'
+              '_getCml(dataContract.contract_id)',
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -189,7 +221,9 @@
             },
             ready: function() {
               // console.log(this.loaded);
-              // list county
+              this.read('./common/buyer',(data)=>{
+                this.buyyer=data;
+              },false,'put');
               this.getChange(false,'get');
               // list riceType
               this.getDb('./common/typeRice',(data)=>{
@@ -222,13 +256,11 @@
               // list port
               this.getDb('./common/port/',(data)=>{
                 this.common.countryport =  data;
-
               },false);
               // list incoterms  ชนิดการจ่าย
               this.getDb('./common/incoterms',(data)=>{
                 this.incoterms=data;
               },false);
-
               this.chart = {
                 labels: ["January", "February", "March", "April", "May", "June", "July"],
                 datasets: [
@@ -256,7 +288,6 @@
                   }
                 ]
                 };
-
             },
             getChange:function (refresh,action) {
               // console.log('action ',action);
@@ -274,37 +305,40 @@
               }
               //
             },
-            computeContract:function (para) {
-
-                this.dataContractChart = {
-                      labels: [
-                        // "ทั้งหมด (ตัน)",
-                        "ทำสัญญาแล้ว (ตัน)",
-                        "คงเหลือ (ตัน)"
-                      ],
-                      datasets: [
-                        {
-                          data: [
-                                //  para.base.contract_quantity_total,
-                                 para.base.contract_quantity_confirm,
-                                 para.base.contract_quantity_confirm_balance
-                               ],
-                          backgroundColor: [
-                            "#FF6384",
-                            "#36A2EB",
-                            "#FFCE56"
+            _computeChart:function (confirm,balance){
+              // console.log(confirm,balance);
+                  return {
+                          labels: [
+                            // "ทั้งหมด (ตัน)",
+                            "ทำสัญญาแล้ว (ตัน)",
+                            "คงเหลือ (ตัน)"
                           ],
-                          hoverBackgroundColor: [
-                            "#FF6384",
-                            "#36A2EB",
-                            "#FFCE56"
-                          ]
-                        }]
-                    };
-                // console.log("vy");
+                          datasets: [
+                            {
+                              data: [
+                                     confirm,
+                                     balance
+                                   ],
+                              backgroundColor: [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56"
+                              ],
+                              hoverBackgroundColor: [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56"
+                              ]
+                            }]
+                        };
+
             },
             test:function () {
               console.log('เข้าโวยยยยยยยยยย');
+            },
+            createContract:function () {
+              this.layerContent='four';
+              this.glQuery('contentPanel').changDrawer();
             },
             editContract:function (e) {
               this.layerContent="primary";
@@ -328,14 +362,26 @@
               // console.log(e.detail.node);
               e.detail.node.common=this.common;
             },
+            _getCml:function (e) {
+              // console.log(e);
+              var contractId;
+              if (typeof e === 'string') {
+                  contractId = e;
+              } else {
+                contractId = e.detail.contract_id;
+              }
+              // console.log(contractId);
+              if (contractId != null) {
+                // this.async(()=>{
+                  this.read('./g2g/confirm/contract/id/'+contractId,(data)=>{
+                    // console.log('data =>', data);
+                    this.cml = data;
+                  },false,'put');
+                  // console.log('this.cml =>',this.cml);
+                // },1000);
+              }
 
-            // getconfirm:function (contractId) {
-            //     this.getDb('./g2g/confirm/contract/id/'+contractId,(data)=>{
-            //       this.cml = data;
-            //       // console.log(this.cml);
-            //       // this.cl_id.items = data;
-            //     });
-            // },
+            },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
               this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
@@ -347,7 +393,7 @@
             shipMentDeatil:function (id,refresh,action) {
               // get put delete
               // console.log('เข้ากระบวนการลบ 1');
-              console.log(id);
+              // console.log(id);
               if (action == 'get') {
                 this.glQuery('layoutMain').openToastLoading();
               }
@@ -398,29 +444,20 @@
             },
             attached:function(){
               this.layoutMain = this.glQuery('layoutMain');
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-insert.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-confirm.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-detail.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-fileup.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-print.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               var resolvedPageUrl = this.resolveUrl(`components/vessel/vessel-page.html`);
               this.importHref(resolvedPageUrl,null,null,true);
-
               this.async(()=>{this.loaded = true;},1000);
-
             },
-
         });;
     </script>
 </dom-module>
