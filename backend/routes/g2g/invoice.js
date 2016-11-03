@@ -29,7 +29,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to"]
+    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to", "invoice_status"]
 };
 var validate = ajv.compile(schema);
 router.get('/', function (req, res, next) {
@@ -91,7 +91,7 @@ router.get('/', function (req, res, next) {
             }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
             .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
-            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
+            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip().filter(r.row('shm_status').eq(true))
             .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
             .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
             .run(conn, function (err, cursor) {

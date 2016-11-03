@@ -60,7 +60,11 @@ router.get('/', function (req, res, next) {
             .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
             .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
             .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
-            .filter(r.row.hasFields('invoice_no').not())
+            .filter(
+                r.row.hasFields('invoice_no').not()
+                    .and(r.row('shm_status').eq(true))
+                    .and(r.row('invoice_status').eq(false))
+            )
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

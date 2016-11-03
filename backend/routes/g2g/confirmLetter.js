@@ -54,7 +54,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id"]
+    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id","cl_status"]
 };
 var validate = ajv.compile(schema);
 

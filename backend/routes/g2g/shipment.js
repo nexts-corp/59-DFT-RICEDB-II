@@ -28,7 +28,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["contract_id", "cl_id", "shm_no", "shm_name"]
+    "required": ["contract_id", "cl_id", "shm_no", "shm_name","shm_status"]
 };
 var validate = ajv.compile(schema);
 
