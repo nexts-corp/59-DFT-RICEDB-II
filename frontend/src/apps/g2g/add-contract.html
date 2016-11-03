@@ -78,11 +78,12 @@
                 <div class="center-justified  horizontal layout wrap">
 
 
-                <template is="dom-repeat" items="[[contracts]]">
+                <template is="dom-repeat" items="[[contracts]]">[[index]]
                   <paper-card heading="[[item.contract_name]]" alt="[[item.contract_name]]">
                      <div class="card-content horizontal layout">
-                       [[computeContract(item.*)]]
-                       <chart-pie data="[[dataContractChart]]"></chart-pie>
+                       <!-- [[_computeChart(index)]] -->
+                       <!-- [[chartDatas]].[[index]] -->
+                       <chart-pie data="[[_computeChart(item.contract_quantity_confirm,item.contract_quantity_confirm_balance)]]"></chart-pie>
                        <div class="layout vertical">
                            <div class="flex nomalFont">ทั้งหมด</div>
                            <div class="flex nomalFont">ทำสัญญาแล้ว</div>
@@ -210,10 +211,15 @@
                 bmc:{
                   type:Object,
                   value:{}
-                }
+                },
+                chartDatas:{
+                  type:Array,
+                  value:[]
+                },
             },
             observers:[
-              '_getCml(dataContract.contract_id)'
+              '_getCml(dataContract.contract_id)',
+              '_chartData(contracts)'
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -306,33 +312,72 @@
               }
               //
             },
-            computeContract:function (para) {
-                this.dataContractChart = {
-                      labels: [
-                        // "ทั้งหมด (ตัน)",
-                        "ทำสัญญาแล้ว (ตัน)",
-                        "คงเหลือ (ตัน)"
-                      ],
-                      datasets: [
-                        {
-                          data: [
-                                //  para.base.contract_quantity_total,
-                                 para.base.contract_quantity_confirm,
-                                 para.base.contract_quantity_confirm_balance
-                               ],
-                          backgroundColor: [
-                            "#FF6384",
-                            "#36A2EB",
-                            "#FFCE56"
+            _chartData:function (data) {
+              // console.log(data);
+              data.map((el,index)=>{
+                this.push('chartDatas', {
+                  contract_quantity_confirm: el.contract_quantity_confirm,
+                  contract_quantity_confirm_balance: el.contract_quantity_confirm_balance,
+                });
+                // console.log(index);
+              });
+              // console.log(this.chartDatas);
+              // console.log(para.base.contract_quantity_confirm);
+              // console.log(para.base.contract_quantity_confirm_balance);
+              //   this.dataContractChart = {
+              //         labels: [
+              //           // "ทั้งหมด (ตัน)",
+              //           "ทำสัญญาแล้ว (ตัน)",
+              //           "คงเหลือ (ตัน)"
+              //         ],
+              //         datasets: [
+              //           {
+              //             data: [
+              //                   //  para.base.contract_quantity_total,
+              //                    para.base.contract_quantity_confirm,
+              //                    para.base.contract_quantity_confirm_balance
+              //                  ],
+              //             backgroundColor: [
+              //               "#FF6384",
+              //               "#36A2EB",
+              //               "#FFCE56"
+              //             ],
+              //             hoverBackgroundColor: [
+              //               "#FF6384",
+              //               "#36A2EB",
+              //               "#FFCE56"
+              //             ]
+              //           }]
+              //       };
+              //   // console.log("vy");
+            },
+            _computeChart:function (confirm,balance){
+              // console.log(confirm,balance);
+                  return {
+                          labels: [
+                            // "ทั้งหมด (ตัน)",
+                            "ทำสัญญาแล้ว (ตัน)",
+                            "คงเหลือ (ตัน)"
                           ],
-                          hoverBackgroundColor: [
-                            "#FF6384",
-                            "#36A2EB",
-                            "#FFCE56"
-                          ]
-                        }]
-                    };
-                // console.log("vy");
+                          datasets: [
+                            {
+                              data: [
+                                     confirm,
+                                     balance
+                                   ],
+                              backgroundColor: [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56"
+                              ],
+                              hoverBackgroundColor: [
+                                "#FF6384",
+                                "#36A2EB",
+                                "#FFCE56"
+                              ]
+                            }]
+                        };
+
             },
             test:function () {
               console.log('เข้าโวยยยยยยยยยย');
@@ -394,7 +439,7 @@
             shipMentDeatil:function (id,refresh,action) {
               // get put delete
               // console.log('เข้ากระบวนการลบ 1');
-              console.log(id);
+              // console.log(id);
               if (action == 'get') {
                 this.glQuery('layoutMain').openToastLoading();
               }
