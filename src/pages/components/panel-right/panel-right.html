@@ -4,18 +4,31 @@
         <style>
             app-drawer{
                 --app-drawer-width:75%;
+                z-index: 1;
             }
             paper-icon-button{
                 width: 50px;
                 height: 50px;
             }
+            app-toolbar{
+                background-color: orange;
+                color: white;
+                font-size: 20px;
+                padding-left: 20px;
+            }
+            .flex-equal-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+            }
         </style>
         <app-drawer align="right">
-         <div style="margin-top:6%"></div>
+             <app-toolbar>
+                {{title}}
+                <div style="margin-left: 78%">
+                    <paper-icon-button icon="close" on-tap="toggle"></paper-icon-button>
+                </div>
+		    </app-toolbar>
           <div style="height:90%; overflow: auto;">
-              <div style="padding:20px;">
-                  <paper-icon-button icon="close" on-tap="toggle"></paper-icon-button>
-              </div>
             <content></content>
           </div>
         </app-drawer>
@@ -23,6 +36,12 @@
     <script>
         Polymer({
             is: 'panel-right',
+            properties:{
+                title:{
+                    type: String,
+                    value: 'title'
+                }
+            },
             toggle:function(){
                 this.$$('app-drawer').toggle();
             },

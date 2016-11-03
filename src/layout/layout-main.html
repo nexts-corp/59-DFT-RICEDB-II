@@ -17,7 +17,7 @@
 	<template>
 	<style is="custom-style" include="gl-color gl-size gl-toast">
 		#drawer{
-			z-index: 1;
+			z-index: 2;
 			--app-drawer-width: 400px;
 		}
 		.offline{
@@ -124,12 +124,13 @@
 			<layout-main-drawer path="{{path}}" on-toggle-drawer="_toggleDrawer"></layout-main-drawer>
 		</app-drawer>
 
-		<app-header-layout>
+		<app-header-layout style="z-index:1;">
 			<app-header fixed condenses effects="waterfall">
 				<layout-main-toolbar on-toggle-drawer="_toggleDrawer"></layout-main-toolbar>
 			</app-header>
-			<content on-toast="_toastManage"></content>
 		</app-header-layout>
+
+		<content on-toast="_toastManage"></content>
 		
 		<paper-toast class="gl-toast-loading" id="toastLoading" positionTarget duration="0" text="">
                 <paper-spinner active></paper-spinner>
