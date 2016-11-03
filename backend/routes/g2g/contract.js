@@ -40,7 +40,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice"]
+    "required": ["contract_name", "buyer_id", "contract_date", "contract_type_rice","contract_status"]
 };
 var validate = ajv.compile(schema);
 

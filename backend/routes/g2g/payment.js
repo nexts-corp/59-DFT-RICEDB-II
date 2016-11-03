@@ -72,9 +72,29 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["fe_foreign", "fe_internal", "fe_other", "pay_date_receipt", "pay_no", "rate_bank", "rate_tt", "invoice"]
+    "required": ["fe_foreign", "fe_internal", "fe_other", "pay_date_receipt", "pay_no", "rate_bank", "rate_tt", "invoice", "pay_status"]
 };
 var validate = ajv.compile(schema);
+router.get('/', function (req, res, next) {
+    db.query(function (conn) {
+        r.table('payment')
+            .filter({ pay_status: false })
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+})
 router.get('/id/:pay_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('payment')
@@ -136,7 +156,7 @@ router.get('/id/:pay_id', function (req, res, next) {
                                                     amount_usd: m2('price_per_ton').mul(m2('weight_net'))
                                                 }
                                             })
-                                             .without('id', 'cl_type_rice')
+                                            .without('id', 'cl_type_rice')
                                     }
                                 })
                                 .merge(function (m) {
