@@ -65,7 +65,7 @@
         this.insert('./g2g/shipment/insert',this.data, () => {
           this.glQuery('addContract').getChange(false,'put');
           // console.log('this.contractId =>',this.contractId);
-          // addContract
+          // add-Contract.html
           this.glQuery('layoutMain').openToastSaveing();
           this.fire('add-shipment',{contract_id:this.contractId});
           //shipment-page.html
@@ -100,6 +100,9 @@
                     console.log(response);
                     console.log(data);
                     this.glQuery('addContract').getChange(false,'put');
+                    // add-Contract.html
+                    // console.log(data.contract_id);
+                    this.fire('add-shipment',{contract_id:data.contract_id});
                       this.fire('shipmentedit', {
                         data: 'editFin'
                       });
