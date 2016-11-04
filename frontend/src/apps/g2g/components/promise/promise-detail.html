@@ -36,12 +36,10 @@
           <template is="dom-if" if="[[!data.contract_status]]">
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Contract</paper-tooltip>
-            <!-- <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
-            <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip> -->
+            <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
+            <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
           </template>
 
-          <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
-          <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
       </div>
       <gl-grid-row width="{{getWidth}}">
         <gl-combo-box id="buyer_id" disabled="[[checkInput]]" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
@@ -191,6 +189,12 @@
               this.glQuery('layoutMain').openToastSaveing();
                 this.update('./g2g/contract/update',this.Newdata, () => {
                   this.glQuery('addContract').getChange(false,'put');
+                  //add-contract.html
+                  this.fire('edit-contract',{contractId:this.Newdata.id});
+                  if (this.Newdata.contract_status == true) {
+                    // this.glQuery('contentPanel').changDrawer();
+                    this.editInput();
+                  }
                   this.editInput();
                  });
             },

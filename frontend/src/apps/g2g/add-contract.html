@@ -182,6 +182,7 @@
                 'select': 'selecteddata',
                 'vessel-insert-common': 'shipmentCommon',
                 'vessel-edit-common' : 'shipmentCommon',
+                'edit-contract':'editContract',
                 'get-confirm-new':'_getCml',
                 'add-confirm':'editConfirm',
                 'add-shipment' : 'editShipment'
@@ -348,10 +349,21 @@
               this.glQuery('contentPanel').changDrawer();
             },
             editContract:function (e) {
-              this.layerContent="primary";
-              // console.log(e.currentTarget.data);
-              this.dataContract = e.currentTarget.data;
-              this.glQuery('contentPanel').changDrawer();
+              if (e.currentTarget.data != undefined) {
+                this.layerContent="primary";
+                // console.log(e.currentTarget.data);
+                this.dataContract = e.currentTarget.data;
+                this.glQuery('contentPanel').changDrawer();
+              } else {
+                this.async(()=>{
+                  var contractId = e.detail.contractId;
+                  // console.log(this.contracts);
+                    var dataContract = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
+                        // console.log(dataConfirm);
+                        this.dataContract = dataContract[0];
+                        console.log('new =>',this.dataContract);
+                },500);
+              }
             },
             editConfirm:function (e) {
               if (e.currentTarget.data != undefined) {
