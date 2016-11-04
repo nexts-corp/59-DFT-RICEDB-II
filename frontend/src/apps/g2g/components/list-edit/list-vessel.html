@@ -568,11 +568,12 @@
 
               this.glQuery('layoutMain').openToastDeleteing();
               this.delete('./g2g/shipment/delete/id/',this.data.shm_id, () => {
-
+                    // console.log(this.data.contract_id);
                 this.fire('shipment-list', {
                   data: 'editFin'
                 });
-                this.glQuery('addContract').getChange(true,'delete');
+                this.glQuery('addContract').getChange(false,'delete');
+                this.fire('add-shipment',{contract_id:this.data.contract_id});
                });
             },
             approveShipment:function () {
@@ -587,7 +588,8 @@
                 this.updateShipment.shm_status = this.data.shm_status;
                 // console.log(this.updateShipment);
                 this.update('./g2g/shipment/update',this.updateShipment, () => {
-                  this.glQuery('addContract').getChange(true,'put');
+                  this.glQuery('addContract').getChange(false,'put');
+                  this.fire('add-shipment',{contract_id:this.updateShipment.contract_id});
                     this.fire('select', {
                       data: 'editFin'
                     });
