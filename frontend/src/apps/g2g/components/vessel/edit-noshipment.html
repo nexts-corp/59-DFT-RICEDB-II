@@ -64,8 +64,9 @@
         // this.postDb(this.data);
         this.insert('./g2g/shipment/insert',this.data, () => {
           this.glQuery('addContract').getChange(false,'put');
-          console.log('this.contractId =>',this.contractId);
+          // console.log('this.contractId =>',this.contractId);
           // addContract
+          this.glQuery('layoutMain').openToastSaveing();
           this.fire('add-shipment',{contract_id:this.contractId});
           //shipment-page.html
           this.fire('shipment-list', {
