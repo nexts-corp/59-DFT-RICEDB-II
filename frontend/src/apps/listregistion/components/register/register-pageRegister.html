@@ -90,7 +90,7 @@
         if(val!=""){
           // console.log(this.selectedItem);
           this.getDb('./external/trader/id/'+this.dataTrader,(data)=>{
-            data['seller_agent'] = [];
+            // data['seller_agent'] = [];
             this.trader = data;
             this.$$('#formData').removeAttribute("hidden");
             this.$$('#removeButtom').removeAttribute("hidden");
@@ -100,6 +100,13 @@
             //console.log(this.trader);
           });
         }
+        else {
+          this.$$('#formData').setAttribute("hidden", "hidden");
+          this.$$('#removeButtom').setAttribute("hidden", "hidden");
+          this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+          this.$$('#changTitle').removeAttribute("hidden");
+          this.$$('#changTitle2').setAttribute("hidden", "hidden");
+        }
       },
       _cancel:function() {
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
@@ -107,6 +114,8 @@
         this.$$('#formData').setAttribute("hidden", "hidden");
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#changTitle2').setAttribute("hidden", "hidden");
+        this.glQuery('contentPanel').changDrawer();
+        this.dataTrader = "";
       },
       _saveData:function(e) {
         // console.log(this.trader);
@@ -130,11 +139,9 @@
                 this.$$('#formData').setAttribute("hidden", "hidden");
                 this.$$('#changTitle').removeAttribute("hidden");
                 this.$$('#changTitle2').setAttribute("hidden", "hidden");
+                this.glQuery('reExporter').getExporters();
+                this.dataTrader = "";
                 this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                  // if (refresh == true) {
-                  //   console.log(action);
-                  //   this.glQuery('contentPanel').changDrawer();
-                  // }
                 }.bind(this));
             }.bind(this))
             .catch(function(error) {
@@ -153,19 +160,16 @@
           // console.log(1);
       },
       attached: function() {
+        this.getExporterTrader();
+      },
+      getExporterTrader:function() {
         this.trader_id = this.trader_id || this.$.trader_id;
         // console.log(this.seller_id);
         this.getDb('./external/exporter/?exporter_status=false',(data)=>{
-
           this.trader_id.items = data;
           // console.log(this.seller_id.items);
         });
       }
-      // editChange:function(e){
-      //   this.pages = 1;
-      //   this.$$('#removeButtom').removeAttribute("hidden");
-      //   this.$$('#removePen').setAttribute("hidden", "hidden");
-      // },
 
     });
   </script>

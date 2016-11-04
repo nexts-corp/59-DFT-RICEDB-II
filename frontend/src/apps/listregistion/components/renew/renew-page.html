@@ -3,7 +3,7 @@
 <link rel="import" href="renew-memberEdit.html">
 <link rel="import" href="../register/register-member.html">
 <dom-module id="renew-page">
-  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-toast">
   .title {
     text-align: center;
      font-size: var(--font-size-h3);
@@ -41,6 +41,16 @@
               {{_checkStatus(data.exporter_active,data.exporter_status,data.trader_active)}}
               <div class="horizontal center-justified layout">
                 <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_active" hidden>ยกเลิกการระงับ</paper-button>
+                <!-- <paper-button raised on-tap="_toastOpen">Default toast</paper-button>
+                <div>
+                  <paper-toast class="gl-toast-dialog" id="toastDialog" duration="0">
+                    <span>ต้องการลบข้อมูลใช้หรือไม่ ? </span>
+                    <div>
+                        <paper-button class="gl-btn-success gl-small" on-tap="toastDialog.toggle()" confirm>Yes</paper-button>
+                        <paper-button class="gl-bg-danger gl-small" on-tap="toastDialog.toggle()">No</paper-button>
+                    </div>
+      		        </paper-toast>
+                </div> -->
                 <!-- <paper-button id="buttomRegister" raised class="gl-btn-primary button" on-tap="_register" hidden>ลงทะเบียนผู้ส่งออก</paper-button> -->
                 <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_retrader" hidden>ต่ออายุ คน.</paper-button>
               </div>
@@ -166,29 +176,31 @@
       },
       _active: function(){
         // console.log(this.data);
-        var datas = {
-          exporter_date_update: new Date,
-          exporter_date_approve:new Date,
-          exporter_no:this.data.exporter_no,
-          trader_id:this.data.trader_id,
-          seller_agent:this.data.seller_agent,
-          id : this.data.exporter_id
+        if (confirm("คุณต้องการจะยกเลิกการระงับใช่ไหม?") == true) {
+          var datas = {
+            exporter_date_update: new Date,
+            exporter_date_approve:new Date,
+            exporter_no:this.data.exporter_no,
+            trader_id:this.data.trader_id,
+            seller_agent:this.data.seller_agent,
+            id : this.data.exporter_id
+          }
+          // console.log(datas);
+          this.glQuery('layoutRegistion').openToastSaveing();
+          axios.put('./external/exporter/update', datas)
+                    .then(function (response) {
+                      console.log("success");
+                      console.log(response);
+                      this.glQuery('contentPanel').changDrawer();
+                      this.glQuery('reExporter').getExporters();
+                      this.glQuery('layoutRegistion').closeToastSaveing(function(){
+                      }.bind(this));
+                    }.bind(this))
+                    .catch(function (error) {
+                      console.log("error");
+                      console.log(error);
+                    })
         }
-        // console.log(datas);
-        this.glQuery('layoutRegistion').openToastSaveing();
-        axios.put('./external/exporter/update', datas)
-                  .then(function (response) {
-                    console.log("success");
-                    console.log(response);
-                    this.glQuery('contentPanel').changDrawer();
-                    this.glQuery('reExporter').getExporters();
-                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                    }.bind(this));
-                  }.bind(this))
-                  .catch(function (error) {
-                    console.log("error");
-                    console.log(error);
-                  })
       },
       _retrader:function(){
         var datas= {
@@ -214,6 +226,10 @@
       toggleDrawer:function(){
           this.glQuery('contentPanel').changDrawer();
       }
+      // _toastOpen:function(){
+      //   this.$.toastDialog.open();
+      //   console.log(this.$.toastDialog);
+      // },
     });
   </script>
 </dom-module>
