@@ -21,11 +21,11 @@ var schema = {
         "fe_other": {
             "type": "number"
         },
-        "pay_date_receipt": {
+        "fee_date_receipt": {
             "type": "string",
             "format": "date-time"
         },
-        "pay_no": {
+        "fee_no": {
             "type": "string"
         },
         "rate_bank": {
@@ -68,20 +68,20 @@ var schema = {
                 "required": ["invoice_id", "invoice_detail"]
             }
         },
-        "pay_status": {
+        "fee_status": {
             "type": "boolean"
         }
     },
-    "required": ["fe_foreign", "fe_internal", "fe_other", "pay_date_receipt", "pay_no", "rate_bank", "rate_tt", "invoice", "pay_status"]
+    "required": ["fe_foreign", "fe_internal", "fe_other", "fee_date_receipt", "fee_no", "rate_bank", "rate_tt", "invoice", "fee_status"]
 };
 var validate = ajv.compile(schema);
 router.get('/', function (req, res, next) {
     db.query(function (conn) {
-        r.table('payment')
-            .filter({ pay_status: false })
+        r.table('fee')
+            .filter({ fee_status: false })
             .merge(function(m){
                 return {
-                    pay_id:m('id')
+                    fee_id:m('id')
                 }
             })
             .without('id')
@@ -101,16 +101,16 @@ router.get('/', function (req, res, next) {
             });
     })
 })
-router.get('/id/:pay_id', function (req, res, next) {
+router.get('/id/:id', function (req, res, next) {
     db.query(function (conn) {
-        r.table('payment')
-            .get(req.params.pay_id)
-            .merge(function (pay_merge) {
+        r.table('fee')
+            .get(req.params.id)
+            .merge(function (fee_merge) {
                 return {
-                    invoice: pay_merge('invoice').map(function (pay_map) {
-                        return pay_map.merge(function (pay_merge1) {
+                    invoice: fee_merge('invoice').map(function (fee_map) {
+                        return fee_map.merge(function (fee_merge1) {
                             return r.table('invoice')
-                                .get(pay_merge1('invoice_id'))
+                                .get(fee_merge1('invoice_id'))
                                 .merge(function (m) {
                                     return {
                                         group_ship: r.table('shipment_detail')
@@ -176,7 +176,7 @@ router.get('/id/:pay_id', function (req, res, next) {
                                         weight_net: m('shipment_detail').sum('weight_net'),
                                         weight_tare: m('shipment_detail').sum('weight_tare'),
                                         amount_usd: m('shipment_detail').sum('amount_usd'),
-                                        invoice_detail: pay_merge1('invoice_detail').map(function (map1) {
+                                        invoice_detail: fee_merge1('invoice_detail').map(function (map1) {
                                             return m('shipment_detail').filter({ shm_det_id: map1('shm_det_id') })(0).merge(map1)
                                         })
                                     }
@@ -190,13 +190,13 @@ router.get('/id/:pay_id', function (req, res, next) {
                     })
                 }
             })
-            .merge(function (pay_merge) {
+            .merge(function (fee_merge) {
                 return {
-                    pay_id: pay_merge('id'),
-                    amount_usd: pay_merge('invoice').sum('amount_usd'),
-                    weight_gross: pay_merge('invoice').sum('weight_gross'),
-                    weight_net: pay_merge('invoice').sum('weight_net'),
-                    weight_tare: pay_merge('invoice').sum('weight_tare')
+                    fee_id: fee_merge('id'),
+                    amount_usd: fee_merge('invoice').sum('amount_usd'),
+                    weight_gross: fee_merge('invoice').sum('weight_gross'),
+                    weight_net: fee_merge('invoice').sum('weight_net'),
+                    weight_tare: fee_merge('invoice').sum('weight_tare')
                 }
             })
             .without('id')
@@ -374,7 +374,7 @@ router.post('/insert', function (req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function (conn) {
-                r.table("payment")
+                r.table("fee")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -411,7 +411,7 @@ router.put('/update', function (req, res, next) {
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("payment")
+                r.table("fee")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -443,10 +443,10 @@ router.delete('/delete/id/:id', function (req, res, next) {
     if (req.params.id != '' && req.params.id != null) {
         result.id = req.params.id;
         db.query(function (conn) {
-            var q = r.table("payment").get(req.params.id).do(function (result) {
+            var q = r.table("fee").get(req.params.id).do(function (result) {
                 return r.branch(
-                    result('pay_status').eq(false)
-                    , r.table("payment").get(req.params.id).delete()
+                    result('fee_status').eq(false)
+                    , r.table("fee").get(req.params.id).delete()
                     , r.expr("Can't delete because this status = true.")
                 )
             })
