@@ -183,7 +183,8 @@
                 'vessel-insert-common': 'shipmentCommon',
                 'vessel-edit-common' : 'shipmentCommon',
                 'get-confirm-new':'_getCml',
-                'add-confirm':'editConfirm'
+                'add-confirm':'editConfirm',
+                'add-shipment' : 'editShipment'
             },
             behaviors: [
                 gl.behavior.core,
@@ -367,15 +368,24 @@
                         this.dataConfirm = dataConfirm[0];
                         console.log('new =>',this.dataConfirm);
                 },500);
-
               }
-
             },
             editShipment:function (e) {
-              this.layerContent="third";
-              // console.log(e.currentTarget.data);
-              this.dataContract = e.currentTarget.data;
-              this.glQuery('contentPanel').changDrawer();
+              if (e.currentTarget.data != undefined) {
+                this.layerContent="third";
+                // console.log(e.currentTarget.data);
+                this.dataContract = e.currentTarget.data;
+                this.glQuery('contentPanel').changDrawer();
+              } else {
+                this.async(()=>{
+                  var contractId = e.detail.contract_id;
+                  // console.log(this.contracts);
+                    var dataShimpent = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
+                        // console.log(dataConfirm);
+                        this.dataContract = dataShimpent[0];
+                        console.log('new =>',this.dataContract);
+                },500);
+              }
             },
             shipmentCommon:function (e) {
               // console.log(e.detail.node);
@@ -384,21 +394,25 @@
             _getCml:function (e) {
               // console.log(e);
               var contractId;
-              if (typeof e === 'string') {
-                  contractId = e;
-              } else {
-                contractId = e.detail.contract_id;
+              if (e != undefined) {
+                if (typeof e === 'string') {
+                    contractId = e;
+                } else {
+                  contractId = e.detail.contract_id;
+                }
+                // console.log(contractId);
+                if (contractId != null) {
+                  // this.async(()=>{
+                    this.read('./g2g/confirm/contract/id/'+contractId,(data)=>{
+                      // console.log('data =>', data);
+                      this.cml = data;
+                    },false,'put');
+                    // console.log('this.cml =>',this.cml);
+                  // },1000);
+                }
               }
-              // console.log(contractId);
-              if (contractId != null) {
-                // this.async(()=>{
-                  this.read('./g2g/confirm/contract/id/'+contractId,(data)=>{
-                    // console.log('data =>', data);
-                    this.cml = data;
-                  },false,'put');
-                  // console.log('this.cml =>',this.cml);
-                // },1000);
-              }
+
+
 
             },
             conFirmDeatil:function (cmlId) {

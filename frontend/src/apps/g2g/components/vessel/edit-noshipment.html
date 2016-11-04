@@ -5,7 +5,7 @@
       display: block;
     }
   </style>
-  <template>
+  <template>{{confirmLetter}}//
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
         <gl-form-input label="Shipment Id"  error-message="กรุณาใส่รายละเอียด Shipment Id" required placeholder="Shipment Name" value="{{data.shm_no}}"></gl-form-input>
@@ -63,11 +63,15 @@
       //  console.log(this.data);
         // this.postDb(this.data);
         this.insert('./g2g/shipment/insert',this.data, () => {
+          this.glQuery('addContract').getChange(false,'put');
+          console.log('this.contractId =>',this.contractId);
+          // addContract
+          this.fire('add-shipment',{contract_id:this.contractId});
           //shipment-page.html
           this.fire('shipment-list', {
             data: 'editFin'
           });
-          this.glQuery('addContract').getChange(true,'put');
+
          });
       },
       update:function () {
