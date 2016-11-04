@@ -22,7 +22,7 @@
           --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
           --paper-fab:{
             background-color: var(--paper-light-blue-500);
-            position: relative;
+            /*position: fixed;*/
             right:   -93%;
             bottom:   -370px;
             /*margin-top:55%;*/
@@ -136,7 +136,7 @@
                 </panel-seleted>
               </div>
               <div name="secondary">
-                <promise-page data="[[dataContract]]"
+                <promise-page data="[[dataConfirm]]"
                               confirm-letter="[[confirmLetter]]"
                               package="[[package]]"
                               incoterms="[[incoterms]]"
@@ -182,7 +182,8 @@
                 'select': 'selecteddata',
                 'vessel-insert-common': 'shipmentCommon',
                 'vessel-edit-common' : 'shipmentCommon',
-                'get-confirm-new':'_getCml'
+                'get-confirm-new':'_getCml',
+                'add-confirm':'editConfirm'
             },
             behaviors: [
                 gl.behavior.core,
@@ -210,9 +211,14 @@
                   type:Object,
                   value:{}
                 },
+                contracts:{
+                  type:Object,
+                  // readOnly: true
+                }
             },
             observers:[
               '_getCml(dataContract.contract_id)',
+              // 'getChange(dataContract.*)'
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -293,7 +299,7 @@
               // console.log('action ',action);
               this.getDb('./g2g/contract/list',(data)=>{
                 this.contracts=data;
-                // dataContract
+                console.log("this.contracts=>",this.contracts);
               },refresh,action)
             },
             selecteddata:function (e) {
@@ -347,10 +353,23 @@
               this.glQuery('contentPanel').changDrawer();
             },
             editConfirm:function (e) {
-              this.layerContent="secondary";
-              // console.log(e.currentTarget.data);
-              this.dataContract = e.currentTarget.data;
-              this.glQuery('contentPanel').changDrawer();
+              if (e.currentTarget.data != undefined) {
+                this.layerContent="secondary";
+                console.log('yy',e.currentTarget.data);//.data);
+                this.dataConfirm = e.currentTarget.data;
+                this.glQuery('contentPanel').changDrawer();
+              } else {
+                this.async(()=>{
+                  var contractId = e.detail.contractId;
+                  // console.log(this.contracts);
+                    var dataConfirm = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
+                        // console.log(dataConfirm);
+                        this.dataConfirm = dataConfirm[0];
+                        console.log('new =>',this.dataConfirm);
+                },500);
+
+              }
+
             },
             editShipment:function (e) {
               this.layerContent="third";

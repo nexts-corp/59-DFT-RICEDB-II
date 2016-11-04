@@ -264,10 +264,6 @@
               this.confirmLetter.cl_status = this.approve(this.confirmLetter.cl_status);
               this.editInput();
               this.addConfirm();
-              this.glQuery('contentPanel').changDrawer();
-              // // edit-noshipment.html
-              // // console.log(this.confirmLetter);
-              // this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
             },
             editConfirm:function (data) {
               // console.log(1);
@@ -302,10 +298,13 @@
                   this.glQuery('addContract').getChange(false,'put');
                   // edit-noshipment.html
                   // console.log(this.confirmLetter);
+                  //addContract
+                  this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
                   if(this.confirmLetter.cl_status == true) {
                     this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
+                    this.backPage();
                   }
-                  this.backPage();
+                  // this.backPage();
                   this.editInput();
                });
             },
@@ -382,7 +381,8 @@
               // this.deleteConfirmDb(this.confirmLetter.cl_id);
               this.delete('./g2g/confirm/delete/id/',this.confirmLetter.cl_id, () => {
                 this.glQuery('addContract').getChange(false,'delete');
-                this.glQuery('contentPanel').changDrawer();
+                // this.glQuery('contentPanel').changDrawer();
+                this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
                 this.editInput();
                 this.backPage();
                });

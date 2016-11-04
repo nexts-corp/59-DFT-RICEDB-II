@@ -93,15 +93,16 @@ router.get(['/', '/list'], function (req, res, next) {
                 return {
                     contract_quantity_total: row('contract_type_rice').sum('type_rice_quantity'),
                     contract_quantity_confirm: row('confirm_letter')
-                        .filter(function (f) {
-                            return f('cl_status').eq(true)
-                        })
+                        // .filter(function (f) {
+                        //     return f('cl_status').eq(true)
+                        // })
                         .sum('cl_quantity_total'),
                     contract_quantity_confirm_balance: row('contract_type_rice').sum('type_rice_quantity').sub(
                         row('confirm_letter')
-                            .filter(function (f) {
-                                return f('cl_status').eq(true)
-                            }).sum('cl_quantity_total')
+                            // .filter(function (f) {
+                            //     return f('cl_status').eq(true)
+                            // })
+                            .sum('cl_quantity_total')
                     ),
                     contract_quantity_shipment: row('shipment')
                         .filter(function (f) {
