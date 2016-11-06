@@ -63,7 +63,7 @@ const project = require('./gulp-tasks/project.js');
 function source() {
   return project.splitSource()
     // Add your own build tasks here!
-    .pipe(gulpif('**/*.{png,gif,jpg,svg}', images.minify()))
+    //.pipe(gulpif('**/*.{png,gif,jpg,svg}', images.minify()))
     //.pipe(gulpif('**/*.html', crisper({scriptInHead:false})))
     .pipe(gulpif('**/*.js',babel({ presets: ['es2015'], compact:false })))
     .pipe(gulpif('**/*.js',uglify()))
