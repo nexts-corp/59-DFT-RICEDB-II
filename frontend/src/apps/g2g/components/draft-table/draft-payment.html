@@ -1,18 +1,22 @@
 <link rel="import" href="../../../../../bower_components/gl-styles/gl-table.html">
-<dom-module id="draft-bl">
+<dom-module id="draft-payment">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-table gl-color">
     :host {
       display: block;
+      --paper-checkbox-margin: 0px 0px 0px 20px;
       /*background-color: var(--gl-primary-color);*/
     }
     .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2) {
       width: 20%;
     }
-    .table-head > tr > th:nth-child(2) {
+    .table-head > tr > th:nth-child(3) {
       width: 30%;
     }
-    .table-head > tr > th:nth-child(2) {
-      width: 50%;
+    .table-head > tr > th:nth-child(4) {
+      width: 45%;
     }
     .labelSearch{
     font-size: var(--font-size-h4);
@@ -22,6 +26,10 @@
     }
     td {
       cursor:pointer;
+    }
+    .btnMoney {
+      margin: 20px 20px 0px 0px;
+      padding: 0px 0px 20px 20px;
     }
   </style>
   <template>
@@ -35,17 +43,19 @@
     <table class="gl-table-default">
       <thead class="table-head">
         <tr>
+          <th><paper-checkbox class="checkBox" data="{{itemSecondary}}"></paper-checkbox></th>
           <th>Shipment No</th>
-          <th>Bill of Landing Number (B/L No.)</th>
+          <th>Invoice </th>
           <th>Confirmation Letter</th>
         </tr>
       </thead>
       <tbody>
-        <template is="dom-repeat" items="[[data]]" as="contract">
-          <template is="dom-repeat" items="[[contract.bl_detail]]" filter="{{_filter(searchInput)}}">
-            <tr data="[[item]]" on-tap="_getBind" level="primary" >
-              <td>[[contract.shm_no]]</td>
-              <td>[[item.bl_no]]</td>
+        <template is="dom-repeat" items="[[data]]" as="payment">
+          <template is="dom-repeat" items="[[payment.invoice_detail]]" filter="{{_filter(searchInput)}}">
+            <tr data="[[item]]" on-tap="_getBind" level="secondary" >
+              <td><paper-checkbox class="checkBox" data="{{itemSecondary}}"></paper-checkbox></td>
+              <td>[[payment.shm_no]]</td>
+              <td>[[item.invoice_no]]</td>
               <td>[[item.cl_name]]</td>
             </tr>
           </template>
@@ -53,10 +63,13 @@
 
       </tbody>
   </table>
+  <div class="horizontal end-justified layout btnMoney">
+     <paper-button class="gl-btn-success" raised on-tap="check">ได้รับเงิน</paper-button>
+  </div>
   </template>
   <script>
     Polymer({
-      is: "draft-bl",
+      is: "draft-payment",
       properties: {
         searchInput: {
           type: String,
@@ -80,7 +93,7 @@
       },
       _getBind: function(e) {
         // console.log(e.currentTarget.data);
-        this.fire('select-bl', {
+        this.fire('select-invoice', {
             data: e.currentTarget.data
           });
         this.fire('nx-grid-' + e.type, {
