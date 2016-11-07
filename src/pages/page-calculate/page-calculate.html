@@ -52,8 +52,10 @@
           font-size: var(--font-size-h4);
           /*text-decoration: blink;*/
           padding: 15px;
-          margin-top: 20px;
-          background-color: var(--gl-gray-lighter-color);
+          margin-top: 10px;
+          text-align: center;
+          margin-bottom: 10px;
+          /*background-color: var(--gl-gray-lighter-color);*/
         }
           table.gl-table-default{
                border-collapse: collapse;
@@ -95,42 +97,27 @@
               การคำนวณส่วนจัดสรรข้าวขาวภายใต้โควตาภาษีสหภาพยุโรป
           </div>
           <div class="container">
-           <gl-form-dropdown-menu label="ปีโควตา">
-            <paper-listbox class="dropdown-content">
-              <paper-item>2558</paper-item>
-              <paper-item>2557</paper-item>
-              <paper-item>2556</paper-item>
-              <paper-item>2555</paper-item>
-            </paper-listbox>
-          </gl-form-dropdown-menu>
+            <gl-form-dropdown-menu label="ปีโควตา">
+              <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearMin}}">
+                <template is="dom-repeat" items="{{getYear}}">
+                  <paper-item year="{{item}}">{{item}}</paper-item>
+                </template>
+              </paper-listbox>
+            </gl-form-dropdown-menu>
           </div>
           
-          <div style="overflow-x:auto;">
-          <table class="gl-table-default">
+          <div style="overflow-x:auto; padding:20px;">
+          <table class="gl-table-default" style="border: 1px solid #ddd;">
               <tr>
                   <th>คำนวณครั้งที่</th>
-                  <th>ปีโควตา</th>
-                  <th>ประเภทข้าว</th>
-                  <th>ยอดรวมการส่งออก</th>
-                  <th>ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวนส่วนจัดสรร</th>
-                  <th>ยอดรวมการขอหนังสือรับรอง</th>
-                  <th>ยอดรวมส่วนต่างปริมาณการส่งข้าว(ตามกรมศุลการกร)</th>
-                  <th>ยอดรวมส่วนต่างมูลค่าการส่งข้าว(ตามกรมศุลการกร)</th>
-                  <th>ปริมาณโควตา 80%</th>
-                  <th>ปริมาณโควตา 10%</th>
-                  <th>จัดการ</th>
+                  <th>ยอดรวมโควตาที่เคยได้รับ</th>
+                  <th>ยอดรวมการส่งออกที่ผ่านมา</th>
+                  <th>ปริมาณโควตา (100%)</th>
               </tr>
               <tr>
-                  <td>1</td>
-                  <td>2559</td>
-                  <td>ข้าวขาว</td>
-                  <td>178,450.14</td>
-                  <td>64,364.66</td>
-                  <td>119,343.15</td>
-                  <td>-5,318,061.14</td>
-                  <td>-77,706,431,185.66</td>
-                  <td>21,455.00</td>
-                  <td>-</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
               </tr>
           </table>
@@ -138,12 +125,12 @@
         </div>
         <!-- </paper-material> -->
 
-        <div class="layout horizontal end-justified">
+        <div class="layout horizontal end-justified" style="padding: 0px 20px 0px 0px">
           <paper-button raised class="gl-btn-primary">ดำเนินการคำนวณโควตา</paper-button>
         </div>
 
       </grid>
-      <panel-right>
+      <panel-right title="การคำนวณส่วนจัดสรร">
           <template is="dom-if" if="[[rendered]]">
             <calculate-setting></calculate-setting>
           </template>
@@ -160,6 +147,7 @@
                 },
             },
             ready: function(){
+              this._getYear();
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/calculate-setting.html'), (e)=>{
                     this.rendered = true;
@@ -170,7 +158,23 @@
             },
             _toggleDrawer: function(e) {
               this.$$("panel-right").toggle();
-            }
+            },
+            _getYear:function(){
+              axios.get('./eu/calculate/year')
+              .then((response)=>{
+                console.log("success");
+                this.getYear = response.data;
+                //console.log(this.getYear);
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error.message);
+                this.fire('toast',{status:'connectError',text:error.message,
+                  callback:function(){
+                    //console.log('test');
+                  }})
+              });
+          }
         });
     </script>
 </dom-module>
