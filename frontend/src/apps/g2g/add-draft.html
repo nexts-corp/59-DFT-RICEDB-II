@@ -133,7 +133,8 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap',
                 'select-bl':'getBlDetail',
-                'select-invoice':'getInvoiceDetail'
+                'select-invoice':'getInvoiceDetail',
+                'select-draftPayment':'draftPayment'
             },
             behaviors: [
                 gl.behavior.core,
@@ -286,6 +287,12 @@
               //   //  console.log(this.inDetail);
               // },false,'get');
               // console.log("pass");
+            },
+            draftPayment:function (e) {
+              console.log(e.detail.data);
+              e.detail.data.map((el)=>{
+                console.log(el.data);
+              });
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);

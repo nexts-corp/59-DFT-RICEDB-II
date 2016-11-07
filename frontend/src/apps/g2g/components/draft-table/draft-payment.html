@@ -43,7 +43,9 @@
     <table class="gl-table-default">
       <thead class="table-head">
         <tr>
-          <th><paper-checkbox class="checkBox" data="{{itemSecondary}}"></paper-checkbox></th>
+          <th>
+            <!-- <paper-checkbox class="checkBox" data="{{itemSecondary}}"></paper-checkbox> -->
+          </th>
           <th>Shipment No</th>
           <th>Invoice </th>
           <th>Confirmation Letter</th>
@@ -53,7 +55,7 @@
         <template is="dom-repeat" items="[[data]]" as="payment">
           <template is="dom-repeat" items="[[payment.invoice_detail]]" filter="{{_filter(searchInput)}}">
             <tr data="[[item]]" on-tap="_getBind" level="secondary" >
-              <td><paper-checkbox class="checkBox" data="{{itemSecondary}}"></paper-checkbox></td>
+              <td><paper-checkbox class="checkBox" data="{{item.invoice_id}}"></paper-checkbox></td>
               <td>[[payment.shm_no]]</td>
               <td>[[item.invoice_no]]</td>
               <td>[[item.cl_name]]</td>
@@ -64,7 +66,7 @@
       </tbody>
   </table>
   <div class="horizontal end-justified layout btnMoney">
-     <paper-button class="gl-btn-success" raised on-tap="check">ได้รับเงิน</paper-button>
+     <paper-button class="gl-btn-success" raised on-tap="payMoney">ได้รับเงิน</paper-button>
   </div>
   </template>
   <script>
@@ -90,6 +92,15 @@
         //   if (!person) return false;
         //   return (person.name && ~person.name.indexOf(val));
         // };
+      },
+      payMoney:function () {
+        // aria-checked="true"
+        var check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
+        // console.log(Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]'));
+        
+        this.fire('select-draftPayment', {
+            data: check
+          });
       },
       _getBind: function(e) {
         // console.log(e.currentTarget.data);
