@@ -106,6 +106,11 @@
             <gl-form-input disabled="[[checkInput]]" label="จำนวนตู้คอนเทนเนอร์" type="number" class="requested"auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          [[testNum(data.*,'weight_per_container')]]
+          <gl-form-input disabled="[[checkInput]]" label="ตู้ละ (ตัน)"class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
+            value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker disabled="[[checkInput]]" label="Packing Date"class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -113,11 +118,7 @@
         </gl-grid-col>
 
 
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[testNum(data.*,'weight_per_container')]]
-          <gl-form-input disabled="[[checkInput]]" label="ตู้ละ (ตัน)"class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
-            value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
-        </gl-grid-col>
+
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker disabled="[[checkInput]]" label="Production Date"class="requested" value="{{data.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
         </gl-grid-col>

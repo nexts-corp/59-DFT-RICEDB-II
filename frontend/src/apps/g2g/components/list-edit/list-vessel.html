@@ -203,6 +203,11 @@
                 <gl-form-input label="จำนวนตู้คอนเทนเนอร์" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              [[changeString2Num(shipment.*,'weight_per_container')]]
+              <gl-form-input label="ตู้ละ (ตัน)" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
+                value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="Packing Date" class="requested"  value="{{shipment.packing_date}}"></vaadin-date-picker>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -210,11 +215,7 @@
             </gl-grid-col>
 
 
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[changeString2Num(shipment.*,'weight_per_container')]]
-              <gl-form-input label="ตู้ละ (ตัน)" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
-                value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
-            </gl-grid-col>
+
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
               <vaadin-date-picker label="Production Date" class="requested"  value="{{shipment.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
             </gl-grid-col>
