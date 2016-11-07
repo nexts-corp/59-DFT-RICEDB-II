@@ -1,5 +1,7 @@
+<link rel="import" href="panel-seleted-draft.html">
 <link rel="import" href="panel-seleted-perriod.html">
 <link rel="import" href="panel-seleted-payment.html">
+<link rel="import" href="data/g2gModelBehavior.html">
 <link rel="import" href="components/grid/nx-grid.html">
 <link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/list-edit/list-draft.html">
@@ -8,14 +10,13 @@
 <link rel="import" href="components/payment/payment-pay.html">
 <link rel="import" href="components/invoice/invoice-page.html">
 <link rel="import" href="components/payment/draft-period.html">
-
+<link rel="import" href="../../../bower_components/gl-styles/gl-panel.html">
 <link rel="import" href="./components/payment/payment-detail.html">
-
-<link rel="import" href="data/db-gtog-contact.html">
-
+<link rel="import" href="data/g2gModelBehavior.html">
+<link rel="import" href="components/list-edit/list-draft-invoice.html">
 
 <dom-module id="g2g-add-draft">
-  <style is="custom-style" include="gl-color">
+  <style is="custom-style" include="gl-color gl-panel">
     * {
       font-family: 'rsuregular', sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -25,73 +26,106 @@
       margin: 0px 10px 0px 10px;
       /*border: 1px solid #000;*/
     }
+    paper-material {
+      height: auto;
+      background-color: var(--gl-white-color);
+      margin: 10px;
+      padding: 5px;
+      border-radius: 5px;
+    }
   </style>
   <template>
-    <db-gtog-contact></db-gtog-contact>
     <!-- <gl-search-input result="{{result}}"></gl-search-input>
     {{result.name}} // {{result.searchType}} -->
-    <content-panel>
-      <grid>
-        <!-- <bill-create></bill-create> -->
-        <iron-pages selected="{{selected}}">
-          <div>
-            <draft-period data="{{draft}}" on-shipment="getshipment"></draft-period>
+      <content-panel>
+        <grid>
+          <!-- <bill-create></bill-create> -->
+          <iron-pages selected="{{selected}}">
+            <div>
+              <draft-period data="{{draft}}" on-shipment="getshipment"></draft-period>
 
-          </div>
-          <div>
-            <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
-              <items type="primary">
-                <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
-              </items>
-              <items type="secondary">
-                <list item="invoice_no" label="Invoice No." width="flex"></list>
-              </items>
-              <items type="third">
-                <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
-              </items>
-            </list-draft>
-          </div>
-        </iron-pages>
+            </div>
+            <div>
+              <!-- <paper-material elevation="1"> -->
 
-      </grid>
-      <panel>
-        <div class="left">
-          <iron-pages selected="{{changePage}}">
-            <panel-seleted-perriod>
-              <section-content name="detail">
-                <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-                  <bill-create name="primary" data="{{blDetail}}"></bill-create>
-                  <invoice-page name="secondary" data="{{inDetail}}"></invoice-page>
-                </iron-pages>
-              </section-content>
-              <section-content name="file">
-                <bill-fileup></bill-fileup>
-              </section-content>
-            </panel-seleted-perriod>
-
-            <!-- payment -->
-
-            <panel-seleted-payment>
+              <panel-seleted-draft >
                 <section-content name="detail">
-                  <payment-detail></payment-detail>
+                  <list-draft data="{{blShipment}}">
+                    <items type="primary">
+                      <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
+                      <list item="cl_name" label="Confirmation Letter" width="flex"></list>
+                    </items>
+                  </list-draft>
                 </section-content>
                 <section-content name="print">
-                  <payment-pay></payment-pay>
+                  <list-draft-invoice data="{{invoiceShipment}}">
+                    <items type="secondary">
+                      <list item="invoice_no" label="Invoice No." width="flex"></list>
+                    </items>
+                  </list-draft-invoice>
                 </section-content>
                 <section-content name="file">
-                  3
+                  <list-draft data="{{dataRound}}" >
+                    <items type="primary">
+                      <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
+                    </items>
+                  </list-draft>
                 </section-content>
-            </panel-seleted-payment>
-            <!-- payment -->
-        </iron-pages>
-          <!-- <gl-tabs get-data="{{panalBl}}">
-            <section-content name="NEW">
-              <bill-create></bill-create>
-            </section-content>
-          </gl-tabs> -->
-        </div>
-      </panel>
-    </content-panel>
+              </panel-seleted-draft>
+              <!-- <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
+                <items type="secondary">
+                  <list item="invoice_no" label="Invoice No." width="flex"></list>
+                </items>
+              </list-draft>
+              <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
+                <items type="third">
+                  <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
+                </items>
+              </list-draft> -->
+                <!-- </paper-material> -->
+            </div>
+          </iron-pages>
+
+        </grid>
+        <panel>
+          <div class="left">
+            <iron-pages selected="{{changePage}}">
+              <panel-seleted-perriod>
+                <section-content name="detail">
+                  <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+                    <bill-create name="primary" data="{{blDetail}}"></bill-create>
+                    <invoice-page name="secondary" data="{{inDetail}}"></invoice-page>
+                  </iron-pages>
+                </section-content>
+                <section-content name="file">
+                  <bill-fileup></bill-fileup>
+                </section-content>
+              </panel-seleted-perriod>
+
+              <!-- payment -->
+
+              <panel-seleted-payment>
+                  <section-content name="detail">
+                    <payment-detail></payment-detail>
+                  </section-content>
+                  <section-content name="print">
+                    <payment-pay></payment-pay>
+                  </section-content>
+                  <section-content name="file">
+                    3
+                  </section-content>
+              </panel-seleted-payment>
+              <!-- payment -->
+          </iron-pages>
+            <!-- <gl-tabs get-data="{{panalBl}}">
+              <section-content name="NEW">
+                <bill-create></bill-create>
+              </section-content>
+            </gl-tabs> -->
+          </div>
+        </panel>
+      </content-panel>
+
   </template>
   <script>
         Polymer({
@@ -101,7 +135,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                g2gModelBehavior
             ],
             properties: {
                 layerContent: {
@@ -172,10 +207,9 @@
                 this.glQuery('adddraft',this);
             },
             ready: function() {
-              this.getDb('./g2g/contract/shipment',(data)=>{
+              this.read('./g2g/contract/shipment',(data)=>{
                 this.draft = data;
-                // console.log(this.draft);
-              });
+              },false,'put');
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
@@ -188,18 +222,17 @@
               }else {
                 id = e;
               }
-              // console.log(id);
-              this.getDb('./g2g/bl/shipment/id/'+id,(data)=>{
+              console.log('getshipment =>',id);
+              this.read('./g2g/bl/shipment/id/'+id,(data)=>{
                 this.blShipment = data;
                 // console.log(this.blShipment);
               },refresh,action);
               this.getInvoice(id,refresh,action);
             },
             getInvoice:function (id,refresh,action) {
-              console.log(id,refresh,action);
-              this.getDb('./g2g/invoice/shipment/id/'+id,(data)=>{
+              // console.log(id,refresh,action);
+              this.read('./g2g/invoice/shipment/id/'+id,(data)=>{
                 this.invoiceShipment = data;
-                // console.log(this.blShipment);
               },refresh,action);
             },
             testss:function (data) {
@@ -211,55 +244,23 @@
             getBlNo:function (blShipment) {
               // console.log(blShipment);
               this.glQuery('layoutMain').openToastLoading();
-              this.getDb('./g2g/bl/no/'+blShipment,(data)=>{
+              this.read('./g2g/bl/no/'+blShipment,(data)=>{
                 this.blDetail = data;
-                // console.log(this.blDetail);
-                // console.log(1111);
+                this.glQuery('contentPanel').changDrawer();
               },false,'get');
             },
             getInvoiceDetail:function (invoice_id) {
-              // console.log(invoice_id);
+              console.log(invoice_id);
               this.glQuery('layoutMain').openToastLoading();
-              this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
+              this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
                 this.inDetail = data;
-                //  console.log(this.inDetail);
-              },false,'get');
-              // console.log("pass");
-            },
-            getDb:function (url,callback,refresh,action) {
-              // console.log(url);
-              axios.get(url)
-                .then((response)=>{
-                  // console.log(refresh," ",action);
-                    callback(response.data);
-                    // console.log(action);
-                      switch (action) {
-                          case 'get':
-                                    this.glQuery('layoutMain').closeToastLoading(()=>{
-                                      this.checkRefresh(refresh);
-                                    });
-                          break;
-                          // insert & updoate
-                          case 'put':
-                                    this.glQuery('layoutMain').closeToastSaveing(()=>{
-                                      this.checkRefresh(refresh);
-                                    });
-                          break;
-                          case 'delete':
-                                    this.glQuery('layoutMain').closeToastDeleteing(()=>{
-                                      this.checkRefresh(refresh);
-                                    });
-                          break;
-                      }
-                })
-                .catch((error)=> {
-                  console.log(error);
-                });
-            },
-            checkRefresh:function (refresh) {
-              if (refresh == true) {
                 this.glQuery('contentPanel').changDrawer();
-              }
+              },false,'get');
+              // this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
+              //   this.inDetail = data;
+              //   //  console.log(this.inDetail);
+              // },false,'get');
+              // console.log("pass");
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
@@ -275,11 +276,12 @@
                 this.dataSelect = e.detail.data;
                 if (typeof this.dataSelect.bl_no !== 'undefined' &&
                     typeof this.dataSelect.invoice_id === 'undefined' ) {
-                  // console.log('bl_no');
+                  console.log('bl_no');
                     this.getBlNo(this.dataSelect.bl_no);
                 }
                 if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
-                  // console.log("invoice_id");
+                  console.log("invoice_id");
+                  console.log(this.dataSelect);
                     this.getInvoiceDetail(this.dataSelect.invoice_id);
                 }
                 // console.log(this.dataSelect.invoice_id);

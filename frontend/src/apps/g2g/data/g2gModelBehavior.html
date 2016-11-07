@@ -58,11 +58,34 @@
                 console.log("success");
                 // actionInpage();
                 callback(response.data);
+                switch (action) {
+                    case 'get':
+                              this.glQuery('layoutMain').closeToastLoading(()=>{
+                                this.checkRefresh(refresh);
+                              });
+                    break;
+                    // insert & updoate
+                    case 'put':
+                              this.glQuery('layoutMain').closeToastSaveing(()=>{
+                                this.checkRefresh(refresh);
+                              });
+                    break;
+                    case 'delete':
+                              this.glQuery('layoutMain').closeToastDeleteing(()=>{
+                                this.checkRefresh(refresh);
+                              });
+                    break;
+                }
               })
               .catch((error)=> {
                 console.log("error");
                 console.log(error);
               })
+      },
+      checkRefresh:function (refresh) {
+        if (refresh == true) {
+          this.glQuery('contentPanel').changDrawer();
+        }
       },
       // UPDATE
       // Exsameple

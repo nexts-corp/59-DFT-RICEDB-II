@@ -34,11 +34,11 @@
 
         <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" auto-validate required value="{{mkInvoce.invoice_no}}"></gl-form-input>
+            <gl-form-input class="resetInput" label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด"  required value="{{mkInvoce.invoice_no}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,0],[500,8]]"></gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <vaadin-date-picker id="invoiceData" label="Date" value="{{mkInvoce.invoice_date}}"></vaadin-date-picker>
+            <vaadin-date-picker  id="invoiceData" label="Date" value="{{mkInvoce.invoice_date}}"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
 
@@ -81,7 +81,7 @@
 
         <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
-            <gl-form-textarea rows="2" value="{{mkInvoce.made_out_to}}" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
+            <gl-form-textarea class="resetInput" rows="2" value="{{mkInvoce.made_out_to}}" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
           </gl-grid-col>
         </gl-grid-row>
           <br>
@@ -238,7 +238,7 @@
 
 
       <gl-form-panel-footer set-padding="20px 0px 0px 20px">
-            <paper-button class="gl-btn-primary" raised on-tap="btnCreateInvoice">สร้าง</paper-button>
+            <paper-button class="gl-btn-info" raised on-tap="btnCreateInvoice">Create Invoice</paper-button>
       </gl-form-panel-footer>
 
     </gl-form-panel-body>
@@ -249,6 +249,7 @@
       is: "bill-create",
       behaviors: [
           gl.behavior.core,
+          g2gModelBehavior
       ],
       properties: {
         nameRice: {
@@ -296,28 +297,20 @@
       },
       btnCreateInvoice:function () {
         this.mkInvoce.bl_no= this.data.bl_no;
+        this.mkInvoce.invoice_status = false;
         this.mkInvoce.invoice_date = new Date (this.mkInvoce.invoice_date);
-        console.log(this.data.shm_id);
+        // console.log(this.data.shm_id);
         this.glQuery('layoutMain').openToastSaveing();
-        console.log(this.mkInvoce);
-        this.postDb(this.mkInvoce);
-      },
-      postDb:function (data) {
-        axios.post('./g2g/invoice/insert', data)
-                  .then ((response)=> {
-                    console.log("success");
-                    console.log(response);
-                    console.log(data);
-                    console.log();
-                    this.glQuery('adddraft').getshipment(this.data.shm_id,true,'put');
-                    // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-
-                  })
-                  .catch((error)=> {
-                    console.log("error");
-                    console.log(error);
-                    console.log(data);
-                  })
+        // console.log(this.mkInvoce);
+      // console.log(  this.$$('.resetInput'));
+      // Polymer.dom(this.root).querySelectorAll('.resetInput').map((el)=>{
+      //              console.log(el);
+      //              el.reset();
+      //          })
+        this.insert('./g2g/invoice/insert',this.mkInvoce, () => {
+          this.glQuery('adddraft').getshipment(this.data.shm_id,true,'put');
+          this.glQuery('contentPanel').changDrawer();
+         });
       },
       toWords: function(num) {
           // Convert numbers to words
