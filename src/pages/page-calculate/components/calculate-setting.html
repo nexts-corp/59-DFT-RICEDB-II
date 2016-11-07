@@ -12,6 +12,9 @@
       @apply(--layout-horizontal);
       @apply(--layout-justified);
     }
+    paper-item:hover{
+      background-color: #F1F1F1;
+    }
     .bg{
       background-color: #F1F1F1;
       padding: 10px;
@@ -35,19 +38,35 @@
   </style>
   <template>
       <header>
-        <div class="title container">การคำนวณส่วนจัดสรร</div>
+        <!--<div class="title container">การคำนวณส่วนจัดสรร</div>-->
        
-        <div class="bg font">
+        <div class="font">
           <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <div>ปีโควตา : 2559</div>
+              <div>
+              <gl-form-input label="ปีโควตา"></gl-form-input>
+              </div>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"> 
-              <div>ประเภทข้าว : ข้าวขาว</div>
+            		<gl-form-dropdown-menu label="ประเภทข้าว">
+									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
+										<template is="dom-repeat" items="{{getTypeRice}}">
+											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+										</template>
+									</paper-listbox>
+								</gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">  
-              <div>ครั้งที่ทำการคำนวณ : 1</div>
+              <gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                <paper-listbox class="dropdown-content" attr-for-selected="math-id" selected="{{math-count}}">
+                  <paper-item math-id="1" >1</paper-item>
+									<!--<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
+										<template is="dom-repeat" items="{{getTypeRice}}">
+											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+										</template>
+									</paper-listbox>-->
+								</gl-form-dropdown-menu>
             </gl-grid-col> 
           </gl-grid-row>
           </div>
@@ -61,12 +80,24 @@
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                 <vaadin-date-picker label="Pick a date"></vaadin-date-picker>
+               		<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearMin}}">
+                      <template is="dom-repeat" items="{{getYear}}">
+                        <paper-item year="{{item}}">{{item}}</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
               </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                 <vaadin-date-picker label="Pick a date"></vaadin-date-picker>
+                 <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearMax}}">
+                      <template is="dom-repeat" items="{{getYear}}">
+                        <paper-item year="{{item}}">{{item}}</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </gl-form-dropdown-menu>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                  <paper-button class="gl-btn-primary" raised>
@@ -107,52 +138,23 @@
             <gl-form-panel-body set-border="0px">
            <div class="vertical layout flex marginTL">
           <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดการส่งออกรวม</div>
+            <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
             <div class="textcontent"> : </div>
             <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดรวมการขอหนังสือรับรอง</div>
+            <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
             <div class="textcontent"> : </div>
             <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดรวมประวัติส่งออก 3 ปี เพื่อคำนวณส่วนจัดสรร</div>
+            <div class="flex-3 textcontent">ปริมาณโควตา (100%)</div>
             <div class="textcontent"> : </div>
             <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
-          <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดรวมปริมาณที่ไม่ได้ขอใช้หนังสือรับรอง</div>
-            <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
-            <div class="flex"></div>
-          </div>
-          <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดรวมส่วนต่างปริมาณการส่งออกข้าว (ตามกรมศุลกากร)</div>
-            <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
-            <div class="flex"></div>
-          </div>
-          <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดรวมส่วนต่างมูลค่าการส่งออกข้าว (ตามกรมศุลกากร)</div>
-            <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
-            <div class="flex"></div>
-          </div>
-          <div class="horizontal layout">
-            <div class="flex-3 textcontent">ปริมาณโควตา 80%</div>
-            <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
-            <div class="flex"></div>
-          </div>
-          <div class="horizontal layout">
-            <div class="flex-3 textcontent">ปริมาณโควตา 10%</div>
-            <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
-            <div class="flex"></div>
           </div>
         </div>
             </gl-form-panel-body>
@@ -192,6 +194,10 @@
           observer: '_selectAllChanged'
         }
       },
+      ready:function(){
+        this._getTypeRice();
+        this._getYear();
+      },
       cal:function(e){
         const check = (item)=>{
             console.log(item);
@@ -205,7 +211,34 @@
           this.set('companyName.'+index+'.check',val);
         });
       },
-
+      _getTypeRice:function(){
+          axios.get('./eu/type_rice/')
+          .then((response)=>{
+              console.log("success!!");
+              console.log(response.data);
+              this.getTypeRice = response.data;
+          })
+          .catch((error)=>{
+              console.log("error");
+              console.log(error);
+          });
+      },
+      _getYear:function(){
+        axios.get('./eu/calculate/year')
+        .then((response)=>{
+          console.log("success");
+          this.getYear = response.data;
+          //console.log(this.getYear);
+        })
+        .catch((error)=>{
+          console.log("error");
+          console.log(error.message);
+          this.fire('toast',{status:'connectError',text:error.message,
+            callback:function(){
+              //console.log('test');
+            }})
+        });
+      }
     });
   </script>
 </dom-module>

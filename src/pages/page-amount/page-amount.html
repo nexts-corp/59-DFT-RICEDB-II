@@ -126,10 +126,10 @@
             </div>
           </div>
           <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
-          <div class="flex searchBorder">
+          <div class="flex" style="border:1px solid #ddd; margin:30px;">
              
           <div style="overflow-x:auto;">
-          <table class="gl-table-default">
+          <table class="gl-table-default" style="">
               <tr>
                 <template is="dom-repeat" items="{{dataAmount.header}}">
                     <th>{{item}}</th>
@@ -161,13 +161,19 @@
 
 
           </div>
+           <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
+              <paper-button raised class="gl-btn-primary">
+                <iron-icon icon="print"></iron-icon>
+                <span style="margin:0px 5px 0px 10px">ออกใบเสร็จ</span>
+              </paper-button>
+            </div>
         </div>
         <!-- </paper-material> -->
 
       </grid>
     
     </content-panel>
-    	<panel-right>
+    	<panel-right title="รายละเอียดการจัดสรรโควตา">
       <template is="dom-if" if="[[rendered]]">
         <amount-allocation-edit></amount-allocation-edit>
       </template>
