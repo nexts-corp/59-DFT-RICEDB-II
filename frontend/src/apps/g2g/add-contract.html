@@ -106,7 +106,7 @@
                        <paper-button raised on-tap="editContract" data="[[item]]" class="btnAddContract">Contract</paper-button>
                        <paper-button raised on-tap="editConfirm" data="[[item]]" class="btnAddContract">ConfirmMation Letter</paper-button>
                        <paper-button raised on-tap="editShipment" data="[[item]]" class="btnAddContract">Shipment</paper-button>
-                       <paper-button raised class="btnAddContract">Payment</paper-button>
+                       <paper-button raised on-tap="editPayment" shmId$="[[item.contract_id]]" class="btnAddContract">Payment</paper-button>
                      </div>
                    </paper-card>
                 </template>
@@ -403,6 +403,10 @@
                 },500);
               }
             },
+            editPayment:function (e) {
+              console.log(e.target.getAttribute("shmId"));
+              this.glChangePath('/g2g/add-draft/'+e.target.getAttribute("shmId"));
+            },
             shipmentCommon:function (e) {
               // console.log(e.detail.node);
               e.detail.node.common=this.common;
@@ -456,6 +460,7 @@
                 },refresh,action);
               });
             },
+
             getDb:function (url,callback,refresh,action) {
               // console.log(url);
               axios.get(url)
