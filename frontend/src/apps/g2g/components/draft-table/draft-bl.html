@@ -43,7 +43,7 @@
       <tbody>
         <template is="dom-repeat" items="[[data]]" as="contract">
           <template is="dom-repeat" items="[[contract.bl_detail]]" filter="{{_filter(searchInput)}}">
-            <tr>
+            <tr data="[[item]]" on-tap="_getBind" level="primary" >
               <td>[[contract.shm_no]]</td>
               <td>[[item.bl_no]]</td>
               <td>[[item.cl_no]]</td>
@@ -69,15 +69,25 @@
       },
       _filter: function(val) {
         console.log(val);
-        return function(val) {
-            return item.type == type || item.manager.type == type;
-        }
+        // return function(val) {
+        //     return item.type == type || item.manager.type == type;
+        // }
         // return function(person) {
         //   if (!val) return true;
         //   if (!person) return false;
         //   return (person.name && ~person.name.indexOf(val));
         // };
-      }
+      },
+      _getBind: function(e) {
+        // console.log(e.currentTarget.data);
+        this.fire('select-bl', {
+            data: e.currentTarget.data
+          });
+        this.fire('nx-grid-' + e.type, {
+            data: e.currentTarget.data,
+            level: e.currentTarget.getAttribute('level')
+          });
+      },
 
     });
   </script>

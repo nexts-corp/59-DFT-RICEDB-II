@@ -130,6 +130,7 @@
             is: "g2g-add-draft",
             listeners: {
                 'nx-grid-tap': 'nxGridTap',
+                'select-bl':'getBlDetail'
             },
             behaviors: [
                 gl.behavior.core,
@@ -213,12 +214,12 @@
                 this.draft = data;
               },false,'put');
               http://localhost:3000/api/g2g/bl/contract/id/
-              this.getshipment(shmId,false,'get');
+              this.getBlNo(shmId,false,'get');
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
-            getshipment:function (e,refresh,action) {
+            getBlNo:function (e,refresh,action) {
               console.log('e0 >',e);
               var id = e;
               this.read('./g2g/bl/contract/id/'+id,(data)=>{
@@ -251,13 +252,14 @@
             cheangpage:function (blShipment) {
               this.selected = 1;
             },
-            getBlNo:function (blShipment) {
-              // console.log(blShipment);
-              // this.glQuery('layoutMain').openToastLoading();
-              // this.read('./g2g/bl/no/'+blShipment,(data)=>{
-              //   this.blDetail = data;
-              //   this.glQuery('contentPanel').changDrawer();
-              // },false,'get');
+            getBlDetail:function (blShipment) {
+              console.log(blShipment.detail.data.bl_no);
+              // this.blDetail = blShipment.detail.data;
+              this.glQuery('layoutMain').openToastLoading();
+              this.read('./g2g/bl/no/'+blShipment.detail.data.bl_no,(data)=>{
+                this.blDetail = data;
+                this.glQuery('contentPanel').changDrawer();
+              },false,'get');
             },
             getInvoiceDetail:function (invoice_id) {
               // console.log(invoice_id);
@@ -283,17 +285,17 @@
                     this.changePage = 0;
                 }
                 // console.log(this.dataSelect);
-                this.dataSelect = e.detail.data;
-                if (typeof this.dataSelect.bl_no !== 'undefined' &&
-                    typeof this.dataSelect.invoice_id === 'undefined' ) {
-                  console.log('bl_no');
-                    this.getBlNo(this.dataSelect.bl_no);
-                }
-                if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
-                  console.log("invoice_id");
-                  console.log(this.dataSelect);
-                    this.getInvoiceDetail(this.dataSelect.invoice_id);
-                }
+                // this.dataSelect = e.detail.data;
+                // if (typeof this.dataSelect.bl_no !== 'undefined' &&
+                //     typeof this.dataSelect.invoice_id === 'undefined' ) {
+                //   console.log('bl_no');
+                //     this.getBlNo(this.dataSelect.bl_no);
+                // }
+                // if (typeof this.dataSelect.invoice_id !== 'undefined' ) {
+                //   console.log("invoice_id");
+                //   console.log(this.dataSelect);
+                //     this.getInvoiceDetail(this.dataSelect.invoice_id);
+                // }
                 // console.log(this.dataSelect.invoice_id);
             }
         });
