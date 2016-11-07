@@ -32,7 +32,7 @@ var schema = {
     "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to", "invoice_status"]
 };
 var validate = ajv.compile(schema);
-router.get('/', function (req, res, next) {
+router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
             .group(function (g) {
@@ -94,7 +94,29 @@ router.get('/', function (req, res, next) {
             .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip().filter(r.row('shm_status').eq(true))
             .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
             .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
-            .orderBy('invoice_no')
+            .filter(
+            r.row('shm_status').eq(true)
+                .and(r.row('contract_id').eq(req.params.contract_id))
+                .and(r.row('invoice_status').eq(false))
+            )
+            .group(function (g) {
+                return g.pluck(
+                    "shm_id", "shm_no", "shm_name", "cl_id", "cl_no", "cl_name"
+                )
+            })
+            .ungroup()
+            .merge(function (me) {
+                return {
+                    shm_id: me('group')('shm_id'),
+                    shm_no: me('group')('shm_no'),
+                    shm_name: me('group')('shm_name'),
+                    cl_id: me('group')('cl_id'),
+                    cl_no: me('group')('cl_no'),
+                    cl_name: me('group')('cl_name'),
+                    invoice_detail: me('reduction')
+                }
+            })
+            .without("group", "reduction")
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
