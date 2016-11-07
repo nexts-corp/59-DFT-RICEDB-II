@@ -29,7 +29,7 @@ router.get(['/exporter'], function (req, res, next) {
             .filter(
             function (row) {
                 return row('type_rice_id').eq(params.type_rice)
-                    .and(row("year").gt(String(parseInt(params.frist_year)-1)).and(row("year").lt(String(parseInt(params.frist_year)+1))))
+                    .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
             }
             )("exporter_id").distinct().map(function (row) {
                 return { id: row }
@@ -50,6 +50,113 @@ router.get(['/exporter'], function (req, res, next) {
             }
         });
     });
+});
+
+router.post(['/calculate'], function (req, res, next) {
+    var params = req.body;
+    db.query(function (conn) {
+
+        statement = r.do(
+
+            r.db('eu').table('ex_export_quantity_eu')
+                .filter(
+                function (row) {
+                    return row('type_rice_id').eq(params.type_rice)
+                        .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
+                }
+                )
+                .filter(function (row) {
+                    return r.expr(params.exporter).contains(row('exporter_id'))
+                })
+                .group('exporter_id')
+                .sum('quantity').ungroup()
+
+            ,
+
+
+            r.db('eu').table('confirm_quota').merge(function (row) {
+                return {
+                    quantity: row('quantity')('quantity').reduce(function (left, right) {
+                        return left.add(right)
+                    }), year: row('quota_id')
+                }
+            }).filter(
+                function (row) {
+                    return row('type_rice_id').eq(params.type_rice)
+                        .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
+                }
+                ).filter(function (row) {
+                    return r.expr(params.exporter).contains(row('exporter_id'))
+                })
+                .group('exporter_id').sum('quantity').ungroup()
+
+            ,
+
+
+            function (sum_export, sum_quota) {
+                return r.do(
+
+                    sum_export.union(sum_quota)
+                        .group('group').map(function (row) { return row('reduction') }).reduce(function (left, right) { return left.sub(right) }).ungroup()
+                        .map(function (row) {
+                            return {
+                                quantity: r.branch(row('reduction').lt(0), 0, row('reduction')),
+                                exporter_id: row('group')
+                            }
+                        })
+
+                    ,
+
+                    r.db('eu').table('quota').get(params.year).merge(
+                        function (row) {
+                            return row('type_rice')
+                        }
+                    ).filter({ type_rice_id: params.type_rice })
+
+                    , function (result1, result2) {
+
+
+                        return result1.merge(function (row) {
+                            return { quantity: row('quantity').mul(result2('amount')(0)).div(result1.sum('quantity')) }
+                        }).merge(function (row) {
+                            return { period: result2('period')(0) }
+                        }).merge(function (row) {
+                            return {
+                                period: row('period').merge(function (period) {
+                                    return {
+                                        quantity: row('quantity').mul(period('percent')).div(100).do(function (result) {
+                                            return r.branch(result.lt(0), 0, result)
+                                        })
+                                    }
+                                })
+                            }
+                        }).do(function (exporter) {
+                            return {
+                                sum_for_cal: result1.sum('quantity'),
+                                sum_export: sum_export.sum('reduction'),
+                                sum_quota: sum_quota.sum('reduction'),
+                                exporter: exporter
+                            }
+                        })
+
+                    }
+
+                )
+            }
+
+        )
+
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+
+
+    });
+    //res.json({ error: params });
 });
 
 
