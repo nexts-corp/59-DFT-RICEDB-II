@@ -23,9 +23,12 @@ var schema = {
         },
         "shm_name": {
             "type": "string"
+        },
+        "shm_status": {
+            "type": "boolean"
         }
     },
-    "required": ["contract_id", "cl_id", "shm_no", "shm_name"]
+    "required": ["contract_id", "cl_id", "shm_no", "shm_name","shm_status"]
 };
 var validate = ajv.compile(schema);
 
@@ -65,6 +68,8 @@ router.get('/id/:shm_id', function (req, res, next) {
                             })
                         }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("carrier_id", r.table("carrier")).without({ right: "id" }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
                         .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
@@ -97,13 +102,30 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 .merge(function (mmm) {
                                     return r.table('type_rice').get(mmm('type_rice_id')).without('id')
                                 })
+                                .merge(function (limit) {
+                                    return {
+                                        type_rice_quantity_confirm: r.table('shipment_detail')
+                                            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
+                                            .filter({
+                                                cl_id: m('cl_id'),
+                                                //shm_id: m('shm_id'),
+                                                type_rice_id: limit('type_rice_id')
+                                            })
+                                            .coerceTo('array')
+                                            .getField('shm_det_quantity')
+                                            .reduce(function (left, right) {
+                                                return left.add(right);
+                                            }).default(0)
+                                    }
+                                })
                                 .merge(function (mmm) {
                                     return {
                                         package: mmm('package').map(function (arr_package) {
                                             return arr_package.merge(function (row_package) {
                                                 return r.table('package').get(row_package('package_id')).without('id')
                                             })
-                                        })
+                                        }),
+                                        type_rice_quantity_limit: mmm('type_rice_quantity').sub(mmm('type_rice_quantity_confirm'))
                                     }
                                 })
                         }
@@ -166,7 +188,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("shipment")
@@ -196,35 +218,25 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:shm_id', function (req, res, next) {
-    //var valid = validate(req.body);
+router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.params.shm_id != '' || req.params.shm_id != null) {
-        result.id = req.params.shm_id;
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
         db.query(function (conn) {
-            r.table("shipment")
-                .get(req.params.shm_id)
-                .delete()
-                .run(conn)
+            var q = r.table("shipment").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('shm_status').eq(false)
+                    , r.table("shipment").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
+            })
+            q.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
-                        // db.query(function (conn) {
-                        //     r.table("shipment_detail")
-                        //         .filter({ shm_id: req.params.id })
-                        //         .delete()
-                        //         .run(conn)
-                        //         .then(function (resp) {
-                        //             //console.log('yyyyy');
-                        //             console.log(result);
-                        //             res.json(result);
-                        //         })
-                        // })
-                        res.json(result);
                     }
+                    res.json(result);
                 })
                 .error(function (err) {
                     result.message = err;
@@ -236,10 +248,6 @@ router.delete('/delete/id/:shm_id', function (req, res, next) {
         result.message = 'require field id';
         res.json(result);
     }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
 });
 
 module.exports = router;

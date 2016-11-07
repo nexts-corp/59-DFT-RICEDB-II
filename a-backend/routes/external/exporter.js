@@ -25,19 +25,9 @@ var schema = {
         },
         "trader_id": {
             "type": "string"
-        },
-        "seller_agent": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "agent_name": { "type": "string" }
-                },
-                "required": ["agent_name"]
-            }
         }
     },
-    "required": ["exporter_no", "exporter_date_approve", "exporter_date_update", "trader_id", "seller_agent"]
+    "required": ["exporter_no", "exporter_date_approve", "exporter_date_update", "trader_id"]
 };
 var validate = ajv.compile(schema);
 
@@ -95,7 +85,15 @@ router.get('/', function (req, res, next) {
                     exporter_date_approve: r.branch(m.hasFields('exporter_date_approve'), m('exporter_date_approve').split('T')(0), null),
                     exporter_date_update: r.branch(m.hasFields('exporter_date_update'), m('exporter_date_update').split('T')(0), null),
                     trader_date_approve: m('trader_date_approve').split('T')(0),
-                    trader_date_expire: m('trader_date_expire').split('T')(0)
+                    trader_date_expire: m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
+                    trader_active: r.now().toISO8601().lt(m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
+                    //r.time(m('trader_date_approve').split('T')(0).split('-')(0).coerceTo('number'), r.december, 31, 0, 0, 0, '+07:00').toISO8601()
+                }
+            })
+            .merge(function (m) {
+                return {
+                    exporter_active_name: r.branch(m('exporter_active').eq(null), null, m('exporter_active').eq(true),'ปกติ','ถูกระงับ'),
+                    trader_active_name: r.branch(m('trader_active').eq(true), 'ปกติ', 'หมดอายุ')
                 }
             })
             .without('id')
@@ -134,10 +132,11 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 exporter_status_name: r.branch(r.row.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก')
             },
             r.db('external_f3').table("trader").get(r.row("trader_id"))
-                .merge(function (r) {
+                .merge(function (m) {
                     return {
-                        trader_date_approve: r('trader_date_approve').split('T')(0),
-                        trader_date_expire: r('trader_date_expire').split('T')(0)
+                        trader_date_approve: m('trader_date_approve').split('T')(0),
+                        trader_date_expire: m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
+                        trader_active: r.now().toISO8601().lt(m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
                     }
                 }),
             r.db('external_f3').table("seller").get(r.row("seller_id")),

@@ -67,7 +67,7 @@ var schema = {
                 "type": "string",
                 "format": "date-time"
             },
-            "seller_id": {
+            "exporter_id": {
                 "type": "string",
                 "minLength": 36
             },
@@ -110,7 +110,7 @@ var schema = {
             "load_port_id",
             "num_of_container",
             "package_id",
-            "seller_id",
+            "exporter_id",
             "ship_id",
             "shipline_id",
             "shm_det_quantity",
@@ -168,7 +168,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("shipment_detail")
@@ -203,7 +203,7 @@ router.delete('/delete/id/:shm_det_id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     //  if (valid) {
     //console.log(req.body);
-    if (req.params.shm_det_id != '' || req.params.shm_det_id != null) {
+    if (req.params.shm_det_id != '' && req.params.shm_det_id != null) {
         result.id = req.params.shm_det_id;
         db.query(function (conn) {
             r.table("shipment_detail")

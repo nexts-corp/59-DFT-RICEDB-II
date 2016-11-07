@@ -24,11 +24,93 @@ var schema = {
         },
         "made_out_to": {
             "type": "string"
+        },
+        "invoice_status": {
+            "type": "boolean"
         }
     },
-    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to"]
+    "required": ["bl_no", "invoice_date", "invoice_no", "made_out_to", "invoice_status"]
 };
 var validate = ajv.compile(schema);
+router.get('/', function (req, res, next) {
+    db.query(function (conn) {
+        r.table('shipment_detail')
+            .group(function (g) {
+                return g.pluck(
+                    "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "ship_voy_no"
+                )
+            })
+            .ungroup()
+            .merge(function (me) {
+                return {
+                    shm_id: me('group')('shm_id'),
+                    bl_no: me('group')('bl_no'),
+                    ship_id: me('group')('ship_id'),
+                    ship_voy_no: me('group')('ship_voy_no'),
+                    load_port_id: me('group')('load_port_id'),
+                    dest_port_id: me('group')('dest_port_id'),
+                    deli_port_id: me('group')('deli_port_id'),
+                    //quantity: me('reduction')
+                }
+            })
+            .without("group", "reduction")
+            .outerJoin(r.table("invoice"),
+            function (detail, invoice) {
+                return invoice("bl_no").eq(detail("bl_no"))
+            })
+            .zip()
+            .filter(r.row.hasFields('invoice_no').and(r.row('invoice_status').eq(false)))
+            .merge(function (m) {
+                return {
+                    invoice_id: m('id')
+                }
+            }).without('id')
+            .eqJoin("load_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        load_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        load_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("dest_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        dest_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        dest_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("deli_port_id", r.table("port")).map(function (port) {
+                return port.merge({
+                    right: {
+                        deli_port_name: port("right")("port_name"),//r.row["right"]["port_name"]
+                        deli_port_code: port("right")("port_code")
+                    }
+                })
+            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
+            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip().filter(r.row('shm_status').eq(true))
+            .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
+            .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
+            .orderBy('invoice_no')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 router.get('/shipment/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
@@ -297,7 +379,7 @@ router.put('/update', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         //console.log(req.body);
-        if (req.body.id != '' || req.body.id != null) {
+        if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
                 r.table("invoice")
@@ -327,24 +409,25 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:invoice_id', function (req, res, next) {
-    //var valid = validate(req.body);
+router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.params.invoice_id != '' || req.params.invoice_id != null) {
-        result.id = req.params.invoice_id;
+    if (req.params.id != '' && req.params.id != null) {
+        result.id = req.params.id;
         db.query(function (conn) {
-            r.table("invoice")
-                .get(req.params.invoice_id)
-                .delete()
-                .run(conn)
+            var q = r.table("invoice").get(req.params.id).do(function (result) {
+                return r.branch(
+                    result('invoice_status').eq(false)
+                    , r.table("invoice").get(req.params.id).delete()
+                    , r.expr("Can't delete because this status = true.")
+                )
+            })
+            q.run(conn)
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
-                        res.json(result);
                     }
+                    res.json(result);
                 })
                 .error(function (err) {
                     result.message = err;
@@ -356,10 +439,6 @@ router.delete('/delete/id/:invoice_id', function (req, res, next) {
         result.message = 'require field id';
         res.json(result);
     }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
 });
 module.exports = router;
 
