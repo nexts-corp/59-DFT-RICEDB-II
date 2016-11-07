@@ -48,7 +48,7 @@
 
               <panel-seleted-draft >
                 <section-content name="detail">
-                  <draft-bl></draft-bl>
+                  <draft-bl data="{{blShipment}}"></draft-bl>
                   <!-- <list-draft data="{{blShipment}}">
                     <items type="primary">
                       <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
@@ -208,34 +208,42 @@
               // console.log('url'+document.location);
               // console.log("PathName  ="+ window.location.pathname);
               var shmId = window.location.pathname.substring(15, 51);
-              console.log(shmId);
+              // console.log(shmId);
               this.read('./g2g/contract/shipment',(data)=>{
                 this.draft = data;
               },false,'put');
+              http://localhost:3000/api/g2g/bl/contract/id/
+              this.getshipment(shmId,false,'get');
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
             },
             getshipment:function (e,refresh,action) {
-              // console.log("check",e.detail);
-              var id;
-              if (typeof e === 'object') {
-                id = e.detail;
-              }else {
-                id = e;
-              }
-              console.log('getshipment =>',id);
-              this.read('./g2g/bl/shipment/id/'+id,(data)=>{
+              console.log('e0 >',e);
+              var id = e;
+              this.read('./g2g/bl/contract/id/'+id,(data)=>{
                 this.blShipment = data;
-                // console.log(this.blShipment);
+                console.log(this.blShipment);
               },refresh,action);
-              this.getInvoice(id,refresh,action);
+              // console.log("check",e.detail);
+              // var id;
+              // if (typeof e === 'object') {
+              //   id = e.detail;
+              // }else {
+              //   id = e;
+              // }
+              // console.log('getshipment =>',id);
+              // this.read('./g2g/bl/shipment/id/'+id,(data)=>{
+              //   this.blShipment = data;
+              //   // console.log(this.blShipment);
+              // },refresh,action);
+              // this.getInvoice(id,refresh,action);
             },
             getInvoice:function (id,refresh,action) {
               // console.log(id,refresh,action);
-              this.read('./g2g/invoice/shipment/id/'+id,(data)=>{
-                this.invoiceShipment = data;
-              },refresh,action);
+              // this.read('./g2g/invoice/shipment/id/'+id,(data)=>{
+              //   this.invoiceShipment = data;
+              // },refresh,action);
             },
             testss:function (data) {
               console.log('เข้าโวยยย',data);
@@ -245,19 +253,19 @@
             },
             getBlNo:function (blShipment) {
               // console.log(blShipment);
-              this.glQuery('layoutMain').openToastLoading();
-              this.read('./g2g/bl/no/'+blShipment,(data)=>{
-                this.blDetail = data;
-                this.glQuery('contentPanel').changDrawer();
-              },false,'get');
+              // this.glQuery('layoutMain').openToastLoading();
+              // this.read('./g2g/bl/no/'+blShipment,(data)=>{
+              //   this.blDetail = data;
+              //   this.glQuery('contentPanel').changDrawer();
+              // },false,'get');
             },
             getInvoiceDetail:function (invoice_id) {
-              console.log(invoice_id);
-              this.glQuery('layoutMain').openToastLoading();
-              this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
-                this.inDetail = data;
-                // this.glQuery('contentPanel').changDrawer();
-              },false,'get');
+              // console.log(invoice_id);
+              // this.glQuery('layoutMain').openToastLoading();
+              // this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
+              //   this.inDetail = data;
+              //   // this.glQuery('contentPanel').changDrawer();
+              // },false,'get');
               // this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
               //   this.inDetail = data;
               //   //  console.log(this.inDetail);
