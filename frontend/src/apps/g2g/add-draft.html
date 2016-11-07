@@ -222,9 +222,11 @@
             getBlNo:function (e,refresh,action) {
               console.log('e0 >',e);
               var id = e;
+              // console.log(id);
               this.read('./g2g/bl/contract/id/'+id,(data)=>{
                 this.blShipment = data;
-                console.log(this.blShipment);
+                // console.log(11);
+                // console.log(this.blShipment);
               },refresh,action);
               // console.log("check",e.detail);
               // var id;
@@ -254,7 +256,6 @@
             },
             getBlDetail:function (blShipment) {
               console.log(blShipment.detail.data.bl_no);
-              // this.blDetail = blShipment.detail.data;
               this.glQuery('layoutMain').openToastLoading();
               this.read('./g2g/bl/no/'+blShipment.detail.data.bl_no,(data)=>{
                 this.blDetail = data;
