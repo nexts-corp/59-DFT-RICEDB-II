@@ -61,10 +61,28 @@ router.get('/', function (req, res, next) {
             .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
             .eqJoin("contract_id", r.table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
             .filter(
-                r.row.hasFields('invoice_no').not()
-                    .and(r.row('shm_status').eq(true))
-                    .and(r.row('invoice_status').eq(false))
+            r.row.hasFields('invoice_no').not()
+                .and(r.row('shm_status').eq(true))
+            //.and(r.row('invoice_status').eq(false))
             )
+            .group(function (g) {
+                return g.pluck(
+                    "shm_id", "shm_no", "shm_name", "cl_id", "cl_no", "cl_name"
+                )
+            })
+            .ungroup()
+            .merge(function (me) {
+                return {
+                    shm_id: me('group')('shm_id'),
+                    shm_no: me('group')('shm_no'),
+                    shm_name: me('group')('shm_name'),
+                    cl_id: me('group')('cl_id'),
+                    cl_no: me('group')('cl_no'),
+                    cl_name: me('group')('cl_name'),
+                    bl_detail: me('reduction')
+                }
+            })
+            .without("group", "reduction")
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
