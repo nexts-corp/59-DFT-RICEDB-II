@@ -14,7 +14,9 @@
 <link rel="import" href="./components/payment/payment-detail.html">
 <link rel="import" href="data/g2gModelBehavior.html">
 <link rel="import" href="components/list-edit/list-draft-invoice.html">
+<!-- <link rel="import" href="../../../bower_components/gl-styles/gl-table.html"> -->
 
+<link rel="import" href="components/draft-table/draft-bl.html">
 <dom-module id="g2g-add-draft">
   <style is="custom-style" include="gl-color gl-panel">
     * {
@@ -40,36 +42,33 @@
       <content-panel>
         <grid>
           <!-- <bill-create></bill-create> -->
-          <iron-pages selected="{{selected}}">
-            <div>
-              <draft-period data="{{draft}}" on-shipment="getshipment"></draft-period>
 
-            </div>
             <div>
               <!-- <paper-material elevation="1"> -->
 
               <panel-seleted-draft >
                 <section-content name="detail">
-                  <list-draft data="{{blShipment}}">
+                  <draft-bl></draft-bl>
+                  <!-- <list-draft data="{{blShipment}}">
                     <items type="primary">
                       <list item="bl_no" label="Bill of Landing Number (B/L No.)" width="flex"></list>
                       <list item="cl_name" label="Confirmation Letter" width="flex"></list>
                     </items>
-                  </list-draft>
+                  </list-draft> -->
                 </section-content>
                 <section-content name="print">
-                  <list-draft-invoice data="{{invoiceShipment}}">
+                  <!-- <list-draft-invoice data="{{invoiceShipment}}">
                     <items type="secondary">
                       <list item="invoice_no" label="Invoice No." width="flex"></list>
                     </items>
-                  </list-draft-invoice>
+                  </list-draft-invoice> -->
                 </section-content>
                 <section-content name="file">
-                  <list-draft data="{{dataRound}}" >
+                  <!-- <list-draft data="{{dataRound}}" >
                     <items type="primary">
                       <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
                     </items>
-                  </list-draft>
+                  </list-draft> -->
                 </section-content>
               </panel-seleted-draft>
               <!-- <list-draft data="{{blShipment}}" datainvoice="{{invoiceShipment}}" dataround="{{dataRound}}">
@@ -116,7 +115,6 @@
                   </section-content>
               </panel-seleted-payment>
               <!-- payment -->
-          </iron-pages>
             <!-- <gl-tabs get-data="{{panalBl}}">
               <section-content name="NEW">
                 <bill-create></bill-create>
@@ -207,6 +205,10 @@
                 this.glQuery('adddraft',this);
             },
             ready: function() {
+              // console.log('url'+document.location);
+              // console.log("PathName  ="+ window.location.pathname);
+              var shmId = window.location.pathname.substring(15, 51);
+              console.log(shmId);
               this.read('./g2g/contract/shipment',(data)=>{
                 this.draft = data;
               },false,'put');
@@ -254,7 +256,7 @@
               this.glQuery('layoutMain').openToastLoading();
               this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
                 this.inDetail = data;
-                this.glQuery('contentPanel').changDrawer();
+                // this.glQuery('contentPanel').changDrawer();
               },false,'get');
               // this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
               //   this.inDetail = data;
@@ -291,6 +293,7 @@
 </dom-module>
 <!--
 
+http://localhost:3000/api/g2g/bl
 
 http://localhost:3000/api/g2g/shipment/id/486e6163-324c-4994-a2b4-ef6af082e4b9
 http://localhost:3000/api/g2g/contract/shipment

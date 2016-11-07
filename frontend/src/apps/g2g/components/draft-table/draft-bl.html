@@ -1,0 +1,82 @@
+<link rel="import" href="../../../../../bower_components/gl-styles/gl-table.html">
+<dom-module id="draft-bl">
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-table gl-color">
+    :host {
+      display: block;
+      /*background-color: var(--gl-primary-color);*/
+    }
+    .table-head > tr > th:nth-child(1) {
+      width: 20%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 30%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 50%;
+    }
+    .labelSearch{
+    font-size: var(--font-size-h4);
+    margin: 10px 10px 10px 10px;
+    font-family: 'rsuregular', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    }
+    td {
+      cursor:pointer;
+    }
+  </style>
+  <template>
+    <div class="flex searchInput ">
+       <div class="horizontal end-justified layout">
+         <div class="labelSearch">B/L No.</div>
+         <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+         <paper-icon-button icon="search"></paper-icon-button>
+       </div>
+   </div>
+    <table class="gl-table-default">
+      <thead class="table-head">
+        <tr>
+          <th>Shipment No</th>
+          <th>Bill of Landing Number (B/L No.)</th>
+          <th>Confirmation Letter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>$100</td>
+          <td>January</td>
+          <td>$100</td>
+        </tr>
+        <tr>
+          <td>$100</td>
+          <td>January</td>
+          <td>$100</td>
+        </tr>
+        <tr>
+          <td>$100</td>
+          <td>January</td>
+          <td>$100</td>
+        </tr>
+        <tr>
+          <td>$100</td>
+          <td>January</td>
+          <td>$100</td>
+        </tr>
+      </tbody>
+  </table>
+  </template>
+  <script>
+    Polymer({
+      is: "draft-bl",
+      properties: {
+        searchInput: {
+          type: String,
+          observer:'_searchInData'
+        }
+      },
+      _searchInData:function (e) {
+        console.log(e);
+      }
+
+    });
+  </script>
+</dom-module>
