@@ -3,7 +3,7 @@ var router = express.Router();
 
 var r = require('rethinkdb');
 var db = require('../../db.js');
-router.get('/', function (req, res, next) {
+router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('shipment_detail')
             // .filter({ shm_id: req.params.shm_id })
@@ -63,7 +63,7 @@ router.get('/', function (req, res, next) {
             .filter(
             r.row.hasFields('invoice_no').not()
                 .and(r.row('shm_status').eq(true))
-            //.and(r.row('invoice_status').eq(false))
+                .and(r.row('contract_id').eq(req.params.contract_id))
             )
             .group(function (g) {
                 return g.pluck(
