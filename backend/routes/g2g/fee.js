@@ -75,16 +75,68 @@ var schema = {
     "required": ["fe_foreign", "fe_internal", "fe_other", "fee_date_receipt", "fee_no", "rate_bank", "rate_tt", "invoice", "fee_status"]
 };
 var validate = ajv.compile(schema);
-router.get('/', function (req, res, next) {
+router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.table('fee')
             .filter({ fee_status: false })
-            .merge(function(m){
+            .merge(function (m) {
                 return {
-                    fee_id:m('id')
+                    fee_id: m('id'),
+                    invoice: m('invoice').merge(function (inv_mer) {
+                        return {
+                            invoice_detail: inv_mer('invoice_detail').merge(function (det_map) {
+                                return r.table('shipment_detail').get(det_map('shm_det_id'))
+                                    .merge(function (shm_det_mer) {
+                                        return r.table('shipment').get(shm_det_mer('shm_id'))
+                                    })
+                                    .merge(function (shm_det_mer) {
+                                        return r.table('confirm_letter').get(shm_det_mer('cl_id'))
+                                    })
+                                    .pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
+                            })
+                        }
+                    })
+                        .merge(function (inv_mer) {
+                            return inv_mer('invoice_detail')(0)
+                        })
+                        .group(function (g) {
+                            return g.pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
+                        })
+                        .ungroup()
+                        .without('reduction')
+                        .getField('group')(0)
                 }
             })
-            .without('id')
+            .merge(function (m) {
+                return m('invoice')
+            })
+            .without('id', 'invoice')
+            .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
+            .filter(
+            r.row('contract_id').eq(req.params.contract_id)
+                .and(r.row('fee_status').eq(false))
+            )
+            .group(function (g) {
+                return g.pluck(
+                    'contract_id', 'cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status'
+                )
+            })
+            .ungroup()
+            .merge(function (me) {
+                return {
+                    contract_id: me('group')('contract_id'),
+                    cl_id: me('group')('cl_id'),
+                    cl_no: me('group')('cl_no'),
+                    cl_name: me('group')('cl_name'),
+                    cl_status: me('group')('cl_status'),
+                    shm_id: me('group')('shm_id'),
+                    shm_no: me('group')('shm_no'),
+                    shm_name: me('group')('shm_name'),
+                    shm_status: me('group')('shm_status'),
+                    fee_detail: me('reduction')
+                }
+            })
+            .without("group", "reduction")
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
