@@ -7,24 +7,24 @@
     .flexchild-1 {
       @apply(--layout-flex);
     }
-    
+
     .flexchild-2 {
       @apply(--layout-flex-2);
     }
-    
+
     .flexchild-5 {
       @apply(--layout-flex-5);
     }
-    
+
     .flex-center-justified {
       @apply(--layout-horizontal);
       @apply(--layout-center-justified);
     }
-    
+
     .header {
       text-align: center;
     }
-    
+
     .text {
       margin-top: 10px;
       margin-right: 10px;
@@ -37,45 +37,45 @@
     .inputHeader {
       width: 40%;
     }
-    
+
     .container {
       padding: 10px;
     }
-    
+
     table.default {
       border-collapse: collapse;
       width: 100%
     }
-    
+
     table.default,
     th,
     td {
       border-bottom: 1px solid #ddd;
     }
-    
+
     th,
     td {
       padding: 15px;
     }
-    
+
     th {
       text-align: center;
       background-color: #F1F1F1;
       white-space: nowrap;
     }
-    
+
     td {
       text-align: left;
       white-space: nowrap;
     }
-    
+
     tr:hover {
       background-color: #F1F1F1;
     }
   </style>
 
 
-  <template>
+  <template>{{data}}
     <div class="header flex-center-justified">
       <gl-form-input class="inputHeader" value="รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO" no-label-float></gl-form-input>
     </div>
@@ -138,81 +138,69 @@
         </gl-grid-col>
       </gl-grid-row>
     </div>
-    <gl-form-panel>
-      <gl-form-panel-body set-padding="5px" set-border="0px">
-        <div class="horizontal justified layout">
-             <div>Invoice No : C123456</div>
-             <div>Vessel : EVER LOYAL V.1449-01BE</div>
-             <div>LotNo : 14</div>
-             <div style="width:20px"></div>
-             <div>1/2</div>
-        </div>
-      <div style="overflow-x:auto;">
-      <table class="default">
-        <tr>
-          <th>ผู้ส่งออก</th>
-          <th>เลขที่ใบแจ้งหนี้</th>
-          <th>วันที่ใบแจ้งหนี้</th>
-          <th>จำนวน(ตัน) <br>(1)</th>
-          <th>มูลค่าต่อตัน(USD)<br>(2)</th>
-          <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
-          <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
-          <th>หักค่า FE (บาท)<br>(5)</th>
-          <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
-          <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
-        </tr>
-        <tr>
-          <td>Capital Cereals Co., Ltd</td>
-          <td>
-            <gl-form-input style="width:140px;" value="ตม.สนก 001/2559"></gl-form-input>
-          </td>
-          <td>
-            <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-12"></vaadin-date-picker>
-          </td>
-          <td>200</td>
-          <td>392</td>
-          <td>78,400</td>
-          <td>2,740,864.00</td>
-          <td>
-            <gl-form-input value="343.50"></gl-form-input>
-          </td>
-          <td>27,405.20</td>
-          <td>2,713,115.30</td>
-        </tr>
-         <tr>
-          <td>Toumi Foods and Prosucts Co,Ltd</td>
-          <td>
-            <gl-form-input style="width:140px;" value="ตม.สนก 008/2559"></gl-form-input>
-          </td>
-          <td>
-            <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-04"></vaadin-date-picker>
-          </td>
-          <td>1,000</td>
-          <td>392</td>
-          <td>392,000</td>
-          <td>13,704,320.00</td>
-          <td>
-            <gl-form-input value="343.50"></gl-form-input>
-          </td>
-          <td>137,039.76</td>
-          <td>13,566,936.74</td>
-        </tr>
-        <tr>
-          <td colspan="3">รวม</td>
-          <td>1,200</td>
-          <td></td>
-          <td>470,792</td>
-          <td>16,445,184.00</td>
-          <td>687.00</td>
-          <td>164,444.96</td>
-          <td>16.280,052.04</td>
-        </tr>
-      </table>
-    </div>
-      </gl-form-panel-body>
-    </gl-form-panel>
+    <template is="dom-repeat" items="[[data.invoice]]" as="invoice">
+      <gl-form-panel>
+        <gl-form-panel-body set-padding="5px" set-border="0px">
+          <div class="horizontal justified layout">
+               <div>Invoice No : [[invoice.invoice_no]]</div>
+               <div>Vessel : [[invoice.ship_name]]</div>
+               <div>LotNo : [[invoice.ship_lot_no]]</div>
+               <div style="width:20px"></div>
+               <div>1/2</div>
+          </div>
+        <div style="overflow-x:auto;">
+        <table class="default">
+          <tr>
+            <th>ผู้ส่งออก</th>
+            <th>เลขที่ใบแจ้งหนี้</th>
+            <th>วันที่ใบแจ้งหนี้</th>
+            <th>จำนวน(ตัน) <br>(1)</th>
+            <th>มูลค่าต่อตัน(USD)<br>(2)</th>
+            <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
+            <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
+            <th>หักค่า FE (บาท)<br>(5)</th>
+            <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
+            <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
+          </tr>
+          <template is="dom-repeat" items="[[invoice.invoice_detail]]" as="invoiceDetail">
+            <tr>
+              <td>[[invoiceDetail.seller_name_en]]</td>
+              <td>
+                <gl-form-input style="width:140px;" value="ตม.สนก 001/2559"></gl-form-input>
+              </td>
+              <td>
+                <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-12"></vaadin-date-picker>
+              </td>
+              <td>[[invoiceDetail.shm_det_quantity]]</td>
+              <td>[[invoiceDetail.price_per_ton]]</td>
+              <td>78,400</td>
+              <td>2,740,864.00</td>
+              <td>
+                <gl-form-input value="343.50"></gl-form-input>
+              </td>
+              <td>27,405.20</td>
+              <td>2,713,115.30</td>
+            </tr>
+          </template>
 
-    <gl-form-panel>
+          <tr>
+            <td colspan="3">รวม</td>
+            <td>1,200</td>
+            <td></td>
+            <td>470,792</td>
+            <td>16,445,184.00</td>
+            <td>687.00</td>
+            <td>164,444.96</td>
+            <td>16.280,052.04</td>
+          </tr>
+        </table>
+      </div>
+        </gl-form-panel-body>
+      </gl-form-panel>
+    </template>
+
+
+    <!-- <gl-form-panel>
       <gl-form-panel-body set-padding="5px" set-border="0px">
         <div class="horizontal justified layout">
              <div>Invoice No : C123457</div>
@@ -266,7 +254,7 @@
       </table>
     </div>
       </gl-form-panel-body>
-    </gl-form-panel>
+    </gl-form-panel> -->
     <gl-form-panel>
       <gl-form-panel-body set-padding="5px" set-border="0px">
         สรุปผล

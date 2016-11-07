@@ -35,7 +35,7 @@
   <template>
     <div class="flex searchInput ">
        <div class="horizontal end-justified layout">
-         <div class="labelSearch">B/L No.</div>{{searchInput}}
+         <div class="labelSearch">Invoice</div>
          <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
          <paper-icon-button icon="search"></paper-icon-button>
        </div>
@@ -97,10 +97,13 @@
         // aria-checked="true"
         var check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
         // console.log(Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]'));
-        
+
         this.fire('select-draftPayment', {
             data: check
           });
+      },
+      _toggleDrawer: function() {
+        this.glQuery('contentPanel').changDrawer();
       },
       _getBind: function(e) {
         // console.log(e.currentTarget.data);

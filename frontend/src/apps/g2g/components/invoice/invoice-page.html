@@ -29,7 +29,7 @@
   </div>
   <hr>
   <!-- <gl-form-panel set-border="0px"> -->
-    <div class="text">NEW COMMERCIAL INOVICE</div>
+    <div class="text">NEW COMMERCIAL INVOICE</div>
   <gl-form-panel-head label="" set-padding="10px" set-border="1px">
   </gl-form-panel-head>
     <iron-pages selected="{{pages}}">
@@ -112,8 +112,9 @@ Polymer({
     // console.log(this.saveData);
     // this.putDb(this.saveData);
     // console.log(this.$.editInvoice.removeAttribute());
+    // console.log(this.data);
     this.update('./g2g/invoice/update',this.saveData, () => {
-        this.glQuery('adddraft').getInvoice(this.data.shm_id,false,'put');
+        this.glQuery('adddraft').getInvoice(this.data.contract_id,true,'put');
      });
   },
   deleteChange:function () {
