@@ -238,7 +238,7 @@
 
 
       <gl-form-panel-footer set-padding="20px 0px 0px 20px">
-            <paper-button class="gl-btn-primary" raised on-tap="btnCreateInvoice">สร้าง</paper-button>
+            <paper-button class="gl-btn-info" raised on-tap="btnCreateInvoice">Create Invoice</paper-button>
       </gl-form-panel-footer>
 
     </gl-form-panel-body>
@@ -249,6 +249,7 @@
       is: "bill-create",
       behaviors: [
           gl.behavior.core,
+          g2gModelBehavior
       ],
       properties: {
         nameRice: {
@@ -296,28 +297,15 @@
       },
       btnCreateInvoice:function () {
         this.mkInvoce.bl_no= this.data.bl_no;
+        this.mkInvoce.invoice_status = false;
         this.mkInvoce.invoice_date = new Date (this.mkInvoce.invoice_date);
-        console.log(this.data.shm_id);
+        // console.log(this.data.shm_id);
         this.glQuery('layoutMain').openToastSaveing();
-        console.log(this.mkInvoce);
-        this.postDb(this.mkInvoce);
-      },
-      postDb:function (data) {
-        axios.post('./g2g/invoice/insert', data)
-                  .then ((response)=> {
-                    console.log("success");
-                    console.log(response);
-                    console.log(data);
-                    console.log();
-                    this.glQuery('adddraft').getshipment(this.data.shm_id,true,'put');
-                    // this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-
-                  })
-                  .catch((error)=> {
-                    console.log("error");
-                    console.log(error);
-                    console.log(data);
-                  })
+        // console.log(this.mkInvoce);
+        this.insert('./g2g/invoice/insert',this.mkInvoce, () => {
+          this.glQuery('adddraft').getshipment(this.data.shm_id,true,'put');
+          this.glQuery('contentPanel').changDrawer();
+         });
       },
       toWords: function(num) {
           // Convert numbers to words
