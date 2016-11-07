@@ -54,8 +54,8 @@
               </div>
 
               <div class="horizontal end-justified layout">
-                <paper-button id="removeButtomC" class="gl-btn-success" on-tap="_cancel" raised>ยกเลิก</paper-button>
-                <paper-button id="removeButtom" class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+                <paper-button id="removeButtomC" class="gl-btn-danger" on-tap="_cancel" raised title="ยกเลิกการสมัคร">ยกเลิก</paper-button>
+                <paper-button id="removeButtom" class="gl-btn-success" on-tap="_saveData" raised title="บันทึกข้อมูลสมาชิก">บันทึก</paper-button>
               </div>
 
     </gl-form-panel>
@@ -114,7 +114,6 @@
         this.$$('#formData').setAttribute("hidden", "hidden");
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#changTitle2').setAttribute("hidden", "hidden");
-        this.glQuery('contentPanel').changDrawer();
         this.dataTrader = "";
       },
       _saveData:function(e) {
@@ -123,7 +122,7 @@
           exporter_no:this.trader.exporter_no,
           exporter_date_approve:new Date (this.trader.exporter_date_approve),
           exporter_date_update:new Date (this.trader.exporter_date_approve),
-          seller_agent:this.trader.seller_agent,
+          // seller_agent:this.trader.seller_agent,
           trader_id:this.trader.trader_id
         }
         // console.log(datas);
