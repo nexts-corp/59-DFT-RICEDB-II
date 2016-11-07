@@ -17,6 +17,7 @@
 <!-- <link rel="import" href="../../../bower_components/gl-styles/gl-table.html"> -->
 
 <link rel="import" href="components/draft-table/draft-bl.html">
+<link rel="import" href="components/draft-table/draft-payment.html">
 <dom-module id="g2g-add-draft">
   <style is="custom-style" include="gl-color gl-panel">
     * {
@@ -57,6 +58,7 @@
                   </list-draft> -->
                 </section-content>
                 <section-content name="print">
+                  <draft-payment data="{{invoiceShipment}}"></draft-payment>
                   <!-- <list-draft-invoice data="{{invoiceShipment}}">
                     <items type="secondary">
                       <list item="invoice_no" label="Invoice No." width="flex"></list>
@@ -130,7 +132,9 @@
             is: "g2g-add-draft",
             listeners: {
                 'nx-grid-tap': 'nxGridTap',
-                'select-bl':'getBlDetail'
+                'select-bl':'getBlDetail',
+                'select-invoice':'getInvoiceDetail',
+                'select-draftPayment':'draftPayment'
             },
             behaviors: [
                 gl.behavior.core,
@@ -213,8 +217,9 @@
               this.read('./g2g/contract/shipment',(data)=>{
                 this.draft = data;
               },false,'put');
-              http://localhost:3000/api/g2g/bl/contract/id/
+              // http://localhost:3000/api/g2g/bl/contract/id/
               this.getBlNo(shmId,false,'get');
+              this.getInvoice(shmId,false,'get');
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
@@ -243,6 +248,13 @@
               // this.getInvoice(id,refresh,action);
             },
             getInvoice:function (id,refresh,action) {
+              // var id = e;
+              // console.log(id);
+              this.read('./g2g/invoice/contract/id/'+id,(data)=>{
+                this.invoiceShipment = data;
+                // console.log(11);
+                console.log(this.invoiceShipment);
+              },refresh,action);
               // console.log(id,refresh,action);
               // this.read('./g2g/invoice/shipment/id/'+id,(data)=>{
               //   this.invoiceShipment = data;
@@ -263,17 +275,24 @@
               },false,'get');
             },
             getInvoiceDetail:function (invoice_id) {
-              // console.log(invoice_id);
+              console.log(invoice_id.detail.data.invoice_id);
+              var invoice_id = invoice_id.detail.data.invoice_id;
               // this.glQuery('layoutMain').openToastLoading();
-              // this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
-              //   this.inDetail = data;
-              //   // this.glQuery('contentPanel').changDrawer();
-              // },false,'get');
+              this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
+                this.inDetail = data;
+                // this.glQuery('contentPanel').changDrawer();
+              },true,'get');
               // this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
               //   this.inDetail = data;
               //   //  console.log(this.inDetail);
               // },false,'get');
               // console.log("pass");
+            },
+            draftPayment:function (e) {
+              console.log(e.detail.data);
+              e.detail.data.map((el)=>{
+                console.log(el.data);
+              });
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
