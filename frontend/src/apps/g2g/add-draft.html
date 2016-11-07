@@ -282,17 +282,27 @@
                 this.inDetail = data;
                 // this.glQuery('contentPanel').changDrawer();
               },true,'get');
-              // this.getDb('./g2g/invoice/id/'+invoice_id,(data)=>{
-              //   this.inDetail = data;
-              //   //  console.log(this.inDetail);
-              // },false,'get');
-              // console.log("pass");
             },
             draftPayment:function (e) {
-              console.log(e.detail.data);
-              e.detail.data.map((el)=>{
-                console.log(el.data);
+              // console.log(e.detail.data);
+              this.changePage = 1;
+              var url='';
+              // this.glQuery('contentPanel').changDrawer();
+              e.detail.data.map((el,index)=>{
+                console.log(index);
+                if (index == 0) {
+                  url = url +el.data;
+                }else {
+                  url = url+'_' +el.data;
+                }
+                // console.log(el.data);
+
               });
+              console.log(url);
+              this.read('./g2g/fee/invoice/id/'+url,(data)=>{
+                this.payment = data;
+                console.log(this.payment );
+              },true,'get');
             },
             nxGridTap: function(e) {
               // console.log(e.detail.level);
