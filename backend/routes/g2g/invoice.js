@@ -227,7 +227,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                     return {
                                         type_rice_id: me2('group')('type_rice_id'),
                                         package_id: me2('group')('package_id'),
-                                        quantity: me2('reduction'),
+                                        quantity_tons: me2('reduction'),
                                         price_per_ton: me('cl_type_rice')
                                             .filter(function (tb) {
                                                 return tb('type_rice_id').eq(me2('group')('type_rice_id'))
@@ -243,9 +243,15 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
                                 .merge(function (me2) {
                                     return {
-                                        weight_gross: me2('quantity').mul(me2('package_kg_per_bag').add(me2('package_weight_bag').div(1000))).div(1000),
-                                        weight_net: me2('quantity').mul(me2('package_kg_per_bag')).div(1000),
-                                        weight_tare: me2('quantity').mul(me2('package_weight_bag').div(1000)).div(1000)
+                                        quantity_bags: me2('quantity_tons').mul(1000).div(me2('package_kg_per_bag'))
+                                    }
+                                })
+                                .merge(function (me2) {
+                                    return {
+                                        weight_gross: me2('quantity_bags').mul(me2('package_kg_per_bag').add(me2('package_weight_bag').div(1000))).div(1000),
+                                        weight_net: me2('quantity_bags').mul(me2('package_kg_per_bag')).div(1000),
+                                        weight_tare: me2('quantity_bags').mul(me2('package_weight_bag').div(1000)).div(1000)
+
                                     }
                                 })
                                 .merge(function (me2) {
