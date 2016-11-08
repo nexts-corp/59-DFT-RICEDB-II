@@ -168,7 +168,20 @@ router.post(['/calculate'], function (req, res, next) {
 
 
 router.post(['/allocate_quota'], function (req, res, next) {
-    
+
+    var params = req.body;
+    db.query(function (conn) {
+        statement = r.db('eu').table('allocate_quota').insert(params);
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+    });
+
+
 });
 
 module.exports = router;
