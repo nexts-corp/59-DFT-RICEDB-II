@@ -195,7 +195,7 @@
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                                <paper-button class="gl-btn-primary" style="margin-top:20px" raised>{{btnName}}</paper-button>
+                                <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px" raised>{{btnName}}</paper-button>
                             </gl-grid-col>
                         </gl-grid-row>
                     </div>
@@ -213,7 +213,7 @@
                                         <th>{{item}}</th>
                                     </template>
                                 </tr>
-                                <template is="dom-repeat" as="item2" items="{{dataAmount.content}}">
+                                <template is="dom-repeat" as="item2" items="{{companyData.content}}">
                                     <tr on-tap="_toggleDrawer">
                                         <td>{{item2.a}}</td>
                                         <td>{{item2.b}}</td>
@@ -246,7 +246,7 @@
                                             <th>{{item}}</th>
                                         </template>
                                     </tr>
-                                    <template is="dom-repeat" as="item2" items="{{dataAmount.content}}">
+                                    <template is="dom-repeat" as="item2" items="{{companyData.content}}">
                                         <tr on-tap="_toggleDrawer">
                                             <td>{{item2.a}}</td>
                                             <td>{{item2.b}}</td>
@@ -276,7 +276,7 @@
         Polymer({
             is: "page-confirm",
             observers:[
-                '_getDataCompanny(selectName)'
+                '_chageCompanyName(selectName)'
             ],
             properties: {
                 layerContent: {
@@ -327,6 +327,24 @@
             },
             ready:function(){         
                 this.btnName = 'แสดงทั้งหมด';
+                this.companyData = {
+                        content:[
+                        {
+                            a:'กมลกิจ บจก',
+                            b:'899.00',
+                            c:'449.00',
+                            d:'225.00',
+                            e:'225.00'
+                        },
+                        {
+                            a:'กรุงเทพค้าข้าว',
+                            b:'135.00',
+                            c:'67.00',
+                            d:'34.00',
+                            e:'34.00'
+                        }
+                    ]
+                }
                 Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e)=>{
                     this.rendered = true;
@@ -338,13 +356,38 @@
             _toggleDrawer: function(e) {
                  this.$$('panel-right').toggle();
             },
-            _getDataCompanny:function(name){
+            _chageCompanyName:function(name){
+                this.companyName =  name;
+            },
+            _getDataCompanny:function(){
                 //console.log(name);
-                if(name == '1'){
+                if(this.companyName == '1'){
                     this.btnName = 'แสดงผลการรับส่วนจัดสรร';
+                    this.companyData = {
+                          content:[
+                            {
+                                a:'กมลกิจ บจก',
+                                b:'899.00',
+                                c:'449.00',
+                                d:'225.00',
+                                e:'225.00'
+                            }
+                        ]
+                    }
                 }
-                else if(name == '2'){
+                else if(this.companyName == '2'){
                     this.btnName = 'แสดงผลการรับส่วนจัดสรร';
+                      this.companyData = {
+                          content:[
+                            {
+                                a:'กรุงเทพค้าข้าว',
+                                b:'135.00',
+                                c:'67.00',
+                                d:'34.00',
+                                e:'34.00'
+                            }
+                        ]
+                    }
                 }
             }
         });
