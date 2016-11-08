@@ -75,7 +75,13 @@
         dataTrader:{
           type:String,
           observer:'_search'
+        },
+        trader:{
+          type:Object
         }
+      },
+      created: function() {
+          this.glQuery('reTrader',this);
       },
       ready: function() {
         this.$$('#changTitle').removeAttribute("hidden");
@@ -89,15 +95,17 @@
       _search:function(val){
         if(val!=""){
           // console.log(this.selectedItem);
-          this.getDb('./external/trader/id/'+this.dataTrader,(data)=>{
+          this.getDb('./external/exporter?trader_id='+this.dataTrader,(data)=>{
             // data['seller_agent'] = [];
-            this.trader = data;
+            data.map((traders)=>{
+              this.trader = traders;
+            })
             this.$$('#formData').removeAttribute("hidden");
             this.$$('#removeButtom').removeAttribute("hidden");
             this.$$('#removeButtomC').removeAttribute("hidden");
             this.$$('#changTitle').setAttribute("hidden", "hidden");
             this.$$('#changTitle2').removeAttribute("hidden");
-            //console.log(this.trader);
+            // console.log(this.trader);
           });
         }
         else {
@@ -119,11 +127,11 @@
       _saveData:function(e) {
         // console.log(this.trader);
         var datas = {
-          exporter_no:this.trader.exporter_no,
-          exporter_date_approve:new Date (this.trader.exporter_date_approve),
-          exporter_date_update:new Date (this.trader.exporter_date_approve),
+        exporter_date_update:new Date,
+        trader_id:this.trader.trader_id
+          // exporter_no:this.trader.exporter_no,
+          // exporter_date_approve:new Date (this.trader.exporter_date_approve),
           // seller_agent:this.trader.seller_agent,
-          trader_id:this.trader.trader_id
         }
         // console.log(datas);
         this.glQuery('layoutRegistion').openToastSaveing();
@@ -138,8 +146,9 @@
                 this.$$('#formData').setAttribute("hidden", "hidden");
                 this.$$('#changTitle').removeAttribute("hidden");
                 this.$$('#changTitle2').setAttribute("hidden", "hidden");
-                this.glQuery('reExporter').getExporters();
                 this.dataTrader = "";
+                this.glQuery('reExporter').getExporters();
+                this.glQuery('reTrader').getExporterTrader();
                 this.glQuery('layoutRegistion').closeToastSaveing(function(){
                 }.bind(this));
             }.bind(this))

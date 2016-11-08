@@ -80,7 +80,7 @@
                 </gl-form-dropdown-menu>
                 <!-- <paper-button class="gl-btn-info gl-small" on-tap="_print" raised><iron-icon icon="print"></iron-icon>พิมพ์</paper-button> -->
             </div>
-            <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
+            <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" title="เพิ่มผู้ส่งออกข้าว" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
           </div>
 
           <!-- <div class="flex title">
@@ -152,7 +152,7 @@
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]"></gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <paper-button class="gl-btn-info buttonSearch" on-tap="_search" raised>ค้นหา</paper-button>
+                <paper-button class="gl-btn-info buttonSearch" on-tap="_search" title="ค้นหาข้อมูล" raised>ค้นหา</paper-button>
               </gl-grid-col>
             </gl-grid-row>
           </div>
@@ -162,7 +162,7 @@
             <div class="flex searchBorder">
               <list-report data={{exporters}}>
                 <items type="primary">
-                  <list item="exporter_no" label="เลข ทบ." width="flex"></list>
+                  <list item="exporter_no_name" label="เลข ทบ." width="flex"></list>
                   <list item="seller_tax_id" label="เลขที่ผู้เสียภาษี" width="flex"></list>
                   <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
                   <list item="type_lic_name" label="ประเภทใบอนุญาต" width="flex"></list>
@@ -270,9 +270,9 @@
             getExporters: function() {
                 this.getDb('./external/exporter', (data) => {
                   data.map((empty)=>{
-                    if (empty.exporter_no == undefined || empty.exporter_active_name == null) {
-                      empty.exporter_no = '-';
-                      empty.exporter_active_name = "-";
+                    if (empty.exporter_no_name == undefined || empty.exporter_active_name == null) {
+                      empty.exporter_no_name = '-';
+                      empty.exporter_active_name = '-';
                     }
                   });
                   this.exporters = data;
