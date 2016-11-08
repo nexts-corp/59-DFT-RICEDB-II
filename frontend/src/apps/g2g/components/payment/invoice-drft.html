@@ -105,13 +105,16 @@
             <td>
               <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="{{invoiceDetail.invoice_date}}"></vaadin-date-picker>
             </td>
+              [[_totalQuantityTons(invoiceDetail.quantity_tons,index)]]
             <td><numeral-js number="[[invoiceDetail.quantity_tons]]" format="0,0" print></numeral-js></td>
+              [[_totalPricePerTon(invoiceDetail.price_per_ton,index)]]
             <td><numeral-js number="[[invoiceDetail.price_per_ton]]" format="0,0" print></numeral-js></td>
-
+              [[_totalAmountUsd(invoiceDetail.amount_usd,index)]]
             <td><numeral-js number="[[invoiceDetail.amount_usd]]" format="0,0" print></numeral-js></td>
             <td><numeral-js number="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" format="0,0" print></td>
             <td>
               [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
+              [[_totalfee(invoiceDetail.invoice_fee,index)]]
               <gl-form-input value="{{invoiceDetail.invoice_fee}}"></gl-form-input>
             </td>
             <td><numeral-js number="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" format="0,0" print></td>
@@ -121,11 +124,11 @@
 
         <tr>
           <td colspan="3">รวม</td>
-          <td>[[_totalTonInvoices(invoiceIndex)]]</td>
-          <td>[[_totalUsdInvoices(invoiceIndex)]]</td>
-          <td>470,792</td>
+          <td><numeral-js number="[[_totalTonInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
+          <td><numeral-js number="[[_totalPricePerTonUsdInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
+          <td><numeral-js number="[[_totalAmountUsdInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
           <td><numeral-js number="[[_totalBathInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
-          <td>[[_totalFee(index)]]</td>
+          <td><numeral-js number="[[_totalFeeInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
           <td><numeral-js number="[[_totalIncomeTaxInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
           <td><numeral-js number="[[_totalMoneyBathInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
         </tr>
@@ -140,6 +143,12 @@
       behaviors: [
           g2gModelBehavior
       ],
+      _totalQuantityTons:function (quantity_tons,index){
+        this.set('invoice.invoice_detail.'+index+'.quantity_tons',Number(quantity_tons));
+      },
+      _totalPricePerTon:function (price_per_ton,index){
+        this.set('invoice.invoice_detail.'+index+'.price_per_ton',Number(price_per_ton));
+      },
       _totalBath:function (quantity_tons,price_per_ton,rate_bank,index) {
         //console.log(invoiceDetail);
         var test = (Number(quantity_tons)*Number(price_per_ton))*rate_bank;
@@ -147,35 +156,53 @@
         //console.log(this.invoice.invoice_detail[index]);
         return test;
       },
+      _totalAmountUsd:function (amountUsd,index) {
+        this.set('invoice.invoice_detail.'+index+'.amountUsd',Number(amountUsd));
+      },
+      _totalfee:function (invoice_fee,index) {
+        this.set('invoice.invoice_detail.'+index+'.invoice_fee',Number(invoice_fee));
+      },
       // (6)=((4)-(5))*1%
       _incomeTax:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
         var incomeTax = ((((Number(quantity_tons)*Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100;
         this.set('invoice.invoice_detail.'+index+'.incomeTax',incomeTax);
         return incomeTax;
       },
+      _totalFeeInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.invoice_fee;
+          }.bind(this));
+          return result;
+      },
       // (3)*34.96
       // (7)=((4)-(5)-(6))<
       _totalMoneyInvoice:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
         var moneyInvoice= ((Number(quantity_tons)*Number(price_per_ton))*Number(rate_bank)-Number(invoice_fee))-(((((Number(quantity_tons)+Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100);
         this.set('invoice.invoice_detail.'+index+'.moneyInvoice',moneyInvoice);
-        console.log("moneyInvoice =>",this.invoice.invoice_detail[index].moneyInvoice);
+        // console.log("moneyInvoice =>",this.invoice.invoice_detail[index].moneyInvoice);
         return moneyInvoice;
       },
-      _totalTonInvoices:function (index){
-          // console.log(this.data.invoice[index].invoice_detail);
-          // var totalTon=0;
-          // this.invoice[index].invoice_detail.map((ton)=>{
-          //     totalTon+=ton.quantity_tons;
-          // });
-          // return totalTon;
+      _totalTonInvoices:function (index,test){
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.quantity_tons;
+          }.bind(this));
+          return result;
       },
-      _totalUsdInvoices:function (index){
-          // console.log(this.data.invoice[index].invoice_detail);
-          // var totalUsd=0;
-          // this.invoice[index].invoice_detail.map((ton)=>{
-          //     totalUsd+=ton.price_per_ton;
-          // });
-          // return totalUsd;
+      _totalPricePerTonUsdInvoices:function (index,test){
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.price_per_ton;
+          }.bind(this));
+          return result;
+      },
+      _totalAmountUsdInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.amountUsd;
+          }.bind(this));
+          return result;
       },
       _totalBathInvoices:function (index,test){
         var result = 0;
@@ -194,10 +221,10 @@
       _totalMoneyBathInvoices:function (index,test) {
         var result = 0;
           test.base.invoice_detail.map(function(item){
-            console.log('item.moneyInvoice  =>',item.moneyInvoice);
+            // console.log('item.moneyInvoice  =>',item.moneyInvoice);
             result+=item.moneyInvoice ;
           }.bind(this));
-          console.log(result);
+          // console.log(result);
           return result;
       }
     });
