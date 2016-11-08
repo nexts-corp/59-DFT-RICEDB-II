@@ -142,6 +142,20 @@
   <script>
     Polymer({
       is: "invoice-drft",
+      properties: {
+        totalInvoice: {
+          type: Object,
+          value:{
+            totalTonInvoices:0,
+            totalPricePerTonUsdInvoices:0,
+            totalAmountUsdInvoices:0,
+            totalBathInvoices:0,
+            totalFeeInvoices:0,
+            totalIncomeTaxInvoices:0,
+            totalMoneyBathInvoices:0,
+          }
+        }
+      },
       behaviors: [
           g2gModelBehavior
       ],
@@ -168,9 +182,9 @@
         // console.log(invoice.invoice_detail[index]);
         var invoice_fee = invoice.invoice_detail.length;
         for (var i = 0; i < invoice.invoice_detail.length; i++) {
-          console.log(i);
-          console.log('-');
-          console.log(invoice.invoice_detail[i]);
+          // console.log(i);
+          // console.log('-');
+          // console.log(invoice.invoice_detail[i]);
           this.set('invoice.invoice_detail.'+i+'.invoice_fee',feeTotal/invoice_fee);
         }
         // console.log(invoice_fee,index,feeTotal);
@@ -188,13 +202,7 @@
         this.set('invoice.invoice_detail.'+index+'.incomeTax',incomeTax);
         return incomeTax;
       },
-      _totalFeeInvoices:function (index,test) {
-        var result = 0;
-          test.base.invoice_detail.map(function(item){
-            result+=item.invoice_fee;
-          }.bind(this));
-          return result;
-      },
+
       // (3)*34.96
       // (7)=((4)-(5)-(6))<
       _totalMoneyInvoice:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
@@ -208,6 +216,8 @@
           test.base.invoice_detail.map(function(item){
             result+=item.quantity_tons;
           }.bind(this));
+          this.set('totalInvoice.totalTonInvoices',result);
+
           return result;
       },
       _totalPricePerTonUsdInvoices:function (index,test){
@@ -215,6 +225,8 @@
           test.base.invoice_detail.map(function(item){
             result+=item.price_per_ton;
           }.bind(this));
+          this.set('totalInvoice.totalPricePerTonUsdInvoices',result);
+
           return result;
       },
       _totalAmountUsdInvoices:function (index,test) {
@@ -222,6 +234,8 @@
           test.base.invoice_detail.map(function(item){
             result+=item.amountUsd;
           }.bind(this));
+          this.set('totalInvoice.totalAmountUsdInvoices',result);
+
           return result;
       },
       _totalBathInvoices:function (index,test){
@@ -229,6 +243,16 @@
           test.base.invoice_detail.map(function(item){
             result+=item.testza;
           }.bind(this));
+          this.set('totalInvoice.totalBathInvoices',result);
+
+          return result;
+      },
+      _totalFeeInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.invoice_fee;
+          }.bind(this));
+          this.set('totalInvoice.totalFeeInvoices',result);
           return result;
       },
       _totalIncomeTaxInvoices:function (index,test) {
@@ -236,6 +260,9 @@
           test.base.invoice_detail.map(function(item){
             result+=item.incomeTax;
           }.bind(this));
+
+          this.set('totalInvoice.totalIncomeTaxInvoices',result);
+
           return result;
       },
       _totalMoneyBathInvoices:function (index,test) {
@@ -245,7 +272,23 @@
             result+=item.moneyInvoice ;
           }.bind(this));
           // console.log(result);
+//           totalTonInvoices
+// totalPricePerTonUsdInvoices
+// totalAmountUsdInvoices
+// totalBathInvoices
+// totalFeeInvoices
+// totalIncomeTaxInvoices
+// totalMoneyBathInvoices
+            // this.set('totalInvoice.'+index+'.totalTonInvoices',result);
+            // this.set('totalInvoice.'+index+'.totalPricePerTonUsdInvoices',result);
+            // this.set('totalInvoice.'+index+'.totalAmountUsdInvoices',result);
+            // this.set('totalInvoice.'+index+'.totalBathInvoices',result);
+            // this.set('totalInvoice.'+index+'.totalFeeInvoices',result);
+            // this.set('totalInvoice.'+index+'.totalIncomeTaxInvoices',result);
+            this.set('totalInvoice.totalMoneyBathInvoices',result);
+            console.log(this.totalInvoice);
           return result;
+
       }
     });
   </script>

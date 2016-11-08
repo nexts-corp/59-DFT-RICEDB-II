@@ -146,134 +146,17 @@
       </gl-grid-row>
     </div>
     <template is="dom-repeat" items="[[data.invoice]]" as="invoice">
-      [[_insertInvoice(invoice.invoice_id,index)]]
+      <!-- [[_insertInvoice(invoice.invoice_id,index)]] -->
       <!-- [[_averageFee(dataPerSubmit.feeTotal)]]//{{dataPerSubmit.rate_bank}} -->
       <invoice-drft invoice="{{invoice}}"
                     rate-bank="{{dataPerSubmit.rate_bank}}"
                     invoice-index="{{index}}"
                     fee-total="[[_countFee(dataPerSubmit.feeTotal)]] "
                     ></invoice-drft>
-      <!-- <gl-form-panel>
-        <gl-form-panel-body set-padding="5px" set-border="0px">
-          <div class="horizontal justified layout">
-               <div>Invoice No : [[invoice.invoice_no]]</div>
-               <div>Vessel : [[invoice.ship_name]]</div>
-               <div>LotNo : [[invoice.ship_lot_no]]</div>
-               <div style="width:20px"></div>
-               <div>1/2</div>
-          </div>
-        <div style="overflow-x:auto;">
-        <table class="default" id="table-[[index]]">
-          <tr>
-            <th>ผู้ส่งออก</th>
-            <th>เลขที่ใบแจ้งหนี้</th>
-            <th>วันที่ใบแจ้งหนี้</th>
-            <th>จำนวน(ตัน) <br>(1)</th>
-            <th>มูลค่าต่อตัน(USD)<br>(2)</th>
-            <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
-            <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
-            <th>หักค่า FE (บาท)<br>(5)</th>
-            <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
-            <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
-          </tr>
-          <template is="dom-repeat" items="[[invoice.invoice_detail]]" as="invoiceDetail">
 
-            [[_insertInvoiceDetail(invoiceDetail.shm_det_id)]]
-            <tr>
-              <td>[[invoiceDetail.seller_name_en]]</td>
-              <td>
-                [[_testArray(invoiceDetail.*)]]
-                <gl-form-input style="width:140px;" value="{{invoiceDetail.invoice_no}}"></gl-form-input>
-              </td>
-              <td>
-                <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="{{invoiceDetail.invoice_date}}"></vaadin-date-picker>
-              </td>
-              <td><numeral-js number="[[invoiceDetail.quantity_tons]]" format="0,0" print></numeral-js></td>
-              <td><numeral-js number="[[invoiceDetail.price_per_ton]]" format="0,0" print></numeral-js></td>
-
-              <td><numeral-js number="[[invoiceDetail.amount_usd]]" format="0,0" print></numeral-js></td>
-              <td><numeral-js number="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoiceDetail)]]" format="0,0" print></td>
-              <td>
-                [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
-                <gl-form-input value="{{invoiceDetail.invoice_fee}}"></gl-form-input>
-              </td>
-              <td><numeral-js number="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoiceDetail.invoice_fee)]]" format="0,0" print></td>
-              <td><numeral-js number="[[_totalMoneyInvoice(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoiceDetail.invoice_fee)]]" format="0,0" print></td>
-            </tr>
-          </template>
-
-          <tr>
-            <td colspan="3">รวม</td>
-            <td>[[_totalTonInvoices(index)]]</td>
-            <td>[[_totalUsdInvoices(index)]]</td>
-            <td>470,792</td>
-            <td>[[_totalBathInvoices(index,invoice.*)]]</td>
-            <td>[[_totalFee(index)]]</td>
-            <td>164,444.96</td>
-            <td>16.280,052.04</td>
-          </tr>
-        </table>
-      </div>
-        </gl-form-panel-body>
-      </gl-form-panel> -->
     </template>
 
 
-    <!-- <gl-form-panel>
-      <gl-form-panel-body set-padding="5px" set-border="0px">
-        <div class="horizontal justified layout">
-             <div>Invoice No : C123457</div>
-             <div>Vessel : COSCO ASHDOD V.015N</div>
-             <div>LotNo : 9</div>
-             <div style="width:20px"></div>
-             <div>2/2</div>
-        </div>
-      <div style="overflow-x:auto;">
-      <table class="default">
-        <tr>
-          <th>ผู้ส่งออก</th>
-          <th>เลขที่ใบแจ้งหนี้</th>
-          <th>วันที่ใบแจ้งหนี้</th>
-          <th>จำนวน(ตัน) <br>(1)</th>
-          <th>มูลค่าต่อตัน(USD)<br>(2)</th>
-          <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
-          <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
-          <th>หักค่า FE (บาท)<br>(5)</th>
-          <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
-          <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
-        </tr>
-        <tr>
-          <td>Thai Ha Public Co., Ltd</td>
-          <td>
-            <gl-form-input style="width:140px;" value="ตม.สนก 001/2559"></gl-form-input>
-          </td>
-          <td>
-            <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-12"></vaadin-date-picker>
-          </td>
-          <td>50</td>
-          <td>397</td>
-          <td>19,850</td>
-          <td>693,956.00</td>
-          <td>
-            <gl-form-input value="687.00"></gl-form-input>
-          </td>
-          <td>6,932.69</td>
-          <td>686,336.31</td>
-        </tr>
-        <tr>
-          <td colspan="3">รวม</td>
-          <td>50</td>
-          <td></td>
-          <td>19,850</td>
-          <td>693,656.00</td>
-          <td>687.00</td>
-          <td>6,932.69</td>
-          <td>686,336.31</td>
-        </tr>
-      </table>
-    </div>
-      </gl-form-panel-body>
-    </gl-form-panel> -->
     <gl-form-panel>
       <gl-form-panel-body set-padding="5px" set-border="0px">
         สรุปผล
@@ -374,81 +257,12 @@ Polymer({
     this.dataPerSubmit.feeTotal = (Number(fee_internal)*rate_bank)+Number(feBath)+Number(otherExpenses);
     this.notifyPath('dataPerSubmit.feeTotal');
   },
-  // _averageFee:function (a) {
-  //   if (a != 0) {
-  //   console.log(a);
-  //     console.log(this.data.invoice.length);
-  //   }
-  //
-  // },
-  _insertInvoice:function (invoice_id,index) {
-    // console.log(index);
-    // this.indexInvoice=index;
-    // this.push('dataPerSubmit.invoice', {
-    //   invoice_id:invoice_id,
-    //   invoice_detail:[]
-    // });
-  },
-  _insertInvoiceDetail:function(shm_det_id){
-    // console.log("length ->",this.dataPerSubmit.invoice.length);
-    // console.log("->",this.indexInvoice);
-    //   console.log("-");
-    //   for (var i = 0; i <= this.indexInvoice; i++) {
-    //     this.push('dataPerSubmit.invoice.'+[i]+'.invoice_detail', {
-    //       shm_det_id:shm_det_id,
-    //     });
-    //   }
-  },
-  _totalUsd:function (quantity_tons,price_per_ton) {
-    return quantity_tons*price_per_ton;
-  },
-  // _totalBath:function (quantity_tons,price_per_ton,rate_bank,invoiceDetail) {
-  //   //console.log(invoiceDetail);
-  //   var test = (Number(quantity_tons)*Number(price_per_ton))*rate_bank;
-  //   invoiceDetail.testza = test;
-  //   return test;
-  // },
-  // // (6)=((4)-(5))*1%
-  // _incomeTax:function (quantity_tons,price_per_ton,rate_bank,invoice_fee){
-  //   return ((((Number(quantity_tons)*Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100;
-  // },
-  // // (3)*34.96
-  // // (7)=((4)-(5)-(6))<
-  // _totalMoneyInvoice:function (quantity_tons,price_per_ton,rate_bank,invoice_fee){
-  //   return ((Number(quantity_tons)*Number(price_per_ton))*Number(rate_bank)-Number(invoice_fee))-(((((Number(quantity_tons)+Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100);
-  // },
-  // _totalTonInvoices:function (index){
-  //     // console.log(this.data.invoice[index].invoice_detail);
-  //     var totalTon=0;
-  //     this.data.invoice[index].invoice_detail.map((ton)=>{
-  //         totalTon+=ton.quantity_tons;
-  //     });
-  //     return totalTon;
-  // },
-  // _totalUsdInvoices:function (index){
-  //     // console.log(this.data.invoice[index].invoice_detail);
-  //     var totalUsd=0;
-  //     this.data.invoice[index].invoice_detail.map((ton)=>{
-  //         totalUsd+=ton.price_per_ton;
-  //     });
-  //     return totalUsd;
-  // },
-  // _totalBathInvoices:function (index,test){
-  //     console.log(test);
-  // },
+
   savePayment:function () {
 
     console.log(this.dataPerSubmit);
     console.log(this.data);
-    // for (var i = 0; i < this.data.invoice.length; i++) {
-    //   console.log(this.data.invoice[i].invoice_id);
-    //   // this.dataPerSubmit.invoice[i].invoice_id=this.data.invoice[i].invoice_id;
-    //   // console.log(this.dataPerSubmit.invoice[i].invoice_id);
-    // }
-  },
-  _testArray:function (arr) {
-    console.log(arr);
-    // arr.idddd = '131853214521';
+
   },
   _countFee:function (fee) {
     // console.log(this.data.invoice.length);
