@@ -87,16 +87,20 @@
 						<div style="overflow-x:auto;">
 							<table class="gl-table-default">
 								<tr>
+									<th></th>
 									<template is="dom-repeat" items="{{dataAmount.header}}">
 										<th>{{item}}</th>
 									</template>
 								</tr>
 								<tr>
+									<td><paper-checkbox></paper-checkbox></td>
 									<template is="dom-repeat" items={{dataAmount.row1}}>
+										
 										<td id="addRedRegExporter">{{item}}</td>
 									</template>
 								</tr>
 								<tr>
+									<td><paper-checkbox></paper-checkbox></td>
 									<template is="dom-repeat" items={{dataAmount.row2}}>
 										<td id="addRedRegExporter">{{item}}</td>
 									</template>
@@ -126,7 +130,7 @@
         <section class="container">
             <div class="frame">
                 <div class="headerContent">
-                    ชำระเงินแบบ : 
+                    ชำระเงินแบบ : {{pageName}}
                 </div>
                 <div class="container">
 					<iron-pages selected="{{selectPage}}">
@@ -140,7 +144,7 @@
             </div>
         </section>
         <div class="flex-end-justified" style="padding-right:20px;">
-            <paper-button class="gl-btn-primary" raised> บันทึกแบบไม่ออกใบเสร็จ </paper-button>
+            <paper-button class="gl-btn-primary" raised> {{btnName}} </paper-button>
         </div>
 
 	</template>
@@ -183,17 +187,31 @@
                 },
 				selectPage:{
 					type: String,
+				},
+				btnName:{
+					type: String,
+					value: 'บันทึก/ออกใบเสร็จ'
 				}
             },
 			_getPay:function(e){
 				this.selectPage = e.target.value;
 				console.log(this.selectPage);
-				/*if(e.target.value == '0')
-					this.this.selectPage.name = 'แบบปกติ';
-				else if (e.target.value == '1')
-					this.this.selectPage.name = 'แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)';
-				else if (e.target.value == '2')
-					this.this.selectPage.name = 'แบบจ่ายเงินเกิน (ออกใบเสร็จ)';*/
+				
+				if(e.target.value == '0'){
+					this.pageName = 'แบบปกติ';
+					this.btnName = 'บันทึก/ออกใบเสร็จ'
+				}
+
+				else if (e.target.value == '1'){
+					this.pageName = 'แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)';
+					this.btnName = 'บันทึก/ไม่ออกใบเสร็จ';
+				}
+	
+				else if (e.target.value == '2'){
+					this.pageName = 'แบบจ่ายเงินเกิน (ออกใบเสร็จ)';
+					this.btnName = 'บันทึก/ออกใบเสร็จ';
+				}
+					
 			}
         });
     </script>
