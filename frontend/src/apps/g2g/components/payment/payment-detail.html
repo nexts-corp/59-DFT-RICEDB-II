@@ -147,7 +147,7 @@
     </div>
     <template is="dom-repeat" items="[[data.invoice]]" as="invoice">
       [[_insertInvoice(invoice.invoice_id,index)]]
-      [[_averageFee(dataPerSubmit.feeTotal)]]//{{dataPerSubmit.rate_bank}}
+      <!-- [[_averageFee(dataPerSubmit.feeTotal)]]//{{dataPerSubmit.rate_bank}} -->
       <invoice-drft invoice="{{invoice}}"
                     rate-bank="{{dataPerSubmit.rate_bank}}"
                     invoice-index="{{index}}"
@@ -374,13 +374,13 @@ Polymer({
     this.dataPerSubmit.feeTotal = (Number(fee_internal)*rate_bank)+Number(feBath)+Number(otherExpenses);
     this.notifyPath('dataPerSubmit.feeTotal');
   },
-  _averageFee:function (a) {
-    if (a != 0) {
-    console.log(a);
-      console.log(this.data.invoice.length);
-    }
-
-  },
+  // _averageFee:function (a) {
+  //   if (a != 0) {
+  //   console.log(a);
+  //     console.log(this.data.invoice.length);
+  //   }
+  //
+  // },
   _insertInvoice:function (invoice_id,index) {
     // console.log(index);
     // this.indexInvoice=index;

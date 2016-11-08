@@ -114,6 +114,8 @@
             <td><numeral-js number="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" format="0,0" print></td>
             <td>
               [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
+              <!-- [[_averageFees(invoiceDetail.*,invoice_fee)]] -->
+              <!-- [[_averageFee(invoiceDetail.invoice_fee,index,feeTotal,invoice)]] -->
               [[_totalfee(invoiceDetail.invoice_fee,index)]]
               <gl-form-input value="{{invoiceDetail.invoice_fee}}"></gl-form-input>
             </td>
@@ -143,6 +145,9 @@
       behaviors: [
           g2gModelBehavior
       ],
+      observers:[
+        '_averageFee(feeTotal,invoice)'
+      ],
       _totalQuantityTons:function (quantity_tons,index){
         this.set('invoice.invoice_detail.'+index+'.quantity_tons',Number(quantity_tons));
       },
@@ -158,6 +163,21 @@
       },
       _totalAmountUsd:function (amountUsd,index) {
         this.set('invoice.invoice_detail.'+index+'.amountUsd',Number(amountUsd));
+      },
+      _averageFee:function (feeTotal,invoice) {
+        // console.log(invoice.invoice_detail[index]);
+        var invoice_fee = invoice.invoice_detail.length;
+        for (var i = 0; i < invoice.invoice_detail.length; i++) {
+          console.log(i);
+          console.log('-');
+          console.log(invoice.invoice_detail[i]);
+          this.set('invoice.invoice_detail.'+i+'.invoice_fee',feeTotal/invoice_fee);
+        }
+        // console.log(invoice_fee,index,feeTotal);
+        // return invoice_fee= feeTotal;
+        // console.log('invoiceDetail.invoice_no >',invoice.invoice_detail);
+        // console.log('invoiceDetail.invoice_no >',invoice.invoice_detail.length);
+        // console.log(feeTotal);
       },
       _totalfee:function (invoice_fee,index) {
         this.set('invoice.invoice_detail.'+index+'.invoice_fee',Number(invoice_fee));
