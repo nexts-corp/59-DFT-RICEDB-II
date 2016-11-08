@@ -144,21 +144,27 @@
             <gl-form-panel-body set-border="0px">
            <div class="vertical layout flex marginTL">
           <div class="horizontal layout">
-            <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
-            <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_for_cal}}"></gl-form-input></div>
-            <div class="flex"></div>
-          </div>
-          <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
             <div class="textcontent"> : </div>
             <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_export}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
-            <div class="flex-3 textcontent">ปริมาณโควตา (100%)</div>
+            <div class="flex-3 textcontent">ยอดรวมประมูลการส่งออกเพื่อคำนวณส่วนจัดสรร</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_for_cal}}"></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+          <div class="horizontal layout">
+            <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
             <div class="textcontent"> : </div>
             <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_quota}}"></gl-form-input></div>
+            <div class="flex"></div>
+          </div>
+           <div class="horizontal layout">
+            <div class="flex-3 textcontent">ปริมาณโควตา 100%</div>
+            <div class="textcontent"> : </div>
+            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.quota_amount}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           </div>
@@ -224,6 +230,7 @@
            exporter_id : exporter,
            type_rice_id : this.typeRice
          }
+          this.fire('toast',{status:'load'});
          this.fire('post-data',this.sendCompanyData);
         //  this._postDb();
         //  console.log(this.sendCompanyData);
@@ -284,6 +291,7 @@
         this.firstYear = fistYear;
         this.lastYear = lastYear; 
         this.typeRice = typeRice;
+        this.fire('toast',{status:'load'});
         axios.get('./eu/calculate/exporter',{
           params:{
             frist_year : fistYear,
@@ -294,6 +302,14 @@
         .then((response)=>{
           console.log("success");
           this.companyName = response.data;
+         this.fire('toast',{
+              status:'success',
+              text:this.textToast,
+              callback:function(){
+                //console.log('test');
+              }
+            });
+          //this.fire('toast',{status:'loadSuccess'});
           //  this.listCompany.map((item)=>{
           //  });
 

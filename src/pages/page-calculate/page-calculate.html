@@ -147,12 +147,21 @@
               .then((response)=>{
               console.log("success");
               //this.textToast = 'บันทึกข้อมูลสำเร็จ';
-              //console.log(response.data);
+              console.log(response.data);
               this.answerSum = {
                 sum_export : response.data.sum_export,
                 sum_for_cal : response.data.sum_for_cal,
-                sum_quota : response.data.sum_quota
+                sum_quota : response.data.sum_quota,
+                quota_amount : response.data.quota_amount
               }
+              this.textToast = 'คำนวณสำเร็จ';
+              this.fire('toast',{
+                status:'success',
+                text:this.textToast,
+                callback:function(){
+                //console.log('test');
+                }
+              });
               console.log(this.answerSum);
               // this._getYear();
               // this._getDatalist(this.selectYear);
