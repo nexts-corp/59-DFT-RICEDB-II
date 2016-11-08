@@ -45,12 +45,18 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <div>
-              <gl-form-input label="ปีโควตา"></gl-form-input>
+             	<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+                <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
+                  <template is="dom-repeat" items="{{getQuotaYear}}">
+                    <paper-item year="{{item}}">{{item}}</paper-item>
+                  </template>
+                </paper-listbox>
+					    </gl-form-dropdown-menu>
               </div>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"> 
             		<gl-form-dropdown-menu label="ประเภทข้าว">
-									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
+									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
 										</template>
@@ -81,7 +87,7 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                		<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
-                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearMin}}">
+                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearFirst}}">
                       <template is="dom-repeat" items="{{getYear}}">
                         <paper-item year="{{item}}">{{item}}</paper-item>
                       </template>
@@ -92,7 +98,7 @@
               </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                  <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
-                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearMax}}">
+                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearLast}}">
                       <template is="dom-repeat" items="{{getYear}}">
                         <paper-item year="{{item}}">{{item}}</paper-item>
                       </template>
@@ -120,7 +126,7 @@
               <template is="dom-repeat" items="{{companyName}}">
                 
                 <paper-item>
-                  <paper-checkbox id="CheckData" style="padding:5px" checked="{{item.check}}" on-input="changeCheck">{{item.name}}</paper-checkbox>
+                  <paper-checkbox id="CheckData" style="padding:5px" checked="{{item.check}}" on-input="changeCheck">{{item.seller_name_th}}</paper-checkbox>
                 </paper-item>
               </template> 
             </div>
@@ -140,19 +146,19 @@
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_for_cal}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_export}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา (100%)</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{resault}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_quota}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           </div>
@@ -172,18 +178,14 @@
   <script>
     Polymer({
       is: "calculate-setting",
+      observers:[
+        '_yearQuoataChanged(selectQuotaYear)',
+        '_getlistCompany(selectYearFirst,selectYearLast,selectTypeRice)'
+      ],
       properties:{
         companyName:{
           type: Array,
-          value:[
-          {id:'1',name:'เอเชีย โกลเด้นไรซ์ บจก.',check:false},
-          {id:'2',name:'เอเคน อิเตอร์เนชั่นแนล',check:false},
-          {id:'3',name:'เอ็นพีเรียลคาร์เปท',check:false},
-          {id:'4',name:'เอส อาร์ ซี ฟูตล์',check:false},
-          {id:'5',name:'เอส ที เกรน บจก',check:false},
-          {id:'6',name:'ฮ่วยชวนค้าข้าว บจก',check:false},
-          {id:'7',name:'แอดวานซ์ไรซ์เทรดดิ้ง',check:false},
-          ]
+          value:[]
         },
         resault:{
           type: String
@@ -192,19 +194,39 @@
           type: Boolean,
           value: false,
           observer: '_selectAllChanged'
+        },
+        sumAnswer:{
+          type : Object,
+          value: {}
         }
       },
       ready:function(){
         this._getTypeRice();
         this._getYear();
+        this._getQuotaYear();
       },
       cal:function(e){
         const check = (item)=>{
-            console.log(item);
+            //console.log(item);
             return item.check == true;
         }
         this.resault = '1';
-        console.log(this.companyName.filter(check));
+
+        var exporter = [];
+         this.companyName.filter(check).map(function(data){
+           exporter.push(data.id);
+         })
+
+         this.sendCompanyData = {
+           year_quota : this.quotaYear,
+           frist_year : this.firstYear,
+           last_year : this.lastYear,
+           exporter_id : exporter,
+           type_rice_id : this.typeRice
+         }
+         this.fire('post-data',this.sendCompanyData);
+        //  this._postDb();
+        //  console.log(this.sendCompanyData);
       },
       _selectAllChanged:function(val){ 
         this.companyName.map((item,index)=>{
@@ -228,6 +250,55 @@
         .then((response)=>{
           console.log("success");
           this.getYear = response.data;
+          //console.log(this.getYear);
+        })
+        .catch((error)=>{
+          console.log("error");
+          console.log(error.message);
+          this.fire('toast',{status:'connectError',text:error.message,
+            callback:function(){
+              //console.log('test');
+            }})
+        });
+      },
+       _getQuotaYear:function(){
+          axios.get('./eu/quota/year')
+          .then((response)=>{
+            console.log("success");
+            this.getQuotaYear = response.data;
+            //console.log(this.getYear);
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error.message);
+            this.fire('toast',{status:'connectError',text:error.message,
+              callback:function(){
+                //console.log('test');
+              }})
+          });
+        },
+        _yearQuoataChanged:function(quotaYear){
+          this.quotaYear = quotaYear;
+        },
+      _getlistCompany:function(fistYear,lastYear,typeRice){
+        this.firstYear = fistYear;
+        this.lastYear = lastYear; 
+        this.typeRice = typeRice;
+        axios.get('./eu/calculate/exporter',{
+          params:{
+            frist_year : fistYear,
+            last_year : lastYear,
+            type_rice_id : typeRice
+          }
+        })
+        .then((response)=>{
+          console.log("success");
+          this.companyName = response.data;
+          //  this.listCompany.map((item)=>{
+          //  });
+
+          console.log(this.companyName);
+          //this.getYear = response.data;
           //console.log(this.getYear);
         })
         .catch((error)=>{

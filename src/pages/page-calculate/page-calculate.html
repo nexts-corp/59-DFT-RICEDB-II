@@ -1,5 +1,6 @@
 
 <link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./components/calculate-list.html">
 
 <dom-module id="page-calculate">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -57,28 +58,6 @@
           margin-bottom: 10px;
           /*background-color: var(--gl-gray-lighter-color);*/
         }
-          table.gl-table-default{
-               border-collapse: collapse;
-               width: 100%;
-               overflow-x:auto;
-               /*white-space: nowrap;*/
-           }
-           table.gl-table-default,th,td{
-               border-bottom: 1px solid #ddd;
-           }
-           th,td{
-               padding: 15px;
-           }
-           th{
-              text-align: left;
-              background-color: #F1F1F1;
-           }
-           td{
-               text-align: left;
-           }
-           tr:hover{
-               background-color: #F1F1F1;
-           }
     </style>
     <template>
 
@@ -107,20 +86,7 @@
           </div>
           
           <div style="overflow-x:auto; padding:20px;">
-          <table class="gl-table-default" style="border: 1px solid #ddd;">
-              <tr>
-                  <th>คำนวณครั้งที่</th>
-                  <th>ยอดรวมโควตาที่เคยได้รับ</th>
-                  <th>ยอดรวมการส่งออกที่ผ่านมา</th>
-                  <th>ปริมาณโควตา (100%)</th>
-              </tr>
-              <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-              </tr>
-          </table>
+            <calculate-list></calculate-list>
           </div>
         </div>
         <!-- </paper-material> -->
@@ -132,7 +98,7 @@
       </grid>
       <panel-right title="การคำนวณส่วนจัดสรร">
           <template is="dom-if" if="[[rendered]]">
-            <calculate-setting></calculate-setting>
+            <calculate-setting on-post-data="_postDb" sum-answer="{{answerSum}}"></calculate-setting>
           </template>
         </panel-right>
     </content-panel>
@@ -174,7 +140,30 @@
                     //console.log('test');
                   }})
               });
-          }
+          },
+          _postDb:function(e){
+              // console.log(e.detail);
+              axios.post('/eu/calculate/calculate',e.detail)
+              .then((response)=>{
+              console.log("success");
+              //this.textToast = 'บันทึกข้อมูลสำเร็จ';
+              //console.log(response.data);
+              this.answerSum = {
+                sum_export : response.data.sum_export,
+                sum_for_cal : response.data.sum_for_cal,
+                sum_quota : response.data.sum_quota
+              }
+              console.log(this.answerSum);
+              // this._getYear();
+              // this._getDatalist(this.selectYear);
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+            });
+          },
+
+
         });
     </script>
 </dom-module>
