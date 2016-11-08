@@ -156,7 +156,7 @@
                <div>1/2</div>
           </div>
         <div style="overflow-x:auto;">
-        <table class="default">
+        <table class="default" id="table-[[index]]">
           <tr>
             <th>ผู้ส่งออก</th>
             <th>เลขที่ใบแจ้งหนี้</th>
@@ -169,34 +169,35 @@
             <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
             <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
           </tr>
-          <template is="dom-repeat" items="[[invoice.invoice_detail]]" as="invoiceDetail" id="[[index]]">
+          <template is="dom-repeat" items="[[invoice.invoice_detail]]" as="invoiceDetail">
             [[_insertInvoiceDetail(invoiceDetail.shm_det_id)]]
             <tr>
               <td>[[invoiceDetail.seller_name_en]]</td>
               <td>
-                <gl-form-input style="width:140px;" value="ตม.สนก 001/2559"></gl-form-input>
+                [[_testArray(invoiceDetail.*)]]
+                <gl-form-input style="width:140px;" value="{{invoiceDetail.invoice_no}}"></gl-form-input>
               </td>
               <td>
-                <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="2015-02-12"></vaadin-date-picker>
+                <vaadin-date-picker style="width:110px;" label="วันที่ได้รับเงิน" value="{{invoiceDetail.invoice_date}}"></vaadin-date-picker>
               </td>
-              <td><numeral-js number="[[invoiceDetail.shm_det_quantity]]" format="0,0" print></numeral-js></td>
+              <td>[[invoiceDetail.shm_det_quantity]]//[[invoiceDetail.price_per_ton]]</td>
               <td><numeral-js number="[[invoiceDetail.price_per_ton]]" format="0,0" print></numeral-js></td>
 
-              <td><numeral-js number="[[_totalUsd(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton)]]" format="0,0" print></numeral-js></td>
+              <td><numeral-js number="[[invoiceDetail.amount_usd]]" format="0,0" print></numeral-js></td>
               <td><numeral-js number="[[_totalBath(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank)]]" format="0,0" print></td>
               <td>
-                [[changeString2Num(invoice.*,'otherExpenses')]]
-                <gl-form-input value="{{invoice_fee}}"></gl-form-input>
+                [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
+                <gl-form-input value="{{invoiceDetail.invoice_fee}}"></gl-form-input>
               </td>
-              <td><numeral-js number="[[_incomeTax(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoice_fee)]]" format="0,0" print></td>
-              <td><numeral-js number="[[_totalMoneyInvoice(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoice_fee)]]" format="0,0" print></td>
+              <td><numeral-js number="[[_incomeTax(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoiceDetail.invoice_fee)]]" format="0,0" print></td>
+              <td><numeral-js number="[[_totalMoneyInvoice(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton,dataPerSubmit.rate_bank,invoiceDetail.invoice_fee)]]" format="0,0" print></td>
             </tr>
           </template>
 
           <tr>
             <td colspan="3">รวม</td>
-            <td>1,200</td>
-            <td></td>
+            <td>[[_totalTonInvoices(index)]]</td>
+            <td>[[_totalUsdInvoices(index)]]</td>
             <td>470,792</td>
             <td>16,445,184.00</td>
             <td>687.00</td>
@@ -335,7 +336,7 @@ Polymer({
     dataPerSubmit: {
       type: Object,
       value:{
-        invoice:[]
+        invoice:[{invoice_id:''}]
       }
     },
     invoice_fee:{
@@ -356,40 +357,67 @@ Polymer({
     return Number(feBath)+Number(otherExpenses);
   },
   _insertInvoice:function (invoice_id,index) {
-    console.log(index);
-    this.indexInvoice=index;
-    this.push('dataPerSubmit.invoice', {
-      invoice_id:invoice_id,
-      invoice_detail:[]
-    });
+    // console.log(index);
+    // this.indexInvoice=index;
+    // this.push('dataPerSubmit.invoice', {
+    //   invoice_id:invoice_id,
+    //   invoice_detail:[]
+    // });
   },
   _insertInvoiceDetail:function(shm_det_id){
     // console.log("length ->",this.dataPerSubmit.invoice.length);
-    console.log("->",this.indexInvoice);
-      console.log("-");
-      for (var i = 0; i <= this.indexInvoice; i++) {
-        this.push('dataPerSubmit.invoice.'+[i]+'.invoice_detail', {
-          shm_det_id:shm_det_id,
-        });
-      }
+    // console.log("->",this.indexInvoice);
+    //   console.log("-");
+    //   for (var i = 0; i <= this.indexInvoice; i++) {
+    //     this.push('dataPerSubmit.invoice.'+[i]+'.invoice_detail', {
+    //       shm_det_id:shm_det_id,
+    //     });
+    //   }
   },
   _totalUsd:function (shm_det_quantity,price_per_ton) {
     return shm_det_quantity*price_per_ton;
   },
   _totalBath:function (shm_det_quantity,price_per_ton,rate_bank) {
-    return (Number(shm_det_quantity)+Number(price_per_ton))*Number(rate_bank);
+    return (Number(shm_det_quantity)*Number(price_per_ton))*rate_bank;
   },
   // (6)=((4)-(5))*1%
   _incomeTax:function (shm_det_quantity,price_per_ton,rate_bank,invoice_fee){
-    return ((((Number(shm_det_quantity)+Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100;
+    return ((((Number(shm_det_quantity)*Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100;
   },
   // (3)*34.96
   // (7)=((4)-(5)-(6))<
   _totalMoneyInvoice:function (shm_det_quantity,price_per_ton,rate_bank,invoice_fee){
-    return ((Number(shm_det_quantity)+Number(price_per_ton))*Number(rate_bank)-Number(invoice_fee))-(((((Number(shm_det_quantity)+Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100);
+    return ((Number(shm_det_quantity)*Number(price_per_ton))*Number(rate_bank)-Number(invoice_fee))-(((((Number(shm_det_quantity)+Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100);
+  },
+  _totalTonInvoices:function (index){
+      // console.log(this.data.invoice[index].invoice_detail);
+      var totalTon=0;
+      this.data.invoice[index].invoice_detail.map((ton)=>{
+          totalTon+=ton.shm_det_quantity;
+      });
+      return totalTon;
+  },
+  _totalUsdInvoices:function (index){
+      // console.log(this.data.invoice[index].invoice_detail);
+      var totalUsd=0;
+      this.data.invoice[index].invoice_detail.map((ton)=>{
+          totalUsd+=ton.price_per_ton;
+      });
+      return totalUsd;
   },
   savePayment:function () {
+
     console.log(this.dataPerSubmit);
+    console.log(this.data);
+    // for (var i = 0; i < this.data.invoice.length; i++) {
+    //   console.log(this.data.invoice[i].invoice_id);
+    //   // this.dataPerSubmit.invoice[i].invoice_id=this.data.invoice[i].invoice_id;
+    //   // console.log(this.dataPerSubmit.invoice[i].invoice_id);
+    // }
+  },
+  _testArray:function (arr) {
+    console.log(arr);
+    // arr.idddd = '131853214521';
   }
 });
 </script>
