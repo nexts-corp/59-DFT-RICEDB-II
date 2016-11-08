@@ -28,7 +28,7 @@ router.get(['/exporter'], function (req, res, next) {
         var statement = r.db('eu').table('ex_export_quantity_eu')
             .filter(
             function (row) {
-                return row('type_rice_id').eq(params.type_rice)
+                return row('type_rice_id').eq(params.type_rice_id)
                     .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
             }
             )("exporter_id").distinct().map(function (row) {
@@ -61,12 +61,12 @@ router.post(['/calculate'], function (req, res, next) {
             r.db('eu').table('ex_export_quantity_eu')
                 .filter(
                 function (row) {
-                    return row('type_rice_id').eq(params.type_rice)
+                    return row('type_rice_id').eq(params.type_rice_id)
                         .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
                 }
                 )
                 .filter(function (row) {
-                    return r.expr(params.exporter).contains(row('exporter_id'))
+                    return r.expr(params.exporter_id).contains(row('exporter_id'))
                 })
                 .group('exporter_id')
                 .sum('quantity').ungroup()
@@ -82,11 +82,11 @@ router.post(['/calculate'], function (req, res, next) {
                 }
             }).filter(
                 function (row) {
-                    return row('type_rice_id').eq(params.type_rice)
+                    return row('type_rice_id').eq(params.type_rice_id)
                         .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
                 }
                 ).filter(function (row) {
-                    return r.expr(params.exporter).contains(row('exporter_id'))
+                    return r.expr(params.exporter_id).contains(row('exporter_id'))
                 })
                 .group('exporter_id').sum('quantity').ungroup()
 
@@ -107,11 +107,11 @@ router.post(['/calculate'], function (req, res, next) {
 
                     ,
 
-                    r.db('eu').table('quota').get(params.year).merge(
+                    r.db('eu').table('quota').get(params.year_quota).merge(
                         function (row) {
                             return row('type_rice')
                         }
-                    ).filter({ type_rice_id: params.type_rice })
+                    ).filter({ type_rice_id: params.type_rice_id })
 
                     , function (result1, result2) {
 
