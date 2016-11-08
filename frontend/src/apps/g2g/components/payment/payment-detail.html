@@ -148,7 +148,11 @@
     <template is="dom-repeat" items="[[data.invoice]]" as="invoice">
       [[_insertInvoice(invoice.invoice_id,index)]]
       [[_averageFee(dataPerSubmit.feeTotal)]]//{{dataPerSubmit.rate_bank}}
-      <invoice-drft invoice="{{invoice}}" rate-bank="{{dataPerSubmit.rate_bank}}" invoice-index="{{index}}"></invoice-drft>
+      <invoice-drft invoice="{{invoice}}"
+                    rate-bank="{{dataPerSubmit.rate_bank}}"
+                    invoice-index="{{index}}"
+                    fee-total="[[_countFee(dataPerSubmit.feeTotal)]] "
+                    ></invoice-drft>
       <!-- <gl-form-panel>
         <gl-form-panel-body set-padding="5px" set-border="0px">
           <div class="horizontal justified layout">
@@ -446,6 +450,10 @@ Polymer({
     console.log(arr);
     // arr.idddd = '131853214521';
   },
+  _countFee:function (fee) {
+    // console.log(this.data.invoice.length);
+    return fee/this.data.invoice.length;
+  }
 });
 </script>
 </dom-module>
