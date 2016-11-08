@@ -119,6 +119,7 @@ router.get('/', function (req, res, next) {
             .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
             .filter(q)
             .filter(d)
+            .orderBy('exporter_no')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
