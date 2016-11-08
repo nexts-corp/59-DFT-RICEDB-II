@@ -75,31 +75,31 @@ var schema = {
     "required": ["fe_foreign", "fe_internal", "fe_other", "fee_date_receipt", "fee_no", "rate_bank", "rate_tt", "invoice", "fee_status"]
 };
 var validate = ajv.compile(schema);
-router.get('/contract/id/:contract_id', function (req, res, next) {
-    db.query(function (conn) {
+router.get('/contract/id/:contract_id', function(req, res, next) {
+    db.query(function(conn) {
         r.table('fee')
             .filter({ fee_status: false })
-            .merge(function (m) {
+            .merge(function(m) {
                 return {
                     fee_id: m('id'),
-                    invoice: m('invoice').merge(function (inv_mer) {
+                    invoice: m('invoice').merge(function(inv_mer) {
                         return {
-                            invoice_detail: inv_mer('invoice_detail').merge(function (det_map) {
+                            invoice_detail: inv_mer('invoice_detail').merge(function(det_map) {
                                 return r.table('shipment_detail').get(det_map('shm_det_id'))
-                                    .merge(function (shm_det_mer) {
+                                    .merge(function(shm_det_mer) {
                                         return r.table('shipment').get(shm_det_mer('shm_id'))
                                     })
-                                    .merge(function (shm_det_mer) {
+                                    .merge(function(shm_det_mer) {
                                         return r.table('confirm_letter').get(shm_det_mer('cl_id'))
                                     })
                                     .pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
                             })
                         }
                     })
-                        .merge(function (inv_mer) {
+                        .merge(function(inv_mer) {
                             return inv_mer('invoice_detail')(0)
                         })
-                        .group(function (g) {
+                        .group(function(g) {
                             return g.pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
                         })
                         .ungroup()
@@ -107,7 +107,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         .getField('group')(0)
                 }
             })
-            .merge(function (m) {
+            .merge(function(m) {
                 return m('invoice')
             })
             .without('id', 'invoice')
@@ -116,13 +116,13 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             r.row('contract_id').eq(req.params.contract_id)
                 .and(r.row('fee_status').eq(false))
             )
-            .group(function (g) {
+            .group(function(g) {
                 return g.pluck(
                     'contract_id', 'cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status'
                 )
             })
             .ungroup()
-            .merge(function (me) {
+            .merge(function(me) {
                 return {
                     contract_id: me('group')('contract_id'),
                     cl_id: me('group')('cl_id'),
@@ -137,9 +137,9 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                 }
             })
             .without("group", "reduction")
-            .run(conn, function (err, cursor) {
+            .run(conn, function(err, cursor) {
                 if (!err) {
-                    cursor.toArray(function (err, result) {
+                    cursor.toArray(function(err, result) {
                         if (!err) {
                             //console.log(JSON.stringify(result, null, 2));
                             res.json(result);
@@ -153,28 +153,28 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             });
     })
 })
-router.get('/id/:id', function (req, res, next) {
-    db.query(function (conn) {
+router.get('/id/:id', function(req, res, next) {
+    db.query(function(conn) {
         r.table('fee')
             .get(req.params.id)
-            .merge(function (fee_merge) {
+            .merge(function(fee_merge) {
                 return {
-                    invoice: fee_merge('invoice').map(function (fee_map) {
-                        return fee_map.merge(function (fee_merge1) {
+                    invoice: fee_merge('invoice').map(function(fee_map) {
+                        return fee_map.merge(function(fee_merge1) {
                             return r.table('invoice')
                                 .get(fee_merge1('invoice_id'))
-                                .merge(function (m) {
+                                .merge(function(m) {
                                     return {
                                         group_ship: r.table('shipment_detail')
                                             .filter({ bl_no: m('bl_no') })
                                             .coerceTo('array')
-                                            .group(function (g) {
+                                            .group(function(g) {
                                                 return g.pluck(
                                                     "ship_id", "shipline_id", "ship_lot_no", "ship_voy_no"
                                                 )
                                             })
                                             .ungroup()
-                                            .merge(function (me) {
+                                            .merge(function(me) {
                                                 return {
                                                     ship_id: me('group')('ship_id'),
                                                     shipline_id: me('group')('shipline_id'),
@@ -192,32 +192,39 @@ router.get('/id/:id', function (req, res, next) {
                                             .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
                                             .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                                             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
-                                            .merge(function (m1) {
+                                            .merge(function(m1) {
                                                 return {
                                                     shm_det_id: m1('id'),
                                                     price_per_ton: m1('cl_type_rice')
-                                                        .filter(function (tb) {
+                                                        .filter(function(tb) {
                                                             return tb('type_rice_id').eq(m1('type_rice_id'))
                                                         }).getField("package")(0)
-                                                        .filter(function (f) {
+                                                        .filter(function(f) {
                                                             return f('package_id').eq(m1('package_id'))
                                                         })(0)
                                                         .pluck('price_per_ton')
                                                         .values()(0),
-                                                    weight_gross: m1('shm_det_quantity').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
-                                                    weight_net: m1('shm_det_quantity').mul(m1('package_kg_per_bag')).div(1000),
-                                                    weight_tare: m1('shm_det_quantity').mul(m1('package_weight_bag').div(1000)).div(1000)
+                                                    quantity_tons: m1('shm_det_quantity'),
+                                                    quantity_bags: m1('shm_det_quantity').mul(1000).div(m1('package_kg_per_bag'))
+
                                                 }
                                             })
-                                            .merge(function (m2) {
+                                            .merge(function(m1) {
                                                 return {
-                                                    amount_usd: m2('price_per_ton').mul(m2('weight_net'))
+                                                    weight_gross: m1('quantity_bags').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
+                                                    weight_net: m1('quantity_bags').mul(m1('package_kg_per_bag')).div(1000),
+                                                    weight_tare: m1('quantity_bags').mul(m1('package_weight_bag').div(1000)).div(1000)
                                                 }
                                             })
-                                            .without('id', 'cl_type_rice')
+                                            .merge(function(m1) {
+                                                return {
+                                                    amount_usd: m1('price_per_ton').mul(m1('weight_net'))
+                                                }
+                                            })
+                                            .without('id', 'cl_type_rice','shm_det_quantity')
                                     }
                                 })
-                                .merge(function (m) {
+                                .merge(function(m) {
                                     return {
                                         invoice_id: m('id'),
                                         ship_id: m('group_ship')('ship_id')(0),
@@ -228,13 +235,13 @@ router.get('/id/:id', function (req, res, next) {
                                         weight_net: m('shipment_detail').sum('weight_net'),
                                         weight_tare: m('shipment_detail').sum('weight_tare'),
                                         amount_usd: m('shipment_detail').sum('amount_usd'),
-                                        invoice_detail: fee_merge1('invoice_detail').map(function (map1) {
+                                        invoice_detail: fee_merge1('invoice_detail').map(function(map1) {
                                             return m('shipment_detail').filter({ shm_det_id: map1('shm_det_id') })(0).merge(map1)
                                         })
                                     }
                                 })
                                 .without("id", "group_ship", "shipment_detail")
-                                .merge(function (m) {
+                                .merge(function(m) {
                                     return r.table("ship").get(m('ship_id')).without('id'),
                                         r.table("shipline").get(m('shipline_id')).without('id')
                                 })
@@ -242,7 +249,7 @@ router.get('/id/:id', function (req, res, next) {
                     })
                 }
             })
-            .merge(function (fee_merge) {
+            .merge(function(fee_merge) {
                 return {
                     fee_id: fee_merge('id'),
                     amount_usd: fee_merge('invoice').sum('amount_usd'),
@@ -252,7 +259,7 @@ router.get('/id/:id', function (req, res, next) {
                 }
             })
             .without('id')
-            .run(conn, function (err, cursor) {
+            .run(conn, function(err, cursor) {
                 if (!err) {
                     res.json(cursor);
                 } else {
@@ -261,17 +268,17 @@ router.get('/id/:id', function (req, res, next) {
             });
     })
 });
-router.get('/shipment/id/:shm_id', function (req, res, next) {
-    db.query(function (conn) {
+router.get('/shipment/id/:shm_id', function(req, res, next) {
+    db.query(function(conn) {
         r.table('shipment_detail')
             .filter({ shm_id: req.params.shm_id })
-            .group(function (g) {
+            .group(function(g) {
                 return g.pluck(
                     "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "ship_voy_no"
                 )
             })
             .ungroup()
-            .merge(function (me) {
+            .merge(function(me) {
                 return {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
@@ -285,19 +292,19 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             })
             .without("group", "reduction")
             .outerJoin(r.table("invoice"),
-            function (detail, invoice) {
+            function(detail, invoice) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
             .zip()
             .filter(r.row.hasFields('invoice_no'))
-            .merge(function (m) {
+            .merge(function(m) {
                 return {
                     invoice_id: m('id')
                 }
             }).without('id')
-            .run(conn, function (err, cursor) {
+            .run(conn, function(err, cursor) {
                 if (!err) {
-                    cursor.toArray(function (err, result) {
+                    cursor.toArray(function(err, result) {
                         if (!err) {
                             //console.log(JSON.stringify(result, null, 2));
                             res.json(result);
@@ -311,26 +318,26 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             });
     })
 });
-router.get('/invoice/id/:invoice_id', function (req, res, next) {
+router.get('/invoice/id/:invoice_id', function(req, res, next) {
     var d = {};
-    db.query(function (conn) {
+    db.query(function(conn) {
         r.table('invoice')
-            .filter(function (f) {
+            .filter(function(f) {
                 return r.expr(req.params.invoice_id.split('_'))
                     .contains(f('id'))
             })
-            .merge(function (m) {
+            .merge(function(m) {
                 return {
                     group_ship: r.table('shipment_detail')
                         .filter({ bl_no: m('bl_no') })
                         .coerceTo('array')
-                        .group(function (g) {
+                        .group(function(g) {
                             return g.pluck(
                                 "ship_id", "shipline_id", "ship_lot_no", "ship_voy_no"
                             )
                         })
                         .ungroup()
-                        .merge(function (me) {
+                        .merge(function(me) {
                             return {
                                 ship_id: me('group')('ship_id'),
                                 shipline_id: me('group')('shipline_id'),
@@ -348,14 +355,14 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                         .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
                         .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
-                        .merge(function (m1) {
+                        .merge(function(m1) {
                             return {
                                 shm_det_id: m1('id'),
                                 price_per_ton: m1('cl_type_rice')
-                                    .filter(function (tb) {
+                                    .filter(function(tb) {
                                         return tb('type_rice_id').eq(m1('type_rice_id'))
                                     }).getField("package")(0)
-                                    .filter(function (f) {
+                                    .filter(function(f) {
                                         return f('package_id').eq(m1('package_id'))
                                     })(0)
                                     .pluck('price_per_ton')
@@ -365,7 +372,7 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                                 weight_tare: m1('shm_det_quantity').mul(m1('package_weight_bag').div(1000)).div(1000)
                             }
                         })
-                        .merge(function (m2) {
+                        .merge(function(m2) {
                             return {
                                 amount_usd: m2('price_per_ton').mul(m2('weight_net'))
                             }
@@ -373,7 +380,7 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                         .without('id', 'cl_type_rice')
                 }
             })
-            .merge(function (m) {
+            .merge(function(m) {
                 return {
                     invoice_id: m('id'),
                     ship_id: m('group_ship')('ship_id')(0),
@@ -389,21 +396,21 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
             .without("id", "group_ship")
             .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
             .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
-            .run(conn, function (err, cursor) {
+            .run(conn, function(err, cursor) {
                 if (!err) {
-                    cursor.toArray(function (err, result) {
+                    cursor.toArray(function(err, result) {
                         if (!err) {
                             d['invoice'] = result;
-                            d['amount_usd'] = Object.keys(result).reduce(function (a, b) {
+                            d['amount_usd'] = Object.keys(result).reduce(function(a, b) {
                                 return a + result[b].amount_usd;
                             }, 0);
-                            d['weight_gross'] = Object.keys(result).reduce(function (a, b) {
+                            d['weight_gross'] = Object.keys(result).reduce(function(a, b) {
                                 return a + result[b].weight_gross;
                             }, 0);
-                            d['weight_net'] = Object.keys(result).reduce(function (a, b) {
+                            d['weight_net'] = Object.keys(result).reduce(function(a, b) {
                                 return a + result[b].weight_net;
                             }, 0);
-                            d['weight_tare'] = Object.keys(result).reduce(function (a, b) {
+                            d['weight_tare'] = Object.keys(result).reduce(function(a, b) {
                                 return a + result[b].weight_tare;
                             }, 0);
                             res.json(Object.keys(d).sort().reduce((r, k) => (r[k] = d[k], r), {})); //sort keys es2015
@@ -417,7 +424,7 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
             })
     })
 });
-router.post('/insert', function (req, res, next) {
+router.post('/insert', function(req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
@@ -425,12 +432,12 @@ router.post('/insert', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id == null) {
             //result.id = req.body.id;
-            db.query(function (conn) {
+            db.query(function(conn) {
                 r.table("fee")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
-                    .then(function (response) {
+                    .then(function(response) {
                         result.message = response;
                         if (response.errors == 0) {
                             result.result = true;
@@ -439,7 +446,7 @@ router.post('/insert', function (req, res, next) {
                         res.json(result);
                         console.log(result);
                     })
-                    .error(function (err) {
+                    .error(function(err) {
                         result.message = err;
                         res.json(result);
                         console.log(result);
@@ -454,7 +461,7 @@ router.post('/insert', function (req, res, next) {
         res.json(result);
     }
 });
-router.put('/update', function (req, res, next) {
+router.put('/update', function(req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
@@ -462,12 +469,12 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
-            db.query(function (conn) {
+            db.query(function(conn) {
                 r.table("fee")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
-                    .then(function (response) {
+                    .then(function(response) {
                         result.message = response;
                         if (response.errors == 0) {
                             result.result = true;
@@ -475,7 +482,7 @@ router.put('/update', function (req, res, next) {
                         res.json(result);
                         console.log(result);
                     })
-                    .error(function (err) {
+                    .error(function(err) {
                         result.message = err;
                         res.json(result);
                         console.log(result);
@@ -490,12 +497,12 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:id', function (req, res, next) {
+router.delete('/delete/id/:id', function(req, res, next) {
     var result = { result: false, message: null, id: null };
     if (req.params.id != '' && req.params.id != null) {
         result.id = req.params.id;
-        db.query(function (conn) {
-            var q = r.table("fee").get(req.params.id).do(function (result) {
+        db.query(function(conn) {
+            var q = r.table("fee").get(req.params.id).do(function(result) {
                 return r.branch(
                     result('fee_status').eq(false)
                     , r.table("fee").get(req.params.id).delete()
@@ -503,14 +510,14 @@ router.delete('/delete/id/:id', function (req, res, next) {
                 )
             })
             q.run(conn)
-                .then(function (response) {
+                .then(function(response) {
                     result.message = response;
                     if (response.errors == 0) {
                         result.result = true;
                     }
                     res.json(result);
                 })
-                .error(function (err) {
+                .error(function(err) {
                     result.message = err;
                     res.json(result);
                     console.log(result);
