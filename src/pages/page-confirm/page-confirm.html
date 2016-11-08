@@ -87,6 +87,7 @@
         }
         
         .contentHeader {
+            padding: 10px 0px 20px 0px;
             font-size: 22px;
             text-align: center;
         }
@@ -129,6 +130,19 @@
             @apply(--layout-horizontal);
             @apply(--layout-center-justified);
         }
+        .panel{
+            border: 1px solid #ddd;
+        }
+        .panelHead{
+            font-size: 22px;
+            background-color: orange;
+            color: white;
+            padding:10px;
+        }
+        .panelBody{
+            
+             padding:20px;
+        }
     </style>
     <template>
 
@@ -170,9 +184,9 @@
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                                 <gl-form-dropdown-menu label="ชื่อบริษัท">
-                                    <paper-listbox class="dropdown-content">
-                                        <paper-item>กมลกิจ บจก.</paper-item>
-                                        <paper-item>กรุงเทพค้าข้าว บจก.</paper-item>
+                                    <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
+                                        <paper-item name="1">กมลกิจ บจก.</paper-item>
+                                        <paper-item name="2">กรุงเทพค้าข้าว บจก.</paper-item>
                                     </paper-listbox>
                                 </gl-form-dropdown-menu>
                             </gl-grid-col>
@@ -181,11 +195,15 @@
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                                <paper-button class="gl-btn-primary" style="margin-top:20px" raised>แสดงผลการรับส่วนจัดสรร</paper-button>
+                                <paper-button class="gl-btn-primary" style="margin-top:20px" raised>{{btnName}}</paper-button>
                             </gl-grid-col>
                         </gl-grid-row>
                     </div>
                     <div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>
+
+                    <div class="panel">
+                    <div class="panelHead">ยืนยันแล้ว</div>
+                    <div class="panelBody">
                     <div class="flex searchBorder">
 
                         <div style="overflow-x:auto;">
@@ -195,48 +213,15 @@
                                         <th>{{item}}</th>
                                     </template>
                                 </tr>
-                                <tr>
-                                    <template is="dom-repeat" items={{dataAmount.row1}}>
-                                        <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                                    </template>
-                                </tr>
-                                <tr>
-                                    <template is="dom-repeat" items={{dataAmount.row2}}>
-                                        <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                                    </template>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th>1034.00</th>
-                                    <th>516.00</th>
-                                    <th>259.00</th>
-                                    <th>259.00</th>
-                                </tr>
-                            </table>
-                        </div>
-
-
-                    </div>
-
-                    <div class="flex searchBorder">
-
-                        <div style="overflow-x:auto;">
-                            <table class="gl-table-default">
-                                <tr>
-                                    <template is="dom-repeat" items="{{dataAmount.header}}">
-                                        <th>{{item}}</th>
-                                    </template>
-                                </tr>
-                                <tr>
-                                    <template is="dom-repeat" items={{dataAmount.row1}}>
-                                        <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                                    </template>
-                                </tr>
-                                <tr>
-                                    <template is="dom-repeat" items={{dataAmount.row2}}>
-                                        <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                                    </template>
-                                </tr>
+                                <template is="dom-repeat" as="item2" items="{{dataAmount.content}}">
+                                    <tr>
+                                        <td>{{item2.a}}</td>
+                                        <td>{{item2.b}}</td>
+                                        <td>{{item2.c}}</td>
+                                        <td>{{item2.d}}</td>
+                                        <td>{{item2.e}}</td>
+                                    </tr>   
+                                </template>
                                 <tr>
                                     <th></th>
                                     <th>1034.00</th>
@@ -246,9 +231,35 @@
                                 </tr>
                             </table>
                         </div>
-
+                        </div>
 
                     </div>
+                    </div>
+                    <div class="panel">
+                    <div class="panelHead">ยังไม่ยืนยัน</div>
+                    <div class="panelBody">
+                        <div class="flex searchBorder">
+                            <div style="overflow-x:auto;">
+                                <table class="gl-table-default">
+                                    <tr>
+                                        <template is="dom-repeat" items="{{dataAmount.header}}">
+                                            <th>{{item}}</th>
+                                        </template>
+                                    </tr>
+                                    <template is="dom-repeat" as="item2" items="{{dataAmount.content}}">
+                                        <tr>
+                                            <td>{{item2.a}}</td>
+                                            <td>{{item2.b}}</td>
+                                            <td>{{item2.c}}</td>
+                                            <td>{{item2.d}}</td>
+                                            <td>{{item2.e}}</td>
+                                        </tr>   
+                                    </template>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                     </div>
                 </div>
                 <!-- </paper-material> -->
 
@@ -264,6 +275,9 @@
     <script>
         Polymer({
             is: "page-confirm",
+            observers:[
+                '_getDataCompanny(selectName)'
+            ],
             properties: {
                 layerContent: {
                     type: String,
@@ -274,26 +288,29 @@
                     value:
                       {
                         header:[
-                          'ผู้ส่งออก',
-                          'ปริมาณโควตารวม',
-                          'งวดที่ 1 (มกราคม)',
-                          'งวดที่ 2 (เมษายน)',
-                          'งวดที่ 3 (กรกฏาคม)'
+                            'ผู้ส่งออก',
+                            'ปริมาณโควตารวม',
+                            'งวดที่ 1 (มกราคม)',
+                            'งวดที่ 2 (เมษายน)',
+                            'งวดที่ 3 (กรกฏาคม)'
                         ],
-                        row1:[
-                            'กมลกิจ บจก',
-                            '899.00',
-                            '449.00',
-                            '225.00',
-                            '225.00'
-                          ],
-                          row2:[
-                            'กรุงเทพค้าข้าว',
-                            '135.00',
-                            '67.00',
-                            '34.00',
-                            '34.00'
-                          ]  
+                        content:[
+                            {
+                                a:'กมลกิจ บจก',
+                                b:'899.00',
+                                c:'449.00',
+                                d:'225.00',
+                                e:'225.00'
+                            },
+                            {
+                                a:'กรุงเทพค้าข้าว',
+                                b:'135.00',
+                                c:'67.00',
+                                d:'34.00',
+                                e:'34.00'
+                            }
+                        ]
+                       
                       }
                 },
                 searchType: {
@@ -309,6 +326,7 @@
             
             },
             ready:function(){         
+                this.btnName = 'แสดงทั้งหมด';
                 Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e)=>{
                     this.rendered = true;
@@ -319,6 +337,15 @@
             },
             _toggleDrawer: function(e) {
                  this.$$('panel-right').toggle();
+            },
+            _getDataCompanny:function(name){
+                //console.log(name);
+                if(name == '1'){
+                    this.btnName = 'แสดงผลการรับส่วนจัดสรร';
+                }
+                else if(name == '2'){
+                    this.btnName = 'แสดงผลการรับส่วนจัดสรร';
+                }
             }
         });
     </script>

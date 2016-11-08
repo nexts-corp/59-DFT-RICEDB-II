@@ -171,8 +171,6 @@
                 }
               });
               console.log(this.answerSum);
-              // this._getYear();
-              // this._getDatalist(this.selectYear);
               })
               .catch((error)=>{
                 console.log("error");
@@ -192,7 +190,6 @@
               .then((response)=>{
               console.log("success");
               //this.textToast = 'บันทึกข้อมูลสำเร็จ';
-              console.log(response.data);
               this.textToast = 'บันทึกข้อมูลสำเร็จ';
               this.fire('toast',{
                 status:'success',
@@ -201,14 +198,38 @@
                 //console.log('test');
                 }
               });
-              console.log(this.answerSum);
-              // this._getYear();
-              // this._getDatalist(this.selectYear);
+              //this._getDatalist();
               })
               .catch((error)=>{
                 console.log("error");
                 console.log(error);
             });
+          },
+          _getDatalist:function(){
+              this.fire('toast',{status:'load'});
+              axios.get('./eu/calculate/allocate_quota?quota_id='+this.sendQuotaYear )
+              .then((response)=>{
+                console.log("success!!");
+                //this.fire('toast',{status:'loadSuccess'});
+                this.fire('toast',{
+                  status:'success',
+                  text:this.textToast,
+                  callback:function(){
+                    //console.log('test');
+                  }
+                });
+                // this.$$('panel-right').close();
+                console.log(response.data);
+                //this.dataList = response.data;
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                this.fire('toast',{status:'connectError',text:error.message,
+                  callback:function(){
+                    //console.log('test');
+                  }})
+              });
           }
 
 
