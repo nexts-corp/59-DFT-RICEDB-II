@@ -29,7 +29,7 @@ router.get(['/exporter'], function (req, res, next) {
             .filter(
             function (row) {
                 return row('type_rice_id').eq(params.type_rice_id)
-                    .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
+                    .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.last_year) + 1))))
             }
             )("exporter_id").distinct().map(function (row) {
                 return { id: row }
@@ -62,7 +62,7 @@ router.post(['/calculate'], function (req, res, next) {
                 .filter(
                 function (row) {
                     return row('type_rice_id').eq(params.type_rice_id)
-                        .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
+                        .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.last_year) + 1))))
                 }
                 )
                 .filter(function (row) {
@@ -83,7 +83,7 @@ router.post(['/calculate'], function (req, res, next) {
             }).filter(
                 function (row) {
                     return row('type_rice_id').eq(params.type_rice_id)
-                        .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.frist_year) + 1))))
+                        .and(row("year").gt(String(parseInt(params.frist_year) - 1)).and(row("year").lt(String(parseInt(params.last_year) + 1))))
                 }
                 ).filter(function (row) {
                     return r.expr(params.exporter_id).contains(row('exporter_id'))
