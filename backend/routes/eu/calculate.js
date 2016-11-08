@@ -104,6 +104,9 @@ router.post(['/calculate'], function (req, res, next) {
                                 exporter_id: row('group')
                             }
                         })
+                        .filter(function (row) {
+                            return row('quantity').eq(0).not()
+                        })
 
                     ,
 
@@ -129,12 +132,16 @@ router.post(['/calculate'], function (req, res, next) {
                                         })
                                     }
                                 })
+                                    .merge(function (row) {
+                                        return { quantity_update: row('quantity') }
+                                    })
                             }
                         }).do(function (exporter) {
                             return {
                                 sum_for_cal: result1.sum('quantity'),
                                 sum_export: sum_export.sum('reduction'),
                                 sum_quota: sum_quota.sum('reduction'),
+                                quota_amount:result2(0)('amount'),
                                 exporter: exporter
                             }
                         })
@@ -160,7 +167,9 @@ router.post(['/calculate'], function (req, res, next) {
 });
 
 
-
+router.post(['/allocate_quota'], function (req, res, next) {
+    
+});
 
 module.exports = router;
 
