@@ -104,6 +104,9 @@ router.post(['/calculate'], function (req, res, next) {
                                 exporter_id: row('group')
                             }
                         })
+                        .filter(function (row) {
+                            return row('quantity').eq(0).not()
+                        })
 
                     ,
 
@@ -129,6 +132,9 @@ router.post(['/calculate'], function (req, res, next) {
                                         })
                                     }
                                 })
+                                    .merge(function (row) {
+                                        return { quantity_update: row('quantity') }
+                                    })
                             }
                         }).do(function (exporter) {
                             return {
