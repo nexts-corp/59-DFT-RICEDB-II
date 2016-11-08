@@ -2,37 +2,63 @@
 <dom-module id="calculate-list">
     <template>
         <style is="custom-style" include="gl-table">
-
+            .container{
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            .container>div{ 
+                font-size:24px;
+                padding: 0px 10px 10px 10px;
+            }
         </style>
-        <table class="gl-table-default" style="border: 1px solid #ddd;">
-            <thead>
-                <tr>
-                  <th>คำนวณครั้งที่</th>
-                  <th>ยอดรวมการส่งออกที่ผ่านมา</th>
-                  <th>ยอดรวมประมูลการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
-                  <th>ยอดรวมโควตาที่เคยได้รับ</th>
-                  <th>ปริมาณโควตา 100%</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>content...</td>
-                    <td>content...</td>
-                    <td>content...</td>
-                    <td>content...</td>
-                    <td>content...</td>
-                </tr>
-            </tbody>
-        </table>
+        <template is="dom-repeat" items="{{listData}}">
+           
+            <div class="container">
+                <div>ประเภท : {{item.type_rice_name_th}}</div>
+                
+                <table class="gl-table-default" style="border: 1px solid #ddd;">
+                    <thead>
+                        <tr>
+                        <th>คำนวณครั้งที่</th>
+                        <th>ยอดรวมการส่งออกที่ผ่านมา</th>
+                        <th>ยอดรวมประมูลการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
+                        <th>ยอดรวมโควตาที่เคยได้รับ</th>
+                        <th>ปริมาณโควตา 100%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <template is="dom-repeat" items="{{item.detail}}">
+                        <tr>
+                            <td>{{item.ordinal_number}}</td>
+                            <td>{{item.quota_amount}}</td>
+                            <td>{{item.sum_export}}</td>
+                            <td>{{item.sum_for_cal}}</td>
+                            <td>{{item.sum_quota}}</td>
+                            </tr>   
+                    </template>
+                    </tbody>
+                </table>
+            </div>
+        </template>
     </template>
     <script>
         Polymer({
             is: 'calculate-list',
             properties:{
                 listData:{
-                    type: Object
+                    type: Array,
+                    observer: '_getDatalist'
                 }
+            },
+            _getDatalist:function(){
+                console.log(this.listData);
+                this.listData.map((item)=>{
+                    console.log(item);
+                   // listData = item.detail;
+                });
             }
+            
         });
     </script>
 </dom-module>

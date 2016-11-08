@@ -50,7 +50,7 @@
           margin-left: 30px;
         }
         .fontContent{
-          font-size: var(--font-size-h4);
+          font-size: 20px;
           /*text-decoration: blink;*/
           padding: 15px;
           margin-top: 10px;
@@ -86,7 +86,7 @@
           </div>
           
           <div style="overflow-x:auto; padding:20px;">
-            <calculate-list></calculate-list>
+            <calculate-list list-data="{{dataList}}"></calculate-list>
           </div>
         </div>
         <!-- </paper-material> -->
@@ -146,6 +146,7 @@
           },
           _yearQuoataChaged:function(quota){
             this.sendQuotaYear = quota;
+            this._getDatalist();
           },
           _postSumData:function(e){
               // console.log(e.detail);
@@ -198,7 +199,7 @@
                 //console.log('test');
                 }
               });
-              //this._getDatalist();
+              this._getDatalist();
               })
               .catch((error)=>{
                 console.log("error");
@@ -218,9 +219,8 @@
                     //console.log('test');
                   }
                 });
-                // this.$$('panel-right').close();
-                console.log(response.data);
-                //this.dataList = response.data;
+                this.dataList = response.data;
+                //console.log(response.data);
               })
               .catch((error)=>{
                 console.log("error");
