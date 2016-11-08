@@ -1,24 +1,47 @@
 
 <dom-module id="quota-list">
     <template>
-        <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
+        <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+           .gl-table-default{
+               border-collapse: collapse;
+               width: 100%;
+               overflow-x:auto;
+           }
+           .gl-table-default,.gl-table-default > thead > tr > th,.gl-table-default > tbody > tr > td{
+               border-bottom: 1px solid #ddd;
+           }
+           .gl-table-default > thead > tr > th,.gl-table-default > tbody > tr > td{
+               padding: 15px;
+           }
+           .gl-table-default > thead > tr > th {
+              text-align: left;
+              background-color: #F1F1F1;
+           }
+           .gl-table-default > tbody > tr:hover{
+               background-color: #F1F1F1;
+           }
+           .right{
+               text-align: right !important;
+           }
+           .center{
+               text-align: center !important;
+           }
         </style>
         <div>
             <table class="gl-table-default" style="border: 1px solid #ddd;">
             <thead>
                 <tr>
-                  <th>ประเภทข้าว</th>
-                  <th>ยอดรวม (งวด) </th>
-                  <th>งวด</th>
+                  <th class="center">ประเภทข้าว</th>
+                  <th class="right">งวด</th>
                   <th>ปริมาณ</th>
+                  <th class="center">ยอดรวม (งวด) </th>
                 </tr>
             </thead>
             <tbody>
                 <template is="dom-repeat" items="{{data.type_rice}}">
                 <tr on-tap="_selectData" data="{{item}}" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
-                    <td>{{item.type_rice_name_th}}</td>
-                    <td>{{item.amount}}</td>
-                    <td>
+                    <td class="center">{{item.type_rice_name_th}}</td>
+                    <td class="right">
                     <template is="dom-repeat" items="{{item.period}}">
                         งวดที่ [[_setIndex(index)]] <br>
                     </template>
@@ -28,6 +51,7 @@
                         ปริมาณ : {{item.quantity}} <br>
                     </template>    
                     </td>
+                    <td class="center">{{item.amount}}</td>
                 </tr>
                 </template>
             </tbody>
