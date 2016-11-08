@@ -57,7 +57,7 @@ router.get('/', function (req, res, next) {
         }
     }
     if (Object.getOwnPropertyNames(d).length !== 0) {
-        d = r.row('exporter_date_update').gt(d.date_start).and(r.row('exporter_date_update').lt(d.date_end));
+        d = r.row('exporter_date_approve').gt(d.date_start).and(r.row('exporter_date_approve').lt(d.date_end));
     }
     // console.log(d);
     // console.log(q);
