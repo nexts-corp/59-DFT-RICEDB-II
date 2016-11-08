@@ -173,7 +173,8 @@
               </td>
               <td>[[invoiceDetail.shm_det_quantity]]</td>
               <td>[[invoiceDetail.price_per_ton]]</td>
-              <td>78,400</td>
+
+              <td>[[_totalUsd(invoiceDetail.shm_det_quantity,invoiceDetail.price_per_ton)]]</td>
               <td>2,740,864.00</td>
               <td>
                 <gl-form-input value="343.50"></gl-form-input>
@@ -317,7 +318,10 @@
 
   <script>
 Polymer({
-  is: "payment-detail"
+  is: "payment-detail",
+  _totalUsd:function (shm_det_quantity,price_per_ton) {
+    return shm_det_quantity*price_per_ton;
+  }
 });
 </script>
 </dom-module>
