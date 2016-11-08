@@ -221,7 +221,7 @@ router.get('/id/:id', function(req, res, next) {
                                                     amount_usd: m1('price_per_ton').mul(m1('weight_net'))
                                                 }
                                             })
-                                            .without('id', 'cl_type_rice','shm_det_quantity')
+                                            .without('id', 'cl_type_rice', 'shm_det_quantity')
                                     }
                                 })
                                 .merge(function(m) {
@@ -367,17 +367,23 @@ router.get('/invoice/id/:invoice_id', function(req, res, next) {
                                     })(0)
                                     .pluck('price_per_ton')
                                     .values()(0),
-                                weight_gross: m1('shm_det_quantity').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
-                                weight_net: m1('shm_det_quantity').mul(m1('package_kg_per_bag')).div(1000),
-                                weight_tare: m1('shm_det_quantity').mul(m1('package_weight_bag').div(1000)).div(1000)
+                                quantity_tons: m1('shm_det_quantity'),
+                                quantity_bags: m1('shm_det_quantity').mul(1000).div(m1('package_kg_per_bag'))
                             }
                         })
-                        .merge(function(m2) {
+                        .merge(function(m1) {
                             return {
-                                amount_usd: m2('price_per_ton').mul(m2('weight_net'))
+                                weight_gross: m1('quantity_bags').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
+                                weight_net: m1('quantity_bags').mul(m1('package_kg_per_bag')).div(1000),
+                                weight_tare: m1('quantity_bags').mul(m1('package_weight_bag').div(1000)).div(1000)
                             }
                         })
-                        .without('id', 'cl_type_rice')
+                        .merge(function(m1) {
+                            return {
+                                amount_usd: m1('price_per_ton').mul(m1('weight_net'))
+                            }
+                        })
+                        .without('id', 'cl_type_rice', 'shm_det_quantity')
                 }
             })
             .merge(function(m) {
