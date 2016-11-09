@@ -65,20 +65,10 @@
               
               <tr>
                 <th colspan="2">รวมปริมาณโควตา</th>
-
-
-                <!--<th>10,727.00</th>
-                <th>10,727.00</th>
-                <th>5,364.00</th>
-                <th>5,364.00</th>
-                <th>5,364.00</th>
-                <th>5,364.00</th>-->
-
                 <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
                     <th>[[_sumPeriod(index,'quantity')]]</th>
                     <th>[[_sumPeriod(index,'quantity_update')]]</th>
                 </template>
-
                 <th>[[_sumQuantity(dataAllocate,'quantity')]]</th>
                 <th>[[_sumQuantity(dataAllocate,'quantity_update')]]</th>
               </tr>
@@ -104,6 +94,9 @@
                     sum += item[key];
                 });
                 return sum;
+            },
+            _toggleDrawer:function(){
+                this.fire('toggle-drawer');
             }
         });
     </script>

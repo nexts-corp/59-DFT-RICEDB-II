@@ -136,7 +136,7 @@
                 </gl-form-dropdown-menu>
               </div>
               <div class="flex-2">
-                <paper-button class="gl-btn-primary" raised on-tap="_getAllocate">ค้นหา</paper-button>
+                <paper-button class="gl-btn-primary" raised on-tap="_getAllocate" disabled$="[[_disableSearch(selectQuotaYear,selectTypeRice,selectQuotaOrdinal)]]">ค้นหา</paper-button>
               </div>
             </div>
             <div class="flex"></div>
@@ -144,7 +144,7 @@
         </div>
         <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
         <div class="flex" style="border:1px solid #ddd; margin:30px;">
-          <allocate-list data-allocate="[[dataAllocate]]"></allocate-list>
+          <allocate-list on-toggle-drawer="_toggleDrawer" data-allocate="[[dataAllocate]]"></allocate-list>
         </div>
         <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
           <paper-button raised class="gl-btn-primary">
@@ -288,9 +288,9 @@
             _getAllocate:function(){
                 axios.get('./eu/allocate/allocate',{
                   params:{
-                    quota_id:'2559',
-                    type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',
-                    ordinal_number:'5'
+                    quota_id:this.selectQuotaYear,
+                    type_rice_id:this.selectTypeRice,
+                    ordinal_number:this.selectQuotaOrdinal
                   }
                 })
                 .then((response)=>{
@@ -300,6 +300,9 @@
                 .catch((error)=>{
                     console.log(error);
                 });
+             },
+             _disableSearch:function(quota_id,type_rice_id,ordinal_number){
+               console.log(quota_id,type_rice_id,ordinal_number);
              }
         });
     </script>
