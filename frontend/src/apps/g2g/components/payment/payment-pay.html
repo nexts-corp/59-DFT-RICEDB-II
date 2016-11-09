@@ -1,88 +1,237 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <dom-module id="payment-pay">
-  <style include="iron-flex iron-flex-alignment gl-color gl-size" is="custom-style">
+  <style include="iron-flex iron-flex-alignment gl-color gl-size gl-table" is="custom-style">
     .text-center {
       text-align: center;
       font-size: var(--font-size-large);
     }
-    
+
     .header-grey {
       background-color: var(--paper-grey-100);
       color: var(--paper-grey-600);
       font-size: var(--font-size-h4);
     }
-    
+
     .header-black {
       color: var(--paper-black-600);
       font-size: var(--font-size-h4);
     }
+
+    .text-top{
+      margin: 15px 0px 15px 15px;
+    }
+
+    .number-align{
+      margin-top: 15px;
+    }
+
+    .button-size{
+      height: 30px;
+    }
+
+    .margin-head{
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+    .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 20%;
+    }
+    .table-head > tr > th:nth-child(3) {
+      width: 25%;
+    }
+    .table-head > tr > th:nth-child(4) {
+      width: 25%;
+    }
+    .table-head > tr > th:nth-child(5) {
+      width: 25%;
+    }
   </style>
   <template>
-    <div class="text-center">จ่ายเงินค่าข้าวให้ผู้ส่งออก</div>
-    <div class="header-grey horizontal layout flex">
-      <div class="flex">งวดที่ 1 ครั้งที่ 1</div>
-      <div class="horizontal layout end-justified flex-10">
-        <div class="labelSearch">ชื่อบริษัท </div>
-        <paper-input label="" no-label-float></paper-input>
-        <paper-icon-button icon="search"></paper-icon-button>
-      </div>
+  <div class="text-center margin-head">จ่ายเงินค่าข้าวให้ผู้ส่งออก</div>
+    <div class="header-grey margin-head">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+              item-value-path="exporter_id" value="{{dataSelected.exporter_id}}" name="exporter_id"></gl-combo-box>
+        </gl-grid-col>
+      </gl-grid-row>
     </div>
-    <div class="header-black horizontal layout flex">
-      <div class="flex">ชื่อผู้ส่งออก</div>
-      <div class="horizontal layout end-justified flex">จำนวน (บาท)</div>
-      <div class="text-center flex"></div>
+
+    <div class="margin-head">
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+          <div class="header-black">ชื่อผู้ส่งออก</div>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <div class="header-black">ไพโรจน์ค้าข้าว จำกัดมหาชน</div>
+        </gl-grid-col>
+      </gl-grid-row>
     </div>
-    <paper-menu>
-      <paper-submenu>
-        <paper-item class="horizontal layout flex menu-trigger">
-          <div class="flex">บริษัท โตมี ฟู๊ด แอนด์ โปรดักส์ จำกัด</div>
-          <div class="horizontal layout end-justified flex">13,566,936.74</div>
-          <div class="horizontal layout end-justified flex">
-            <paper-button raised>
-              <iron-icon icon="icons:gesture"></iron-icon>
-              จ่ายเช็ค
-            </paper-button>
+    <table class="gl-table-default">
+      <thead class="table-head">
+        <tr>
+          <th></th>
+          <th>งวดที่</th>
+          <th>ครั้งที่</th>
+          <th>จำนวนเงิน(บาท)</th>
+          <th>วันที่จ่ายเงิน</th>
+          <th><div style="text-align:center;">สถานะ</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td><div style="margin-left:10px;">1</div></td>
+          <td><div style="margin-left:10px;">1</div></td>
+          <td>13,566,936.74</td>
+          <td>10/09/2559</td>
+          <td><paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td><div style="margin-left:10px;">1</div></td>
+          <td><div style="margin-left:10px;">2</div></td>
+          <td>686,336.31</td>
+          <td>11/09/2559</td>
+          <td><paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td><div style="margin-left:10px;">2</div></td>
+          <td><div style="margin-left:10px;">1</div></td>
+          <td>2,777,734.50</td>
+          <td>12/10/2559</td>
+          <td><paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
+        </tr>
+
+        <tr>
+          <td></td>
+          <td><div style="margin-left:10px;">3</div></td>
+          <td><div style="margin-left:10px;">1</div></td>
+          <td>686,336.31</td>
+          <td>30/10/2559</td>
+          <td><paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
+        </tr>
+
+      </tbody>
+    </table>
+    <!-- <paper-material elevation="1" class="top">
+      <div class="vertical layout">
+        <div class="text-top">งวดที่ 1</div>
+        <div class="header-grey">
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div>ครั้งที่</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div>จำนวน(บาท)</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+          </gl-grid-row>
+        </div>
+
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="text-top">1</div>
+              <div class="text-top">2</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="number-align">13,566,936.74</div>
+              <div class="number-align">686,336.31</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button>
+              <paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
+      </paper-material>
+
+      <paper-material  class="top">
+        <div class="vertical layout">
+          <div class="text-top">งวดที่ 2</div>
+          <div class="header-grey">
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <div>ครั้งที่</div>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <div>จำนวน(บาท)</div>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+            </gl-grid-row>
           </div>
-        </paper-item>
-        <paper-menu class="menu-content">
-          1
-        </paper-menu>
-      </paper-submenu>
-      <paper-submenu>
-        <paper-item class="horizontal layout flex menu-trigger">
-          <div class="flex">บริษัท แคปปิตัลซีเรียลส์ จำกัด</div>
-          <div class="horizontal layout end-justified flex">2,713,115.30</div>
-          <div class="horizontal layout end-justified flex">
-            <paper-button raised>
-              <iron-icon icon="icons:gesture"></iron-icon>
-              จ่ายเช็ค
-            </paper-button>
+
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="text-top">1</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="number-align">2,777,734.50</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
+      </paper-material>
+
+      <paper-material  class="top">
+        <div class="vertical layout">
+          <div class="text-top">งวดที่ 3</div>
+          <div class="header-grey">
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <div>ครั้งที่</div>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <div>จำนวน(บาท)</div>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+            </gl-grid-row>
           </div>
-        </paper-item>
-        <paper-menu class="menu-content">
-          2
-        </paper-menu>
-      </paper-submenu>
-      <paper-submenu>
-        <paper-item class="horizontal layout flex menu-trigger">
-          <div class="flex">บริษัท ไทยฮา จำกัด</div>
-          <div class="horizontal layout end-justified flex">686,336.31</div>
-          <div class="horizontal layout end-justified flex">
-            <paper-button raised>
-              <iron-icon icon="icons:gesture"></iron-icon>
-              จ่ายเช็ค
-            </paper-button>
-          </div>
-        </paper-item>
-        <paper-menu class="menu-content">
-          3
-        </paper-menu>
-      </paper-submenu>
-    </paper-menu>
+
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="text-top">1</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="number-align">686,336.31</div>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
+      </paper-material> -->
+
   </template>
   <script>
     Polymer({
-      is: 'payment-pay'
+      is: 'payment-pay',
+
     });
   </script>
 </dom-module>
