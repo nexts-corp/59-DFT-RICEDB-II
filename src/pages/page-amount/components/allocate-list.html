@@ -1,0 +1,91 @@
+<dom-module id="allocate-list">
+    <template>
+        <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+            table.gl-table-default {
+                border-collapse: collapse;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            table.gl-table-default,
+            th,
+            td {
+                border-bottom: 1px solid #ddd;
+            }
+            
+            th,
+            td {
+                padding: 15px;
+            }
+            
+            th {
+                text-align: left;
+                background-color: #F1F1F1;
+            }
+            
+            td {
+                text-align: left;
+            }
+            
+            tr:hover {
+                background-color: #F1F1F1;
+            }
+            
+            .contentHeader {
+                font-size: 22px;
+                text-align: center;
+            }
+        </style>
+        <div style="overflow-x:auto;">
+            <table class="gl-table-default" style="">
+              <tr>
+                <template is="dom-repeat" items="[[_generateHeader(dataAllocate)]]">
+                  <th>{{item}}</th>
+                </template>
+              </tr>
+              <tr>
+                <template is="dom-repeat" items={{dataAllocate.row1}}>
+                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+                </template>
+              </tr>
+              <tr>
+                <template is="dom-repeat" items={{dataAllocate.row2}}>
+                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+                </template>
+              </tr>
+              <tr>
+                <th colspan="2">รวมปริมาณโควตา</th>
+                <th>10,727.00</th>
+                <th>10,727.00</th>
+                <th>5,364.00</th>
+                <th>5,364.00</th>
+                <th>5,364.00</th>
+                <th>5,364.00</th>
+                <th>21,455.00</th>
+                <th>21,455.00</th>
+              </tr>
+            </table>
+          </div>
+    </template>
+    <script>
+        Polymer({
+            is: 'allocate-list',
+            _generateHeader:function(data){
+                console.log(data.exporter[0].period.length);
+                return [
+                          'ลำดับที่',
+                          'ผู้ส่งออก',
+                          'งวดที่ 1 (มกราคม)',
+                          'ยอดปรับปรุงงวดที่ 1',
+                          'งวดที่ 2 (เมษายน)',
+                          'ยอดปรับปรุงงวดที่ 2',
+                          'งวดที่ 3 (กรกฏาคม)',
+                          'ยอดปรับปรุงงวดที่ 3',
+                          'ปริมาณโควต้ารวม',
+                          'รวมยอดปรับปรุง'
+                ];
+            }
+        });
+    </script>
+</dom-module>

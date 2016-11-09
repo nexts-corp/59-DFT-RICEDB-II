@@ -1,4 +1,5 @@
 <link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./components/allocate-list.html">
 
 <dom-module id="page-amount">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -143,39 +144,7 @@
         </div>
         <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
         <div class="flex" style="border:1px solid #ddd; margin:30px;">
-
-          <div style="overflow-x:auto;">
-            <table class="gl-table-default" style="">
-              <tr>
-                <template is="dom-repeat" items="{{dataAmount.header}}">
-                  <th>{{item}}</th>
-                </template>
-              </tr>
-              <tr>
-                <template is="dom-repeat" items={{dataAmount.row1}}>
-                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                </template>
-              </tr>
-              <tr>
-                <template is="dom-repeat" items={{dataAmount.row2}}>
-                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                </template>
-              </tr>
-              <tr>
-                <th colspan="2">รวมปริมาณโควตา</th>
-                <th>10,727.00</th>
-                <th>10,727.00</th>
-                <th>5,364.00</th>
-                <th>5,364.00</th>
-                <th>5,364.00</th>
-                <th>5,364.00</th>
-                <th>21,455.00</th>
-                <th>21,455.00</th>
-              </tr>
-            </table>
-          </div>
-
-
+          <allocate-list data-allocate="[[dataAllocate]]"></allocate-list>
         </div>
         <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
           <paper-button raised class="gl-btn-primary">
@@ -321,11 +290,11 @@
                   params:{
                     quota_id:'2559',
                     type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',
-                    ordinal_number:'1'
+                    ordinal_number:'5'
                   }
                 })
                 .then((response)=>{
-                    //this.getTypeRice = response.data;
+                    this.dataAllocate = response.data;
                     console.log(response.data);
                 })
                 .catch((error)=>{

@@ -122,7 +122,7 @@ router.post(['/calculate'], function(req, res, next) {
                         return result1.merge(function(row) {
                             return { quantity: row('quantity').mul(result2('amount')(0)).div(result1.sum('quantity')) }
                         }).merge(function(row) {
-                            return { period: result2('period')(0) }
+                            return { period: result2('period')(0),quantity_update:row('quantity') }
                         }).merge(function(row) {
                             return {
                                 period: row('period').merge(function(period) {
