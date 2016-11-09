@@ -12,7 +12,7 @@ var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 router.get(['/allocate'], function (req, res, next) {
     var params = req.query;
     db.query(function (conn) {
-        
+
         var statement = r.db('eu').table('allocate_quota').filter({
             quota_id: params.quota_id,
             type_rice_id: params.type_rice_id,
@@ -29,7 +29,7 @@ router.get(['/allocate'], function (req, res, next) {
 
                 })
             }
-        }).coerceTo('array');
+        }).coerceTo('array')(0);
 
         statement.run(conn, function (err, cursor) {
             if (!err) {
@@ -38,6 +38,28 @@ router.get(['/allocate'], function (req, res, next) {
                 res.json({ error: "error" });
             }
         });
+    });
+});
+
+
+router.get(['/quota_ordinal'], function (req, res, next) {
+    var params = req.query;
+    db.query(function (conn) {
+        var statement = r.db('eu').table('allocate_quota')
+            .filter({ quota_id: params.quota_id, type_rice_id: params.type_rice_id })
+            .orderBy('ordinal_number')
+            .map(function (row) {
+                return row('ordinal_number')
+            });
+        
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+
     });
 });
 

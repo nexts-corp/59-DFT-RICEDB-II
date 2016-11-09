@@ -177,7 +177,7 @@ router.get(['/allocate_quota'], function(req, res, next) {
             .map(function(row) {
                 return {
                     type_rice_id: row('group'),
-                    detail: row('reduction')
+                    detail: row('reduction').orderBy('ordinal_number')
                 }
             })
             .eqJoin('type_rice_id', r.db('eu').table('type_rice')).zip().without('id');

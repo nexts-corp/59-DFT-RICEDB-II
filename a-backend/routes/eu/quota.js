@@ -11,7 +11,9 @@ var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 
 router.get(['/year'], function (req, res, next) {
     db.query(function (conn) {
-        var statement = r.db('eu').table('quota').map(function (x) { return x('id') }).coerceTo('array');
+        var statement = r.db('eu').table('quota')
+        .orderBy(r.desc('id'))
+        .map(function (x) { return x('id') }).coerceTo('array');
         statement.run(conn, function (err, cursor) {
             if (!err) {
                 res.json(cursor);

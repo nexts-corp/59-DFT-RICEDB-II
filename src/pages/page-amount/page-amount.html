@@ -1,77 +1,94 @@
 <link rel="import" href="./../components/panel-right/panel-right.html">
 
 <dom-module id="page-amount">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-        * {
-            font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .header {
-          padding: 10px 0px 10px 10px;
-          background-color: var(--paper-grey-100);
-          color: var(--paper-grey-600);
-          font-size: var(--font-size-h4);
-          font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        .registor{
-          margin: 20px;
-        }
-        .title {
-          text-align: center;
-           font-size: var(--font-size-h3);
-           font-family: 'rsuregular', sans-serif;
-             -webkit-font-smoothing: antialiased;
-        }
-        .searchBox{
-          padding: 5px;
-          background-color: var(--gl-gray-lighter-color);
-        }
-        .elevation{
-          border-radius: 5px;
-          margin: 10px;
-          padding: 5px;
-        }
-        .searchBorder{
-          border: 1px solid var(--gl-gray-light-color);
-          margin: 15px;
-          border-radius: 3px
-        }
-        paper-material {
-          background-color: var(--gl-white-color);
-        }
-        gl-search-input{
-          margin: 30px 0px 0px 0px;
-        }
-        table.gl-table-default{
-          border-collapse: collapse;
-          width: 100%;
-          overflow-x:auto;
-          white-space: nowrap;
-        }
-        table.gl-table-default,th,td{
-          border-bottom: 1px solid #ddd;
-        }
-        th,td{
-          padding: 15px;
-        }
-        th{
-          text-align: left;
-          background-color: #F1F1F1;
-        }
-        td{
-          text-align: left;
-        }
-        tr:hover{
-          background-color: #F1F1F1;
-        }
-        .contentHeader{
-          font-size: 22px;
-          text-align: center;
-        }
-    </style>
-    <template>
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    * {
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .header {
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h4);
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .registor {
+      margin: 20px;
+    }
+    
+    .title {
+      text-align: center;
+      font-size: var(--font-size-h3);
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .searchBox {
+      padding: 5px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    
+    .elevation {
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+    }
+    
+    .searchBorder {
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+    
+    paper-material {
+      background-color: var(--gl-white-color);
+    }
+    
+    gl-search-input {
+      margin: 30px 0px 0px 0px;
+    }
+    
+    table.gl-table-default {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    
+    table.gl-table-default,
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th,
+    td {
+      padding: 15px;
+    }
+    
+    th {
+      text-align: left;
+      background-color: #F1F1F1;
+    }
+    
+    td {
+      text-align: left;
+    }
+    
+    tr:hover {
+      background-color: #F1F1F1;
+    }
+    
+    .contentHeader {
+      font-size: 22px;
+      text-align: center;
+    }
+  </style>
+  <template>
 
     <content-panel>
       <grid>
@@ -91,58 +108,57 @@
             <div class="layout horizontal">
               <div class="flex"></div>
               <div class="flex-2">
-                  <gl-form-dropdown-menu label="ปีโควตา">
-                    <paper-listbox class="dropdown-content">
-                        <paper-item>2559</paper-item>
-                        <paper-item>2558</paper-item>
-                        <paper-item>2557</paper-item>
-                        <paper-item>2559</paper-item>
-                    </paper-listbox>     
-                    </gl-form-dropdown-menu>
+                <gl-form-dropdown-menu label="ปีโควตา">
+                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
+                    <template is="dom-repeat" items="{{getQuotaYear}}">
+                      <paper-item year="{{item}}">{{item}}</paper-item>
+                    </template>
+                  </paper-listbox>
+                </gl-form-dropdown-menu>
               </div>
               <div class="flex-2">
-                   <gl-form-dropdown-menu label="ประเภทข้าว">
-                        <paper-listbox class="dropdown-content">
-                            <paper-item>ข้าวขาว</paper-item>
-                            <paper-item>ข้าวหัก</paper-item>
-                        </paper-listbox>
-                    </gl-form-dropdown-menu>
+                <gl-form-dropdown-menu label="ประเภทข้าว">
+									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
+										<template is="dom-repeat" items="{{getTypeRice}}">
+											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+										</template>
+									</paper-listbox>
+								</gl-form-dropdown-menu>
               </div>
               <div class="flex-2">
-                   <gl-form-dropdown-menu label="การคำนวณครั้งที่">
-                    <paper-listbox class="dropdown-content">
-                        <paper-item>1</paper-item>
-                        <paper-item>2</paper-item>
-                        <paper-item>3</paper-item>
-                        <paper-item>4</paper-item>
-                    </paper-listbox>
-                    </gl-form-dropdown-menu>
-              </div>      
-                <div class="flex-2">   
-                        <paper-button class="gl-btn-primary" raised>ค้นหา</paper-button>
-                </div>
+                <gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaOrdinal}}">
+                    <template is="dom-repeat" items="{{getQuotaOrdinal}}">
+                      <paper-item year="{{item}}">{{item}}</paper-item>
+                    </template>
+                  </paper-listbox>
+                </gl-form-dropdown-menu>
               </div>
-                <div class="flex"></div>
+              <div class="flex-2">
+                <paper-button class="gl-btn-primary" raised on-tap="_getAllocate">ค้นหา</paper-button>
+              </div>
             </div>
+            <div class="flex"></div>
           </div>
-          <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
-          <div class="flex" style="border:1px solid #ddd; margin:30px;">
-             
+        </div>
+        <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
+        <div class="flex" style="border:1px solid #ddd; margin:30px;">
+
           <div style="overflow-x:auto;">
-          <table class="gl-table-default" style="">
+            <table class="gl-table-default" style="">
               <tr>
                 <template is="dom-repeat" items="{{dataAmount.header}}">
-                    <th>{{item}}</th>
+                  <th>{{item}}</th>
                 </template>
               </tr>
               <tr>
                 <template is="dom-repeat" items={{dataAmount.row1}}>
-                    <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
                 </template>
               </tr>
               <tr>
                 <template is="dom-repeat" items={{dataAmount.row2}}>
-                    <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
                 </template>
               </tr>
               <tr>
@@ -156,32 +172,33 @@
                 <th>21,455.00</th>
                 <th>21,455.00</th>
               </tr>
-          </table>
+            </table>
           </div>
 
 
-          </div>
-           <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
-              <paper-button raised class="gl-btn-primary">
-                <iron-icon icon="print"></iron-icon>
-                <span style="margin:0px 5px 0px 10px">ออกใบเสร็จ</span>
-              </paper-button>
-            </div>
+        </div>
+        <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
+          <paper-button raised class="gl-btn-primary">
+            <iron-icon icon="print"></iron-icon>
+            <span style="margin:0px 5px 0px 10px">ออกใบเสร็จ</span>
+          </paper-button>
+        </div>
         </div>
         <!-- </paper-material> -->
 
       </grid>
-    
+
     </content-panel>
-    	<panel-right title="รายละเอียดการจัดสรรโควตา">
+    <panel-right title="รายละเอียดการจัดสรรโควตา">
       <template is="dom-if" if="[[rendered]]">
         <amount-allocation-edit></amount-allocation-edit>
       </template>
-		</panel-right>
-    </template>
-    <script>
+    </panel-right>
+  </template>
+  <script>
         Polymer({
             is: "page-amount",
+            observers:['_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'],
             properties: {
                 layerContent: {
                     type: String,
@@ -240,7 +257,10 @@
                     } ]
                 }
             },
+           
             ready:function(){
+               this._getQuotaYear();
+               this._getTypeRice();
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/amount-allocation-edit.html'), (e)=>{
                     this.rendered = true;
@@ -249,9 +269,69 @@
                 });
               }); 
             },
+            _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
+              this.selectQuotaOrdinal = "";
+              axios.get('./eu/allocate/quota_ordinal',{
+                params:{
+                  quota_id:yearQuoata,
+                  type_rice_id:typeRice
+                }
+              })
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getQuotaOrdinal = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
             _toggleDrawer: function(e) {
                this.$$("panel-right").toggle();
-            }
+            },
+            _getQuotaYear: function(){
+              axios.get('./eu/quota/year')
+              .then((response)=>{
+                console.log("success");
+                this.getQuotaYear = response.data;
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error.message);
+                this.fire('toast',{status:'connectError',text:error.message,
+                  callback:function(){
+                  }})
+              });
+            },
+            _getTypeRice:function(){
+                axios.get('./eu/type_rice/')
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getTypeRice = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            _getAllocate:function(){
+                axios.get('./eu/allocate/allocate',{
+                  params:{
+                    quota_id:'2559',
+                    type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',
+                    ordinal_number:'1'
+                  }
+                })
+                .then((response)=>{
+                    //this.getTypeRice = response.data;
+                    console.log(response.data);
+                })
+                .catch((error)=>{
+                    console.log(error);
+                });
+             }
         });
     </script>
 </dom-module>
