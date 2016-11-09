@@ -40,30 +40,47 @@
         <div style="overflow-x:auto;">
             <table class="gl-table-default" style="">
               <tr>
-                <template is="dom-repeat" items="[[_generateHeader(dataAllocate)]]">
-                  <th>{{item}}</th>
+                <th>ลำดับที่</th>
+                <th>ผู้ส่งออก</th>
+                <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
+                    <th>งวดที่ [[_num(index)]]</th>
+                    <th>ยอดปรับปรุงงวดที่ [[_num(index)]]</th>
                 </template>
+                <th>ปริมาณโควต้ารวม</th>
+                <th>รวมยอดปรับปรุง</th>
               </tr>
-              <tr>
-                <template is="dom-repeat" items={{dataAllocate.row1}}>
-                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
+              
+                <template is="dom-repeat" items="[[dataAllocate.exporter]]">
+                    <tr on-tap="_toggleDrawer" id="addRedRegExporter">
+                        <td>[[_num(index)]]</td>
+                        <td>[[item.seller_name_th]]</td>
+                        <template is="dom-repeat" as="period" items="[[item.period]]">
+                            <td>[[period.quantity]]</td>
+                            <td>[[period.quantity_update]]</td>
+                        </template>
+                        <td>[[item.quantity]]</td>
+                        <td>[[item.quantity_update]]</td>
+                    </tr>
                 </template>
-              </tr>
-              <tr>
-                <template is="dom-repeat" items={{dataAllocate.row2}}>
-                  <td on-tap="_toggleDrawer" id="addRedRegExporter">{{item}}</td>
-                </template>
-              </tr>
+              
               <tr>
                 <th colspan="2">รวมปริมาณโควตา</th>
+
+
+                <!--<th>10,727.00</th>
                 <th>10,727.00</th>
-                <th>10,727.00</th>
                 <th>5,364.00</th>
                 <th>5,364.00</th>
                 <th>5,364.00</th>
-                <th>5,364.00</th>
-                <th>21,455.00</th>
-                <th>21,455.00</th>
+                <th>5,364.00</th>-->
+
+                <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
+                    <th>[[_sumPeriod(index,'quantity')]]</th>
+                    <th>[[_sumPeriod(index,'quantity_update')]]</th>
+                </template>
+
+                <th>[[_sumQuantity(dataAllocate,'quantity')]]</th>
+                <th>[[_sumQuantity(dataAllocate,'quantity_update')]]</th>
               </tr>
             </table>
           </div>
@@ -71,20 +88,22 @@
     <script>
         Polymer({
             is: 'allocate-list',
-            _generateHeader:function(data){
-                console.log(data.exporter[0].period.length);
-                return [
-                          'ลำดับที่',
-                          'ผู้ส่งออก',
-                          'งวดที่ 1 (มกราคม)',
-                          'ยอดปรับปรุงงวดที่ 1',
-                          'งวดที่ 2 (เมษายน)',
-                          'ยอดปรับปรุงงวดที่ 2',
-                          'งวดที่ 3 (กรกฏาคม)',
-                          'ยอดปรับปรุงงวดที่ 3',
-                          'ปริมาณโควต้ารวม',
-                          'รวมยอดปรับปรุง'
-                ];
+            _num:function(index){
+                return index+1;
+            },
+            _sumPeriod:function(index,key){
+                var sum = 0;
+                this.dataAllocate.exporter.map(function(item){
+                    sum += item.period[index][key];
+                });
+                return sum;
+            },
+            _sumQuantity:function(index,key){
+                var sum = 0;
+                this.dataAllocate.exporter.map(function(item){
+                    sum += item[key];
+                });
+                return sum;
             }
         });
     </script>
