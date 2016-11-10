@@ -27,6 +27,11 @@
          border-radius: 5px;
          box-shadow: inset 0 0 3px 3px rgba(0,0,0,.2);
        }
+       .riceName{
+         /*color: red;*/
+         margin-top: 25px;
+         font-size: var(--font-size-h4);
+       }
     </style>
 
 
@@ -52,7 +57,16 @@
             <vaadin-date-picker disabled="[[checkInput]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
-
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+            <div class="riceName">
+              จำนวนข้าวที่ทำสัญญา :
+            </div>
+          </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(data.*,'contract_quantity')]]
+            <gl-form-input  auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+        </gl-grid-col>
+        </gl-grid-row>
         <template is="dom-repeat" items="{{data.contract_type_rice}}">
             <div class="bg top">
               <gl-grid-row>
@@ -68,9 +82,9 @@
     </gl-form-dropdown-menu>
     </gl-grid-col>
 
-    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(item.*,'type_rice_quantity')]]
+    <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(item.*,'type_rice_quantity')]]
         <gl-form-input  auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
-    </gl-grid-col>
+    </gl-grid-col> -->
     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
     <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
@@ -163,7 +177,6 @@
                     type_rice_id: '',
                     type_rice_name_en: '',
                     type_rice_name_th: '',
-                    type_rice_quantity: '',
                 });
             },
             dele: function(e) {
@@ -180,6 +193,7 @@
               }
               this.Newdata.id=this.data.contract_id;
               this.Newdata.contract_name=this.data.contract_name;
+                this.Newdata.contract_quantity=this.data.contract_quantity;
               this.Newdata.buyer_id=this.data.buyer_id;
               this.Newdata.contract_date=new Date (this.data.contract_date);
               this.Newdata.contract_type_rice=this.data.contract_type_rice;

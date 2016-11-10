@@ -143,6 +143,9 @@
     Polymer({
       is: "invoice-drft",
       properties: {
+        list:{
+          type: Array,
+        },
         totalInvoice: {
           type: Object,
           notify:true,
@@ -274,12 +277,18 @@
             result+=item.moneyInvoice ;
           }.bind(this));
             this.set('totalInvoice.totalMoneyBathInvoices',result);
-
+            // this.set('totalInvoice.'+index+'.totalMoneyBathInvoices',result);
+            // this.set('totalInvoice.'+this.invoiceIndex+'.inddd',result);
           return result;
       },
       _sendTotalInvoice:function (totalInvoice) {
         // console.log(this.totalInvoice);
-        this.fire('total-invoice',{data:this.totalInvoice});
+        var result = 1;
+        this.set("list.2", {name: "changed c"});
+        console.log('list',this.list);
+        console.log("this.invoiceIndex =>",this.invoiceIndex);
+        console.log('totalInvoice =>',this.totalInvoice);
+        // this.fire('total-invoice',{data:this.totalInvoice});
       }
     });
   </script>
