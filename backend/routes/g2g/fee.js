@@ -77,7 +77,7 @@ var schema = {
 var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function(req, res, next) {
     db.query(function(conn) {
-        r.table('fee')
+        r.db('g2g').table('fee')
             .filter({ fee_status: false })
             .merge(function(m) {
                 return {
@@ -85,12 +85,12 @@ router.get('/contract/id/:contract_id', function(req, res, next) {
                     invoice: m('invoice').merge(function(inv_mer) {
                         return {
                             invoice_detail: inv_mer('invoice_detail').merge(function(det_map) {
-                                return r.table('shipment_detail').get(det_map('shm_det_id'))
+                                return r.db('g2g').table('shipment_detail').get(det_map('shm_det_id'))
                                     .merge(function(shm_det_mer) {
-                                        return r.table('shipment').get(shm_det_mer('shm_id'))
+                                        return r.db('g2g').table('shipment').get(shm_det_mer('shm_id'))
                                     })
                                     .merge(function(shm_det_mer) {
-                                        return r.table('confirm_letter').get(shm_det_mer('cl_id'))
+                                        return r.db('g2g').table('confirm_letter').get(shm_det_mer('cl_id'))
                                     })
                                     .pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
                             })
@@ -111,11 +111,17 @@ router.get('/contract/id/:contract_id', function(req, res, next) {
                 return m('invoice')
             })
             .without('id', 'invoice')
-            .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
             .filter(
             r.row('contract_id').eq(req.params.contract_id)
                 .and(r.row('fee_status').eq(false))
             )
+            .merge(function(m) {
+                return {
+                    cl_date: m('cl_date').split('T')(0),
+                    fee_date_receipt: m('fee_date_receipt').split('T')(0)
+                }
+            })
             .group(function(g) {
                 return g.pluck(
                     'contract_id', 'cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status'
@@ -155,17 +161,17 @@ router.get('/contract/id/:contract_id', function(req, res, next) {
 })
 router.get('/id/:id', function(req, res, next) {
     db.query(function(conn) {
-        r.table('fee')
+        r.db('g2g').table('fee')
             .get(req.params.id)
             .merge(function(fee_merge) {
                 return {
                     invoice: fee_merge('invoice').map(function(fee_map) {
                         return fee_map.merge(function(fee_merge1) {
-                            return r.table('invoice')
+                            return r.db('g2g').table('invoice')
                                 .get(fee_merge1('invoice_id'))
                                 .merge(function(m) {
                                     return {
-                                        group_ship: r.table('shipment_detail')
+                                        group_ship: r.db('g2g').table('shipment_detail')
                                             .filter({ bl_no: m('bl_no') })
                                             .coerceTo('array')
                                             .group(function(g) {
@@ -182,13 +188,13 @@ router.get('/id/:id', function(req, res, next) {
                                                     ship_voy_no: me('group')('ship_voy_no')
                                                 }
                                             }),
-                                        shipment_detail: r.table('shipment_detail')
+                                        shipment_detail: r.db('g2g').table('shipment_detail')
                                             .filter({ bl_no: m('bl_no') })
                                             .coerceTo('array')
                                             .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
-                                            .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
-                                            .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_date", "cl_name", "cl_quality"] }).zip()
-                                            .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
+                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: "id" }).zip()
+                                            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "cl_date", "cl_name", "cl_quality"] }).zip()
+                                            .eqJoin("package_id", r.db('common').table("package")).without({ right: "id" }).zip()
                                             .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
                                             .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                                             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
@@ -235,15 +241,24 @@ router.get('/id/:id', function(req, res, next) {
                                         weight_net: m('shipment_detail').sum('weight_net'),
                                         weight_tare: m('shipment_detail').sum('weight_tare'),
                                         amount_usd: m('shipment_detail').sum('amount_usd'),
+                                        invoice_date: m('invoice_date').split('T')(0),
                                         invoice_detail: fee_merge1('invoice_detail').map(function(map1) {
                                             return m('shipment_detail').filter({ shm_det_id: map1('shm_det_id') })(0).merge(map1)
+                                                .merge(function(m2) {
+                                                    return {
+                                                        exporter_date_approve: m2('exporter_date_approve').split('T')(0),
+                                                        exporter_date_update: m2('exporter_date_update').split('T')(0),
+                                                        invoice_date: m2('invoice_date').split('T')(0),
+                                                        trader_date_approve: m2('trader_date_approve').split('T')(0)
+                                                    }
+                                                })
                                         })
                                     }
                                 })
                                 .without("id", "group_ship", "shipment_detail")
                                 .merge(function(m) {
-                                    return r.table("ship").get(m('ship_id')).without('id'),
-                                        r.table("shipline").get(m('shipline_id')).without('id')
+                                    return r.db('common').table("ship").get(m('ship_id')).without('id'),
+                                        r.db('common').table("shipline").get(m('shipline_id')).without('id')
                                 })
                         })
                     })
@@ -252,6 +267,7 @@ router.get('/id/:id', function(req, res, next) {
             .merge(function(fee_merge) {
                 return {
                     fee_id: fee_merge('id'),
+                    fee_date_receipt: fee_merge('fee_date_receipt').split('T')(0),
                     amount_usd: fee_merge('invoice').sum('amount_usd'),
                     weight_gross: fee_merge('invoice').sum('weight_gross'),
                     weight_net: fee_merge('invoice').sum('weight_net'),
@@ -270,7 +286,7 @@ router.get('/id/:id', function(req, res, next) {
 });
 router.get('/shipment/id/:shm_id', function(req, res, next) {
     db.query(function(conn) {
-        r.table('shipment_detail')
+        r.db('g2g').table('shipment_detail')
             .filter({ shm_id: req.params.shm_id })
             .group(function(g) {
                 return g.pluck(
@@ -291,7 +307,7 @@ router.get('/shipment/id/:shm_id', function(req, res, next) {
                 }
             })
             .without("group", "reduction")
-            .outerJoin(r.table("invoice"),
+            .outerJoin(r.db('g2g').table("invoice"),
             function(detail, invoice) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
@@ -321,14 +337,14 @@ router.get('/shipment/id/:shm_id', function(req, res, next) {
 router.get('/invoice/id/:invoice_id', function(req, res, next) {
     var d = {};
     db.query(function(conn) {
-        r.table('invoice')
+        r.db('g2g').table('invoice')
             .filter(function(f) {
                 return r.expr(req.params.invoice_id.split('_'))
                     .contains(f('id'))
             })
             .merge(function(m) {
                 return {
-                    group_ship: r.table('shipment_detail')
+                    group_ship: r.db('g2g').table('shipment_detail')
                         .filter({ bl_no: m('bl_no') })
                         .coerceTo('array')
                         .group(function(g) {
@@ -345,19 +361,22 @@ router.get('/invoice/id/:invoice_id', function(req, res, next) {
                                 ship_voy_no: me('group')('ship_voy_no')
                             }
                         }),
-                    invoice_detail: r.table('shipment_detail')
+                    invoice_detail: r.db('g2g').table('shipment_detail')
                         .filter({ bl_no: m('bl_no') })
                         .coerceTo('array')
                         .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
-                        .eqJoin("shm_id", r.table("shipment")).without({ right: "id" }).zip()
-                        .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_date", "cl_name", "cl_quality"] }).zip()
-                        .eqJoin("package_id", r.table("package")).without({ right: "id" }).zip()
+                        .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: "id" }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "cl_date", "cl_name", "cl_quality"] }).zip()
+                        .eqJoin("package_id", r.db('common').table("package")).without({ right: "id" }).zip()
                         .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
                         .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
                         .merge(function(m1) {
                             return {
                                 shm_det_id: m1('id'),
+                                exporter_date_approve:m1('exporter_date_approve').split('T')(0),
+                                exporter_date_update:m1('exporter_date_update').split('T')(0),
+                                trader_date_approve:m1('trader_date_approve').split('T')(0),
                                 price_per_ton: m1('cl_type_rice')
                                     .filter(function(tb) {
                                         return tb('type_rice_id').eq(m1('type_rice_id'))
@@ -389,6 +408,7 @@ router.get('/invoice/id/:invoice_id', function(req, res, next) {
             .merge(function(m) {
                 return {
                     invoice_id: m('id'),
+                    invoice_date:m('invoice_date').split('T')(0),
                     ship_id: m('group_ship')('ship_id')(0),
                     shipline_id: m('group_ship')('shipline_id')(0),
                     ship_lot_no: m('group_ship')('ship_lot_no')(0),
@@ -400,8 +420,8 @@ router.get('/invoice/id/:invoice_id', function(req, res, next) {
                 }
             })
             .without("id", "group_ship")
-            .eqJoin("ship_id", r.table("ship")).without({ right: "id" }).zip()
-            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
+            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
             .run(conn, function(err, cursor) {
                 if (!err) {
                     cursor.toArray(function(err, result) {
@@ -439,7 +459,7 @@ router.post('/insert', function(req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function(conn) {
-                r.table("fee")
+                r.db('g2g').table("fee")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -476,7 +496,7 @@ router.put('/update', function(req, res, next) {
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function(conn) {
-                r.table("fee")
+                r.db('g2g').table("fee")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -508,10 +528,10 @@ router.delete('/delete/id/:id', function(req, res, next) {
     if (req.params.id != '' && req.params.id != null) {
         result.id = req.params.id;
         db.query(function(conn) {
-            var q = r.table("fee").get(req.params.id).do(function(result) {
+            var q = r.db('g2g').table("fee").get(req.params.id).do(function(result) {
                 return r.branch(
                     result('fee_status').eq(false)
-                    , r.table("fee").get(req.params.id).delete()
+                    , r.db('g2g').table("fee").get(req.params.id).delete()
                     , r.expr("Can't delete because this status = true.")
                 )
             })

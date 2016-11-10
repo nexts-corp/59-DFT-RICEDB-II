@@ -3,7 +3,7 @@ var r = require('rethinkdb');
 function ConectDB(){
     this.query = function(callback){
 
-        r.connect( {host: 'rdb.codeunbug.com', port: 28015,db: 'g2g'}, function(err, conn) {
+        r.connect( {host: 'rdb.codeunbug.com', port: 28015}, function(err, conn) {
             if (err){
                 console.log('... Connect db error');
             }else{

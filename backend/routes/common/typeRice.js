@@ -7,7 +7,7 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("type_rice")
+        r.db('common').table("type_rice")
             .merge(function (row) {
                 return { type_rice_id: row('id') }
             })
@@ -31,7 +31,7 @@ router.get(['/', '/list'], function (req, res, next) {
 
 router.get('/id/:type_rice_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("type_rice")
+        r.db('common').table("type_rice")
             .get(req.params.type_rice_id.toUpperCase())
             .merge({
                 type_rice_id: r.row('id')

@@ -7,7 +7,7 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("surveyor")
+        r.db('common').table("surveyor")
             .merge(function (row) {
                 return { surveyor_id: row('id') }
             })
@@ -30,7 +30,7 @@ router.get(['/', '/list'], function (req, res, next) {
 });
 router.get('/id/:surveyor_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("surveyor")
+        r.db('common').table("surveyor")
             .get(req.params.surveyor_id)
             .merge({
                 surveyor_id: r.row('id')

@@ -23,7 +23,7 @@ var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("country")
+        r.db('common').table("country")
             .merge(function (row) {
                 return { country_id: row('id') }
             })
@@ -46,7 +46,7 @@ router.get(['/', '/list'], function (req, res, next) {
 });
 router.get('/id/:country_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("country")
+        r.db('common').table("country")
             .get(req.params.country_id.toUpperCase())
             .merge({
                 country_id: r.row('id')
@@ -63,14 +63,14 @@ router.get('/id/:country_id', function (req, res, next) {
 });
 router.get('/port', function (req, res, next) {
     db.query(function (conn) {
-        r.table("country")
+        r.db('common').table("country")
             .merge(function (row) {
                 return { country_id: row('id') }
             })
             .map(function (m) {
                 return m.merge(function (me) {
                     return {
-                        port: r.table('port')
+                        port: r.db('common').table('port')
                         .filter({ country_id: me('country_id') })
                         .merge(function(p){
                             return {
@@ -104,7 +104,7 @@ router.post('/insert', function (req, res, next) {
     if (valid) {
         //res.json(req.body);
         db.query(function (conn) {
-            r.table("country")
+            r.db('common').table("country")
                 .insert(req.body)
                 .run(conn)
                 .then(function (response) {

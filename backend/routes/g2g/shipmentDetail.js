@@ -134,7 +134,7 @@ router.post('/insert', function (req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function (conn) {
-                r.table("shipment_detail")
+                r.db('g2g').table("shipment_detail")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -171,7 +171,7 @@ router.put('/update', function (req, res, next) {
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("shipment_detail")
+                r.db('g2g').table("shipment_detail")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -206,7 +206,7 @@ router.delete('/delete/id/:shm_det_id', function (req, res, next) {
     if (req.params.shm_det_id != '' && req.params.shm_det_id != null) {
         result.id = req.params.shm_det_id;
         db.query(function (conn) {
-            r.table("shipment_detail")
+            r.db('g2g').table("shipment_detail")
                 .get(req.params.shm_det_id)
                 .delete()
                 .run(conn)

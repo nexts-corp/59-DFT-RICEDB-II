@@ -7,12 +7,12 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("ship")
+        r.db('common').table("ship")
             .merge(function (row) {
                 return { ship_id: row('id') }
             })
             .without('id')
-            .eqJoin("shipline_id", r.table("shipline")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -31,11 +31,11 @@ router.get(['/', '/list'], function (req, res, next) {
 });
 router.get('/id/:ship_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("ship")
+        r.db('common').table("ship")
             .get(req.params.ship_id)
             .merge(
             { ship_id: r.row('id') },
-            r.table("shipline").get(r.row("shipline_id"))
+            r.db('common').table("shipline").get(r.row("shipline_id"))
             )
             .without('id')
             .run(conn, function (err, cursor) {

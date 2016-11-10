@@ -116,7 +116,7 @@ router.get('/', function (req, res, next) {
             .without('id')
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
             .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
-            .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: "id" }).zip()
             .filter(q)
             .filter(d)
             .orderBy('exporter_no')
@@ -159,9 +159,9 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 }),
             r.db('external_f3').table("seller").get(r.row("seller_id")),
             r.db('external_f3').table("type_license").get(r.row("type_lic_id")),
-            r.table("country").get(r.row("country_id"))
+            r.db('common').table("country").get(r.row("country_id"))
             )
-            //  .merge(r.table("country").get(r.row("country_id")))
+            //  .merge(r.db('common').table("country").get(r.row("country_id")))
             .without('id')
             .run(conn, function (err, cursor) {
                 //console.log(err);

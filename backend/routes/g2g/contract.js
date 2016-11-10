@@ -48,7 +48,7 @@ var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("contract")
+        r.db('g2g').table("contract")
             //.filter({ contract_status: true })
             .merge(function (row) {
                 return {
@@ -56,10 +56,10 @@ router.get(['/', '/list'], function (req, res, next) {
                     contract_date: row('contract_date').split('T')(0),
                     contract_type_rice: row('contract_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
-                            return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                            return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
                     }),
-                    confirm_letter: r.table('confirm_letter')
+                    confirm_letter: r.db('g2g').table('confirm_letter')
                         .filter({ 'contract_id': row('id') })
                         .merge(function (cl) {
                             return {
@@ -74,12 +74,12 @@ router.get(['/', '/list'], function (req, res, next) {
                         .orderBy('cl_no')
                         .without('id')
                         .coerceTo('array'),
-                    shipment: r.table('shipment')
+                    shipment: r.db('g2g').table('shipment')
                         .filter({ contract_id: row('id') })
                         .merge(function (shm) {
                             return {
                                 shm_id: shm('id'),
-                                shm_quantity: r.table("shipment_detail")
+                                shm_quantity: r.db('g2g').table("shipment_detail")
                                     .filter({ "shm_id": shm('id') })
                                     .sum("shm_det_quantity"),
                                 shm_status_name: r.branch(shm('shm_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
@@ -88,7 +88,7 @@ router.get(['/', '/list'], function (req, res, next) {
                         .orderBy('shm_no')
                         .without('id')
                         .coerceTo('array')
-                        .eqJoin("cl_id", r.table("confirm_letter")).without({ right: ["id", "cl_type_rice", "cl_quality"] }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "cl_type_rice", "cl_quality"] }).zip()
                 }
             })
             .merge(function (row) {
@@ -123,8 +123,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("buyer_id", r.table("buyer")).without({ right: "id" }).zip()
-            .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
+            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: "id" }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: "id" }).zip()
             .orderBy('contract_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
@@ -145,18 +145,18 @@ router.get(['/', '/list'], function (req, res, next) {
 
 router.get('/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("contract")
+        r.db('g2g').table("contract")
             .get(req.params.contract_id)
             .merge(function (row) {
                 return {
                     contract_id: row('id'),
                     contract_type_rice: row('contract_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
-                            return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                            return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
                             .merge(function (limit) {
                                 return {
-                                    type_rice_quantity_confirm: r.table('confirm_letter')
+                                    type_rice_quantity_confirm: r.db('g2g').table('confirm_letter')
                                         .filter(function (f) {
                                             return f('cl_type_rice').contains(function (c) {
                                                 return c('type_rice_id').eq(limit('type_rice_id'))
@@ -188,9 +188,9 @@ router.get('/id/:contract_id', function (req, res, next) {
                 }
             })
             .merge(function (row) {
-                return r.table("buyer").get(row('buyer_id')).without('id')
+                return r.db('common').table("buyer").get(row('buyer_id')).without('id')
                     .merge(function (r_buyer) {
-                        return r.table("country").get(r_buyer("country_id")).without("id")
+                        return r.db('common').table("country").get(r_buyer("country_id")).without("id")
                     })
             })
             .without('id')
@@ -212,7 +212,7 @@ router.post('/insert', function (req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function (conn) {
-                r.table("contract")
+                r.db('g2g').table("contract")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -249,7 +249,7 @@ router.put('/update', function (req, res, next) {
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("contract")
+                r.db('g2g').table("contract")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -281,10 +281,10 @@ router.delete('/delete/id/:id', function (req, res, next) {
     if (req.params.id != '' && req.params.id != null) {
         result.id = req.params.id;
         db.query(function (conn) {
-            var q = r.table("contract").get(req.params.id).do(function (result) {
+            var q = r.db('g2g').table("contract").get(req.params.id).do(function (result) {
                 return r.branch(
                     result('contract_status').eq(false)
-                    , r.table("contract").get(req.params.id).delete()
+                    , r.db('g2g').table("contract").get(req.params.id).delete()
                     , r.expr("Can't delete because this status = true.")
                 )
             })
@@ -309,14 +309,14 @@ router.delete('/delete/id/:id', function (req, res, next) {
 });
 router.get('/shipment', function (req, res, next) {
     db.query(function (conn) {
-        r.table("contract")
+        r.db('g2g').table("contract")
             .merge(function (row) {
                 return { contract_id: row('id') }
             })
             .map(function (m) {
                 return m.merge(function (me) {
                     return {
-                        shipment: r.table('shipment')
+                        shipment: r.db('g2g').table('shipment')
                             .filter({ contract_id: me('contract_id') })
                             .merge(function (p) {
                                 return {

@@ -7,7 +7,7 @@ var db = require('../../db.js');
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.table("shipline")
+        r.db('common').table("shipline")
             .merge(function (row) {
                 return { shipline_id: row('id') }
             })
@@ -30,7 +30,7 @@ router.get(['/', '/list'], function (req, res, next) {
 });
 router.get('/id/:shipline_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("shipline")
+        r.db('common').table("shipline")
             .get(req.params.shipline_id)
             .merge(
             { shipline_id: r.row('id') }
@@ -48,14 +48,14 @@ router.get('/id/:shipline_id', function (req, res, next) {
 });
 router.get('/ship', function (req, res, next) {
     db.query(function (conn) {
-        r.table("shipline")
+        r.db('common').table("shipline")
             .merge(function (row) {
                 return { shipline_id: row('id') }
             })
             .map(function (m) {
                 return m.merge(function (me) {
                     return {
-                        ship: r.table('ship')
+                        ship: r.db('common').table('ship')
                             .filter({ shipline_id: me('shipline_id') })
                             .merge(function (p) {
                                 return {

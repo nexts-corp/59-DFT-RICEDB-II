@@ -60,7 +60,7 @@ var validate = ajv.compile(schema);
 
 router.get('/id/:cl_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("confirm_letter")
+        r.db('g2g').table("confirm_letter")
             .get(req.params.cl_id)
             .merge(function (row) {
                 return {
@@ -71,13 +71,13 @@ router.get('/id/:cl_id', function (req, res, next) {
                             return {
                                 package: row_type_rice('package').map(function (arr_package) {
                                     return arr_package.merge(function (row_package) {
-                                        return r.table('package').get(row_package('package_id')).without('id')
+                                        return r.db('common').table('package').get(row_package('package_id')).without('id')
                                     })
                                 })
-                            }//, r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                            }//, r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
                             .merge(function (row_type_rice) {
-                                return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                                return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
                     }),
                     cl_total_quantity: row('cl_type_rice').sum('type_rice_quantity')
@@ -95,7 +95,7 @@ router.get('/id/:cl_id', function (req, res, next) {
 });
 router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("confirm_letter")
+        r.db('g2g').table("confirm_letter")
             .filter({ "contract_id": req.params.contract_id, "cl_status": true })
             .merge(function (row) {
                 return {
@@ -106,13 +106,13 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                             return {
                                 package: row_type_rice('package').map(function (arr_package) {
                                     return arr_package.merge(function (row_package) {
-                                        return r.table('package').get(row_package('package_id')).without('id')
+                                        return r.db('common').table('package').get(row_package('package_id')).without('id')
                                     })
                                 })
                             }
                         })
                             .merge(function (row_type_rice) {
-                                return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                                return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
                     })
                 }
@@ -143,7 +143,7 @@ router.post('/insert', function (req, res, next) {
         if (req.body.id == null) {
             //result.id = req.body.id;
             db.query(function (conn) {
-                r.table("confirm_letter")
+                r.db('g2g').table("confirm_letter")
                     //.get(req.body.id)
                     .insert(req.body)
                     .run(conn)
@@ -180,7 +180,7 @@ router.put('/update', function (req, res, next) {
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
             db.query(function (conn) {
-                r.table("confirm_letter")
+                r.db('g2g').table("confirm_letter")
                     .get(req.body.id)
                     .update(req.body)
                     .run(conn)
@@ -212,10 +212,10 @@ router.delete('/delete/id/:id', function (req, res, next) {
     if (req.params.id != '' && req.params.id != null) {
         result.id = req.params.id;
         db.query(function (conn) {
-            var q = r.table("confirm_letter").get(req.params.id).do(function (result) {
+            var q = r.db('g2g').table("confirm_letter").get(req.params.id).do(function (result) {
                 return r.branch(
                     result('cl_status').eq(false)
-                    , r.table("confirm_letter").get(req.params.id).delete()
+                    , r.db('g2g').table("confirm_letter").get(req.params.id).delete()
                     , r.expr("Can't delete because this status = true.")
                 )
             })
@@ -246,7 +246,7 @@ router.delete('/delete/id/:id', function (req, res, next) {
 //     if (req.params.cl_id != '' && req.params.cl_id != null) {
 //         result.id = req.params.cl_id;
 //         db.query(function (conn) {
-//             r.table("confirm_letter")
+//             r.db('g2g').table("confirm_letter")
 //                 .get(req.params.cl_id)
 //                 .delete()
 //                 .run(conn)
