@@ -64,7 +64,7 @@
             </div>
           </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(data.*,'contract_quantity')]]
-            <gl-form-input  auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+            <gl-form-input  auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
         </gl-grid-col>
         </gl-grid-row>
         <template is="dom-repeat" items="{{data.contract_type_rice}}">
@@ -177,7 +177,6 @@
                     type_rice_id: '',
                     type_rice_name_en: '',
                     type_rice_name_th: '',
-                    type_rice_quantity: '',
                 });
             },
             dele: function(e) {
@@ -194,6 +193,7 @@
               }
               this.Newdata.id=this.data.contract_id;
               this.Newdata.contract_name=this.data.contract_name;
+                this.Newdata.contract_quantity=this.data.contract_quantity;
               this.Newdata.buyer_id=this.data.buyer_id;
               this.Newdata.contract_date=new Date (this.data.contract_date);
               this.Newdata.contract_type_rice=this.data.contract_type_rice;
