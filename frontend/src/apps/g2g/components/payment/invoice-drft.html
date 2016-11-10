@@ -69,7 +69,7 @@
     background-color: #F1F1F1;
   }
 </style>
-  <template>///*/*-{{rateBank}}//{{invoiceIndex}}//{{feeTotal}}
+  <template>
     <gl-form-panel>
       <gl-form-panel-body set-padding="5px" set-border="0px">
         <div class="horizontal justified layout">
@@ -145,6 +145,7 @@
       properties: {
         totalInvoice: {
           type: Object,
+          notify:true,
           value:{
             totalTonInvoices:0,
             totalPricePerTonUsdInvoices:0,
@@ -160,7 +161,8 @@
           g2gModelBehavior
       ],
       observers:[
-        '_averageFee(feeTotal,invoice)'
+        '_averageFee(feeTotal,invoice)',
+        '_sendTotalInvoice(totalInvoice.*)'
       ],
       _totalQuantityTons:function (quantity_tons,index){
         this.set('invoice.invoice_detail.'+index+'.quantity_tons',Number(quantity_tons));
@@ -271,24 +273,13 @@
             // console.log('item.moneyInvoice  =>',item.moneyInvoice);
             result+=item.moneyInvoice ;
           }.bind(this));
-          // console.log(result);
-//           totalTonInvoices
-// totalPricePerTonUsdInvoices
-// totalAmountUsdInvoices
-// totalBathInvoices
-// totalFeeInvoices
-// totalIncomeTaxInvoices
-// totalMoneyBathInvoices
-            // this.set('totalInvoice.'+index+'.totalTonInvoices',result);
-            // this.set('totalInvoice.'+index+'.totalPricePerTonUsdInvoices',result);
-            // this.set('totalInvoice.'+index+'.totalAmountUsdInvoices',result);
-            // this.set('totalInvoice.'+index+'.totalBathInvoices',result);
-            // this.set('totalInvoice.'+index+'.totalFeeInvoices',result);
-            // this.set('totalInvoice.'+index+'.totalIncomeTaxInvoices',result);
             this.set('totalInvoice.totalMoneyBathInvoices',result);
-            console.log(this.totalInvoice);
-          return result;
 
+          return result;
+      },
+      _sendTotalInvoice:function (totalInvoice) {
+        // console.log(this.totalInvoice);
+        this.fire('total-invoice',{data:this.totalInvoice});
       }
     });
   </script>
