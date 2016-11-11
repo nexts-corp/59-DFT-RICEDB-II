@@ -28,6 +28,9 @@ var schema = {
         "fee_no": {
             "type": "string"
         },
+        "fee_name": {
+            "type": "string"
+        },
         "rate_bank": {
             "type": "number"
         },
@@ -72,7 +75,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "fee_no", "rate_bank", "rate_tt", "invoice", "fee_status"]
+    "required": ["fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "fee_no", "fee_name", "rate_bank", "rate_tt", "invoice", "fee_status"]
 };
 var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function(req, res, next) {
@@ -374,9 +377,9 @@ router.get('/invoice/id/:invoice_id', function(req, res, next) {
                         .merge(function(m1) {
                             return {
                                 shm_det_id: m1('id'),
-                                exporter_date_approve:m1('exporter_date_approve').split('T')(0),
-                                exporter_date_update:m1('exporter_date_update').split('T')(0),
-                                trader_date_approve:m1('trader_date_approve').split('T')(0),
+                                exporter_date_approve: m1('exporter_date_approve').split('T')(0),
+                                exporter_date_update: m1('exporter_date_update').split('T')(0),
+                                trader_date_approve: m1('trader_date_approve').split('T')(0),
                                 price_per_ton: m1('cl_type_rice')
                                     .filter(function(tb) {
                                         return tb('type_rice_id').eq(m1('type_rice_id'))
@@ -408,7 +411,7 @@ router.get('/invoice/id/:invoice_id', function(req, res, next) {
             .merge(function(m) {
                 return {
                     invoice_id: m('id'),
-                    invoice_date:m('invoice_date').split('T')(0),
+                    invoice_date: m('invoice_date').split('T')(0),
                     ship_id: m('group_ship')('ship_id')(0),
                     shipline_id: m('group_ship')('shipline_id')(0),
                     ship_lot_no: m('group_ship')('ship_lot_no')(0),
