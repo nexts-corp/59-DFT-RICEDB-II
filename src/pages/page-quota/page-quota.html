@@ -238,16 +238,14 @@
           this.fire('toast',{
             status:'openDialog',
             text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
-            confirmed:this._deleteData,
+            confirmed:this._deleteData.bind(this),
             el: this,
             data:e.detail
           })
         },
         _deleteData:function(result,detail){
-          var el = detail.el;
           var data = detail.data;
           if(result == true){
-              console.log(detail.el);
               //this.fire('toast',{status:'load'});
               axios.delete('/eu/quota',{
               params:{
@@ -257,10 +255,10 @@
               })
               .then((response)=>{
                 console.log("success");
-                el.textToast = 'ลบข้อมูลสำเร็จ';
+                this.textToast = 'ลบข้อมูลสำเร็จ';
                 console.log(response);
-                el._getYear();
-                el._getDatalist(el.selectYear);
+                this._getYear();
+                this._getDatalist(this.selectYear);
                 //el.$$('panel-right').close();
               })
               .catch((error)=>{
@@ -268,7 +266,6 @@
                 console.log(error);
               });
           }
-         
         },
         _onDataSelect:function(e){
           this.status = 'update';
