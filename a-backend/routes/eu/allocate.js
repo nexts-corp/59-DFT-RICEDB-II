@@ -24,7 +24,7 @@ router.get(['/allocate'], function (req, res, next) {
                         .merge(function (exporter) { return { exporter_id: exporter('id') } })
                         .eqJoin('trader_id', r.db('external_f3').table('trader')).zip()
                         .eqJoin('seller_id', r.db('external_f3').table('seller')).zip()
-                        .merge(function (seller) { return { id: seller('exporter_id') } }).pluck('id', 'seller_name_th')(0)
+                        .merge(function (seller) { return { id: seller('exporter_id') } }).pluck('id', 'seller_name_th','seller_tax_id')(0)
                         .without('id')
 
                 })
