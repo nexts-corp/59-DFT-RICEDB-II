@@ -182,7 +182,8 @@
 Polymer({
   is: "payment-detail",
   behaviors: [
-      g2gModelBehavior
+      g2gModelBehavior,
+      gl.behavior.core,
   ],
   properties: {
 
@@ -239,8 +240,8 @@ Polymer({
     // console.log(this.data);
     //  shm_det_id
     this.data.invoice.map((el,indexShmid)=>{
-      // console.log(el.invoice_id);
-      this._changeStatusInvoice(el.invoice_id);
+      console.log(el);
+      this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
       this.push('dataPerSubmit.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
       el.invoice_detail.map((shmDet,indexshmdet)=>{
         // console.log(indexShmid);
@@ -266,11 +267,30 @@ Polymer({
     //   // this.glQuery('contentPanel').changDrawer();
     //  });
   },
-  _changeStatusInvoice:function (id) {
-    console.log(id);
-    this.update('./g2g/invoice/update',id, () => {
+  _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,contract_id) {
+    // console.log(bl_no,invoice_date,invoice_no,invoice_status,made_out_to);
+    var data = {
+      id:invoice_id,
+      bl_no:bl_no,
+      invoice_date:new Date(invoice_date),
+      invoice_no:invoice_no,
+      invoice_status:true,
+      made_out_to:made_out_to,
+    };
+    // var data ={
+    //   bl_no:  "112233" ,
+    //   id:  "c0593e57-a1bf-49bf-b53d-9f9999c1b208" ,
+    //   invoice_date:  "2016-11-08T00:00:00.000Z" ,
+    //   invoice_no:  "invoice 1" ,
+    //   invoice_status: false ,
+    //   made_out_to:  "11"
+    // }
+    // console.log(data);
+    var contractId = this.glQuery('adddraft').getUrl();
+    this.update('./g2g/invoice/update',data, () => {
       // this.glQuery('addContract').getChange(false,'put');
       // this.editInput();
+      this.glQuery('adddraft').getInvoice(contractId,false,'get');
      });
   },
   _countFee:function (fee) {

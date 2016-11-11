@@ -35,17 +35,17 @@
     <table class="gl-table-default">
       <thead class="table-head">
         <tr>
-          <th>Round No</th>
           <th>Shipment No</th>
-          <th>Money Total</th>
+          <th>Round No</th>
+          <th>Confirm</th>
         </tr>
       </thead>
       <tbody>
         <template is="dom-repeat" items="[[data]]" as="contract">
-          <template is="dom-repeat" items="[[contract.bl_detail]]" filter="{{_filter(searchInput)}}">
+          <template is="dom-repeat" items="[[contract.fee_detail]]" >
             <tr data="[[item]]" on-tap="_getBind" level="primary" >
               <td>[[contract.shm_no]]</td>
-              <td>[[item.bl_no]]</td>
+              <td>[[item.shm_name]]</td>
               <td>[[item.cl_name]]</td>
             </tr>
           </template>
