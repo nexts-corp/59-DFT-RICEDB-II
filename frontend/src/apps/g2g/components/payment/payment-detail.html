@@ -89,6 +89,9 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
           <gl-form-input label="ครั้งที่" value="{{dataPerSubmit.fee_no}}"></gl-form-input>
         </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{dataPerSubmit.fee_name}}"></gl-form-input>
+        </gl-grid-col>
       </gl-grid-row>
     </div>
     <div class="container">
@@ -233,14 +236,15 @@ Polymer({
   savePayment:function () {
 
     // console.log(this.dataPerSubmit);
-    console.log(this.data);
+    // console.log(this.data);
     //  shm_det_id
     this.data.invoice.map((el,indexShmid)=>{
-      // console.log(el);
+      // console.log(el.invoice_id);
+      this._changeStatusInvoice(el.invoice_id);
       this.push('dataPerSubmit.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
       el.invoice_detail.map((shmDet,indexshmdet)=>{
-        // console.log(shmDet.shm_det_id);
         // console.log(indexShmid);
+
         this.push('dataPerSubmit.invoice.'+indexShmid+'.invoice_detail',{
           shm_det_id:shmDet.shm_det_id,
           invoice_no:shmDet.invoice_no,
@@ -249,14 +253,24 @@ Polymer({
         });
       });
     });
-    this.dataPerSubmit.fee_no='1';
+    // this.data.invoice.map((el)=>{
+    //   console.log(el);
+    // });
+    // this.dataPerSubmit.fee_no='1';
+    delete this.dataPerSubmit.feeTotal;
     this.dataPerSubmit.fee_date_receipt = new Date(this.dataPerSubmit.fee_date_receipt);
     this.dataPerSubmit.fee_status = false;
-    // console.log('this.dataPerSubmit=>',this.dataPerSubmit);
-    this.insert('./g2g/fee/insert',this.dataPerSubmit, () => {
+    // console.log('this.dataPerSubmit=>',this.data);
+    // this.insert('./g2g/fee/insert',this.dataPerSubmit, () => {
+    //   // this.glQuery('addContract').getChange(false,'put');
+    //   // this.glQuery('contentPanel').changDrawer();
+    //  });
+  },
+  _changeStatusInvoice:function (id) {
+    console.log(id);
+    this.update('./g2g/invoice/update',id, () => {
       // this.glQuery('addContract').getChange(false,'put');
-      // this.glQuery('contentPanel').changDrawer();
-      // this.backPage();
+      // this.editInput();
      });
   },
   _countFee:function (fee) {
