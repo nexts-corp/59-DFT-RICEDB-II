@@ -4,6 +4,42 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
+var schema = {
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "buyer_address": {
+            "type": "string"
+        },
+        "buyer_email": {
+            "type": "string",
+            "format": "email"
+        },
+        "buyer_fax": {
+            "type": "string"
+        },
+        "buyer_fullname": {
+            "type": "string"
+        },
+        "buyer_masks": {
+            "type": "string"
+        },
+        "buyer_name": {
+            "type": "string"
+        },
+        "buyer_tel": {
+            "type": "string"
+        },
+        "country_id": {
+            "type": "string"
+        }
+    },
+    "required": ["buyer_address", "buyer_email","buyer_fullname","buyer_masks","buyer_name","country_id"]
+};
+var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
