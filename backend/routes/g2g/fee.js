@@ -12,13 +12,13 @@ var schema = {
         "id": {
             "type": "string"
         },
-        "fe_foreign": {
+        "fee_foreign": {
             "type": "number"
         },
-        "fe_internal": {
+        "fee_internal": {
             "type": "number"
         },
-        "fe_other": {
+        "fee_other": {
             "type": "number"
         },
         "fee_date_receipt": {
@@ -51,7 +51,7 @@ var schema = {
                                     "type": "string",
                                     "format": "date-time"
                                 },
-                                "invoice_fe": {
+                                "invoice_fee": {
                                     "type": "number"
                                 },
                                 "invoice_no": {
@@ -61,7 +61,7 @@ var schema = {
                                     "type": "string"
                                 }
                             },
-                            "required": ["invoice_date", "invoice_fe", "invoice_no", "shm_det_id"]
+                            "required": ["invoice_date", "invoice_fee", "invoice_no", "shm_det_id"]
                         }
                     },
                 },
@@ -72,7 +72,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["fe_foreign", "fe_internal", "fe_other", "fee_date_receipt", "fee_no", "rate_bank", "rate_tt", "invoice", "fee_status"]
+    "required": ["fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "fee_no", "rate_bank", "rate_tt", "invoice", "fee_status"]
 };
 var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function(req, res, next) {
