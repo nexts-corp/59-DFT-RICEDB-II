@@ -56,44 +56,6 @@
 					    </paper-icon-item>
                     </template>
                     
-					<!--<paper-icon-item on-tap="selectPage" path="/quota" focused>
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						รายการจัดสรรปีโควตา
-                        <div>
-                             <paper-spinner active></paper-spinner>
-                        </div>
-					</paper-icon-item>
-					<paper-icon-item on-tap="selectPage" path="">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						น้ำเข้าข้อมูลเพื่อการคำนวณ
-					</paper-icon-item>
-                    <paper-icon-item on-tap="selectPage" path="/calculate">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						การคำนวณส่วนจัดสรร
-					</paper-icon-item>
-                     <paper-icon-item on-tap="selectPage" path="/amount">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท
-                         <div class="position">
-                             <paper-spinner active></paper-spinner>
-                        </div>
-					</paper-icon-item>
-                     <paper-icon-item on-tap="selectPage" path="/confirm">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						ยืนยันส่วนจัดสรร
-					</paper-icon-item>
-                     <paper-icon-item on-tap="selectPage" path="/quota">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						ปริมาณการใช้สิทธิโควตา
-					</paper-icon-item>
-                     <paper-icon-item on-tap="selectPage" path="/quota">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						การโอนส่วนจัดสรร
-					</paper-icon-item>
-                    <paper-icon-item on-tap="selectPage" path="/fee">
-						<iron-icon icon="chevron-right" item-icon></iron-icon>
-						รับชำระเงินและออกใบเสร็จ
-					</paper-icon-item>-->
 				</div>
 			</div>
     </template>
@@ -147,7 +109,7 @@
                         path:e.currentTarget.getAttribute('path') 
                     });
                 }else{
-                    this.fire('toggle-drawer');
+                    this.fire('open-drawer');
                 }
                 
             },
@@ -156,7 +118,7 @@
                     this.listMenu.map((item,i)=>{
                         this.set('listMenu.'+i+'.loading',false);
                     });
-                    this.fire('toggle-drawer');
+                    this.fire('close-drawer');
                 },1000)
                 
             }

@@ -51,15 +51,15 @@
               </tr>
               
                 <template is="dom-repeat" items="[[dataAllocate.exporter]]">
-                    <tr on-tap="_toggleDrawer" id="addRedRegExporter">
+                    <tr on-tap="_selectData" data="{{item}}" id="addRedRegExporter">
                         <td>[[_num(index)]]</td>
                         <td>[[item.seller_name_th]]</td>
                         <template is="dom-repeat" as="period" items="[[item.period]]">
-                            <td>[[period.quantity]]</td>
-                            <td>[[period.quantity_update]]</td>
+                            <td>[[_formatNumber(period.quantity)]]</td>
+                            <td>[[_formatNumber(period.quantity_update)]]</td>
                         </template>
-                        <td>[[item.quantity]]</td>
-                        <td>[[item.quantity_update]]</td>
+                        <td>[[_formatNumber(item.quantity)]]</td>
+                        <td>[[_formatNumber(item.quantity_update)]]</td>
                     </tr>
                 </template>
               
@@ -86,17 +86,21 @@
                 this.dataAllocate.exporter.map(function(item){
                     sum += item.period[index][key];
                 });
-                return sum;
+                return this._formatNumber(sum);
             },
             _sumQuantity:function(index,key){
                 var sum = 0;
                 this.dataAllocate.exporter.map(function(item){
                     sum += item[key];
                 });
-                return sum;
+                return this._formatNumber(sum);
             },
-            _toggleDrawer:function(){
-                this.fire('toggle-drawer');
+            _formatNumber:function(item){
+                var number = numeral(item).format('0,0.00');
+                return number;
+            },
+            _selectData:function(e){
+                this.fire('data-select',e.currentTarget.data);
             }
         });
     </script>

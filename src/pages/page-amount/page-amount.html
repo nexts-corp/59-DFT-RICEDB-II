@@ -1,6 +1,6 @@
 <link rel="import" href="./../components/panel-right/panel-right.html">
 <link rel="import" href="./components/allocate-list.html">
-
+<!--<script src="./../../../bower_components/Numeral-js-npm/min/numeral.min.js"></script>-->
 <dom-module id="page-amount">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     * {
@@ -121,7 +121,7 @@
                 <gl-form-dropdown-menu label="ประเภทข้าว">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
-											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+											<paper-item on-tap="_typeRiceName_th" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
 										</template>
 									</paper-listbox>
 								</gl-form-dropdown-menu>
@@ -144,7 +144,7 @@
         </div>
         <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
         <div class="flex" style="border:1px solid #ddd; margin:30px;">
-          <allocate-list on-toggle-drawer="_toggleDrawer" data-allocate="[[dataAllocate]]"></allocate-list>
+          <allocate-list on-toggle-drawer="_toggleDrawer" on-data-select="_onDataSelect" data-allocate="[[dataAllocate]]"></allocate-list>
         </div>
         <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
           <paper-button raised class="gl-btn-primary">
@@ -160,14 +160,15 @@
     </content-panel>
     <panel-right title="รายละเอียดการจัดสรรโควตา">
       <template is="dom-if" if="[[rendered]]">
-        <amount-allocation-edit></amount-allocation-edit>
+        <amount-allocation-edit data-select="{{dataSelected}}" data-quota="{{dataQuota}}"></amount-allocation-edit>
       </template>
     </panel-right>
   </template>
   <script>
         Polymer({
             is: "page-amount",
-            observers:['_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'],
+            observers:[
+              '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'],
             properties: {
                 layerContent: {
                     type: String,
@@ -228,6 +229,8 @@
             },
            
             ready:function(){
+              //var number = numeral('1000.32').format('0,0.00');
+              //console.log(number);
                this._getQuotaYear();
                this._getTypeRice();
                Polymer.RenderStatus.afterNextRender(this,function(){
@@ -255,6 +258,11 @@
                     console.log("error");
                     console.log(error);
                 });
+            },
+            _typeRiceName_th:function(e){
+             //console.log(e.target.textContent);
+             this.getTypeRiceName = e.target.textContent;
+              //console.log(this.getTypeRice);
             },
             _toggleDrawer: function(e) {
                this.$$("panel-right").toggle();
@@ -285,6 +293,18 @@
                     console.log(error);
                 });
             },
+            _onDataSelect:function(e){
+              console.log(e.detail);
+              this.fire('toast',{status:'load'});
+              this.dataSelected = e.detail;
+              this.dataQuota = {
+                quota_id : this.selectQuotaYear,
+                type_rice_id : this.getTypeRiceName,
+                ordinal_number : this.selectQuotaOrdinal
+              }
+              this.fire('toast',{status:'success',callback:function(){}});
+              this.$$("panel-right").toggle();
+            },
             _getAllocate:function(){
                 axios.get('./eu/allocate/allocate',{
                   params:{
@@ -296,6 +316,7 @@
                 .then((response)=>{
                     this.dataAllocate = response.data;
                     console.log(this.dataAllocate);
+                    
                 })
                 .catch((error)=>{
                     console.log(error);

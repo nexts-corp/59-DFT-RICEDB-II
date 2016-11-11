@@ -60,12 +60,12 @@
 	</style>
 	<div blur$="{{offline}}">
 		<app-drawer id="drawer">
-			<layout-main-drawer path="{{path}}" on-toggle-drawer="_toggleDrawer"></layout-main-drawer>
+			<layout-main-drawer path="{{path}}" on-toggle-drawer="_toggleDrawer"  on-open-drawer="_openDrawer" on-close-drawer="_closeDrawer"></layout-main-drawer>
 		</app-drawer>
 
 		<app-header-layout style="z-index:1;">
 			<app-header fixed condenses effects="waterfall">
-				<layout-main-toolbar on-toggle-drawer="_toggleDrawer"></layout-main-toolbar>
+				<layout-main-toolbar on-toggle-drawer="_toggleDrawer" on-open-drawer="_openDrawer" on-close-drawer="_closeDrawer"></layout-main-toolbar>
 			</app-header>
 		</app-header-layout>
 		
@@ -97,6 +97,12 @@
 			},
 			_toggleDrawer:function(){
 				this.$.drawer.toggle();
+			},
+			_openDrawer:function(){
+				this.$.drawer.open();
+			},
+			_closeDrawer:function(){
+				this.$.drawer.close();
 			}
         });
     </script>

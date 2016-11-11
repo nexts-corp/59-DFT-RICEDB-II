@@ -1,4 +1,5 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+
 <dom-module id="amount-allocation-edit">
 	<style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
 		.title {
@@ -57,23 +58,23 @@
 				<gl-grid-row width="{{getWidth}}">
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="ปีโควต้า" value="2559" id="" disabled name=""></gl-form-input>
+						<gl-form-input label="ปีโควต้า" value="{{dataQuota.quota_id}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="ประเภทข้าว" value="ข้าวขาว" id="" disabled name=""></gl-form-input>
+						<gl-form-input label="ประเภทข้าว" value="{{dataQuota.type_rice_id}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="การคำนวณครั้งที่" value="1" id="" disabled name=""></gl-form-input>
+						<gl-form-input label="การคำนวณครั้งที่" value="{{dataQuota.ordinal_number}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 
 				<gl-grid-row width="{{getWidth}}">
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="3094001204" id="" disabled name=""></gl-form-input>
+						<gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="{{dataSelect.seller_tax_id}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="บริษัท" value="กมลกิจ บจก." id="" disabled name=""></gl-form-input>
+						<gl-form-input label="บริษัท" value="{{dataSelect.seller_name_th}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 
@@ -92,15 +93,15 @@
 			<gl-form-panel set-padding="0px 0px 20px 0px">
 					<div class="title">unknown</div>
 					<gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
-												<template is="dom-repeat" items="{{period}}">
+												<template is="dom-repeat" items="{{dataSelect.period}}">
          
 					<gl-grid-row width="{{getWidth}}">
-						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-							<gl-form-input label="{{item.name}}" value="{{item.quantity}}" id="" disabled name=""></gl-form-input>
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+							<gl-form-input label="งวดที่ [[_num(index)]]" value="{{item.quantity}}" id="" disabled name=""></gl-form-input>
 						</gl-grid-col>
-						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-							<gl-form-input label="ยอดปรับปรุง" always-float-label value="{{item.quantityUpdate}}"></gl-form-input>
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+							<gl-form-input label="ยอดปรับปรุง" always-float-label value="{{item.quantity_update}}"></gl-form-input>
 						</gl-grid-col>
 					</gl-grid-row>
 
@@ -108,13 +109,14 @@
          
          
 				<gl-grid-row width="{{getWidth}}">
-					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="[[_sumAllocation(period.*,'quantity')]]"></gl-form-input>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+						<!--<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="{{dataSelect.quantity}}"></gl-form-input>-->
+						<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="[[_sumAllocation(dataSelect.period.*,'quantity')]]"></gl-form-input>
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>-->
 					</gl-grid-col>
-					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-						<gl-form-input label="ยอดปรับปรุงรวม" value="[[_sumAllocation(period.*,'quantityUpdate')]]" disabled></gl-form-input>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+						<gl-form-input label="ยอดปรับปรุงรวม" value="[[_sumAllocation(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 					</gl-form-panel-body>
@@ -162,7 +164,16 @@
         },
         data:{
           type: String
-        }
+        },
+				dataSelect:{
+					type: Array
+				},
+				dataQuota:{
+					type: Object
+				}
+      },
+			 _num:function(index){
+        return index+1;
       },
       _sumAllocation:function(item,key){
         var answer = 0;
