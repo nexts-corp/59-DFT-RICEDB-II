@@ -69,7 +69,7 @@
     background-color: #F1F1F1;
   }
 </style>
-  <template>{{totalInvoice}}
+  <template>
 
     <gl-form-panel-body set-padding="5px" set-border="0px">
       สรุปผล
@@ -88,23 +88,24 @@
       <template is="dom-repeat" items="[[totalInvoice]]" as="invoice">
       <tr>
         <td colspan="3">รวม (Invoice No : [[invoice.invoice_no]])</td>
-        <td>[[invoice.totalTonInvoices]]</td>
-        <td>[[invoice.totalPricePerTonUsdInvoices]]</td>
-        <td>[[invoice.totalAmountUsdInvoices]]</td>
-        <td>[[invoice.totalBathInvoices]]</td>
-        <td>[[invoice.totalFeeInvoices]]</td>
-        <td>[[invoice.totalIncomeTaxInvoices]]</td>
-        <td>[[invoice.totalMoneyBathInvoices]]</td>
+        <td><numeral-js number="[[invoice.totalTonInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[invoice.totalPricePerTonUsdInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[invoice.totalAmountUsdInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[invoice.totalBathInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[invoice.totalFeeInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[invoice.totalIncomeTaxInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[invoice.totalMoneyBathInvoices]]" format="0,0" print></td>
       </tr>
       </template>
       <tr>
         <td colspan="3">รวมทั้งหมด</td>
-        <td>1,250</td>
-        <td>490,250</td>
-        <td>17,139,140.00</td>
-        <td>1,374.00</td>
-        <td>171,377.65</td>
-        <td>16,966,388.35</td>
+        <td><numeral-js number="{{data.totalTonInvoices}}" format="0,0" print></td>
+        <td><numeral-js number="[[data.totalPricePerTonUsdInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[data.totalAmountUsdInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[data.totalBathInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[data.totalFeeInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[data.totalIncomeTaxInvoices]]" format="0,0" print></td>
+        <td><numeral-js number="[[data.totalMoneyBathInvoices]]" format="0,0" print></td>
       </tr>
     </table>
   </div>
@@ -113,12 +114,69 @@
     <script>
       Polymer({
         is: "draft-sum",
+        properties: {
+          data: {
+            type: Object,
+            value:{
+              totalTonInvoices:0,
+              totalPricePerTonUsdInvoices:0,
+              totalAmountUsdInvoices:0,
+              totalBathInvoices:0,
+              totalFeeInvoices:0,
+              totalIncomeTaxInvoices:0,
+              totalMoneyBathInvoices:0,
+            }
+          }
+        },
         observers:[
           'check(totalInvoice.*)'
         ],
         check:function (totalInvoice) {
-          console.log('totalInvoice =>',totalInvoice);
-        }
+          // console.log('totalInvoice =>',this.totalInvoice);
+          var result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalTonInvoices;
+          });
+          this.data.totalTonInvoices = result
+          this.notifyPath('data.totalTonInvoices');
+          result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalPricePerTonUsdInvoices;
+          });
+          this.data.totalPricePerTonUsdInvoices = result
+          this.notifyPath('data.totalPricePerTonUsdInvoices');
+          result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalAmountUsdInvoices;
+          });
+          this.data.totalAmountUsdInvoices = result
+          this.notifyPath('data.totalAmountUsdInvoices');
+          result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalBathInvoices;
+          });
+          this.data.totalBathInvoices = result
+          this.notifyPath('data.totalBathInvoices');
+          result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalFeeInvoices;
+          });
+          this.data.totalFeeInvoices = result
+          this.notifyPath('data.totalFeeInvoices');
+          result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalIncomeTaxInvoices;
+          });
+          this.data.totalIncomeTaxInvoices = result
+          this.notifyPath('data.totalIncomeTaxInvoices');
+          result=0;
+          this.totalInvoice.map((el)=>{
+            result += el.totalMoneyBathInvoices;
+          });
+          this.data.totalMoneyBathInvoices = result
+          this.notifyPath('data.totalMoneyBathInvoices');
+
+        },
       });
     </script>
 </dom-module>
