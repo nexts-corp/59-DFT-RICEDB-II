@@ -1,7 +1,7 @@
 
 <link rel="import" href="./../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="invoice-drft.html">
-
+<link rel="import" href="draft-sum.html">
 <dom-module id="payment-detail">
 
   <style is="custom-style" include="iron-flex iron-flex-alignment">
@@ -145,62 +145,20 @@
         </gl-grid-col>
       </gl-grid-row>
     </div>
-    <template is="dom-repeat" items="[[data.invoice]]" as="invoice">
+    <template is="dom-repeat" items="{{data.invoice}}" as="invoice">
       <!-- [[_insertInvoice(invoice.invoice_id,index)]] -->
       <!-- [[_averageFee(dataPerSubmit.feeTotal)]]//{{dataPerSubmit.rate_bank}} -->
       <invoice-drft invoice="{{invoice}}"
                     rate-bank="{{dataPerSubmit.rate_bank}}"
                     invoice-index="{{index}}"
                     fee-total="[[_countFee(dataPerSubmit.feeTotal)]] "
-                    ></invoice-drft>
+      ></invoice-drft>
 
     </template>
 
 
     <gl-form-panel>
-      <gl-form-panel-body set-padding="5px" set-border="0px">
-        สรุปผล
-        <div style="overflow-x:auto;">
-      <table class="default">
-         <tr>
-          <th colspan="3">รายการ Invoice</th>
-          <th>จำนวน(ตัน) <br>(1)</th>
-          <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
-          <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
-          <th>หักค่า FE (บาท)<br>(5)</th>
-          <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
-          <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
-        </tr>
-        <tr>
-          <td colspan="3">รวม (Invoice No : C123456)</td>
-          <td>1,200</td>
-          <td>470,792</td>
-          <td>16,445,184.00</td>
-          <td>687.00</td>
-          <td>164,444.96</td>
-          <td>16.280,052.04</td>
-        </tr>
-        <tr>
-          <td colspan="3">รวม (Invoice No : C123457)</td>
-          <td>50</td>
-          <td>19,850</td>
-          <td>693,656.00</td>
-          <td>687.00</td>
-          <td>6,932.69</td>
-          <td>686,336.31</td>
-        </tr>
-        <tr>
-          <td colspan="3">รวมทั้งหมด</td>
-          <td>1,250</td>
-          <td>490,250</td>
-          <td>17,139,140.00</td>
-          <td>1,374.00</td>
-          <td>171,377.65</td>
-          <td>16,966,388.35</td>
-        </tr>
-      </table>
-    </div>
-      </gl-form-panel-body>
+        <draft-sum total-invoice="[[data.invoice]]"></draft-sum>
     </gl-form-panel>
     <div class="container">
       หมายเหตุ
@@ -224,6 +182,12 @@ Polymer({
       g2gModelBehavior
   ],
   properties: {
+
+    totalInvoice: {
+      type: Array,
+      notify:true,
+      value:[]
+    },
     dataPerSubmit: {
       type: Object,
       value:{
@@ -244,10 +208,15 @@ Polymer({
       type:Number,
     }
   },
-  listeners: {
-      'total-invoice': '_totalInvoice',
+  // listeners: {
+  //     'total-invoice': '_totalInvoice',
+  // },
+  observers:[
+    'check(data.invoice.*)'
+  ],
+  check:function (invoice) {
+    // console.log('invoice =>',invoice);
   },
-
   _totalMoney:function (rate_bank,amount_usd) {
     return rate_bank*amount_usd ;
   },
@@ -259,12 +228,12 @@ Polymer({
     this.notifyPath('dataPerSubmit.feeTotal');
   },
   _totalInvoice:function (e) {
-    console.log(e.detail.data);
+    // console.log(e.detail.data);
   },
   savePayment:function () {
 
-    console.log(this.dataPerSubmit);
-    console.log(this.data);
+    // console.log(this.dataPerSubmit);
+    // console.log(this.data);
 
   },
   _countFee:function (fee) {

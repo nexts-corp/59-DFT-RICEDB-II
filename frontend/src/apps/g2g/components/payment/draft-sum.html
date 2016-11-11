@@ -1,0 +1,124 @@
+<dom-module id="draft-sum">
+<style is="custom-style" include="iron-flex iron-flex-alignment">
+  .flexchild-1 {
+    @apply(--layout-flex);
+  }
+
+  .flexchild-2 {
+    @apply(--layout-flex-2);
+  }
+
+  .flexchild-5 {
+    @apply(--layout-flex-5);
+  }
+
+  .flex-center-justified {
+    @apply(--layout-horizontal);
+    @apply(--layout-center-justified);
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  .text {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+  .setText{
+    font-weight: bold;
+    font-size: 18px;
+    color : #737373;
+  }
+  .inputHeader {
+    width: 40%;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  table.default {
+    border-collapse: collapse;
+    width: 100%
+  }
+
+  table.default,
+  th,
+  td {
+    border-bottom: 1px solid #ddd;
+  }
+
+  th,
+  td {
+    padding: 15px;
+  }
+
+  th {
+    text-align: center;
+    background-color: #F1F1F1;
+    white-space: nowrap;
+  }
+
+  td {
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  tr:hover {
+    background-color: #F1F1F1;
+  }
+</style>
+  <template>{{totalInvoice}}
+
+    <gl-form-panel-body set-padding="5px" set-border="0px">
+      สรุปผล
+      <div style="overflow-x:auto;">
+    <table class="default">
+       <tr>
+        <th colspan="3">รายการ Invoice</th>
+        <th>จำนวน(ตัน) <br>(1)</th>
+        <th>มูลค่าต่อตัน(USD)<br>(2)</th>
+        <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
+        <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
+        <th>หักค่า FE (บาท)<br>(5)</th>
+        <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
+        <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
+      </tr>
+      <template is="dom-repeat" items="[[totalInvoice]]" as="invoice">
+      <tr>
+        <td colspan="3">รวม (Invoice No : [[invoice.invoice_no]])</td>
+        <td>[[invoice.totalTonInvoices]]</td>
+        <td>[[invoice.totalPricePerTonUsdInvoices]]</td>
+        <td>[[invoice.totalAmountUsdInvoices]]</td>
+        <td>[[invoice.totalBathInvoices]]</td>
+        <td>[[invoice.totalFeeInvoices]]</td>
+        <td>[[invoice.totalIncomeTaxInvoices]]</td>
+        <td>[[invoice.totalMoneyBathInvoices]]</td>
+      </tr>
+      </template>
+      <tr>
+        <td colspan="3">รวมทั้งหมด</td>
+        <td>1,250</td>
+        <td>490,250</td>
+        <td>17,139,140.00</td>
+        <td>1,374.00</td>
+        <td>171,377.65</td>
+        <td>16,966,388.35</td>
+      </tr>
+    </table>
+  </div>
+    </gl-form-panel-body>
+  </template>
+    <script>
+      Polymer({
+        is: "draft-sum",
+        observers:[
+          'check(totalInvoice.*)'
+        ],
+        check:function (totalInvoice) {
+          console.log('totalInvoice =>',totalInvoice);
+        }
+      });
+    </script>
+</dom-module>
