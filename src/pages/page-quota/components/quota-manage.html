@@ -85,6 +85,7 @@
 										<!--{{item.proportion}}-->
 										<td>
 											[[testNum(item.*,'percent')]]
+                                            [[disabledMath(item.percent,item.quantity)]]
 											<gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
 										</td>
 										<td>
@@ -92,7 +93,7 @@
 												index="{{index}}" required placeholder="กรุณาใส่จำนวน" id="{{index}}" no-label-float></gl-form-input>
 										</td>
 										<td>
-											<paper-button on-tap="_delPeriod" item="{{item}}">
+											<paper-button on-tap="_confirmDelPeriod" item="{{item}}">
 												<iron-icon icon="delete"></iron-icon>
 											</paper-button>
 										</td>
@@ -120,7 +121,7 @@
                                     <th></th>
                                     <th></th>
 									<th>
-										<paper-button raised class="gl-btn-primary" on-tap="_mathData">คำนวณ</paper-button>
+										<paper-button hidden$="{{hide}}" raised class="gl-btn-primary" on-tap="_mathData">คำนวณ</paper-button>
 									</th>
 								</tr>
                                 </thead>
@@ -134,7 +135,7 @@
             <section>
                 <div class="horizontal flex-equal-justified">
                     <div style="margin-left:10px;">
-                        <paper-button on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
+                        <paper-button hidden$="{{!checkStatus(status)}}" on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
                     </div>
                     <div style="margin-right:10px;">
                         <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
@@ -172,10 +173,20 @@
             _addPeriod:function(){
                 this.push('Period',{percent:'',quantity:''});
             },
-            _delPeriod:function(e){
-                if (confirm("ต้องการลบข้อมูลหรือไม่ ?") == true) {
-                this.splice('Period',this.Period.indexOf(e.currentTarget.item),1);
-                } 
+            _confirmDelPeriod:function(e){
+                this.fire('toast',{
+                    status:'openDialog',
+                    text:'ต้องการงวดใช่หรือไม่ ?',
+                    confirmed:this._delPeriod,
+                    el: this,
+                    data:e.currentTarget.item
+                })
+            },
+            _delPeriod:function(resalut,detail){
+                console.log(resalut,detail.data);
+                if(resalut==true){
+                    detail.el.splice('Period', detail.el.Period.indexOf(detail.data),1);
+                }
             },
             _mathProportion:function(percent,item){
                 item.quantity = (parseFloat(this.sum)*parseFloat(percent))/100;
@@ -256,6 +267,11 @@
             },
             checkStatus:function(status){
                 return status=='update';
+            },
+            disabledMath:function(percent,quantity){
+                console.log('percent',percent);
+                console.log('quantity',quantity);
+               //this.hide=false;
             }
         });
     </script>

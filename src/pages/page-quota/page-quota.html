@@ -91,8 +91,6 @@
 
 		</div>
 
-		<!--<button on-click="test">ss</button>-->
-
 		<panel-right title="การกำหนดปีโควตา">
       <template is="dom-if" if="[[rendered]]">
         <quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"
@@ -161,28 +159,6 @@
           //console.log(e.currentTarget.id);
           //console.log(this.sendData);
         },
-        test:function(){
-          /*this.glQuery('layoutEu').openToastLoading();
-
-          axios.get('http://localhost:3000/api/common/ship/')
-          .then(function (response) {
-            console.log(response);
-
-            this.glQuery('layoutEu').closeToastLoading(function(){
-              this.glQuery('contentPanel').changDrawer();
-            }.bind(this));
-
-  
-          }.bind(this))
-          .catch(function (error) {
-            //this.glQuery('toastLoading').hide();
-            //console.log(error);
-          });*/
-          //this.$$('panel-right').toggle()
-          //this.$$('panel-right').test("1234");
-          //console.log( this.$$('panel-right').test());
-         
-        },
         _getYear:function(){
           axios.get('./eu/quota/year')
           .then((response)=>{
@@ -195,7 +171,6 @@
             console.log(error.message);
             this.fire('toast',{status:'connectError',text:error.message,
               callback:function(){
-                //console.log('test');
               }})
           });
         },
@@ -209,7 +184,6 @@
               status:'success',
               text:this.textToast,
               callback:function(){
-                //console.log('test');
               }
             });
             this.$$('panel-right').close();
@@ -221,16 +195,12 @@
             console.log(error);
             this.fire('toast',{status:'connectError',text:error.message,
               callback:function(){
-                //console.log('test');
               }})
           });
         },
         _yearChanged:function(val){
           this._getDatalist(val);
           this.sendYear = val;
-        },
-        _sendData:function(e){
-          //console.log(e.currentTarget.data);
         },
         _postData:function(e){
           //console.log('post-data:',e.detail);
@@ -265,7 +235,6 @@
           });
         },
         _confirmData:function(e){
-          //console.log(e.detail);
           this.fire('toast',{
             status:'openDialog',
             text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
@@ -273,24 +242,6 @@
             el: this,
             data:e.detail
           })
-        
-           /*axios.delete('/eu/quota',{
-              params:{
-                id:e.detail.year,
-                type_rice_id:e.detail.type_rice_id
-              }
-              })
-              .then((response)=>{
-                console.log("success");
-                this.textToast = 'ลบข้อมูลสำเร็จ';
-                console.log(response);
-                this._getYear();
-                this._getDatalist(this.selectYear);
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error);
-              });*/
         },
         _deleteData:function(result,detail){
           var el = detail.el;
