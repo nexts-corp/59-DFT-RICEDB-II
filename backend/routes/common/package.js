@@ -4,7 +4,27 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
+var schema = {
+    //'type': 'object',
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "package_name": {
+            "type": "string"
+        },
+        "package_kg_per_bag": {
+            "type": "number"
+        },
+        "package_weight_bag": {
+            "type": "number"
+        }
+    },
+    "required": ["package_name", "package_kg_per_bag", "package_weight_bag"]
+};
+var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("package")

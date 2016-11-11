@@ -6,17 +6,28 @@ var db = require('../../db.js');
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 
+var Ajv = require('ajv');
+var ajv = Ajv({ allErrors: true });
 var schema = {
-    "patternProperties": {
-        ".*$": { "type": "string" }
-    },
+    //'type': 'object',
     "properties": {
         "id": {
-            "type": "string",
-            "maxLength": 2,
-            "minLength": 2
+            "type": "string"
+        },
+        "country_fullname_en": {
+            "type": "string"
+        },
+        "country_fullname_th": {
+            "type": "string"
+        },
+        "country_name_en": {
+            "type": "string"
+        },
+        "country_name_th": {
+            "type": "string"
         }
-    }
+    },
+    "required": ["country_fullname_en", "country_fullname_th", "country_name_en", "country_name_th"]
 };
 var validate = ajv.compile(schema);
 
@@ -71,14 +82,14 @@ router.get('/port', function (req, res, next) {
                 return m.merge(function (me) {
                     return {
                         port: r.db('common').table('port')
-                        .filter({ country_id: me('country_id') })
-                        .merge(function(p){
-                            return {
-                                port_id:p('id')
-                            }
-                        })
-                        .without('id')
-                        .coerceTo('array')
+                            .filter({ country_id: me('country_id') })
+                            .merge(function (p) {
+                                return {
+                                    port_id: p('id')
+                                }
+                            })
+                            .without('id')
+                            .coerceTo('array')
                     }
                 })
             })
