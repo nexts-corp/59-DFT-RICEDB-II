@@ -69,7 +69,7 @@
                   </list-draft-invoice> -->
                 </section-content>
                 <section-content name="file">
-                  <invoice-round ></invoice-round>
+                  <invoice-round data="{{roundShipment}}"></invoice-round>
                   <!-- <list-draft data="{{dataRound}}" >
                     <items type="primary">
                       <list item="round" label="ค่าใช้จ่ายในการส่งมอบ" width="flex"></list>
@@ -198,6 +198,7 @@
               // http://localhost:3000/api/g2g/bl/contract/id/
               this.getBlNo(shmId,false,'get');
               this.getInvoice(shmId,false,'get');
+              this.getRound(shmId,false,'get');
             },
             attached: function() {
                 this.layoutMain = this.glQuery('layoutMain');
@@ -237,6 +238,13 @@
               // this.read('./g2g/invoice/shipment/id/'+id,(data)=>{
               //   this.invoiceShipment = data;
               // },refresh,action);
+            },
+            getRound:function (id,refresh,action) {
+              this.read('./g2g/fee/contract/id/'+id,(data)=>{
+                this.roundShipment = data;
+                // console.log(11);
+                // console.log(this.invoiceShipment);
+              },refresh,action);
             },
             testss:function (data) {
               console.log('เข้าโวยยย',data);
