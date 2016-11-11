@@ -116,7 +116,7 @@
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>-->
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-						<gl-form-input label="ยอดปรับปรุงรวม" value="[[_sumAllocation(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
+						<gl-form-input label="ยอดปรับปรุงรวม" value="[[_sumAllocationUpdate(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 					</gl-form-panel-body>
@@ -132,30 +132,6 @@
     Polymer({
       is: "amount-allocation-edit",
       properties:{
-        period:{
-          type: Array,
-          value:[
-            {
-              id:'1',
-              name: 'งวดที่ 1 (มกราคม)',
-              quantity: '449.50',
-              quantityUpdate:'449.50'
-            },
-            {
-               id:'2',
-              name: 'งวดที่ 2 (เมษายน)',
-              quantity: '224.75',
-              quantityUpdate:'224.75'
-            },
-            {
-               id:'3',
-              name: 'งวดที่ 3 (กรกฏาคม)',
-              quantity: '224.75',
-              quantityUpdate:'224.75'
-            },
-          ]
-        
-        },
         oldAnswer:{
           type: String
         },
@@ -184,8 +160,33 @@
           answer += parseFloat(data[key]);
         })
         console.log(answer);
+				this.sumAllocation = answer;
         return answer;
-      }
+      },
+			_sumAllocationUpdate:function(item,key){
+        var answer = 0;
+        console.log(item.base);
+        
+        item.base.map((data)=>{
+          console.log(data[key]);
+          answer += parseFloat(data[key]);
+        })
+        console.log(answer);
+				this.dataSelect.quantity_update = answer;
+        return answer;
+      },
+			_saveData:function(){
+				// this.fire('post-data')
+				var perData = {};
+				for(key in this.dataSelect){
+					if(key!="seller_name_th" && key!="seller_tax_id"){
+						perData[key] = this.dataSelect[key]
+					}
+				}
+				//console.log(perData);
+				this.fire('post-data',perData);
+				//console.log(this.dataSelect);
+			}
     });
   </script>
 </dom-module>

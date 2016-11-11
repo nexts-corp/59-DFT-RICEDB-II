@@ -160,7 +160,7 @@
     </content-panel>
     <panel-right title="รายละเอียดการจัดสรรโควตา">
       <template is="dom-if" if="[[rendered]]">
-        <amount-allocation-edit data-select="{{dataSelected}}" data-quota="{{dataQuota}}"></amount-allocation-edit>
+        <amount-allocation-edit data-select="{{dataSelected}}" on-post-data="_putData" data-quota="{{dataQuota}}"></amount-allocation-edit>
       </template>
     </panel-right>
   </template>
@@ -240,6 +240,7 @@
               this.fire('toast',{status:'load'});
               this.dataSelected = e.detail;
               this.dataQuota = {
+                allocate_id : '',
                 quota_id : this.selectQuotaYear,
                 type_rice_id : this.getTypeRiceName,
                 ordinal_number : this.selectQuotaOrdinal
@@ -270,6 +271,27 @@
              },
              _disableSearch:function(quota_id,type_rice_id,ordinal_number){
                console.log(quota_id,type_rice_id,ordinal_number);
+             },
+             _putData:function(e){
+               var data = {
+                 allocate_id : this.dataAllocate.id,
+                 exporter : e.detail
+               }
+              //  http://localhost:3000/api/eu/allocate/allocate
+                //this.fire('toast',{status:'load'});
+                axios.put('/eu/allocate/allocate',data)
+                .then((response)=>{
+                  console.log("success");
+                  this.textToast = 'แก้ไขข้อมูลสำเร็จ';
+                  console.log(response);
+                  //this._getYear();
+                  this._getAllocate();
+                  // this._getDatalist(this.selectYear);
+                })
+                .catch((error)=>{
+                  console.log("error");
+                  console.log(error);
+                });
              }
         });
     </script>
