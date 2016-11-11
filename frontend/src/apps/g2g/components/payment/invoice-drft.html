@@ -128,7 +128,7 @@
           <td colspan="3">รวม</td>
           <td><numeral-js number="[[_totalTonInvoices(invoiceIndex,invoice.*)]]" format="0,0.00" print></td>
           <td><numeral-js number="[[_totalPricePerTonUsdInvoices(invoiceIndex,invoice.*)]]" format="0,0.00" print></td>
-          <td><numeral-js number="[[_totalAmountUsdInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
+          <td><numeral-js number="[[_totalAmountUsdInvoices(invoiceIndex,invoice.*)]]" format="0,0.00" print></td>
           <td><numeral-js number="[[_totalBathInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
           <td><numeral-js number="[[_totalFeeInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
           <td><numeral-js number="[[_totalIncomeTaxInvoices(invoiceIndex,invoice.*)]]" format="0,0" print></td>
@@ -224,7 +224,7 @@
             result+=item.amountUsd;
           }.bind(this));
           this.set('invoice.totalAmountUsdInvoices',result);
-          return result;
+          return result.toString();
       },
       _totalBathInvoices:function (index,test){
         var result = 0;

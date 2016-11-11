@@ -84,10 +84,10 @@
     <div class="container">
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-          <gl-form-input label="งวดที่" value="{{dataPerSubmit.shipment}}"></gl-form-input>
+          <gl-form-input label="งวดที่" value="{{data.shipment}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-          <gl-form-input label="ครั้งที่" value="{{dataPerSubmit.round}}"></gl-form-input>
+          <gl-form-input label="ครั้งที่" value="{{dataPerSubmit.fee_no}}"></gl-form-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -137,10 +137,10 @@
           <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{dataPerSubmit.fee_foreign}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          [[changeString2Num(dataPerSubmit.*,'otherExpenses')]]
-          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{dataPerSubmit.otherExpenses}}"></gl-form-input>
+          [[changeString2Num(dataPerSubmit.*,'fee_other')]]
+          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{dataPerSubmit.fee_other}}"></gl-form-input>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(dataPerSubmit.fee_internal,dataPerSubmit.fee_foreign,dataPerSubmit.otherExpenses,dataPerSubmit.rate_bank)}}
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(dataPerSubmit.fee_internal,dataPerSubmit.fee_foreign,dataPerSubmit.fee_other,dataPerSubmit.rate_bank)}}
           <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{dataPerSubmit.feeTotal}}" format-number></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
@@ -196,8 +196,8 @@ Polymer({
         rate_bank:0,
         fee_internal:0,
         fee_foreign:0,
-        otherExpenses:0,
-        invoice:[{invoice_id:''}]
+        fee_other:0,
+        invoice:[]
       }
     },
     invoice_fee:{
@@ -220,11 +220,11 @@ Polymer({
   _totalMoney:function (rate_bank,amount_usd) {
     return rate_bank*amount_usd ;
   },
-  _feTotal:function (fee_internal,feBath,otherExpenses,rate_bank){
+  _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
     // invoiceDetail.invoice_fee
     // console.log(this.dataPerSubmit);
-    // return (Number(fee_internal)*rate_bank)+Number(feBath)+Number(otherExpenses);
-    this.dataPerSubmit.feeTotal = (Number(fee_internal)*rate_bank)+Number(feBath)+Number(otherExpenses);
+    // return (Number(fee_internal)*rate_bank)+Number(feBath)+Number(fee_other);
+    this.dataPerSubmit.feeTotal = (Number(fee_internal)*rate_bank)+Number(feBath)+Number(fee_other);
     this.notifyPath('dataPerSubmit.feeTotal');
   },
   _totalInvoice:function (e) {
@@ -233,8 +233,31 @@ Polymer({
   savePayment:function () {
 
     // console.log(this.dataPerSubmit);
-    // console.log(this.data);
-
+    console.log(this.data);
+    //  shm_det_id
+    this.data.invoice.map((el,indexShmid)=>{
+      // console.log(el);
+      this.push('dataPerSubmit.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
+      el.invoice_detail.map((shmDet,indexshmdet)=>{
+        // console.log(shmDet.shm_det_id);
+        // console.log(indexShmid);
+        this.push('dataPerSubmit.invoice.'+indexShmid+'.invoice_detail',{
+          shm_det_id:shmDet.shm_det_id,
+          invoice_no:shmDet.invoice_no,
+          invoice_date:new Date (shmDet.invoice_date),
+          invoice_fee:shmDet.invoice_fee,
+        });
+      });
+    });
+    this.dataPerSubmit.fee_no='1';
+    this.dataPerSubmit.fee_date_receipt = new Date(this.dataPerSubmit.fee_date_receipt);
+    this.dataPerSubmit.fee_status = false;
+    // console.log('this.dataPerSubmit=>',this.dataPerSubmit);
+    this.insert('./g2g/fee/insert',this.dataPerSubmit, () => {
+      // this.glQuery('addContract').getChange(false,'put');
+      // this.glQuery('contentPanel').changDrawer();
+      // this.backPage();
+     });
   },
   _countFee:function (fee) {
     // console.log(this.data.invoice.length);
