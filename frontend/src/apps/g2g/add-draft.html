@@ -174,38 +174,6 @@
                 inDetail:{
                   type:Object,
                 },
-                dataRound: {
-                    type: Object,
-                    notify: true,
-                    value: function() {
-                        return [
-                          {
-                            id: 1,
-                            round:'1',
-                            blNos: [
-                              {
-                                id:1,
-                                blNo:'C123456'
-                              },
-                              {
-                                id:2,
-                                blNo:'C123457'
-                              }
-                            ]
-                          },
-                          {
-                            id: 2,
-                            round:'2',
-                            blNos: [
-                              {
-                                id:1,
-                                blNo:'C123458'
-                              }
-                            ]
-                          }
-                      ]
-                    }
-                }
             },
             observers:[
               'cheangpage(blShipment)'
@@ -216,10 +184,13 @@
                 this.glSetLayout('layout-main');
                 this.glQuery('adddraft',this);
             },
+            getUrl:function () {
+              return window.location.pathname.substring(15, 51);
+            },
             ready: function() {
               // console.log('url'+document.location);
               // console.log("PathName  ="+ window.location.pathname);
-              var shmId = window.location.pathname.substring(15, 51);
+              var shmId = this.getUrl();
               // console.log(shmId);
               this.read('./g2g/contract/shipment',(data)=>{
                 this.draft = data;
@@ -232,13 +203,13 @@
                 this.layoutMain = this.glQuery('layoutMain');
             },
             getBlNo:function (e,refresh,action) {
-              console.log('e0 >',e);
+              // console.log('e0 >',e);
               var id = e;
               // console.log(id);
               this.read('./g2g/bl/contract/id/'+id,(data)=>{
                 this.blShipment = data;
                 // console.log(11);
-                console.log(this.blShipment);
+                // console.log(this.blShipment);
               },refresh,action);
               // console.log("check",e.detail);
               // var id;
@@ -260,7 +231,7 @@
               this.read('./g2g/invoice/contract/id/'+id,(data)=>{
                 this.invoiceShipment = data;
                 // console.log(11);
-                console.log(this.invoiceShipment);
+                // console.log(this.invoiceShipment);
               },refresh,action);
               // console.log(id,refresh,action);
               // this.read('./g2g/invoice/shipment/id/'+id,(data)=>{
