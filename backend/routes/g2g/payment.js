@@ -107,7 +107,6 @@ router.get('/exporter/id/:id', function (req, res, next) {
                         .filter(function (f) {
                             return f.eq(0).not()
                         })
-
                 }
             })
             .merge(function (me1) {
@@ -131,7 +130,7 @@ router.get('/exporter/id/:id', function (req, res, next) {
                     fee_id: me1('fee_id')
                     , exporter_id: req.params.id
                 }).coerceTo('array').eq([])
-                    , { pay_status: false, pay_date: null }
+                    , { pay_status: false, pay_date: '-' }
                     , r.db('g2g').table("payment")
                         .filter({
                             fee_id: me1('fee_id'),
