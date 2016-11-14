@@ -199,7 +199,18 @@ Polymer({
       gl.behavior.core,
   ],
   properties: {
-
+    newData:{
+      type:Object,
+      value:{
+        fee_date_receipt:0,
+        rate_tt:0,
+        rate_bank:0,
+        fee_internal:0,
+        fee_foreign:0,
+        fee_other:0,
+        invoice:[]
+      }
+    },
     totalInvoice: {
       type: Array,
       notify:true,
@@ -266,37 +277,40 @@ Polymer({
   },
   savePayment:function () {
     this.editInput();
-    // console.log(this.data);
-    // console.log(this.data);
-    //  shm_det_id
-    // this.data.invoice.map((el,indexShmid)=>{
-    //   // this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
-    //   this.push('data.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
-    //   el.invoice_detail.map((shmDet,indexshmdet)=>{
-    //     this.push('data.invoice.'+indexShmid+'.invoice_detail',{
-    //       shm_det_id:shmDet.shm_det_id,
-    //       invoice_no:shmDet.invoice_no,
-    //       invoice_date:new Date (shmDet.invoice_date),
-    //       invoice_fee:shmDet.invoice_fee,
-    //     });
-    //   });
-    // });
-    // this.data.invoice.map((el)=>{
-    //   console.log(el);
-    // });
-    // this.data.fee_no='1';
-    // delete this.data.feeTotal;
-    // this.data.fee_date_receipt = new Date(this.data.fee_date_receipt);
-    // this.data.fee_status = false;
-    // console.log('this.data=>',this.data);
-    var contractId = this.glQuery('adddraft').getUrl();
-    // this.insert('./g2g/fee/insert',this.data, () => {
-    //   this.glQuery('adddraft').getRound(contractId,true,'get');
-    //   // this.glQuery('contentPanel').changDrawer();
-    //  });
+    console.log(this.data);
+    // this.set('newData',{fee_date_receipt:  "2016-11-25T00:00:00.000Z"});
+    this.set('newData',{
+      fee_date_receipt:  new Date (this.data.fee_date_receipt) ,
+      fee_foreign: this.data.fee_foreign ,
+      fee_internal: this.data.fee_internal ,
+      fee_name:  this.data.fee_name ,
+      fee_no:  this.data.fee_no ,
+      fee_other: this.data.fee_other ,
+      fee_status: this.data.fee_status ,
+      id:  this.data.fee_id ,
+      invoice: [] ,
+      rate_bank: this.data.rate_bank ,
+      rate_tt:this.data.rate_tt
+    });
+
+    this.data.invoice.map((el,indexShmid)=>{
+      this.push('newData.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
+      el.invoice_detail.map((shmDet,indexshmdet)=>{
+        this.push('newData.invoice.'+indexShmid+'.invoice_detail',{
+          shm_det_id:shmDet.shm_det_id,
+          invoice_no:shmDet.invoice_no,
+          invoice_date:new Date (shmDet.invoice_date),
+          invoice_fee:shmDet.invoice_fee,
+        });
+      });
+    });
+      // console.log(this.newData);
+      this.update('./g2g/fee/update',this.newData, () => {
+        this.glQuery('adddraft').getRound(this.contractId,true,'get');
+       });
+
   },
   _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,made_out_to,status) {
-    // console.log(bl_no,invoice_date,invoice_no,invoice_status,made_out_to);
     var data = {
       id:invoice_id,
       bl_no:bl_no,
@@ -305,20 +319,8 @@ Polymer({
       invoice_status:status,
       made_out_to:made_out_to,
     };
-    console.log(data);
-    // var data ={
-    //   bl_no:  "1122" ,
-    //   id:  "3eea3d32-285b-4ea1-b655-dc107efb53b1" ,
-    //   invoice_date:  "2016-11-08T00:00:00.000Z" ,
-    //   invoice_no:  "Invoice 3" ,
-    //   invoice_status: false ,
-    //   made_out_to:  "ch"
-    // }
     // console.log(data);
-    // var contractId = this.glQuery('adddraft').getUrl();
     this.update('./g2g/invoice/update',data, () => {
-      // this.glQuery('addContract').getChange(false,'put');
-      // this.editInput();
       this.glQuery('adddraft').getInvoice(this.contractId,false,'get');
      });
   },
