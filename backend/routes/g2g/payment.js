@@ -140,7 +140,8 @@ router.get('/exporter/id/:id', function (req, res, next) {
                         .merge(function (me2) {
                             return {
                                 pay_id: me2('id'),
-                                pay_status: true
+                                pay_status: true,
+                                pay_date: me2('pay_date').split('T')(0)
                             }
                         })
                         .without('id')
