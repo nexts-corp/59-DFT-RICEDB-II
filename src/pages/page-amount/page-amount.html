@@ -253,6 +253,7 @@
               });
             },
             _getAllocate:function(){
+                this.fire('toast',{status:'load'});
                 axios.get('./eu/allocate/allocate',{
                   params:{
                     quota_id:this.selectQuotaYear,
@@ -263,6 +264,10 @@
                 .then((response)=>{
                     this.dataAllocate = response.data;
                     console.log(this.dataAllocate);
+                    this.fire('toast',{status:'success',
+                    callback:function(){
+                      
+                    }});
                     
                 })
                 .catch((error)=>{
@@ -277,13 +282,19 @@
                  allocate_id : this.dataAllocate.id,
                  exporter : e.detail
                }
-              //  http://localhost:3000/api/eu/allocate/allocate
-                //this.fire('toast',{status:'load'});
+                this.fire('toast',{status:'load'});
                 axios.put('/eu/allocate/allocate',data)
                 .then((response)=>{
                   console.log("success");
-                  this.textToast = 'แก้ไขข้อมูลสำเร็จ';
+                  // this.textToast = 'แก้ไขข้อมูลสำเร็จ';
                   console.log(response);
+                  this.fire('toast',{status:'success',
+                  text:'แก้ไขข้อมูลสำเร็จ',
+                  callback:function(){
+                    
+                  }
+                  });
+                   this.$$("panel-right").toggle();
                   //this._getYear();
                   this._getAllocate();
                   // this._getDatalist(this.selectYear);

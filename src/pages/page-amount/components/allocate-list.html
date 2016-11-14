@@ -18,6 +18,7 @@
             th,
             td {
                 padding: 15px;
+                font-size: 20px;
             }
             
             th {
@@ -84,16 +85,17 @@
             },
             _sumPeriod:function(index,key){
                 var sum = 0;
-                this.dataAllocate.exporter.map(function(item){
-                    sum += item.period[index][key];
+                this.dataAllocate.exporter.map((item)=>{
+                    sum += parseFloat(item.period[index][key]);
                 });
-                return this._formatNumber(sum);
+                 return this._formatNumber(sum);
             },
             _sumQuantity:function(index,key){
                 var sum = 0;
                 this.dataAllocate.exporter.map(function(item){
                     sum += item[key];
                 });
+                console.log(sum);
                 return this._formatNumber(sum);
             },
             _formatNumber:function(item){
