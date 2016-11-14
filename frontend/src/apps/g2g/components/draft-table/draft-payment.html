@@ -55,11 +55,11 @@
         <template is="dom-repeat" items="{{data}}" as="payment">
           [[_initShmId(payment.invoice_detail)]]
           <template is="dom-repeat" items="{{payment.invoice_detail}}" filter="{{_filter(searchInput)}}">
-            <tr data="[[item]]" >
+            <tr >
               <td class="item"><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" on-change="filterData" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
-              <td class="item" on-tap="_getBind" level="secondary" >[[payment.shm_no]]</td>
-              <td class="item" on-tap="_getBind" level="secondary" >[[item.invoice_no]]</td>
-              <td class="item" on-tap="_getBind" level="secondary" >[[item.cl_name]]</td>
+              <td class="item" data="[[item]]" on-tap="_getBind" level="secondary" >[[payment.shm_no]]</td>
+              <td class="item" data="[[item]]" on-tap="_getBind" level="secondary" >[[item.invoice_no]]</td>
+              <td class="item" data="[[item]]" on-tap="_getBind" level="secondary" >[[item.cl_name]]</td>
             </tr>
           </template>
           <tr>
@@ -106,7 +106,7 @@
           // console.log(this.data );
       },
       _filter: function(val) {
-        console.log(val);
+        // console.log(val);
         // return function(val) {
         //     return item.type == type || item.manager.type == type;
         // }
@@ -118,12 +118,12 @@
       },
       _initShmId:function(shm_id){
         // this.shmId = shm_id;
-        console.log(shm_id.length);
+        // console.log(shm_id.length);
       },
       _checkShmId:function (shmId) {
-        console.log('shmId =>',shmId);
-        console.log('this.shmId =>',this.shmId );
-        console.log(this.shmId == shmId);
+        // console.log('shmId =>',shmId);
+        // console.log('this.shmId =>',this.shmId );
+        // console.log(this.shmId == shmId);
         // this.shmId = shmId;
         // return this.shmId !=shmId;
       },
