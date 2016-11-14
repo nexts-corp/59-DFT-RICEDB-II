@@ -12,6 +12,7 @@
 <link rel="import" href="components/payment/draft-period.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-panel.html">
 <link rel="import" href="./components/payment/payment-detail.html">
+<link rel="import" href="./components/payment/payment-detail-round.html">
 <link rel="import" href="data/g2gModelBehavior.html">
 <link rel="import" href="components/list-edit/list-draft-invoice.html">
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
@@ -116,9 +117,20 @@
                   <section-content name="detail">
                     <payment-detail data="{{payment}}"></payment-detail>
                   </section-content>
-                  <section-content name="print">
+                  <!-- <section-content name="print">
                     <payment-pay></payment-pay>
+                  </section-content> -->
+                  <section-content name="file">
+                    3
                   </section-content>
+              </panel-seleted-payment>
+              <panel-seleted-payment>
+                  <section-content name="detail">
+                    <payment-detail-round data="{{roundDetail}}"></payment-detail-round>
+                  </section-content>
+                  <!-- <section-content name="print">
+                    <payment-pay></payment-pay>
+                  </section-content> -->
                   <section-content name="file">
                     3
                   </section-content>
@@ -141,7 +153,8 @@
                 'nx-grid-tap': 'nxGridTap',
                 'select-bl':'getBlDetail',
                 'select-invoice':'getInvoiceDetail',
-                'select-draftPayment':'draftPayment'
+                'select-draftPayment':'draftPayment',
+                'select-round':'roundDetails'
             },
             behaviors: [
                 gl.behavior.core,
@@ -253,7 +266,7 @@
               this.selected = 1;
             },
             getBlDetail:function (blShipment) {
-              console.log(blShipment.detail.data.bl_no);
+              // console.log(blShipment.detail.data.bl_no);
               this.glQuery('layoutMain').openToastLoading();
               this.read('./g2g/bl/no/'+blShipment.detail.data.bl_no,(data)=>{
                 this.blDetail = data;
@@ -261,7 +274,7 @@
               },false,'get');
             },
             getInvoiceDetail:function (invoice_id) {
-              console.log(invoice_id.detail.data.invoice_id);
+              // console.log(invoice_id.detail.data.invoice_id);
               var invoice_id = invoice_id.detail.data.invoice_id;
               // this.glQuery('layoutMain').openToastLoading();
               this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
@@ -275,7 +288,7 @@
               var url='';
               // this.glQuery('contentPanel').changDrawer();
               e.detail.data.map((el,index)=>{
-                console.log(index);
+                // console.log(index);
                 if (index == 0) {
                   url = url +el.data;
                 }else {
@@ -284,10 +297,17 @@
                 // console.log(el.data);
 
               });
-              console.log(url);
+              // console.log(url);
               this.read('./g2g/fee/invoice/id/'+url,(data)=>{
                 this.payment = data;
-                console.log(this.payment );
+                // console.log(this.payment );
+              },true,'get');
+            },
+            roundDetails:function (e) {
+              // console.log(e.detail.data);
+              this.read('./g2g/fee/id/'+e.detail.data,(data)=>{
+                this.roundDetail = data;
+                console.log(this.roundDetail);
               },true,'get');
             },
             nxGridTap: function(e) {
@@ -296,7 +316,7 @@
                 this.layerContent = e.detail.level;
                 // console.log(this.layerContent);
                 if (this.layerContent === 'third') {
-                    this.changePage = 1;
+                    this.changePage = 2;
                 } else {
                     this.changePage = 0;
                 }

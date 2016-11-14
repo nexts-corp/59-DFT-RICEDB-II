@@ -57,7 +57,16 @@
   <script>
     Polymer({
       is: "invoice-round",
-
+      _getBind: function(e) {
+        // console.log(e.currentTarget.data);
+        this.fire('select-round', {
+            data: e.currentTarget.data.fee_id
+          });
+        this.fire('nx-grid-' + e.type, {
+            data: e.currentTarget.data,
+            level: e.currentTarget.getAttribute('level')
+          });
+      },
     });
   </script>
 </dom-module>

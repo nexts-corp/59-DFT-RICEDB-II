@@ -2,7 +2,7 @@
 <link rel="import" href="./../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="invoice-drft.html">
 <link rel="import" href="draft-sum.html">
-<dom-module id="payment-detail">
+<dom-module id="payment-detail-round">
 
   <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
     .flexchild-1 {
@@ -87,17 +87,17 @@
           <gl-form-input label="งวดที่" value="{{data.shipment}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-          <gl-form-input label="ครั้งที่" value="{{dataPerSubmit.fee_no}}"></gl-form-input>
+          <gl-form-input label="ครั้งที่" value="{{data.fee_no}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{dataPerSubmit.fee_name}}"></gl-form-input>
+          <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}"></gl-form-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
     <div class="container">
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <vaadin-date-picker label="วันที่ได้รับเงิน" value="{{dataPerSubmit.fee_date_receipt}}"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" format-number></gl-form-label-input>
@@ -110,21 +110,21 @@
                 <div class="text">T/T</div>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                [[changeString2Num(dataPerSubmit.*,'rate_tt')]]
-                <gl-form-input style="width:60px;" value="{{dataPerSubmit.rate_tt}}" no-label-float></gl-form-input>
+                [[changeString2Num(data.*,'rate_tt')]]
+                <gl-form-input style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                 <div class="text">ธ.กรุงไทยเสนอ</div>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                [[changeString2Num(dataPerSubmit.*,'rate_bank')]]
-                <gl-form-input style="width:60px;" value="{{dataPerSubmit.rate_bank}}" no-label-float></gl-form-input>
+                [[changeString2Num(data.*,'rate_bank')]]
+                <gl-form-input style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
               </gl-grid-col>
             </gl-grid-row>
           </gl-grid-col>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="{{_totalMoney(dataPerSubmit.rate_bank,data.amount_usd)}}" format-number></gl-form-label-input>
+          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="{{_totalMoney(data.rate_bank,data.amount_usd)}}" format-number></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -132,29 +132,29 @@
     <div class="container">
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          [[changeString2Num(dataPerSubmit.*,'fee_internal')]]
-          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="{{dataPerSubmit.fee_internal}}"></gl-form-input>
+          [[changeString2Num(data.*,'fee_internal')]]
+          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          [[changeString2Num(dataPerSubmit.*,'fee_foreign')]]
-          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{dataPerSubmit.fee_foreign}}"></gl-form-input>
+          [[changeString2Num(data.*,'fee_foreign')]]
+          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          [[changeString2Num(dataPerSubmit.*,'fee_other')]]
-          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{dataPerSubmit.fee_other}}"></gl-form-input>
+          [[changeString2Num(data.*,'fee_other')]]
+          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"></gl-form-input>
         </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(dataPerSubmit.fee_internal,dataPerSubmit.fee_foreign,dataPerSubmit.fee_other,dataPerSubmit.rate_bank)}}
-          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{dataPerSubmit.feeTotal}}" format-number></gl-form-label-input>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
+          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" format-number></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
     <template is="dom-repeat" items="{{data.invoice}}" as="invoice">
       <!-- [[_insertInvoice(invoice.invoice_id,index)]] -->
-      <!-- [[_averageFee(dataPerSubmit.feeTotal)]]//{{dataPerSubmit.rate_bank}} -->
+      <!-- [[_averageFee(data.feeTotal)]]//{{data.rate_bank}} -->
       <invoice-drft invoice="{{invoice}}"
-                    rate-bank="{{dataPerSubmit.rate_bank}}"
+                    rate-bank="{{data.rate_bank}}"
                     invoice-index="{{index}}"
-                    fee-total="[[_countFee(dataPerSubmit.feeTotal)]] "
+                    fee-total="[[_countFee(data.feeTotal)]] "
                     invoice-page="[[invoicePage]]"
 
       ></invoice-drft>
@@ -182,7 +182,7 @@
 
   <script>
 Polymer({
-  is: "payment-detail",
+  is: "payment-detail-round",
   behaviors: [
       g2gModelBehavior,
       gl.behavior.core,
@@ -194,18 +194,7 @@ Polymer({
       notify:true,
       value:[]
     },
-    dataPerSubmit: {
-      type: Object,
-      value:{
-        fee_date_receipt:0,
-        rate_tt:0,
-        rate_bank:0,
-        fee_internal:0,
-        fee_foreign:0,
-        fee_other:0,
-        invoice:[]
-      }
-    },
+
     invoice_fee:{
       type:parseFloat,
       value:0
@@ -233,10 +222,10 @@ Polymer({
   },
   _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
     // invoiceDetail.invoice_fee
-    // console.log(this.dataPerSubmit);
+    // console.log(this.data);
     // return (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
-    this.dataPerSubmit.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
-    this.notifyPath('dataPerSubmit.feeTotal');
+    this.data.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
+    this.notifyPath('data.feeTotal');
   },
   _invoicePage:function (data) {
     this.invoicePage = data.length;
@@ -247,17 +236,17 @@ Polymer({
   },
   savePayment:function () {
 
-    // console.log(this.dataPerSubmit);
+    // console.log(this.data);
     // console.log(this.data);
     //  shm_det_id
     this.data.invoice.map((el,indexShmid)=>{
       // console.log(el);
       this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
-      this.push('dataPerSubmit.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
+      this.push('data.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
       el.invoice_detail.map((shmDet,indexshmdet)=>{
         // console.log(indexShmid);
 
-        this.push('dataPerSubmit.invoice.'+indexShmid+'.invoice_detail',{
+        this.push('data.invoice.'+indexShmid+'.invoice_detail',{
           shm_det_id:shmDet.shm_det_id,
           invoice_no:shmDet.invoice_no,
           invoice_date:new Date (shmDet.invoice_date),
@@ -268,16 +257,16 @@ Polymer({
     // this.data.invoice.map((el)=>{
     //   console.log(el);
     // });
-    // this.dataPerSubmit.fee_no='1';
-    delete this.dataPerSubmit.feeTotal;
-    this.dataPerSubmit.fee_date_receipt = new Date(this.dataPerSubmit.fee_date_receipt);
-    this.dataPerSubmit.fee_status = false;
-    // console.log('this.dataPerSubmit=>',this.data);
+    // this.data.fee_no='1';
+    // delete this.data.feeTotal;
+    // this.data.fee_date_receipt = new Date(this.data.fee_date_receipt);
+    // this.data.fee_status = false;
+    // console.log('this.data=>',this.data);
     var contractId = this.glQuery('adddraft').getUrl();
-    this.insert('./g2g/fee/insert',this.dataPerSubmit, () => {
-      this.glQuery('adddraft').getRound(contractId,true,'get');
-      // this.glQuery('contentPanel').changDrawer();
-     });
+    // this.insert('./g2g/fee/insert',this.data, () => {
+    //   this.glQuery('adddraft').getRound(contractId,true,'get');
+    //   // this.glQuery('contentPanel').changDrawer();
+    //  });
   },
   _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,contract_id) {
     // console.log(bl_no,invoice_date,invoice_no,invoice_status,made_out_to);
