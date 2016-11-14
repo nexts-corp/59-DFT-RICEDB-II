@@ -159,20 +159,20 @@
         '_averageFee(feeTotal,invoice)',
       ],
       _totalQuantityTons:function (quantity_tons,index){
-        this.set('invoice.invoice_detail.'+index+'.quantity_tons',Number(quantity_tons));
+        this.set('invoice.invoice_detail.'+index+'.quantity_tons',parseFloat(quantity_tons));
       },
       _totalPricePerTon:function (price_per_ton,index){
-        this.set('invoice.invoice_detail.'+index+'.price_per_ton',Number(price_per_ton));
+        this.set('invoice.invoice_detail.'+index+'.price_per_ton',parseFloat(price_per_ton));
       },
       _totalBath:function (quantity_tons,price_per_ton,rate_bank,index) {
         //console.log(invoiceDetail);
-        var test = (Number(quantity_tons)*Number(price_per_ton))*rate_bank;
+        var test = (parseFloat(quantity_tons)*parseFloat(price_per_ton))*rate_bank;
         this.set('invoice.invoice_detail.'+index+'.testza',test);
         //console.log(this.invoice.invoice_detail[index]);
         return test;
       },
       _totalAmountUsd:function (amountUsd,index) {
-        this.set('invoice.invoice_detail.'+index+'.amountUsd',Number(amountUsd));
+        this.set('invoice.invoice_detail.'+index+'.amountUsd',parseFloat(amountUsd));
       },
       _averageFee:function (feeTotal,invoice) {
         // console.log(invoice.invoice_detail[index]);
@@ -185,11 +185,11 @@
         }
       },
       _totalfee:function (invoice_fee,index) {
-        this.set('invoice.invoice_detail.'+index+'.invoice_fee',Number(invoice_fee));
+        this.set('invoice.invoice_detail.'+index+'.invoice_fee',parseFloat(invoice_fee));
       },
       // (6)=((4)-(5))*1%
       _incomeTax:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
-        var incomeTax = ((((Number(quantity_tons)*Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100;
+        var incomeTax = ((((parseFloat(quantity_tons)*parseFloat(price_per_ton))*parseFloat(rate_bank))-parseFloat(invoice_fee))*1)/100;
         this.set('invoice.invoice_detail.'+index+'.incomeTax',incomeTax);
         return incomeTax;
       },
@@ -197,7 +197,7 @@
       // (3)*34.96
       // (7)=((4)-(5)-(6))<
       _totalMoneyInvoice:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
-        var moneyInvoice= ((Number(quantity_tons)*Number(price_per_ton))*Number(rate_bank)-Number(invoice_fee))-(((((Number(quantity_tons)+Number(price_per_ton))*Number(rate_bank))-Number(invoice_fee))*1)/100);
+        var moneyInvoice= ((parseFloat(quantity_tons)*parseFloat(price_per_ton))*parseFloat(rate_bank)-parseFloat(invoice_fee))-(((((parseFloat(quantity_tons)+parseFloat(price_per_ton))*parseFloat(rate_bank))-parseFloat(invoice_fee))*1)/100);
         this.set('invoice.invoice_detail.'+index+'.moneyInvoice',moneyInvoice);
         // console.log("moneyInvoice =>",this.invoice.invoice_detail[index].moneyInvoice);
         return moneyInvoice;
@@ -238,6 +238,7 @@
         var result = 0;
           test.base.invoice_detail.map(function(item){
             result+=item.invoice_fee;
+            console.log(result);
           }.bind(this));
           this.set('invoice.totalFeeInvoices',result);
           return result;

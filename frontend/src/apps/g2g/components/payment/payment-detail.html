@@ -205,11 +205,11 @@ Polymer({
       }
     },
     invoice_fee:{
-      type:Number,
+      type:parseFloat,
       value:0
     },
     indexInvoice:{
-      type:Number,
+      type:parseFloat,
     }
   },
   // listeners: {
@@ -227,8 +227,8 @@ Polymer({
   _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
     // invoiceDetail.invoice_fee
     // console.log(this.dataPerSubmit);
-    // return (Number(fee_internal)*rate_bank)+Number(feBath)+Number(fee_other);
-    this.dataPerSubmit.feeTotal = (Number(fee_internal)*rate_bank)+Number(feBath)+Number(fee_other);
+    // return (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
+    this.dataPerSubmit.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
     this.notifyPath('dataPerSubmit.feeTotal');
   },
   _totalInvoice:function (e) {
@@ -240,7 +240,7 @@ Polymer({
     // console.log(this.data);
     //  shm_det_id
     this.data.invoice.map((el,indexShmid)=>{
-      console.log(el);
+      // console.log(el);
       this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
       this.push('dataPerSubmit.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
       el.invoice_detail.map((shmDet,indexshmdet)=>{
@@ -262,10 +262,11 @@ Polymer({
     this.dataPerSubmit.fee_date_receipt = new Date(this.dataPerSubmit.fee_date_receipt);
     this.dataPerSubmit.fee_status = false;
     // console.log('this.dataPerSubmit=>',this.data);
-    // this.insert('./g2g/fee/insert',this.dataPerSubmit, () => {
-    //   // this.glQuery('addContract').getChange(false,'put');
-    //   // this.glQuery('contentPanel').changDrawer();
-    //  });
+    var contractId = this.glQuery('adddraft').getUrl();
+    this.insert('./g2g/fee/insert',this.dataPerSubmit, () => {
+      this.glQuery('adddraft').getRound(contractId,true,'get');
+      // this.glQuery('contentPanel').changDrawer();
+     });
   },
   _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,contract_id) {
     // console.log(bl_no,invoice_date,invoice_no,invoice_status,made_out_to);
@@ -278,12 +279,12 @@ Polymer({
       made_out_to:made_out_to,
     };
     // var data ={
-    //   bl_no:  "112233" ,
-    //   id:  "c0593e57-a1bf-49bf-b53d-9f9999c1b208" ,
+    //   bl_no:  "1122" ,
+    //   id:  "3eea3d32-285b-4ea1-b655-dc107efb53b1" ,
     //   invoice_date:  "2016-11-08T00:00:00.000Z" ,
-    //   invoice_no:  "invoice 1" ,
+    //   invoice_no:  "Invoice 3" ,
     //   invoice_status: false ,
-    //   made_out_to:  "11"
+    //   made_out_to:  "ch"
     // }
     // console.log(data);
     var contractId = this.glQuery('adddraft').getUrl();
