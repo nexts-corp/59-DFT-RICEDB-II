@@ -77,7 +77,7 @@
              <div>Vessel : [[invoice.ship_name]]</div>
              <div>LotNo : [[invoice.ship_lot_no]]</div>
              <div style="width:20px"></div>
-             <div>1/2</div>
+             <div>[[_countPage(invoiceIndex)]]/[[invoicePage]]</div>
         </div>
       <div style="overflow-x:auto;">
       <table class="default" id="table-[[index]]">
@@ -158,6 +158,9 @@
       observers:[
         '_averageFee(feeTotal,invoice)',
       ],
+      _countPage:function (invoiceIndex) {
+        return invoiceIndex+1;
+      },
       _totalQuantityTons:function (quantity_tons,index){
         this.set('invoice.invoice_detail.'+index+'.quantity_tons',parseFloat(quantity_tons));
       },
@@ -238,7 +241,6 @@
         var result = 0;
           test.base.invoice_detail.map(function(item){
             result+=item.invoice_fee;
-            console.log(result);
           }.bind(this));
           this.set('invoice.totalFeeInvoices',result);
           return result;

@@ -155,6 +155,8 @@
                     rate-bank="{{dataPerSubmit.rate_bank}}"
                     invoice-index="{{index}}"
                     fee-total="[[_countFee(dataPerSubmit.feeTotal)]] "
+                    invoice-page="[[invoicePage]]"
+
       ></invoice-drft>
 
     </template>
@@ -210,13 +212,18 @@ Polymer({
     },
     indexInvoice:{
       type:parseFloat,
+    },
+    invoicePage:{
+      type:Number,
+      value:1
     }
   },
   // listeners: {
   //     'total-invoice': '_totalInvoice',
   // },
   observers:[
-    'check(data.invoice.*)'
+    'check(data.invoice.*)',
+    '_invoicePage(data.invoice)'
   ],
   check:function (invoice) {
     // console.log('invoice =>',invoice);
@@ -230,6 +237,10 @@ Polymer({
     // return (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
     this.dataPerSubmit.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
     this.notifyPath('dataPerSubmit.feeTotal');
+  },
+  _invoicePage:function (data) {
+    this.invoicePage = data.length;
+    // console.log(data.length);
   },
   _totalInvoice:function (e) {
     // console.log(e.detail.data);
