@@ -40,14 +40,14 @@
 
       <gl-form-panel-head set-padding="0px 0px 0px 0px">
         <div id="removePen" hidden>
-          <!-- <paper-icon-button icon="create" on-tap="editChange" title="แก้ไขข้อมูล"></paper-icon-button> -->
+          <paper-icon-button icon="create" on-tap="editChange" title="แก้ไขข้อมูล"></paper-icon-button>
         </div>
       </gl-form-panel-head>
               <div class="bd">
                   <gl-form-panel>
                       <iron-pages selected="{{pages}}">
                           <renew-memberShow data="{{data}}"></renew-memberShow>
-                          <!-- <renew-memberEdit data="{{data}}"></renew-memberEdit> -->
+                          <renew-memberEdit data="{{data}}"></renew-memberEdit>
                       </iron-pages>
                   </gl-form-panel>
               </div>
@@ -108,7 +108,7 @@
           // seller_agent:this.data.seller_agent,
           trader_id:this.data.trader_id
         }
-        this.glQuery('layoutRegistion').openToastSaveing();
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
         // console.log(datas);
         // console.log(this.exporterId);
         axios.put('./external/exporter/update', datas)
@@ -117,13 +117,9 @@
                     console.log(response);
                     this.glQuery('reExporter').getExporters();
                     this.pages = 0;
-                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                      // if (refresh == true) {
-                      //   console.log(action);
-                      //   this.glQuery('contentPanel').changDrawer();
-                      // }
-                    }.bind(this));
-                    // this.glQuery('refreshPage').exporterIdChanged(exporterId);
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      console.log('success');
+                    }});
                   }.bind(this))
                   .catch(function (error) {
                     console.log("error");
@@ -201,26 +197,32 @@
         }
       },
       _active: function(){
-        // console.log(this.data);
-        if (confirm("คุณต้องการจะยกเลิกการระงับใช่ไหม?") == true) {
-          var datas = {
-            exporter_date_update: new Date,
-            exporter_date_approve:new Date,
-            exporter_no:this.data.exporter_no,
-            trader_id:this.data.trader_id,
-            // seller_agent:this.data.seller_agent,
-            id : this.data.exporter_id
-          }
-          // console.log(datas);
-          this.glQuery('layoutRegistion').openToastSaveing();
-          axios.put('./external/exporter/update', datas)
+        this.fire('toast',{status:'dialog',
+        text:'คุณต้องการจะยกเลิกการระงับใช่ไหม ?',
+        confirmed : this._confirmToast,
+        el: this,
+        datas: {
+           exporter_date_update: new Date,
+           exporter_date_approve:new Date,
+           exporter_no:this.data.exporter_no,
+           trader_id:this.data.trader_id,
+           trader_id:this.data.trader_id,
+           id : this.data.exporter_id
+        }
+      });
+      },
+      _confirmToast:function(result,detail){
+        if(result == true){
+          detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          axios.put('./external/exporter/update', detail.datas)
                     .then(function (response) {
                       console.log("success");
                       console.log(response);
-                      this.glQuery('contentPanel').changDrawer();
-                      this.glQuery('reExporter').getExporters();
-                      this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                      }.bind(this));
+                      detail.el.glQuery('contentPanel').changDrawer();
+                      detail.el.glQuery('reExporter').getExporters();
+                      detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                        console.log('success');
+                      }});
                     }.bind(this))
                     .catch(function (error) {
                       console.log("error");
@@ -234,6 +236,7 @@
           trader_date_approve: new Date
         }
         // console.log(datas);
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
         this.glQuery('layoutRegistion').openToastSaveing();
         axios.put('./external/trader/update', datas)
                   .then(function (response) {
@@ -241,8 +244,9 @@
                     console.log(response);
                     this.glQuery('contentPanel').changDrawer();
                     this.glQuery('reExporter').getExporters();
-                    this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                    }.bind(this));
+                    detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      console.log('success');
+                    }});
                   }.bind(this))
                   .catch(function (error) {
                     console.log("error");
@@ -252,10 +256,6 @@
       toggleDrawer:function(){
           this.glQuery('contentPanel').changDrawer();
       }
-      // _toastOpen:function(){
-      //   this.$.toastDialog.open();
-      //   console.log(this.$.toastDialog);
-      // },
     });
   </script>
 </dom-module>

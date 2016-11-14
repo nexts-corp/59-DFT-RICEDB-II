@@ -35,9 +35,9 @@
         <div id="changTitle2" class="title" hidden>ขึ้นทะเบียนผู้ส่งออกข้าวส่งออกไปจำหน่ายต่างประเทศ</div>
             <div class="searchBox searchBorder">
               <gl-grid-row width="{{getWidth}}">
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                <gl-combo-box id="trader_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+                <gl-combo-box style="margin-left:2em;" id="trader_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
                     item-value-path="trader_id" value="{{dataTrader}}" on-value-changed="getTrader"></gl-combo-box>
                 </gl-grid-col>
                 <!-- <paper-button class="gl-btn-info" raised on-tap="_search">ค้นหา</paper-button> -->
@@ -134,7 +134,7 @@
           // seller_agent:this.trader.seller_agent,
         }
         // console.log(datas);
-        this.glQuery('layoutRegistion').openToastSaveing();
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
         axios.post('./external/exporter/insert', datas)
             .then(function(response) {
                 console.log("success");
@@ -149,8 +149,9 @@
                 this.dataTrader = "";
                 this.glQuery('reExporter').getExporters();
                 this.glQuery('reTrader').getExporterTrader();
-                this.glQuery('layoutRegistion').closeToastSaveing(function(){
-                }.bind(this));
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
             }.bind(this))
             .catch(function(error) {
                 console.log("error");
@@ -174,6 +175,9 @@
         this.trader_id = this.trader_id || this.$.trader_id;
         // console.log(this.seller_id);
         this.getDb('./external/exporter/?exporter_status=false',(data)=>{
+          data.map((type)=>{
+            type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+          });
           this.trader_id.items = data;
           // console.log(this.seller_id.items);
         });
