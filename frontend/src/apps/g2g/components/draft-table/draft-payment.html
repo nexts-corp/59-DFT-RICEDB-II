@@ -24,12 +24,12 @@
     font-family: 'rsuregular', sans-serif;
     -webkit-font-smoothing: antialiased;
     }
-    td {
+    td.item {
       cursor:pointer;
     }
     .btnMoney {
-      margin: 20px 20px 0px 0px;
-      padding: 0px 0px 20px 20px;
+      margin: 10px 10px 0px 0px;
+      padding: 0px 0px 10px 10px;
     }
   </style>
   <template>
@@ -52,22 +52,31 @@
         </tr>
       </thead>
       <tbody>
-        <template is="dom-repeat" items="[[data]]" as="payment">
-          <template is="dom-repeat" items="[[payment.invoice_detail]]" filter="{{_filter(searchInput)}}">
-            <tr data="[[item]]" on-tap="_getBind" level="secondary" >
-              <td><paper-checkbox class="checkBox" data="{{item.invoice_id}}"></paper-checkbox></td>
-              <td>[[payment.shm_no]]</td>
-              <td>[[item.invoice_no]]</td>
-              <td>[[item.cl_name]]</td>
+        <template is="dom-repeat" items="{{data}}" as="payment">
+          [[_initShmId(payment.invoice_detail)]]
+          <template is="dom-repeat" items="{{payment.invoice_detail}}" filter="{{_filter(searchInput)}}">
+            <tr data="[[item]]" >
+              <td class="item"><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" on-change="filterData" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
+              <td class="item" on-tap="_getBind" level="secondary" >[[payment.shm_no]]</td>
+              <td class="item" on-tap="_getBind" level="secondary" >[[item.invoice_no]]</td>
+              <td class="item" on-tap="_getBind" level="secondary" >[[item.cl_name]]</td>
             </tr>
           </template>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <div class="horizontal end-justified layout btnMoney">
+               <paper-button class="gl-btn-success" raised on-tap="payMoney">ได้รับเงิน</paper-button>
+            </div>
+          </td>
+          </tr>
         </template>
 
       </tbody>
   </table>
-  <div class="horizontal end-justified layout btnMoney">
-     <paper-button class="gl-btn-success" raised on-tap="payMoney">ได้รับเงิน</paper-button>
-  </div>
+
   </template>
   <script>
     Polymer({
@@ -76,11 +85,25 @@
         searchInput: {
           type: String,
           // observer:'_searchInData'
+        },
+        shmId:{
+          type:String,
         }
       },
+      listeners: {
+          'filterData':'filterData',
+      },
       _searchInData:function (e) {
-        console.log(e);
-        console.log(this.data);
+        // console.log(e);
+        // console.log(this.data);
+      },
+      filterData:function (e) {
+        // console.log(e.currentTarget.getAttribute("shmId"));
+        // var shmId = e.currentTarget.getAttribute("shmId");
+        // var pol = this.data.filter(function (shm) { return shm.shm_id == shmId });
+        //   this.data = pol;
+        //   this.notifyPath('data');
+          // console.log(this.data );
       },
       _filter: function(val) {
         console.log(val);
@@ -93,6 +116,17 @@
         //   return (person.name && ~person.name.indexOf(val));
         // };
       },
+      _initShmId:function(shm_id){
+        // this.shmId = shm_id;
+        console.log(shm_id.length);
+      },
+      _checkShmId:function (shmId) {
+        console.log('shmId =>',shmId);
+        console.log('this.shmId =>',this.shmId );
+        console.log(this.shmId == shmId);
+        // this.shmId = shmId;
+        // return this.shmId !=shmId;
+      },
       payMoney:function () {
         // aria-checked="true"
         var check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
@@ -101,9 +135,6 @@
         this.fire('select-draftPayment', {
             data: check
           });
-      },
-      _toggleDrawer: function() {
-        this.glQuery('contentPanel').changDrawer();
       },
       _getBind: function(e) {
         // console.log(e.currentTarget.data);
