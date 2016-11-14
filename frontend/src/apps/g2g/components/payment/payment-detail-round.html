@@ -1,4 +1,4 @@
-
+<link rel="import" href="../../data/g2gModelBehavior.html">
 <link rel="import" href="./../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="invoice-drft.html">
 <link rel="import" href="draft-sum.html">
@@ -78,29 +78,35 @@
 
   <template>
     <!-- รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ COFCO -->
+    <div id="removePen"  class="horizontal end-justified layout" >
+      <paper-icon-button disabled$="{{!checkBtn}}" id="editRound" class="pink" icon="create" on-tap="editRound"></paper-icon-button>
+      <paper-icon-button id="deleteRound" class="pink" icon="delete" on-tap="deleteRound"></paper-icon-button>
+      <paper-tooltip for="editRound" position="bottom" animation-delay="0">Edit Round</paper-tooltip>
+      <paper-tooltip for="deleteRound" position="bottom" animation-delay="0">Delete Round</paper-tooltip>
+   </div>
     <div class="header flex-center-justified">
       <gl-form-label-input label="" class="inputHeader" value="รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ" ></gl-form-label-input >
     </div>
     <div class="container">
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-          <gl-form-input label="งวดที่" value="{{data.shipment}}"></gl-form-input>
+          <gl-form-input label="งวดที่" value="{{data.shipment}}" disabled$="{{checkBtn}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-          <gl-form-input label="ครั้งที่" value="{{data.fee_no}}"></gl-form-input>
+          <gl-form-input label="ครั้งที่" value="{{data.fee_no}}" disabled$="{{checkBtn}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}"></gl-form-input>
+          <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" disabled$="{{checkBtn}}"></gl-form-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
     <div class="container">
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <vaadin-date-picker label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}" disabled$="{{checkBtn}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" format-number></gl-form-label-input>
+          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" format-number disabled$="{{checkBtn}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           <div class="setText">อัตราแลกเปลี่ยน</div>
@@ -111,14 +117,14 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 [[changeString2Num(data.*,'rate_tt')]]
-                <gl-form-input style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
+                <gl-form-input style="width:60px;" value="{{data.rate_tt}}" no-label-float disabled$="{{checkBtn}}"></gl-form-input>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                 <div class="text">ธ.กรุงไทยเสนอ</div>
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                 [[changeString2Num(data.*,'rate_bank')]]
-                <gl-form-input style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
+                <gl-form-input style="width:60px;" value="{{data.rate_bank}}" no-label-float disabled$="{{checkBtn}}"></gl-form-input>
               </gl-grid-col>
             </gl-grid-row>
           </gl-grid-col>
@@ -133,18 +139,18 @@
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           [[changeString2Num(data.*,'fee_internal')]]
-          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}"></gl-form-input>
+          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" disabled$="{{checkBtn}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           [[changeString2Num(data.*,'fee_foreign')]]
-          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"></gl-form-input>
+          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}" disabled$="{{checkBtn}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           [[changeString2Num(data.*,'fee_other')]]
-          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"></gl-form-input>
+          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}" disabled$="{{checkBtn}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
-          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" format-number></gl-form-label-input>
+          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" format-number disabled$="{{checkBtn}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -156,7 +162,7 @@
                     invoice-index="{{index}}"
                     fee-total="[[_countFee(data.feeTotal)]] "
                     invoice-page="[[invoicePage]]"
-
+                    check-btn="[[checkBtn]]"
       ></invoice-drft>
 
     </template>
@@ -174,7 +180,12 @@
 
     <div class="horizontal end-justified layout">
       <paper-button raised class="gl-btn-danger">ยกเลิก</paper-button>
-      <paper-button raised on-tap="savePayment" class="gl-btn-success">บันทึก</paper-button>
+      <template is="dom-if" if="[[!checkBtn]]">
+        <paper-button raised on-tap="savePayment" class="gl-btn-success">บันทึก</paper-button>
+      </template>
+      <template is="dom-if" if="[[checkBtn]]">
+        <paper-button raised on-tap="payment" class="gl-btn-info">ยืนยันการจ่ายเงิน</paper-button>
+      </template>
     </div>
     </div>
 
@@ -188,7 +199,18 @@ Polymer({
       gl.behavior.core,
   ],
   properties: {
-
+    newData:{
+      type:Object,
+      value:{
+        fee_date_receipt:0,
+        rate_tt:0,
+        rate_bank:0,
+        fee_internal:0,
+        fee_foreign:0,
+        fee_other:0,
+        invoice:[]
+      }
+    },
     totalInvoice: {
       type: Array,
       notify:true,
@@ -205,6 +227,9 @@ Polymer({
     invoicePage:{
       type:Number,
       value:1
+    },
+    contractId:{
+      type:String,
     }
   },
   // listeners: {
@@ -214,8 +239,24 @@ Polymer({
     'check(data.invoice.*)',
     '_invoicePage(data.invoice)'
   ],
+  attached: function() {
+    this.editInput();
+    this.contractId = this.glQuery('adddraft').getUrl();
+  },
   check:function (invoice) {
     // console.log('invoice =>',invoice);
+  },
+  editRound:function () {
+    this.editInput();
+  },
+  deleteRound:function () {
+    console.log(this.data);
+    this.data.invoice.map((el,indexShmid)=>{
+      this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.made_out_to,false);
+    });
+    this.delete('./g2g/fee/delete/id/',this.data.fee_id, () => {
+      this.glQuery('adddraft').getRound(this.contractId,true,'get');
+     });
   },
   _totalMoney:function (rate_bank,amount_usd) {
     return rate_bank*amount_usd ;
@@ -235,18 +276,27 @@ Polymer({
     // console.log(e.detail.data);
   },
   savePayment:function () {
+    this.editInput();
+    console.log(this.data);
+    // this.set('newData',{fee_date_receipt:  "2016-11-25T00:00:00.000Z"});
+    this.set('newData',{
+      fee_date_receipt:  new Date (this.data.fee_date_receipt) ,
+      fee_foreign: this.data.fee_foreign ,
+      fee_internal: this.data.fee_internal ,
+      fee_name:  this.data.fee_name ,
+      fee_no:  this.data.fee_no ,
+      fee_other: this.data.fee_other ,
+      fee_status: this.data.fee_status ,
+      id:  this.data.fee_id ,
+      invoice: [] ,
+      rate_bank: this.data.rate_bank ,
+      rate_tt:this.data.rate_tt
+    });
 
-    // console.log(this.data);
-    // console.log(this.data);
-    //  shm_det_id
     this.data.invoice.map((el,indexShmid)=>{
-      // console.log(el);
-      this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
-      this.push('data.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
+      this.push('newData.invoice',{invoice_id:el.invoice_id,invoice_detail:[]});
       el.invoice_detail.map((shmDet,indexshmdet)=>{
-        // console.log(indexShmid);
-
-        this.push('data.invoice.'+indexShmid+'.invoice_detail',{
+        this.push('newData.invoice.'+indexShmid+'.invoice_detail',{
           shm_det_id:shmDet.shm_det_id,
           invoice_no:shmDet.invoice_no,
           invoice_date:new Date (shmDet.invoice_date),
@@ -254,44 +304,24 @@ Polymer({
         });
       });
     });
-    // this.data.invoice.map((el)=>{
-    //   console.log(el);
-    // });
-    // this.data.fee_no='1';
-    // delete this.data.feeTotal;
-    // this.data.fee_date_receipt = new Date(this.data.fee_date_receipt);
-    // this.data.fee_status = false;
-    // console.log('this.data=>',this.data);
-    var contractId = this.glQuery('adddraft').getUrl();
-    // this.insert('./g2g/fee/insert',this.data, () => {
-    //   this.glQuery('adddraft').getRound(contractId,true,'get');
-    //   // this.glQuery('contentPanel').changDrawer();
-    //  });
+      // console.log(this.newData);
+      this.update('./g2g/fee/update',this.newData, () => {
+        this.glQuery('adddraft').getRound(this.contractId,true,'get');
+       });
+
   },
-  _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,contract_id) {
-    // console.log(bl_no,invoice_date,invoice_no,invoice_status,made_out_to);
+  _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,made_out_to,status) {
     var data = {
       id:invoice_id,
       bl_no:bl_no,
       invoice_date:new Date(invoice_date),
       invoice_no:invoice_no,
-      invoice_status:true,
+      invoice_status:status,
       made_out_to:made_out_to,
     };
-    // var data ={
-    //   bl_no:  "1122" ,
-    //   id:  "3eea3d32-285b-4ea1-b655-dc107efb53b1" ,
-    //   invoice_date:  "2016-11-08T00:00:00.000Z" ,
-    //   invoice_no:  "Invoice 3" ,
-    //   invoice_status: false ,
-    //   made_out_to:  "ch"
-    // }
     // console.log(data);
-    var contractId = this.glQuery('adddraft').getUrl();
     this.update('./g2g/invoice/update',data, () => {
-      // this.glQuery('addContract').getChange(false,'put');
-      // this.editInput();
-      this.glQuery('adddraft').getInvoice(contractId,false,'get');
+      this.glQuery('adddraft').getInvoice(this.contractId,false,'get');
      });
   },
   _countFee:function (fee) {
