@@ -11,6 +11,7 @@ var ship = require('./ship');
 var buyer = require('./buyer');
 var surveyor = require('./surveyor');
 var incoterms = require('./incoterms');
+var bank = require('./bank');
 
 app.use('/typeRice', typeRice);
 app.use('/package', package);
@@ -22,5 +23,5 @@ app.use('/shipline', shipline);
 app.use('/buyer', buyer);
 app.use('/surveyor', surveyor);
 app.use('/incoterms', incoterms);
-
+app.use('/bank', bank);
 module.exports = app;
