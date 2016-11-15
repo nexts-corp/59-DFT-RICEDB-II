@@ -18,6 +18,9 @@ var schema = {
         "fee_id": {
             "type": "string"
         },
+        "pay_no": {
+            "type": "string"
+        },
         "pay_amount": {
             "type": "number"
         },
@@ -32,7 +35,7 @@ var schema = {
             "type": "string"
         }
     },
-    "required": ["exporter_id", "fee_id", "pay_amount", "pay_date", "bank_id", "bank_branch"]
+    "required": ["exporter_id", "fee_id", "pay_no", "pay_amount", "pay_date", "bank_id", "bank_branch"]
 };
 var validate = ajv.compile(schema);
 router.get('/exporter/id/:id', function (req, res, next) {
