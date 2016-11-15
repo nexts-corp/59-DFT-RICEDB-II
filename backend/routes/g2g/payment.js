@@ -24,9 +24,15 @@ var schema = {
         "pay_date": {
             "type": "string",
             "format": "date"
+        },
+        "bank_id": {
+            "type": "string"
+        },
+        "bank_branch": {
+            "type": "string"
         }
     },
-    "required": ["exporter_id", "fee_id", "pay_amount", "pay_date"]
+    "required": ["exporter_id", "fee_id", "pay_amount", "pay_date", "bank_id", "bank_branch"]
 };
 var validate = ajv.compile(schema);
 router.get('/exporter/id/:id', function (req, res, next) {
@@ -136,6 +142,7 @@ router.get('/exporter/id/:id', function (req, res, next) {
                             fee_id: me1('fee_id'),
                             exporter_id: req.params.id
                         })
+                        .eqJoin("bank_id", r.db('common').table("bank")).without({ right: "id" }).zip()
                         .coerceTo('array')(0)
                         .merge(function (me2) {
                             return {
@@ -145,6 +152,7 @@ router.get('/exporter/id/:id', function (req, res, next) {
                             }
                         })
                         .without('id')
+
                 )
             })
             .merge(function (me1) {
