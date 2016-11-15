@@ -25,6 +25,12 @@ var schema = {
         },
         "country_name_th": {
             "type": "string"
+        },
+        "country_code2": {
+            "type": "string"
+        },
+        "country_code3": {
+            "type": "string"
         }
     },
     "required": ["id", "country_fullname_en", "country_fullname_th", "country_name_en", "country_name_th"]
