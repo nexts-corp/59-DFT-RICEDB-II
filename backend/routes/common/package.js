@@ -22,7 +22,7 @@ var schema = {
             "type": "number"
         }
     },
-    "required": ["package_name", "package_kg_per_bag", "package_weight_bag"]
+    "required": ["id", "package_name", "package_kg_per_bag", "package_weight_bag"]
 };
 var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
@@ -69,30 +69,25 @@ router.post('/insert', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        if (req.body.id == null) {
-            db.query(function (conn) {
-                r.db('common').table("package")
-                    .insert(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                            result.id = response.generated_keys;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'field "id" must do not have data';
-            res.json(result);
-        }
+        db.query(function (conn) {
+            r.db('common').table("package")
+                .insert(req.body)
+                .run(conn)
+                .then(function (response) {
+                    result.message = response;
+                    if (response.errors == 0) {
+                        result.result = true;
+                        result.id = response.generated_keys;
+                    }
+                    res.json(result);
+                    console.log(result);
+                })
+                .error(function (err) {
+                    result.message = err;
+                    res.json(result);
+                    console.log(result);
+                })
+        })
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
@@ -103,32 +98,26 @@ router.put('/update', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        //console.log(req.body);
-        if (req.body.id != '' && req.body.id != null) {
-            result.id = req.body.id;
-            db.query(function (conn) {
-                r.db('common').table("package")
-                    .get(req.body.id)
-                    .update(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'require field id';
-            res.json(result);
-        }
+        result.id = req.body.id;
+        db.query(function (conn) {
+            r.db('common').table("package")
+                .get(req.body.id)
+                .update(req.body)
+                .run(conn)
+                .then(function (response) {
+                    result.message = response;
+                    if (response.errors == 0) {
+                        result.result = true;
+                    }
+                    res.json(result);
+                    console.log(result);
+                })
+                .error(function (err) {
+                    result.message = err;
+                    res.json(result);
+                    console.log(result);
+                })
+        })
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);

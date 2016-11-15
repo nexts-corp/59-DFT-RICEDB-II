@@ -29,6 +29,7 @@ router.get(['/', '/list'], function (req, res, next) {
                 return { bank_id: row('id') }
             })
             .without('id')
+            .orderBy('bank_name_th')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -45,7 +46,6 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-
 router.get('/id/:bank_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("bank")
@@ -96,32 +96,26 @@ router.put('/update', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        //console.log(req.body);
-        if (req.body.id != '' && req.body.id != null) {
-            result.id = req.body.id;
-            db.query(function (conn) {
-                r.db('common').table("bank")
-                    .get(req.body.id)
-                    .update(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'require field id';
-            res.json(result);
-        }
+        result.id = req.body.id;
+        db.query(function (conn) {
+            r.db('common').table("bank")
+                .get(req.body.id)
+                .update(req.body)
+                .run(conn)
+                .then(function (response) {
+                    result.message = response;
+                    if (response.errors == 0) {
+                        result.result = true;
+                    }
+                    res.json(result);
+                    console.log(result);
+                })
+                .error(function (err) {
+                    result.message = err;
+                    res.json(result);
+                    console.log(result);
+                })
+        })
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
