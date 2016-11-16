@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Timestamp = require('../../class/Timestamp.js');
+var timestamp = new Timestamp();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -114,9 +117,9 @@ router.get('/', function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","created","updated"] }).zip()
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .filter(q)
             .filter(d)
             .orderBy('exporter_no')
@@ -186,6 +189,7 @@ router.post('/insert', function (req, res, next) {
                         if (response > 0) {
                             req.body.exporter_no = response;
                             req.body.exporter_date_approve = req.body.exporter_date_update;
+                            req.body = timestamp.create(req.body);
                             r.db('external_f3').table("exporter")
                                 .insert(req.body)
                                 .run(conn)
@@ -223,6 +227,7 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
+            req.body = timestamp.update(req.body);
             db.query(function (conn) {
                 r.db('external_f3').table("exporter")
                     .get(req.body.id)

@@ -30,7 +30,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             function (detail, invoice) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
-            .without({ right: ["id","created","updated"] }).zip()
+            .without({ right: ["id","date_created","date_updated"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -38,7 +38,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         load_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -46,7 +46,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         dest_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -54,12 +54,12 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         deli_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
-            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","created","updated", "cl_type_rice"] }).zip()
-            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","created","updated", "contract_type_rice"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated", "cl_type_rice"] }).zip()
+            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","date_created","date_updated", "contract_type_rice"] }).zip()
             .filter(
             r.row.hasFields('invoice_no').not()
                 .and(r.row('shm_status').eq(true))
@@ -135,7 +135,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             function (detail, invoice) {
                 return invoice("bl_no").eq(detail("bl_no"))
             })
-            .without({ right: ["id","created","updated"] }).zip()
+            .without({ right: ["id","date_created","date_updated"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -143,7 +143,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                         load_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -151,7 +151,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                         dest_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -159,14 +159,14 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                         deli_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
-            .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","created","updated", "cl_type_rice"] }).zip()
-            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","created","updated", "contract_type_rice"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated", "cl_type_rice"] }).zip()
+            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","date_created","date_updated", "contract_type_rice"] }).zip()
             .filter(r.row.hasFields('invoice_no').not())
             .run(conn, function (err, cursor) {
                 if (!err) {
@@ -207,9 +207,9 @@ router.get('/no/:bl_no', function (req, res, next) {
                 }
             })
             .without("group", "reduction")
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","created","updated", "contract_type_rice"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","date_created","date_updated", "contract_type_rice"] }).zip()
             .merge(function (me) {
                 return {
                     bl_detail: r.db('g2g').table('shipment_detail')
@@ -238,7 +238,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                             }
                         })
                         .without("group", "reduction")
-                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id","date_created","date_updated"] }).zip()
                         .merge(function (me2) {
                             return {
                                 quantity_bags: me2('quantity_tons').mul(1000).div(me2('package_kg_per_bag'))
@@ -257,7 +257,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                                 amount_usd: me2('price_per_ton').mul(me2('weight_net'))
                             }
                         })
-                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id","date_created","date_updated"] }).zip()
                         .coerceTo('array')
                 }
             })
@@ -277,7 +277,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         buyer_country_id: buyer("right")("country_id")
                     }
                 })
-            }).without({ right: ["id","created","updated", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "country_id"] }).zip()
             .eqJoin("buyer_country_id", r.db('common').table("country")).map(function (country) {
                 return country.merge({
                     right: {
@@ -286,7 +286,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         buyer_country_name_th: country("right")("country_name_th")
                     }
                 })
-            }).without({ right: ["id","created","updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
             .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -295,7 +295,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         dest_country_id: port("right")("country_id")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -304,7 +304,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         deli_country_id: port("right")("country_id")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -313,7 +313,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         load_country_id: port("right")("country_id")
                     }
                 })
-            }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("dest_country_id", r.db('common').table("country")).map(function (dest) {
                 return dest.merge({
                     right: {
@@ -322,7 +322,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         dest_country_name_th: dest("right")("country_name_th")
                     }
                 })
-            }).without({ right: ["id","created","updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
             .eqJoin("deli_country_id", r.db('common').table("country")).map(function (deli) {
                 return deli.merge({
                     right: {
@@ -331,7 +331,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                         deli_country_name_th: deli("right")("country_name_th")
                     }
                 })
-            }).without({ right: ["id","created","updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
             .eqJoin("load_country_id", r.db('common').table("country")).map(function (load) {
                 return load.merge({
                     right: {
@@ -340,10 +340,10 @@ router.get('/no/:bl_no', function (req, res, next) {
                         load_country_name_th: load("right")("country_name_th")
                     }
                 })
-            }).without({ right: ["id","created","updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
-            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: ["id","created","updated"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: ["id","date_created","date_updated"] }).zip()
             (0)
             .run(conn, function (err, cursor) {
                 //console.log(err);

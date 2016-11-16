@@ -91,7 +91,7 @@ router.get(['/', '/list'], function (req, res, next) {
                         .orderBy('shm_no')
                         .without('id')
                         .coerceTo('array')
-                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","created","updated", "cl_type_rice", "cl_quality"] }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated", "cl_type_rice", "cl_quality"] }).zip()
                 }
             })
             .merge(function (row) {
@@ -126,8 +126,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id","created","updated"] }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","created","updated"] }).zip()
+            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
             .orderBy('contract_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
