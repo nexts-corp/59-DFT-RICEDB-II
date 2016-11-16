@@ -208,9 +208,7 @@ router.post('/insert', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        //console.log(req.body);
         if (req.body.id == null) {
-            //result.id = req.body.id;
             db.query(function (conn) {
                 r.db('g2g').table("contract")
                     //.get(req.body.id)

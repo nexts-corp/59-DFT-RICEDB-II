@@ -128,7 +128,6 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     surveyor_id: me('group')('surveyor_id'),
                     ship_lot_no: me('group')('ship_lot_no'),
                     carrier_id: me('group')('carrier_id')
-                    //quantity: me('reduction')
                 }
             })
             .without("group", "reduction")
