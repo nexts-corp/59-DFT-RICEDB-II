@@ -5,6 +5,8 @@
 <link rel="import" href="/bower_components/numeral-js/numeral-js.html">
 <link rel="import" href="../vessel/view-noshipment.html">
 <link rel="import" href="../vessel/edit-noshipment.html">
+<link rel="import" href="../vessel/booking-edit.html">
+<link rel="import" href="../../../../../bower_components/gl-styles/gl-panel.html">
 <dom-module id="list-vessel">
 
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -109,198 +111,37 @@
     <iron-pages selected="{{pageEditShipment}}" attr-for-selected="name">
       <div name="view">
         <view-noshipment data="{{data}}" ></view-noshipment>
-
-
-
     <gl-grid-row width="{{getWidth}}">
 
-      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,10]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,8]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
-        <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="displayInsert" >เพิ่มผู้ส่งออก</paper-button>
+        <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl">จัดการ B/l No</paper-button>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+        <paper-button  class="gl-btn-primary" raised on-tap="editBlShm" name="addShmdt">เพิ่มผู้ส่งออก</paper-button>
+        <!-- <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="displayInsert" >เพิ่มผู้ส่งออก</paper-button> -->
       </gl-grid-col>
     </gl-grid-row>
-    <div id="changeDivcss" hidden="[[!btnAdd]]">
+    <div hidden="{{addBlShm}}">
+    <iron-pages selected="{{addContent}}" attr-for-selected="name">
+      <div name="addBl">
+        <booking-edit common="[[common]]" country="[[data.country]]" data="{{dataBl}}"></booking-edit>
+      </div>
+      <div name="addShmdt">
+        <div class="bd">
+          <vessel-edit   approve="[[checkInput]]" check-input="[[!checkInput]]"
+                         data="{{shipment}}"      shm-id="[[data.shm_id]]"
+                         common="[[common]]"      country="[[data.country]]"
+                         buyer-masks="[[data.buyerMasks]]"  cl-no="{{data.cl_no}}"
+                         cl-type-rice="[[data.cl_type_rice]]" insert-shipment="true"
+                         bl-nos="{{blNos}}"
+                         >
+          </vessel-edit>
+          </div>
 
-        <gl-form-panel-body>
-          <div class="title">รายละเอียดผู้ส่งออกและเรือ</div>
-        </gl-form-panel-body>
-
-        <gl-form-panel-body>
-          <gl-grid-row width="{{getWidth}}">
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box required  id="exporter_id" label="ผู้ส่งออก" item-label-path="seller_name_en"
-                class="requested"    item-value-path="exporter_id"  items="{{common.seller}}" value="{{shipment.exporter_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-              <gl-form-label-input label="Tel."class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{seller_phone}}" id="seller_phone" name="seller_phone"></gl-form-label-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name"
-                class="requested"  item-value-path="shipline_id" items="{{common.shipline}}"  value="{{shipment.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
-              <!-- <gl-form-dropdown-menu label="Shipping Line" error-message="กรุณาเลือก Shipping Line"  placeholder="เลือก Shipping Line" required>
-                <paper-menu class="dropdown-content" attr-for-selected="shipline-id" selected="{{shipment.shipline_id}}" id="bs" name="bs">
-                  <template is="dom-repeat" items="[[shipline]]">
-                    <paper-item shipline-id="[[item.shipline_id]]" shipline-name="{{item.shipline_name}}">[[item.shipline_name]]</paper-item>
-                  </template>
-                </paper-menu>
-              </gl-form-dropdown-menu> -->
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="ship_id" label="Vessel" item-label-path="ship_name"
-                class="requested"  item-value-path="ship_id" items="{{shipInShipline}}" value="{{shipment.ship_id}}" ></gl-combo-box>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <!-- <gl-form-input label="ผู้ส่งออก" auto-validate error-message="กรุณาใส่ชื่อผู้ส่งออก" required placeholder="ใส่ชื่อผู้ส่งออก" -->
-                <!-- value="{{shipment.seller_name_en}}" id="actualShipper" name="actualShipper"></gl-form-input> -->
-                <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name"
-                  class="requested"   item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{shipment.surveyor_id}}"></gl-combo-box>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.ship_voy_no}}"
-              class="requested"   id="voidNo" name="voidNo"></gl-form-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.ship_lot_no}}"
-              class="requested"   id="lotNo" name="lotNo"></gl-form-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Booking No."class="requested"  auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"  value="{{shipment.book_no}}" id="book_no" name="book_no"></gl-form-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="B/L No." class="requested"  auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.bl_no}}" id="bl_no" name="bl_no"></gl-form-input>
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
-              <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name"
-              class="requested"     item-value-path="carrier_id" items="{{common.carrier}}" value="{{shipment.carrier_id}}"></gl-combo-box>
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="port_id" label="POL" item-label-path="port_name"
-              class="requested"     item-value-path="port_id" items="{{pol}}"  value="{{shipment.load_port_id}}"></gl-combo-box>
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker label="ETD" class="requested"  value="{{shipment.etd_date}}"></vaadin-date-picker>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker label="ETA" class="requested"  value="{{shipment.eta_date}}"></vaadin-date-picker>
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name"
-                class="requested"   item-value-path="port_id" items="{{pod}}" value="{{shipment.dest_port_id}}" on-value-changed="_getPlace"></gl-combo-box>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name"
-              class="requested"     item-value-path="port_id" items="{{pod}}" value="{{shipment.deli_port_id}}" ></gl-combo-box>
-            </gl-grid-col>
-
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[changeString2Num(shipment.*,'num_of_container')]]
-                <gl-form-input label="จำนวนตู้คอนเทนเนอร์" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{shipment.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[changeString2Num(shipment.*,'weight_per_container')]]
-              <gl-form-input label="ตู้ละ (ตัน)" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
-                value="{{shipment.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker label="Packing Date" class="requested"  value="{{shipment.packing_date}}"></vaadin-date-picker>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input label="Packing Time" class="requested" type="time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
-            </gl-grid-col>
-
-
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker label="Production Date" class="requested"  value="{{shipment.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
-            </gl-grid-col>
-          </gl-grid-row>
-        </gl-form-panel-body>
-
-        <gl-form-panel-body>
-          <div class="text-center">รายละเอียดการส่งมอบ</div>
-        </gl-form-panel-body>
-
-        <gl-form-panel-body>
-          <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Confirmation Letter" value="{{data.cl_no}}"></gl-form-label-input>
-              <!-- <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no"
-                  item-value-path="cl_id" value="{{shipment.cl_id}}" items="{{cml}}" on-value-changed="getCmlForRiceType"></gl-combo-box> -->
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
-                class="requested"   item-value-path="type_rice_id" items="[[data.cl_type_rice]]" value="{{shipment.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
-              class="requested"     item-value-path="package_id" items="[[package_id]]" value="{{shipment.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Price (USD/MT)" format-number value="{{price.price_per_ton}}"></gl-form-label-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)"  value="{{price.package_weight_bag}}"></gl-form-label-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              [[changeString2Num(shipment.*,'shm_det_quantity')]]
-              <gl-form-input label="จำนวน/ตัน" type="number" class="requested"  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.shm_det_quantity}}"></gl-form-input>
-            </gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="MARKS" value="{{data.buyerMasks}}"></gl-form-label-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="Quantity (BAGS)" value="{{quantityBag}}"></gl-form-label-input>
-            </gl-grid-col>
-          </gl-grid-row>
-
-          <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="G.W. WEIGHT (M/T)"  value="G.W. {{gw}}"></gl-form-label-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="N.W. WEIGHT (M/T)"  value="N.W. {{nw}}"></gl-form-label-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-label-input label="T.W. WEIGHT (M/T)"  value="T.W. {{tw}}"></gl-form-label-input>
-            </gl-grid-col>
-          </gl-grid-row>
-          <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,5]]"></gl-grid-col>
-
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-              <div class="top">ORIGINALS</div>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
-              [[changeString2Num(shipment.*,'origin_page')]]
-              <gl-form-input label=""  type="number" class="w padL requested" required  value="{{shipment.origin_page}}"></gl-form-input>
-            </gl-grid-col>
-            <div class="top">/</div>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
-              [[changeString2Num(shipment.*,'nn_page')]]
-              <gl-form-input label="" type="number"  class="w requested" required  value="{{shipment.nn_page}}"></gl-form-input>
-            </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-              <div class="top">N/N</div>
-            </gl-grid-col>
-          </gl-grid-row>
-        </gl-form-panel-body>
-
-
-      <gl-form-panel-footer>
-        <paper-button class="gl-btn-danger" raised index="[[index]]" on-tap="displayInsert">
-          </iron-icon>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" raised index="[[index]]" on-tap="clickSubmit">
-          </iron-icon>บันทึก</paper-button>
-      </gl-form-panel-footer>
-    </div>
+      </div>
+    </iron-pages>
+  </div>
 
     <div class="layout horizontal top">
       <template is="dom-repeat" items="{{config.primary}}">
@@ -334,15 +175,11 @@
       </paper-icon-item>
       <iron-collapse id="collapse[[itemPrimary.shm_det_id]]">
         <div class="collapse-content">
-          <div class="bd">
 
                 <vessel-edit data="{{itemPrimary}}" index="[[index]]" approve="[[data.shm_status]]"
                   buyer-masks='[[data.buyerMasks]]' contract-id='[[data.contract_id]]' cl-type-rice='[[data.cl_type_rice]]' cl-no='{{data.cl_no}}' country='[[data.country]]'>
                 </vessel-edit>
               <!-- </iron-pages> -->
-
-          </div>
-
 
           <!-- จบ -->
         </div>
@@ -376,10 +213,6 @@
               gl.behavior.core
             ],
             properties: {
-                county:{
-                    type:String,
-                    value:'TH'
-                },
                 btnAdd:{
                     type:Boolean,
                     value:false
@@ -395,6 +228,9 @@
                   type:Object,
                 },
                 cml:{
+                  type:Object,
+                },
+                bl:{
                   type:Object,
                 },
                 shipment:{
@@ -435,6 +271,10 @@
                   type:String,
                   value:'view'
                 },
+                addContent:{
+                  type:String,
+                  value:'addBl'
+                },
                 updateShipment:{
                   type:Object,
                   value:{
@@ -444,23 +284,27 @@
                     shm_no:'',
                     shm_status:'',
                   }
+                },
+                addBlShm:{
+                  type:Boolean,
+                  value:true
                 }
             },
             observers: [
               'getCounty(data.country,common)',
               'calc(shipment.shm_det_quantity)',
-              '_genBl(shipment.book_no)',
               // '_getPlace(shipment.deli_port_id)'
+              '_getBl(data.shm_id)'
             ],
             listeners: {
                'shipmentedit':'finEdit',
                'save-Data-shipmentDetail':'_saveChangeShipment',
-               'delete-Data-shipmentDetail':'_shipmentDetailDelete'
+               'delete-Data-shipmentDetail':'_shipmentDetailDelete',
+               'add-Bl':'_addBltoBlno',
+               'cancel-Show':'_cancalShow',
+               'click-Submit':'_clickSubmit'
              },
-            //
-            // ready: function() {
-            //   this.$$('#removeButtom').removeAttribute("hidden");
-            // },
+
             attached: function() {
               // console.log("created-2");
               this.fire('vessel-insert-common',{node:this});
@@ -472,18 +316,56 @@
               this.pageEditShipment = 'view';
               // console.log(e);
             },
-            _genBl:function (data) {
-              this.shipment.bl_no = data;
-              // console.log('this.shipment.bl_no =>',this.shipment.bl_no);
-              this.notifyPath('shipment.bl_no');
+            _addBltoBlno:function (e) {
+              // console.log(e.detail.data);
+              this._cancalShow();
+              this.push('blNos',e.detail.data);
+              console.log(this.blNos);
             },
-            _getPlace:function (data) {
-              // console.log(data.detail.value);
-              this.shipment.deli_port_id = data.detail.value;
-              // console.log("this.shipment.deli_port_id =>", this.shipment.deli_port_id );
-              this.notifyPath('shipment.deli_port_id');
+            _cancalShow:function () {
+              this.addBlShm= !this.addBlShm;
+            },
+            setData:function (data) {
+              // console.log(data.shipline_id == undefined);
+              if(data.shipline_id != undefined){
+                // console.log(data.shipline_id);
+                this.shipment.shipline_id =data.shipline_id;
+                this.shipment.bl_no=data.bl_no;
+                this.shipment.book_no=data.bl_no;
+                this.shipment.ship_id=data.ship_id;
+                this.shipment.surveyor_id=data.surveyor_id;
+                this.shipment.ship_voy_no=data.ship_voy_no;
+                this.shipment.carrier_id=data.carrier_id;
+                this.shipment.ship_lot_no=data.ship_lot_no;
+                this.shipment.load_port_id=data.load_port_id;
+                this.shipment.dest_port_id=data.dest_port_id;
+                this.shipment.deli_port_id=data.deli_port_id;
+                // console.log(this.shipment);
+                this.notifyPath('shipment.shipline_id');
+                this.notifyPath('shipment.bl_no');
+                this.notifyPath('shipment.book_no');
+                this.notifyPath('shipment.ship_id');
+                this.notifyPath('shipment.surveyor_id');
+                this.notifyPath('shipment.ship_voy_no');
+                this.notifyPath('shipment.carrier_id');
+                this.notifyPath('shipment.ship_lot_no');
+                this.notifyPath('shipment.load_port_id');
+                this.notifyPath('shipment.dest_port_id');
+                this.notifyPath('shipment.deli_port_id');
+              }
+
             },
 
+            // _getPlace:function (data) {
+            //   // console.log(data.detail.value);
+            //   this.shipment.deli_port_id = data.detail.value;
+            //   // console.log("this.shipment.deli_port_id =>", this.shipment.deli_port_id );
+            //   this.notifyPath('shipment.deli_port_id');
+            // },
+            editBlShm:function (e) {
+              this.addBlShm= false;
+              this.addContent = e.currentTarget.getAttribute("name");
+            },
             _shipmentDetailDelete:function (e) {
               // this.deleteDb(e.currentTarget.id);
               // console.log(e.detail.data);
@@ -505,63 +387,60 @@
             },
 
             displayInsert: function() {
-                    this.btnAdd= !this.btnAdd;
+              this.editInput();
+                    // this.btnAdd= !this.btnAdd;
             },
-            clickSubmit: function(){
+            _clickSubmit: function(){
+              console.log('addShimment =>',this.addShimment);
+              // console.log('dataBl =>',this.dataBl);
               this.shipment.shm_id=this.data.shm_id;
               this.shipment.eta_date=new Date (this.shipment.eta_date);
               this.shipment.etd_date=new Date (this.shipment.etd_date);
               this.shipment.packing_date=new Date (this.shipment.packing_date);
               this.shipment.product_date=new Date (this.shipment.product_date);
 
-              var requested = Polymer.dom(this.root).querySelectorAll(".requested");
-              // เช็คค่าว่าง
-              var check = 0;
-              requested.reverse().map((el)=>{
-                  if(el.value == undefined || el.value ==''){
-                    // console.log(el.value);
-                    el.focus();
-                    check += 1;
-                  }
-              })
-              // console.log(check);
-              //เช็คว่ายังเหลือค่าที่ไมไ่ด้เติมไหม ถา้ไม่ก็ส่งเลย
-              if (check <= 0) {
-                this.glQuery('layoutMain').openToastSaveing();
-                this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
-                  this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
-                  this.shipment = {
-                    exporter_id:'',
-                    shipline_id:'',
-                    ship_id:'',
-                    surveyor_id:'',
-                    ship_voy_no:'',
-                    ship_lot_no:'',
-                    book_no:'',
-                    bl_no:'',
-                    carrier_id:'',
-                    load_port_id:'',
-                    etd_date:'',
-                    eta_date:'',
-                    dest_port_id:'',
-                    deli_port_id:'',
-                    num_of_container:'',
-                    packing_date:'',
-                    packing_time:'',
-                    weight_per_container:'',
-                    product_date:'',
-                    type_rice_id:'',
-                    package_id:'',
-                    shm_det_quantity:'',};
-                  this.quantityBag ='';
-                   this.sumGW ='';
-                   this.gw  ='';
-                   this.sumNw ='';
-                   this.nw ='';
-                   this.tw ='';
-                  this.displayInsert();
-                 });
-              }
+
+              console.log(this.shipment);
+              this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
+                this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
+                this._cancalShow();
+              });
+              //   this.glQuery('layoutMain').openToastSaveing();
+              //   this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
+              //     this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
+              //     this.seller_phon='';
+              //     this.shipment = {
+              //       exporter_id:'',
+              //       shipline_id:'',
+              //       ship_id:'',
+              //       surveyor_id:'',
+              //       ship_voy_no:'',
+              //       ship_lot_no:'',
+              //       book_no:'',
+              //       bl_no:'',
+              //       carrier_id:'',
+              //       load_port_id:'',
+              //       etd_date:'',
+              //       eta_date:'',
+              //       dest_port_id:'',
+              //       deli_port_id:'',
+              //       num_of_container:'',
+              //       packing_date:'',
+              //       packing_time:'',
+              //       weight_per_container:'',
+              //       product_date:'',
+              //       type_rice_id:'',
+              //       package_id:'',
+              //       shm_det_quantity:'',};
+              //     this.quantityBag ='';
+              //      this.sumGW ='';
+              //      this.gw  ='';
+              //      this.sumNw ='';
+              //      this.nw ='';
+              //      this.tw ='';
+              //     this.displayInsert();
+              //    });
+              // }
             },
             deleteShipment:function (e) {
               // console.log(this.data.shm_id);

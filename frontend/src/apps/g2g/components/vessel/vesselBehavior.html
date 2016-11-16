@@ -10,11 +10,27 @@
       .catch(function (error) {
       }.bind(this));
   },
+  _getBl:function (shm_id) {
+    this.read('./g2g/bl/shipment/id/'+shm_id,(data)=>{
+      this.blNos=data;
+      // console.log(this.blNos);
+    },false,'put');
+  },
+  _initFormBl:function (e) {
+    // console.log(e.detail.value);
+    var blNodetail = e.detail.value;
+    // console.log(this.blNos);
+    if ( this.blNos!= undefined) {
+      var blNo = this.blNos.filter(function (blNos) { return blNos.bl_no == blNodetail });
+        this.blNo = blNo[0];
+        this.setData(this.blNo);
+    }
+  },
   getCounty(country,common){
 
        var countryport = common.countryport;
-
-       var pol = countryport.filter(function (countryport) { return countryport.country_id == 'TH' });
+        // console.log('countryport =>',countryport);
+       var pol = countryport.filter(function (countryport) { return countryport.country_id == 'THA' });
          this.pol = pol;
         //  console.log(this.pol);
        var pod = countryport.filter(function (countryport) { return countryport.country_id == country });
