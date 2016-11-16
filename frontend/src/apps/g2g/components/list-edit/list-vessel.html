@@ -367,10 +367,10 @@
               this.addContent = e.currentTarget.getAttribute("name");
             },
             _shipmentDetailDelete:function (e) {
-              // this.deleteDb(e.currentTarget.id);
               // console.log(e.detail.data);
-              this.delete('./g2g/shipment/detail/delete/id/',e.detail.data, () => {
+              this.delete('./g2g/shipment/detail/delete/id/',e.detail.shm_det_id, () => {
                 this.glQuery('addContract').getChange(false,'delete');
+                this.glQuery('addContract').shipMentDeatil(e.detail.shm_id,false,'put');
                });
               this.glQuery('layoutMain').openToastDeleteing();
             },
