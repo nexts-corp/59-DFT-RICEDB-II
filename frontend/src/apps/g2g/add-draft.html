@@ -198,13 +198,22 @@
                 this.glQuery('adddraft',this);
             },
             getUrl:function () {
-              return window.location.pathname.substring(15, 51);
+              // get cookie
+              var cookie = document.cookie.split(';');
+              var url;
+              cookie.map((ee)=>{
+                ee = ee.replace(' ', '');
+                if (ee.indexOf("url") == 0 ) {
+                  url=ee.substring(4, 40);
+                }
+              });
+              return url;
             },
             ready: function() {
               // console.log('url'+document.location);
               // console.log("PathName  ="+ window.location.pathname);
               var shmId = this.getUrl();
-              // console.log(shmId);
+              // console.log('shmId => ',shmId);
               this.read('./g2g/contract/shipment',(data)=>{
                 this.draft = data;
               },false,'put');
