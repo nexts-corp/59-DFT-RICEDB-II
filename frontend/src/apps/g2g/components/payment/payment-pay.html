@@ -1,9 +1,18 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
 <dom-module id="payment-pay">
-  <style include="iron-flex iron-flex-alignment gl-color gl-size gl-table" is="custom-style">
-    .text-center {
+  <style include="iron-flex iron-flex-alignment gl-color gl-size gl-table gl-toast" is="custom-style">
+    .textheader-center {
       text-align: center;
       font-size: var(--font-size-large);
+    }
+
+    .text-center{
+      text-align: center;
+    }
+
+    .text-right{
+      text-align: right;
     }
 
     .header-grey {
@@ -40,7 +49,7 @@
       width: 15%;
     }
     .table-head > tr > th:nth-child(3) {
-      width: 15%;
+      width: 10%;
     }
     .table-head > tr > th:nth-child(4) {
       width: 15%;
@@ -52,17 +61,18 @@
       width: 15%;
     }
     .table-head > tr > th:nth-child(7) {
-      width: 30%;
+      width: 20%;
     }
   </style>
   <template>
-  <div class="text-center margin-head">จ่ายเงินค่าข้าวให้ผู้ส่งออก</div>
+
+  <div class="textheader-center margin-head">จ่ายเงินค่าข้าวให้ผู้ส่งออก</div>
     <div class="header-grey margin-head">
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-              item-value-path="exporter_id" value="{{dataSelected}}" on-value-changed="getTrader"></gl-combo-box>
+              item-value-path="exporter_id" value="{{dataSelected}}" on-value-changed="getPayment"></gl-combo-box>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -74,7 +84,7 @@
           <div class="header-black">ชื่อผู้ส่งออก</div>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <template is="dom-repeat" items="{{data}}">
+          <template is="dom-repeat" items="{{dataName}}">
             <div class="header-black">{{item.seller_name_th}}</div>
           </template>
         </gl-grid-col>
@@ -86,76 +96,100 @@
           <th></th>
           <th>งวดที่</th>
           <th>ครั้งที่</th>
-          <th style="text-align:right;">จำนวนเงิน(บาท)</th>
+          <th><div class="text-right">จำนวนเงิน(บาท)</div></th>
           <th></th>
-          <th style="text-align:center;">วันที่จ่ายเงิน</th>
+          <th><div class="text-center">วันที่จ่ายเงิน</div></th>
           <th></th>
-          <th><div style="text-align:center;">สถานะ</div></th>
+          <th><div class="text-center">สถานะ</div></th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td></td>
-          <td><div style="margin-left:10px;">1</div></td>
-          <td><div style="margin-left:10px;">1</div></td>
-          <td style="text-align:right;">13,566,936.74</td>
-          <td></td>
-          <td style="text-align:center;">-</td>
-          <td></td>
-          <td><paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
-        </tr>
 
-        <tr>
-          <td></td>
-          <td><div style="margin-left:10px;">1</div></td>
-          <td><div style="margin-left:10px;">2</div></td>
-          <td style="text-align:right;">686,336.31</td>
-          <td></td>
-          <td style="text-align:center;">-</td>
-          <td></td>
-          <td><paper-button class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
-        </tr>
+        <tbody>
+          <tr>
+            <template is="dom-repeat" as="datapay" items="{{data}}">
+              <td></td>
+              <td><div style="margin-left:10px;">{{datapay.shm_no}}</div></td>
+              <td><div style="margin-left:10px;">{{datapay.fee_no}}</div></td>
+              <td><div class="text-right">{{datapay.amount_thb_balance}}</div></td>
+              <td></td>
+              <td><div class="text-center">{{datapay.pay_date}}</div></td>
+              <td></td>
+              <td hidden="{{!datapay.pay_status}}"><div class="text-center">จ่ายเช็คแล้ว</div></td>
+              <td hidden="{{datapay.pay_status}}">
+                  <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay"><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button>
+              </td>
+            </template>
+          </tr>
+        </tbody>
 
-        <tr>
-          <td></td>
-          <td><div style="margin-left:10px;">2</div></td>
-          <td><div style="margin-left:10px;">1</div></td>
-          <td style="text-align:right;">2,777,734.50</td>
-          <td></td>
-          <td style="text-align:center;">-</td>
-          <td></td>
-          <td><paper-button style="text-align:center;" class="gl-btn-success button-size" raised><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button></td>
-        </tr>
-
-        <tr>
-          <td></td>
-          <td><div style="margin-left:10px;">3</div></td>
-          <td><div style="margin-left:10px;">1</div></td>
-          <td style="text-align:right;">686,336.31</td>
-          <td></td>
-          <td style="text-align:center;">30/10/2559</td>
-          <td></td>
-          <td style="text-align:center;">จ่ายเช็คแล้ว</td>
-        </tr>
-
-      </tbody>
     </table>
+
+    <paper-dialog id="dialog" style="width:60%;">
+      <div class="textheader-center">กรอกข้อมูลรับเช็ค</div>
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-dropdown-menu style="width:100%;" label="ธนาคาร" placeholder="กรุณาเลือกธนาคาร">
+            <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataCheck.bank_id}}" name="bank_id">
+              <template is="dom-repeat" as="bank" items="[[dataBank]]">
+                <paper-item value="{{bank.bank_id}}">{{bank.bank_name_th}}</paper-item>
+              </template>
+            </paper-menu>
+          </gl-form-dropdown-menu>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-input  label="สาขา :" placeholder="กรุณาใส่ชื่อสาขา" value="{{dataCheck.bank_branch}}" name="bank_branch"></gl-form-input>
+        </gl-grid-col>
+      </gl-grid-row>
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-input  label="เลขที่เช็ค :" maxlength="7" allowed-pattern="[0-9]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{dataCheck.pay_no}}" name="pay_no"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker label="วันที่รับเช็ค" value="{{dataCheck.pay_date}}" name="pay_date"></vaadin-date-picker>
+        </gl-grid-col>
+      </gl-grid-row>
+      <div class="buttons">
+        <paper-button class="gl-btn-danger button-size" raised on-tap="_cancel">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-primary button-size" raised on-tap="_save">บันทึก</paper-button>
+      </div>
+    </paper-dialog>
 
   </template>
   <script>
     Polymer({
       is: 'payment-pay',
+      behaviors: [gl.behavior.core],
       properties: {
         dataSelected:{
           type:Object,
           observer:'_search'
         },
+        dataName:{
+          type:Array
+        },
         data:{
           type:Array
+        },
+        dataBank:{
+          type:Array
+        },
+        dataCheck:{
+          type:Object,
+          value:{}
+        },
+        dataPay:{
+          type:Object,
+          value:{}
         }
+      },
+      created: function() {
+          this.glQuery('refreshBank',this);
       },
       attached: function() {
         this.getExporters();
+        this.getBank();
       },
       getDb: function(url, callback) {
           axios.get(url)
@@ -170,19 +204,77 @@
           this.exporter_id.items = data;
         });
       },
-      getTrader: function(e){
+      getBank: function(){
+        this.getDb('./common/bank', (data) => {
+          this.dataBank = data;
+        });
+      },
+      getPayment: function(e){
         // console.log(e.detail.value);
         this.dataSelected = e.detail.value
       },
       _search:function(val){
         if(val!=""){
           // console.log(this.dataSelected);
-          this.getDb('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
+          this.getDb('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
             this.data = data;
           });
+          this.getDb('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
+            this.dataName = data;
+          });
         }
+        else {
+          this.data = [];
+          this.dataName = [];
+        }
+      },
+      _pay:function(e) {
+        this.dataPay = e.target.data;
+        this.$.dialog.toggle();
+      },
+      _save:function() {
+      // console.log(this.dataCheck);
+      // console.log(this.dataPay);
+      // console.log(this.dataSelected);
+          this.fire('toast',{status:'dialog',
+          text:'ยืนยันในการจ่ายเช็ค ?',
+          confirmed : this._confirmToast,
+          el: this,
+          datas: {
+            exporter_id : this.dataSelected,
+            pay_amount : this.dataPay.amount_thb_balance,
+            fee_id : this.dataPay.fee_id,
+            pay_date : this.dataCheck.pay_date,
+            pay_no : this.dataCheck.pay_no,
+            bank_branch : this.dataCheck.bank_branch,
+            bank_id : this.dataCheck.bank_id
+          }
+        });
+      },
+        _confirmToast:function(result,detail){
+          if(result == true){
+            // console.log(detail.datas);
+            detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+            axios.post('./g2g/payment/insert', detail.datas)
+                      .then(function (response) {
+                        console.log("success");
+                        console.log(response);
+                        detail.el.glQuery('refreshBank')._search();
+                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                          console.log('success');
+                        }});
+                      }.bind(this))
+                      .catch(function (error) {
+                        console.log("error");
+                        console.log(error);
+                      })
+          }
+        },
+      _cancel:function() {
+        this.$.dialog.toggle();
+        this.dataCheck = {};
+        this.dataPay = {};
       }
-
     });
   </script>
 </dom-module>
