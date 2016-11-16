@@ -111,7 +111,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .filter({ shm_id: req.params.shm_id })
             .group(function (g) {
                 return g.pluck(
-                    "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "ship_voy_no"
+                    "ship_id", "load_port_id", "dest_port_id", "deli_port_id",
+                     "bl_no", "shm_id", "ship_voy_no","surveyor_id","ship_lot_no","carrier_id"
                 )
             })
             .ungroup()
@@ -124,6 +125,9 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),
                     deli_port_id: me('group')('deli_port_id'),
+                    surveyor_id: me('group')('surveyor_id'),
+                    ship_lot_no: me('group')('ship_lot_no'),
+                    carrier_id: me('group')('carrier_id')
                     //quantity: me('reduction')
                 }
             })
@@ -157,6 +161,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     }
                 })
             }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: "id" }).zip()
+            .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: "id" }).zip()
             .eqJoin("ship_id", r.db('common').table("ship")).without({ right: "id" }).zip()
             .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
             .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: "id" }).zip()
