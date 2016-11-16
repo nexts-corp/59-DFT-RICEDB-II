@@ -1,4 +1,5 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
 <dom-module id="calculate-setting">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .title{
@@ -133,25 +134,25 @@
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_export}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{formatNumber(sumAnswer.sum_export)}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_for_cal}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{formatNumber(sumAnswer.sum_for_cal)}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.sum_quota}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{formatNumber(sumAnswer.sum_quota)}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
            <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา 100%</div>
             <div class="textcontent"> : </div>
-            <div class="flex"><gl-form-input no-label-float value="{{sumAnswer.quota_amount}}"></gl-form-input></div>
+            <div class="flex"><gl-form-input no-label-float value="{{formatNumber(sumAnswer.quota_amount)}}"></gl-form-input></div>
             <div class="flex"></div>
           </div>
           </div>
@@ -171,6 +172,7 @@
   <script>
     Polymer({
       is: "calculate-setting",
+      behaviors:[FormatNumberBehavior],
       observers:[
         '_yearQuoataChanged(selectQuotaYear)',
         '_getlistCompany(selectYearFirst,selectYearLast,selectTypeRice)'
@@ -327,7 +329,7 @@
           quota_amount : this.sumAnswer.quota_amount,
         }
         this.fire('post-data',sendData);
-        //console.log(sendData);
+        // console.log(sendData);
        
       }
     });

@@ -1,4 +1,4 @@
-
+<link rel="import" href="./../../components/format-number-behavior.html">
 <dom-module id="calculate-list">
     <template>
         <style is="custom-style" include="gl-table">
@@ -31,10 +31,10 @@
                     <template is="dom-repeat" items="{{item.detail}}">
                         <tr>
                             <td>{{item.ordinal_number}}</td>
-                            <td>{{item.quota_amount}}</td>
-                            <td>{{item.sum_export}}</td>
-                            <td>{{item.sum_for_cal}}</td>
-                            <td>{{item.sum_quota}}</td>
+                            <td>[[formatNumber(item.quota_amount)]]</td>
+                            <td>[[formatNumber(item.sum_export)]]</td>
+                            <td>[[formatNumber(item.sum_for_cal)]]</td>
+                            <td>[[formatNumber(item.sum_quota)]]</td>
                             </tr>   
                     </template>
                     </tbody>
@@ -45,6 +45,7 @@
     <script>
         Polymer({
             is: 'calculate-list',
+            behaviors:[FormatNumberBehavior],
             properties:{
                 listData:{
                     type: Array,

@@ -1,4 +1,4 @@
-
+<link rel="import" href="./../../components/format-number-behavior.html">
 <dom-module id="quota-list">
     <template>
         <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -49,10 +49,10 @@
                     </td>
                     <td>
                      <template is="dom-repeat" items="{{item.period}}">
-                        ปริมาณ : {{item.quantity}} <br>
+                        ปริมาณ : [[formatNumber(item.quantity)]] <br>
                     </template>    
                     </td>
-                    <td class="center">{{item.amount}}</td>
+                    <td class="center">[[formatNumber(item.amount)]]</td>
                 </tr>
                 </template>
             </tbody>
@@ -62,6 +62,7 @@
     <script>
         Polymer({
             is: 'quota-list',
+            behaviors: [FormatNumberBehavior],
             _setIndex:function(item){
                 return item = item+1;
                 
