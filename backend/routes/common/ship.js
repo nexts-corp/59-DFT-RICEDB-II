@@ -3,6 +3,10 @@ var router = express.Router();
 
 var r = require('rethinkdb');
 var db = require('../../db.js');
+
+var Timestamp = require('../../class/Timestamp.js');
+var timestamp = new Timestamp();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -29,7 +33,7 @@ router.get(['/', '/list'], function (req, res, next) {
                 return { ship_id: row('id') }
             })
             .without('id')
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -70,6 +74,7 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         if (req.body.id == null) {
+            req.body = timestamp.create(req.body);
             db.query(function (conn) {
                 r.db('common').table("ship")
                     .insert(req.body)
@@ -106,6 +111,7 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
+            req.body = timestamp.update(req.body);
             db.query(function (conn) {
                 r.db('common').table("ship")
                     .get(req.body.id)

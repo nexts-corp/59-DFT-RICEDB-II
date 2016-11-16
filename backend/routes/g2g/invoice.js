@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Timestamp = require('../../class/Timestamp.js');
+var timestamp = new Timestamp();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -72,7 +75,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         load_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -80,7 +83,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         dest_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
             .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -88,12 +91,12 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                         deli_port_code: port("right")("port_code")
                     }
                 })
-            }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
-            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: "id" }).zip()
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: "id" }).zip().filter(r.row('shm_status').eq(true))
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "cl_type_rice"] }).zip()
-            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
+            }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
+            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","date_created","date_updated"] }).zip().filter(r.row('shm_status').eq(true))
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated", "cl_type_rice"] }).zip()
+            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","date_created","date_updated", "contract_type_rice"] }).zip()
             .filter(
             r.row('shm_status').eq(true)
                 .and(r.row('contract_id').eq(req.params.contract_id))
@@ -216,9 +219,9 @@ router.get('/id/:invoice_id', function (req, res, next) {
                         }
                     })
                     .without("group", "reduction")
-                    .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: "id" }).zip()
-                    .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: "id" }).zip()
-                    .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "contract_type_rice"] }).zip()
+                    .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","date_created","date_updated"] }).zip()
+                    .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated"] }).zip()
+                    .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id","date_created","date_updated", "contract_type_rice"] }).zip()
                     .merge(function (me) {
                         return {
                             bl_detail: r.db('g2g').table('shipment_detail')
@@ -247,7 +250,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                     }
                                 })
                                 .without("group", "reduction")
-                                .eqJoin("package_id", r.db('common').table("package")).without({ right: "id" }).zip()
+                                .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id","date_created","date_updated"] }).zip()
                                 .merge(function (me2) {
                                     return {
                                         quantity_bags: me2('quantity_tons').mul(1000).div(me2('package_kg_per_bag'))
@@ -266,7 +269,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                         amount_usd: me2('price_per_ton').mul(me2('weight_net'))
                                     }
                                 })
-                                .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: "id" }).zip()
+                                .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id","date_created","date_updated"] }).zip()
                                 .coerceTo('array')
                         }
                     })
@@ -286,7 +289,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 buyer_country_id: buyer("right")("country_id")
                             }
                         })
-                    }).without({ right: ["id", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "country_id"] }).zip()
                     .eqJoin("buyer_country_id", r.db('common').table("country")).map(function (country) {
                         return country.merge({
                             right: {
@@ -295,7 +298,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 buyer_country_name_th: country("right")("country_name_th")
                             }
                         })
-                    }).without({ right: ["id", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
                     .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                         return port.merge({
                             right: {
@@ -304,7 +307,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 dest_country_id: port("right")("country_id")
                             }
                         })
-                    }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
                     .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                         return port.merge({
                             right: {
@@ -313,7 +316,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 deli_country_id: port("right")("country_id")
                             }
                         })
-                    }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
                     .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                         return port.merge({
                             right: {
@@ -322,7 +325,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 load_country_id: port("right")("country_id")
                             }
                         })
-                    }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
                     .eqJoin("dest_country_id", r.db('common').table("country")).map(function (dest) {
                         return dest.merge({
                             right: {
@@ -331,7 +334,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 dest_country_name_th: dest("right")("country_name_th")
                             }
                         })
-                    }).without({ right: ["id", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
                     .eqJoin("deli_country_id", r.db('common').table("country")).map(function (deli) {
                         return deli.merge({
                             right: {
@@ -340,7 +343,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 deli_country_name_th: deli("right")("country_name_th")
                             }
                         })
-                    }).without({ right: ["id", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
                     .eqJoin("load_country_id", r.db('common').table("country")).map(function (load) {
                         return load.merge({
                             right: {
@@ -349,10 +352,10 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 load_country_name_th: load("right")("country_name_th")
                             }
                         })
-                    }).without({ right: ["id", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
-                    .eqJoin("ship_id", r.db('common').table("ship")).without({ right: "id" }).zip()
-                    .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
-                    .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: "id" }).zip()
+                    }).without({ right: ["id","date_created","date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
+                    .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","date_created","date_updated"] }).zip()
+                    .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
+                    .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: ["id","date_created","date_updated"] }).zip()
                     (0)
             })
             .merge(function (m) {
@@ -379,6 +382,7 @@ router.post('/insert', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id == null) {
             //result.id = req.body.id;
+            req.body = timestamp.create(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("invoice")
                     //.get(req.body.id)
@@ -416,6 +420,7 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
+            req.body = timestamp.update(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("invoice")
                     .get(req.body.id)

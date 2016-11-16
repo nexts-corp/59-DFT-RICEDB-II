@@ -1,5 +1,4 @@
 var r = require('rethinkdb');
-
 function ConectDB(){
     this.query = function(callback){
 
