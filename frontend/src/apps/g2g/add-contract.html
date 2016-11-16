@@ -84,30 +84,43 @@
 
                 <template is="dom-repeat" items="[[contracts]]">
                   <paper-card heading="[[item.contract_name]]" alt="[[item.contract_name]]">
-                     <div class="card-content horizontal layout">
-                      <chart-pie data="[[_computeChart(item.contract_quantity_confirm,item.contract_quantity_confirm_balance)]]"></chart-pie>
-                       <div class="layout vertical">
-                           <div class="flex nomalFont">ทั้งหมด</div>
-                           <div class="flex nomalFont">ทำสัญญาแล้ว</div>
-                           <div class="flex nomalFont">คงเหลือ</div>
-                       </div>
-                       <div class="layout vertical">
-                           <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_total]]" format="0,0" print></numeral-js>  </div>
-                           <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_confirm]]" format="0,0" print></numeral-js>  </div>
-                           <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_confirm_balance]]" format="0,0" print></numeral-js>  </div>
-                       </div>
-                       <div class="layout vertical">
-                           <div class="flex nomalFont total"> ตัน</div>
-                           <div class="flex nomalFont total"> ตัน</div>
-                           <div class="flex nomalFont total"> ตัน</div>
-                       </div>
+                     <div class="card-content ">
+                       <iron-pages selected="0" id="chart-[[item.contract_id]]">
+                         <div class="horizontal layout">
+                            <chart-pie data="[[_computeChart(item.contract_quantity_confirm,item.contract_quantity_confirm_balance)]]"></chart-pie>
+                            <div class="layout vertical">
+                                <div class="flex nomalFont">ทั้งหมด</div>
+                                <div class="flex nomalFont">ทำสัญญาแล้ว</div>
+                                <div class="flex nomalFont">คงเหลือ</div>
+                            </div>
+                            <div class="layout vertical">
+                                <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity]]" format="0,0" print></numeral-js>  </div>
+                                <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_confirm]]" format="0,0" print></numeral-js>  </div>
+                                <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_confirm_balance]]" format="0,0" print></numeral-js>  </div>
+                            </div>
+                            <div class="layout vertical">
+                                <div class="flex nomalFont total"> ตัน</div>
+                                <div class="flex nomalFont total"> ตัน</div>
+                                <div class="flex nomalFont total"> ตัน</div>
+                            </div>
+                         </div>
+                         <div>Two</div>
+                     </iron-pages>
                      </div>
+
+                     <div class="horizontal end-justified layout ">
+                       <iron-icon icon="chevron-left" on-tap="previousIron" id="chart-[[item.contract_id]]"></iron-icon>
+                       <iron-icon icon="chevron-right" on-tap="nextIron" id="chart-[[item.contract_id]]"></iron-icon>
+                     </div>
+
                      <div class="card-actions horizontal end-justified layout">
                        <paper-button raised on-tap="editContract" data="[[item]]" class="btnAddContract">Contract</paper-button>
                        <paper-button raised on-tap="editConfirm" data="[[item]]" class="btnAddContract">ConfirmMation Letter</paper-button>
                        <paper-button raised on-tap="editShipment" data="[[item]]" class="btnAddContract">Shipment</paper-button>
                        <paper-button raised on-tap="editPayment" shmId$="[[item.contract_id]]" class="btnAddContract">Payment</paper-button>
                      </div>
+
+
                    </paper-card>
                 </template>
                 <!-- <paper-card class="horizontal layout center center-justified">
@@ -351,6 +364,16 @@
             createContract:function () {
               this.layerContent='four';
               this.glQuery('contentPanel').changDrawer();
+            },
+            previousIron:function (e) {
+              console.log(elseif);
+            },
+            nextIron:function (e) {
+              console.log(Polymer.dom(e.currentTarget).parentNode.previousSibling);
+              // var dom = Polymer.dom(e.currentTarget).parentNode.parentNode;
+              // dom.map((el)=>{
+              //   console.log(el);
+              // });
             },
             editContract:function (e) {
               if (e.currentTarget.data != undefined) {
