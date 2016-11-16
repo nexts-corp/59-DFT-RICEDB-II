@@ -399,13 +399,17 @@
                     var dataShimpent = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
                         // console.log(dataConfirm);
                         this.dataContract = dataShimpent[0];
-                        console.log('new =>',this.dataContract);
+                        // console.log('new =>',this.dataContract);
                 },500);
               }
             },
             editPayment:function (e) {
-              console.log(e.target.getAttribute("shmId"));
-              this.glChangePath('/g2g/add-draft/'+e.target.getAttribute("shmId"));
+              // console.log(e.target.getAttribute("shmId"));
+              document.cookie = "url="+e.target.getAttribute("shmId");
+              // console.log(document.cookie);
+
+              // console.log(x.indexOf("url"));
+              this.glChangePath('/g2g/add-draft/');
             },
             shipmentCommon:function (e) {
               // console.log(e.detail.node);
