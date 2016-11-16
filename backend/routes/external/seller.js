@@ -12,7 +12,7 @@ router.get(['/', '/list'], function (req, res, next) {
                 return { seller_id: row('id') }
             })
             .without('id')
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: "id" }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","created","updated"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

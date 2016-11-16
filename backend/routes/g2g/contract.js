@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Timestamp = require('../../class/Timestamp.js');
+var timestamp = new Timestamp();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -88,7 +91,7 @@ router.get(['/', '/list'], function (req, res, next) {
                         .orderBy('shm_no')
                         .without('id')
                         .coerceTo('array')
-                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "cl_type_rice", "cl_quality"] }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","created","updated", "cl_type_rice", "cl_quality"] }).zip()
                 }
             })
             .merge(function (row) {
@@ -123,8 +126,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: "id" }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: "id" }).zip()
+            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id","created","updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","created","updated"] }).zip()
             .orderBy('contract_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
@@ -209,6 +212,7 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         if (req.body.id == null) {
+            req.body = timestamp.create(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("contract")
                     //.get(req.body.id)
@@ -246,6 +250,7 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
+            req.body = timestamp.update(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("contract")
                     .get(req.body.id)

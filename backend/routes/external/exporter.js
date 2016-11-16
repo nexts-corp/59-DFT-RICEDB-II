@@ -114,9 +114,9 @@ router.get('/', function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
-            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: "id" }).zip()
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","created","updated"] }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id","created","updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","created","updated"] }).zip()
             .filter(q)
             .filter(d)
             .orderBy('exporter_no')

@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Timestamp = require('../../class/Timestamp.js');
+var timestamp = new Timestamp();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -50,7 +53,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     load_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -58,7 +61,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     dest_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -66,17 +69,17 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     deli_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: "id" }).zip()
-                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: "id" }).zip()
-                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: "id" }).zip()
-                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "country_id"] }).zip()
-                        .eqJoin("ship_id", r.db('common').table("ship")).without({ right: "id" }).zip()
-                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: "id" }).zip()
-                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: "id" }).zip()
-                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: "id" }).zip()
-                        .eqJoin("package_id", r.db('common').table("package")).without({ right: "id" }).zip()
-                        // .eqJoin("country_id", r.db('common').table("country")).without({ right: "id" }).zip()
+                        }).without({ right: ["id","created","updated", "port_name", "port_code", "country_id"] }).zip()
+                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","created","updated", "country_id"] }).zip()
+                        .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id","created","updated"] }).zip()
+                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id","created","updated"] }).zip()
+                        // .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","created","updated"] }).zip()
                         .merge(function (r) {
                             return {
                                 shm_det_id: r('id'),
@@ -105,7 +108,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 .merge(function (limit) {
                                     return {
                                         type_rice_quantity_confirm: r.db('g2g').table('shipment_detail')
-                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: "id" }).zip()
+                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","created","updated"] }).zip()
                                             .filter({
                                                 cl_id: m('cl_id'),
                                                 //shm_id: m('shm_id'),
@@ -135,7 +138,7 @@ router.get('/id/:shm_id', function (req, res, next) {
             // .map(function(m){
             //     return m('cl_type_rice').merge({xx:'xx'})
             // })
-            //.eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: "id" }).zip()
+            //.eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","created","updated"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     res.json(cursor);
@@ -153,6 +156,7 @@ router.post('/insert', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id == null) {
             //result.id = req.body.id;
+            req.body = timestamp.create(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("shipment")
                     //.get(req.body.id)
@@ -190,6 +194,7 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
+            req.body = timestamp.update(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("shipment")
                     .get(req.body.id)

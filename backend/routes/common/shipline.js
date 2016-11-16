@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var Timestamp = require('../../class/Timestamp.js');
+var timestamp = new Timestamp();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -103,6 +106,7 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         if (req.body.id == null) {
+            req.body = timestamp.create(req.body);
             db.query(function (conn) {
                 r.db('common').table("shipline")
                     .insert(req.body)
@@ -139,6 +143,7 @@ router.put('/update', function (req, res, next) {
         //console.log(req.body);
         if (req.body.id != '' && req.body.id != null) {
             result.id = req.body.id;
+            req.body = timestamp.update(req.body);
             db.query(function (conn) {
                 r.db('common').table("shipline")
                     .get(req.body.id)
