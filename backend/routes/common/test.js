@@ -23,7 +23,6 @@ router.put('/update', function (req, res, next) {
 });
 router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    result.id = req.params.id;
     datacontext.delete("common", "test", req.params.id, res);
 });
 module.exports = router;
