@@ -43,6 +43,7 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                     var history = {
                         tb_name: tbname,
                         action: "update",
+                        id_value: obj.id,
                         old_value: response.changes[0].old_val,
                         new_value: obj,
                         date_created: obj.date_updated
@@ -71,6 +72,7 @@ DataContext.prototype.delete = function (dbname, tbname, id, res) {
                     var history = {
                         tb_name: tbname,
                         action: "delete",
+                        id_value: id,
                         old_value: response.changes[0].old_val,
                         new_value: null,
                         date_created: new Date()
