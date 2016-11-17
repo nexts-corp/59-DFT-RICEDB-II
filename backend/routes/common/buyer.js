@@ -40,7 +40,7 @@ var schema = {
             "type": "string"
         }
     },
-    "required": ["buyer_address", "buyer_email","buyer_fullname","buyer_masks","buyer_name","country_id"]
+    "required": ["buyer_address", "buyer_email", "buyer_fullname", "buyer_masks", "buyer_name", "buyer_tel", "buyer_fax", "country_id"]
 };
 var validate = ajv.compile(schema);
 
@@ -51,7 +51,7 @@ router.get(['/', '/list'], function (req, res, next) {
                 return { buyer_id: row('id') }
             })
             .without('id')
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -92,7 +92,7 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         if (req.body.id == null) {
-            req.body = timestamp.create(req.body);
+            req.body = timestamp.insert(req.body);
             db.query(function (conn) {
                 r.db('common').table("buyer")
                     .insert(req.body)
