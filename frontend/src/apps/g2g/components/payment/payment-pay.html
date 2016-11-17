@@ -116,7 +116,7 @@
               <td></td>
               <td hidden="{{!datapay.pay_status}}"><div class="text-center">จ่ายเช็คแล้ว</div></td>
               <td hidden="{{datapay.pay_status}}">
-                  <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay"><iron-icon icon="icons:gesture"></iron-icon>จ่ายเช็ค</paper-button>
+                  <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay"><iron-icon icon="editor:attach-money"></iron-icon>จ่ายเช็ค</paper-button>
               </td>
             </template>
           </tr>
@@ -144,10 +144,10 @@
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="เลขที่เช็ค :" maxlength="7" allowed-pattern="[0-9]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{dataCheck.pay_no}}" name="pay_no"></gl-form-input>
+          <gl-form-input  label="เลขที่เช็ค :" allowed-pattern="[0-9]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{dataCheck.pay_no}}" name="pay_no"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่รับเช็ค" value="{{dataCheck.pay_date}}" name="pay_date"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่เช็ค" value="{{dataCheck.pay_date}}" name="pay_date"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
       <div class="buttons">
@@ -263,6 +263,7 @@
                         detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                           console.log('success');
                         }});
+                        detail.el.$.dialog.toggle();
                       }.bind(this))
                       .catch(function (error) {
                         console.log("error");
