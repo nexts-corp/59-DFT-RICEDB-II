@@ -123,7 +123,7 @@ router.post('/insert', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        req.body = timestamp.create(req.body);
+        req.body = timestamp.insert(req.body);
         db.query(function (conn) {
             r.db('common').table("country")
                 .insert(req.body)

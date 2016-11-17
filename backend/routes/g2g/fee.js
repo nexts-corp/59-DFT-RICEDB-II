@@ -464,7 +464,7 @@ router.post('/insert', function(req, res, next) {
         //console.log(req.body);
         if (req.body.id == null) {
             //result.id = req.body.id;
-            req.body = timestamp.create(req.body);
+            req.body = timestamp.insert(req.body);
             db.query(function(conn) {
                 r.db('g2g').table("fee")
                     //.get(req.body.id)

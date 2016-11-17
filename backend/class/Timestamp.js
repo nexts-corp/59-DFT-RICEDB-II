@@ -5,7 +5,7 @@ function Timestamp() {
     this.date_updated = new Date();
 }
 // // class methods
-Timestamp.prototype.create = function (obj) {
+Timestamp.prototype.insert = function (obj) {
     return Object.assign(obj, this);
 };
 Timestamp.prototype.update = function (obj) {

@@ -189,7 +189,7 @@ router.post('/insert', function (req, res, next) {
                         if (response > 0) {
                             req.body.exporter_no = response;
                             req.body.exporter_date_approve = req.body.exporter_date_update;
-                            req.body = timestamp.create(req.body);
+                            req.body = timestamp.insert(req.body);
                             r.db('external_f3').table("exporter")
                                 .insert(req.body)
                                 .run(conn)

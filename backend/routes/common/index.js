@@ -12,7 +12,7 @@ var buyer = require('./buyer');
 var surveyor = require('./surveyor');
 var incoterms = require('./incoterms');
 var bank = require('./bank');
-
+var test = require('./test');
 app.use('/typeRice', typeRice);
 app.use('/package', package);
 app.use('/country', country);
@@ -24,4 +24,5 @@ app.use('/buyer', buyer);
 app.use('/surveyor', surveyor);
 app.use('/incoterms', incoterms);
 app.use('/bank', bank);
+app.use('/test', test);
 module.exports = app;

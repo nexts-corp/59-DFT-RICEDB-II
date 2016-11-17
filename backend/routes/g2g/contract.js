@@ -212,7 +212,7 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         if (req.body.id == null) {
-            req.body = timestamp.create(req.body);
+            req.body = timestamp.insert(req.body);
             db.query(function (conn) {
                 r.db('g2g').table("contract")
                     //.get(req.body.id)
