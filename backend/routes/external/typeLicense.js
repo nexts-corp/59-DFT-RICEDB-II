@@ -3,6 +3,10 @@ var router = express.Router();
 
 var r = require('rethinkdb');
 var db = require('../../db.js');
+
+var DataContext = require('../../class/DataContext.js');
+var datacontext = new DataContext();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 
@@ -64,28 +68,10 @@ router.get('/id/:type_lic_id', function (req, res, next) {
 router.post('/insert', function (req, res, next) {
     var valid = validate(req.body);
     if (valid) {
-        //res.json(req.body);
-        db.query(function (conn) {
-            r.db('external_f3').table("type_license")
-                .insert(req.body)
-                .run(conn)
-                .then(function (response) {
-                    if (response.errors == 0) {
-                        res.json(req.body);
-                        console.log('Success ', response);
-                    } else {
-                        res.json("Error ", response);
-                        console.log('Error ', response);
-                    }
-                })
-                .error(function (err) {
-                    res.json("Error", err);
-                    console.log('error occurred ', err);
-                })
-        })
+        datacontext.insert("external_f3", "type_license", req.body, res);
     } else {
-        //console.log('Invalid: ' + ajv.errorsText(validate.errors));
-        res.json('Invalid: ' + ajv.errorsText(validate.errors));
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
     }
 
 });

@@ -4,8 +4,8 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-var Timestamp = require('../../class/Timestamp.js');
-var timestamp = new Timestamp();
+var DataContext = require('../../class/DataContext.js');
+var datacontext = new DataContext();
 
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
@@ -31,7 +31,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["contract_id", "cl_id", "shm_no", "shm_name","shm_status"]
+    "required": ["contract_id", "cl_id", "shm_no", "shm_name", "shm_status"]
 };
 var validate = ajv.compile(schema);
 
@@ -53,7 +53,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     load_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -61,7 +61,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     dest_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -69,16 +69,16 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     deli_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id","date_created","date_updated", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","date_created","date_updated", "country_id"] }).zip()
-                        .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id","date_created","date_updated"] }).zip()
+                        }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
+                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
+                        .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         // .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
                         .merge(function (r) {
                             return {
@@ -108,7 +108,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 .merge(function (limit) {
                                     return {
                                         type_rice_quantity_confirm: r.db('g2g').table('shipment_detail')
-                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id","date_created","date_updated"] }).zip()
+                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                                             .filter({
                                                 cl_id: m('cl_id'),
                                                 //shm_id: m('shm_id'),
@@ -155,28 +155,7 @@ router.post('/insert', function (req, res, next) {
     if (valid) {
         //console.log(req.body);
         if (req.body.id == null) {
-            //result.id = req.body.id;
-            req.body = timestamp.insert(req.body);
-            db.query(function (conn) {
-                r.db('g2g').table("shipment")
-                    //.get(req.body.id)
-                    .insert(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                            result.id = response.generated_keys;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
+            datacontext.insert("g2g", "shipment", req.body, res);
         } else {
             result.message = 'field "id" must do not have data';
             res.json(result);
@@ -191,33 +170,7 @@ router.put('/update', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        //console.log(req.body);
-        if (req.body.id != '' && req.body.id != null) {
-            result.id = req.body.id;
-            req.body = timestamp.update(req.body);
-            db.query(function (conn) {
-                r.db('g2g').table("shipment")
-                    .get(req.body.id)
-                    .update(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'require field id';
-            res.json(result);
-        }
+        datacontext.update("g2g", "shipment", req.body, res);
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
@@ -225,34 +178,30 @@ router.put('/update', function (req, res, next) {
 });
 router.delete('/delete/id/:id', function (req, res, next) {
     var result = { result: false, message: null, id: null };
-    if (req.params.id != '' && req.params.id != null) {
-        result.id = req.params.id;
-        db.query(function (conn) {
-            var q = r.db('g2g').table("shipment").get(req.params.id).do(function (result) {
-                return r.branch(
-                    result('shm_status').eq(false)
-                    , r.db('g2g').table("shipment").get(req.params.id).delete()
-                    , r.expr("Can't delete because this status = true.")
-                )
-            })
-            q.run(conn)
-                .then(function (response) {
-                    result.message = response;
-                    if (response.errors == 0) {
-                        result.result = true;
-                    }
-                    res.json(result);
-                })
-                .error(function (err) {
-                    result.message = err;
-                    res.json(result);
-                    console.log(result);
-                })
+    result.id = req.params.id;
+    db.query(function (conn) {
+        var q = r.db('g2g').table("shipment").get(req.params.id).do(function (result) {
+            return r.branch(
+                result('shm_status').eq(false)
+                , r.expr('delete')
+                , r.expr("Can't delete because this status = true.")
+            )
         })
-    } else {
-        result.message = 'require field id';
-        res.json(result);
-    }
+        q.run(conn)
+            .then(function (response) {
+                if (response == "delete") {
+                    datacontext.delete("g2g", "shipment", req.params.id, res);
+                } else {
+                    result.message = response;
+                    res.json(result);
+                }
+            })
+            .error(function (err) {
+                result.message = err;
+                res.json(result);
+                console.log(result);
+            })
+    })
 });
 
 module.exports = router;
