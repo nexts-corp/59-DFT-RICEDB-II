@@ -43,6 +43,12 @@
 		.toastConnectError>span{
 			font-size: 16px;
 		}
+		.buttonDailog{
+			height: 30px;
+			width: 10px !important;
+			font-size: 16px !important;
+			border-radius: 2px;
+		}
 		iron-icon{
 			height: auto;
 			width: 30px;
@@ -58,20 +64,32 @@
 		.btNo{
 			background-color: #d9534f;
 		}
+		#bgToast{
+			position: fixed;
+			background-color: #000;
+			width:100%;
+			height:100%;
+			top:0;
+			right:0;
+			opacity: 0.5;
+			z-index: 2;
+		}
     </style>
     <template>
-        <paper-toast class="toastLoading" id="toastLoading" positionTarget duration="0" text="">
+		<div id="bgToast" hidden$="[[!opened]]"></div>
+		<div id="bgToast" hidden$="[[!openedload]]"></div>
+        <paper-toast class="toastLoading" id="toastLoading" opened="{{openedload}}" positionTarget duration="0" text="">
                 <paper-spinner active></paper-spinner>
                 <span>
                     กำลังโหลด... 
                 </span>
         </paper-toast>
 		
-		<paper-toast class="toastDialog" id="toastDialog" duration="0">
+		<paper-toast class="toastDialog" opened="{{opened}}" id="toastDialog" duration="0">
 			<span>{{status.content}}</span>
 			<div style="padding: 10px 20px 10px 20px;">
-				<paper-button class="btYes" on-tap="resultToastDialog" confirm>Yes</paper-button>
-				<paper-button class="btNo" on-tap="resultToastDialog">No</paper-button>
+				<paper-button class="btYes buttonDailog" on-tap="resultToastDialog" confirm>Yes</paper-button>
+				<paper-button class="btNo buttonDailog" on-tap="resultToastDialog">No</paper-button>
 			</div>
 		</paper-toast>
 
