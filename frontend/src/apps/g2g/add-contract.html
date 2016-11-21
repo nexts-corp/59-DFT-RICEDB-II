@@ -104,14 +104,32 @@
                                 <div class="flex nomalFont total"> ตัน</div>
                             </div>
                          </div>
-                         <div>Two</div>
+                         <div class="horizontal layout">
+                           <chart-pie data="[[_computeChart(item.contract_quantity_shipment,item.contract_quantity_shipment_balance)]]"></chart-pie>
+                           <div class="layout vertical">
+                               <div class="flex nomalFont">ทั้งหมด</div>
+                               <div class="flex nomalFont">ส่งแล้ว</div>
+                               <div class="flex nomalFont">คงเหลือ</div>
+                           </div>
+                           <div class="layout vertical">
+                               <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity]]" format="0,0" print></numeral-js>  </div>
+                               <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_shipment]]" format="0,0" print></numeral-js>  </div>
+                               <div class="flex nomalFont number">:<numeral-js number="[[item.contract_quantity_shipment_balance]]" format="0,0" print></numeral-js>  </div>
+                           </div>
+                           <div class="layout vertical">
+                               <div class="flex nomalFont total"> ตัน</div>
+                               <div class="flex nomalFont total"> ตัน</div>
+                               <div class="flex nomalFont total"> ตัน</div>
+                           </div>
+                         </div>
                      </iron-pages>
-                     </div>
-
                      <div class="horizontal end-justified layout ">
                        <iron-icon icon="chevron-left" on-tap="previousIron" id="chart-[[item.contract_id]]"></iron-icon>
                        <iron-icon icon="chevron-right" on-tap="nextIron" id="chart-[[item.contract_id]]"></iron-icon>
                      </div>
+                     </div>
+
+
 
                      <div class="card-actions horizontal end-justified layout">
                        <paper-button raised on-tap="editContract" data="[[item]]" class="btnAddContract">Contract</paper-button>
@@ -366,14 +384,16 @@
               this.glQuery('contentPanel').changDrawer();
             },
             previousIron:function (e) {
-              console.log(elseif);
+              Polymer.dom(e.currentTarget).parentNode
+                                          .parentNode
+                                          .firstElementChild
+                                          .selectPrevious();
             },
             nextIron:function (e) {
-              console.log(Polymer.dom(e.currentTarget).parentNode.previousSibling);
-              // var dom = Polymer.dom(e.currentTarget).parentNode.parentNode;
-              // dom.map((el)=>{
-              //   console.log(el);
-              // });
+              Polymer.dom(e.currentTarget).parentNode
+                                          .parentNode
+                                          .firstElementChild
+                                          .selectNext();
             },
             editContract:function (e) {
               if (e.currentTarget.data != undefined) {
