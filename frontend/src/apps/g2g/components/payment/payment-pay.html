@@ -156,6 +156,12 @@
       </div>
     </paper-dialog>
 
+    <div id="notfound" hidden>
+      <div class="horizontal center-justified layout searchBorder">
+        <div class="title" style="margin:20px">ไม่พบข้อมูล</div>
+      </div>
+    </div>
+
   </template>
   <script>
     Polymer({
@@ -218,6 +224,10 @@
           // console.log(this.dataSelected);
           this.getDb('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
             this.data = data;
+            this.$$('#notfound').setAttribute("hidden", "hidden");
+            if (this.data == null) {
+              this.$$('#notfound').removeAttribute("hidden");
+            }
           });
           this.getDb('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
             this.dataName = data;
@@ -226,6 +236,7 @@
         else {
           this.data = [];
           this.dataName = [];
+          this.$$('#notfound').setAttribute("hidden", "hidden");
         }
       },
       _pay:function(e) {
