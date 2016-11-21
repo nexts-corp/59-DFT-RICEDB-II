@@ -4,8 +4,8 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-var Timestamp = require('../../class/Timestamp.js');
-var timestamp = new Timestamp();
+var DataContext = require('../../class/DataContext.js');
+var datacontext = new DataContext();
 
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
@@ -91,7 +91,7 @@ router.get(['/', '/list'], function (req, res, next) {
                         .orderBy('shm_no')
                         .without('id')
                         .coerceTo('array')
-                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id","date_created","date_updated", "cl_type_rice", "cl_quality"] }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "cl_quality"] }).zip()
                 }
             })
             .merge(function (row) {
@@ -126,8 +126,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id","date_created","date_updated"] }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .orderBy('contract_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
@@ -206,110 +206,6 @@ router.get('/id/:contract_id', function (req, res, next) {
             });
     })
 });
-router.post('/insert', function (req, res, next) {
-    //console.log(req.body);
-    var valid = validate(req.body);
-    var result = { result: false, message: null, id: null };
-    if (valid) {
-        if (req.body.id == null) {
-            req.body = timestamp.insert(req.body);
-            db.query(function (conn) {
-                r.db('g2g').table("contract")
-                    //.get(req.body.id)
-                    .insert(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                            result.id = response.generated_keys;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'field "id" must do not have data';
-            res.json(result);
-        }
-    } else {
-        result.message = ajv.errorsText(validate.errors);
-        res.json(result);
-    }
-});
-router.put('/update', function (req, res, next) {
-    //console.log(req.body);
-    var valid = validate(req.body);
-    var result = { result: false, message: null, id: null };
-    if (valid) {
-        //console.log(req.body);
-        if (req.body.id != '' && req.body.id != null) {
-            result.id = req.body.id;
-            req.body = timestamp.update(req.body);
-            db.query(function (conn) {
-                r.db('g2g').table("contract")
-                    .get(req.body.id)
-                    .update(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'require field id';
-            res.json(result);
-        }
-    } else {
-        result.message = ajv.errorsText(validate.errors);
-        res.json(result);
-    }
-});
-router.delete('/delete/id/:id', function (req, res, next) {
-    var result = { result: false, message: null, id: null };
-    if (req.params.id != '' && req.params.id != null) {
-        result.id = req.params.id;
-        db.query(function (conn) {
-            var q = r.db('g2g').table("contract").get(req.params.id).do(function (result) {
-                return r.branch(
-                    result('contract_status').eq(false)
-                    , r.db('g2g').table("contract").get(req.params.id).delete()
-                    , r.expr("Can't delete because this status = true.")
-                )
-            })
-            q.run(conn)
-                .then(function (response) {
-                    result.message = response;
-                    if (response.errors == 0) {
-                        result.result = true;
-                    }
-                    res.json(result);
-                })
-                .error(function (err) {
-                    result.message = err;
-                    res.json(result);
-                    console.log(result);
-                })
-        })
-    } else {
-        result.message = 'require field id';
-        res.json(result);
-    }
-});
 router.get('/shipment', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table("contract")
@@ -348,4 +244,59 @@ router.get('/shipment', function (req, res, next) {
             });
     })
 });
+router.post('/insert', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        if (req.body.id == null) {
+            datacontext.insert("g2g", "contract", req.body, res);
+        } else {
+            result.message = 'field "id" must do not have data';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.put('/update', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        datacontext.update("g2g", "contract", req.body, res);
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.delete('/delete/id/:id', function (req, res, next) {
+    var result = { result: false, message: null, id: null };
+    result.id = req.params.id;
+    db.query(function (conn) {
+        var q = r.db('g2g').table("contract").get(req.params.id).do(function (result) {
+            return r.branch(
+                result('contract_status').eq(false)
+                , r.expr("delete")
+                , r.expr("Can't delete because this status = true.")
+            )
+        })
+        q.run(conn)
+            .then(function (response) {
+                if (response == "delete") {
+                    datacontext.delete("g2g", "contract", req.params.id, res);
+                } else {
+                    result.message = response;
+                    res.json(result);
+                }
+            })
+            .error(function (err) {
+                result.message = err;
+                res.json(result);
+                console.log(result);
+            })
+    })
+});
+
 module.exports = router;
