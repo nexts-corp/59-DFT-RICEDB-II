@@ -1,6 +1,7 @@
 <style media="screen">
   html,body {
    margin: 0;
+   margin-bottom: 100px;
    height: 100%;
    background-color: #eee;
   }
@@ -8,51 +9,54 @@
 <link rel="import" href="components/list-menu.html">
 <dom-module id="layout-dashboard">
   <style media="screen" include="gl-color">
-  div.paper-header{
-    border-bottom: 1px solid var(--paper-grey-300);
+  :host{
+    --app-drawer-width:400px;
   }
-  paper-toolbar.toolbarHead {
-    --paper-toolbar-background:var(--paper-orange-300);
-    --paper-toolbar-title: {
-        font-weight: normal;
-        font-size: 20px;
-        font-family: 'rsubold', sans-serif;
-        -webkit-font-smoothing: antialiased;
-        /*padding: 0px 0px 10px 70px;*/
-        /*line-height: 25px*/
-    };
+   app-header {
+         position: fixed;
+         width: 100%;
+         z-index: 1;
   }
-  paper-toolbar.toolbarbody {
-    height: 5px;
-    /*--paper-toolbar-background:#29AAE3;*/
-    --paper-toolbar-background: #FFF;
+   app-toolbar {
+      background-color:#f7941e;
+      color: #fff;
   }
-  paper-toolbar.toolbarfoot {
-    /*height: 50px;*/
-    --paper-toolbar-background:#FFF;
-    --paper-header-panel-body: {
-      font-size: 16px;
-    };
+  app-toolbar.footer {
+     background-color:#fff;
+     height: 5px;
+     box-shadow: 0px 2px 5px grey;
+    box-sizing: border-box;
+ }
+  app-toolbar > iron-image{
+    margin: 0px 15px 0px 15px;
   }
-  paper-toolbar.toolbarbody > div.title {
-    margin-left: 0px;
+  app-toolbar > div.header{
+      margin-left: 20px;
+      font-weight: normal;
+      font-size: 20px;
+      font-family: 'rsubold', sans-serif;
+      -webkit-font-smoothing: antialiased;
   }
-  iron-icon {
-    --iron-icon-height: 25px;
-     --iron-icon-width: 25px;
-     --iron-icon-fill-color:black;
+  app-toolbar > paper-icon-button{
+    right: 0;
+    bottom: 0;
   }
-  div.content {
-    margin: 5px 0px 0px 0px;
+  .headpad{
+    height: 90px;
+  }
+  app-drawer {
+    z-index: 2;
+  }
+  app-drawer.persistent {
+      width: 100%;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      background: rgba(0, 0, 0, 0.5)
+    }
 
-  }
-  paper-icon-button.menu {
-     color: #fff;
-     --paper-icon-button-ink-color: var(--paper-indigo-500);
-   }
   </style>
   <template>
-    <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="40%">
+    <!-- <paper-drawer-panel id="drawerDashboard" force-narrow drawer-width="40%">
       <paper-header-panel mode="waterfall" drawer >
         <div class="paper-header">
           <paper-toolbar class="toolbarHead">
@@ -63,13 +67,6 @@
           </paper-toolbar>
           <paper-toolbar class="toolbarbody">
           </paper-toolbar>
-          <!-- <paper-toolbar class="toolbarfoot">
-              <div class="title">
-                <div>
-                  <button type="button" name="button">เพิ่ม</button>
-                </div>
-              </div>
-          </paper-toolbar> -->
         </div>
         <div class="content">
           <list-menu></list-menu>
@@ -84,17 +81,34 @@
           </paper-toolbar>
           <paper-toolbar class="toolbarbody">
           </paper-toolbar>
-          <!-- <paper-toolbar class="toolbarfoot">
-            <paper-icon-button icon="menu" class="menu" on-tap="_changDrawer"></paper-icon-button>
-            <div class="title"></div>
-          </paper-toolbar> -->
         </div>
           <div class="content">
             <tag-page-load id="tagPageLoad"></tag-page-load>
           </div>
         </paper-header-panel>
-      </paper-drawer-panel>
+      </paper-drawer-panel> -->
+       <app-header fixed condenses effects="waterfall" >
+        <app-toolbar sticky>
+          <paper-icon-button icon="menu" on-tap="_chd"></paper-icon-button>
+          <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+          <div main-title class="header"> ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+        </app-toolbar>
+        <app-toolbar class="footer"></app-toolbar>
+      </app-header>
+      <div class="headpad"></div>
+      <!-- persistent="true" -->
+      <app-drawer id="mainMenu"  persistent="true" class="persistent" >
+        <app-toolbar sticky>
+          <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+          <div main-title class="header"> </div>
+          <paper-icon-button icon="close" on-tap="_chd"></paper-icon-button>
 
+        </app-toolbar>
+        <app-toolbar class="footer"></app-toolbar>
+        <!-- <button type="button" name="button" on-tap="_chd">ปิด</button> -->
+        <list-menu></list-menu>
+      </app-drawer>
+      <tag-page-load id="tagPageLoad"></tag-page-load>
 
   </template>
   <script>
@@ -112,6 +126,12 @@
         //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
         this.$.drawerDashboard.togglePanel();
       },
+      _chd:function () {
+        console.log(this.$.mainMenu.toggle());
+      },
+      _ddd:function () {
+        this.$.mainMenu.close();
+      }
     });
   </script>
 
