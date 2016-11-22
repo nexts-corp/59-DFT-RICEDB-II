@@ -72,7 +72,7 @@
         axios.get(url)
               .then((response)=> {
                 // console.log("success");
-                console.log(response.data);
+                // console.log(response.data);
                 // actionInpage();
                 callback(response.data);
                 switch (action) {
@@ -87,9 +87,7 @@
                             this._checkRefresh(refresh);
                     break;
                     case 'delete':
-                              // this.glQuery('layoutMain').closeToastDeleteing(()=>{
-                              //   this.checkRefresh(refresh);
-                              // });
+                            this._checkRefresh(refresh);
                     break;
                 }
               })
@@ -113,16 +111,32 @@
       //   this.editInput();
       //  });
       update:function (url,data,actionInpage) {
+        this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
         axios.put(url, data)
                   .then((response) => {
                     console.log("success");
                     console.log(response);
                     // this.actionInpage();
-                    actionInpage();
+
+                    // console.log(response.data.id != null);
+                    if (response.data.id != null) {
+                      this.fire('toast',{status:'success',text:'แก้ไขสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                         callback:function(){
+                           actionInpage();
+                         }
+                      });
+                    } else {
+                      this.fire('toast',{status:'connectError',text:'ไม่สามารถบันทึกได้', //คำสั่งสำหรับเปิด toast error
+                        callback:function(){}
+                      });
+                    }
                   })
                   .catch((error)=> {
                     console.log("error");
                     console.log(error);
+                    this.fire('toast',{status:'connectError',text:'Can not connect the database server', //คำสั่งสำหรับเปิด toast error
+                      callback:function(){}
+                    });
                   })
       },
       //DELETE
@@ -134,16 +148,43 @@
       //   this.backPage();
       //  });
       delete:function (url,dataId,actionInpage) {
-        axios.delete(url+dataId)
-                  .then((response)=> {
-                    console.log("success");
-                    console.log(response);
-                    actionInpage();
-                  })
-                  .catch((error)=> {
-                    console.log("error");
-                    // console.log(error);
-                  })
+        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+            status:'dialog',
+            text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+            confirmed:this._deleteData, //function ที่ใช้รับค่า ปุ่ม
+            el: this, // compontents
+            data:{url:url,dataId:dataId,actionInpage:actionInpage} // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+        });
+      },
+      _deleteData:function(result,detail){ //function สำหรับรับค่าปุ่มที่ toast ส่งกลับมา
+        //
+        // console.log('result',result);
+        // console.log('detail',detail);
+        if (result == true) {
+          axios.delete(detail.data.url+detail.data.dataId)
+                    .then((response)=> {
+                      // console.log("success");
+                      // console.log(response);
+                      // this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+                      // console.log(response.data.id != null);
+                      if (response.data.id != null) {
+                        detail.el.fire('toast',{status:'success',text:'ลบสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                           callback:function(){
+                             detail.data.actionInpage();
+                           }
+                        });
+                      } else {
+                        detail.el.fire('toast',{status:'connectError',text:'ไม่สามารถบันทึกได้', //คำสั่งสำหรับเปิด toast error
+                          callback:function(){}
+                        });
+                      }
+                    })
+                    .catch((error)=> {
+                      detail.el.fire('toast',{status:'connectError',text:'Can not connect the database server', //คำสั่งสำหรับเปิด toast error
+                        callback:function(){}
+                      });
+                    })
+        }
       },
       changeString2Num:function(ob,param){
         //console.log(typeof ob.value);
