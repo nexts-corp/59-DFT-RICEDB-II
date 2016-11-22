@@ -3,7 +3,7 @@
     <template>
         <style is="custom-style">
             app-drawer{
-                --app-drawer-width:75%;
+                /*--app-drawer-width: 80%;*/
                 z-index: 1;
             }
             paper-icon-button{
@@ -59,10 +59,23 @@
                 title:{
                     type: String,
                     value: 'title'
+                },
+                setWidth:{
+                    type: String,
+                    value: '75%'
                 }
+            },
+            attached:function(){
+                this.customStyle['--app-drawer-width'] = this.setWidth;
+                this.updateStyles();
             },
             toggle:function(){
                 this.$$('app-drawer').toggle();
+            },
+            _setWidth:function(width){
+                this.setWidth = width;
+                this.customStyle['--app-drawer-width'] = this.setWidth;
+                this.updateStyles();
             },
             close:function(e){
                 this.$$('app-drawer').close();
