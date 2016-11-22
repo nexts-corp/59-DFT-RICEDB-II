@@ -15,7 +15,7 @@
 			}
 			
 			.number {
-				text-align: right;
+				text-align: right !important;
 			}
 			
 			header {
@@ -36,6 +36,7 @@
                 @apply(--layout-horizontal);
                 @apply(--layout-justified);
             }
+         
 		</style>
 		<div>
 			<section>
@@ -45,11 +46,11 @@
 						<gl-grid-row width="{{getWidth}}">
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-input label="ปีโควต้า" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
+								<gl-form-input label="ปีโควต้า" class="mathData saveData" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
 									id="" name="" disabled$="{{checkStatus(status)}}"></gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-dropdown-menu label="ประเภทข้าว" required disabled="{{checkStatus(status)}}">
+								<gl-form-dropdown-menu label="ประเภทข้าว" class="mathData saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
@@ -60,7 +61,9 @@
 
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-								<gl-form-input class="mathData" id="sum" label="ยอดรวม" value="{{sum}}" auto-validate error-message="กรุณาใสจำนวน" required></gl-form-input>
+								<gl-form-input class="mathData saveData" id="sum" label="ยอดรวม" value="[[formatNumber(sum)]]" always-float-label auto-validate error-message="กรุณาใสจำนวน" required>
+                                     <div suffix>บาท</div>
+                                </gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 						</gl-grid-row>
@@ -71,7 +74,7 @@
 								<tr>
 									<th>จำนวนงวด</th>
                                     <th>เดือน</th>
-									<th>สัดส่วน % </th>
+									<th style="text-align: right;">สัดส่วน % </th>
 									<th>ปริมาณ</th>
 									<th></th>
 								</tr>
@@ -87,11 +90,13 @@
 										<td>
 											[[testNum(item.*,'percent')]]
                                             [[disabledMath(item.percent,item.quantity)]]
-											<gl-form-input class="mathData" auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>
+											<gl-form-input class="mathData number saveData" auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float>
+                                                <div suffix>%</div>
+                                            </gl-form-input>
 										</td>
 										<td>
-											<gl-form-input auto-validate error-message="กรุณาใสจำนวน" value="[[formatNumber(item.quantity)]]" on-input="inputProportionChange"
-												index="{{index}}" required placeholder="กรุณาใส่จำนวน" id="{{index}}" no-label-float></gl-form-input>
+											<gl-form-input class="saveData" value="[[formatNumber(item.quantity)]]" on-input="inputProportionChange"
+												index="{{index}}" required id="{{index}}" no-label-float></gl-form-input>
 										</td>
 										<td>
 											<paper-button on-tap="_confirmDelPeriod" item="{{item}}">
@@ -103,12 +108,12 @@
 								</template>
                                  <tbody>
 								<tr>
-                                    <td>	
+                                    <td colspan="2">	
                                         <paper-button on-tap="_addPeriod">
 											<iron-icon icon="add"></iron-icon> เพิ่มงวด
                                         </paper-button>
                                     </td>
-                                    <td></td>
+                                  
                                     <td></td>
                                     <td></td>
 									<td>
@@ -178,7 +183,7 @@
             _confirmDelPeriod:function(e){
                 this.fire('toast',{
                     status:'openDialog',
-                    text:'ต้องการงวดใช่หรือไม่ ?',
+                    text:'ต้องการลบงวดใช่หรือไม่ ?',
                     confirmed:this._delPeriod,
                     el: this,
                     data:e.currentTarget.item
@@ -209,7 +214,6 @@
             },
             _mathData:function(){   
                 this.$$('.mathData').validate();
-                console.log(this.$$('.mathData'));
                 var stat = Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
                     return  item.validate();
                 });
@@ -225,21 +229,31 @@
               
             },
             _saveData:function(){
-                var amount = this.$$('#sum').value; 
-                var datas = {
-                id:this.year,
-                type_rice:
-                    {
-                    amount:parseInt(this.unFormat(amount)),
-                    period:this.Period,
-                    type_rice_id:this.typeRice,
-                    }
+                var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                    return  item.validate();
+                });
+                var chkStat = function(stat){
+                    return stat == true
+                };
+                if(this.Period == ""){
+                    console.log('this.Period');
                 }
-                // console.log(datas);
-               if(this.status == 'post')
-                    this.fire('post-data',datas); 
-                else if (this.status == 'update')
-                    this.fire('put-data',datas); 
+                else if(stat.every(chkStat) == true){
+                    var amount = this.$$('#sum').value; 
+                    var datas = {
+                        id:this.year,
+                        type_rice:
+                        {
+                            amount:parseInt(this.unFormat(amount)),
+                            period:this.Period,
+                            type_rice_id:this.typeRice,
+                        }
+                    }
+                    if(this.status == 'post')
+                        this.fire('post-data',datas); 
+                    else if (this.status == 'update')
+                        this.fire('put-data',datas); 
+                }
             },
             testNum:function(ob,param){
                 //console.log(typeof ob.value);
@@ -255,6 +269,9 @@
             },
             _getData:function(data){
                 //console.log(data);
+                Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
+                    item.reset();
+                });
                 this.Period = data.period;
                 this.year = data.year;
                 this.sum = data.amount;
