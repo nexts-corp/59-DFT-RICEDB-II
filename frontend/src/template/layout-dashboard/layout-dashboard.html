@@ -1,17 +1,20 @@
 <style media="screen">
   html,body {
-    /*overflow:hidden;*/
    margin: 0;
    margin-bottom: 100px;
    height: 100%;
    background-color: #eee;
   }
 </style>
+<link rel="import" href="../../../bower_components/nylon-toast/nylon-toast.html">
 <link rel="import" href="components/list-menu.html">
 <dom-module id="layout-dashboard">
   <style media="screen" include="gl-color">
   :host{
     --app-drawer-width:400px;
+  }
+  .hideSc{
+    overflow:hidden;
   }
    app-header {
          position: fixed;
@@ -76,7 +79,10 @@
         <app-toolbar class="footer"></app-toolbar>
         <list-menu></list-menu>
       </app-drawer>
-      <tag-page-load id="tagPageLoad"></tag-page-load>
+      <nylon-toast>
+        <tag-page-load id="tagPageLoad"></tag-page-load>
+      </nylon-toast>
+      <!-- <tag-page-load id="tagPageLoad"></tag-page-load> -->
 
   </template>
   <script>
@@ -91,7 +97,8 @@
         }
       },
       _chd:function () {
-        this.$.mainMenu.toggle()
+        this.$.mainMenu.toggle();
+        // console.log(document.getElementsByTagName("body")[0].style.overflow = "hidden");
       }
     });
   </script>

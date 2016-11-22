@@ -1,4 +1,4 @@
-
+<link rel="import" href="format-number-behavior.html">
 <link rel="import" href="./../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="invoice-drft.html">
 <link rel="import" href="draft-sum.html">
@@ -100,7 +100,7 @@
           <vaadin-date-picker label="วันที่ได้รับเงิน" value="{{dataPerSubmit.fee_date_receipt}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" format-number></gl-form-label-input>
+          <gl-form-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="[[formatNumber(data.amount_usd)]]"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           <div class="setText">อัตราแลกเปลี่ยน</div>
@@ -124,7 +124,7 @@
           </gl-grid-col>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="{{_totalMoney(dataPerSubmit.rate_bank,data.amount_usd)}}" format-number></gl-form-label-input>
+          <gl-form-label-input label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="{{_totalMoney(dataPerSubmit.rate_bank,data.amount_usd)}}"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -133,18 +133,18 @@
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           [[changeString2Num(dataPerSubmit.*,'fee_internal')]]
-          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="{{dataPerSubmit.fee_internal}}"></gl-form-input>
+          <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="[[formatNumber(dataPerSubmit.fee_internal)]]" placeholder="0.00"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           [[changeString2Num(dataPerSubmit.*,'fee_foreign')]]
-          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{dataPerSubmit.fee_foreign}}"></gl-form-input>
+          <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="[[formatNumber(dataPerSubmit.fee_foreign)]]" placeholder="0.00"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
           [[changeString2Num(dataPerSubmit.*,'fee_other')]]
-          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{dataPerSubmit.fee_other}}"></gl-form-input>
+          <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="[[formatNumber(dataPerSubmit.fee_other)]]" placeholder="0.00"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(dataPerSubmit.fee_internal,dataPerSubmit.fee_foreign,dataPerSubmit.fee_other,dataPerSubmit.rate_bank)}}
-          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{dataPerSubmit.feeTotal}}" format-number></gl-form-label-input>
+          <gl-form-label-input label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="[[formatNumber(dataPerSubmit.feeTotal)]]" placeholder="0.00"></gl-form-label-input>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -186,6 +186,7 @@ Polymer({
   behaviors: [
       g2gModelBehavior,
       gl.behavior.core,
+      FormatNumberBehavior
   ],
   properties: {
 
@@ -216,6 +217,10 @@ Polymer({
     invoicePage:{
       type:Number,
       value:1
+    },
+    _defaultFormat:{
+        type: String,
+        value: '0,0.00'
     }
   },
   // listeners: {
@@ -229,7 +234,7 @@ Polymer({
     // console.log('invoice =>',invoice);
   },
   _totalMoney:function (rate_bank,amount_usd) {
-    return rate_bank*amount_usd ;
+    return numeral(rate_bank*amount_usd).format(this._defaultFormat);
   },
   _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
     // invoiceDetail.invoice_fee

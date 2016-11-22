@@ -2,6 +2,9 @@
 <dom-module id="promise-detail">
 
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+        gl-form-dropdown-menu{
+          width: 100%;
+        }
         .bg {
             background-color: var(--paper-grey-200);
             border: 1px solid black;
@@ -47,24 +50,24 @@
 
       </div>
       <gl-grid-row width="{{getWidth}}">
-        <gl-combo-box id="buyer_id" disabled="[[checkInput]]" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
+        <gl-combo-box class="required" required id="buyer_id" disabled="[[checkInput]]" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
             item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{buyyer}}" on-value-changed="_getBuyerAddress"></gl-combo-box>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input class="bottom approve" disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+            <gl-form-input required class="required" disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อสัญญา" label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker disabled="[[checkInput]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+            <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
         <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
             <div class="riceName">
               จำนวนข้าวที่ทำสัญญา :
             </div>
-          </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(data.*,'contract_quantity')]]
-            <gl-form-input  auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+          </gl-grid-col> -->
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
+            <gl-form-input class="required" required   auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวนข้าวที่ทำสัญญา (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
         </gl-grid-col>
         </gl-grid-row>
         <template is="dom-repeat" items="{{data.contract_type_rice}}">
@@ -72,7 +75,7 @@
               <gl-grid-row>
 
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-dropdown-menu disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
+                    <gl-form-dropdown-menu class="required" required  disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
                       <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
                         <template is="dom-repeat" items="[[typeRice]]">
                           <paper-item value="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
@@ -103,12 +106,12 @@
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
             <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
-            <gl-form-textarea rows="2" disabled label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
+            <gl-form-textarea class="required" required  rows="2" disabled label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-            <gl-form-textarea disabled="[[checkInput]]" rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+            <gl-form-textarea class="required" required  disabled="[[checkInput]]" rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
 
@@ -138,9 +141,6 @@
             properties: {
                 data: {
                     type: Object,
-                    value: {
-                        name: ''
-                    }
                 },
                 Newdata:{
                   type:Object,
@@ -148,7 +148,7 @@
                     contract_name:'',
                     buyer_id:'',
                     contract_date:'',
-                    contract_type_rice:'',
+                    contract_type_rice:[],
                   }
                 },
             },
@@ -159,13 +159,6 @@
                 var buyer_id = this.buyyer.filter(function (buyyer) { return buyyer.buyer_id == selectedItem });
                     this.buyerAddress=buyer_id[0].buyer_address;
                   }
-            },
-            // observers
-            checkbb:function () {
-              // this.glQuery('addContract').getDb('./g2g/contract/list',(data)=>{
-              //   this.contracts=data;
-              //   console.log(this.contracts);
-              // },true,'put')
             },
             confirmDrawer:function () {
               this.data.contract_status = this.approve(this.data.contract_status);
@@ -180,44 +173,49 @@
                 });
             },
             dele: function(e) {
-                // var index = this.data.contract_type_rice.indexOf(data);
                 this.splice('data.contract_type_rice', e.currentTarget.id, 1);
             },
 
             saveData: function() {
-              //  this.data
-              for (var i = 0; i < this.data.contract_type_rice.length; i++) {
-                    delete this.data.contract_type_rice[i].type_rice_desc_en;
-                    delete this.data.contract_type_rice[i].type_rice_name_en;
-                    delete this.data.contract_type_rice[i].type_rice_name_th;
-              }
+              this.data.contract_type_rice.map((riceCode)=>{
+                this.push('Newdata.contract_type_rice', {type_rice_id :riceCode.type_rice_id});
+              })
               this.Newdata.id=this.data.contract_id;
               this.Newdata.contract_name=this.data.contract_name;
-                this.Newdata.contract_quantity=this.data.contract_quantity;
+              this.Newdata.contract_quantity=this.data.contract_quantity;
               this.Newdata.buyer_id=this.data.buyer_id;
               this.Newdata.contract_date=new Date (this.data.contract_date);
-              this.Newdata.contract_type_rice=this.data.contract_type_rice;
               this.Newdata.contract_status=this.data.contract_status;
               this.Newdata.contract_desc=this.data.contract_desc;
+
               // console.log(this.Newdata);
-              this.glQuery('layoutMain').openToastSaveing();
+              var el = Polymer.dom(this.root).querySelectorAll('.required');
+              var stat = el.map((el)=> el.validate());
+              if (stat.every(elem => elem == true)) {
                 this.update('./g2g/contract/update',this.Newdata, () => {
-                  this.glQuery('addContract').getChange(false,'put');
-                  //add-contract.html
-                  this.fire('edit-contract',{contractId:this.Newdata.id});
                   if (this.Newdata.contract_status == true) {
-                    // this.glQuery('contentPanel').changDrawer();
-                    this.editInput();
-                  }
+                      this.editInput();
+                    }
+                  this.fire('refresh-contract',{refresh:false ,action:'put'});
                   this.editInput();
+                  this.data = this.Newdata;
+                  this.Newdata = {
+                    contract_type_rice:[],
+                  };
                  });
+
+              }
             },
             deleteContract:function () {
-              console.log(1);
               this.delete('./g2g/contract/delete/id/',this.data.contract_id, () => {
-                this.glQuery('addContract').getChange(true,'delete');
+                this.fire('refresh-contract',{refresh:true ,action:'delete'});
+                console.log(121512);
                });
-            }
+            },
+            // _deleteData:function(result,detail){ //function สำหรับรับค่าปุ่มที่ toast ส่งกลับมา
+            //   console.log('result',result);
+            //   console.log('detail',detail);
+            // }
 
         });
     </script>
