@@ -1,6 +1,7 @@
 
 <link rel="import" href="./../components/panel-right/panel-right.html">
 <link rel="import" href="./components/calculate-list.html">
+<link rel="import" href="./components/calculate-listQuota.html">
 
 <dom-module id="page-calculate">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -86,7 +87,7 @@
           </div>
           
           <div style="overflow-x:auto; padding:20px;">
-            <calculate-list list-data="{{dataList}}"></calculate-list>
+            <calculate-list list-data="{{dataList}}" on-data-select="_onDataSelect"></calculate-list>
           </div>
         </div>
         <!-- </paper-material> -->
@@ -96,11 +97,14 @@
         </div>
 
       </grid>
-      <panel-right title="การคำนวณส่วนจัดสรร">
+      <panel-right title="การคำนวณส่วนจัดสรร" set-width="85%">
           <template is="dom-if" if="[[rendered]]">
-            <calculate-setting quota-year="{{sendQuotaYear}}" on-post-sum="_postSumData" on-post-data="_postData" sum-answer="{{answerSum}}"></calculate-setting>
+            <iron-pages selected="{{pageSelect}}">
+              <div><calculate-setting quota-year="{{sendQuotaYear}}" on-post-sum="_postSumData" on-post-data="_postData" sum-answer="{{answerSum}}"></calculate-setting></div>
+              <div><calculate-listQuota data="{{dataListQuota}}"></calculate-listQuota></div>
+            </iron-pages>
           </template>
-        </panel-right>
+      </panel-right>
     </content-panel>
     </template>
     <script>
@@ -126,7 +130,10 @@
               }); 
             },
             _toggleDrawer: function(e) {
+              this.$$('panel-right')._setWidth('75%');
               this.$$("panel-right").toggle();
+              this.pageSelect = 0;
+              
             },
             _getYear:function(){
               axios.get('./eu/quota/year')
@@ -233,6 +240,27 @@
                     //console.log('test');
                   }})
               });
+          },
+          _onDataSelect:function(){
+            this.pageSelect = 1;
+            this.$$('panel-right')._setWidth('95%');
+            this.getDatalistQuota();
+          },
+          getDatalistQuota:function(){
+            this.fire('toast',{status:'load'});
+            axios.get('./eu/calculate/test')
+            .then((response)=>{
+               this.fire('toast',{
+                  status:'success',
+                  callback:()=>{
+                    this.$$('panel-right').toggle();
+                  }
+                });
+                this.dataListQuota = response.data;
+            })   
+            .catch((error)=>{
+
+            })
           }
 
 
