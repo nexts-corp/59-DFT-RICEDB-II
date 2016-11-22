@@ -337,7 +337,7 @@ router.post(['/calculate'], function (req, res, next) {
                             }
                         })
                 }
-            });
+            }).without('year','period');
 
         statement.run(conn, function (err, cursor) {
             if (!err) {
@@ -523,7 +523,7 @@ router.get(['/allocate_quota'], function (req, res, next) {
             .map(function (row) {
                 return {
                     type_rice_id: row('group'),
-                    detail: row('reduction').orderBy('ordinal_number')
+                    detail: row('reduction').orderBy('ordinal_number').without('spreadsheets')
                 }
             })
             .eqJoin('type_rice_id', r.db('eu').table('type_rice')).zip().without('id');
@@ -554,6 +554,24 @@ router.post(['/allocate_quota'], function (req, res, next) {
     });
 
 
+});
+
+
+
+
+router.get(['/spreadsheets'], function (req, res, next) {
+    var params = req.query;
+    db.query(function (conn) {
+        var statement = r.db('eu').table('allocate_quota').get(params.id)('spreadsheets');
+
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+    });
 });
 
 module.exports = router;
