@@ -29,7 +29,7 @@
                     </thead>
                     <tbody>
                     <template is="dom-repeat" items="{{item.detail}}">
-                        <tr on-tap="_selectData" style="cursor:pointer;">
+                        <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
                             <td>{{item.ordinal_number}}</td>
                             <td>[[formatNumber(item.quota_amount)]]</td>
                             <td>[[formatNumber(item.sum_export)]]</td>
@@ -52,8 +52,9 @@
                     observer: '_getDatalist'
                 }
             },
-            _selectData:function(){
-                this.fire('data-select');
+            _selectData:function(e){
+                // console.log(e.currentTarget.key);
+                this.fire('data-select',{key:e.currentTarget.key});
             },
             _getDatalist:function(){
                 console.log(this.listData);
