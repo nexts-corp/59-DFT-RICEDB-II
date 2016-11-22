@@ -273,7 +273,7 @@ router.post(['/calculate'], function (req, res, next) {
                 confirmed: row('reduction2'),
                 confirmed_amount: row('amount2'),
                 sum_export: row('amount').sub(row('amount2')),
-                sum_export_convert: r.branch(row('amount').sub(row('amount2')).lt(0), 0, row('amount').sub(row('amount2')))
+                sum_export_convert: r.branch(row('amount').sub(row('amount2')).lt(0), 0, r.round(row('amount').sub(row('amount2'))))
             }
         })
 
@@ -313,7 +313,9 @@ router.post(['/calculate'], function (req, res, next) {
             .merge(function (row) {
                 return {
                     spreadsheets: row('spreadsheets').merge(function (row2) {
-                        return { quantity: row2('sum_export_convert').mul(row('quota_amount')).div(row('sum_for_cal')) }
+                        return r.branch(row2('sum_export_convert').lt(0), 0, row2('sum_export_convert')).do(function (result) {
+                            return { quantity: result.mul(row('quota_amount')).div(row('sum_for_cal')) }
+                        })
                     })
                 }
             })
@@ -325,9 +327,12 @@ router.post(['/calculate'], function (req, res, next) {
                     }).pluck('quantity', 'exporter_id')
                         .merge(function (row3) {
                             return {
+                                quantity_update:row3('quantity'),
                                 period: row('period')
                                     .merge(function (row4) {
-                                        return { quantity: row3('quantity').mul(row4('percent')).div(100) }
+                                        return r.do(row3('quantity').mul(row4('percent')).div(100), function (result) {
+                                            return { quantity: result, quantity_update: result }
+                                        })
                                     })
                             }
                         })
@@ -351,156 +356,156 @@ router.post(['/calculate'], function (req, res, next) {
 router.get(['/test'], function (req, res, next) {
 
     var data = [
-    {
-      "confirmed": [
         {
-          "quantity": 750,
-          "year": "2556"
+            "confirmed": [
+                {
+                    "quantity": 750,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 350,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 450,
+                    "year": "2558"
+                }
+            ],
+            "confirmed_amount": 1550,
+            "exported": [
+                {
+                    "quantity": 840,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 350,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 50,
+                    "year": "2558"
+                }
+            ],
+            "exported_amount": 1240,
+            "exporter_id": "05993550-ce69-46d3-8bac-24de7f75d88a",
+            "quantity": 0,
+            "seller_name_th": "บริษัท น้ำแข็งค้าข้าว จำกัด",
+            "sum_export": -310,
+            "sum_export_convert": 0
         },
         {
-          "quantity": 350,
-          "year": "2557"
+            "confirmed": [
+                {
+                    "quantity": 300,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 1000,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 450,
+                    "year": "2558"
+                }
+            ],
+            "confirmed_amount": 1750,
+            "exported": [
+                {
+                    "quantity": 630,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 150,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 1200,
+                    "year": "2558"
+                }
+            ],
+            "exported_amount": 1980,
+            "exporter_id": "45618ca7-157b-4fda-bbf1-7c8a01ecc744",
+            "quantity": 425.9259259259259,
+            "seller_name_th": "บริษัท ปองค้าข้าว จำกัด",
+            "sum_export": 230,
+            "sum_export_convert": 230
         },
         {
-          "quantity": 450,
-          "year": "2558"
+            "confirmed": [
+                {
+                    "quantity": 250,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 300,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 500,
+                    "year": "2558"
+                }
+            ],
+            "confirmed_amount": 1050,
+            "exported": [
+                {
+                    "quantity": 100,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 550,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 320,
+                    "year": "2558"
+                }
+            ],
+            "exported_amount": 970,
+            "exporter_id": "908c94d9-75ea-4cd7-b06a-66dbf60d2622",
+            "quantity": 0,
+            "seller_name_th": "บริษัท แคปปตัลซีเรียลส์ จํากัด",
+            "sum_export": -80,
+            "sum_export_convert": 0
+        },
+        {
+            "confirmed": [
+                {
+                    "quantity": 700,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 350,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 600,
+                    "year": "2558"
+                }
+            ],
+            "confirmed_amount": 1650,
+            "exported": [
+                {
+                    "quantity": 1500,
+                    "year": "2556"
+                },
+                {
+                    "quantity": 700,
+                    "year": "2557"
+                },
+                {
+                    "quantity": 300,
+                    "year": "2558"
+                }
+            ],
+            "exported_amount": 2500,
+            "exporter_id": "adfa25b6-2060-4465-aaff-8e172fc36f22",
+            "quantity": 1574.0740740740741,
+            "seller_name_th": "บริษัท พงษ์ลาภ จำกัด",
+            "sum_export": 850,
+            "sum_export_convert": 850
         }
-      ],
-      "confirmed_amount": 1550,
-      "exported": [
-        {
-          "quantity": 840,
-          "year": "2556"
-        },
-        {
-          "quantity": 350,
-          "year": "2557"
-        },
-        {
-          "quantity": 50,
-          "year": "2558"
-        }
-      ],
-      "exported_amount": 1240,
-      "exporter_id": "05993550-ce69-46d3-8bac-24de7f75d88a",
-      "quantity": 0,
-      "seller_name_th": "บริษัท น้ำแข็งค้าข้าว จำกัด",
-      "sum_export": -310,
-      "sum_export_convert": 0
-    },
-    {
-      "confirmed": [
-        {
-          "quantity": 300,
-          "year": "2556"
-        },
-        {
-          "quantity": 1000,
-          "year": "2557"
-        },
-        {
-          "quantity": 450,
-          "year": "2558"
-        }
-      ],
-      "confirmed_amount": 1750,
-      "exported": [
-        {
-          "quantity": 630,
-          "year": "2556"
-        },
-        {
-          "quantity": 150,
-          "year": "2557"
-        },
-        {
-          "quantity": 1200,
-          "year": "2558"
-        }
-      ],
-      "exported_amount": 1980,
-      "exporter_id": "45618ca7-157b-4fda-bbf1-7c8a01ecc744",
-      "quantity": 425.9259259259259,
-      "seller_name_th": "บริษัท ปองค้าข้าว จำกัด",
-      "sum_export": 230,
-      "sum_export_convert": 230
-    },
-    {
-      "confirmed": [
-        {
-          "quantity": 250,
-          "year": "2556"
-        },
-        {
-          "quantity": 300,
-          "year": "2557"
-        },
-        {
-          "quantity": 500,
-          "year": "2558"
-        }
-      ],
-      "confirmed_amount": 1050,
-      "exported": [
-        {
-          "quantity": 100,
-          "year": "2556"
-        },
-        {
-          "quantity": 550,
-          "year": "2557"
-        },
-        {
-          "quantity": 320,
-          "year": "2558"
-        }
-      ],
-      "exported_amount": 970,
-      "exporter_id": "908c94d9-75ea-4cd7-b06a-66dbf60d2622",
-      "quantity": 0,
-      "seller_name_th": "บริษัท แคปปตัลซีเรียลส์ จํากัด",
-      "sum_export": -80,
-      "sum_export_convert": 0
-    },
-    {
-      "confirmed": [
-        {
-          "quantity": 700,
-          "year": "2556"
-        },
-        {
-          "quantity": 350,
-          "year": "2557"
-        },
-        {
-          "quantity": 600,
-          "year": "2558"
-        }
-      ],
-      "confirmed_amount": 1650,
-      "exported": [
-        {
-          "quantity": 1500,
-          "year": "2556"
-        },
-        {
-          "quantity": 700,
-          "year": "2557"
-        },
-        {
-          "quantity": 300,
-          "year": "2558"
-        }
-      ],
-      "exported_amount": 2500,
-      "exporter_id": "adfa25b6-2060-4465-aaff-8e172fc36f22",
-      "quantity": 1574.0740740740741,
-      "seller_name_th": "บริษัท พงษ์ลาภ จำกัด",
-      "sum_export": 850,
-      "sum_export_convert": 850
-    }
     ];
-      
+
     res.json(data);
 
 
