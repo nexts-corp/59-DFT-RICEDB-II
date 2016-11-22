@@ -1,86 +1,55 @@
 <dom-module id="content-panel">
 
   <style include="iron-flex iron-flex-factors gl-color">
+  :host{
+    --app-drawer-width:75%;
+  }
   .rightdata {
+      /*position: absolute;*/
+      /*float: left;*/
       height: 100%;
       border-left: 1px solid var(--paper-grey-300);
       padding: 5px 10px 0px 10px;
+      height: 100%;
+      overflow-y: auto;
     }
-    /*#changeDivcss {
-      width: 0px;
-      -webkit-transition: all 1s ease;
-      -moz-transition: all 1s ease;
-      -o-transition: all 1s ease;
-      transition: all 1s ease;
-      display: none;
-    }*/
-    paper-material {
-      background-color: var(--gl-white-color);
-      margin: 10px;
-      padding: 5px;
+    app-drawer{
+      z-index: 1;
+      /*right: auto;*/
     }
   </style>
 
-  <template>
-    <div class=" flex-horizontal">
-      <paper-drawer-panel right-drawer drawer-width="75%" force-narrow id="drawer" persistent=true>
-        <paper-header-panel drawer >
-          <div class="rightdata">
-            <content select="panel"></content>
-          </div>
-        </paper-header-panel>
-        <paper-header-panel main>
-          <!-- <paper-material elevation="1"> -->
-            <content select="grid"></content>
-          <!-- </paper-material> -->
+  <template is="dom-bind">
 
-        </paper-header-panel>
-      </paper-drawer-panel>
-    </div>
+    <content select="grid"></content>
+    <!-- align="right" -->
+    <app-drawer id="drawer" align="right" swipe-open>
+        <div class="rightdata" align="left" >1212
+          <content select="panel" ></content>
+        </div>
+      </app-drawer>
   </template>
 
   <script>
     Polymer({
       is:'content-panel',
+      properties: {
+        items: {
+          type: Array,
+          value:['inbox', 'favorite', 'polymer', 'question-answer', 'send', 'archive', 'backup', 'dashboard']
+        }
+      },
       behaviors:[gl.behavior.core],
       created:function(){
         this.glQuery('contentPanel',this);
       },
-      // ready:function(){
-      //   this.changeDiv();
-      // },
+      ready: function() {
+        // console.log(this.$.drawer.toggle());
+      },
       changDrawer:function(){
         //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
-        this.$.drawer.togglePanel();
+        this.$.drawer.toggle();
       },
-      // changeDiv:function(){
-      //   var css = Polymer.dom(this.root).querySelector('#changeDivcss');
-      //
-      //   if(!this.fristPanel){
-      //     if(localStorage.getItem("togglePanel")=="true"
-      //     && localStorage.getItem("togglePanel")!=null){
-      //       // l('s');
-      //       css.className += " flex-2";
-      //     }
-      //     this.fristPanel = true;
-      //   }else{
-      //
-      //     // เช็คว่ามีแล้วหรือยัง ถ้ามีแล้วก็ไม่เพิ่ม
-      //     // console.log(css);
-      //     if (css.classList.contains('flex-2') == false){
-      //       // css.style.display = "inline";
-      //       css.classList.remove("displyNone");
-      //       css.className += " flex-2 rightdata";
-      //       localStorage.setItem("togglePanel", true);
-      //     }else{
-      //       // css.style.display = "none";
-      //       css.classList.remove("flex-2");
-      //       css.classList.remove("rightdata");
-      //       css.className += " displyNone";
-      //       localStorage.setItem("togglePanel", false);
-      //     }
-      //   }
-      // },
     });
   </script>
 

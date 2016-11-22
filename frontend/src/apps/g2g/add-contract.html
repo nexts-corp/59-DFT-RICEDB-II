@@ -17,18 +17,17 @@
         :host{
           --paper-card:{
             width: 600px;
-            /*height: 462px;*/
             margin: 5px 15px 15px 10px;
           }
-          --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
-          --paper-fab:{
-            background-color: var(--paper-light-blue-500);
-            /*position: fixed;*/
-            right:   -93%;
-            bottom:   -370px;
-            /*margin-top:55%;*/
-          }
         }
+        paper-fab {
+           position: fixed;
+           right: 16px;
+           bottom: 16px;
+           --paper-fab-background:var(--paper-light-blue-500);
+           --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+           color: #fff;
+         }
         .left {
             margin: 0px 10px 0px 10px;
         }
@@ -47,7 +46,7 @@
         }
     </style>
     <template>
-      <content-panel>
+    <content-panel>
         <grid>
           <div class=" center-justified layout">
             <div id="content" class="layout vertical center-justified wrap">
@@ -63,9 +62,6 @@
                  </paper-card>
               </div>
               <div id="body">
-                <!-- <paper-material elevation="1">
-                  Contract
-                </paper-material> -->
                 <div class="center-justified  horizontal layout wrap">
                 <template is="dom-repeat" items="[[contracts]]">
                   <paper-card heading="[[item.contract_name]]" alt="[[item.contract_name]]">
@@ -80,11 +76,6 @@
                      </div>
                   </paper-card>
                 </template>
-                <!-- <paper-card class="horizontal layout center center-justified">
-                  <div class="card-content">[[layerContent]]
-                    <paper-button raised class="gl-large gl-btn-primary" on-tap="createContract">Create New Contract</paper-button>
-                  </div>
-                </paper-card> -->
                 </div>
 
              </div>
@@ -94,8 +85,6 @@
         </grid>
       <panel>
         <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-
-
               <div name="primary">
                 <panel-seleted title="Contract">
                   <section-content name="detail">
@@ -138,14 +127,15 @@
                 </panel-seleted>
               </div>
             </iron-pages>
-
-
-
       </panel>
 
       </content-panel>
-      <paper-fab icon="add" title="heart" id="addContract" on-tap="createContract"></paper-fab>
-      <paper-tooltip for="addContract" offset="0">Create Contract</paper-tooltip>
+      <div id="button">
+        <paper-fab icon="add" title="heart" id="addContract" on-tap="createContract"></paper-fab>
+        <paper-tooltip for="addContract" offset="0">Create Contract</paper-tooltip>
+      </div>
+
+
     </template>
     <script>
         Polymer({
@@ -198,7 +188,7 @@
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
-                this.glSetLayout('layout-main');
+                this.glSetLayout('layout-dashboard');
                 this.glQuery('addContract',this);
             },
             ready: function() {
