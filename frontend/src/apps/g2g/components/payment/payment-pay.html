@@ -1,5 +1,7 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../data/g2gModelBehavior.html">
+<link rel="import" href="format-number-behavior.html">
 <dom-module id="payment-pay">
   <style include="iron-flex iron-flex-alignment gl-color gl-size gl-table gl-toast" is="custom-style">
     .textheader-center {
@@ -110,7 +112,7 @@
               <td></td>
               <td><div style="margin-left:10px;">{{datapay.shm_no}}</div></td>
               <td><div style="margin-left:10px;">{{datapay.fee_no}}</div></td>
-              <td><div class="text-right">{{datapay.amount_thb_balance}}</div></td>
+              <td><div class="text-right">[[formatNumber(datapay.amount_thb_balance)]]</div></td>
               <td></td>
               <td><div class="text-center">{{datapay.pay_date}}</div></td>
               <td></td>
@@ -166,7 +168,11 @@
   <script>
     Polymer({
       is: 'payment-pay',
-      behaviors: [gl.behavior.core],
+      behaviors: [
+        gl.behavior.core,
+        FormatNumberBehavior,
+        g2gModelBehavior
+      ],
       properties: {
         dataSelected:{
           type:Object,
@@ -201,25 +207,29 @@
         this.getExporters();
         this.getBank();
       },
-      getDb: function(url, callback) {
-          axios.get(url)
-              .then(function(response) {
-                  callback(response.data);
-              }.bind(this))
-              .catch(function(error) {}.bind(this));
-      },
+      // getDb: function(url, callback) {
+      //     axios.get(url)
+      //         .then(function(response) {
+      //             callback(response.data);
+      //         }.bind(this))
+      //         .catch(function(error) {}.bind(this));
+      // },
       getExporters: function() {
         this.exporter_id = this.exporter_id || this.$.exporter_id;
-        this.getDb('./external/exporter?exporter_status=true', (data) => {
+        this.read('./external/exporter?exporter_status=true',(data)=>{
           this.exporter_id.items = data;
-        });
+        },false,'');
+        // this.getDb('./external/exporter?exporter_status=true', (data) => {
+        //   this.exporter_id.items = data;
+        // });
       },
       getBank: function(){
-        this.getDb('./common/bank', (data) => {
+        this.read('./common/bank',(data)=>{
           this.dataBank = data;
-          // var defaultBank = this.dataBank.filter(function (dataBank) { return this.dataBank.bank_id == 'KTB' });
-          //   console.log(defaultBank);
-        });
+        },false,'');
+        // this.getDb('./common/bank', (data) => {
+        //   this.dataBank = data;
+        // });
       },
       getPayment: function(e){
         // console.log(e.detail.value);
@@ -228,16 +238,26 @@
       _search:function(val){
         if(val!=""){
           // console.log(this.dataSelected);
-          this.getDb('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
+          this.read('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
             this.data = data;
             this.$$('#notfound').setAttribute("hidden", "hidden");
             if (this.data == null) {
               this.$$('#notfound').removeAttribute("hidden");
             }
-          });
-          this.getDb('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
+          },false,'');
+          this.read('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
             this.dataName = data;
-          });
+          },false,'');
+          // this.getDb('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
+          //   this.data = data;
+          //   this.$$('#notfound').setAttribute("hidden", "hidden");
+          //   if (this.data == null) {
+          //     this.$$('#notfound').removeAttribute("hidden");
+          //   }
+          // });
+          // this.getDb('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
+          //   this.dataName = data;
+          // });
         }
         else {
           this.data = [];
