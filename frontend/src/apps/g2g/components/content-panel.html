@@ -19,12 +19,12 @@
     }
   </style>
 
-  <template is="dom-bind">
+  <template >
 
     <content select="grid"></content>
     <!-- align="right" -->
     <app-drawer id="drawer" align="right" swipe-open>
-        <div class="rightdata" align="left" >1212
+        <div class="rightdata" align="left" >
           <content select="panel" ></content>
         </div>
       </app-drawer>
@@ -33,18 +33,9 @@
   <script>
     Polymer({
       is:'content-panel',
-      properties: {
-        items: {
-          type: Array,
-          value:['inbox', 'favorite', 'polymer', 'question-answer', 'send', 'archive', 'backup', 'dashboard']
-        }
-      },
       behaviors:[gl.behavior.core],
       created:function(){
         this.glQuery('contentPanel',this);
-      },
-      ready: function() {
-        // console.log(this.$.drawer.toggle());
       },
       changDrawer:function(){
         //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
