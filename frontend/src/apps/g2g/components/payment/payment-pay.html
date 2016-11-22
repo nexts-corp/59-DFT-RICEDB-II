@@ -130,7 +130,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-dropdown-menu style="width:100%;" label="ธนาคาร" placeholder="กรุณาเลือกธนาคาร">
-            <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataCheck.bank_id}}" name="bank_id">
+            <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{bank_id}}" name="bank_id">
               <template is="dom-repeat" as="bank" items="[[dataBank]]">
                 <paper-item value="{{bank.bank_id}}">{{bank.bank_name_th}}</paper-item>
               </template>
@@ -188,6 +188,10 @@
         dataPay:{
           type:Object,
           value:{}
+        },
+        bank_id:{
+          type:String,
+          value:'KTB'
         }
       },
       created: function() {
@@ -213,6 +217,8 @@
       getBank: function(){
         this.getDb('./common/bank', (data) => {
           this.dataBank = data;
+          // var defaultBank = this.dataBank.filter(function (dataBank) { return this.dataBank.bank_id == 'KTB' });
+          //   console.log(defaultBank);
         });
       },
       getPayment: function(e){
@@ -258,7 +264,7 @@
             pay_date : this.dataCheck.pay_date,
             pay_no : this.dataCheck.pay_no,
             bank_branch : this.dataCheck.bank_branch,
-            bank_id : this.dataCheck.bank_id
+            bank_id : this.bank_id
           }
         });
       },
