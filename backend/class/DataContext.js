@@ -47,12 +47,14 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                             tb_name: tbname,
                             action: "update",
                             id_value: obj.id,
+                            old_value: null,
                             new_value: obj,
                             date_created: new Date(),
                             actor: 'admin'
                         }
-                        if (response.unchanged == 1) history['old_value'] = null;
-                        else history['old_value'] = response.changes[0].val;
+                        if (response.unchanged != 1)
+                            history['old_value'] = response.changes[0].val;
+
                         r.db(dbname).table('history').insert(history).run(conn).then()
                     }
                     res.json(result);
