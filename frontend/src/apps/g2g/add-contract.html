@@ -131,6 +131,7 @@
 
       </content-panel>
       <div id="button">
+        <button type="button" name="button" on-tap="test">test</button>
         <paper-fab icon="add" title="heart" id="addContract" on-tap="createContract"></paper-fab>
         <paper-tooltip for="addContract" offset="0">Create Contract</paper-tooltip>
       </div>
@@ -143,6 +144,7 @@
             listeners: {
                 // 'nx-grid-tap': 'nxGridTap',
                 // 'nx-grid-dblclick': 'nxGridDblclick'
+                'refresh-contract':'_getChange',
                 'select': 'selecteddata',
                 'vessel-insert-common': 'shipmentCommon',
                 'vessel-edit-common' : 'shipmentCommon',
@@ -184,7 +186,6 @@
             },
             observers:[
               '_getCml(dataContract.contract_id)',
-              // 'getChange(dataContract.*)'
             ],
             created: function() {
                 this.glSetTitle('ทำสัญญา');
@@ -192,45 +193,46 @@
                 this.glQuery('addContract',this);
             },
             ready: function() {
+
               // console.log(this.loaded);
               this.read('./common/buyer',(data)=>{
                 this.buyyer=data;
               },false,'put');
-              this.getChange(false,'get');
+              this._getChange(false,'get');
               // list riceType
-              this.getDb('./common/typeRice',(data)=>{
+              this.read('./common/typeRice',(data)=>{
                 this.typeRice=data;
               },false);
               // list package
-              this.getDb('./common/package',(data)=>{
+              this.read('./common/package',(data)=>{
                 this.package=data;
               },false);
-              this.getDb('./external/exporter?exporter_active=true&trader_active=true',(data)=>{
+              this.read('./external/exporter?exporter_active=true&trader_active=true',(data)=>{
                   this.common.seller= data;
                   // console.log(this.common.seller);
               },false);
-              this.getDb('./common/carrier',(data)=>{
+              this.read('./common/carrier',(data)=>{
                 //เอาข้อมูลไปยัดลง item ใน คอมโบบล็อก id carrier_id
                   this.common.carrier= data;
               },false);
               //shipline_id
-              this.getDb('./common/shipline/',(data)=>{
+              this.read('./common/shipline/',(data)=>{
                 this.common.shipline = data;
               },false);
               //ship in shipline
-              this.getDb('./common/shipline/ship',(data)=>{
+              this.read('./common/shipline/ship',(data)=>{
                 this.common.shipInShipline = data;
               },false);
               //get surveyor_id
-              this.getDb('./common/surveyor',(data)=>{
+              this.read('./common/surveyor',(data)=>{
                 this.common.surveyor = data;
               },false);
               // list port
-              this.getDb('./common/port/',(data)=>{
+              this.read('./common/port/',(data)=>{
                 this.common.countryport =  data;
               },false);
               // list incoterms  ชนิดการจ่าย
-              this.getDb('./common/incoterms',(data)=>{
+              this.read('./common/incoterms',(data)=>{
                 this.incoterms=data;
               },false);
               this.chart = {
@@ -261,12 +263,23 @@
                 ]
                 };
             },
-            getChange:function (refresh,action) {
-              // console.log('action ',action);
-              this.getDb('./g2g/contract/list',(data)=>{
+            _checkEvent:function (eRefresh,eAction) {
+              var refresh,action;
+              if (eRefresh.detail != undefined) {
+                refresh=eRefresh.detail.refresh;
+                action=eRefresh.detail.action;
+              } else {
+                refresh=eRefresh;
+                action=eAction;
+              }
+              return {refresh,action}
+            },
+            _getChange:function (refresh,action) {
+              var item = this._checkEvent(refresh,action);
+              this.read('./g2g/contract/list',(data)=>{
                 this.contracts=data;
                 // console.log("this.contracts=>",this.contracts);
-              },refresh,action)
+              },item.refresh,item.action)
             },
             selecteddata:function (e) {
               // console.log(e.detail.data.shm_id);
@@ -279,6 +292,10 @@
             },
             test:function () {
               console.log('เข้าโวยยยยยยยยยย');
+              console.log('openDialog');
+              this.fire('toast',{status:'connectError',text:'Error code 404 not found', //คำสั่งสำหรับเปิด toast error
+        callback:function(){
+        }})
             },
             createContract:function () {
               this.layerContent='four';
@@ -293,18 +310,17 @@
               } else {
                 this.async(()=>{
                   var contractId = e.detail.contractId;
-                  // console.log(this.contracts);
                     var dataContract = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
                         // console.log(dataConfirm);
                         this.dataContract = dataContract[0];
-                        console.log('new =>',this.dataContract);
+                        // console.log('new =>',this.dataContract);
                 },500);
               }
             },
             editConfirm:function (e) {
               if (e.currentTarget.data != undefined) {
                 this.layerContent="secondary";
-                console.log('yy',e.currentTarget.data);//.data);
+                // console.log('yy',e.currentTarget.data);//.data);
                 this.dataConfirm = e.currentTarget.data;
                 this.glQuery('contentPanel').changDrawer();
               } else {
@@ -314,7 +330,7 @@
                     var dataConfirm = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
                         // console.log(dataConfirm);
                         this.dataConfirm = dataConfirm[0];
-                        console.log('new =>',this.dataConfirm);
+                        // console.log('new =>',this.dataConfirm);
                 },500);
               }
             },
@@ -336,10 +352,7 @@
               }
             },
             editPayment:function (e) {
-              // console.log(e.target.getAttribute("shmId"));
               document.cookie = "url="+e.target.getAttribute("shmId");
-              // console.log(document.cookie);
-
               // console.log(x.indexOf("url"));
               this.glChangePath('/g2g/add-draft/');
             },
@@ -358,37 +371,28 @@
                 }
                 // console.log(contractId);
                 if (contractId != null) {
-                  // this.async(()=>{
                     this.read('./g2g/confirm/contract/id/'+contractId,(data)=>{
                       // console.log('data =>', data);
                       this.cml = data;
                     },false,'put');
-                    // console.log('this.cml =>',this.cml);
-                  // },1000);
                 }
               }
-
-
-
             },
             conFirmDeatil:function (cmlId) {
               this.glQuery('layoutMain').openToastLoading();
-              this.getDb('./g2g/confirm/id/'+cmlId,(data)=>{
+              this.read('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
                 // console.log(this.confirmLetter);
               },false,'get');
-              // console.log(this.confirmLetter);
             },
             shipMentDeatil:function (id,refresh,action) {
-              // get put delete
               // console.log('เข้ากระบวนการลบ 1');
-              // console.log(id);
               if (action == 'get') {
                 this.glQuery('layoutMain').openToastLoading();
               }
               // console.log('=>',id,refresh,action);
-              this.getDb('./g2g/shipment/id/'+id,(data)=>{
-                this.getDb('./g2g/contract/id/'+data.contract_id,(data2)=>{
+              this.read('./g2g/shipment/id/'+id,(data)=>{
+                this.read('./g2g/contract/id/'+data.contract_id,(data2)=>{
                   data.country =  data2.country_id;
                   data.buyerMasks =  data2.buyer_masks;
                   this.shipMent = data;
@@ -397,41 +401,6 @@
               });
             },
 
-            getDb:function (url,callback,refresh,action) {
-              // console.log(url);
-              axios.get(url)
-                .then((response)=>{
-                    callback(response.data);
-                    // console.log(action);
-                      switch (action) {
-                          case 'get':
-                                    this.glQuery('layoutMain').closeToastLoading(function(){
-                                    this.checkRefresh(refresh);
-                                    }.bind(this));
-                          break;
-                          // insert & updoate
-                          case 'put':
-                                    this.glQuery('layoutMain').closeToastSaveing(function(){
-                                      this.checkRefresh(refresh);
-                                    }.bind(this));
-                          break;
-                          case 'delete':
-                                    this.glQuery('layoutMain').closeToastDeleteing(function(){
-                                      this.checkRefresh(refresh);
-                                    }.bind(this));
-                          break;
-                      }
-                })
-                .catch((error)=> {
-                  console.log(error);
-                });
-                // console.log(1);
-            },
-            checkRefresh:function (refresh) {
-              if (refresh == true) {
-                this.glQuery('contentPanel').changDrawer();
-              }
-            },
             attached:function(){
               this.layoutMain = this.glQuery('layoutMain');
               var resolvedPageUrl = this.resolveUrl(`components/promise/promise-insert.html`);

@@ -2,6 +2,9 @@
 <dom-module id="promise-detail-insert">
 
     <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+        gl-form-dropdown-menu{
+          width: 100%;
+        }
         .bg {
             background-color: var(--paper-grey-200);
             border: 1px solid black;
@@ -40,24 +43,24 @@
 
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box id="buyer_id" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
+        <gl-combo-box class="required" required id="buyer_id" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
             item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{buyyer}}" on-value-changed="_getBuyerAddress"></gl-combo-box>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input class="bottom approve" error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+            <gl-form-input class="required"  required class="bottom approve" error-message="กรุณาใส่ชื่อสัญญา" required label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+            <vaadin-date-picker class="required"  required label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
           </gl-grid-col>
         </gl-grid-row>
         <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
             <div class="riceName">
               จำนวนข้าวที่ทำสัญญา :
             </div>
-          </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(data.*,'contract_quantity')]]
-            <gl-form-input  auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+          </gl-grid-col> -->
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
+            <gl-form-input class="required"  required auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวนข้าวที่ทำสัญญา (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่จำนวนตัน" name="contract_quantity"></gl-form-input>
         </gl-grid-col>
         </gl-grid-row>
         <template is="dom-repeat" items="{{data.contract_type_rice}}">
@@ -65,15 +68,14 @@
               <gl-grid-row>
 
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-dropdown-menu label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
+                    <gl-form-dropdown-menu class="required"  required label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
                       <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
                         <template is="dom-repeat" items="[[typeRice]]">
                           <paper-item value="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
                         </template>
-
-    </paper-menu>
-    </gl-form-dropdown-menu>
-    </gl-grid-col>
+                    </paper-menu>
+                  </gl-form-dropdown-menu>
+                </gl-grid-col>
 
     <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(item.*,'type_rice_quantity')]]
         <gl-form-input  auto-validate error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
@@ -92,22 +94,19 @@
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
             <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
-            <gl-form-textarea disabled rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
+            <gl-form-textarea class="required"  required disabled rows="2" label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-            <gl-form-textarea  rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+            <gl-form-textarea class="required"  required rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
 
     <div class="horizontal end-justified layout">
       <!-- [[data.contract_status]] -->
         <paper-button class="gl-btn-danger" raised on-tap="cancelDrawer">ยกเลิก</paper-button>
-
-          <paper-button class="gl-btn-success" on-tap="saveData" raised>บันทึก</paper-button>
-
-
+        <paper-button class="gl-btn-success" on-tap="saveData" raised>บันทึก</paper-button>
     </div>
     </template>
 
@@ -122,7 +121,6 @@
                 data: {
                     type: Object,
                     value: {
-                        name: '',
                         contract_type_rice: [{
                             type_rice_id: '',
                             type_rice_name_en: '',
@@ -130,17 +128,7 @@
                         }]
                     }
                 },
-                Newdata:{
-                  type:Object,
-                  value: {
-                    contract_name:'',
-                    buyer_id:'',
-                    contract_date:'',
-                    contract_type_rice:'',
-                  }
-                },
             },
-            // observers
             _getBuyerAddress:function (e) {
               var selectedItem = e.detail.value;
               // console.log(selectedItem);
@@ -162,28 +150,15 @@
             },
 
             saveData: function() {
-              //  this.data
-
-              for (var i = 0; i < this.data.contract_type_rice.length; i++) {
-                    delete this.data.contract_type_rice[i].type_rice_desc_en;
-                    delete this.data.contract_type_rice[i].type_rice_name_en;
-                    delete this.data.contract_type_rice[i].type_rice_name_th;
-              }
-              this.Newdata.contract_name=this.data.contract_name;
-              this.Newdata.contract_quantity=this.data.contract_quantity;
-              this.Newdata.buyer_id=this.data.buyer_id;
-              this.Newdata.contract_date=new Date (this.data.contract_date);
-              this.Newdata.contract_type_rice=this.data.contract_type_rice;
-              this.Newdata.contract_status=false;
-              this.Newdata.contract_desc=this.data.contract_desc;
-
-              // console.log(this.Newdata);
-
-              this.glQuery('layoutMain').openToastSaveing();
-              console.log(this.Newdata);
-                this.insert('./g2g/contract/insert',this.Newdata, () => {
-                  this.glQuery('addContract').getChange(true,'put');
+              this.data.contract_date=new Date (this.data.contract_date);
+              this.data.contract_status=false;
+              var el = Polymer.dom(this.root).querySelectorAll('.required');
+              var stat = el.map((el)=> el.validate());
+              if (stat.every(elem => elem == true)) {
+                this.insert('./g2g/contract/insert',this.data, () => {
+                  this.fire('refresh-contract',{refresh:true ,action:'put'});
                  });
+              }
             },
             cancelDrawer:function () {
               this.glQuery('contentPanel').changDrawer();

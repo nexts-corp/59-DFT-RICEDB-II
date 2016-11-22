@@ -35,15 +35,31 @@
       //   this.backPage();
       //  });
       insert:function (url,data,actionInpage) {
+
         axios.post(url, data)
                   .then((response)=> {
-                    console.log("success");
-                    console.log(response);
-                    actionInpage();
+                    // console.log("success");
+                    // console.log(response);
+                    this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+                    // console.log(response.data.id != null);
+                    if (response.data.id != null) {
+                      this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                         callback:function(){
+                           actionInpage();
+                         }
+                      });
+                    } else {
+                      this.fire('toast',{status:'connectError',text:'ไม่สามารถบันทึกได้', //คำสั่งสำหรับเปิด toast error
+                        callback:function(){}
+                      });
+                    }
                   })
                   .catch((error)=> {
-                    console.log("error");
-                    console.log(error);
+                    // console.log("error");
+                    // console.log(error);
+                    this.fire('toast',{status:'connectError',text:'Can not connect the database server', //คำสั่งสำหรับเปิด toast error
+                      callback:function(){}
+                    });
                   })
 
       },
@@ -55,34 +71,37 @@
       read:function (url,callback,refresh,action) {
         axios.get(url)
               .then((response)=> {
-                console.log("success");
+                // console.log("success");
+                console.log(response.data);
                 // actionInpage();
                 callback(response.data);
                 switch (action) {
+                  //read
                     case 'get':
-                              this.glQuery('layoutMain').closeToastLoading(()=>{
-                                this.checkRefresh(refresh);
-                              });
+                              // this.glQuery('layoutMain').closeToastLoading(()=>{
+                              //   this.checkRefresh(refresh);
+                              // });
                     break;
                     // insert & updoate
                     case 'put':
-                              this.glQuery('layoutMain').closeToastSaveing(()=>{
-                                this.checkRefresh(refresh);
-                              });
+                            this._checkRefresh(refresh);
                     break;
                     case 'delete':
-                              this.glQuery('layoutMain').closeToastDeleteing(()=>{
-                                this.checkRefresh(refresh);
-                              });
+                              // this.glQuery('layoutMain').closeToastDeleteing(()=>{
+                              //   this.checkRefresh(refresh);
+                              // });
                     break;
                 }
               })
               .catch((error)=> {
-                console.log("error");
-                console.log(error);
+                // console.log("error");
+                // console.log(error);
+                this.fire('toast',{status:'connectError',text:'Can not connect the database server', //คำสั่งสำหรับเปิด toast error
+                  callback:function(){}
+                });
               })
       },
-      checkRefresh:function (refresh) {
+      _checkRefresh:function (refresh) {
         if (refresh == true) {
           this.glQuery('contentPanel').changDrawer();
         }
