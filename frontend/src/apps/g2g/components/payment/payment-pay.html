@@ -207,29 +207,16 @@
         this.getExporters();
         this.getBank();
       },
-      // getDb: function(url, callback) {
-      //     axios.get(url)
-      //         .then(function(response) {
-      //             callback(response.data);
-      //         }.bind(this))
-      //         .catch(function(error) {}.bind(this));
-      // },
       getExporters: function() {
         this.exporter_id = this.exporter_id || this.$.exporter_id;
         this.read('./external/exporter?exporter_status=true',(data)=>{
           this.exporter_id.items = data;
         },false,'');
-        // this.getDb('./external/exporter?exporter_status=true', (data) => {
-        //   this.exporter_id.items = data;
-        // });
       },
       getBank: function(){
         this.read('./common/bank',(data)=>{
           this.dataBank = data;
         },false,'');
-        // this.getDb('./common/bank', (data) => {
-        //   this.dataBank = data;
-        // });
       },
       getPayment: function(e){
         // console.log(e.detail.value);
@@ -248,16 +235,6 @@
           this.read('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
             this.dataName = data;
           },false,'');
-          // this.getDb('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
-          //   this.data = data;
-          //   this.$$('#notfound').setAttribute("hidden", "hidden");
-          //   if (this.data == null) {
-          //     this.$$('#notfound').removeAttribute("hidden");
-          //   }
-          // });
-          // this.getDb('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
-          //   this.dataName = data;
-          // });
         }
         else {
           this.data = [];
@@ -292,20 +269,27 @@
           if(result == true){
             // console.log(detail.datas);
             detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-            axios.post('./g2g/payment/insert', detail.datas)
-                      .then(function (response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshBank')._search();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                        detail.el.$.dialog.toggle();
-                      }.bind(this))
-                      .catch(function (error) {
-                        console.log("error");
-                        console.log(error);
-                      })
+            detail.el.insert('./g2g/payment/insert', detail.datas, () => {
+              detail.el.glQuery('refreshBank')._search();
+              detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+              detail.el.$.dialog.toggle();
+             });
+            // axios.post('./g2g/payment/insert', detail.datas)
+            //           .then(function (response) {
+            //             console.log("success");
+            //             console.log(response);
+            //             detail.el.glQuery('refreshBank')._search();
+            //             detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+            //               console.log('success');
+            //             }});
+            //             detail.el.$.dialog.toggle();
+            //           }.bind(this))
+            //           .catch(function (error) {
+            //             console.log("error");
+            //             console.log(error);
+            //           })
           }
         },
       _cancel:function() {

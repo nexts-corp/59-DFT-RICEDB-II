@@ -13,71 +13,77 @@
     margin-top: 20px;
   }
   .header{
-    padding-top: 35px;
-    font-size: var(--font-size-h2);
+    background-color: orange;
+		padding: 5px 0px 5px 0px;
+		color: white;
+    font-size: var(--font-size-h3);
     text-decoration: underline;
   }
 </style>
   <template>
-    <div class="horizontal center-justified layout header">
-      Confirmation Letter
-    </div>
-    <iron-pages selected="{{layerConfirm}}">
-      <div id="listitem">
-        <div class="addconfirm horizontal end-justified layout">
-          <paper-button raised class="gl-btn-primary" on-tap="createConfirm">Create Confirmation Letter</paper-button>
-        </div>
-        <div class="selectconfirm">
-          <list-confirm data="{{data.confirm_letter}}">
-            <items type="primary">
-              <list item="cl_no" label="No" width="flex" type="string"></list>
-              <list item="cl_name" label="Name" width="flex" type="string"></list>
-              <list item="cl_quantity_total" label="จำนวน (ตัน)" width="flex" type="string"></list>
-              <list item="cl_status_name" label="สถานะ" width="flex" type="string"></list>
-              <!-- <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ (ตัน)" width="flex" type="string"></list> -->
-            </items>
-          </list-confirm>
-        </div>
+    <gl-form-panel set-padding="0px 0px 20px 0px">
+      <div class="horizontal center-justified layout header">
+        Confirmation Letter
       </div>
-      <div>
-        <panel-seleted>
+      <gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
+        <iron-pages selected="{{layerConfirm}}">
+          <div id="listitem">
+            <div class="addconfirm horizontal end-justified layout">
+              <paper-button raised class="gl-btn-primary" on-tap="createConfirm">Create Confirmation Letter</paper-button>
+            </div>
+            <div class="selectconfirm">
+              <list-confirm data="{{data.confirm_letter}}">
+                <items type="primary">
+                  <list item="cl_no" label="No" width="flex" type="string"></list>
+                  <list item="cl_name" label="Name" width="flex" type="string"></list>
+                  <list item="cl_quantity_total" label="จำนวน (ตัน)" width="flex" type="string"></list>
+                  <list item="cl_status_name" label="สถานะ" width="flex" type="string"></list>
+                  <!-- <list item="cl_quantity_balance" label="ยังไม่ได้สงมอบ (ตัน)" width="flex" type="string"></list> -->
+                </items>
+              </list-confirm>
+            </div>
+          </div>
+          <div>
+            <panel-seleted>
 
-         <section-content name="detail">
-           <promise-confirm
-                             confirm-letter="[[confirmLetter]]"
-                             rice-type="[[riceType]]"
-                             package="[[package]]"
-                             incoterms="[[incoterms]]"></promise-confirm>
-         </section-content>
-         <section-content name="print">
-             <vessel-print></vessel-print>
-         </section-content>
-         <section-content name="file">
-             <promise-fileup></promise-fileup>
-         </section-content>
-       </panel-seleted>
+             <section-content name="detail">
+               <promise-confirm
+                                 confirm-letter="[[confirmLetter]]"
+                                 rice-type="[[riceType]]"
+                                 package="[[package]]"
+                                 incoterms="[[incoterms]]"></promise-confirm>
+             </section-content>
+             <section-content name="print">
+                 <vessel-print></vessel-print>
+             </section-content>
+             <section-content name="file">
+                 <promise-fileup></promise-fileup>
+             </section-content>
+           </panel-seleted>
 
-      </div>
-      <div>
-        <panel-seleted>
+          </div>
+          <div>
+            <panel-seleted>
 
-         <section-content name="detail">
-           <promise-insert
-                           contract-id="[[data.contract_id]]"
-                           package="[[package]]"
-                           rice-type="[[riceType]]"
-                           incoterms="[[incoterms]]"></promise-insert>
-         </section-content>
-         <section-content name="print">
-             <vessel-print></vessel-print>
-         </section-content>
-         <section-content name="file">
-             <promise-fileup></promise-fileup>
-         </section-content>
-       </panel-seleted>
+             <section-content name="detail">
+               <promise-insert
+                               contract-id="[[data.contract_id]]"
+                               package="[[package]]"
+                               rice-type="[[riceType]]"
+                               incoterms="[[incoterms]]"></promise-insert>
+             </section-content>
+             <section-content name="print">
+                 <vessel-print></vessel-print>
+             </section-content>
+             <section-content name="file">
+                 <promise-fileup></promise-fileup>
+             </section-content>
+           </panel-seleted>
 
-      </div>
-    </iron-pages>
+          </div>
+        </iron-pages>
+      </gl-form-panel-body>
+    </gl-form-panel>
 
 
 
