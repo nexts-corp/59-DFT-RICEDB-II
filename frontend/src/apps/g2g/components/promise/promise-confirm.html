@@ -228,23 +228,17 @@
                 newConfirm:{
                     type:Object,
                     value:
-                          [
                             {
                               cl_date:"",
                               cl_id:"",
                               cl_name:"",
-                              cl_no:"1",
+                              cl_no:"",
                               cl_quality:"",
                               cl_total_quantity:"",
-                              cl_type_rice:
-                                [
-                                  {
-                                    id:1
-                                  }
-                                ],
+                              cl_type_rice:[],
                               inct_id:''
                             }
-                          ]
+
 
                 }
             },
@@ -276,35 +270,24 @@
             addConfirm:function () {
               //เปลี่ยนเป็น id
 
-              // console.log(this.confirmLetter.cl_id);
-                // this.confirmLetter.id = this.confirmLetter.cl_id;
+              this.confirmLetter.cl_type_rice.map((riceCode,index)=>{
+                this.push('newConfirm.cl_type_rice',
+                  {
+                    type_rice_id :riceCode.type_rice_id,
+                    type_rice_quantity :riceCode.type_rice_quantity,
+                    package :[]
+                  }
+                );
+                this.confirmLetter.cl_type_rice[index].package.map((packages)=>{
+                  this.push('newConfirm.cl_type_rice.'+index+'.package',
+                    {
+                      package_id :packages.package_id,
+                      price_per_ton :packages.price_per_ton
+                    }
+                  );
+                });
+              });
 
-              this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
-              delete this.confirmLetter.cl_id
-              delete this.confirmLetter.cl_total_quantity;
-              for (var i = 0; i < this.confirmLetter.cl_type_rice.length; i++) {
-                // console.log(this.confirmLetter.cl_type_rice[i].type_rice_quantity);
-                // this.confirmLetter.cl_type_rice[i].type_rice_quantity = parseFloat(this.confirmLetter.cl_type_rice[i].type_rice_quantity);
-                delete this.confirmLetter.cl_type_rice[i].type_rice_desc_en
-                delete this.confirmLetter.cl_type_rice[i].type_rice_name_en;
-                delete this.confirmLetter.cl_type_rice[i].type_rice_name_th;
-                for (var j = 0; j < this.confirmLetter.cl_type_rice[i].package.length; j++) {
-                  // this.confirmLetter.cl_type_rice[i].package[j].price_per_ton = parseFloat(this.confirmLetter.cl_type_rice[i].package[j].price_per_ton);
-                  delete this.confirmLetter.cl_type_rice[i].package[j].package_kg_per_bag;
-                  delete this.confirmLetter.cl_type_rice[i].package[j].package_weight_bag;
-                  delete this.confirmLetter.cl_type_rice[i].package[j].package_name;
-                }
-              }
-              console.log(this.confirmLetter);
-              this.confirmLetter.contract_type_rice.map((riceCode)=>{
-                this.push('Newdata.contract_type_rice', {type_rice_id :riceCode.type_rice_id});
-              })
-              package:Array[1]
-              type_rice_id:"10061090002"
-              type_rice_quantity:13
-              // this.glQuery('layoutMain').openToastSaveing();
-              // this.postDb(this.confirmLetter);
-              // this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
               this.newConfirm.cl_date = new Date (this.confirmLetter.cl_date);
               this.newConfirm.cl_name = this.confirmLetter.cl_name;
               this.newConfirm.cl_no = this.confirmLetter.cl_no;
@@ -320,11 +303,16 @@
               // console.log(this.csonfirmLetter);
               if (stat.every(elem => elem == true)) {
                 console.log(this.newConfirm);
-                // this.insert('./g2g/confirm/insert',this.confirmLetter, () => {
-                //   this.fire('refresh-contract',{refresh:false ,action:'put'});
-                //   this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
-                //   this.backPage();
-                //  });
+                this.update('./g2g/confirm/update',this.newConfirm, () => {
+                  this.fire('refresh-contract',{refresh:false ,action:'put'});
+                  this.fire('add-confirm',{contractId:this.newConfirm.contract_id});
+                  if(this.newConfirm.cl_status == true) {
+                        this.fire('get-confirm-new',{contract_id:this.newConfirm.contract_id,});
+                        this.backPage();
+                  }
+                      // this.backPage();
+                  this.editInput();
+                 });
               }
               // this.update('./g2g/confirm/update',this.confirmLetter, () => {
               //     this.glQuery('addContract').getChange(false,'put');
