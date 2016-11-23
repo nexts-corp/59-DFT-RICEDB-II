@@ -327,7 +327,7 @@ router.post(['/calculate'], function (req, res, next) {
                     }).pluck('quantity', 'exporter_id')
                         .merge(function (row3) {
                             return {
-                                quantity_update:row3('quantity'),
+                                quantity_update: row3('quantity'),
                                 period: row('period')
                                     .merge(function (row4) {
                                         return r.do(row3('quantity').mul(row4('percent')).div(100), function (result) {
@@ -337,7 +337,7 @@ router.post(['/calculate'], function (req, res, next) {
                             }
                         })
                 }
-            }).without('year','period');
+            }).without('year', 'period');
 
         statement.run(conn, function (err, cursor) {
             if (!err) {
@@ -562,7 +562,11 @@ router.post(['/allocate_quota'], function (req, res, next) {
 router.get(['/spreadsheets'], function (req, res, next) {
     var params = req.query;
     db.query(function (conn) {
-        var statement = r.db('eu').table('allocate_quota').get(params.id)('spreadsheets');
+        var statement = r.db('eu').table('allocate_quota').get(params.id)
+            .pluck('spreadsheets', 'quota_amount', 'sum_export', 'sum_for_cal', 'sum_quota', 'quota_id', 'ordinal_number', 'type_rice_id', 'id')
+            .merge(function (row) {
+                return r.db('eu').table('type_rice').get(row('type_rice_id')).without('id')
+            })
 
         statement.run(conn, function (err, cursor) {
             if (!err) {
