@@ -9,8 +9,9 @@ function DataContext() {
     this.date_updated = new Date();
 }
 // // class methods
-var result = { result: false, message: null, id: null };
+
 DataContext.prototype.insert = function (dbname, tbname, obj, res) {
+    var result = { result: false, message: null, id: null };
     obj = Object.assign(obj, this);
     db.query(function (conn) {
         r.db(dbname).table(tbname)
@@ -31,7 +32,8 @@ DataContext.prototype.insert = function (dbname, tbname, obj, res) {
     })
 };
 DataContext.prototype.update = function (dbname, tbname, obj, res) {
-    if (obj.id != '' && obj.id != null) {
+    var result = { result: false, message: null, id: null };
+    if (obj.id != '' && obj.id != null && typeof obj.id != 'undefined') {
         result.id = obj.id;
         obj = Object.assign(obj, { date_updated: this.date_updated, updater: 'admin' });
         db.query(function (conn) {
@@ -52,8 +54,11 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                             date_created: new Date(),
                             actor: 'admin'
                         }
-                        if (response.unchanged != 1)
-                            history.old_value = response.changes[0].val;
+                        console.log(response);
+                        // if (response.unchanged != 1){
+                        //     console.log("xx");
+                        //     history['old_value'] = response.changes[0].val;
+                        // }
 
                         r.db(dbname).table('history').insert(history).run(conn).then()
                     }
@@ -70,6 +75,7 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
     }
 };
 DataContext.prototype.delete = function (dbname, tbname, id, res) {
+    var result = { result: false, message: null, id: null };
     if (id != '' || id != null) {
         result.id = id;
         db.query(function (conn) {
