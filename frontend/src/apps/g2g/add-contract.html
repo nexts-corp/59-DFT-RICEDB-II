@@ -150,6 +150,7 @@
                 'vessel-edit-common' : 'shipmentCommon',
                 'get-contract-new':'editContract',
                 'get-confirm-new':'_getCml',
+                'get-confirm-detail-new':'conFirmDeatil',
                 'add-confirm':'editConfirm',
                 'add-shipment' : 'editShipment'
             },
@@ -282,7 +283,7 @@
               },item.refresh,item.action)
             },
             selecteddata:function (e) {
-              // console.log(e.detail.data.shm_id);
+              // console.log('selecteddata',e);
               if (e.detail.data.shm_id == undefined) {
                 this.conFirmDeatil(e.detail.data.cl_id);
               } else {
@@ -362,13 +363,14 @@
               e.detail.node.common=this.common;
             },
             _getCml:function (e) {
-              // console.log(e);
               var contractId;
               if (e != undefined) {
                 if (typeof e === 'string') {
                     contractId = e;
+                    // console.log('no Event');
                 } else {
                   contractId = e.detail.contract_id;
+                  // console.log('event');
                 }
                 // console.log(contractId);
                 if (contractId != null) {
@@ -380,10 +382,15 @@
               }
             },
             conFirmDeatil:function (cmlId) {
-
-              this.read('./g2g/confirm/id/'+cmlId,(data)=>{
+              var cml_Id;
+              if (cmlId instanceof Object) {
+                  console.log(cml_Id= cmlId.detail.cl_id);
+              } else {
+                cml_Id=cmlId;
+              }
+              this.read('./g2g/confirm/id/'+cml_Id,(data)=>{
                 this.confirmLetter = data;
-                // console.log(this.confirmLetter);
+                console.log(this.confirmLetter);
               },false,'get');
             },
             shipMentDeatil:function (id,refresh,action) {

@@ -230,16 +230,12 @@
                     value:
                             {
                               cl_date:"",
-                              cl_id:"",
                               cl_name:"",
                               cl_no:"",
                               cl_quality:"",
-                              cl_total_quantity:"",
                               cl_type_rice:[],
                               inct_id:''
                             }
-
-
                 }
             },
             behaviors: [
@@ -249,11 +245,11 @@
             ],
             observers: [
               'dataChange(data)',
-              'check(confirmLetter.cl_type_rice.*)'
+              // 'check(confirmLetter.cl_type_rice.*)'
             ],
-            check:function (data) {
-              // console.log(data);
-            },
+            // check:function (data) {
+            //   // console.log(data);
+            // },
             attached: function() {
               // console.log("created confirm-mation-common");
               this.fire('confirm-mation-common',{node:this});
@@ -293,7 +289,6 @@
               this.newConfirm.cl_no = this.confirmLetter.cl_no;
               this.newConfirm.cl_quality = this.confirmLetter.cl_quality;
               this.newConfirm.cl_status = this.confirmLetter.cl_status;
-              // this.newConfirm.cl_type_rice = Array[1]
               this.newConfirm.contract_id = this.confirmLetter.contract_id;
               this.newConfirm.id = this.confirmLetter.cl_id;
               this.newConfirm.inct_id = this.confirmLetter.inct_id;
@@ -302,31 +297,18 @@
               var stat = el.map((el)=> el.validate());
               // console.log(this.csonfirmLetter);
               if (stat.every(elem => elem == true)) {
-                console.log(this.newConfirm);
                 this.update('./g2g/confirm/update',this.newConfirm, () => {
                   this.fire('refresh-contract',{refresh:false ,action:'put'});
                   this.fire('add-confirm',{contractId:this.newConfirm.contract_id});
+                  this.fire('get-confirm-detail-new',{cl_id:this.newConfirm.id});
                   if(this.newConfirm.cl_status == true) {
                         this.fire('get-confirm-new',{contract_id:this.newConfirm.contract_id,});
-                        this.backPage();
                   }
-                      // this.backPage();
                   this.editInput();
+                  //ล่างค่า
+                  this.newConfirm={cl_type_rice:[]};
                  });
               }
-              // this.update('./g2g/confirm/update',this.confirmLetter, () => {
-              //     this.glQuery('addContract').getChange(false,'put');
-              //     // edit-noshipment.html
-              //     // console.log(this.confirmLetter);
-              //     //addContract
-              //     this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
-              //     if(this.confirmLetter.cl_status == true) {
-              //       this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
-              //       this.backPage();
-              //     }
-              //     // this.backPage();
-              //     this.editInput();
-              //  });
             },
             calcWeight: function(data) {
 
@@ -400,7 +382,8 @@
               // console.log(this.confirmLetter.cl_id);
               // this.deleteConfirmDb(this.confirmLetter.cl_id);
               this.delete('./g2g/confirm/delete/id/',this.confirmLetter.cl_id, () => {
-                this.glQuery('addContract').getChange(false,'delete');
+                //addcontract
+                this.fire('refresh-contract',{refresh:false ,action:'put'});
                 // addContract
                 this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
                 this.editInput();
@@ -408,6 +391,9 @@
                });
             },
             backPage:function () {
+              if (this.checkInput == false) {
+                this.editInput();
+              }
               this.fire('select', {
                 data: 'fin',
               });
