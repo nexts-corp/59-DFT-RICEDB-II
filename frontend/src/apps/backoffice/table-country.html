@@ -1,0 +1,176 @@
+<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
+<link rel="import" href="components/country/insert-country.html">
+<link rel="import" href="components/country/edit-country.html">
+<dom-module id="backoffice-table-country">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
+    .button-top{
+      margin: 20px;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-head {
+      text-align: center;
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h3);
+      font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    .table-head > tr > th:nth-child(1) {
+      width: 10%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 20%;
+    }
+    .table-head > tr > th:nth-child(3) {
+      width: 20%;
+    }
+    .table-head > tr > th:nth-child(4) {
+      width: 20%;
+    }
+    .table-head > tr > th:nth-child(5) {
+      width: 20%;
+    }
+    .elevation{
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+    }
+    </style>
+    <template>
+      <content-panel>
+        <grid>
+          <paper-material elevation="1" class="elevation">
+
+          <div class="text-head">ระบบจัดการประเทศ</div>
+
+          <div class="horizontal end-justified layout">
+            <paper-button class="gl-btn-primary button-top" title="เพิ่มประเทศ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มประเทศ</paper-button>
+          </div>
+
+          <table class="gl-table-default">
+            <thead class="table-head">
+              <tr>
+                <th><div class="text-center">รหัสประเทศ</div></th>
+                <th><div class="text-center">Country name<p>(ชื่อประเทศภาษาไทย)</div></th>
+                <th><div class="text-center">Country fullname<p>(ชื่อเต็มประเทศภาษาไทย)</div></th>
+                <th><div class="text-center">Country name<p>(ชื่อประเทศภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">Country fullname<p>(ชื่อเต็มประเทศภาษาอังกฤษ)</div></th>
+                <th style="text-align:right;">
+                  <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มประเทศ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มประเทศ</paper-button> -->
+                </th>
+              </tr>
+            </thead>
+
+            <template is="dom-repeat" items="{{dataCountry}}">
+              <tbody>
+                <tr>
+                  <td><div class="text-center">{{item.country_id}}</div></td>
+                  <td><div class="text-center">{{item.country_name_th}}</div></td>
+                  <td><div>{{item.country_fullname_th}}</div></td>
+                  <td><div class="text-center">{{item.country_name_en}}</div></td>
+                  <td><div>{{item.country_fullname_en}}</div></td>
+                  <td style="text-align:right;">
+                    <paper-icon-button data="{{item}}" on-tap="_edit" icon="icons:create"></paper-icon-button>
+                    <paper-icon-button data="{{item}}" icon="delete" on-tap="_delete"></paper-icon-button>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+
+          </table>
+          </paper-material>
+
+        </grid>
+
+        <panel>
+          <div class="left">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="addRedRegCountry"><insert-country></insert-country></div>
+              <div name="editRegCountry"><edit-country data="{{dataSelect}}"></edit-country></div>
+
+            </iron-pages>
+          </div>
+        </panel>
+      </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "backoffice-table-country",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            properties: {
+              dataCountry:{
+                type:Array
+              }
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            attached: function() {
+              this.getCountry();
+            },
+            created: function() {
+                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
+                this.glSetLayout('layout-registion');
+                this.glQuery('refreshCountry',this)
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent ="addRedRegCountry";
+            },
+            _edit: function(e) {
+              // console.log(e.target.data);
+              this.dataSelect = e.target.data;
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent ="editRegCountry";
+            },
+            _delete: function(e){
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการลบใช่หรือไม่ ?',
+              confirmed : this._confirmToast,
+              el: this,
+              datas: {
+                 id : e.target.data.country_id
+              }
+            });
+            },
+            _confirmToast:function(result,detail){
+              if(result == true){
+                detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                axios.delete('./common/country/delete/id/'+detail.datas.id)
+                    .then(function(response) {
+                        console.log("success");
+                        console.log(response);
+                        detail.el.glQuery('refreshCountry').getCountry();
+                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                          console.log('success');
+                        }});
+                    }.bind(this))
+                    .catch(function(error) {
+                        console.log("error");
+                        console.log(error);
+                    })
+              }
+            },
+            getDb: function(url, callback) {
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+            },
+            getCountry: function() {
+                this.getDb('./common/country', (data) => {
+                  this.dataCountry = data;
+                });
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,83 @@
+<dom-module id="edit-surveyor">
+<style include="iron-flex iron-flex-alignment gl-color gl-size">
+  .text-center {
+    text-align: center;
+    font-size: var(--font-size-h3);
+    background-color: var(--paper-grey-100);
+    margin-top: 20px;
+  }
+  .margin-top{
+    margin-top: 15px;
+  }
+  .button{
+    margin-top: 20px;
+  }
+</style>
+  <template>
+    <div class="text-center">แก้ไขข้อมูลผู้สำรวจรังวัด</div>
+
+    <!-- <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-label-input class="margin-top" label="รหัสผู้สำรวจ :" value="{{data.surveyor_id}}"></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row> -->
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="ชื่อผู้สำรวจรังวัด :" placeholder="กรอกชื่อผู้สำรวจรังวัด" value="{{data.surveyor_name}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+      <div class="button">
+        <paper-button class="gl-btn-danger" on-tap="_cancel" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_edit" raised>บันทึก</paper-button>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "edit-surveyor",
+      properties: {
+        data: {
+          type: Object,
+          value: {}
+        }
+      },
+      behaviors: [
+          gl.behavior.core,
+          gl.behavior.locales
+      ],
+      _edit:function(){
+        // console.log(this.data);
+        var datas = {
+          id : this.data.surveyor_id,
+          surveyor_name: this.data.surveyor_name
+        }
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+        axios.put('./common/surveyor/update', datas)
+            .then(function(response) {
+                console.log("success");
+                console.log(response);
+                this.glQuery('refreshSurveyor').getSurveyor();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+            }.bind(this))
+            .catch(function(error) {
+                console.log("error");
+                console.log(error);
+            })
+      },
+      _cancel:function() {
+        this.glQuery('contentPanel').changDrawer();
+        // this.data = {};
+      }
+    });
+  </script>
+</dom-module>
