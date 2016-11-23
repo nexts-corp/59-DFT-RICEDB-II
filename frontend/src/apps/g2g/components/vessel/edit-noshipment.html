@@ -8,23 +8,30 @@
   <template>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input label="Shipment Id"  error-message="กรุณาใส่รายละเอียด Shipment Id" required placeholder="Shipment Name" value="{{data.shm_no}}"></gl-form-input>
+        <gl-form-input class="required"  required  label="Shipment Id"  error-message="กรุณาใส่รายละเอียด Shipment Id" required placeholder="Shipment Name" value="{{data.shm_no}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,8]]">
-        <gl-form-input label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{data.shm_name}}"></gl-form-input>
+        <gl-form-input class="required"  required  label="Shipment Name"  error-message="กรุณาใส่รายละเอียด Shipment Name" required placeholder="Shipment Name" value="{{data.shm_name}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-    <gl-combo-box id="cl_id" label="Confirmation Letter" item-label-path="cl_no" error-message="กรุณาเลือกรายละเอียด Confirmation Letter"
+    <gl-combo-box class="required"  required  id="cl_id" label="Confirmation Letter" item-label-path="cl_no" error-message="กรุณาเลือกรายละเอียด Confirmation Letter"
         item-value-path="cl_id" value="{{data.cl_id}}" items="{{confirmLetter}}" ></gl-combo-box>
      </gl-grid-col>
-     </gl-grid-row>
+   </gl-grid-row>
+     <template is="dom-if" if="[[_checkInsert(insertPage)]]">
+       <div class="horizontal end-justified layout">
+         <paper-button class="gl-btn-danger" raised on-tap="backPageInsert">ย้อนกลับ</paper-button>
+         <paper-button raised on-tap="insertShipment" class="gl-btn-success">บัณทึก</paper-button>
+      </div>
+    </template>
+    <template is="dom-if" if="[[_checkInsert(editPage)]]">
      <div class="horizontal end-justified layout">
        <paper-button class="gl-btn-danger" raised on-tap="backPage">ย้อนกลับ</paper-button>
-       <paper-button raised on-tap="checkInsertOrUpdate" class="gl-btn-success">Save</paper-button>
+       <paper-button raised on-tap="updateShipment" class="gl-btn-success">บัณทึก</paper-button>
      </div>
-
+      </template>
   </template>
   <script >
     Polymer({
@@ -34,7 +41,7 @@
           g2gModelBehavior
       ],
       properties: {
-        updateShipment: {
+        editShipment: {
           type: Object,
           value:{}
         },
@@ -43,75 +50,60 @@
           value:{
               contract_id:''
           }
-        }
+        },
+
       },
       observers:[
         // 'getconfirm(contractId)'
+        'checkid(data.*)'
       ],
-      checkInsertOrUpdate:function () {
-        // console.log(this.insert == true);
-        if (this.insertPage != true) {
-            this.update();
-        }else {
-          // console.log(this.contractId);
-            this.insertShipment();
-        }
+      checkid:function (data) {
+        // console.log(data);
+      },
+      _checkInsert:function (data) {
+        return data == true;
+      },
+      backPageInsert:function () {
+        this.fire('shipment-list', {
+            data: 'editFin'
+        });
       },
       insertShipment:function () {
         this.data.contract_id= this.contractId;
         this.data.shm_status = false;
-      //  console.log(this.data);
-          // this.$.cl_id.reset();
-        // this.postDb(this.data);
-        this.insert('./g2g/shipment/insert',this.data, () => {
-          this.glQuery('addContract').getChange(false,'put');
-          // console.log('this.contractId =>',this.contractId);
-          // add-Contract.html
-          this.glQuery('layoutMain').openToastSaveing();
-          this.fire('add-shipment',{contract_id:this.contractId});
-          //shipment-page.html
-          this.fire('shipment-list', {
-            data: 'editFin'
-          });
-
-         });
+        var el = Polymer.dom(this.root).querySelectorAll('.required');
+        var stat = el.map((el)=> el.validate());
+        if (stat.every(elem => elem == true)) {
+          this.insert('./g2g/shipment/insert',this.data, () => {
+            this.fire('refresh-contract',{refresh:false ,action:'put'});
+            this.fire('add-shipment',{contract_id:this.contractId});
+              //shipment-page.html
+            this.backPageInsert();
+           });
+        }
       },
-      update:function () {
-
-        this.updateShipment.id = this.data.shm_id;
-        this.updateShipment.shm_name = this.data.shm_name;
-        this.updateShipment.contract_id = this.data.contract_id;
-        this.updateShipment.shm_no = this.data.shm_no;
-        this.updateShipment.cl_id = this.data.cl_id;
-        this.updateShipment.shm_status = this.data.shm_status;
-        this.glQuery('layoutMain').openToastSaveing();
-        // console.log(  this.updateShipment);
-        this.putDb(this.updateShipment);
-        // this.update('./g2g/shipment/update',this.updateShipment, () => {
-        //   // this.glQuery('addContract').getChange(false,'put');
-        //   // this.fire('shipmentedit', {
-        //   //   data: 'editFin'
-        //   // });
-        //  });
-      },
-      putDb:function (data) {
-        axios.put('./g2g/shipment/update', data)
-                  .then( (response)=> {
-                    console.log("success");
-                    console.log(response);
-                    console.log(data);
-                    this.glQuery('addContract').getChange(false,'put');
-                    // add-Contract.html
-                    // console.log(data.contract_id);
-                    this.fire('add-shipment',{contract_id:data.contract_id});
-                      this.fire('shipmentedit', {
-                        data: 'editFin'
-                      });
-                  })
-                  .catch(function (error) {
-                    console.log("error");
-                    console.log(error);
-                  })
+      updateShipment:function () {
+        // console.log(this.data);
+        this.editShipment.id = this.data.shm_id;
+        this.editShipment.shm_name = this.data.shm_name;
+        this.editShipment.contract_id = this.data.contract_id;
+        this.editShipment.shm_no = this.data.shm_no;
+        this.editShipment.cl_id = this.data.cl_id;
+        this.editShipment.shm_status = this.data.shm_status;
+        var el = Polymer.dom(this.root).querySelectorAll('.required');
+        var stat = el.map((el)=> el.validate());
+        if (stat.every(elem => elem == true)) {
+          // console.log(  this.editShipment);
+          this.update('./g2g/shipment/update',this.editShipment, () => {
+            this.fire('refresh-contract',{refresh:false ,action:'put'});
+            this.fire('add-shipment',{contract_id:this.editShipment.contract_id});
+            //ย้อนหน้า
+            this.fire('shipmentedit', {
+                data: 'editFin'
+            });
+            // break;
+           });
+        }
       },
       backPage:function () {
         //list-vessel

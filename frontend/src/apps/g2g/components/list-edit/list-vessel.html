@@ -196,7 +196,7 @@
     </div>
   </div>
   <div name="edit">
-    <edit-noshipment data="{{data}}" confirm-letter="[[confirmLetter]]"></edit-noshipment>
+    <edit-noshipment data="{{data}}" edit-page="{{editPage}}" confirm-letter="[[confirmLetter]]"></edit-noshipment>
   </div>
 
 
@@ -232,6 +232,10 @@
                 },
                 bl:{
                   type:Object,
+                },
+                editPage:{
+                  type: Boolean,
+                  value:true
                 },
                 shipment:{
                   type:Object,
@@ -294,8 +298,13 @@
               'getCounty(data.country,common)',
               'calc(shipment.shm_det_quantity)',
               // '_getPlace(shipment.deli_port_id)'
-              '_getBl(data.shm_id)'
+              '_getBl(data.shm_id)',
+              'check(data)'
+
             ],
+            check:function (data) {
+              // console.log('list',data);
+            },
             listeners: {
                'shipmentedit':'finEdit',
                'save-Data-shipmentDetail':'_saveChangeShipment',
@@ -391,20 +400,21 @@
                     // this.btnAdd= !this.btnAdd;
             },
             _clickSubmit: function(){
-              console.log('addShimment =>',this.addShimment);
-              // console.log('dataBl =>',this.dataBl);
-              this.shipment.shm_id=this.data.shm_id;
-              this.shipment.eta_date=new Date (this.shipment.eta_date);
-              this.shipment.etd_date=new Date (this.shipment.etd_date);
-              this.shipment.packing_date=new Date (this.shipment.packing_date);
-              this.shipment.product_date=new Date (this.shipment.product_date);
-
-
               console.log(this.shipment);
-              this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
-                this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
-                this._cancalShow();
-              });
+              // console.log('addShimment =>',this.addShimment);
+              // // console.log('dataBl =>',this.dataBl);
+              // this.shipment.shm_id=this.data.shm_id;
+              // this.shipment.eta_date=new Date (this.shipment.eta_date);
+              // this.shipment.etd_date=new Date (this.shipment.etd_date);
+              // this.shipment.packing_date=new Date (this.shipment.packing_date);
+              // this.shipment.product_date=new Date (this.shipment.product_date);
+              //
+              //
+              // console.log(this.shipment);
+              // this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
+              //   this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
+              //   this._cancalShow();
+              // });
               //   this.glQuery('layoutMain').openToastSaveing();
               //   this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
               //     this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
@@ -443,16 +453,11 @@
               // }
             },
             deleteShipment:function (e) {
-              // console.log(this.data.shm_id);
-              // this.deleteShipmentDb(e.detail.data);
-
-              this.glQuery('layoutMain').openToastDeleteing();
               this.delete('./g2g/shipment/delete/id/',this.data.shm_id, () => {
-                    // console.log(this.data.contract_id);
+                this.fire('refresh-contract',{refresh:false ,action:'put'});
                 this.fire('shipment-list', {
                   data: 'editFin'
                 });
-                this.glQuery('addContract').getChange(false,'delete');
                 this.fire('add-shipment',{contract_id:this.data.contract_id});
                });
             },
