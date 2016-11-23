@@ -1,4 +1,6 @@
 <link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/month-behavior.html">
+
 <dom-module id="quota-manage">
 	<template>
 		<style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size gl-table">
@@ -84,13 +86,20 @@
 									<tr>
 										<td>งวดที่ : {{getIndex(index)}}</td>
                                         <td>
+                                            	<gl-form-dropdown-menu no-label-float>
+                                                    <paper-listbox class="dropdown-content" attr-for-selected="mounth" selected="{{item.month}}">
+                                                        <template is="dom-repeat" items="{{month}}">
+                                                            <paper-item mounth="{{item.id}}">{{item.name}}</paper-item>
+                                                        </template>
+                                                    </paper-listbox>
+                                                </gl-form-dropdown-menu>
                                             <!--<gl-form-input value="{{item.month}}" auto-validate error-message="กรุณากรอกเดือน" required placeholder="กรุณาใส่จำนวน" no-label-float></gl-form-input>-->
                                         </td>
 										<!--{{item.proportion}}-->
 										<td>
 											[[testNum(item.*,'percent')]]
                                             [[disabledMath(item.percent,item.quantity)]]
-											<gl-form-input class="mathData number saveData" auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float>
+											<gl-form-input label="" class="mathData number saveData" auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float>
                                                 <div suffix>%</div>
                                             </gl-form-input>
 										</td>
@@ -156,7 +165,10 @@
 	<script>
         Polymer({
             is: 'quota-manage',
-            behaviors: [FormatNumberBehavior],
+            behaviors: [
+                FormatNumberBehavior,
+                MonthBehavior
+                ],
                properties: {
                 Period: {
                 type: Array,
@@ -249,6 +261,7 @@
                             type_rice_id:this.typeRice,
                         }
                     }
+                    console.log(datas);
                     if(this.status == 'post')
                         this.fire('post-data',datas); 
                     else if (this.status == 'update')

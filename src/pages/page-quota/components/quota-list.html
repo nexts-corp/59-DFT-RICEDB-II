@@ -1,4 +1,6 @@
 <link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/month-behavior.html">
+
 <dom-module id="quota-list">
     <template>
         <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -44,7 +46,7 @@
                     <td class="center">{{item.type_rice_name_th}}</td>
                     <td class="right">
                     <template is="dom-repeat" items="{{item.period}}">
-                        งวดที่ [[_setIndex(index)]] เดือน .... <br>
+                        งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]] <br>
                     </template>
                     </td>
                     <td>
@@ -62,7 +64,7 @@
     <script>
         Polymer({
             is: 'quota-list',
-            behaviors: [FormatNumberBehavior],
+            behaviors: [FormatNumberBehavior,MonthBehavior],
             _setIndex:function(item){
                 return item = item+1;
                 
