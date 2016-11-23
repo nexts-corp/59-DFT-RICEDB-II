@@ -8,6 +8,7 @@
 <link rel="import" href="../../../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="components/promise/promise-detail-insert.html">
 <link rel="import" href="components/chart/pie-contract.html">
+<link rel="import" href="components/payment/format-number-behavior.html">
 <dom-module id="g2g-add-contract">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
         * {
@@ -293,8 +294,8 @@
               console.log('เข้าโวยยยยยยยยยย');
               console.log('openDialog');
               this.fire('toast',{status:'connectError',text:'Error code 404 not found', //คำสั่งสำหรับเปิด toast error
-        callback:function(){
-        }})
+                callback:function(){
+                }})
             },
             createContract:function () {
               this.layerContent='four';
@@ -321,6 +322,7 @@
                 this.layerContent="secondary";
                 // console.log('yy',e.currentTarget.data);//.data);
                 this.dataConfirm = e.currentTarget.data;
+                console.log(this.dataConfirm);
                 this.glQuery('contentPanel').changDrawer();
               } else {
                 this.async(()=>{
@@ -329,7 +331,7 @@
                     var dataConfirm = this.contracts.filter(function (contracts) { return contracts.contract_id == contractId });
                         // console.log(dataConfirm);
                         this.dataConfirm = dataConfirm[0];
-                        // console.log('new =>',this.dataConfirm);
+                        console.log('new =>',this.dataConfirm);
                 },500);
               }
             },
@@ -378,7 +380,7 @@
               }
             },
             conFirmDeatil:function (cmlId) {
-              this.glQuery('layoutMain').openToastLoading();
+
               this.read('./g2g/confirm/id/'+cmlId,(data)=>{
                 this.confirmLetter = data;
                 // console.log(this.confirmLetter);

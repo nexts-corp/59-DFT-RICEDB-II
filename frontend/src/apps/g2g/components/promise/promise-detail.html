@@ -136,7 +136,8 @@
             is: "promise-detail",
             behaviors: [
                 gl.behavior.core,
-                g2gModelBehavior
+                g2gModelBehavior,
+                FormatNumberBehavior
             ],
             properties: {
                 data: {
@@ -203,19 +204,13 @@
                     contract_type_rice:[],
                   };
                  });
-
-              }
+                }
             },
             deleteContract:function () {
               this.delete('./g2g/contract/delete/id/',this.data.contract_id, () => {
                 this.fire('refresh-contract',{refresh:true ,action:'delete'});
-                console.log(121512);
                });
             },
-            // _deleteData:function(result,detail){ //function สำหรับรับค่าปุ่มที่ toast ส่งกลับมา
-            //   console.log('result',result);
-            //   console.log('detail',detail);
-            // }
 
         });
     </script>
