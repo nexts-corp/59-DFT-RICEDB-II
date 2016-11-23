@@ -53,7 +53,7 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                             actor: 'admin'
                         }
                         if (response.unchanged != 1)
-                            history['old_value'] = response.changes[0].val;
+                            history.old_value = response.changes[0].val;
 
                         r.db(dbname).table('history').insert(history).run(conn).then()
                     }
