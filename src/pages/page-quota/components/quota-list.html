@@ -34,8 +34,10 @@
             <thead>
                 <tr>
                   <th class="center">ประเภทข้าว</th>
-                  <th class="right">งวด</th>
-                  <th>ปริมาณ</th>
+                  [[getMonth(data)]]
+                    <template is="dom-repeat" items="{{quaotaMonth}}">
+                        <th class="center"> งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]]</th>
+                    </template>
                   <th class="center">ปริมาณโควตารวม </th>
                 </tr>
             </thead>
@@ -44,16 +46,9 @@
                 <template is="dom-repeat" items="{{data.type_rice}}">
                 <tr on-tap="_selectData" data="{{item}}" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
                     <td class="center">{{item.type_rice_name_th}}</td>
-                    <td class="right">
-                    <template is="dom-repeat" items="{{item.period}}">
-                        งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]] <br>
-                    </template>
-                    </td>
-                    <td>
                      <template is="dom-repeat" items="{{item.period}}">
-                        ปริมาณ : [[formatNumber(item.quantity)]] <br>
+                        <td class="center">[[formatNumber(item.quantity)]]</td>
                     </template>    
-                    </td>
                     <td class="center">[[formatNumber(item.amount)]]</td>
                 </tr>
                 </template>
@@ -68,6 +63,12 @@
             _setIndex:function(item){
                 return item = item+1;
                 
+            },
+            getMonth:function(month){
+                //console.log(month);
+                month.type_rice.map((item)=>{
+                    this.quaotaMonth = item.period;
+                });
             },
             _selectData:function(e){
                 //console.log(e.currentTarget.data);
