@@ -42,7 +42,7 @@
     <gl-form-panel-body>
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box required  id="exporter_id" label="ผู้ส่งออก" item-label-path="seller_name_en" disabled="[[checkInput]]"
+          <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" item-label-path="seller_name_en" disabled="[[checkInput]]"
            item-value-path="exporter_id"  items="{{common.seller}}" value="{{data.exporter_id}}" on-value-changed="getSellerPhone"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
@@ -52,35 +52,35 @@
           <gl-form-input disabled label="Booking No."class="requested" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด"  value="{{data.book_no}}" id="book_no" name="book_no"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="bl_no" label="B/L No." item-label-path="bl_no" disabled="[[checkInput]]"
+          <gl-combo-box class="required" required  id="bl_no" label="B/L No." item-label-path="bl_no" disabled="[[checkInput]]"
              item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}" on-value-changed="_initFormBl"></gl-combo-box>
             <!-- <gl-form-input label="B/L No." class="requested"   error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.bl_no}}" id="bl_no" name="bl_no"></gl-form-input> -->
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="shipline_id" label="Shipping Line" item-label-path="shipline_name" disabled
-            class="requested"  item-value-path="shipline_id" items="{{common.shipline}}" value="{{data.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
+             item-value-path="shipline_id" items="{{common.shipline}}" value="{{data.shipline_id}}" on-value-changed="getShip"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="ship_id" label="Vessel" item-label-path="ship_name" disabled
-          class="requested"    item-value-path="ship_id" items="{{shipInShipline}}" value="{{data.ship_id}}"></gl-combo-box>
+           item-value-path="ship_id" items="{{shipInShipline}}" value="{{data.ship_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="surveyor_id" label="Surveyor" item-label-path="surveyor_name" disabled
-              class="requested"  item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
+            item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input disabled label="Void No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}"
-          class="requested"  id="voidNo" name="voidNo"></gl-form-input>
+          <gl-form-input disabled label="Void No."  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}"
+          id="voidNo" name="voidNo"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input disabled label="Lot No." auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}"
-          class="requested"  id="lotNo" name="lotNo"></gl-form-input>
+          <gl-form-input disabled label="Lot No."  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}"
+          id="lotNo" name="lotNo"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- <gl-form-input label="Shipping Agent" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{shipment.carrier_name}}" id="carrier_name" name="carrier_name"></gl-form-input> -->
           <gl-combo-box id="carrier_id" label="Shipping Agent" item-label-path="carrier_name" disabled
-            class="requested"  item-value-path="carrier_id" items="{{common.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
+             item-value-path="carrier_id" items="{{common.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -88,42 +88,42 @@
            item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker disabled="[[checkInput]]" label="ETD"class="requested" value="{{data.etd_date}}"></vaadin-date-picker>
+          <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="ETD"class="requested" value="{{data.etd_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker disabled="[[checkInput]]" label="ETA"class="requested" value="{{data.eta_date}}"></vaadin-date-picker>
+          <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="ETA"class="requested" value="{{data.eta_date}}"></vaadin-date-picker>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name" disabled
-          class="requested" item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
+          item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="deli_port_id" label="Place of Delivery" item-label-path="port_name" disabled
-          class="requested" item-value-path="port_id" items="{{pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
+          item-value-path="port_id" items="{{pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
         </gl-grid-col>
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           [[testNum(data.*,'num_of_container')]]
-            <gl-form-input disabled="[[checkInput]]" label="จำนวนตู้คอนเทนเนอร์" type="number" class="requested"auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
+            <gl-form-input class="required" required  disabled="[[checkInput]]" label="จำนวนตู้คอนเทนเนอร์" type="number" class="requested"auto-validate error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" required placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" id="num_of_container" name="num_of_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           [[testNum(data.*,'weight_per_container')]]
-          <gl-form-input disabled="[[checkInput]]" label="ตู้ละ (ตัน)"class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
+          <gl-form-input class="required" required  disabled="[[checkInput]]" label="ตู้ละ (ตัน)"class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required pattern="[0-9,,]*" placeholder="ใส่รายละเอียด"
             value="{{data.weight_per_container}}" id="weight_per_container" name="weight_per_container"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker disabled="[[checkInput]]" label="Packing Date"class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
+          <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="Packing Date"class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input disabled="[[checkInput]]" label="Packing Time"class="requested" type="time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
+          <gl-form-input  class="required" required disabled="[[checkInput]]" label="Packing Time"class="requested" type="time" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" id="pack_time" name="pack_time"></gl-form-input>
         </gl-grid-col>
 
 
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker disabled="[[checkInput]]" label="Production Date"class="requested" value="{{data.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
+          <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="Production Date"class="requested" value="{{data.product_date}}" name="product_date" id="product_date"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
     </gl-form-panel-body>
@@ -139,11 +139,11 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en" disabled="[[checkInput]]"
-          class="requested"    item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
+           class="required" required  item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name" disabled="[[checkInput]]"
-          class="requested"    item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
+           class="required" required  item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -155,7 +155,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- [[testNum(data.*,'shm_det_quantity')]] -->
           [[testNum(data.*,'shm_det_quantity')]]
-          <gl-form-input disabled="[[checkInput]]" label="จำนวน/ตัน" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
+          <gl-form-input class="required" required  disabled="[[checkInput]]" label="จำนวน/ตัน" class="requested" type="number" auto-validate error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -186,12 +186,12 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
           [[testNum(data.*,'origin_page')]]
-          <gl-form-input label=""  disabled="[[checkInput]]"class="w padL requested" type="number" value="{{data.origin_page}}"></gl-form-input>
+          <gl-form-input class="required" required  label=""  disabled="[[checkInput]]"class="w padL requested" type="number" value="{{data.origin_page}}"></gl-form-input>
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
           [[testNum(data.*,'nn_page')]]
-          <gl-form-input label=""  disabled="[[checkInput]]"class="w requested" type="number" value="{{data.nn_page}}"></gl-form-input>
+          <gl-form-input class="required" required  label=""  disabled="[[checkInput]]"class="w requested" type="number" value="{{data.nn_page}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
           <div class="top">N/N</div>
@@ -212,7 +212,7 @@
         <paper-button class="gl-btn-danger" raised index="[[index]]" on-tap="cancalShow">
           </iron-icon>ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" raised index="[[index]]" on-tap="clickSubmit">
-        </iron-icon>บันทึกll</paper-button>
+        </iron-icon>บันทึก</paper-button>
       </gl-form-panel-footer>
     </template>
 
@@ -239,7 +239,11 @@
         },
         common:{
           type:Object
-        }
+        },
+        editsMdatial:{
+          type:Object,
+          value:{}
+        },
       },
       // listeners: {
       //   'shipline_id.selected-item-changed': 'regularTap'
@@ -305,51 +309,46 @@
         this.calc(this.data.shm_det_quantity);
       },
       saveShipment:function () {
-        delete this.data.carrier_name;
-        delete this.data.cl_name;
-        delete this.data.cl_no;
-        delete this.data.deli_port_code;
-        delete this.data.deli_port_name;
-        delete this.data.dest_port_code;
-        delete this.data.dest_port_name;
-        this.data.eta_date=new Date (this.data.eta_date);
-        this.data.etd_date=new Date (this.data.eta_date);
-        delete this.data.load_port_code;
-        delete this.data.load_port_name;
-        delete this.data.package_kg_per_bag;
-        delete this.data.package_name;
-        delete this.data.package_weight_bag;
-        this.data.packing_date=new Date (this.data.packing_date);
-        this.data.product_date=new Date (this.data.product_date);
-        delete this.data.seller_address_en;
-        delete this.data.seller_address_th;
-        delete this.data.seller_email;
-        delete this.data.seller_fax;
-        delete this.data.seller_name_en;
-        delete this.data.seller_name_th;
-        delete this.data.seller_phone;
-        delete this.data.seller_tax_id;
-        delete this.data.ship_name;
-        delete this.data.shipline_name;
-        delete this.data.surveyor_name;
-        delete this.data.type_rice_name_en;
-        delete this.data.type_rice_name_th;
-        this.data.id=this.data.shm_det_id
-        delete this.data.shm_det_id;
-        delete this.data.trader_date_approve;
-        delete this.data.trader_distric;
-        delete this.data.trader_id;
-        delete this.data.trader_name;
-        delete this.data.trader_no;
-        delete this.data.trader_office;
-        delete this.data.trader_province;
-        delete this.data.seller_agent;
         // console.log(this.data);
-        this.fire('save-Data-shipmentDetail',{
-          data:this.data,
-          index:this.index
-        });
-        this.editInput();
+        // this.data.id=this.data.shm_det_id
+        this.editsMdatial.id = this.data.shm_det_id;
+        this.editsMdatial.bl_no = this.data.bl_no;
+        this.editsMdatial.book_no = this.data.book_no;
+        this.editsMdatial.carrier_id = this.data.carrier_id;
+        this.editsMdatial.deli_port_id = this.data.deli_port_id;
+        this.editsMdatial.dest_port_id = this.data.dest_port_id;
+        this.editsMdatial.eta_date = new Date (this.data.eta_date);
+        this.editsMdatial.etd_date = new Date (this.data.etd_date);
+        this.editsMdatial.exporter_id = this.data.exporter_id;
+        this.editsMdatial.load_port_id = this.data.load_port_id;
+        this.editsMdatial.nn_page = this.data.nn_page;
+        this.editsMdatial.num_of_container = this.data.num_of_container;
+        this.editsMdatial.origin_page = this.data.origin_page;
+        this.editsMdatial.package_id = this.data.package_id;
+        this.editsMdatial.packing_date = new Date (this.data.packing_date);
+        this.editsMdatial.packing_time = this.data.packing_time;
+        this.editsMdatial.product_date = new Date (this.data.product_date);
+        this.editsMdatial.ship_id = this.data.ship_id;
+        this.editsMdatial.ship_lot_no = this.data.ship_lot_no;
+        this.editsMdatial.ship_voy_no = this.data.ship_voy_no;
+        this.editsMdatial.shipline_id = this.data.shipline_id;
+        this.editsMdatial.shm_det_quantity = this.data.shm_det_quantity;
+        this.editsMdatial.shm_id = this.data.shm_id;
+        this.editsMdatial.surveyor_id = this.data.surveyor_id;
+        this.editsMdatial.type_rice_id = this.data.type_rice_id;
+        this.editsMdatial.weight_per_container = this.data.weight_per_container;
+        console.log(this.editsMdatial);
+        var el = Polymer.dom(this.root).querySelectorAll('.required');
+        var stat = el.map((el)=> el.validate());
+        // console.log(this.csonfirmLetter);
+        if (stat.every(elem => elem == true)) {
+          this.fire('save-Data-shipmentDetail',{
+            data:this.editsMdatial,
+            index:this.index
+          });
+          // this.editInput();
+        }
+
       },
       shipmentDelete:function () {
         console.log(this.data);
@@ -363,7 +362,13 @@
         this.fire('cancel-Show',{data:'canael'});
       },
       clickSubmit:function () {
-        this.fire('click-Submit',{data:'fin'});
+        var el = Polymer.dom(this.root).querySelectorAll('.required');
+        var stat = el.map((el)=> el.validate());
+        // console.log(this.csonfirmLetter);
+        if (stat.every(elem => elem == true)) {
+          this.fire('click-Submit',{data:'fin'});
+        }
+
       }
 
     });

@@ -381,76 +381,34 @@
                 this.glQuery('addContract').getChange(false,'delete');
                 this.glQuery('addContract').shipMentDeatil(e.detail.shm_id,false,'put');
                });
-              this.glQuery('layoutMain').openToastDeleteing();
+              // this.glQuery('layoutMain').openToastDeleteing();
             },
             _saveChangeShipment:function(e){
               // console.log(this.data.shipment_detail[e.detail.index]=e.detail.data);
               var data = this.data.shipment_detail[e.detail.index]=e.detail.data;
-              this.update('./g2g/shipment/detail/update', data,() => {
-                // this.displayInsert();
-                this.glQuery('addContract').shipMentDeatil(data.shm_id,false,'put');
-                this.editInput();
-               });
-
-              this.glQuery('layoutMain').openToastSaveing();
+              console.log('this.data => 389 ',this.data);
+              // this.update('./g2g/shipment/detail/update', data,() => {
+              //   // this.fire('refresh-contract',{refresh:false ,action:'put'});
+              //   // this.editInput();
+              //  });
             },
 
             displayInsert: function() {
               this.editInput();
-                    // this.btnAdd= !this.btnAdd;
             },
             _clickSubmit: function(){
-              console.log(this.shipment);
               // console.log('addShimment =>',this.addShimment);
               // // console.log('dataBl =>',this.dataBl);
-              // this.shipment.shm_id=this.data.shm_id;
-              // this.shipment.eta_date=new Date (this.shipment.eta_date);
-              // this.shipment.etd_date=new Date (this.shipment.etd_date);
-              // this.shipment.packing_date=new Date (this.shipment.packing_date);
-              // this.shipment.product_date=new Date (this.shipment.product_date);
-              //
-              //
+              this.shipment.shm_id=this.data.shm_id;
+              this.shipment.eta_date=new Date (this.shipment.eta_date);
+              this.shipment.etd_date=new Date (this.shipment.etd_date);
+              this.shipment.packing_date=new Date (this.shipment.packing_date);
+              this.shipment.product_date=new Date (this.shipment.product_date);
               // console.log(this.shipment);
-              // this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
-              //   this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
-              //   this._cancalShow();
-              // });
-              //   this.glQuery('layoutMain').openToastSaveing();
-              //   this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
-              //     this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
-              //     this.seller_phon='';
-              //     this.shipment = {
-              //       exporter_id:'',
-              //       shipline_id:'',
-              //       ship_id:'',
-              //       surveyor_id:'',
-              //       ship_voy_no:'',
-              //       ship_lot_no:'',
-              //       book_no:'',
-              //       bl_no:'',
-              //       carrier_id:'',
-              //       load_port_id:'',
-              //       etd_date:'',
-              //       eta_date:'',
-              //       dest_port_id:'',
-              //       deli_port_id:'',
-              //       num_of_container:'',
-              //       packing_date:'',
-              //       packing_time:'',
-              //       weight_per_container:'',
-              //       product_date:'',
-              //       type_rice_id:'',
-              //       package_id:'',
-              //       shm_det_quantity:'',};
-              //     this.quantityBag ='';
-              //      this.sumGW ='';
-              //      this.gw  ='';
-              //      this.sumNw ='';
-              //      this.nw ='';
-              //      this.tw ='';
-              //     this.displayInsert();
-              //    });
-              // }
+              this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
+                this.fire('refresh-contract',{refresh:false ,action:'put'});
+                this._cancalShow();
+              });
             },
             deleteShipment:function (e) {
               this.delete('./g2g/shipment/delete/id/',this.data.shm_id, () => {

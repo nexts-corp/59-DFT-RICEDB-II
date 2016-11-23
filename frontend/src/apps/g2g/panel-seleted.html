@@ -1,6 +1,6 @@
 <dom-module id="panel-seleted">
 
-<style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size">
+<style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size gl-panel">
     paper-tabs{
       /*margin-left: 100px;*/
       background-color: #f7941e;
@@ -54,32 +54,38 @@
     .hr{
       border-bottom: 1px solid var(--gl-gray-light-color);
     }
+    .content{
+      /*margin-bottom: 80px;*/
+    }
+    .cc{
+      margin-bottom: 80px;
+    }
 </style>
 
     <template>
-      <div class="horizontal end-justified layout button">
-        <div><paper-icon-button icon="close" on-tap="toggleDrawer" title="ปิดหน้าต่างนี้"></paper-icon-button> </div>
-      </div>
-      <paper-material elevation="1" >
-        <div class="horizontal center-justified layout header">
-          [[title]]
+      <div class="gl-panel-default">
+        <div class="gl-panel-default-header">
+            {{title}}
         </div>
-        <paper-tabs selected="{{selected}}" align-bottom no-slide>
-          <paper-tab>รายละเอียด</paper-tab>
-          <paper-tab>พิมพ์</paper-tab>
-          <paper-tab>ไฟล์</paper-tab>
-        </paper-tabs>
+        <div class="gl-panel-default-content content">
+          <paper-tabs selected="{{selected}}" align-bottom no-slide>
+              <paper-tab>รายละเอียด</paper-tab>
+              <paper-tab>พิมพ์</paper-tab>
+              <paper-tab>ไฟล์</paper-tab>
+            </paper-tabs>
 
-    <!-- <div class="hr"></div> -->
-      <div class="bdDrawer">
-        <iron-pages selected="{{selected}}">
-          <div><content select="section-content[name=detail]"></content></div>
-
-          <div><content select="section-content[name=print]"></content></div>
-          <div><content select="section-content[name=file]"></content></div>
-        </iron-pages>
+        <!-- <div class="hr"></div> -->
+          <div class="bdDrawer">
+            <iron-pages selected="{{selected}}">
+              <div><content select="section-content[name=detail]"></content></div>
+              <div><content select="section-content[name=print]"></content></div>
+              <div><content select="section-content[name=file]"></content></div>
+            </iron-pages>
+            </div>
         </div>
-      </paper-material>
+
+    </div>
+<div class="cc"></div>
 
 
     </template>
