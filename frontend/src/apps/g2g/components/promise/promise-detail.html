@@ -146,6 +146,7 @@
                 Newdata:{
                   type:Object,
                   value: {
+                    id:'',
                     contract_name:'',
                     buyer_id:'',
                     contract_date:'',
@@ -193,6 +194,10 @@
               var el = Polymer.dom(this.root).querySelectorAll('.required');
               var stat = el.map((el)=> el.validate());
               if (stat.every(elem => elem == true)) {
+                console.log(this.Newdata);
+                // this.editInput();
+                // this.data ={};
+                // this.data = this.Newdata;
                 this.update('./g2g/contract/update',this.Newdata, () => {
                   if (this.Newdata.contract_status == true) {
                       this.editInput();
