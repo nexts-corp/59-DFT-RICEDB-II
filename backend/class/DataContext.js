@@ -53,12 +53,12 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                             new_value: obj,
                             date_created: new Date(),
                             actor: 'admin'
+                        };
+                        if (typeof response.changes !== 'undefined') {
+                            // console.log(history.old_value);
+                            history.old_value = response.changes[0].old_val;
+                            //console.log(history.old_value);
                         }
-                        console.log(response);
-                        // if (response.unchanged != 1){
-                        //     console.log("xx");
-                        //     history['old_value'] = response.changes[0].val;
-                        // }
 
                         r.db(dbname).table('history').insert(history).run(conn).then()
                     }
