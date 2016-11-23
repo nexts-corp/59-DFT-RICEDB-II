@@ -86,13 +86,13 @@
       <form is="iron-form" id="confirmLitter" method="get">
         <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input  disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}"></gl-form-input>
+              <gl-form-input class="required" required    disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="Confirmation Letter No." placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_no}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <gl-form-input disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="Confirmation Name" placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_name}}"></gl-form-input>
+              <gl-form-input class="required" required   disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="Confirmation Name" placeholder="ใส่รายละเอียด" value="{{confirmLetter.cl_name}}"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-              <vaadin-date-picker  disabled="[[checkInput]]" label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
+              <vaadin-date-picker class="required" required    disabled="[[checkInput]]" label="วันที่" value="{{confirmLetter.cl_date}}" name="cl_date"></vaadin-date-picker>
             </gl-grid-col>
         </gl-grid-row>
 
@@ -102,7 +102,7 @@
           <div class="bg">
             <gl-grid-row>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                <gl-form-dropdown-menu id  disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
+                <gl-form-dropdown-menu class="required" required   id  disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" required>
                   <paper-menu class="dropdown-content" attr-for-selected="rice-type-id" selected="{{item.type_rice_id}}" name="type_rice_id">
                     <template is="dom-repeat" items="[[riceType]]">
                       <paper-item rice-type-id="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
@@ -113,7 +113,7 @@
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                 [[calcWeight(item.*)]]
                 [[changeString2Num(item.*,'type_rice_quantity')]]
-                <gl-form-input  disabled="[[checkInput]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+                <gl-form-input class="required" required    disabled="[[checkInput]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                   value="{{item.type_rice_quantity}}"
                  name="type_rice_quantity"></gl-form-input>
 
@@ -135,7 +135,7 @@
               <template is="dom-repeat" as="packageitem" items="[[item.package]]">
                 <tr >
                   <td>
-                    <gl-form-dropdown-menu  disabled="[[checkInput]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
+                    <gl-form-dropdown-menu class="required" required    disabled="[[checkInput]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" required no-label-float>
                     <paper-menu id="[[index]]"  class="dropdown-content" attr-for-selected="package-id" selected="{{packageitem.package_id}}" name="package_id" >
                       <template is="dom-repeat" items="[[package]]">
                         <paper-item package-id="{{item.package_id}}" >[[item.package_name]]</paper-item>
@@ -144,7 +144,7 @@
                   </gl-form-dropdown-menu>
                   </td>
                   <td> [[changeString2Num(packageitem.*,'price_per_ton')]]
-                    <gl-form-input  disabled="[[checkInput]]" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                    <gl-form-input class="required" required    disabled="[[checkInput]]" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                   </td>
                   <td>
                     <gl-form-input disabled placeholder=""  value="[[changePrice(packageitem.package_id,package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
@@ -180,7 +180,7 @@
         </template>
       <gl-grid-row>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-              <gl-form-dropdown-menu  disabled="[[checkInput]]" label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
+              <gl-form-dropdown-menu class="required" required    disabled="[[checkInput]]" label="Basis on" error-message="กรุณาเลือกราคา" placeholder="เลือกประเภท" name="inct_id" required>
                   <paper-menu class="dropdown-content" attr-for-selected="price-type" selected="{{confirmLetter.inct_id}}" >
                       <template is="dom-repeat" items="[[incoterms]]">
                         <paper-item price-type="[[item.inct_id]]">[[item.inct_name]]</paper-item>
@@ -195,7 +195,7 @@
           </gl-grid-col>
 
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-              <gl-form-textarea  disabled="[[checkInput]]" label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
+              <gl-form-textarea class="required" required    disabled="[[checkInput]]" label="Detail" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{confirmLetter.cl_quality}}" name="cl_quality"></gl-form-textarea>
           </gl-grid-col>
       </gl-grid-row>
       </form>
@@ -224,24 +224,28 @@
                 },
                 confirmLetter:{
                     type: Object,
+                },
+                newConfirm:{
+                    type:Object,
                     value:
-                      [
-                        {
-                          cl_date:"",
-                          cl_id:"",
-                          cl_name:"",
-                          cl_no:"1",
-                          cl_quality:"",
-                          cl_total_quantity:"",
-                          cl_type_rice:
-                            [
-                              {
-                                id:1
-                              }
-                            ],
-                          inct_id:''
-                        }
-                      ]
+                          [
+                            {
+                              cl_date:"",
+                              cl_id:"",
+                              cl_name:"",
+                              cl_no:"1",
+                              cl_quality:"",
+                              cl_total_quantity:"",
+                              cl_type_rice:
+                                [
+                                  {
+                                    id:1
+                                  }
+                                ],
+                              inct_id:''
+                            }
+                          ]
+
                 }
             },
             behaviors: [
@@ -273,7 +277,7 @@
               //เปลี่ยนเป็น id
 
               // console.log(this.confirmLetter.cl_id);
-                this.confirmLetter.id = this.confirmLetter.cl_id;
+                // this.confirmLetter.id = this.confirmLetter.cl_id;
 
               this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
               delete this.confirmLetter.cl_id
@@ -291,22 +295,50 @@
                   delete this.confirmLetter.cl_type_rice[i].package[j].package_name;
                 }
               }
-              //
-              this.glQuery('layoutMain').openToastSaveing();
+              console.log(this.confirmLetter);
+              this.confirmLetter.contract_type_rice.map((riceCode)=>{
+                this.push('Newdata.contract_type_rice', {type_rice_id :riceCode.type_rice_id});
+              })
+              package:Array[1]
+              type_rice_id:"10061090002"
+              type_rice_quantity:13
+              // this.glQuery('layoutMain').openToastSaveing();
               // this.postDb(this.confirmLetter);
-              this.update('./g2g/confirm/update',this.confirmLetter, () => {
-                  this.glQuery('addContract').getChange(false,'put');
-                  // edit-noshipment.html
-                  // console.log(this.confirmLetter);
-                  //addContract
-                  this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
-                  if(this.confirmLetter.cl_status == true) {
-                    this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
-                    this.backPage();
-                  }
-                  // this.backPage();
-                  this.editInput();
-               });
+              // this.confirmLetter.cl_date=new Date (this.confirmLetter.cl_date);
+              this.newConfirm.cl_date = new Date (this.confirmLetter.cl_date);
+              this.newConfirm.cl_name = this.confirmLetter.cl_name;
+              this.newConfirm.cl_no = this.confirmLetter.cl_no;
+              this.newConfirm.cl_quality = this.confirmLetter.cl_quality;
+              this.newConfirm.cl_status = this.confirmLetter.cl_status;
+              // this.newConfirm.cl_type_rice = Array[1]
+              this.newConfirm.contract_id = this.confirmLetter.contract_id;
+              this.newConfirm.id = this.confirmLetter.cl_id;
+              this.newConfirm.inct_id = this.confirmLetter.inct_id;
+
+              var el = Polymer.dom(this.root).querySelectorAll('.required');
+              var stat = el.map((el)=> el.validate());
+              // console.log(this.csonfirmLetter);
+              if (stat.every(elem => elem == true)) {
+                console.log(this.newConfirm);
+                // this.insert('./g2g/confirm/insert',this.confirmLetter, () => {
+                //   this.fire('refresh-contract',{refresh:false ,action:'put'});
+                //   this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
+                //   this.backPage();
+                //  });
+              }
+              // this.update('./g2g/confirm/update',this.confirmLetter, () => {
+              //     this.glQuery('addContract').getChange(false,'put');
+              //     // edit-noshipment.html
+              //     // console.log(this.confirmLetter);
+              //     //addContract
+              //     this.fire('add-confirm',{contractId:this.confirmLetter.contract_id});
+              //     if(this.confirmLetter.cl_status == true) {
+              //       this.fire('get-confirm-new',{contract_id:this.confirmLetter.contract_id,});
+              //       this.backPage();
+              //     }
+              //     // this.backPage();
+              //     this.editInput();
+              //  });
             },
             calcWeight: function(data) {
 
