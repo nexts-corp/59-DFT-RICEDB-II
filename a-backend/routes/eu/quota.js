@@ -57,7 +57,8 @@ router.post(['/'], function (req, res, next) {
                 r.db('eu').table('quota').insert(
                     {
                         "id": req.body.id,
-                        "type_rice": [req.body.type_rice]
+                        "type_rice": [req.body.type_rice],
+                        "month":req.body.month
                     }
                 )
                 ,
