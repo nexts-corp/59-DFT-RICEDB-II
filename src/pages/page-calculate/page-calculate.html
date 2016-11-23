@@ -67,7 +67,7 @@
         <div class="layout vertical registor">
           <div class="flex">
             <div class="layout horizontal end-justified">
-              <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter">ตั้งค่าการคำนวณโควตา</paper-button>
+              <paper-button hidden="{{hide}}" raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter">ตั้งค่าการคำนวณโควตา</paper-button>
             </div>
           </div>
           <div class="flex title">
@@ -93,7 +93,7 @@
         <!-- </paper-material> -->
 
         <div class="layout horizontal end-justified" style="padding: 0px 20px 0px 0px">
-          <paper-button raised class="gl-btn-primary">ดำเนินการคำนวณโควตา</paper-button>
+          <!--<paper-button raised class="gl-btn-primary">ดำเนินการคำนวณโควตา</paper-button>-->
         </div>
 
       </grid>
@@ -101,7 +101,7 @@
           <template is="dom-if" if="[[rendered]]">
             <iron-pages selected="{{pageSelect}}">
               <div><calculate-setting quota-year="{{sendQuotaYear}}" on-post-sum="_postSumData" on-post-data="_postData" sum-answer="{{answerSum}}"></calculate-setting></div>
-              <div><calculate-listQuota data="{{dataListQuota}}"></calculate-listQuota></div>
+              <div><calculate-listQuota data="{{dataListQuota}}" on-delete-data="_confirmData"></calculate-listQuota></div>
             </iron-pages>
           </template>
       </panel-right>
@@ -121,6 +121,7 @@
             },
             ready: function(){
               this._getYear();
+              this.hide = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/calculate-setting.html'), (e)=>{
                     this.rendered = true;
@@ -159,6 +160,7 @@
           },
           _yearQuoataChaged:function(quota){
             this.sendQuotaYear = quota;
+            this.hide = false;
             this._getDatalist();
           },
           _postSumData:function(e){
@@ -251,8 +253,8 @@
           _onDataSelect:function(e){
             this.pageSelect = 1;
             this.$$('panel-right')._setWidth('95%');
-             console.log(e.detail.key);
             this.getDatalistQuota(e.detail.key);
+            this.getKey = e.detail.key;
           },
           getDatalistQuota:function(key){
             this.fire('toast',{status:'load'});
@@ -265,10 +267,42 @@
                   }
                 });
                 this.dataListQuota = response.data;
+               
             })   
             .catch((error)=>{
 
             })
+          },
+          _confirmData:function(){
+              this.fire('toast',{
+              status:'openDialog',
+              text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+              confirmed:this._deleteData.bind(this)
+            })
+          },
+          _deleteData:function(result,detail){
+             console.log('key:',this.getKey);
+            // var data = detail.data;
+            if(result == true){
+                //this.fire('toast',{status:'load'});
+                // http://localhost:3000/api/eu/calculate/allocate_quota?id=462106d4-ea26-4151-9cf1-07371ed01a9d
+                axios.delete('/eu/calculate/allocate_quota',{
+                params:{
+                  id : this.getKey
+                }
+                })
+                .then((response)=>{
+                  console.log("success");
+                  this.textToast = 'ลบข้อมูลสำเร็จ';
+                  console.log(response);
+                  this.$$('panel-right').toggle();
+                  this._getDatalist();
+                })
+                .catch((error)=>{
+                  console.log("error");
+                  console.log(error);
+                });
+            }
           }
 
 

@@ -7,11 +7,15 @@
             }
         },
         formatNumber:function(number){
-            var num = numeral(number).format(this._defaultFormat);
-            if(number == 0 ||  number == ""){
-                num = "";
+        //    console.log(number);
+            if(number == null){
+                return "";
             }
-            return num
+            else {
+                var num = numeral(number).format(this._defaultFormat);
+                return num
+            }
+           
         },
         setFormat:function(format){
             if(format == "" || format == "undefined"){

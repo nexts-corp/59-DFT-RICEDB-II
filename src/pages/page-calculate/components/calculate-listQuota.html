@@ -1,7 +1,9 @@
 
+<link rel="import" href="./../../components/format-number-behavior.html">
+
 <dom-module id="calculate-listQuota">
     <template>
-        <style is="custom-style" include="gl-panel">
+        <style is="custom-style" include="gl-panel gl-size gl-color iron-flex iron-flex-factors iron-flex-alignment">
             *{
                 text-align: left;
             }
@@ -37,14 +39,23 @@
            .center{
                text-align: center;
            }
+           .left{
+               text-align: left;
+           }
+            .flex-equal-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+            }
         </style>
         <section class="container">
-            <div>calculate-listQuota</div>
             <div class="gl-panel-default">
                 <div class="gl-panel-default-header">
-                    Header
+                    ปีการจัดสรรโควตา {{data.quota_id}} ประเภท : {{data.type_rice_name_th}} ปริมาณ {{formatNumber(data.quota_amount)}} ตัน
                 </div>
                 <div class="gl-panel-default-content">
+                    <div class="right" style="padding-bottom:5px;">
+                    ยอดรวมส่งออก {{countYear}} ปี เพื่อการคำนวณ: {{formatNumber(data.sum_for_cal)}} ยอดรวมการส่งออก [[formatNumber(data.sum_export)]]
+                    ยอดรวมโควตา [[formatNumber(data.sum_quota)]]</div>
                     <div style="overflow-x:auto;">
                     <table class="gl-table-default" style="border: 1px solid #ddd;">
                         <thead>
@@ -76,41 +87,59 @@
                             </tr>
                             <tr>
                                 <template is="dom-repeat" items="{{quotaYear}}">
-                                    <th>{{item.year}}</th>
+                                    <th class="right">{{item.year}}</th>
                                 </template>
                                  <template is="dom-repeat" items="{{quotaYear}}">
-                                    <th>{{item.year}}</th>
+                                    <th class="right">{{item.year}}</th>
                                 </template>
                             </tr>
                         </thead>
                         <tbody>
-                            <template is="dom-repeat" items="{{data}}">
+                            <template is="dom-repeat" items="{{data.spreadsheets}}">
                                 <tr>
-                                   <td class="center">{{item.seller_name_th}}</td>
+                                   <td class="left">{{item.seller_name_th}}</td>
                                    <template is="dom-repeat" items={{item.exported}}>
-                                       <td class="right">{{item.quantity}}</td>
+                                       <td class="right">[[formatNumber(item.quantity)]]</td>
                                    </template>
-                                   <td>{{item.exported_amount}}</td>
+                                   <td>[[formatNumber(item.exported_amount)]]</td>
                                    <template is="dom-repeat" items={{item.confirmed}}>
-                                       <td class="right">{{item.quantity}}</td>
+                                       <td class="right">[[formatNumber(item.quantity)]]</td>
                                    </template>
-                                   <td class="right">{{item.confirmed_amount}}</td>
-                                   <td class="center">{{item.sum_export}}</td>
-                                   <td class="center">{{item.sum_export_convert}}</td>
-                                   <td class="right">{{item.quantity}}</td>
+                                   <td class="right">[[formatNumber(item.confirmed_amount)]]</td>
+                                   <td class="center">[[formatNumber(item.sum_export)]]</td>
+                                   <td class="center">[[formatNumber(item.sum_export_convert)]]</td>
+                                   <td class="right">[[formatNumber(item.quantity)]]</td>
                                 </tr>
                             </template>
+                            <tr>
+                                <td></td>
+                                <td colspan$="[[countYear]]"></td>
+                                <td class="center">[[formatNumber(data.sum_export)]]</td>
+                                <td colspan$="[[countYear]]"></td>
+                                <td class="class="center"">[[formatNumber(data.sum_quota)]]</td>
+                                <td></td>
+                                <td class="center">[[formatNumber(data.sum_for_cal)]]</td>
+                                <td class="right">[[formatNumber(data.quota_amount)]]</td>
+                            </tr>
                         </tbody>
                     </table>
                     </div>
                 </div>
             </div>
         </section>
-       
+        <div class="horizontal flex-equal-justified" style="padding:0px 10px 20px 0px;">
+             <div style="padding: 0px 0px 0px 20px;">
+                <paper-button on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
+            </div>
+            <div>
+                <paper-button raised class="gl-btn-success">บันทึก</paper-button>
+            </div>
+        </div>
     </template>
     <script>
         Polymer({
             is: 'calculate-listQuota',
+            behaviors:[FormatNumberBehavior],
             properties:{
                 data:{
                     type: Array,
@@ -118,12 +147,16 @@
                 }
             },
             _getYear:function(){
-               this.data.map((item)=>{
+                console.log(this.data);
+               this.data.spreadsheets.map((item)=>{
                    this.quotaYear = item.confirmed;
                });
                this.countYear = this.quotaYear.length;
             //    console.log(this.quotaYear.length);
                console.log('datalist',this.datalist);
+            },
+            _deleteData:function(){
+                this.fire('delete-data');
             }
         });
     </script>
