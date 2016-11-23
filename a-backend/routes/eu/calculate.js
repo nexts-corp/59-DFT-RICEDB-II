@@ -349,7 +349,6 @@ router.post(['/calculate'], function (req, res, next) {
 
 
     });
-    //res.json({ error: params });
 });
 
 
@@ -544,6 +543,23 @@ router.post(['/allocate_quota'], function (req, res, next) {
     var params = req.body;
     db.query(function (conn) {
         statement = r.db('eu').table('allocate_quota').insert(params);
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+    });
+
+
+});
+
+router.delete(['/allocate_quota'], function (req, res, next) {
+
+    var params = req.query;
+    db.query(function (conn) {
+        statement = r.db('eu').table('allocate_quota').get(params.id).delete();
         statement.run(conn, function (err, cursor) {
             if (!err) {
                 res.json(cursor);
