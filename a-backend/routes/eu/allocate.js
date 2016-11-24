@@ -17,7 +17,7 @@ router.get(['/allocate'], function (req, res, next) {
             quota_id: params.quota_id,
             type_rice_id: params.type_rice_id,
             ordinal_number: params.ordinal_number
-        }).merge(function (row) {
+        }).without('spreadsheets').merge(function (row) {
             return {
                 exporter: row('exporter').merge(function (exporter) {
                     return r.db('external_f3').table('exporter').filter({ id: exporter('exporter_id') })
@@ -68,7 +68,7 @@ router.get(['/quota_ordinal'], function (req, res, next) {
     var params = req.query;
     db.query(function (conn) {
         var statement = r.db('eu').table('allocate_quota')
-            .filter({ quota_id: params.quota_id, type_rice_id: params.type_rice_id })
+            .filter({ quota_id: params.quota_id, type_rice_id: params.type_rice_id, state:'allocate' })
             .orderBy('ordinal_number')
             .map(function (row) {
                 return row('ordinal_number')

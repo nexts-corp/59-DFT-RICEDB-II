@@ -574,7 +574,7 @@ router.delete(['/allocate_quota'], function (req, res, next) {
 
 
 
-
+//ข้อมูลตารางคำนวณ
 router.get(['/spreadsheets'], function (req, res, next) {
     var params = req.query;
     db.query(function (conn) {
@@ -583,6 +583,24 @@ router.get(['/spreadsheets'], function (req, res, next) {
             .merge(function (row) {
                 return r.db('eu').table('type_rice').get(row('type_rice_id')).without('id')
             })
+
+        statement.run(conn, function (err, cursor) {
+            if (!err) {
+                res.json(cursor);
+            } else {
+                res.json({ error: "error" });
+            }
+        });
+    });
+});
+
+
+//เปลี่ยนสถานะไปยังการจัดสรรข้าว
+router.put(['/state/allocate'], function (req, res, next) {
+    var params = req.body;
+    db.query(function (conn) {
+
+        var statement = r.db('eu').table('allocate_quota').get(params.allocate_id).update({state:'allocate'});
 
         statement.run(conn, function (err, cursor) {
             if (!err) {
