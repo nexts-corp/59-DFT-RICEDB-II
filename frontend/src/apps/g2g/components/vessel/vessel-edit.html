@@ -244,6 +244,10 @@
           type:Object,
           value:{}
         },
+        data:{
+          type:Object,
+          value:{}
+        }
       },
       // listeners: {
       //   'shipline_id.selected-item-changed': 'regularTap'
@@ -264,10 +268,14 @@
         //send to file add-contract
         this.fire('vessel-edit-common',{node:this});
       },
+      //from vesselBehavior.html
       setData:function (data) {
-        // console.log(data.shipline_id == undefined);
-        if(data.shipline_id != undefined){
-          // console.log(data.shipline_id);
+        // console.log(1111,data);
+        // console.log(typeof data == undefined);
+        console.log(data);
+        if(typeof data != undefined){
+          console.log(typeof data != undefined);
+          console.log(data);
           this.data.shipline_id =data.shipline_id;
           this.data.bl_no=data.bl_no;
           this.data.book_no=data.bl_no;
@@ -341,14 +349,20 @@
         var el = Polymer.dom(this.root).querySelectorAll('.required');
         var stat = el.map((el)=> el.validate());
         // console.log(this.csonfirmLetter);
+        console.log(stat.every(elem => elem == true));
         if (stat.every(elem => elem == true)) {
           this.fire('save-Data-shipmentDetail',{
             data:this.editsMdatial,
-            index:this.index
+            index:this.index,
+            fun:this
           });
           // this.editInput();
         }
 
+      },
+      editInputs:function () {
+        console.log(1515);
+        this.editInput();
       },
       shipmentDelete:function () {
         console.log(this.data);
