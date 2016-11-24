@@ -31,11 +31,39 @@
         </style>
         <div>
             <table class="gl-table-default" style="border: 1px solid #ddd;">
+                <thead>
+                    <th class="center">ประเภทข้าว</th>
+                    <th class="right">งวดที่/เดือน</th>
+                    <th>ปริมาณโควตา</th>
+                    <th>ปริมาณโควตารวม</th>
+                </thead>
+                <tbody>
+                    <template is="dom-repeat" items="{{data.type_rice}}">
+                        <tr on-tap="_selectData" data="{{item}}" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
+                             <td class="center">{{item.type_rice_name_th}}</td>
+                             <td>
+                                <template is="dom-repeat" items="{{item.period}}">
+                                    <div class="right">งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]]</div>    
+                                </template>
+                             </td>
+                             <td>
+                                <template is="dom-repeat" items="{{item.period}}">
+                                    <div>[[formatNumber(item.quantity)]]</div>
+                                </template> 
+                             </td>
+                             <td>[[formatNumber(item.amount)]]</td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+             <!--<template is="dom-repeat" items="{{data.type_rice}}">
+            <table class="gl-table-default" style="border: 1px solid #ddd;">
+           
             <thead>
                 <tr>
                   <th class="center">ประเภทข้าว</th>
                   [[getMonth(data)]]
-                    <template is="dom-repeat" items="{{quaotaMonth}}">
+                    <template is="dom-repeat" items="{{item.period}}">
                         <th class="center"> งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]]</th>
                     </template>
                   <th class="center">ปริมาณโควตารวม </th>
@@ -43,7 +71,7 @@
             </thead>
             
             <tbody>
-                <template is="dom-repeat" items="{{data.type_rice}}">
+             
                 <tr on-tap="_selectData" data="{{item}}" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
                     <td class="center">{{item.type_rice_name_th}}</td>
                      <template is="dom-repeat" items="{{item.period}}">
@@ -51,9 +79,11 @@
                     </template>    
                     <td class="center">[[formatNumber(item.amount)]]</td>
                 </tr>
-                </template>
+              
             </tbody>
         </table>
+        <br>
+        </template>-->
         </div>
     </template>
     <script>

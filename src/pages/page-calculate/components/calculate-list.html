@@ -12,11 +12,11 @@
                 padding: 0px 10px 10px 10px;
             }
         </style>
-        <template is="dom-repeat" items="{{listData}}">
+       
            
             <div class="container">
-                <div>ประเภท : {{item.type_rice_name_th}}</div>
-                
+                <div>ประเภท : {{typeRiceName}}</div>
+                <template is="dom-repeat" items="{{listData}}">
                 <table class="gl-table-default" style="border: 1px solid #ddd;">
                     <thead>
                         <tr>
@@ -39,8 +39,9 @@
                     </template>
                     </tbody>
                 </table>
+                </template>
             </div>
-        </template>
+        
     </template>
     <script>
         Polymer({
@@ -57,9 +58,10 @@
                 this.fire('data-select',{key:e.currentTarget.key});
             },
             _getDatalist:function(){
-                console.log(this.listData);
+                console.log('list',this.listData);
                 this.listData.map((item)=>{
-                    console.log(item);
+                    // console.log(item);
+                    this.typeRiceName = item.type_rice_name_th;
                    // listData = item.detail;
                 });
             }
