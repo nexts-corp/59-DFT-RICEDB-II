@@ -16,7 +16,7 @@
            
             <div class="container">
                 <div>ประเภท : {{typeRiceName}}</div>
-                <template is="dom-repeat" items="{{listData}}">
+               
                 <table class="gl-table-default" style="border: 1px solid #ddd;">
                     <thead>
                         <tr>
@@ -27,7 +27,8 @@
                         <th>ปริมาณโควตา 100%</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <template is="dom-repeat" items="{{listData}}">
+                    <tbody> 
                     <template is="dom-repeat" items="{{item.detail}}">
                         <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
                             <td>{{item.ordinal_number}}</td>
@@ -38,8 +39,9 @@
                         </tr>   
                     </template>
                     </tbody>
+                    </template>
                 </table>
-                </template>
+                
             </div>
         
     </template>
