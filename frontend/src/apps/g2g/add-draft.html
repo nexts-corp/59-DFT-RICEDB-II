@@ -115,7 +115,7 @@
 
               <panel-seleted-payment>
                   <section-content name="detail">
-                    <payment-detail data="{{payment}}"></payment-detail>
+                    <payment-detail data="{{fee}}"></payment-detail>
                   </section-content>
                   <!-- <section-content name="print">
                     <payment-pay></payment-pay>
@@ -288,7 +288,6 @@
               // this.glQuery('layoutMain').openToastLoading();
               this.read('./g2g/invoice/id/'+invoice_id,(data)=>{
                 this.inDetail = data;
-                this.glQuery('contentPanel').changDrawer();
               },true,'get');
             },
             draftPayment:function (e) {
@@ -308,9 +307,9 @@
               });
               // console.log(url);
               this.read('./g2g/fee/invoice/id/'+url,(data)=>{
-                this.payment = data;
-                // console.log(this.payment );
-              },true,'get');
+                this.fee = data;
+                console.log(this.fee );
+              },false,'get');
             },
             roundDetails:function (e) {
               // console.log(e.detail.data);

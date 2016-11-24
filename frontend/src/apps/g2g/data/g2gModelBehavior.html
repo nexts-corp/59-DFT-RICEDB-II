@@ -69,10 +69,11 @@
       //   this.buyyer=data;
       // },false,'put');
       read:function (url,callback,refresh,action) {
+        console.log(url);
         // this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
         axios.get(url)
               .then((response)=> {
-                // console.log("success");
+                console.log("success");
                 // console.log(response.data);
                 // actionInpage();
                 // this.fire('toast',{status:'success',text:'ดึงข้อมูลเสร็จสิ้น',  // คำสั่งสำหรับเปิด toast success
@@ -81,12 +82,12 @@
                 //    }
                 // });
                 callback(response.data);
+                console.log(1111);
                 switch (action) {
                   //read
                     case 'get':
-                              // this.glQuery('layoutMain').closeToastLoading(()=>{
-                              //   this.checkRefresh(refresh);
-                              // });
+                            this._checkRefresh(refresh);
+                            console.log(2222);
                     break;
                     // insert & updoate
                     case 'put':
