@@ -154,7 +154,7 @@ router.put('/update', function (req, res, next) {
     }
 });
 router.delete('/delete/id/:id', function (req, res, next) {
-    datacontext.delete("common", "bank", req.params.id, res);
+    datacontext.delete("g2g", "shipment_detail", req.params.id, res);
 });
 
 module.exports = router;

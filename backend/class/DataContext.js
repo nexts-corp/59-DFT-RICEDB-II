@@ -86,6 +86,7 @@ DataContext.prototype.delete = function (dbname, tbname, id, res) {
                 .then(function (response) {
                     result.message = response;
                     if (response.errors == 0) {
+                        console.log('xxxx')
                         result.result = true;
                         var history = {
                             tb_name: tbname,
