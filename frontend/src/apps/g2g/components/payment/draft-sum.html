@@ -1,27 +1,21 @@
-<link rel="import" href="format-number-behavior.html">
 <dom-module id="draft-sum">
 <style is="custom-style" include="iron-flex iron-flex-alignment">
   .flexchild-1 {
     @apply(--layout-flex);
   }
-
   .flexchild-2 {
     @apply(--layout-flex-2);
   }
-
   .flexchild-5 {
     @apply(--layout-flex-5);
   }
-
   .flex-center-justified {
     @apply(--layout-horizontal);
     @apply(--layout-center-justified);
   }
-
   .header {
     text-align: center;
   }
-
   .text {
     margin-top: 10px;
     margin-right: 10px;
@@ -34,45 +28,33 @@
   .inputHeader {
     width: 40%;
   }
-
   .container {
     padding: 10px;
   }
-
   table.default {
     border-collapse: collapse;
     width: 100%
   }
-
   table.default,
   th,
   td {
     border-bottom: 1px solid #ddd;
   }
-
   th,
   td {
     padding: 15px;
   }
-
   th {
     text-align: center;
     background-color: #F1F1F1;
     white-space: nowrap;
   }
-
   td {
     text-align: left;
     white-space: nowrap;
   }
-
   tr:hover {
     background-color: #F1F1F1;
-  }
-
-  .form-number {
-    width:140px;
-    text-align:right;
   }
 </style>
   <template>
@@ -94,24 +76,24 @@
       <template is="dom-repeat" items="[[totalInvoice]]" as="invoice">
       <tr>
         <td colspan="3">รวม (Invoice No : [[invoice.invoice_no]])</td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalTonInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalPricePerTonUsdInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalAmountUsdInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalBathInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalFeeInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalIncomeTaxInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(invoice.totalMoneyBathInvoices)]]" disabled></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalTonInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalPricePerTonUsdInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalAmountUsdInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalBathInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalFeeInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalIncomeTaxInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[invoice.totalMoneyBathInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
       </tr>
       </template>
       <tr>
         <td colspan="3">รวมทั้งหมด</td>
-        <td><gl-form-input class="form-number" value="{{formatNumber(data.totalTonInvoices)}}" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(data.totalPricePerTonUsdInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(data.totalAmountUsdInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(data.totalBathInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(data.totalFeeInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(data.totalIncomeTaxInvoices)]]" disabled></gl-form-input></td>
-        <td><gl-form-input class="form-number" value="[[formatNumber(data.totalMoneyBathInvoices)]]" disabled></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="{{data.totalTonInvoices}}" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[data.totalPricePerTonUsdInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[data.totalAmountUsdInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[data.totalBathInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[data.totalFeeInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[data.totalIncomeTaxInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
+        <td><gl-form-input style="width:140px;" value="[[data.totalMoneyBathInvoices]]" disabled format="0,0.00" print></gl-form-input></td>
       </tr>
     </table>
   </div>
@@ -134,9 +116,6 @@
             }
           }
         },
-        behaviors: [
-            FormatNumberBehavior
-        ],
         observers:[
           'check(totalInvoice.*)'
         ],
@@ -184,7 +163,6 @@
           });
           this.data.totalMoneyBathInvoices = result
           this.notifyPath('data.totalMoneyBathInvoices');
-
         },
       });
     </script>
