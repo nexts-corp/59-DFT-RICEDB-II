@@ -152,7 +152,8 @@
                 'get-confirm-new':'_getCml',
                 'get-confirm-detail-new':'conFirmDeatil',
                 'add-confirm':'editConfirm',
-                'add-shipment' : 'editShipment'
+                'add-shipment' : 'editShipment',
+                'get-shipMentDetail':'shipMentDeatil'
             },
             behaviors: [
                 gl.behavior.core,
@@ -384,7 +385,7 @@
             conFirmDeatil:function (cmlId) {
               var cml_Id;
               if (cmlId instanceof Object) {
-                  console.log(cml_Id= cmlId.detail.cl_id);
+                  cml_Id= cmlId.detail.cl_id;
               } else {
                 cml_Id=cmlId;
               }
@@ -394,12 +395,19 @@
               },false,'get');
             },
             shipMentDeatil:function (id,refresh,action) {
-              // console.log('เข้ากระบวนการลบ 1');
+              console.log('เข้ากระบวนการ 1');
               if (action == 'get') {
                 // this.glQuery('layoutMain').openToastLoading();
               }
+              var shm_id;
+              if (id instanceof Object) {
+                console.log(id);
+                  shm_id= id.detail.shm_id;
+              } else {
+                shm_id=id;
+              }
               // console.log('=>',id,refresh,action);
-              this.read('./g2g/shipment/id/'+id,(data)=>{
+              this.read('./g2g/shipment/id/'+shm_id,(data)=>{
                 this.read('./g2g/contract/id/'+data.contract_id,(data2)=>{
                   data.country =  data2.country_id;
                   data.buyerMasks =  data2.buyer_masks;

@@ -406,6 +406,9 @@
               this.shipment.product_date=new Date (this.shipment.product_date);
               // console.log(this.shipment);
               this.insert('./g2g/shipment/detail/insert',this.shipment, () => {
+                // this.glQuery('addContract').shipMentDeatil(this.shipment.shm_id,false,'put');
+                this.fire('get-shipMentDetail',{shm_id :this.shipment.shm_id,refresh:false ,action:'put'});
+                console.log(111);
                 this.fire('refresh-contract',{refresh:false ,action:'put'});
                 this._cancalShow();
               });
