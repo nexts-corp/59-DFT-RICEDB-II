@@ -376,10 +376,13 @@
               this.addContent = e.currentTarget.getAttribute("name");
             },
             _shipmentDetailDelete:function (e) {
-              // console.log(e.detail.data);
+              console.log(e.detail);
               this.delete('./g2g/shipment/detail/delete/id/',e.detail.shm_det_id, () => {
-                this.glQuery('addContract').getChange(false,'delete');
-                this.glQuery('addContract').shipMentDeatil(e.detail.shm_id,false,'put');
+                // this.glQuery('addContract').getChange(false,'delete');
+                // this.glQuery('addContract').shipMentDeatil(e.detail.shm_id,false,'put');
+                this.fire('get-shipMentDetail',{shm_id :e.detail.shm_id,refresh:false ,action:'delete'});
+                console.log(111);
+                this.fire('refresh-contract',{refresh:false ,action:'delete'});
                });
               // this.glQuery('layoutMain').openToastDeleteing();
             },
