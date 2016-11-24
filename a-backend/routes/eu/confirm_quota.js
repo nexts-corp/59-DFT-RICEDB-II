@@ -26,7 +26,7 @@ router.get(['/confirmed'], function (req, res, next) {
         var statement = r.db('eu').table('confirm_quota').filter({
             quota_id: params.quota_id,
             type_rice_id: params.type_rice_id,
-            ordinal_number: params.ordinal_number
+            ordinal_number: params.ordinal_number  
         });
 
         statement.run(conn, function (err, cursor) {
