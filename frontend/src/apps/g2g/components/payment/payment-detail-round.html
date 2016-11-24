@@ -291,8 +291,11 @@ Polymer({
       });
     });
       // console.log(this.newData);
+      console.log(this.newData);
+
       this.update('./g2g/fee/update',this.newData, () => {
-        this.glQuery('adddraft').getRound(this.contractId,true,'get');
+        this.glQuery('adddraft').getRound(this.contractId,false,'get');
+        this.fire('select-round',{data:this.newData.id});
        });
   },
   _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,made_out_to,status) {
