@@ -118,41 +118,33 @@
       //   this.glQuery('addContract').getChange(false,'put');
       //   this.editInput();
       //  });
-      update:function (url,data,actionInpage) {
-        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
-            status:'dialog',
-            text:'ต้องการแก้ไขข้อมูลใช่หรือไม่ ?',
-            confirmed:this._update, //function ที่ใช้รับค่า ปุ่ม
-            el: this, // compontents
-            data:{url:url,data:data,actionInpage:actionInpage} // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-        });
-        // this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
-        // axios.put(url, data)
-        //           .then((response) => {
-        //             console.log("success");
-        //             console.log(response);
-        //             // this.actionInpage();
-        //
-        //             // console.log(response.data.id != null);
-        //             if (response.data.id != null) {
-        //               this.fire('toast',{status:'success',text:'แก้ไขสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-        //                  callback:function(){
-        //                    actionInpage();
-        //                  }
-        //               });
-        //             } else {
-        //               this.fire('toast',{status:'connectError',text:'ไม่สามารถบันทึกได้', //คำสั่งสำหรับเปิด toast error
-        //                 callback:function(){}
-        //               });
-        //             }
-        //           })
-        //           .catch((error)=> {
-        //             console.log("error");
-        //             console.log(error);
-        //             this.fire('toast',{status:'connectError',text:'Can not connect the database server', //คำสั่งสำหรับเปิด toast error
-        //               callback:function(){}
-        //             });
-        //           })
+      update:function (url,data,actionInpage,proxy=false) {
+        // console.log(111);
+        if (proxy == false) {
+          this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+              status:'dialog',
+              text:'ต้องการแก้ไขข้อมูลใช่หรือไม่ ?',
+              confirmed:this._update, //function ที่ใช้รับค่า ปุ่ม
+              el: this, // compontents
+              data:{url:url,data:data,actionInpage:actionInpage} // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+          });
+        } else {
+          console.log(1);
+          console.log(url, data,actionInpage);
+          axios.put(url, data)
+                    .then((response) => {
+                      console.log("success");
+                      console.log(response);
+                      actionInpage();
+                    })
+                    .catch((error)=> {
+                      console.log("error");
+                      console.log(error);
+                      this.fire('toast',{status:'connectError',text:'Can not connect the database server', //คำสั่งสำหรับเปิด toast error
+                        callback:function(){}
+                      });
+                    })
+        }
       },
       _update:function (result,detail) {
         if (result == true) {
