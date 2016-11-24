@@ -111,17 +111,18 @@
     <iron-pages selected="{{pageEditShipment}}" attr-for-selected="name">
       <div name="view">
         <view-noshipment data="{{data}}" ></view-noshipment>
-    <gl-grid-row width="{{getWidth}}">
-
-      <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,8]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
-        <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl">จัดการ B/l No</paper-button>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
-        <paper-button  class="gl-btn-primary" raised on-tap="editBlShm" name="addShmdt">เพิ่มผู้ส่งออก</paper-button>
-        <!-- <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="displayInsert" >เพิ่มผู้ส่งออก</paper-button> -->
-      </gl-grid-col>
-    </gl-grid-row>
+    <template is="dom-if" if="[[!data.shm_status]]">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[500,7],[700,8]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+          <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl">จัดการ B/l No</paper-button>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,2]]">
+          <paper-button  class="gl-btn-primary" raised on-tap="editBlShm" name="addShmdt">เพิ่มผู้ส่งออก</paper-button>
+          <!-- <paper-button id="removeButtom" hidden="[[data.shm_status]]" class="gl-btn-primary" raised on-tap="displayInsert" >เพิ่มผู้ส่งออก</paper-button> -->
+        </gl-grid-col>
+      </gl-grid-row>
+    </template>
     <div hidden="{{addBlShm}}">
     <iron-pages selected="{{addContent}}" attr-for-selected="name">
       <div name="addBl">
@@ -392,7 +393,7 @@
               // console.log(this.data.shipment_detail[e.detail.index]=e.detail.data);
               var data = this.data.shipment_detail[e.detail.index]=e.detail.data;
               // log
-              console.log('this.data => 389 ',this.data);
+              // console.log('this.data => 389 ',this.data);
               this.update('./g2g/shipment/detail/update', data,() => {
                 this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
                 this.fire('refresh-contract',{refresh:false ,action:'put'});

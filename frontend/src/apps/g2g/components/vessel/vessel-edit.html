@@ -178,23 +178,15 @@
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,5]]"></gl-grid-col>
-
-
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <div class="top">ORIGINALS</div>
-        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
           [[testNum(data.*,'origin_page')]]
-          <gl-form-input class="required" required  label=""  disabled="[[checkInput]]"class="w padL requested" type="number" value="{{data.origin_page}}"></gl-form-input>
+          <gl-form-input class="required" required  label="ORIGINALS"  disabled="[[checkInput]]"class="w padL requested" type="number" value="{{data.origin_page}}"></gl-form-input>
         </gl-grid-col>
         <div class="top">/</div>
         <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
           [[testNum(data.*,'nn_page')]]
-          <gl-form-input class="required" required  label=""  disabled="[[checkInput]]"class="w requested" type="number" value="{{data.nn_page}}"></gl-form-input>
-        </gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,1]]">
-          <div class="top">N/N</div>
+          <gl-form-input id="testtttt" class="required" required  label="N/N"  disabled="[[checkInput]]"class="w requested" type="number" value="{{data.nn_page}}"></gl-form-input>
         </gl-grid-col>
       </gl-grid-row>
       <!-- <paper-button  class="gl-btn-success" raised on-tap="checkData" index="[[index]]">
@@ -348,24 +340,27 @@
         // console.log(this.editsMdatial);
         var el = Polymer.dom(this.root).querySelectorAll('.required');
         var stat = el.map((el)=> el.validate());
+        // console.log();
+        // el.map((el)=>{
+        //   console.log(el);
+        //   el.getValue();
+        // });
         // console.log(this.csonfirmLetter);
-        console.log(stat.every(elem => elem == true));
+        // console.log(stat.every(elem => elem == true));
         if (stat.every(elem => elem == true)) {
           this.fire('save-Data-shipmentDetail',{
             data:this.editsMdatial,
             index:this.index,
             fun:this
           });
-          // this.editInput();
         }
 
       },
       editInputs:function () {
-        console.log(1515);
         this.editInput();
       },
       shipmentDelete:function () {
-        console.log(this.data);
+        // console.log(this.data);
         //list-vessel.html
         this.fire('delete-Data-shipmentDetail',{
           shm_det_id:this.data.shm_det_id,
@@ -378,6 +373,7 @@
       clickSubmit:function () {
         var el = Polymer.dom(this.root).querySelectorAll('.required');
         var stat = el.map((el)=> el.validate());
+        el.map((el)=>{ el.reset()});
         // console.log(this.csonfirmLetter);
         if (stat.every(elem => elem == true)) {
           this.fire('click-Submit',{data:'fin'});
