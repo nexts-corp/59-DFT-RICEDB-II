@@ -54,7 +54,7 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                             date_created: new Date(),
                             actor: 'admin'
                         };
-                        if (typeof response.changes !== 'undefined') {
+                        if (response.changes != [] && response.unchanged != 1 || response.replaced == 1) {
                             // console.log(history.old_value);
                             history.old_value = response.changes[0].old_val;
                             //console.log(history.old_value);
