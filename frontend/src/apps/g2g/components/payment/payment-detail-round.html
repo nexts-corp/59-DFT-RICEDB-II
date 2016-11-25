@@ -172,7 +172,7 @@
         <paper-button raised on-tap="savePayment" class="gl-btn-success">บันทึก</paper-button>
       </template>
       <template is="dom-if" if="[[checkBtn]]">
-        <paper-button raised on-tap="payment" class="gl-btn-info">ยืนยันการจ่ายเงิน</paper-button>
+        <paper-button raised on-tap="confirmFee" class="gl-btn-info">ยืนยันการจ่ายเงิน</paper-button>
       </template>
     </div>
     </div>
@@ -237,7 +237,7 @@ Polymer({
     this.editInput();
   },
   deleteRound:function () {
-    console.log(this.data);
+    // console.log(this.data);
     this.data.invoice.map((el,indexShmid)=>{
       this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.made_out_to,false);
     });
@@ -262,9 +262,17 @@ Polymer({
   _totalInvoice:function (e) {
     // console.log(e.detail.data);
   },
+  confirmFee:function () {
+      // this.approve(this.data.fee_status);
+    this.data.fee_status = this.approve(this.data.fee_status);
+    // this.set('data',{ fee_status:this.approve(this.data.fee_status)});
+    console.log(this.data);
+    this.editInput();
+    this.savePayment();
+  },
   savePayment:function () {
     this.editInput();
-    console.log(this.data);
+    // console.log(this.data);
     // this.set('newData',{fee_date_receipt:  "2016-11-25T00:00:00.000Z"});
     this.set('newData',{
       fee_date_receipt:  new Date (this.data.fee_date_receipt) ,
