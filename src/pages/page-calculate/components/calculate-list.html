@@ -2,48 +2,62 @@
 <dom-module id="calculate-list">
     <template>
         <style is="custom-style" include="gl-table">
-            .container{
+            .container {
                 padding: 20px;
                 border: 1px solid #ddd;
                 border-radius: 5px;
             }
-            .container>div{ 
-                font-size:24px;
+
+            
+            .container>div {
+                font-size: 24px;
                 padding: 0px 10px 10px 10px;
             }
+            
+            .right {
+                text-align: right !important;
+            }
+            
+            .center {
+                text-align: center;
+            }
+            
+            .left {
+                text-align: left;
+            }
         </style>
-       
-           
-            <div class="container">
-                <div>ประเภท : {{typeRiceName}}</div>
-               
-                <table class="gl-table-default" style="border: 1px solid #ddd;">
-                    <thead>
-                        <tr>
+
+
+        <div class="container">
+            <div>ประเภท : {{typeRiceName}}</div>
+
+            <table class="gl-table-default" style="border: 1px solid #ddd;">
+                <thead>
+                    <tr>
                         <th>คำนวณครั้งที่</th>
-                        <th>ยอดรวมการส่งออกที่ผ่านมา</th>
-                        <th>ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
-                        <th>ยอดรวมโควตาที่เคยได้รับ</th>
-                        <th>ปริมาณโควตา 100%</th>
-                        </tr>
-                    </thead>
-                    <template is="dom-repeat" items="{{listData}}">
-                    <tbody> 
-                    <template is="dom-repeat" items="{{item.detail}}">
-                        <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
-                            <td>{{item.ordinal_number}}</td>
-                            <td>[[formatNumber(item.quota_amount)]]</td>
-                            <td>[[formatNumber(item.sum_export)]]</td>
-                            <td>[[formatNumber(item.sum_for_cal)]]</td>
-                            <td>[[formatNumber(item.sum_quota)]]</td>
-                        </tr>   
-                    </template>
+                        <th class="right">ยอดรวมการส่งออกที่ผ่านมา</th>
+                        <th class="right">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
+                        <th class="right">ยอดรวมโควตาที่เคยได้รับ</th>
+                        <th class="right">ปริมาณโควตา 100%</th>
+                    </tr>
+                </thead>
+                <template is="dom-repeat" items="{{listData}}">
+                    <tbody>
+                        <template is="dom-repeat" items="{{item.detail}}">
+                            <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
+                                <td>[[item.ordinal_number]]</td>
+                                <td class="right">[[formatNumber(item.sum_export)]]</td>
+                                <td class="right">[[formatNumber(item.sum_for_cal)]]</td>
+                                <td class="right">[[formatNumber(item.sum_quota)]]</td>
+                                <td class="right">[[formatNumber(item.quota_amount)]]</td>
+                            </tr>
+                        </template>
                     </tbody>
-                    </template>
-                </table>
-                
-            </div>
-        
+                </template>
+            </table>
+
+        </div>
+
     </template>
     <script>
         Polymer({

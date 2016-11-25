@@ -87,10 +87,10 @@
                             </tr>
                             <tr>
                                 <template is="dom-repeat" items="{{quotaYear}}">
-                                    <th class="right">{{item.year}}</th>
+                                    <th class="center">{{item.year}}</th>
                                 </template>
                                  <template is="dom-repeat" items="{{quotaYear}}">
-                                    <th class="right">{{item.year}}</th>
+                                    <th class="center">{{item.year}}</th>
                                 </template>
                             </tr>
                         </thead>
@@ -101,24 +101,24 @@
                                    <template is="dom-repeat" items={{item.exported}}>
                                        <td class="right">[[formatNumber(item.quantity)]]</td>
                                    </template>
-                                   <td>[[formatNumber(item.exported_amount)]]</td>
+                                   <td  class="right">[[formatNumber(item.exported_amount)]]</td>
                                    <template is="dom-repeat" items={{item.confirmed}}>
                                        <td class="right">[[formatNumber(item.quantity)]]</td>
                                    </template>
                                    <td class="right">[[formatNumber(item.confirmed_amount)]]</td>
-                                   <td class="center">[[formatNumber(item.sum_export)]]</td>
-                                   <td class="center">[[formatNumber(item.sum_export_convert)]]</td>
+                                   <td class="right">[[formatNumber(item.sum_export)]]</td>
+                                   <td class="right">[[formatNumber(item.sum_export_convert)]]</td>
                                    <td class="right">[[formatNumber(item.quantity)]]</td>
                                 </tr>
                             </template>
                             <tr>
                                 <td></td>
                                 <td colspan$="[[countYear]]"></td>
-                                <td class="center">[[formatNumber(data.sum_export)]]</td>
+                                <td class="right">[[formatNumber(data.sum_export)]]</td>
                                 <td colspan$="[[countYear]]"></td>
-                                <td class="class="center"">[[formatNumber(data.sum_quota)]]</td>
+                                <td class="right">[[formatNumber(data.sum_quota)]]</td>
                                 <td></td>
-                                <td class="center">[[formatNumber(data.sum_for_cal)]]</td>
+                                <td class="right">[[formatNumber(data.sum_for_cal)]]</td>
                                 <td class="right">[[formatNumber(data.quota_amount)]]</td>
                             </tr>
                         </tbody>
@@ -132,7 +132,7 @@
                 <paper-button on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
             </div>
             <div>
-                <paper-button raised class="gl-btn-success">บันทึก</paper-button>
+                <paper-button raised class="gl-btn-success">บันทึกส่วนจัดสรร</paper-button>
             </div>
         </div>
     </template>
