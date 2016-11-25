@@ -132,7 +132,7 @@
                 <paper-button on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
             </div>
             <div>
-                <paper-button raised class="gl-btn-success">บันทึกส่วนจัดสรร</paper-button>
+                <paper-button on-tap="_saveData" raised class="gl-btn-success">บันทึกส่วนจัดสรร</paper-button>
             </div>
         </div>
     </template>
@@ -154,6 +154,9 @@
                this.countYear = this.quotaYear.length;
             //    console.log(this.quotaYear.length);
                console.log('datalist',this.datalist);
+            },
+            _saveData:function(){
+                this.fire('save-data',this.data.id);
             },
             _deleteData:function(){
                 this.fire('delete-data');

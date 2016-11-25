@@ -69,7 +69,7 @@
           margin:auto;
         }
 
-        @media screen and (min-width: 1200px) {
+        @media screen and (min-width: 1275px) {
             .xcontainer {
                 width:80%;
             }
@@ -116,7 +116,7 @@
           <template is="dom-if" if="[[rendered]]">
             <iron-pages selected="{{pageSelect}}">
               <div><calculate-setting quota-year="{{sendQuotaYear}}" on-post-sum="_postSumData" on-post-data="_postData" sum-answer="{{answerSum}}"></calculate-setting></div>
-              <div><calculate-listQuota data="{{dataListQuota}}" on-delete-data="_confirmData"></calculate-listQuota></div>
+              <div><calculate-listQuota data="{{dataListQuota}}" on-save-data="_saveData" on-delete-data="_confirmData"></calculate-listQuota></div>
             </iron-pages>
           </template>
       </panel-right>
@@ -295,6 +295,32 @@
               text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
               confirmed:this._deleteData.bind(this)
             })
+          },
+          _saveData:function(e){
+            console.log(e.detail);
+            this.fire('toast',{status:'load'});
+            axios.put('/eu/calculate/state/allocate',{allocate_id:e.detail})
+            .then((response)=>{
+              console.log("success");
+              console.log(response);
+              this.textToast = 'บันทึกข้อมูลสำเร็จ';
+              this.fire('toast',{
+                status:'success',
+                text:this.textToast,
+                callback:function(){
+                //console.log('test');
+                
+                }
+              });
+              this.$$("panel-right").toggle();
+              this._getDatalist();
+              // this._getYear();
+              // this._getDatalist(this.selectYear);
+            })
+            .catch((error)=>{
+              console.log("error");
+              console.log(error);
+            });
           },
           _deleteData:function(result,detail){
              console.log('key:',this.getKey);
