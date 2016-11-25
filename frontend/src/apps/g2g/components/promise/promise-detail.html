@@ -1,27 +1,13 @@
 <!-- <link rel="import" href="../../data/g2gModelBehavior.html"> -->
+<link rel="import" href="../../../../../bower_components/gl-styles/gl-table.html">
 <dom-module id="promise-detail">
 
-    <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-table">
+
         gl-form-dropdown-menu{
           width: 100%;
         }
-        .bg {
-            background-color: var(--paper-grey-200);
-            border: 1px solid black;
-            padding: 10px 0px 10px 10px;
-        }
-
-        paper-button {
-            margin-top: 10px;
-        }
-
-        .icon-bin {
-            margin-top: 10px;
-        }
-
-        .bottom {
-            margin-bottom: 10px;
-        }
+        /**/
         paper-icon-button.crud {
         margin: 5px 5px 5px 5px;
        }
@@ -33,13 +19,46 @@
        .riceName{
          /*color: red;*/
          margin-top: 25px;
-         font-size: var(--font-size-h4);
+         font-size: var(--font-size-h5);
        }
+       paper-button.btnInTable {
+         --paper-button:{
+          margin-top: 0px;
+           height: 30px;
+         }
+       }
+       .titleName {
+         margin-bottom: 10px;
+       }
+       .table-head > tr > th:nth-child(1),
+       .table-head > tr > th:nth-child(3),
+       .table-body > tr > td:nth-child(1),
+       .table-body > tr > td:nth-child(3),
+       .table-foot > tr > td:nth-child(1),
+       .table-foot > tr > td:nth-child(3) {
+         width: 20%;
+         text-align: center;
+       }
+       .table-head > tr > th:nth-child(2),
+       .table-body > tr > th:nth-child(2),
+       .table-foot > tr > th:nth-child(2) {
+         width: 60%;
+       }
+       .gl-table-default{
+         margin-bottom: 20px;
+       }
+       .upGlComboBox {
+         margin-top: -20px;
+       }
+       paper-button[disabled]{
+          background: #eaeaea;
+          color: #a8a8a8;
+        }
     </style>
 
 
     <template>
-    <form is="iron-form" id="insertPromiseDetail">
+
       <div class="horizontal end-justified layout">
           <template is="dom-if" if="[[!data.contract_status]]">
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
@@ -50,15 +69,12 @@
 
       </div>
       <gl-grid-row width="{{getWidth}}">
-        <gl-combo-box class="required" required id="buyer_id" disabled="[[checkInput]]" label="Buyer" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
-            item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{buyyer}}" on-value-changed="_getBuyerAddress"></gl-combo-box>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input required class="required" disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อสัญญา" label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
-          </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
-          </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-input required class="required" disabled="[[checkInput]]" error-message="กรุณาใส่ชื่อสัญญา" label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker class="required" required  disabled="[[checkInput]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+        </gl-grid-col>
         </gl-grid-row>
         <gl-grid-row width="{{getWidth}}">
           <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -66,52 +82,73 @@
               จำนวนข้าวที่ทำสัญญา :
             </div>
           </gl-grid-col> -->
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-combo-box class="required" required id="buyer_id" disabled="[[checkInput]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
+          item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{buyyer}}" on-value-changed="_getBuyerAddress">
+          </gl-combo-box>
+          </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
-            <gl-form-input class="required" required   auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวนข้าวที่ทำสัญญา (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+            <gl-form-input class="required" required   auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="น้ำหนักสินค้า (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
         </gl-grid-col>
         </gl-grid-row>
-        <template is="dom-repeat" items="{{data.contract_type_rice}}">
-            <div class="bg top">
-              <gl-grid-row>
+        <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+                <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
+                <gl-form-textarea class="required" required  rows="2" disabled label="ที่อยู่ผู้สั่งซื้อ" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
+            </gl-grid-col>
+        </gl-grid-row>
 
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-dropdown-menu class="required" required  disabled="[[checkInput]]" label="ชนิดข้าว" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name" required>
-                      <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{item.type_rice_id}}">
-                        <template is="dom-repeat" items="[[typeRice]]">
-                          <paper-item value="[[item.type_rice_id]]">[[item.type_rice_name_th]]</paper-item>
-                        </template>
+        <gl-grid-row>
+        <div class="titleName">รายชื่อชนิดข้าว</div>
+        <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>ลำดับที่</th>
+              <th>ชนิดข้าว</th>
+              <th>
+                <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
+                  กระทำการ
+                </template>
+              </th>
+            </tr>
+          </thead>
+          <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
+            <tfoot class="table-foot">
+              <tr>
+                <td></td>
+                <td></td>
+                <td>
+                  <paper-button disabled="[[checkInput]]" raised id="[[index]]" on-tap="addNewData" class="btnInTable gl-btn-primary" >เพิ่มชนิดข้าว</paper-button>
+                </td>
+              </tr>
+            </tfoot>
+          </template>
+          <tbody class="table-body">
+          <template is="dom-repeat" items="{{data.contract_type_rice}}">
+            <tr>
+                <td>
+                  [[_conterRice(index)]]
+                </td>
+                <td>
+                  <div class="upGlComboBox"><gl-combo-box id="riceSelected" class="required" required  disabled="[[checkInput]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name"
+                  item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{typeRice}}" >
+                </gl-combo-box ></div>
 
-    </paper-menu>
-    </gl-form-dropdown-menu>
-    </gl-grid-col>
-
-    <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(item.*,'type_rice_quantity')]]
-        <gl-form-input  auto-validate disabled="[[checkInput]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="จำนวน (ตัน)" value="{{item.type_rice_quantity}}" placeholder="ใส่รายละเอียด" name="type_rice_quantity"></gl-form-input>
-    </gl-grid-col> -->
-    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-    <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
-        <paper-icon-button id="[[index]]" class="icon-bin" icon="icons:delete" title="ลบชนิดข้าว" style="color: gray;" on-tap="dele"></paper-icon-button>
-    </template>
-    </gl-grid-col>
-    </gl-grid-row>
-    </div>
-    </template>
-      <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
-        <div class="horizontal end-justified layout">
-            <paper-button raised on-tap="addNewData" class="gl-btn-primary">Add Rice Type</paper-button>
-        </div>
-      </template>
+                </td>
+                <td>
+                <template is="dom-if" if="[[checkBtnView(checkBtn)]]">
+                  <paper-button disabled="[[checkInput]]" raised id="[[index]]" on-tap="dele" class="btnInTable gl-btn-danger"title="ลบชนิดข้าว">ลบข้อมูล</paper-button>
+                </template>
+                </td>
+            </tr>
+          </template>
+          </tbody>
+        </table>
+        </gl-grid-row>
 
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-            <gl-form-input value="{{data.buyer_id}}" name="buyer_id" hidden></gl-form-input>
-            <gl-form-textarea class="required" required  rows="2" disabled label="ชื่อผู้ซื้อสินค้า, ที่อยู่" placeholder="ใส่รายละเอียด" value="{{buyerAddress}}" name="buyer_address"></gl-form-textarea>
-        </gl-grid-col>
-    </gl-grid-row>
-    <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-            <gl-form-textarea class="required" required  disabled="[[checkInput]]" rows="2" label="รายละเอียด" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+            <gl-form-textarea class="required" required  disabled="[[checkInput]]" rows="2" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
 
@@ -128,7 +165,7 @@
         </template>
 
     </div>
-    </form>
+
     </template>
 
     <script>
@@ -153,6 +190,9 @@
                     contract_type_rice:[],
                   }
                 },
+            },
+            _conterRice:function (num) {
+              return Number(num)+1;
             },
             _getBuyerAddress:function (e) {
               var selectedItem = e.detail.value;
