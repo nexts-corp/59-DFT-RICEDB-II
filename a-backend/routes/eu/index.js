@@ -6,6 +6,7 @@ var type_rice = require('./type_rice');
 var calculate = require('./calculate');
 var allocate = require('./allocate');
 var confirm_quota = require('./confirm_quota');
+var transaction = require('./transaction');
 
 var test = require('./test');
 
@@ -18,5 +19,7 @@ app.use('/type_rice', type_rice);
 app.use('/test', test);
 
 app.use('/confirm_quota', confirm_quota);
+
+app.use('/transaction', transaction);
 
 module.exports = app;
