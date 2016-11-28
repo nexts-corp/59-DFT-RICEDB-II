@@ -63,7 +63,7 @@
 								</gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input label="การคำนวณครั้งที่" value="{{ordinalNumber}}" required ></gl-form-input>  
+              <gl-form-input label="การคำนวณครั้งที่" value="{{mathOrdinalNumber(ordinalNumber.length)}}" required ></gl-form-input>  
              <!--<gl-form-input></gl-form-input>-->
             </gl-grid-col> 
           </gl-grid-row>
@@ -179,6 +179,9 @@
         quotaYear:{
           type: String
         },
+        ordinalNumber:{
+          type: String
+        },
         resault:{
           type: String
         },
@@ -196,6 +199,9 @@
         this._getTypeRice();
         this._getYear();
         this._getQuotaYear();
+      },
+      mathOrdinalNumber:function(number){
+        return number+1;
       },
       cal:function(e){
         const check = (item)=>{
@@ -316,7 +322,7 @@
         var sendData = {
           quota_id : this.quotaYear,
           type_rice_id : this.selectTypeRice,
-          ordinal_number : this.ordinalNumber,
+          ordinal_number : this.mathOrdinalNumber(this.ordinalNumber.length),
           sum_export : this.sumAnswer.sum_export,
           sum_for_cal : this.sumAnswer.sum_for_cal,
           sum_quota : this.sumAnswer.sum_quota,
