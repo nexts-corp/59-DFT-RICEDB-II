@@ -46,6 +46,8 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
           <div class="text-head">ระบบจัดการท่าเรือ</div>
 
           <div class="horizontal end-justified layout">
@@ -55,11 +57,11 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">No</div></th>
-                <th><div class="text-center">รหัสท่าเรือ</div></th>
-                <th><div class="text-center">port_code</div></th>
-                <th><div class="text-center">ชื่อท่าเรือ</div></th>
-                <th><div class="text-center">ประเทศ</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Port ID<p>(เลขประจำตัวท่าเรือ)</div></th>
+                <th><div class="text-center">Port Code<p>(รหัสท่าเรือ)</div></th>
+                <th><div class="text-center">Port Name<p>(ชื่อท่าเรือ)</div></th>
+                <th><div class="text-center">Country<p>(ประเทศ)</div></th>
                 <th style="text-align:right;"></th>
               </tr>
             </thead>
@@ -115,8 +117,8 @@
               this.getPort();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshPort',this)
             },
             _toggleDrawer: function(e) {
@@ -171,6 +173,9 @@
                     this.dataPort[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

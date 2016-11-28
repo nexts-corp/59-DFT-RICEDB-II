@@ -27,7 +27,7 @@
       width: 5%;
     }
     .table-head > tr > th:nth-child(3) {
-      width: 25%;
+      width: 20%;
     }
     .elevation{
       border-radius: 5px;
@@ -40,7 +40,9 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
-          <div class="text-head">ระบบจัดการผู้ให้บริการ</div>
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
+          <div class="text-head">ระบบจัดการผู้ให้บริการเรือ</div>
 
           <div class="horizontal end-justified layout">
             <paper-button class="gl-btn-primary button-top" title="เพิ่มผู้ให้บริการ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มผู้ให้บริการ</paper-button>
@@ -49,9 +51,9 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">No</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
                 <th></th>
-                <th><div>ชื่อผู้ให้บริการ</div></th>
+                <th><div class="text-center">Carrier Name<p>(ชื่อผู้ให้บริการเรือ)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -63,7 +65,7 @@
                 <tr>
                   <td><div class="text-center">{{item.no}}</div></td>
                   <td></td>
-                  <td><div>{{item.carrier_name}}</div></td>
+                  <td><div class="text-center">{{item.carrier_name}}</div></td>
                   <td style="text-align:right;">
                     <paper-icon-button data="{{item}}" on-tap="_edit" icon="icons:create"></paper-icon-button>
                     <paper-icon-button data="{{item}}" icon="delete" on-tap="_delete"></paper-icon-button>
@@ -107,8 +109,8 @@
               this.getCarrier();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshCarrier',this)
             },
             _toggleDrawer: function(e) {
@@ -163,6 +165,9 @@
                     this.dataCarrier[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

@@ -40,6 +40,8 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
           <div class="text-head">ระบบจัดการเรือ</div>
 
           <div class="horizontal end-justified layout">
@@ -50,9 +52,9 @@
             <thead class="table-head">
               <tr>
                 <!-- <th><div class="text-center">รหัสเรือ</div></th> -->
-                <th><div class="text-center">No</div></th>
-                <th><div class="text-center">ชื่อเรือ</div></th>
-                <th><div class="text-center">ชื่อสายเรือ</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Ship Name<p>(ชื่อเรือ)</div></th>
+                <th><div class="text-center">Shipline Name<p>(ชื่อสายเรือ)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -109,8 +111,8 @@
               this.getShip();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshShip',this)
             },
             _toggleDrawer: function(e) {
@@ -165,6 +167,9 @@
                     this.dataShip[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

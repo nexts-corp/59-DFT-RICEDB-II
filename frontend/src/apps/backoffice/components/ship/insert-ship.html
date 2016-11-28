@@ -26,7 +26,7 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="ชื่อเรือ :" placeholder="กรอกชื่อเรือ" value="{{data.ship_name}}"></gl-form-input>
+        <gl-form-input class="margin-top" label="Ship Name (ชื่อเรือ) :" placeholder="กรอกชื่อเรือ" value="{{data.ship_name}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -34,13 +34,8 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-dropdown-menu style="width:100%;" label="สายเรือ" placeholder="กรุณาเลือกสายเรือ">
-          <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{data.shipline_id}}" name="shipline_id">
-            <template is="dom-repeat" items="[[dataShipline]]">
-              <paper-item value="{{item.shipline_id}}">{{item.shipline_name}}</paper-item>
-            </template>
-          </paper-menu>
-        </gl-form-dropdown-menu>
+        <gl-combo-box style="margin-top:15px" id="shipline_id" label="Country (ประเทศ)" item-label-path="shipline_name"
+            item-value-path="shipline_id" value="{{data.shipline_id}}"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -104,8 +99,10 @@
               .catch(function(error) {}.bind(this));
       },
       getShipline: function() {
+        this.shipline_id = this.shipline_id || this.$.shipline_id;
           this.getDb('./common/shipline', (data) => {
             this.dataShipline = data;
+            this.shipline_id.items = data;
           });
       }
     });

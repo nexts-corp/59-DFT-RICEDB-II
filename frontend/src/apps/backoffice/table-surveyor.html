@@ -37,7 +37,9 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
-          <div class="text-head">ระบบจัดการผู้สำรวจรังวัด</div>
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
+          <div class="text-head">ระบบจัดการหน่วยงานตรวจสอบสินค้า</div>
 
           <div class="horizontal end-justified layout">
             <paper-button class="gl-btn-primary button-top" title="เพิ่มผู้สำรวจรังวัด" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มผู้สำรวจรังวัด</paper-button>
@@ -46,8 +48,8 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">No</div></th>
-                <th><div class="text-center">ชื่อผู้สำรวจรังวัด</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Surveyor Name<p>(ชื่อหน่วยงานตรวจสอบสินค้า)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -102,8 +104,8 @@
               this.getSurveyor();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshSurveyor',this)
             },
             _toggleDrawer: function(e) {
@@ -158,6 +160,9 @@
                     this.dataSurveyor[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

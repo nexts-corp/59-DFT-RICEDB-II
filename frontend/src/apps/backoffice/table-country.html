@@ -46,6 +46,8 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
           <div class="text-head">ระบบจัดการประเทศ</div>
 
           <div class="horizontal end-justified layout">
@@ -55,11 +57,11 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">รหัสประเทศ</div></th>
-                <th><div class="text-center">Country name<p>(ชื่อประเทศภาษาไทย)</div></th>
-                <th><div class="text-center">Country fullname<p>(ชื่อเต็มประเทศภาษาไทย)</div></th>
-                <th><div class="text-center">Country name<p>(ชื่อประเทศภาษาอังกฤษ)</div></th>
-                <th><div class="text-center">Country fullname<p>(ชื่อเต็มประเทศภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">Country Code<p>(รหัสประเทศ)</div></th>
+                <th><div class="text-center">Country Name<p>(ชื่อประเทศภาษาไทย)</div></th>
+                <th><div class="text-center">Country Fullname<p>(ชื่อเต็มประเทศภาษาไทย)</div></th>
+                <th><div class="text-center">Country Name<p>(ชื่อประเทศภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">Country Fullname<p>(ชื่อเต็มประเทศภาษาอังกฤษ)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มประเทศ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มประเทศ</paper-button> -->
                 </th>
@@ -117,8 +119,8 @@
               this.getCountry();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshCountry',this)
             },
             _toggleDrawer: function(e) {
@@ -170,6 +172,9 @@
                 this.getDb('./common/country', (data) => {
                   this.dataCountry = data;
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

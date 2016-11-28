@@ -1,4 +1,4 @@
-<dom-module id="edit-package">
+<dom-module id="edit-Harmonizedcode">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
     text-align: center;
@@ -14,35 +14,27 @@
   }
 </style>
   <template>
-    <div class="text-center">แก้ไขข้อมูล Package</div>
+    <div class="text-center">แก้ไขข้อมูลพิกัดข้าว</div>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-label-input class="margin-top" label="Package Code (รหัสแพ็คเกต) :" placeholder="กรอกรหัส Package" value="{{data.package_id}}"></gl-form-label-input>
+        <gl-form-label-input class="margin-top" label="Harmonized Code (พิกัดข้าว) :" placeholder="ใส่เลขพิกัดข้าว 11 หลัก" maxlength="11" value="{{data.type_rice_id}}"></gl-form-label-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row>
+    <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Package Weight (น้ำหนักแพ็คเกต (kg)) :" placeholder="กรอกน้ำหนัก Package" value="{{data.package_kg_per_bag}}"></gl-form-input>
+        <gl-form-input class="margin-top" label="Rice Name(TH) (ชื่อข้าว (ภาษาไทย)) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_th}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row>
+    <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Package Name (ชื่อแพ็คเกต) :" placeholder="กรอกชื่อ Package" value="{{data.package_name}}"></gl-form-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-    </gl-grid-row>
-
-    <gl-grid-row>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Package Weight_bag (น้ำหนักกระสอบ (g)) :" placeholder="กรอกน้ำหนักกระสอบ" value="{{data.package_weight_bag}}"></gl-form-input>
+        <gl-form-textarea class="margin-top" label="Rice Name(EN) (ชื่อข้าว (ภาษาอังกฤษ)) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_en}}"></gl-form-textarea>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -57,7 +49,7 @@
   </template>
   <script>
     Polymer({
-      is: "edit-package",
+      is: "edit-Harmonizedcode",
       properties: {
         data: {
           type: Object,
@@ -71,17 +63,16 @@
       _edit:function(){
         // console.log(this.data);
         var datas = {
-          id: this.data.package_id,
-          package_kg_per_bag: parseInt(this.data.package_kg_per_bag),
-          package_name: this.data.package_name,
-          package_weight_bag: parseInt(this.data.package_weight_bag)
+          id: this.data.type_rice_id,
+          type_rice_name_th: this.data.type_rice_name_th,
+          type_rice_name_en: this.data.type_rice_name_en
         }
         this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.put('./common/package/update', datas)
+        axios.put('./common/typerice/update', datas)
             .then(function(response) {
                 console.log("success");
                 console.log(response);
-                this.glQuery('refreshPackage').getPackage();
+                this.glQuery('refreshRice').getTyperices();
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                   console.log('success');
                 }});

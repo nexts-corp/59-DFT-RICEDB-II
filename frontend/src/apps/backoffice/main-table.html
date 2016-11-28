@@ -1,0 +1,103 @@
+<dom-module id="backoffice-main-table">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
+
+    </style>
+    <template>
+
+      <paper-material elevation="1" style="padding:5px; margin-left:15%; width:70%;">
+
+        <template is="dom-repeat" items="[[menuTable]]">
+          <div style="padding:5px">
+            <paper-listbox>
+              <paper-item on-tap="_getUrl" url$="[[item.url]]" style="cursor:pointer;">{{item.nameMenu}}</paper-item>
+            </paper-listbox>
+          </div>
+        </template>
+
+      </paper-material>
+
+    </template>
+    <script>
+        Polymer({
+            is: "backoffice-main-table",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            properties: {
+              menuTable: {
+                type: Object,
+                value:
+                [
+                  {
+                    id:0,
+                    nameMenu:'ระบบจัดการธนาคาร',
+                    url:'/backoffice/table-bank'
+                  },
+                  {
+                    id:1,
+                    nameMenu:'ระบบจัดการผู้ซื้อ',
+                    url:'/backoffice/table-buyer'
+                  },
+                  {
+                    id:2,
+                    nameMenu:'ระบบจัดการผู้ให้บริการเรือ',
+                    url:'/backoffice/table-carrier'
+                  },
+                  {
+                    id:3,
+                    nameMenu:'ระบบจัดการประเทศ',
+                    url:'/backoffice/table-country'
+                  },
+                  {
+                    id:4,
+                    nameMenu:'ระบบจัดการข้อกำหนดการส่งสินค้า',
+                    url:'/backoffice/table-incoterms'
+                  },
+                  {
+                    id:5,
+                    nameMenu:'ระบบจัดการ Package',
+                    url:'/backoffice/table-package'
+                  },
+                  {
+                    id:6,
+                    nameMenu:'ระบบจัดการท่าเรือ',
+                    url:'/backoffice/table-port'
+                  },
+                  {
+                    id:7,
+                    nameMenu:'ระบบจัดการเรือ',
+                    url:'/backoffice/table-ship'
+                  },
+                  {
+                    id:8,
+                    nameMenu:'ระบบจัดการสายเรือ',
+                    url:'/backoffice/table-shipline'
+                  },
+                  {
+                    id:9,
+                    nameMenu:'ระบบจัดการหน่วยงานตรวจสอบสินค้า',
+                    url:'/backoffice/table-surveyor'
+                  },
+                  {
+                    id:10,
+                    nameMenu:'ระบบจัดการพิกัดข้าว',
+                    url:'/backoffice/table-Harmonizedcode'
+                  }
+                ]
+              }
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            created: function() {
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
+            },
+            _getUrl:function(e){
+              var url = e.target.getAttribute('url')
+              this.glChangePath(url);
+            }
+        });
+    </script>
+</dom-module>

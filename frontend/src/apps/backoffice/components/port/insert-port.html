@@ -18,26 +18,21 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="รหัสท่าเรือ :" placeholder="กรอกรหัสท่าเรือ" value="{{data.port_id}}"></gl-form-input>
+        <gl-form-input class="margin-top" label="Port ID (เลขประจำตัวท่าเรือ) :" placeholder="กรอกรหัสท่าเรือ" value="{{data.port_id}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-dropdown-menu class="margin-top" style="width:100%;" label="ประเทศ :" placeholder="เลือกประเทศ">
-          <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{data.country_id}}" name="country_id">
-            <template is="dom-repeat" items="[[country]]">
-              <paper-item value="{{item.country_id}}">{{item.country_name_th}}</paper-item>
-            </template>
-          </paper-menu>
-        </gl-form-dropdown-menu>
+        <gl-form-input class="margin-top" label="Port Code (รหัสท่าเรือ) :" placeholder="port_code" value="{{data.port_code}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="port_code :" placeholder="port_code" value="{{data.port_code}}"></gl-form-input>
+        <gl-form-input class="margin-top" label="Port Name (ชื่อท่าเรือ) :" placeholder="กรอกชื่อท่าเรือ" value="{{data.port_name}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="ชื่อท่าเรือ :" placeholder="กรอกชื่อท่าเรือ" value="{{data.port_name}}"></gl-form-input>
+        <gl-combo-box style="margin-top:15px" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
+            item-value-path="country_id" value="{{data.country_id}}"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -63,7 +58,7 @@
           gl.behavior.locales
       ],
       attached: function() {
-        this.getPort();
+        this.getCountry();
       },
       _save:function functionName() {
         var datas = {
@@ -99,9 +94,11 @@
               }.bind(this))
               .catch(function(error) {}.bind(this));
       },
-      getPort: function() {
+      getCountry: function() {
+        this.country_id = this.country_id || this.$.country_id;
           this.getDb('./common/country', (data) => {
             this.country = data;
+            this.country_id.items = data;
           });
       }
     });

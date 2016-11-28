@@ -46,6 +46,8 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
           <div class="text-head">ระบบจัดการแพ็คเกต</div>
 
           <div class="horizontal end-justified layout">
@@ -55,11 +57,11 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">No</div></th>
-                <th><div class="text-center">รหัส Package</div></th>
-                <th><div class="text-center">น้ำหนัก Package</div></th>
-                <th><div class="text-center">ชื่อ Package</div></th>
-                <th><div class="text-center">น้ำหนักกระสอบ</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Package Code<p>(รหัสแพ็คเกต)</div></th>
+                <th><div class="text-center">Package Weight (kg)<p>(น้ำหนักแพ็คเกต (กก.))</div></th>
+                <th><div class="text-center">Package Name<p>(ชื่อแพ็คเกต)</div></th>
+                <th><div class="text-center">Package Weight_bag (g)<p>(น้ำหนักกระสอบ (ก.))</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -117,8 +119,8 @@
               this.getPackage();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshPackage',this)
             },
             _toggleDrawer: function(e) {
@@ -173,6 +175,9 @@
                     this.dataPackage[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

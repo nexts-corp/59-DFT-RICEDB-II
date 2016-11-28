@@ -1,9 +1,9 @@
 <link rel="import" href="../g2g/components/content-panel.html">
 <link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
-<link rel="import" href="components/typerice/insert-rice.html">
-<link rel="import" href="components/typerice/edit-rice.html">
-<dom-module id="backoffice-table-typerice">
+<link rel="import" href="components/Harmonizedcode/insert-Harmonizedcode.html">
+<link rel="import" href="components/Harmonizedcode/edit-Harmonizedcode.html">
+<dom-module id="backoffice-table-Harmonizedcode">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     .button-top{
       margin: 20px;
@@ -40,6 +40,8 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
           <div class="text-head">ระบบจัดการพิกัดข้าว</div>
 
           <div class="horizontal end-justified layout">
@@ -49,9 +51,9 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">Customs tariff (พิกัดข้าว)</div></th>
-                <th><div>Rice name (ชื่อข้าวภาษาไทย)</div></th>
-                <th><div>Rice name (ชื่อข้าวภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">Harmonized Code<p>(พิกัดข้าว)</div></th>
+                <th><div class="text-center">Rice Name(TH)<p>(ชื่อข้าว (ภาษาไทย))</div></th>
+                <th><div class="text-center">Rice Name(EN)<p>(ชื่อข้าว (ภาษาอังกฤษ))</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -80,8 +82,8 @@
         <panel>
           <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <div name="addRedRegRice"><insert-rice></insert-rice></div>
-              <div name="editRegRice"><edit-rice data="{{dataSelect}}"></edit-rice></div>
+              <div name="addRedRegRice"><insert-Harmonizedcode></insert-Harmonizedcode></div>
+              <div name="editRegRice"><edit-Harmonizedcode data="{{dataSelect}}"></edit-Harmonizedcode></div>
 
             </iron-pages>
           </div>
@@ -90,7 +92,7 @@
     </template>
     <script>
         Polymer({
-            is: "backoffice-table-typerice",
+            is: "backoffice-table-Harmonizedcode",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
@@ -111,8 +113,8 @@
               this.getTyperices();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshRice',this)
             },
             _toggleDrawer: function(e) {
@@ -164,6 +166,9 @@
                 this.getDb('./common/typerice', (data) => {
                   this.dataRice = data;
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

@@ -1,4 +1,4 @@
-<dom-module id="insert-bank">
+<dom-module id="insert-Harmonizedcode">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
     .text-center {
       text-align: center;
@@ -14,28 +14,27 @@
     }
   </style>
   <template>
-    <div class="text-center">เพิ่มข้อมูลธนาคาร</div>
+    <div class="text-center">เพิ่มข้อมูลพิกัดข้าว</div>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="Harmonized Code (พิกัดข้าว) :" placeholder="ใส่เลขพิกัดข้าว 11 หลัก" maxlength="11" allowed-pattern="[0-9]" value="{{data.type_rice_id}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
 
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Bank Code (รหัสธนาคาร) :" placeholder="กรอกรหัสธนาคาร" value="{{data.bank_id}}"></gl-form-input>
+        <gl-form-input class="margin-top" label="Rice Name(TH) (ชื่อข้าว (ภาษาไทย)) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_th}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row>
+    <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Bank Name(TH) (ชื่อธนาคาร (ภาษาไทย)) :" placeholder="กรอกชื่อธนาคาร (ภาษาไทย)" value="{{data.bank_name_th}}"></gl-form-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-    </gl-grid-row>
-
-    <gl-grid-row>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Bank Name(EN) (ชื่อธนาคาร (ภาษาอังกฤษ)) :" placeholder="กรอกชื่อธนาคาร (ภาษาอังกฤษ)" value="{{data.bank_name_en}}"></gl-form-input>
+        <gl-form-input class="margin-top" label="Rice Name(EN) (ชื่อข้าว (ภาษาอังกฤษ)) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_en}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -49,7 +48,7 @@
   </template>
   <script>
     Polymer({
-      is: "insert-bank",
+      is: "insert-Harmonizedcode",
       properties: {
         data: {
           type: Object,
@@ -62,18 +61,18 @@
       ],
       _save:function functionName() {
         var datas = {
-          id : this.data.bank_id,
-          bank_name_th: this.data.bank_name_th,
-          bank_name_en: this.data.bank_name_en
+          id : this.data.type_rice_id,
+          type_rice_name_th : this.data.type_rice_name_th,
+          type_rice_name_en : this.data.type_rice_name_en
         }
         // console.log(datas);
         this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.post('./common/bank/insert', datas)
+        axios.post('./common/typeRice/insert', datas)
             .then(function(response) {
                 console.log("success");
                 console.log(response);
                 this.data = {};
-                this.glQuery('refreshBank').getBank();
+                this.glQuery('refreshRice').getTyperices();
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                   console.log('success');
                 }});

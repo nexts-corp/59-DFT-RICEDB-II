@@ -43,6 +43,8 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
           <div class="text-head">ระบบจัดการข้อกำหนดการส่งสินค้า</div>
 
           <div class="horizontal end-justified layout">
@@ -52,10 +54,10 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">No</div></th>
-                <th><div class="text-center">รหัส</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Incoterms Code<p>(รหัสข้อกำหนดส่งสินค้า)</div></th>
                 <th></th>
-                <th><div>ชื่อข้อกำหนดส่งสินค้า</div></th>
+                <th><div class="text-center">Incoterms Name<p>(ชื่อข้อกำหนดส่งสินค้า)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -112,8 +114,8 @@
               this.getIncoterms();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshIncoterms',this)
             },
             _toggleDrawer: function(e) {
@@ -168,6 +170,9 @@
                     this.dataIncoterms[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>

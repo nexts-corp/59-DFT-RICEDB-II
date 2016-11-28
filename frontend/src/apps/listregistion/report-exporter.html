@@ -2,10 +2,11 @@
 <link rel="import" href="components/list-edit/list-report.html">
 <link rel="import" href="components/renew/renew-page.html">
 <link rel="import" href="components/register/register-pageRegister.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 
 
 <dom-module id="listregistion-report-exporter">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
     * {
         font-family: 'rsuregular', sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -30,6 +31,10 @@
        font-family: 'rsuregular', sans-serif;
          -webkit-font-smoothing: antialiased;
     }
+    .text-table{
+      text-align: center;
+       font-size: var(--font-size-h4);
+    }
     .textSearch{
       text-align: center;
        font-size: var(--font-size-h4);
@@ -50,8 +55,14 @@
     .searchBorder{
       border: 1px solid var(--gl-gray-light-color);
       margin: 15px;
-      border-radius: 3px
+      border-radius: 3px;
     }
+    .gl-table-default{
+         border-collapse: collapse;
+         width: 100%;
+         overflow-x:auto;
+         white-space: nowrap;
+     }
     paper-material {
       background-color: var(--gl-white-color);
     }
@@ -159,8 +170,39 @@
 
 
           <div id="found" hidden>
-            <div class="flex searchBorder">
-              <list-report data={{exporters}}>
+            <div class="searchBorder">
+              <table class="gl-table-default">
+                <thead class="table-head">
+                  <tr>
+                    <th><div class="text-table">เลข ทบ.</div></th>
+                    <th><div class="text-table">เลขที่ผู้เสียภาษี</div></th>
+                    <th><div class="text-table">ชื่อบริษัท</div></th>
+                    <th><div class="text-table">ประเภทใบอนุญาต</div></th>
+                    <th><div class="text-table">สถานะสมาชิกสมาคมฯ</div></th>
+                    <th><div class="text-table">สถานะ คน.</div></th>
+                    <th><div class="text-table">สถานะผู้ส่งออก</div></th>
+                    <th><div class="text-table">วันที่ลงทะเบียน</div></th>
+                  </tr>
+                </thead>
+
+
+                <template is="dom-repeat" items="{{exporters}}">
+                  <tbody>
+                    <tr id="detailRegExporter" on-tap="_selectData" data="[[item]]" style="cursor:pointer;">
+                      <td><div class="text-table">{{item.exporter_no_name}}</div></td>
+                      <td><div class="text-table">{{item.seller_tax_id}}</div></td>
+                      <td><div class="text-table">{{item.seller_name_th}}</div></td>
+                      <td><div class="text-table">{{item.type_lic_name}}</div></td>
+                      <td><div class="text-table">{{item.exporter_status_name}}</div></td>
+                      <td><div class="text-table">{{item.trader_active_name}}</div></td>
+                      <td><div class="text-table">{{item.exporter_active_name}}</div></td>
+                      <td><div class="text-table">{{item.exporter_date_approve}}</div></td>
+                    </tr>
+                  </tbody>
+                </template>
+
+              </table>
+              <!-- <list-report data={{exporters}}>
                 <items type="primary">
                   <list item="exporter_no_name" label="เลข ทบ." width="flex"></list>
                   <list item="seller_tax_id" label="เลขที่ผู้เสียภาษี" width="flex"></list>
@@ -169,12 +211,12 @@
                   <list item="exporter_status_name" label="สถานะสมาชิกสมาคมฯ" width="flex"></list>
                   <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
                   <list item="exporter_active_name" label="สถานะผู้ส่งออก" width="flex"></list>
-                  <!-- <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list> -->
                 </items>
-              </list-report>
+              </list-report> -->
             </div>
           </div>
         </div>
+
         <div id="notfound" hidden>
         <div class="horizontal center-justified layout searchBorder">
           <div class="title" style="margin:20px">ไม่พบข้อมูลที่ค้นหา</div>
@@ -334,6 +376,11 @@
               //   window.location = this.resolveUrl(this.$$('#reName').getAttribute("src"));
               //   // console.log('รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ');
               // }
+            },
+            _selectData:function(e){
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent = e.currentTarget.id;
+              this.dataSelect = e.currentTarget.data;
             }
         });
     </script>

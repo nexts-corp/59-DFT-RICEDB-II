@@ -43,7 +43,9 @@
         <grid>
           <paper-material elevation="1" class="elevation">
 
-          <div class="text-head">ระบบจัดการแบงค์</div>
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
+          <div class="text-head">ระบบจัดการธนาคาร</div>
 
           <div class="horizontal end-justified layout">
             <paper-button class="gl-btn-primary button-top" title="เพิ่มธนาคาร" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มธนาคาร</paper-button>
@@ -52,10 +54,10 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
-                <th><div class="text-center">No</div></th>
-                <th><div class="text-center">รหัส</div></th>
-                <th><div class="text-center">ชื่อธนาคาร (ภาษาไทย)</div></th>
-                <th><div class="text-center">ชื่อธนาคาร (ภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Bank Code<p>(รหัสธนาคาร)</div></th>
+                <th><div class="text-center">Bank Name(TH)<p>(ชื่อธนาคาร (ภาษาไทย))</div></th>
+                <th><div class="text-center">Bank Name(EN)<p>(ชื่อธนาคาร (ภาษาอังกฤษ))</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -112,8 +114,8 @@
               this.getBank();
             },
             created: function() {
-                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
-                this.glSetLayout('layout-registion');
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backoffice');
                 this.glQuery('refreshBank',this)
             },
             _toggleDrawer: function(e) {
@@ -168,6 +170,9 @@
                     this.dataBank[i]['no'] = i+1;
                   }
                 });
+            },
+            _back:function() {
+              window.history.back();
             }
         });
     </script>
