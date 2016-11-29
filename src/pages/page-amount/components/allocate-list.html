@@ -1,4 +1,7 @@
 
+<link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/month-behavior.html">
+
 <dom-module id="allocate-list">
     <template>
         <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -45,7 +48,7 @@
                 <th>ลำดับที่</th>
                 <th>ผู้ส่งออก</th>
                 <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
-                    <th>งวดที่ [[_num(index)]]</th>
+                    <th>งวดที่ [[_num(index)]] [[getMonthName(item.month)]]</th>
                     <th>ยอดปรับปรุงงวดที่ [[_num(index)]]</th>
                 </template>
                 <th>ปริมาณโควต้ารวม</th>
@@ -57,11 +60,11 @@
                         <td>[[_num(index)]]</td>
                         <td>[[item.seller_name_th]]</td>
                         <template is="dom-repeat" as="period" items="[[item.period]]">
-                            <td>[[_formatNumber(period.quantity)]]</td>
-                            <td>[[_formatNumber(period.quantity_update)]]</td>
+                            <td>[[formatNumber(period.quantity)]]</td>
+                            <td>[[formatNumber(period.quantity_update)]]</td>
                         </template>
-                        <td>[[_formatNumber(item.quantity)]]</td>
-                        <td>[[_formatNumber(item.quantity_update)]]</td>
+                        <td>[[formatNumber(item.quantity)]]</td>
+                        <td>[[formatNumber(item.quantity_update)]]</td>
                     </tr>
                 </template>
               
@@ -80,6 +83,10 @@
     <script>
         Polymer({
             is: 'allocate-list',
+            behaviors: [
+                FormatNumberBehavior,
+                MonthBehavior
+            ],
             _num:function(index){
                 return index+1;
             },
@@ -88,7 +95,7 @@
                 this.dataAllocate.exporter.map((item)=>{
                     sum += parseFloat(item.period[index][key]);
                 });
-                 return this._formatNumber(sum);
+                 return this.formatNumber(sum);
             },
             _sumQuantity:function(index,key){
                 var sum = 0;
@@ -96,11 +103,7 @@
                     sum += item[key];
                 });
                 console.log(sum);
-                return this._formatNumber(sum);
-            },
-            _formatNumber:function(item){
-                var number = numeral(item).format('0,0.00');
-                return number;
+                return this.formatNumber(sum);
             },
             _selectData:function(e){
                 this.fire('data-select',e.currentTarget.data);
