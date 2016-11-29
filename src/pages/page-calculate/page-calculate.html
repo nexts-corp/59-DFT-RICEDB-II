@@ -63,6 +63,10 @@
           margin-bottom: 10px;
           /*background-color: var(--gl-gray-lighter-color);*/
         }
+        .font{
+          font-family: 'CSChatThaiUI', sans-serif !important;
+          -webkit-font-smoothing: antialiased;
+        }
     </style>
     <template>
     <content-panel>
@@ -83,7 +87,7 @@
             <gl-form-dropdown-menu label="ปีโควตา">
               <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
                 <template is="dom-repeat" items="{{getYear}}">
-                  <paper-item year="{{item}}">{{item}}</paper-item>
+                  <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                 </template>
               </paper-listbox>
             </gl-form-dropdown-menu>
@@ -293,7 +297,7 @@
             axios.put('/eu/calculate/state/allocate',{allocate_id:e.detail})
             .then((response)=>{
               console.log("success");
-              console.log(response);
+              console.log('save::',response.data);
               this.textToast = 'บันทึกข้อมูลสำเร็จ';
               this.fire('toast',{
                 status:'success',

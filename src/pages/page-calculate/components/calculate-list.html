@@ -39,6 +39,7 @@
                         <th class="right">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
                         <th class="right">ยอดรวมโควตาที่เคยได้รับ</th>
                         <th class="right">ปริมาณโควตา 100%</th>
+                        <th class="right">สถานะ</th>
                     </tr>
                 </thead>
                 <template is="dom-repeat" items="{{listData}}">
@@ -50,6 +51,7 @@
                                 <td class="right">[[formatNumber(item.sum_for_cal)]]</td>
                                 <td class="right">[[formatNumber(item.sum_quota)]]</td>
                                 <td class="right">[[formatNumber(item.quota_amount)]]</td>
+                                <td class="right">[[item.status]]</td>
                             </tr>
                         </template>
                     </tbody>
@@ -71,12 +73,17 @@
             },
             _selectData:function(e){
                 // console.log(e.currentTarget.key);
-                this.fire('data-select',{key:e.currentTarget.key});
+                
+                this.fire('data-select',{
+                    key:e.currentTarget.key,
+                    status:e.currentTarget.status});
             },
             _getDatalist:function(){
                 console.log('list',this.listData);
                 this.listData.map((item)=>{
-                    // console.log(item);
+                    item.detail.map((item)=>{
+                        item.status = '?';
+                    });
                     this.typeRiceName = item.type_rice_name_th;
                    // listData = item.detail;
                 });

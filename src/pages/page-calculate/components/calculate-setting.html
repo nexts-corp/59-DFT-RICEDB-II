@@ -8,6 +8,8 @@
     }
     *{
       text-align:left;
+      font-family: 'rsuregular', sans-serif;
+			-webkit-font-smoothing: antialiased;
     }
     .flex-equal-justified {
       @apply(--layout-horizontal);
@@ -40,6 +42,10 @@
       margin : 10px 0px 0px 50px;
       font-size: 18px;
     }
+    .font{
+        font-family: 'CSChatThaiUI', sans-serif !important;
+        -webkit-font-smoothing: antialiased;
+    }
   </style>
   <template>
       <header>
@@ -57,13 +63,13 @@
             		<gl-form-dropdown-menu label="ประเภทข้าว">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
-											<paper-item rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
 										</template>
 									</paper-listbox>
 								</gl-form-dropdown-menu>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input label="การคำนวณครั้งที่" value="{{mathOrdinalNumber(ordinalNumber.length)}}" required ></gl-form-input>  
+              <gl-form-input label="การคำนวณครั้งที่" value="{{ordinum}}" required ></gl-form-input>  
              <!--<gl-form-input></gl-form-input>-->
             </gl-grid-col> 
           </gl-grid-row>
@@ -81,7 +87,7 @@
                		<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
                     <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearFirst}}">
                       <template is="dom-repeat" items="{{getYear}}">
-                        <paper-item year="{{item}}">{{item}}</paper-item>
+                        <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                       </template>
                     </paper-listbox>
                   </gl-form-dropdown-menu>
@@ -92,7 +98,7 @@
                  <gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
                     <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearLast}}">
                       <template is="dom-repeat" items="{{getYear}}">
-                        <paper-item year="{{item}}">{{item}}</paper-item>
+                        <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                       </template>
                     </paper-listbox>
                   </gl-form-dropdown-menu>
@@ -180,7 +186,8 @@
           type: String
         },
         ordinalNumber:{
-          type: String
+          type: String,
+          observer : 'mathOrdinalNumber'
         },
         resault:{
           type: String
@@ -200,8 +207,21 @@
         this._getYear();
         this._getQuotaYear();
       },
-      mathOrdinalNumber:function(number){
-        return number+1;
+      mathOrdinalNumber:function(){
+        // var num = number + 1;
+        if(this.ordinalNumber == ""){
+          this.ordinum = 1;
+        }
+        else {
+          this.ordinalNumber.map((item)=>{
+            
+            this.ordinum = item.detail.length+1;
+            this.ordinum.toString();
+          });
+        }
+        // this.ordinalNumber.length + 1;
+        // this.ordinalNumber.toString();
+       
       },
       cal:function(e){
         const check = (item)=>{
@@ -322,14 +342,14 @@
         var sendData = {
           quota_id : this.quotaYear,
           type_rice_id : this.selectTypeRice,
-          ordinal_number : this.mathOrdinalNumber(this.ordinalNumber.length),
+          ordinal_number : this.ordinum.toString(),
           sum_export : this.sumAnswer.sum_export,
           sum_for_cal : this.sumAnswer.sum_for_cal,
           sum_quota : this.sumAnswer.sum_quota,
           quota_amount : this.sumAnswer.quota_amount,
         }
         this.fire('post-data',sendData);
-        // console.log(sendData);
+        console.log(sendData);
        
       }
     });
