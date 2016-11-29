@@ -1,4 +1,4 @@
-<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/list-edit/list-report.html">
 <link rel="import" href="components/renew/renew-page.html">
 <link rel="import" href="components/register/register-pageRegister.html">
@@ -6,7 +6,7 @@
 
 
 <dom-module id="listregistion-report-exporter">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table gl-toast">
     * {
         font-family: 'rsuregular', sans-serif;
         -webkit-font-smoothing: antialiased;
@@ -60,7 +60,6 @@
     .gl-table-default{
          border-collapse: collapse;
          width: 100%;
-         overflow-x:auto;
          white-space: nowrap;
      }
     paper-material {
@@ -170,7 +169,7 @@
 
 
           <div id="found" hidden>
-            <div class="searchBorder">
+            <div class="searchBorder" style="overflow-x:auto;">
               <table class="gl-table-default">
                 <thead class="table-head">
                   <tr>
@@ -337,6 +336,12 @@
                     if(str==''){str += '?'}else{str += '&'}
                     str += key+'='+this.dataSelected[key];
                   }
+              }
+              if (this.dataSelected.date_start != undefined && this.dataSelected.date_start != '' && (this.dataSelected.date_end == undefined || this.dataSelected.date_end == '')) {
+                this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่สิ้นสุดค้นหา'})
+              }
+              else if (this.dataSelected.date_end != undefined && this.dataSelected.date_end != '' && (this.dataSelected.date_start == undefined || this.dataSelected.date_start == '')) {
+                this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่เริ่มต้นค้นหา'})
               }
               this.getDb('./external/exporter'+str, (data) => {
                 data.map((empty)=>{
