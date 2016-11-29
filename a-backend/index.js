@@ -5,7 +5,8 @@ var app = express();
 
 
 const cluster = require('cluster');
-const numCPUs = require('os').cpus().length;
+//const numCPUs = require('os').cpus().length;
+const numCPUs = 1;
 
 if (cluster.isMaster) {
   for (var i = 0; i < numCPUs; i++) {
