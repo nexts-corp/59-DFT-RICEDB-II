@@ -1,0 +1,135 @@
+
+<link rel="import" href="./../../components/month-behavior.html">
+<dom-module id="report-panel">
+    <template>
+        <style is="custom-style" include="gl-table gl-panel gl-color">
+            * {
+                text-align: left;
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                margin:10px;
+            }
+            .box {
+                martin:auto;
+                text-align:center;
+            }
+            .tableM {
+                padding-top:25px;
+                font-weight: bold;
+            }
+            tableB {
+                margin-top:1px;
+            }
+        </style>
+<table>
+    <tr>
+        <td>
+            <gl-form-dropdown-menu label="รายงานการส่งออกข้าวไป EU">
+                <paper-listbox class="dropdown-content">
+                    <paper-item>ในโควตา</paper-item>
+                    <paper-item>นอกโควตา</paper-item>
+                </paper-listbox>
+            </gl-form-dropdown-menu>
+        </td>
+        <td>
+            <gl-form-dropdown-menu label="เดือน">
+                <paper-listbox class="dropdown-content">
+                    <template is="dom-repeat" items="{{month}}">
+                        <paper-item>[[item.name]]</paper-item>
+                    </template>
+                </paper-listbox>
+            </gl-form-dropdown-menu>
+        </td>
+        <td>
+            <gl-form-dropdown-menu label="ปี">
+                <paper-listbox class="dropdown-content">
+                    <paper-item>2559</paper-item>
+                </paper-listbox>
+            </gl-form-dropdown-menu>
+        </td>
+        <td>
+            <gl-form-dropdown-menu label="บริษัท">
+                <paper-listbox class="dropdown-content">
+                    <paper-item>กรุงไทย</paper-item>
+                </paper-listbox>
+            </gl-form-dropdown-menu>
+        </td>
+</table>
+<div class="gl-panel-default" style="padding-top:5px;">
+    <div class="gl-panel-default-header">
+        1.แสดงเอกสารภายในกำหนด 
+    </div>
+    <div class="gl-panel-default-content">
+        <table class="tableB">
+        <tr>
+            <td class="tableM">เอกสารถูกต้องตามประกาศ</td>
+            <td><gl-form-input label="ข้าวขาว" value="[[data.type_rice11]]"></gl-form-input></td>
+            <td><gl-form-input label="ข้าวหัก" value="[[data.type_rice12]]"></gl-form-input></td>
+        </tr>
+        <tr>
+            <td class="tableM">เอกสารไม่ถูกต้องตามประกาศ</td>
+            <td><gl-form-input label="ข้าวขาว" value="[[data.type_rice21]]"></gl-form-input></td>
+            <td><gl-form-input label="ข้าวหัก" value="[[data.type_rice22]]"></gl-form-input></td>
+        </tr>
+        </table>
+    </div>
+</div>
+<div class="gl-panel-default">
+        <div class="gl-panel-default-header">
+        2.แสดงเอกสารเกินกำหนด
+    </div>
+    <div class="gl-panel-default-content">
+        <table>
+        <tr>
+            <td class="tableM">เอกสารเกินกำหนด</td>
+            <td><gl-form-input label="ข้าวขาว" value="[[data.type_rice31]]"></gl-form-input></td>
+            <td><gl-form-input label="ข้าวหัก" value="[[data.type_rice32]]"></gl-form-input></td>
+        </tr>
+    </div>
+    </table>
+</div>
+<div class="box">
+     <paper-button raised class="gl-btn-success">บันทึก</paper-button>
+     <paper-button raised class="gl-btn-danger">ยกเลิก</paper-button>
+</div>
+<!--
+        <div>
+            <table class="gl-table-default">
+                <tbody class="table-body">
+                    <tr>
+                        <td colspan="5">1.แสดงเอกสารภายในกำหนด<td>
+                    </tr>
+                    <tr>
+                        <td>- เอกสารถูกต้องตามประกาศ<td>
+                        <td><paper-input label="ข้าวขาว"></paper-input><td>
+                        <td><paper-input label="ข้าวหัก"></paper-input><td>
+                    </tr>
+                    <tr>
+                        <td>- เอกสารไม่ถูกต้องตามประกาศ<td>
+                        <td><paper-input label="ข้าวขาว"></paper-input><td>
+                        <td><paper-input label="ข้าวหัก"></paper-input><td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">2.แสดงเอกสารเกินกำหนด<td>
+                    </tr>
+                    <tr>
+                        <td>- เอกสารเกินกำหนด<td>
+                        <td><paper-input label="ข้าวขาว"></paper-input><td>
+                        <td><paper-input label="ข้าวหัก"></paper-input><td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <paper-button raised>บันทึก</paper-button>
+            <paper-button raised>ยกเลิก</paper-button>
+        </div>-->
+    </template>
+    <script>
+        Polymer({
+            is: 'report-panel',
+            behaviors:[
+                MonthBehavior
+            ]
+        });
+    </script>
+</dom-module>
