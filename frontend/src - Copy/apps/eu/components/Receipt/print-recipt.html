@@ -1,0 +1,200 @@
+<link rel="import" href="./../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="./../../../../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="./../../../../../bower_components/paper-radio-button/paper-radio-button.html">
+
+<link rel="import" href="./normal-pay.html">
+<link rel="import" href="./quota-pay.html">
+<link rel="import" href="./over-pay.html">
+
+
+
+<dom-module id="print-recipt">
+	<style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+		.container {
+			padding: 20px;
+		}
+		
+		.frame {
+			border: 1px solid #ddd;
+			border-radius: 5px;
+		}
+		
+		header>div {
+			text-align: center;
+			font-size: 22px;
+			margin-top: 20px;
+		}
+		
+		.headerContent {
+			padding: 10px;
+			font-size: 20px;
+			color: white;
+			background-color: orange;
+		}
+		
+		table.gl-table-default {
+			border-collapse: collapse;
+			width: 100%;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+		
+		table.gl-table-default,
+		th,
+		td {
+			border-bottom: 1px solid #ddd;
+		}
+		
+		th,
+		td {
+			padding: 15px;
+		}
+		
+		th {
+			text-align: center;
+			background-color: #F1F1F1;
+		}
+		
+		td {
+			text-align: center;
+		}
+		
+		tr:hover {
+			background-color: #F1F1F1;
+		}
+		
+		.searchBorder {
+			border: 1px solid var(--gl-gray-light-color);
+			margin: 15px;
+			border-radius: 3px
+		}
+         .flex-end-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-end-justified);
+        }
+	</style>
+	<template>
+		<header>
+			<div>พิมพ์ใบเสร็จ</div>
+		</header>
+		<section class="container">
+			<div class="frame">
+				<div class="headerContent">
+					รายการออกใบเสร็จ
+				</div>
+				<div class="container">
+					<div class="flex searchBorder">
+						<div style="overflow-x:auto;">
+							<table class="gl-table-default">
+								<tr>
+									<template is="dom-repeat" items="{{dataAmount.header}}">
+										<th>{{item}}</th>
+									</template>
+								</tr>
+								<tr>
+									<template is="dom-repeat" items={{dataAmount.row1}}>
+										<td id="addRedRegExporter">{{item}}</td>
+									</template>
+								</tr>
+								<tr>
+									<template is="dom-repeat" items={{dataAmount.row2}}>
+										<td id="addRedRegExporter">{{item}}</td>
+									</template>
+								</tr>
+							</table>
+						</div>
+					</div>
+                    <div class="container">  
+                        <div>                    
+                            <label id="label1">วิธีการจ่ายเงิน : </label>
+                            <paper-radio-group aria-labelledby="label1" selected="a">
+                                <paper-radio-button name="a">เช็คธนาคาร</paper-radio-button>
+                            </paper-radio-group>
+                        </div>
+                        <div>
+                            <label id="label1">กรณีใช้ยอดเงิน : </label>
+                            <paper-radio-group aria-labelledby="label1" on-tap="_getPay">
+                                <paper-radio-button name="a" value="0">แบบปกติ</paper-radio-button>
+                                <paper-radio-button name="b" value="1">แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)</paper-radio-button>
+                                <paper-radio-button name="c" value="2">แบบจ่ายเงินเกิน (ออกใบเสร็จ)</paper-radio-button>
+                            </paper-radio-group>
+                        </div>
+                    </div>
+				</div>
+			</div>
+		</section>
+        <section class="container">
+            <div class="frame">
+                <div class="headerContent">
+                    ชำระเงินแบบ : 
+                </div>
+                <div class="container">
+					<iron-pages selected="{{selectPage}}">
+						<section><normal-pay></normal-pay></section>
+						<section><quota-pay></quota-pay></section>
+						<section><over-pay></over-pay></section>
+					</iron-pages>
+					    
+                  <!--<quota-pay></quota-pay>-->
+                </div>
+            </div>
+        </section>
+        <div class="flex-end-justified" style="padding-right:20px;">
+            <paper-button class="gl-btn-primary" raised> บันทึกแบบไม่ออกใบเสร็จ </paper-button>
+        </div>
+
+	</template>
+	<script>
+        Polymer({
+            is: 'print-recipt',
+            properties:{
+                  dataAmount:{
+                    type: Object,
+                    value:
+                      {
+                        header:[
+                          'ชื่อฟอร์ม',
+                          'เลขที่คำขอ EC',
+                          'เลขที่หนังสือรับรอง',
+                          'ผู้รับมอบ',
+                          'ปริมาณ (ตัน)',
+                          'จำนวนเงินต่อตัน',
+                          'รวมเงินทั้งหมด (บาท)'
+                        ],
+                        row1:[
+                            'EC ข้าวในโควต้า EU',
+                            '20160701-0001',
+                            '012/2016',
+                            'นายสมพร มานะ',
+                            '120.00',
+                            '2,500.00',
+                            '300,000.00'
+                          ],
+                          row2:[
+                            'EC ข้าวในโควต้า EU',
+                            '20160701-0002',
+                            '013/2016',
+                            'นายสมพร มานะ',
+                            '100.00',
+                            '2,500.00',
+                            '250,000.00'
+                          ]  
+                      }
+                },
+				selectPage:{
+					type: String,
+				}
+            },
+			_getPay:function(e){
+				this.selectPage = e.target.value;
+				console.log(this.selectPage);
+				/*if(e.target.value == '0')
+					this.this.selectPage.name = 'แบบปกติ';
+				else if (e.target.value == '1')
+					this.this.selectPage.name = 'แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)';
+				else if (e.target.value == '2')
+					this.this.selectPage.name = 'แบบจ่ายเงินเกิน (ออกใบเสร็จ)';*/
+			}
+        });
+    </script>
+</dom-module>

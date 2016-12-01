@@ -1,0 +1,100 @@
+<dom-module id="edit-package">
+<style include="iron-flex iron-flex-alignment gl-color gl-size">
+  .text-center {
+    text-align: center;
+    font-size: var(--font-size-h3);
+    background-color: var(--paper-grey-100);
+    margin-top: 20px;
+  }
+  .margin-top{
+    margin-top: 15px;
+  }
+  .button{
+    margin-top: 20px;
+  }
+</style>
+  <template>
+    <div class="text-center">แก้ไขข้อมูล Package</div>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+        <gl-form-label-input class="margin-top" label="รหัส Package :" placeholder="กรอกรหัส Package" value="{{data.package_id}}"></gl-form-label-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+        <gl-form-input class="margin-top" label="น้ำหนัก Package :" placeholder="กรอกน้ำหนัก Package" value="{{data.package_kg_per_bag}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+        <gl-form-input class="margin-top" label="ชื่อ Package :" placeholder="กรอกชื่อ Package" value="{{data.package_name}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+        <gl-form-input class="margin-top" label="น้ำหนักกระสอบ :" placeholder="กรอกน้ำหนักกระสอบ" value="{{data.package_weight_bag}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+      <div class="button">
+        <paper-button class="gl-btn-danger" on-tap="_cancel" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_edit" raised>บันทึก</paper-button>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "edit-package",
+      properties: {
+        data: {
+          type: Object,
+          value: {}
+        }
+      },
+      behaviors: [
+          gl.behavior.core,
+          gl.behavior.locales
+      ],
+      _edit:function(){
+        // console.log(this.data);
+        var datas = {
+          id: this.data.package_id,
+          package_kg_per_bag: parseInt(this.data.package_kg_per_bag),
+          package_name: this.data.package_name,
+          package_weight_bag: parseInt(this.data.package_weight_bag)
+        }
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+        axios.put('./common/package/update', datas)
+            .then(function(response) {
+                console.log("success");
+                console.log(response);
+                this.glQuery('refreshPackage').getPackage();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+            }.bind(this))
+            .catch(function(error) {
+                console.log("error");
+                console.log(error);
+            })
+      },
+      _cancel:function() {
+        this.glQuery('contentPanel').changDrawer();
+        this.data = {};
+      }
+    });
+  </script>
+</dom-module>

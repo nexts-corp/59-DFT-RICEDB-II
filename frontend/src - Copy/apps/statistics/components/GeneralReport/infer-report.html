@@ -1,0 +1,129 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+
+<link rel="import" href="./../../../../../bower_components/paper-radio-group/paper-radio-group.html">
+
+<dom-module id="infer-report">
+  <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+    .title{
+      background-color: orange;
+      padding: 10px;
+      color: white;
+    }
+    header>div{
+      text-align: center;
+      font-size: 22px;
+      padding: 20px;
+    }
+    table.default {
+      border-collapse: collapse;
+      width: 100%
+    }
+
+    table.default,
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 15px;
+    }
+
+    th {
+      text-align: left;
+      background-color: #F1F1F1;
+      white-space: nowrap;
+    }
+
+    td {
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background-color: #F1F1F1;
+    }
+    .number{
+      text-align: right;
+    }
+  </style>
+  <template>
+    <header>
+      <div>สรุปยอดรวมการส่งออกข้าวตามใบอนุญาต </div>
+    </header>
+    <gl-form-panel set-padding = "0px 0px 20px 0px">
+      <div class="title">รายละเอียดการจัดสรรโควตา</div>
+      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+            <gl-grid-row>
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                   
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              
+              </gl-grid-col>
+           </gl-grid-row>
+
+           <gl-grid-row>
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                   
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <vaadin-date-picker label="ถึงวันที่"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                
+              </gl-grid-col>
+           </gl-grid-row>
+           <gl-grid-row>
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+                   <label id="label1">แบบที่:</label>
+                    <paper-radio-group aria-labelledby="label1">
+                      <paper-radio-button name="a">แบบที่1</paper-radio-button>
+                      <paper-radio-button name="b">แบบที่2</paper-radio-button>
+                      <paper-radio-button name="d">แบบที่3</paper-radio-button>
+                    </paper-radio-group>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                
+              </gl-grid-col>
+           </gl-grid-row>
+             <span class="horizontal center-justified layout" style="padding:10px">
+               <paper-button class="gl-btn-primary" raised>แสดงรายงาน</paper-button>
+             </span>
+      </gl-form-panel-body>
+    </gl-form-panel>
+    <gl-form-panel set-padding = "0px 0px 20px 0px">
+      <div class="title">
+        แสดงรายงาน
+      </div>
+      <span class="horizontal end-justified layout" style="padding:10px">
+        <paper-button raised>PDF</paper-button>
+        <paper-button raised>Word</paper-button>
+        <paper-button raised>Excel</paper-button>
+      </span>
+      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+         <gl-grid-row width="{{getWidth}}">
+         </gl-grid-row>
+      </gl-form-panel-body>
+    </gl-form-panel>
+    <div class="horizontal end-justified layout">
+        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "infer-report"
+    });
+  </script>
+</dom-module>
+

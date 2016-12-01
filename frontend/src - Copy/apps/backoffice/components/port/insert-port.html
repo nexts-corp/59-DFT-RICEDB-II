@@ -1,0 +1,109 @@
+<dom-module id="insert-port">
+  <style include="iron-flex iron-flex-alignment gl-color gl-size">
+    .text-center {
+      text-align: center;
+      font-size: var(--font-size-h3);
+      background-color: var(--paper-grey-100);
+      margin-top: 20px;
+    }
+    .margin-top{
+      margin-top: 15px;
+    }
+    .button{
+      margin-top: 20px;
+    }
+  </style>
+  <template>
+    <div class="text-center">เพิ่มข้อมูล Port</div>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="รหัสท่าเรือ :" placeholder="กรอกรหัสท่าเรือ" value="{{data.port_id}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-dropdown-menu class="margin-top" style="width:100%;" label="ประเทศ :" placeholder="เลือกประเทศ">
+          <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{data.country_id}}" name="country_id">
+            <template is="dom-repeat" items="[[country]]">
+              <paper-item value="{{item.country_id}}">{{item.country_name_th}}</paper-item>
+            </template>
+          </paper-menu>
+        </gl-form-dropdown-menu>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="port_code :" placeholder="port_code" value="{{data.port_code}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="ชื่อท่าเรือ :" placeholder="กรอกชื่อท่าเรือ" value="{{data.port_name}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+      <div class="button">
+        <paper-button class="gl-btn-danger" raised on-tap="_cancel">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" raised on-tap="_save">บันทึก</paper-button>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "insert-port",
+      properties: {
+        data: {
+          type: Object,
+          value:{}
+        },
+        country: Array
+      },
+      behaviors: [
+          gl.behavior.core,
+          gl.behavior.locales
+      ],
+      attached: function() {
+        this.getPort();
+      },
+      _save:function functionName() {
+        var datas = {
+          id : this.data.port_id,
+          port_name : this.data.port_name,
+          port_code : this.data.port_code,
+          country_id : this.data.country_id
+        }
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+        axios.post('./common/port/insert', datas)
+            .then(function(response) {
+                console.log("success");
+                console.log(response);
+                this.data = {};
+                this.glQuery('refreshPort').getPort();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+            }.bind(this))
+            .catch(function(error) {
+                console.log("error");
+                console.log(error);
+            })
+      },
+      _cancel:function() {
+        this.glQuery('contentPanel').changDrawer();
+        this.data = {};
+      },
+      getDb: function(url, callback) {
+          axios.get(url)
+              .then(function(response) {
+                  callback(response.data);
+              }.bind(this))
+              .catch(function(error) {}.bind(this));
+      },
+      getPort: function() {
+          this.getDb('./common/country', (data) => {
+            this.country = data;
+          });
+      }
+    });
+  </script>
+</dom-module>

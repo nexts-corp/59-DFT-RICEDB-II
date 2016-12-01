@@ -1,0 +1,171 @@
+<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
+<link rel="import" href="components/ship/insert-ship.html">
+<link rel="import" href="components/ship/edit-ship.html">
+<dom-module id="backoffice-table-ship">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
+    .button-top{
+      margin: 20px;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-head {
+      text-align: center;
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h3);
+      font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 25%;
+    }
+    .table-head > tr > th:nth-child(3) {
+      width: 25%;
+    }
+    .elevation{
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+    }
+    </style>
+    <template>
+      <content-panel>
+        <grid>
+          <paper-material elevation="1" class="elevation">
+
+          <div class="text-head">ระบบจัดการเรือ</div>
+
+          <div class="horizontal end-justified layout">
+            <paper-button class="gl-btn-primary button-top" title="เพิ่มเรือ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
+          </div>
+
+          <table class="gl-table-default">
+            <thead class="table-head">
+              <tr>
+                <!-- <th><div class="text-center">รหัสเรือ</div></th> -->
+                <th><div class="text-center">No</div></th>
+                <th><div class="text-center">ชื่อเรือ</div></th>
+                <th><div class="text-center">ชื่อสายเรือ</div></th>
+                <th style="text-align:right;">
+                  <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
+                </th>
+              </tr>
+            </thead>
+
+            <template is="dom-repeat" items="{{dataShip}}">
+              <tbody>
+                <tr>
+                  <!-- <td><div class="text-center">{{item.ship_id}}</div></td> -->
+                  <td><div class="text-center">{{item.no}}</div></td>
+                  <td><div class="text-center">{{item.ship_name}}</div></td>
+                  <td><div class="text-center">{{item.shipline_name}}</div></td>
+                  <td style="text-align:right;">
+                    <paper-icon-button data="{{item}}" on-tap="_edit" icon="icons:create"></paper-icon-button>
+                    <paper-icon-button data="{{item}}" icon="delete" on-tap="_delete"></paper-icon-button>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+
+          </table>
+          </paper-material>
+
+        </grid>
+
+        <panel>
+          <div class="left">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="addRedRegShip"><insert-ship></insert-ship></div>
+              <div name="editRegShip"><edit-ship data="{{dataSelect}}"></edit-ship></div>
+
+            </iron-pages>
+          </div>
+        </panel>
+      </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "backoffice-table-ship",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            properties: {
+              dataShip:{
+                type:Array
+              }
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            attached: function() {
+              this.getShip();
+            },
+            created: function() {
+                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
+                this.glSetLayout('layout-registion');
+                this.glQuery('refreshShip',this)
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent ="addRedRegShip";
+            },
+            _edit: function(e) {
+              // console.log(e.target.data);
+              this.dataSelect = e.target.data;
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent ="editRegShip";
+            },
+            _delete: function(e){
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการลบใช่หรือไม่ ?',
+              confirmed : this._confirmToast,
+              el: this,
+              datas: {
+                 id : e.target.data.ship_id
+              }
+            });
+            },
+            _confirmToast:function(result,detail){
+              if(result == true){
+                detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                axios.delete('./common/ship/delete/id/'+detail.datas.id)
+                    .then(function(response) {
+                        console.log("success");
+                        console.log(response);
+                        detail.el.glQuery('refreshShip').getShip();
+                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                          console.log('success');
+                        }});
+                    }.bind(this))
+                    .catch(function(error) {
+                        console.log("error");
+                        console.log(error);
+                    })
+              }
+            },
+            getDb: function(url, callback) {
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+            },
+            getShip: function() {
+                this.getDb('./common/ship', (data) => {
+                  this.dataShip = data;
+                  for (var i = 0; i < this.dataShip.length; i++) {
+                    this.dataShip[i]['no'] = i+1;
+                  }
+                });
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,128 @@
+<link rel="import" href="../list-edit/listEditBehavior.html">
+<link rel="import" href="invoice-save.html">
+<link rel="import" href="invoice-edit.html">
+<dom-module id="invoice-page">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
+  .text {
+    text-align: center;
+    font-size: var(--font-size-large);
+  }
+  paper-icon-button.pink {
+  margin: 5px 5px 5px 5px;
+ }
+ paper-icon-button.pink:hover {
+   background-color: var(--paper-grey-200);
+   border-radius: 5px;
+   box-shadow: inset 0 0 3px 3px rgba(0,0,0,.2);
+   /*background-color: var(--paper-pink-500);
+   color: white;*/
+ }
+</style>
+<template>
+
+  <div id="removePen"  class="horizontal end-justified layout" >
+    <paper-icon-button disabled$="{{checkBtn}}"id="editInvoice" class="pink" icon="create" on-tap="editChange"></paper-icon-button>
+    <paper-icon-button id="deleteInvoice" class="pink" icon="delete" on-tap="deleteChange"></paper-icon-button>
+    <paper-tooltip for="editInvoice" position="bottom" animation-delay="0">Edit Invoice</paper-tooltip>
+    <paper-tooltip for="deleteInvoice" position="bottom" animation-delay="0">Delete Invoice</paper-tooltip>
+ </div>
+  <hr>
+  <!-- <gl-form-panel set-border="0px"> -->
+    <div class="text">NEW COMMERCIAL INVOICE</div>
+  <gl-form-panel-head label="" set-padding="10px" set-border="1px">
+  </gl-form-panel-head>
+    <iron-pages selected="{{pages}}">
+        <invoice-save data="{{data}}" name-rice="[[nameRice]]"></invoice-save>
+        <invoice-edit data="{{data}}" name-rice="[[nameRice]]"></invoice-edit>
+    </iron-pages>
+
+
+
+  <gl-form-panel-footer>
+    <paper-button id="removeButtom" class="gl-btn-success" on-tap="saveEdit" raised hidden>บันทึก</paper-button>
+  </gl-form-panel-footer>
+  <!-- </gl-form-panel> -->
+
+
+</template>
+<script>
+Polymer({
+  is: "invoice-page",
+  behaviors: [
+      listEditBehavior,
+      gl.behavior.core,
+      g2gModelBehavior
+    ],
+  properties: {
+    pages:{
+      type:Number,
+      value: 0
+    },
+    data:{
+      type:Object
+    },
+    nameRice: {
+      type: String,
+      value:''
+    },
+    saveData:{
+      type:Object,
+      value:{
+              id:'',
+              bl_no:'',
+              invoice_date:'',
+              invoice_no:'',
+              made_out_to:'',
+            }
+    },
+  },
+  observers:['check(data)'],
+  check:function (data) {
+    var rice = data.cl_type_rice;
+    // console.log(rice);
+    // console.log(this.nameRice.length);
+    if (this.nameRice.length == 0) {
+      rice.map((el)=>{
+            this.nameRice += el.type_rice_desc_en+', ';
+      });
+    }
+  // console.log(this.nameRice);
+    // this.mockUpdata = data;
+  },
+  editChange:function(e){
+     this.editInput();
+    this.pages = 1;
+    this.$$('#removeButtom').removeAttribute("hidden");
+    // this.$$('#removePen').setAttribute("hidden", "hidden");
+  },
+  saveEdit:function(e) {
+     this.editInput();
+    // console.log(this.data);
+    this.pages = 0;
+    this.$$('#removeButtom').setAttribute("hidden", "hidden");
+    // this.$$('#removePen').removeAttribute("hidden");
+
+    this.saveData.id = this.data.invoice_id;
+    this.saveData.bl_no = this.data.bl_no;
+    this.saveData.invoice_date =new Date(this.data.invoice_date);
+    this.saveData.invoice_no = this.data.invoice_no;
+    this.saveData.made_out_to = this.data.made_out_to;
+    this.saveData.invoice_status= this.data.invoice_status;
+    // console.log(this.saveData);
+    // this.putDb(this.saveData);
+    // console.log(this.$.editInvoice.removeAttribute());
+    // console.log(this.data);
+    this.update('./g2g/invoice/update',this.saveData, () => {
+        this.glQuery('adddraft').getInvoice(this.data.contract_id,false,'put');
+     });
+  },
+  deleteChange:function () {
+    // console.log(this.data.invoice_id);
+     this.delete('./g2g/invoice/delete/id/',this.data.invoice_id, () => {
+       this.glQuery('adddraft').getInvoice(this.data.contract_id,true,'delete');
+        this.glQuery('adddraft').getBlNo(this.data.contract_id,false,'get');
+      });
+  },
+});
+</script>
+</dom-module>

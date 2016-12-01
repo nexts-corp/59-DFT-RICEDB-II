@@ -69,7 +69,7 @@
             item-value-path="surveyor_id" items="{{common.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input disabled label="Void No."  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}"
+          <gl-form-input disabled label="Voy No."  error-message="กรุณาใส่รายละเอียด" required placeholder="ใส่รายละเอียด" value="{{data.ship_voy_no}}"
           id="voidNo" name="voidNo"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -84,7 +84,7 @@
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="port_id" label="POL" item-label-path="port_name" disabled
+          <gl-combo-box id="port_id" label="Port of loading" item-label-path="port_name" disabled
            item-value-path="port_id" items="{{pol}}" value="{{data.load_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -95,7 +95,7 @@
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="dest_port_id" label="POD" item-label-path="port_name" disabled
+          <gl-combo-box id="dest_port_id" label="Port of destination" item-label-path="port_name" disabled
           item-value-path="port_id" items="{{pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -135,22 +135,22 @@
     <gl-form-panel-body>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input  label="Confirmation Letter" value="[[clNo]]" ></gl-form-label-input>
+          <gl-form-label-input  label="ชื่อสัญญา" value="[[clNo]]" ></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en" disabled="[[checkInput]]"
            class="required" required  item-value-path="type_rice_id" items="[[clTypeRice]]" value="{{data.type_rice_id}}" on-value-changed="getRiceTypeForPackage"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name" disabled="[[checkInput]]"
+          <gl-combo-box id="package_id" label="ชนิดบรรจุภัณฑ์ (กก./กระสอบ)" item-label-path="package_name" disabled="[[checkInput]]"
            class="required" required  item-value-path="package_id" items="[[package_id]]" value="{{data.package_id}}" on-value-changed="getPackageForPrice"></gl-combo-box>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="Price (USD/MT)" format-number value="{{price.price_per_ton}}"></gl-form-label-input>
+          <gl-form-label-input label="ราคา (USD/ตัน)" format-number value="{{price.price_per_ton}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-label-input label="น้ำหนักกระสอบ (gram/bag)"  value="{{price.package_weight_bag}}"></gl-form-label-input>
+          <gl-form-label-input label="น้ำหนักกระสอบ (กรัม)"  value="{{price.package_weight_bag}}"></gl-form-label-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <!-- [[testNum(data.*,'shm_det_quantity')]] -->
@@ -254,8 +254,19 @@
         // 'check(data.shm_det_quantity)',
         'getPrice(contractId)',
         'calc(data.shm_det_quantity)',
-        // 'shipment(data.shm_det_quantity)'
+        '_getSellerPhone(data)'
       ],
+      _getSellerPhone:function (data) {
+        // console.log("common=>",data.seller_phone);
+        this.seller_phone = data.seller_phone;
+        // var selectedItem = e.detail.value;
+        // if (selectedItem) {
+        //   var seller = this.common.seller.filter(function (seller) { return seller.exporter_id == selectedItem });
+        //       // console.log(seller[0].seller_phone);
+        //       this.seller_phone=seller[0].seller_phone;
+        //       // console.log(this.shipment.seller_phone);
+        // }
+      },
       attached: function() {
         //send to file add-contract
         this.fire('vessel-edit-common',{node:this});
@@ -373,7 +384,7 @@
       clickSubmit:function () {
         var el = Polymer.dom(this.root).querySelectorAll('.required');
         var stat = el.map((el)=> el.validate());
-        el.map((el)=>{ el.reset()});
+        // el.map((el)=>{ el.reset()});
         // console.log(this.csonfirmLetter);
         if (stat.every(elem => elem == true)) {
           this.fire('click-Submit',{data:'fin'});

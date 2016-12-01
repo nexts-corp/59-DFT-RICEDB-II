@@ -1,0 +1,156 @@
+<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="components/list-edit/list-report.html">
+
+
+<dom-module id="listregistion-report-list-export-company">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    * {
+        font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+
+        .header {
+          padding: 10px 0px 10px 10px;
+          background-color: var(--paper-grey-100);
+          color: var(--paper-grey-600);
+          font-size: var(--font-size-h4);
+          font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .registor{
+          margin: 20px;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+        .searchBox{
+          padding: 5px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+        .elevation{
+          border-radius: 5px;
+          margin: 10px;
+          padding: 5px;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px
+        }
+        paper-material {
+          background-color: var(--gl-white-color);
+        }
+    </style>
+    <template>
+
+    <content-panel>
+      <grid>
+
+        <div class="layout vertical registor">
+
+          <div class="flex title">
+              รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวส่งไปจำหน่ายต่างประเทศ
+          </div>
+          <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="จากวันที่" value="{{dataSelected.date_start}}" name="date_start"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <vaadin-date-picker label="ถึงวันที่" value="{{dataSelected.date_end}}" name="date_end"></vaadin-date-picker>
+              </gl-grid-col>
+                <paper-button class="gl-btn-info top" on-tap="_search" raised>แสดงรายงาน</paper-button>
+            </gl-grid-row>
+          </div>
+          <div class="flex title">
+              รายชื่อบริษัทส่งออกข้าวต่างประเทศ และคณะกรรมการบริษัท<br>
+               ประเภท (ทั่วไป, ชายแดน, ไม่เกิน 12 ก.ก)<br>
+               ระหว่างวันที่ [[dataSelected.date_start]] ถึง [[dataSelected.date_end]]
+          </div>
+          <div class="flex searchBorder">
+            <list-report data={{exporters}}>
+              <items type="primary">
+                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                <list item="seller_agent.agent_name" label="รายชื่อคณะกรรมการ" width="flex"></list>
+                <list item="exporter_status_name" label="การเป็นสมาชิกสมาคมผู้ส่งข้าวออก ฯ" width="flex"></list>
+                <list item="exporter_date_update" label="กรมอนนุมัติวันที่" width="flex"></list>
+                <list item="trader_no" label="เลขที่หนังสืออนุญาติ ปกข." width="flex"></list>
+              </items>
+            </list-report>
+          </div>
+        </div>
+
+      </grid>
+    </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "listregistion-report-list-export-company",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            properties: {
+                dataSelected:{
+                  type:Object,
+                  value:{}
+                }
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            created: function() {
+                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
+                this.glSetLayout('layout-registion');
+
+            },
+            _result:function () {
+              console.log(this.result);
+            },
+            nxGridTap: function(e) {
+                this.layerContent = e.detail.level;
+                if (this.layerContent === 'third') {
+                    this.vesselPage = 1;
+                } else {
+                    this.vesselPage = 0;
+                }
+                this.dataSelect = e.detail.data;
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent = e.target.id;
+            },
+            getDb: function(url, callback) {
+                // console.log(url);
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+                // console.log(1);
+            },
+            attached: function() {
+                this.getDb('./external/exporter', (data) => {
+                  this.exporters = data;
+                });
+            },
+            _search: function(){
+              var str='';
+              for( key in this.dataSelected){
+                  if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
+                    if(str==''){str += '?'}else{str += '&'}
+                    str += key+'='+this.dataSelected[key];
+                  }
+              }
+              this.getDb('./external/exporter'+str, (data) => {
+                this.exporters = data;
+              })
+            }
+        });
+    </script>
+</dom-module>

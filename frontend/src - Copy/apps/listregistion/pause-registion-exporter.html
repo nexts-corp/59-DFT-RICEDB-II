@@ -1,0 +1,224 @@
+<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="components/list-edit/list-registration.html">
+<link rel="import" href="components/renew/renew-memberShow.html">
+
+<link rel="import" href="components/list-edit/list-registration-pause.html">
+
+
+<dom-module id="listregistion-pause-registion-exporter">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+        * {
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+          padding: 10px 0px 10px 10px;
+          background-color: var(--paper-grey-100);
+          color: var(--paper-grey-600);
+          font-size: var(--font-size-h4);
+          font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .registor{
+          margin: 20px;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+        .searchBox{
+          padding: 5px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+        .elevation{
+          border-radius: 5px;
+          margin: 10px;
+          padding: 5px;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px
+        }
+        paper-material {
+          background-color: var(--gl-white-color);
+        }
+        gl-search-input{
+          margin: 30px 0px 0px 0px;
+        }
+        .button{
+          margin: 10px;
+        }
+        gl-combo-box{
+          width: 70%;
+        }
+        .iconSearch{
+          margin-top: 25px;
+          margin-left: 40px;
+        }
+    </style>
+    <template>
+
+    <content-panel>
+      <grid>
+        <paper-material elevation="1" class="elevation">
+
+        <div class="layout vertical registor">
+          <div class="flex ">
+            <div class="layout horizontal end-justified">
+              <!-- <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" id="addRedRegExporter"> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button> -->
+            </div>
+          </div>
+          <div class="flex title">
+            ทะเบียนผู้ส่งออกข้าวที่ถูกระงับ
+          </div>
+          <div class="flex searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <iron-icon class="iconSearch" icon="icons:search"></iron-icon>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
+              </gl-grid-col>
+              <!-- <paper-button class="gl-btn-info" raised on-tap="_result">ค้นหา</paper-button> -->
+            </gl-grid-row>
+          </div>
+
+          <div class="flex searchBorder">
+            <list-registration-pause data="{{exporters}}">
+              <items type="primary">
+                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
+                <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
+                <list item="exporter_date_approve" label="วันที่อนุมัติ" width="flex"></list>
+                <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
+              </items>
+            </list-registration-pause>
+
+          </div>
+        </div>
+        </paper-material>
+
+      </grid>
+    <panel>
+        <div class="left">
+          <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+            <div name="detailRegExporter">
+              <renew-memberShow exporter-id="[[exporterId]]" data={{dataSelect}}></renew-memberShow>
+              <div class="horizontal center-justified layout">
+                <paper-button raised class="gl-btn-success button" on-tap="_active">ยกเลิกการระงับ</paper-button>
+              </div>
+            </div>
+
+          </iron-pages>
+        </div>
+    </panel>
+    </content-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "listregistion-pause-registion-exporter",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            properties: {
+                layerContent: {
+                    type: String,
+                    value: "detailRegExporter"
+                },
+                exporterId:{
+                  type: String,
+                  observer: '_exporterIdChanged'
+                }
+            },
+            _exporterIdChanged:function(val){
+              if(val!=""){
+                this.layerContent = "detailRegExporter";
+              }
+            },
+            created: function() {
+                this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
+                this.glSetLayout('layout-registion');
+                this.glQuery('pauseExporter',this);
+            },
+            nxGridTap: function(e) {
+              // console.log(e.detail.level);
+              // console.log(e.detail.data);
+              // console.log(this.layerContent );
+                this.layerContent = e.detail.level;
+                // console.log(this.layerContent);
+                if (this.layerContent === 'third') {
+                    this.vesselPage = 1;
+                } else {
+                    this.vesselPage = 0;
+                }
+                this.dataSelect = e.detail.data;
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('contentPanel').changDrawer();
+              this.layerContent = e.target.id;
+              // console.log(e.target.id);
+            },
+            getDb: function(url, callback) {
+                // console.log(url);
+                axios.get(url)
+                    .then(function(response) {
+                        callback(response.data);
+                    }.bind(this))
+                    .catch(function(error) {}.bind(this));
+                // console.log(1);
+            },
+            attached: function() {
+                this.getExporters();
+                this.getIdExporters();
+            },
+            getExporters: function(){
+              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+                  this.exporters = data;
+                  for (var i = 0; i < this.exporters.length; i++) {
+                    this.exporters[i]['check'] = false;
+                  }
+              });
+            },
+            getIdExporters: function(){
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
+              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+                data.map((type)=>{
+                  type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+                });
+                  this.exporter_id.items = data;
+              });
+            },
+            _active: function(){
+              // console.log(this.dataSelect);
+              var datas = {
+                exporter_date_update: new Date,
+                exporter_date_approve:new Date,
+                exporter_no:this.dataSelect.exporter_no,
+                trader_id:this.dataSelect.trader_id,
+                seller_agent:this.dataSelect.seller_agent,
+                id : this.dataSelect.exporter_id
+              }
+              // console.log(datas);
+              axios.put('./external/exporter/update', datas)
+                        .then(function (response) {
+                          console.log("success");
+                          console.log(response);
+                          this.glQuery('contentPanel').changDrawer();
+                          this.glQuery('pauseExporter').getExporters();
+                        }.bind(this))
+                        .catch(function (error) {
+                          console.log("error");
+                          console.log(error);
+                        })
+            }
+        });
+    </script>
+</dom-module>

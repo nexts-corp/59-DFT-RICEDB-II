@@ -1,0 +1,101 @@
+<dom-module id="panel-seleted-draft">
+
+<style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size">
+    paper-tabs{
+      /*margin-left: 100px;*/
+      background-color: #f7941e;
+      /*color:var(--gl-gray-light-color);*/
+      /*height: 60px;*/
+      /*font-weight: bold;*/
+      color: #F2F2F2;
+      --paper-tabs-selection-bar:{
+        height: 5px;
+        background-color: var(--gl-info-color);
+      }
+    }
+    paper-tab:focus > div.tab-content{
+      background-color: yellow;
+      opacity: 1;
+      font-weight: 0;
+    }
+    paper-tab:not(:last-of-type) {
+      border-right: 3px solid var(--gl-gray-light-color);
+      font-size: var(--font-size-h5);
+      font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    paper-tabs paper-tab.iron-selected {
+      font-size: var(--font-size-h4);
+      color: var(--gl-white-color);
+      background-color: var(--gl-info-color);
+    }
+    .button{
+      margin: 5px 0px 5px 0px;
+    }
+    paper-icon-button{
+      color: var(--gl-gray-light-color);
+    }
+    paper-icon-button:hover{
+      color: var(--gl-gray-darker-color);
+    }
+    .bdDrawer{
+      margin-top: 10px;
+      /*padding: 10px 15px 15px 15px;*/
+    }
+    paper-material{
+      margin: 15px 10px 10px 10px;
+      background-color: var(--gl-white-color);
+      border-radius: 5px;
+      margin-bottom: 5px;
+    }
+    .header{
+      padding: 10px 0px 10px 0px;
+      font-size: var(--font-size-h2);
+      text-decoration: underline;
+    }
+    .hr{
+      border-bottom: 1px solid var(--gl-gray-light-color);
+    }
+</style>
+
+    <template>
+      <paper-material elevation="1" >
+        <!-- <div class="horizontal center-justified layout header">
+          [[title]]
+        </div> -->
+        <paper-tabs selected="{{selected}}" align-bottom no-slide>
+          <paper-tab>Bill of Landing Number</paper-tab>
+          <paper-tab>Invoice</paper-tab>
+          <paper-tab>Fee</paper-tab>
+          <paper-tab>การจ่ายเงิน</paper-tab>
+        </paper-tabs>
+
+    <!-- <div class="hr"></div> -->
+      <div class="bdDrawer">
+        <iron-pages selected="{{selected}}">
+          <div><content select="section-content[name=detail]"></content></div>
+          <div><content select="section-content[name=print]"></content></div>
+          <div><content select="section-content[name=file]"></content></div>
+          <div><content select="section-content[name=pay]"></content></div>
+        </iron-pages>
+        </div>
+      </paper-material>
+
+
+    </template>
+    <script>
+        Polymer({
+            is:'panel-seleted-draft',
+            behaviors:[gl.behavior.core],
+            properties: {
+              selected: {
+                type: String,
+                value: 0
+              }
+            },
+            toggleDrawer:function(){
+                this.glQuery('contentPanel').changDrawer();
+            },
+        });
+    </script>
+</dom-module>

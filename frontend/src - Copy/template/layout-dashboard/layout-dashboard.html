@@ -1,0 +1,106 @@
+<style media="screen">
+  html,body {
+   margin: 0;
+   margin-bottom: 100px;
+   height: 100%;
+   background-color: #eee;
+  }
+</style>
+<link rel="import" href="../../../bower_components/nylon-toast/nylon-toast.html">
+<link rel="import" href="components/list-menu.html">
+<dom-module id="layout-dashboard">
+  <style media="screen" include="gl-color">
+  :host{
+    --app-drawer-width:400px;
+  }
+  .hideSc{
+    overflow:hidden;
+  }
+   app-header {
+         position: fixed;
+         width: 100%;
+         z-index: 1;
+  }
+   app-toolbar {
+      background-color:#f7941e;
+      color: #fff;
+  }
+  app-toolbar.footer {
+     background-color:#fff;
+     height: 5px;
+     box-shadow: 0px 2px 5px grey;
+    box-sizing: border-box;
+ }
+  app-toolbar > iron-image{
+    margin: 0px 15px 0px 15px;
+  }
+  app-toolbar > div.header{
+      margin-left: 20px;
+      font-weight: normal;
+      font-size: 20px;
+      font-family: 'rsubold', sans-serif;
+      -webkit-font-smoothing: antialiased;
+  }
+  app-toolbar > paper-icon-button{
+    right: 0;
+    bottom: 0;
+  }
+  .headpad{
+    height: 90px;
+  }
+  app-drawer {
+    z-index: 2;
+    --app-drawer-scrim-background: rgba(0, 0, 0, 0.5);
+  }
+  app-drawer.persistent {
+      width: 100%;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      background: rgba(0, 0, 0, 0.5)
+    }
+  </style>
+  <template>
+
+       <app-header fixed condenses effects="waterfall" >
+        <app-toolbar sticky>
+          <paper-icon-button icon="menu" on-tap="_chd"></paper-icon-button>
+          <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+          <div main-title class="header"> ระบบการขายและการส่งมอบข้าวรัฐบาลต่อรัฐบาล</div>
+        </app-toolbar>
+        <app-toolbar class="footer"></app-toolbar>
+      </app-header>
+      <div class="headpad"></div>
+      <app-drawer id="mainMenu"  persistent="true" class="persistent" swipe-open>
+        <app-toolbar sticky>
+          <iron-image src="../../../images/manifest/icon-32.png"></iron-image>
+          <div main-title class="header"> </div>
+          <paper-icon-button icon="close" on-tap="_chd"></paper-icon-button>
+        </app-toolbar>
+        <app-toolbar class="footer"></app-toolbar>
+        <list-menu></list-menu>
+      </app-drawer>
+      <nylon-toast>
+        <tag-page-load id="tagPageLoad"></tag-page-load>
+      </nylon-toast>
+      <!-- <tag-page-load id="tagPageLoad"></tag-page-load> -->
+
+  </template>
+  <script>
+    Polymer({
+      is:'layout-dashboard',
+      behaviors:[gl.behavior.template,gl.behavior.locales],
+      changeLanguage:function(){
+        if(this.language == 'th'){
+          this.glSwitchLanguage('en');
+        }else{
+          this.glSwitchLanguage('th');
+        }
+      },
+      _chd:function () {
+        this.$.mainMenu.toggle();
+        // console.log(document.getElementsByTagName("body")[0].style.overflow = "hidden");
+      }
+    });
+  </script>
+
+</dom-module>

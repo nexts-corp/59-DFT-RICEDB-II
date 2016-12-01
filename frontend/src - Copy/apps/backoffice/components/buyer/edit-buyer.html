@@ -1,0 +1,142 @@
+<dom-module id="edit-buyer">
+<style include="iron-flex iron-flex-alignment gl-color gl-size">
+  .text-center {
+    text-align: center;
+    font-size: var(--font-size-h3);
+    background-color: var(--paper-grey-100);
+    margin-top: 20px;
+  }
+  .margin-top{
+    margin-top: 15px;
+  }
+  .button{
+    margin-top: 20px;
+  }
+</style>
+  <template>
+    <div class="text-center">แก้ไขข้อมูลผู้ซื้อ</div>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="ชื่อ :" placeholder="กรอกชื่อ" value="{{data.buyer_name}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="ชื่อเต็ม :" placeholder="กรอกชื่อเต็ม" value="{{data.buyer_fullname}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="นามแฝง :" placeholder="กรอกนามแฝง" value="{{data.buyer_masks}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="E-mail :" placeholder="ตัวอย่าง test@gmail.com" value="{{data.buyer_email}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="Fax :" placeholder="กรอกเบอร์Fax" value="{{data.buyer_fax}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="เบอร์โทรศัพท์ :" placeholder="กรอกเบอร์โทรศัพท์" value="{{data.buyer_tel}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-dropdown-menu class="margin-top" style="width:100%;" label="ประเทศ" placeholder="กรุณาเลือกประเทศ">
+          <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{data.country_id}}" name="country_id">
+            <template is="dom-repeat" items="[[dataCountry]]">
+              <paper-item value="{{item.country_id}}">{{item.country_name_th}}</paper-item>
+            </template>
+          </paper-menu>
+        </gl-form-dropdown-menu>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+        <gl-form-textarea class="margin-top" label="ที่อยู่ :" placeholder="กรอกที่อยู่" value="{{data.buyer_address}}"></gl-form-textarea>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+      <div class="button">
+        <paper-button class="gl-btn-danger" on-tap="_cancel" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_edit" raised>บันทึก</paper-button>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "edit-buyer",
+      properties: {
+        data: {
+          type: Object,
+          value: {}
+        },
+        dataCountry: {
+          type: Array
+        }
+      },
+      behaviors: [
+          gl.behavior.core,
+          gl.behavior.locales
+      ],
+      attached: function() {
+        this.getCountry();
+      },
+      _edit:function(){
+        // console.log(this.data);
+        var datas = {
+          id: this.data.buyer_id,
+          buyer_name: this.data.buyer_name,
+          buyer_fullname: this.data.buyer_fullname,
+          buyer_masks: this.data.buyer_masks,
+          buyer_email: this.data.buyer_email,
+          buyer_fax: this.data.buyer_fax,
+          buyer_tel: this.data.buyer_tel,
+          country_id: this.data.country_id,
+          buyer_address: this.data.buyer_address
+        }
+        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+        axios.put('./common/buyer/update', datas)
+            .then(function(response) {
+                console.log("success");
+                console.log(response);
+                this.glQuery('refreshBuyer').getBuyer();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+            }.bind(this))
+            .catch(function(error) {
+                console.log("error");
+                console.log(error);
+            })
+      },
+      _cancel:function() {
+        this.glQuery('contentPanel').changDrawer();
+        // this.data = {};
+      },
+      getDb: function(url, callback) {
+          axios.get(url)
+              .then(function(response) {
+                  callback(response.data);
+              }.bind(this))
+              .catch(function(error) {}.bind(this));
+      },
+      getCountry: function() {
+          this.getDb('./common/country', (data) => {
+            this.dataCountry = data;
+          });
+      }
+    });
+  </script>
+</dom-module>
