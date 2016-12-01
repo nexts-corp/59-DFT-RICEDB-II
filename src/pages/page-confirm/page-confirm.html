@@ -1,4 +1,7 @@
+
+<link rel="import" href="./components/confirm-list.html">
 <link rel="import" href="./../components/panel-right/panel-right.html">
+
 <dom-module id="page-confirm">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         * {
@@ -42,7 +45,7 @@
         }
         
         .searchBorder {
-            border: 1px solid var(--gl-gray-light-color);
+            border: 1px solid #ddd;
             margin: 15px;
             border-radius: 3px
         }
@@ -53,37 +56,6 @@
         
         gl-search-input {
             margin: 30px 0px 0px 0px;
-        }
-        
-        table.gl-table-default {
-            border-collapse: collapse;
-            width: 100%;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        
-        table.gl-table-default,
-        th,
-        td {
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th,
-        td {
-            padding: 15px;
-        }
-        
-        th {
-            text-align: left;
-            background-color: #F1F1F1;
-        }
-        
-        td {
-            text-align: left;
-        }
-        
-        tr:hover {
-            background-color: #F1F1F1;
         }
         
         .contentHeader {
@@ -134,141 +106,101 @@
             border: 1px solid #ddd;
         }
         .panelHead{
-            font-size: 22px;
             background-color: orange;
             color: white;
-            padding:10px;
+            padding: 10px;
         }
-        .panelBody{
-            
+        .panelBody{ 
              padding:20px;
+        }
+        paper-tab{
+            font-size: 20px;
+        }
+        paper-tab : hover{
+            background-color: white !important;
+
         }
     </style>
     <template>
-
-        <content-panel>
-            <grid>
-                <!-- <paper-material elevation="1" class="elevation"> -->
-
-
-                <div class="layout vertical registor">
-                    <div class="flex">
-                        <div class="layout horizontal end-justified">
-                            <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
-                        </div>
-                    </div>
-                    <div class="flex title">
-                        ยืนยันรับส่วนจัดสรร ปีโควตา 2559
-                    </div>
-                    <div class="flex searchBox searchBorder">
-                        <gl-grid-row width="{{getWidth}}">  
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                                <!--<gl-form-label-input label="ปีโควตา" value="2559"></gl-form-label-input>-->
-                            </gl-grid-col>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                                <gl-form-dropdown-menu label="ประเภทข้าว">
-                                    <paper-listbox class="dropdown-content">
-                                        <paper-item>ข้าวขาว</paper-item>
-                                        <paper-item>ข้าวหัก</paper-item>
-                                    </paper-listbox>
-                                </gl-form-dropdown-menu>
-                            </gl-grid-col>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                                <gl-form-dropdown-menu label="การคำนวณครั้งที่">
-                                    <paper-listbox class="dropdown-content">
-                                        <paper-item>1</paper-item>
-                                        <paper-item>2</paper-item>
-                                    </paper-listbox>
-                                </gl-form-dropdown-menu>
-                            </gl-grid-col>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                                <gl-form-dropdown-menu label="ชื่อบริษัท">
-                                    <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
-                                        <paper-item name="1">กมลกิจ บจก.</paper-item>
-                                        <paper-item name="2">กรุงเทพค้าข้าว บจก.</paper-item>
-                                    </paper-listbox>
-                                </gl-form-dropdown-menu>
-                            </gl-grid-col>
-                        </gl-grid-row>
-                        <gl-grid-row>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                                <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px" raised>{{btnName}}</paper-button>
-                            </gl-grid-col>
-                        </gl-grid-row>
-                    </div>
-                    <div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>
-
-                    <div class="panel">
-                    <div class="panelHead">ยืนยันแล้ว</div>
-                    <div class="panelBody">
-                    <div class="flex searchBorder">
-
-                        <div style="overflow-x:auto;">
-                            <table class="gl-table-default">
-                                <tr>
-                                    <template is="dom-repeat" items="{{dataAmount.header}}">
-                                        <th>{{item}}</th>
-                                    </template>
-                                </tr>
-                                <template is="dom-repeat" as="item2" items="{{companyData.content}}">
-                                    <tr on-tap="_toggleDrawer">
-                                        <td>{{item2.a}}</td>
-                                        <td>{{item2.b}}</td>
-                                        <td>{{item2.c}}</td>
-                                        <td>{{item2.d}}</td>
-                                        <td>{{item2.e}}</td>
-                                    </tr>   
-                                </template>
-                                <tr>
-                                    <th></th>
-                                    <th>1034.00</th>
-                                    <th>516.00</th>
-                                    <th>259.00</th>
-                                    <th>259.00</th>
-                                </tr>
-                            </table>
-                        </div>
-                        </div>
-
-                    </div>
-                    </div>
-                    <div class="panel">
-                    <div class="panelHead">ยังไม่ยืนยัน</div>
-                    <div class="panelBody">
-                        <div class="flex searchBorder">
-                            <div style="overflow-x:auto;">
-                                <table class="gl-table-default">
-                                    <tr>
-                                        <template is="dom-repeat" items="{{dataAmount.header}}">
-                                            <th>{{item}}</th>
-                                        </template>
-                                    </tr>
-                                    <template is="dom-repeat" as="item2" items="{{companyData.content}}">
-                                        <tr on-tap="_toggleDrawer">
-                                            <td>{{item2.a}}</td>
-                                            <td>{{item2.b}}</td>
-                                            <td>{{item2.c}}</td>
-                                            <td>{{item2.d}}</td>
-                                            <td>{{item2.e}}</td>
-                                        </tr>   
-                                    </template>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                     </div>
+        <div class="layout vertical registor">
+            <div class="flex">
+                <div class="layout horizontal end-justified">
+                    <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
                 </div>
-                <!-- </paper-material> -->
+            </div>
+            <div class="flex title">
+                ยืนยันรับส่วนจัดสรร ปีโควตา 2559
+            </div>
+            <div class="flex searchBox searchBorder">
+                <gl-grid-row width="{{getWidth}}">  
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <!--<gl-form-label-input label="ปีโควตา" value="2559"></gl-form-label-input>-->
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <gl-form-dropdown-menu label="ประเภทข้าว">
+                            <paper-listbox class="dropdown-content">
+                                <paper-item>ข้าวขาว</paper-item>
+                                <paper-item>ข้าวหัก</paper-item>
+                            </paper-listbox>
+                        </gl-form-dropdown-menu>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                            <paper-listbox class="dropdown-content">
+                                <paper-item>1</paper-item>
+                                <paper-item>2</paper-item>
+                            </paper-listbox>
+                        </gl-form-dropdown-menu>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        <gl-form-dropdown-menu label="ชื่อบริษัท">
+                            <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
+                                <paper-item name="1">กมลกิจ บจก.</paper-item>
+                                <paper-item name="2">กรุงเทพค้าข้าว บจก.</paper-item>
+                            </paper-listbox>
+                        </gl-form-dropdown-menu>
+                    </gl-grid-col>
+                </gl-grid-row>
+                <gl-grid-row>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px" raised>{{btnName}}</paper-button>
+                    </gl-grid-col>
+                </gl-grid-row>
+            </div>
+            <div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>
 
-            </grid>
+            <div class="panel">
+            <div class="panelHead">
+                <paper-tabs selected="{{pageSelected}}">
+                    <paper-tab>ยืนยันแล้ว</paper-tab>
+                    <paper-tab>ยังไม่ยืนยัน</paper-tab>
+                </paper-tabs>
+            </div>
+            <div class="panelBody">
+            <div class="flex searchBorder">
+                <div style="overflow-x:auto;">
+                    
+                    <iron-pages selected="{{pageSelected}}">
+                        <section>
+                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect"></confirm-list>
+                        </section>
+                        <section>
+                             <confirm-list on-data-select="_onDataSelect"></confirm-list>
+                        </section>
+                    </iron-pages>
+                   
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
             
-        </content-panel>
         <panel-right title="ยืนยันรับส่วนจัดสรร">
             <template is="dom-if" if="[[rendered]]">
-               <confirm-allocate-edit></confirm-allocate-edit>
+               <confirm-allocate-edit data="{{dataSelect}}"></confirm-allocate-edit>
             </template>
 		</panel-right>
     </template>
@@ -282,6 +214,19 @@
                 layerContent: {
                     type: String,
                     value: "detailRegExporter"
+                },
+                data:{
+                    type: Object,
+                    value: {
+                        header:[
+                            'ผู้ส่งออก',
+                            'ปริมาณโควตารวม',
+                            'งวดที่ 1 (มกราคม)',
+                            'งวดที่ 2 (เมษายน)',
+                            'งวดที่ 3 (กรกฏาคม)'
+                        ]
+                    }
+                    
                 },
                 dataAmount:{
                     type: Object,
@@ -327,24 +272,6 @@
             },
             ready:function(){         
                 this.btnName = 'แสดงทั้งหมด';
-                this.companyData = {
-                        content:[
-                        {
-                            a:'กมลกิจ บจก',
-                            b:'899.00',
-                            c:'449.00',
-                            d:'225.00',
-                            e:'225.00'
-                        },
-                        {
-                            a:'กรุงเทพค้าข้าว',
-                            b:'135.00',
-                            c:'67.00',
-                            d:'34.00',
-                            e:'34.00'
-                        }
-                    ]
-                }
                 Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e)=>{
                     this.rendered = true;
@@ -353,42 +280,11 @@
                 });
                 });
             },
-            _toggleDrawer: function(e) {
-                 this.$$('panel-right').toggle();
-            },
-            _chageCompanyName:function(name){
-                this.companyName =  name;
-            },
-            _getDataCompanny:function(){
-                //console.log(name);
-                if(this.companyName == '1'){
-                    this.btnName = 'แสดงผลการรับส่วนจัดสรร';
-                    this.companyData = {
-                          content:[
-                            {
-                                a:'กมลกิจ บจก',
-                                b:'899.00',
-                                c:'449.00',
-                                d:'225.00',
-                                e:'225.00'
-                            }
-                        ]
-                    }
-                }
-                else if(this.companyName == '2'){
-                    this.btnName = 'แสดงผลการรับส่วนจัดสรร';
-                      this.companyData = {
-                          content:[
-                            {
-                                a:'กรุงเทพค้าข้าว',
-                                b:'135.00',
-                                c:'67.00',
-                                d:'34.00',
-                                e:'34.00'
-                            }
-                        ]
-                    }
-                }
+            _onDataSelect:function(e){
+                this.pageSelected = 0;
+                this.$$('panel-right').toggle();
+                this.dataSelect = e.detail;
+                console.log(this.dataSelect);
             }
         });
     </script>

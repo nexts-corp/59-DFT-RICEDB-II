@@ -1,0 +1,62 @@
+<link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./components/report-list.html">
+<link rel="import" href="./components/report-panel.html">
+
+<dom-module id="page-report">
+    <template>
+        <style include="gl-size">
+            .title {
+                text-align: center;
+                font-size: var(--font-size-h3);
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                margin-top:20px;
+            }      
+            .content {
+                padding:20px;
+            }
+            paper-tab {
+                background-color:orange;
+                color:white;
+            }
+        </style>
+
+        <div class="flex title">
+            ชำระเงินค่าธรรมเนียมพิเศษ
+        </div>
+        <br>
+        <paper-tabs selected="{{selected}}">
+            <paper-tab >ในโควต้า</paper-tab>
+            <paper-tab>นอกโควต้า</paper-tab>
+        </paper-tabs>
+        <iron-pages selected="{{selected}}">
+            <div class="content">
+                <report-list on-data-select="_onDataSelect"></report-list>
+            </div>
+            <div>Page 2</div>
+        </iron-pages>
+
+        <panel-right title="รายงานการส่งออกข้าวไปสหภาพยุโรป">
+                <report-panel data="{{dataSelect}}"></report-panel>
+        </panel-right>
+       
+        
+    </template>
+    <script>
+        Polymer({
+            is: 'page-report',
+            properties:{
+                selected:{
+                    value:'0'
+                }
+            },
+            _onDataSelect: function(e){
+                //console.log(e.detail);
+                this.dataSelect=e.detail;
+                //Polymer.dom(this.root).querySelector('panel-right').toggle();
+                this.$$('panel-right').toggle();
+            }
+            
+        });
+    </script>
+</dom-module>

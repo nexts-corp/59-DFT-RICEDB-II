@@ -1,0 +1,46 @@
+
+<dom-module id="confirm-list">
+    <template>
+        <style is="custom-style" include="gl-table">
+        
+        </style>
+       <table class="gl-table-default">
+           <thead>
+            <tr>
+                <template is="dom-repeat" items="{{data.header}}">
+                    <th>{{item}}</th>
+                </template>
+            </tr>
+            </thead>
+            <tbody>
+            <template is="dom-repeat" items="{{data.content}}">
+                <tr on-tap="_selectData" data="{{item}}">
+                    <td>{{item.a}}</td>
+                    <td>{{item.b}}</td>
+                    <td>{{item.c}}</td>
+                    <td>{{item.d}}</td>
+                    <td>{{item.e}}</td>
+                </tr>
+            </template>
+             </tbody> 
+             <thead>
+            <tr>
+                <th></th>
+                <th>1034.00</th>
+                <th>516.00</th>
+                <th>259.00</th>
+                <th>259.00</th>
+            </tr>
+             </thead>
+        </table>
+    </template>
+    <script>
+        Polymer({
+            is: 'confirm-list',
+            _selectData:function(e){
+                this.fire('data-select',e.currentTarget.data)
+            }
+
+        });
+    </script>
+</dom-module>
