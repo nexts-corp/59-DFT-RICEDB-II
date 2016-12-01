@@ -3,12 +3,12 @@
 <dom-module id="report-panel">
     <template>
         <style is="custom-style" include="gl-table gl-panel gl-color">
-            * {
+            /** {
                 text-align: left;
                 font-family: 'rsuregular', sans-serif;
                 -webkit-font-smoothing: antialiased;
                 margin:10px;
-            }
+            }*/
             .box {
                 martin:auto;
                 text-align:center;
@@ -20,7 +20,15 @@
             tableB {
                 margin-top:1px;
             }
+            .container{
+                padding: 0px 30px 10px 30px;
+            }
+             .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
         </style>
+        <div class="container">
 <table>
     <tr>
         <td>
@@ -85,44 +93,15 @@
             <td><gl-form-input label="ข้าวขาว" value="[[data.type_rice31]]"></gl-form-input></td>
             <td><gl-form-input label="ข้าวหัก" value="[[data.type_rice32]]"></gl-form-input></td>
         </tr>
+        </table>
     </div>
-    </table>
+    
 </div>
-<div class="box">
+<div class="flex-end-justified" style="margin-top: 15px;">
      <paper-button raised class="gl-btn-success">บันทึก</paper-button>
      <paper-button raised class="gl-btn-danger">ยกเลิก</paper-button>
 </div>
-<!--
-        <div>
-            <table class="gl-table-default">
-                <tbody class="table-body">
-                    <tr>
-                        <td colspan="5">1.แสดงเอกสารภายในกำหนด<td>
-                    </tr>
-                    <tr>
-                        <td>- เอกสารถูกต้องตามประกาศ<td>
-                        <td><paper-input label="ข้าวขาว"></paper-input><td>
-                        <td><paper-input label="ข้าวหัก"></paper-input><td>
-                    </tr>
-                    <tr>
-                        <td>- เอกสารไม่ถูกต้องตามประกาศ<td>
-                        <td><paper-input label="ข้าวขาว"></paper-input><td>
-                        <td><paper-input label="ข้าวหัก"></paper-input><td>
-                    </tr>
-                    <tr>
-                        <td colspan="5">2.แสดงเอกสารเกินกำหนด<td>
-                    </tr>
-                    <tr>
-                        <td>- เอกสารเกินกำหนด<td>
-                        <td><paper-input label="ข้าวขาว"></paper-input><td>
-                        <td><paper-input label="ข้าวหัก"></paper-input><td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <paper-button raised>บันทึก</paper-button>
-            <paper-button raised>ยกเลิก</paper-button>
-        </div>-->
+        </div>
     </template>
     <script>
         Polymer({
