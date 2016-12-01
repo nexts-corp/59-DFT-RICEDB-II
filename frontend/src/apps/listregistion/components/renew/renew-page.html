@@ -208,13 +208,20 @@
       _confirmToast:function(result,detail){
         if(result == true){
           detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          detail.el.update('./external/exporter/update', detail.datas, () => {
-            detail.el.glQuery('contentPanel').changDrawer();
-            detail.el.glQuery('reExporter').getExporters();
-            detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-              console.log('success');
-            }});
-          });
+          axios.put('./external/exporter/update', detail.datas)
+                    .then(function (response) {
+                      console.log("success");
+                      console.log(response);
+                      detail.el.glQuery('contentPanel').changDrawer();
+                      detail.el.glQuery('reExporter').getExporters();
+                      detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                        console.log('success');
+                      }});
+                    }.bind(this))
+                    .catch(function (error) {
+                      console.log("error");
+                      console.log(error);
+                    })
         }
       },
       _retrader:function(){
