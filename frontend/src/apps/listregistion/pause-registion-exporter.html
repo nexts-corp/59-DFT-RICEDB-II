@@ -1,7 +1,7 @@
 <link rel="import" href="components/content-panel.html">
 <link rel="import" href="components/list-edit/list-registration.html">
 <link rel="import" href="components/renew/renew-memberShow.html">
-
+<link rel="import" href="data/dataBehavior.html">
 <link rel="import" href="components/list-edit/list-registration-pause.html">
 
 
@@ -126,7 +126,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             properties: {
                 layerContent: {
@@ -166,21 +167,12 @@
               this.layerContent = e.target.id;
               // console.log(e.target.id);
             },
-            getDb: function(url, callback) {
-                // console.log(url);
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-                // console.log(1);
-            },
             attached: function() {
                 this.getExporters();
                 this.getIdExporters();
             },
             getExporters: function(){
-              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+              this.read('./external/exporter/?exporter_active=false',(data)=>{
                   this.exporters = data;
                   for (var i = 0; i < this.exporters.length; i++) {
                     this.exporters[i]['check'] = false;
@@ -189,7 +181,7 @@
             },
             getIdExporters: function(){
               this.exporter_id = this.exporter_id || this.$.exporter_id;
-              this.getDb('./external/exporter/?exporter_active=false', (data) => {
+              this.read('./external/exporter/?exporter_active=false',(data)=>{
                 data.map((type)=>{
                   type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
                 });
@@ -207,17 +199,10 @@
                 id : this.dataSelect.exporter_id
               }
               // console.log(datas);
-              axios.put('./external/exporter/update', datas)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                          this.glQuery('contentPanel').changDrawer();
-                          this.glQuery('pauseExporter').getExporters();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          console.log(error);
-                        })
+              this.update('./external/exporter/update', datas, () => {
+                this.glQuery('contentPanel').changDrawer();
+                this.glQuery('pauseExporter').getExporters();
+               });
             }
         });
     </script>

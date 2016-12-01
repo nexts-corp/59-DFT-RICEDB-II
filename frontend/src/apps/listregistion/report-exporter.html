@@ -2,6 +2,7 @@
 <link rel="import" href="components/list-edit/list-report.html">
 <link rel="import" href="components/renew/renew-page.html">
 <link rel="import" href="components/register/register-pageRegister.html">
+<link rel="import" href="data/dataBehavior.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 
 
@@ -272,7 +273,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
@@ -301,27 +303,21 @@
               this.$$('#found').removeAttribute("hidden");
               this.$$('#notfound').setAttribute("hidden", "hidden");
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getExporters: function() {
-                this.getDb('./external/exporter', (data) => {
-                  data.map((empty)=>{
-                    if (empty.exporter_no_name == undefined || empty.exporter_active_name == null) {
-                      empty.exporter_no_name = '-';
-                      empty.exporter_active_name = '-';
-                    }
-                  });
-                  this.exporters = data;
+              this.read('./external/exporter',(data)=>{
+                data.map((empty)=>{
+                  if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
+                    empty.exporter_no_name = '-';
+                    empty.exporter_active_name = '-';
+                    empty.exporter_date_approve = '-';
+                  }
                 });
+                this.exporters = data;
+              });
             },
             getIdExporters:function(){
               this.exporter_id = this.exporter_id || this.$.exporter_id;
-              this.getDb('./external/exporter?exporter_status=true', (data) => {
+              this.read('./external/exporter?exporter_status=true',(data)=>{
                 data.map((type)=>{
                   type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
                 });
@@ -343,15 +339,15 @@
               else if (this.dataSelected.date_end != undefined && this.dataSelected.date_end != '' && (this.dataSelected.date_start == undefined || this.dataSelected.date_start == '')) {
                 this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่เริ่มต้นค้นหา'})
               }
-              this.getDb('./external/exporter'+str, (data) => {
+              this.read('./external/exporter'+str,(data)=>{
                 data.map((empty)=>{
-                  if (empty.exporter_no == undefined || empty.exporter_active_name == null) {
-                    empty.exporter_no = '-';
-                    empty.exporter_active_name = "-";
+                  if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
+                    empty.exporter_no_name = '-';
+                    empty.exporter_active_name = '-';
+                    empty.exporter_date_approve = '-';
                   }
                 });
                 if (data == '') {
-                  // alert('ไม่พบข้อมูลที่ค้นหา');
                   this.$$('#notfound').removeAttribute("hidden");
                   this.$$('#found').setAttribute("hidden", "hidden");
                 }
@@ -364,23 +360,6 @@
             },
             _print:function(e) {
               window.open(e.target.getAttribute('src'),'_blank');
-              // this.report = e.target.getAttribute('report');
-              // if (this.report == 'reportExporter') {
-              //   window.location = this.resolveUrl(this.$$('#reEx').getAttribute("src"));
-              //   // console.log('รายชื่อผู้ได้รับหนังสืออนุญาต');
-              // }
-              // else if (this.report == 'reportNameCompany') {
-              //   window.location = this.resolveUrl(this.$$('#reCom').getAttribute("src"));
-              //   // console.log('รายชื่อบริษัทส่งออกข้าวฯ');
-              // }
-              // else if (this.report == 'reportAddress') {
-              //   window.location = this.resolveUrl(this.$$('#reAdd').getAttribute("src"));
-              //   // console.log('รายชื่อและที่อยู่ของผู้ส่งออกข้าว');
-              // }
-              // else if (this.report == 'reportNameExporter') {
-              //   window.location = this.resolveUrl(this.$$('#reName').getAttribute("src"));
-              //   // console.log('รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ');
-              // }
             },
             _selectData:function(e){
               this.glQuery('contentPanel').changDrawer();

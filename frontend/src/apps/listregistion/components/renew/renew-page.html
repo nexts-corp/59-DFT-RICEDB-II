@@ -1,4 +1,5 @@
 <link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
+<link rel="import" href="../../data/dataBehavior.html">
 <link rel="import" href="renew-memberShow.html">
 <link rel="import" href="renew-memberEdit.html">
 <link rel="import" href="../register/register-member.html">
@@ -64,7 +65,7 @@
   <script>
     Polymer({
       is: "renew-page",
-      behaviors: [gl.behavior.core],
+      behaviors: [gl.behavior.core,dataBehavior],
       properties: {
         pages:{
             type:Number,
@@ -111,20 +112,13 @@
         this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
         // console.log(datas);
         // console.log(this.exporterId);
-        axios.put('./external/exporter/update', datas)
-                  .then(function (response) {
-                    console.log("success");
-                    console.log(response);
-                    this.glQuery('reExporter').getExporters();
-                    this.pages = 0;
-                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                      console.log('success');
-                    }});
-                  }.bind(this))
-                  .catch(function (error) {
-                    console.log("error");
-                    console.log(error);
-                  })
+        this.update('./external/exporter/update', datas, () => {
+          this.glQuery('reExporter').getExporters();
+          this.pages = 0;
+          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+            console.log('success');
+          }});
+         });
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removeButtomC').setAttribute("hidden", "hidden");
         this.$$('#removePen').removeAttribute("hidden");
@@ -214,20 +208,13 @@
       _confirmToast:function(result,detail){
         if(result == true){
           detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          axios.put('./external/exporter/update', detail.datas)
-                    .then(function (response) {
-                      console.log("success");
-                      console.log(response);
-                      detail.el.glQuery('contentPanel').changDrawer();
-                      detail.el.glQuery('reExporter').getExporters();
-                      detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                        console.log('success');
-                      }});
-                    }.bind(this))
-                    .catch(function (error) {
-                      console.log("error");
-                      console.log(error);
-                    })
+          detail.el.update('./external/exporter/update', detail.datas, () => {
+            detail.el.glQuery('contentPanel').changDrawer();
+            detail.el.glQuery('reExporter').getExporters();
+            detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+          });
         }
       },
       _retrader:function(){
