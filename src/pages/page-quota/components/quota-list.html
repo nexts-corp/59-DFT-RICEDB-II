@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                     <template is="dom-repeat" items="{{data.type_rice}}">
-                        <tr on-tap="_selectData" data="{{item}}" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
+                        <tr on-tap="_selectData" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
                              <td class="center">{{item.type_rice_name_th}}</td>
                              <td>
                                 <template is="dom-repeat" items="{{item.period}}">
@@ -101,7 +101,7 @@
                 });
             },
             _selectData:function(e){
-                //console.log(e.currentTarget.data);
+                // console.log(e.currentTarget.data);
                 this.fire('data-select',e.currentTarget.data);
                 
             }
