@@ -117,6 +117,7 @@
     <script>
         Polymer({
             is: "page-calculate",
+            behaviors:[nylonBehavior],
             observers:[
               '_yearQuoataChaged(selectQuotaYear)'
             ],
@@ -126,8 +127,10 @@
                     value: "detailRegExporter"
                 }
             },
+            nylonPageActive:function(){
+                this._getYear();
+            },
             attached: function(){
-              this._getYear();
               this.hide = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/calculate-setting.html'), (e)=>{
