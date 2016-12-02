@@ -7,8 +7,15 @@
                 border: 1px solid #ddd;
                 border-radius: 5px;
             }
+            paper-tooltip{
+                --paper-tooltip:{
+                    font-size: 20px;
+                    font-family: 'rsuregular', sans-serif;
+                    -webkit-font-smoothing: antialiased;
+                }
+            }
+          
 
-            
             .container>div {
                 font-size: 24px;
                 padding: 0px 10px 10px 10px;
@@ -25,12 +32,20 @@
             .left {
                 text-align: left;
             }
+            .flex-equal-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+            }
         </style>
 
 
         <div class="container">
-            <div>ประเภท : {{typeRiceName}}</div>
-
+            <div class="flex-equal-justified">
+                <div>ประเภท : {{typeRiceName}}</div>
+                <paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
+                <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>
+            </div>
+            
             <table class="gl-table-default" style="border: 1px solid #ddd;">
                 <thead>
                     <tr>
@@ -66,6 +81,10 @@
             is: 'calculate-list',
             behaviors:[FormatNumberBehavior],
             properties:{
+                active:{
+                    type: Boolean,
+                    value: true
+                },
                 listData:{
                     type: Array,
                     observer: '_getDatalist'
@@ -80,6 +99,7 @@
             },
             _getDatalist:function(){
                 console.log('list',this.listData);
+                this.active = false;
                 this.listData.map((item)=>{
                     item.detail.map((item)=>{
                         item.status = '?';
@@ -87,6 +107,9 @@
                     this.typeRiceName = item.type_rice_name_th;
                    // listData = item.detail;
                 });
+            },
+            _settingData:function(){
+                this.fire('setting-data');
             }
             
         });

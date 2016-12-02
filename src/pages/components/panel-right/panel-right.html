@@ -68,6 +68,10 @@
                 setWidth:{
                     type: String,
                     value: '80%'
+                },
+                stat:{
+                    type: String,
+                    value: 'show'
                 }
             },
             attached:function(){
@@ -75,6 +79,13 @@
                 this.updateStyles();
             },
             toggle:function(){
+                if(this.stat == 'hidden'){
+                    this.stat = 'show'
+                }
+                else if (this.stat == 'show'){
+                    this.stat = 'hidden'
+                }
+                document.documentElement.style.overflow = this.stat;
                 this.$$('app-drawer').toggle();
             },
             _setWidth:function(width){
@@ -83,6 +94,8 @@
                 this.updateStyles();
             },
             close:function(e){
+                this.stat = 'show';
+                 document.documentElement.style.overflow = this.stat;
                 this.$$('app-drawer').close();
             },
             closeBgAppDrawer:function(e){
