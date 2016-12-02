@@ -106,6 +106,7 @@
     Polymer({
       is: 'page-quota',
       observers:['_yearChanged(selectYear)'],
+      behaviors: [nylonBehavior],
       properties: {
           layerContent: {
               type: String,
@@ -128,6 +129,9 @@
             type: String,
             value: 'foo'
           }
+      },
+      nylonPageActive:function(){
+        console.log('active');
       },
       attached: function(){
         this.layerContent = "addRedRegExporter";
