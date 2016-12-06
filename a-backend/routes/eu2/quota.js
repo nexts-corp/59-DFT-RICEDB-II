@@ -4,9 +4,6 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-var Ajv = require('ajv');
-var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
-
 var mqtt = require('mqtt')
 var client  = mqtt.connect('mqtt://mqtt.codeunbug.com')
 
