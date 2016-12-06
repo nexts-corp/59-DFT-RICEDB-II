@@ -182,16 +182,16 @@ router.get('/id/:id', function (req, res, next) {
                                             .coerceTo('array')
                                             .group(function (g) {
                                                 return g.pluck(
-                                                    "ship_id", "shipline_id", "ship_lot_no", "ship_voy_no"
+                                                    "ship", "shipline_id", "ship_lot_no"//, "ship_voy_no"
                                                 )
                                             })
                                             .ungroup()
                                             .merge(function (me) {
                                                 return {
-                                                    ship_id: me('group')('ship_id'),
+                                                    ship: me('group')('ship'),
                                                     shipline_id: me('group')('shipline_id'),
                                                     ship_lot_no: me('group')('ship_lot_no'),
-                                                    ship_voy_no: me('group')('ship_voy_no')
+                                                    //ship_voy_no: me('group')('ship_voy_no')
                                                 }
                                             }),
                                         shipment_detail: r.db('g2g').table('shipment_detail')
@@ -239,10 +239,10 @@ router.get('/id/:id', function (req, res, next) {
                                 .merge(function (m) {
                                     return {
                                         invoice_id: m('id'),
-                                        ship_id: m('group_ship')('ship_id')(0),
+                                        ship: m('group_ship')('ship')(0),
                                         shipline_id: m('group_ship')('shipline_id')(0),
                                         ship_lot_no: m('group_ship')('ship_lot_no')(0),
-                                        ship_voy_no: m('group_ship')('ship_voy_no')(0),
+                                        //  ship_voy_no: m('group_ship')('ship_voy_no')(0),
                                         weight_gross: m('shipment_detail').sum('weight_gross'),
                                         weight_net: m('shipment_detail').sum('weight_net'),
                                         weight_tare: m('shipment_detail').sum('weight_tare'),
@@ -263,8 +263,17 @@ router.get('/id/:id', function (req, res, next) {
                                 })
                                 .without("id", "group_ship", "shipment_detail")
                                 .merge(function (m) {
-                                    return r.db('common').table("ship").get(m('ship_id')).without('id'),
-                                        r.db('common').table("shipline").get(m('shipline_id')).without('id')
+                                    return r.db('common').table("shipline").get(m('shipline_id')).without('id')
+                                    // r.db('common').table("ship").get(m('ship_id')).without('id'),
+                                })
+                                .merge(function (m) {
+                                    return {
+                                        ship: m('ship').map(function (arr_ship) {
+                                            return arr_ship.merge(function (row_ship) {
+                                                return r.db('common').table('ship').get(row_ship('ship_id')).without('id','date_created','date_updated')
+                                            })
+                                        })
+                                    }
                                 })
                         })
                     })
@@ -296,7 +305,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .filter({ shm_id: req.params.shm_id })
             .group(function (g) {
                 return g.pluck(
-                    "ship_id", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "ship_voy_no"
+                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id"//, "ship_voy_no"
                 )
             })
             .ungroup()
@@ -304,8 +313,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                 return {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
-                    ship_id: me('group')('ship_id'),
-                    ship_voy_no: me('group')('ship_voy_no'),
+                    ship: me('group')('ship'),
+                    //ship_voy_no: me('group')('ship_voy_no'),
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),
                     deli_port_id: me('group')('deli_port_id'),
@@ -321,7 +330,12 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .filter(r.row.hasFields('invoice_no'))
             .merge(function (m) {
                 return {
-                    invoice_id: m('id')
+                    invoice_id: m('id'),
+                    ship: m('ship').map(function (arr_ship) {
+                        return arr_ship.merge(function (row_ship) {
+                            return r.db('common').table('ship').get(row_ship('ship_id')).without('id','date_created','date_updated')
+                        })
+                    })
                 }
             }).without('id')
             .run(conn, function (err, cursor) {
@@ -355,16 +369,16 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                         .coerceTo('array')
                         .group(function (g) {
                             return g.pluck(
-                                "ship_id", "shipline_id", "ship_lot_no", "ship_voy_no"
+                                "ship", "shipline_id", "ship_lot_no"//, "ship_voy_no"
                             )
                         })
                         .ungroup()
                         .merge(function (me) {
                             return {
-                                ship_id: me('group')('ship_id'),
+                                ship: me('group')('ship'),
                                 shipline_id: me('group')('shipline_id'),
                                 ship_lot_no: me('group')('ship_lot_no'),
-                                ship_voy_no: me('group')('ship_voy_no')
+                                //ship_voy_no: me('group')('ship_voy_no')
                             }
                         }),
                     invoice_detail: r.db('g2g').table('shipment_detail')
@@ -415,10 +429,10 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                 return {
                     invoice_id: m('id'),
                     invoice_date: m('invoice_date').split('T')(0),
-                    ship_id: m('group_ship')('ship_id')(0),
+                    ship: m('group_ship')('ship')(0),
                     shipline_id: m('group_ship')('shipline_id')(0),
                     ship_lot_no: m('group_ship')('ship_lot_no')(0),
-                    ship_voy_no: m('group_ship')('ship_voy_no')(0),
+                    //ship_voy_no: m('group_ship')('ship_voy_no')(0),
                     weight_gross: m('invoice_detail').sum('weight_gross'),
                     weight_net: m('invoice_detail').sum('weight_net'),
                     weight_tare: m('invoice_detail').sum('weight_tare'),
@@ -426,7 +440,16 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                 }
             })
             .without("id", "group_ship")
-            .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .merge(function (m) {
+                return {
+                    ship: m('ship').map(function (arr_ship) {
+                        return arr_ship.merge(function (row_ship) {
+                            return r.db('common').table('ship').get(row_ship('ship_id')).without('id','date_created','date_updated')
+                        })
+                    })
+                }
+            })
             .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {

@@ -74,16 +74,31 @@ var schema = {
                 "type": "string",
                 "minLength": 36
             },
-            "ship_id": {
-                "type": "string",
-                "minLength": 36
+            // "ship_id": {
+            //     "type": "string",
+            //     "minLength": 36
+            // },
+            "ship": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "ship_id": {
+                            "type": "string"
+                        },
+                        "ship_voy_no": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["ship_id", "ship_voy_no"]
+                }
             },
             "ship_lot_no": {
                 "type": "string"
             },
-            "ship_voy_no": {
-                "type": "string"
-            },
+            // "ship_voy_no": {
+            //     "type": "string"
+            // },
             "shipline_id": {
                 "type": "string",
                 "minLength": 36
@@ -114,8 +129,8 @@ var schema = {
             "num_of_container",
             "package_id",
             "exporter_id",
-            "ship_id",
-            "shipline_id",
+            "ship",
+            // "shipline_id",
             "shm_det_quantity",
             "shm_id",
             "surveyor_id",

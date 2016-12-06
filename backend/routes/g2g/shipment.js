@@ -74,19 +74,25 @@ router.get('/id/:shm_id', function (req, res, next) {
                         .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
-                        .eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated"] }).zip()
                         // .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
-                        .merge(function (r) {
+
+                        .merge(function (me) {
                             return {
-                                shm_det_id: r('id'),
-                                eta_date: r('eta_date').split('T')(0),
-                                etd_date: r('etd_date').split('T')(0),
-                                packing_date: r('packing_date').split('T')(0),
-                                product_date: r('product_date').split('T')(0)
+                                shm_det_id: me('id'),
+                                eta_date: me('eta_date').split('T')(0),
+                                etd_date: me('etd_date').split('T')(0),
+                                packing_date: me('packing_date').split('T')(0),
+                                product_date: me('product_date').split('T')(0),
+                                ship: me('ship').map(function (arr_ship) {
+                                    return arr_ship.merge(function (row_ship) {
+                                        return r.db('common').table('ship').get(row_ship('ship_id')).without('id','date_created','date_updated')
+                                    })
+                                })
                             }
                         })
                         .without('id')
