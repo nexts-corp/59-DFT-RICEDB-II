@@ -1,21 +1,21 @@
 var express = require('express');
 var router = express.Router();
 
-var fs = require('fs');
-var path = require('path');
-var multiparty = require('multiparty');
-var stream = require('stream');
-
-
 var r = require('rethinkdb');
 var db = require('../../db.js');
+
+var mqtt = require('mqtt')
+var client  = mqtt.connect('mqtt://mqtt.codeunbug.com')
+
+client.on('connect', function () {
+    client.subscribe('eu-transaction-'+global.mqttId);
+});
 
 router.post(['/'], function (req, res, next) {
     var params = req.body;
     var statement;
 
     db.query(function (conn) {
-
         statement = r.db('eu').table('transaction_quota').insert(params);
         statement.run(conn, function (err, cursor) {
             if (!err) {

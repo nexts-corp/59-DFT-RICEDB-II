@@ -4,6 +4,19 @@ var bodyParser = require('body-parser');
 var app = express();
 
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + s4() +  s4() +
+    s4() + s4() + s4() + s4();
+}
+
+global.mqttId = guid();
+
+
 const cluster = require('cluster');
 //const numCPUs = require('os').cpus().length;
 const numCPUs = 1;
@@ -29,6 +42,7 @@ if (cluster.isMaster) {
   var common = require('./routes/common');
   var ext_f3 = require('./routes/external');
   var eu = require('./routes/eu');
+  var eu2 = require('./routes/eu2');
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: true }))
@@ -50,6 +64,7 @@ if (cluster.isMaster) {
   app.use('/common', common);
   app.use('/external', ext_f3);
   app.use('/eu', eu);
+  app.use('/eu2', eu2);
 
 
   public.use('/api', app);

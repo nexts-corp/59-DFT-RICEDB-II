@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
@@ -9,62 +10,72 @@
   <link rel="shortcut icon" sizes="32x32" href="/images/app-icon-32.png">
   <link rel="manifest" href="/manifest.json">
   <script src="/bower_components/axios/dist/axios.min.js"></script>
+
   <script>axios.defaults.baseURL = 'http://localhost:3000/api'</script>
   <link rel="import" href="/src/nylon-app.html" async>
 
+  <script src="./mqtt.min.js"></script>
+  <script>
+    var client = mqtt.connect('ws://mqtt.codeunbug.com/mqtt');
+  </script>
   <style>
-
     body {
       margin: 0;
     }
-
+    
     #toolbar {
-				background-color: #f7941e;
-				color: white;
-				font-family: 'rsuregular', sans-serif;
-       			-webkit-font-smoothing: antialiased;
-				--app-toolbar-font-size: 20px;
-				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        height:64px;
-			}
-
-
-      .loader {
-        border: 5px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 5px solid #3498db;
-        width: 30px;
-        height: 30px;
-        -webkit-animation: spin 0.5s linear infinite;
-        animation: spin 0.5s linear infinite;
-
-        margin: auto;
+      background-color: #f7941e;
+      color: white;
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      --app-toolbar-font-size: 20px;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      height: 64px;
+    }
+    
+    .loader {
+      border: 5px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 5px solid #3498db;
+      width: 30px;
+      height: 30px;
+      -webkit-animation: spin 0.5s linear infinite;
+      animation: spin 0.5s linear infinite;
+      margin: auto;
+    }
+    
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
       }
-
-      @-webkit-keyframes spin {
-        0% { -webkit-transform: rotate(0deg); }
-        100% { -webkit-transform: rotate(360deg); }
+      100% {
+        -webkit-transform: rotate(360deg);
       }
-
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    }
+    
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
-
-      .middle{
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        top:0;
-        left: 0;
-        z-index: 1;
-        display: -webkit-flex;
-        display: flex;
+      100% {
+        transform: rotate(360deg);
       }
-
+    }
+    
+    .middle {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      display: -webkit-flex;
+      display: flex;
+    }
   </style>
 
 </head>
+
 <body>
 
   <nylon-app unresolved>
@@ -72,7 +83,7 @@
     <div class="middle">
       <div class="loader"></div>
     </div>
-    
+
   </nylon-app>
 
   <script>
@@ -95,4 +106,5 @@
   </script>
 
 </body>
+
 </html>
