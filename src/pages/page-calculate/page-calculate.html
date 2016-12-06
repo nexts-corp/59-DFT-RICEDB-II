@@ -227,7 +227,7 @@
                 
                 }
               });
-              this.$$("panel-right").toggle();
+              this.$$("panel-right").close();
               this._getDatalist();
               })
               .catch((error)=>{
@@ -251,7 +251,8 @@
                 this.dataList = response.data;
                 if(this.dataList == ''){
                    this.pageSelect = 0;
-                   this.$$("panel-right").toggle();
+                   this.$$('panel-right')._setWidth('80%');
+                   this.$$("panel-right").open();
                 }
                 console.log('dataList',response.data);
               })
@@ -265,8 +266,6 @@
               });
           },
           _onDataSelect:function(e){
-            this.pageSelect = 1;
-            this.$$('panel-right')._setWidth('95%');
             this.getDatalistQuota(e.detail.key);
             this.getKey = e.detail.key;
           },
@@ -277,7 +276,9 @@
                this.fire('toast',{
                   status:'success',
                   callback:()=>{
-                    this.$$('panel-right').toggle();
+                    this.pageSelect = 1;
+                    this.$$('panel-right')._setWidth('95%');
+                    this.$$('panel-right').open();
                   }
                 });
                 this.dataListQuota = response.data;
@@ -310,7 +311,7 @@
                 
                 }
               });
-              this.$$("panel-right").toggle();
+              this.$$("panel-right").close();
               this._getDatalist();
               // this._getYear();
               // this._getDatalist(this.selectYear);
@@ -335,7 +336,7 @@
                   console.log("success");
                   this.textToast = 'ลบข้อมูลสำเร็จ';
                   console.log(response);
-                  this.$$('panel-right').toggle();
+                  this.$$('panel-right').close();
                   this._getDatalist();
                 })
                 .catch((error)=>{

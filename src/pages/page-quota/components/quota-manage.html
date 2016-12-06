@@ -44,7 +44,9 @@
                 @apply(--layout-horizontal);
                 @apply(--layout-justified);
             }
-         
+            .pointer{
+                cursor:pointer;
+            }
 		</style>
 		<div>
 			<section>
@@ -122,18 +124,12 @@
                                  </tbody>
 								</template>
                                  <tbody>
-								<tr>
-                                    <td colspan="2">	
-                                        <paper-button on-tap="_addPeriod">
+								<tr class="pointer" on-tap="_addPeriod">
+                                    <td colspan="5">	
+                                        <paper-button on-tap="">
 											<iron-icon icon="add"></iron-icon> เพิ่มงวด
                                         </paper-button>
                                     </td>
-                                  
-                                    <td></td>
-                                    <td></td>
-									<td>
-									
-									</td>
 								</tr>
                                  </tbody>
                                 <thead>
@@ -230,7 +226,16 @@
             inputProportionChange:function(e){
                 this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
             },
-            _mathData:function(){   
+            _mathData:function(){
+                if(this.Period == ''){
+                     this.fire('toast',
+                        {
+                            status:'connectError',
+                            text:'กรุณาเพิ่มงวด',
+                            callback:function(){
+                            }
+                        });
+                }   
                 this.$$('.mathData').validate();
                 var stat = Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
                     return  item.validate();
@@ -254,7 +259,13 @@
                     return stat == true
                 };
                 if(this.Period == ""){
-                    console.log('this.Period');
+                    this.fire('toast',
+                        {
+                            status:'connectError',
+                            text:'กรุณาเพิ่มงวด',
+                            callback:function(){
+                            }
+                        });
                 }
                 else if(stat.every(chkStat) == true){
                     var amount = this.$$('#sum').value; 
@@ -267,11 +278,27 @@
                             type_rice_id:this.typeRice,
                         }
                     }
-                    console.log(datas);
-                    if(this.status == 'post')
-                        this.fire('post-data',datas); 
-                    else if (this.status == 'update')
-                        this.fire('put-data',datas); 
+                    // console.log(datas);
+                    var num = 0;
+                    this.Period.map((item)=>{
+                        num += item.percent;
+                    });
+                    if(num == 100){
+                        if(this.status == 'post')
+                            this.fire('post-data',datas); 
+                        else if (this.status == 'update')
+                            this.fire('put-data',datas); 
+                    }
+                    else {
+                        this.fire('toast',
+                        {
+                            status:'connectError',
+                            text:'ผลรวมของสัดส่วนต้องได้ 100% เท่านั้น',
+                            callback:function(){
+                            }
+                        });
+                    }
+                  
                 }
             },
             testNum:function(ob,param){

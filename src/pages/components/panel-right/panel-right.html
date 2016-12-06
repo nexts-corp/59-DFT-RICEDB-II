@@ -80,11 +80,12 @@
             },
             toggle:function(){
                 if(this.stat == 'hidden'){
-                    this.stat = 'show'
+                    this.stat = 'scroll'
                 }
-                else if (this.stat == 'show'){
+                else if (this.stat == 'scroll'){
                     this.stat = 'hidden'
                 }
+                // console.log(this.stat);
                 document.documentElement.style.overflow = this.stat;
                 this.$$('app-drawer').toggle();
             },
@@ -93,9 +94,12 @@
                 this.customStyle['--app-drawer-width'] = this.setWidth;
                 this.updateStyles();
             },
+            open:function(){
+                 document.documentElement.style.overflow = 'hidden';
+                 this.$$('app-drawer').open();
+            },
             close:function(e){
-                this.stat = 'show';
-                 document.documentElement.style.overflow = this.stat;
+                document.documentElement.style.overflow = 'auto';
                 this.$$('app-drawer').close();
             },
             closeBgAppDrawer:function(e){

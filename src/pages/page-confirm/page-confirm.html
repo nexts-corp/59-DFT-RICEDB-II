@@ -184,10 +184,10 @@
                     
                     <iron-pages selected="{{pageSelected}}">
                         <section>
-                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect"></confirm-list>
+                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
                         </section>
                         <section>
-                             <confirm-list on-data-select="_onDataSelect"></confirm-list>
+                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="nonConfirm"></confirm-list>
                         </section>
                     </iron-pages>
                    
@@ -199,7 +199,7 @@
             
         <panel-right title="ยืนยันรับส่วนจัดสรร">
             <template is="dom-if" if="[[rendered]]">
-               <confirm-allocate-edit data="{{dataSelect}}"></confirm-allocate-edit>
+               <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}"></confirm-allocate-edit>
             </template>
 		</panel-right>
     </template>
@@ -281,9 +281,10 @@
             },
             _onDataSelect:function(e){
                 this.pageSelected = 0;
+                this.statusConfirm = 'cofirm';
                 this.$$('panel-right').toggle();
-                this.dataSelect = e.detail;
-                console.log(this.dataSelect);
+                this.dataSelect = e.detail.data;
+                this.statusSelect = e.detail.status;
             }
         });
     </script>
