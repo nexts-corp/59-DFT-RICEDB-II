@@ -4,6 +4,7 @@
         <style is="custom-style" include="gl-table">
         
         </style>
+        <div>{{status}}</div>
        <table class="gl-table-default">
            <thead>
             <tr>
@@ -37,8 +38,17 @@
     <script>
         Polymer({
             is: 'confirm-list',
+            properties:{
+                status: {
+                    type: String
+                }
+            },
             _selectData:function(e){
-                this.fire('data-select',e.currentTarget.data)
+                this.fire('data-select',
+                {
+                    data:e.currentTarget.data,
+                    status: this.status
+                })
             }
 
         });

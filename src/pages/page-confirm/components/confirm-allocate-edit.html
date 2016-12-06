@@ -57,7 +57,8 @@
   <template>
     <!--<div class="textHeader">ยืนยันรับส่วนจัดสรร</div>-->
     <gl-form-panel set-padding = "0px 0px 20px 0px">
-      <div class="title">ข้อมูลบริษัท</div>
+      <div class="title">ข้อมูลบริษัท {{status}}</div>
+     
       <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
          <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -141,7 +142,12 @@
   <script>
     Polymer({
       is: "confirm-allocate-edit",
-
+      properties:{
+        status:{
+          type: String,
+          value: '??'
+        }
+      }
     });
   </script>
 </dom-module>
