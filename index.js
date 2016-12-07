@@ -37,12 +37,12 @@ if (cluster.isMaster) {
 } else {
 
 　
-  var test = require('./routes/test');
-  var g2g = require('./routes/g2g');
-  var common = require('./routes/common');
-  var ext_f3 = require('./routes/external');
-  var eu = require('./routes/eu');
-  var eu2 = require('./routes/eu2');
+  var test = require('./api/test');
+  var g2g = require('./api/g2g');
+  var common = require('./api/common');
+  var ext_f3 = require('./api/external');
+  var eu = require('./api/eu');
+  var eu2 = require('./api/eu2');
 
   // parse application/x-www-form-urlencoded
   app.use(bodyParser.urlencoded({ extended: true }))
@@ -66,10 +66,19 @@ if (cluster.isMaster) {
   app.use('/eu', eu);
   app.use('/eu2', eu2);
 
+  app.use(function (req, res, next) {
+    res.status(404).send('Sorry cant find API that!')
+  })
+
 
   public.use('/api', app);
-  public.listen(3000);
+  public.use(express.static('public'));
+  
+  public.use(function (req, res, next) {
+    res.sendfile("./public/index.html");
+  });
 
+  public.listen(3000);
 
 
 }
