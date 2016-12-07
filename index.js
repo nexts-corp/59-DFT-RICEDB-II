@@ -1,8 +1,10 @@
 var express = require('express');
-var public = express();
-var bodyParser = require('body-parser');
 var app = express();
+var public = express();
+   
+var io = require('socket.io')(server);
 
+var bodyParser = require('body-parser');
 
 function guid() {
   function s4() {
@@ -35,8 +37,9 @@ if (cluster.isMaster) {
     console.log(`[worker] ${worker.process.pid} start (^.^)`);
   });
 } else {
+  
+  server.listen(3000);
 
-　
   var test = require('./api/test');
   var g2g = require('./api/g2g');
   var common = require('./api/common');
@@ -78,8 +81,11 @@ if (cluster.isMaster) {
     res.sendfile("./public/index.html");
   });
 
-  public.listen(3000);
-
-
+  // io.on('connection', function (socket) {
+  //   socket.emit('news', { hello: 'world' });
+  //   socket.on('my other event', function (data) {
+  //     console.log(data);
+  //   });
+  // });
 }
 

@@ -11,22 +11,7 @@
   <link rel="manifest" href="/manifest.json">
 
   <script src="/bower_components/axios/dist/axios.min.js"></script>
-  <script>axios.defaults.baseURL = 'http://localhost:3000/api'</script>
-
-  <script src="./mqtt.min.js"></script>
-  
-
-  <script>
-    var client = mqtt.connect('ws://mqtt.codeunbug.com/mqtt');
-    client.subscribe("mqtt/demo")
- 
-    client.on("message", function (topic, payload) {
-      alert([topic, payload].join(": "))
-      client.end()
-    })
-    
-    client.publish("mqtt/demo", "hello world!")
-  </script>
+  <script>axios.defaults.baseURL = 'api'</script>
 
   <link rel="import" href="/src/nylon-app.html" async>
   <style>
