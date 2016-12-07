@@ -4,21 +4,19 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-var mqtt = require('mqtt')
-var client  = mqtt.connect('mqtt://mqtt.codeunbug.com')
-
+var mqtt = require('mqtt');
+var client  = mqtt.connect('mqtt://mqtt.codeunbug.com');
 
 client.on('connect', function () {
-  client.subscribe(`eu-quotaPut-`+global.mqttId)
+  client.subscribe('testxx');
 })
 
 client.on('message', function (topic, message) {
-  // message is Buffer 
-  if(topic==`eu-quotaPut-`+global.mqttId){
-      console.log(message.toString())
-      console.log('ok');
-  }
-  client.end()
+  
+  console.log(topic,message.toString());
+  client.publish('testzz','123456');
+  //setInterval(()=>{ client.publish('testzz','testzz'); }, 1000);
+  //client.end();
   
 })
 
