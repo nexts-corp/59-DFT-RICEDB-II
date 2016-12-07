@@ -7,7 +7,7 @@ function ConectDB(){
             if (err){
                 console.log('... Connect db error');
             }else{
-                console.log('Connect db success ...');
+                //console.log('Connect db success ...');
                 callback(conn);
             }
             

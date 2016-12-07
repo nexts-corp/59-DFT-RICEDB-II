@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var public = express();
    
-var io = require('socket.io')(server);
 
 var bodyParser = require('body-parser');
 
@@ -38,7 +37,6 @@ if (cluster.isMaster) {
   });
 } else {
   
-  server.listen(3000);
 
   var test = require('./api/test');
   var g2g = require('./api/g2g');
@@ -81,11 +79,6 @@ if (cluster.isMaster) {
     res.sendfile("./public/index.html");
   });
 
-  // io.on('connection', function (socket) {
-  //   socket.emit('news', { hello: 'world' });
-  //   socket.on('my other event', function (data) {
-  //     console.log(data);
-  //   });
-  // });
+  public.listen(3000);
 }
 
