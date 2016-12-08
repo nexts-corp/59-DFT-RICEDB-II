@@ -1,3 +1,4 @@
+<link rel="import" href="../controller/g2gShipmentController.html">
 <dom-module id="list-of-bill-sm">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     *{
@@ -15,8 +16,22 @@
        width: 1em;
        margin-right: 0.5em;
      }
+     table {
+       border: 0.1em solid #F1F1F1;
+       margin-top: 1em;
+       margin-bottom: 1em;
+     }
+     div.title{
+       margin-top: 1em;
+       text-align: center;
+       font-size: var(--font-size-h4);
+     }
   </style>
   <template>
+    <div class="title">
+      Bill of Landing Number
+    </div>
+
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
@@ -24,17 +39,7 @@
               <th>Booking No</th>
             </tr>
           </thead>
-          <tfoot class="table-foot">
-            <tr>
-              <td></td>
-              <td>
-                <div class="horizontal end-justified layout">
-                  <paper-button raised class="btnInTable gl-btn-primary" on-tap="addBlDetail">
-                    <iron-icon icon="add"></iron-icon>เพิ่ม B/L</paper-button>
-                </div>
-              </td>
-            </tr>
-          </tfoot>
+
           <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]">
               <tr>
@@ -45,10 +50,21 @@
 
          </tbody>
       </table>
+      <div class="horizontal end-justified layout" style="margin-bottom:1em;">
+        <paper-button raised class="gl-btn-danger" on-tap="cancelInsertShipment">
+          <!-- <iron-icon icon="add"></iron-icon> -->
+          ปิดการแสดง B/L</paper-button>
+        <paper-button raised class=" gl-btn-primary" on-tap="addBlDetail">
+          <!-- <iron-icon icon="add"></iron-icon> -->
+          เพิ่ม B/L</paper-button>
+      </div>
   </template>
   <script>
     Polymer({
       is: "list-of-bill-sm",
+      behaviors: [
+          g2gShipmentController
+      ],
       // observers:[
       //   'check(data)'
       // ],

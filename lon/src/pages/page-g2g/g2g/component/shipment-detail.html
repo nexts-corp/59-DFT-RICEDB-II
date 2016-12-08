@@ -67,7 +67,7 @@
       </div>
       <iron-pages selected="[[pageBl]]" attr-for-selected="name">
         <div name="listOfBl">
-          <list-of-bill-sm data="[[dataForSelect.blNos]]"></list-of-bill-sm>
+          <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
         </div>
         <div name="BlDetail">
           <bill-detail-sm data-for-select="[[dataForSelect]]"></bill-detail-sm>
@@ -75,42 +75,45 @@
         <div name="addExporter">
           <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" ></detail-exporter-ship>
         </div>
+        <div name="listOfExporter">
+          <table class="gl-table-default">
+             <thead class="table-head">
+                 <tr>
+                   <th></th>
+                   <th>ลำดับที่</th>
+                   <th>ผู้ส่งออก</th>
+                   <th>จำนวนข้าว</th>
+                 </tr>
+             </thead>
+         </table>
+         <template is="dom-repeat" items="[[data.shipment_detail]]">
+           <paper-item>
+             <div>
+               <paper-icon-button icon="expand-more" on-tap="_toggleSub" aria-controls$="collapse[[item.shm_det_id]]"></paper-icon-button>
+             </div>
+             <div>
+               [[_ObcountIndex(index)]]
+             </div>
+             <div>
+               [[item.seller_name_en]]
+             </div>
+             <div>
+               [[item.shm_det_quantity]]
+             </div>
+           </paper-item>
+           <iron-collapse id="collapse[[item.shm_det_id]]">
+             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" ></detail-exporter-ship>
+           </iron-collapse>
+         </template>
+
+         <div class="horizontal end-justified layout">
+             <paper-button class="gl-btn-danger" raised on-tap="backPageShipment">ย้อนกลับ</paper-button>
+             <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
+         </div>
+        </div>
       </iron-pages>
 
-      <table class="gl-table-default">
-         <thead class="table-head">
-             <tr>
-               <th></th>
-               <th>ลำดับที่</th>
-               <th>ผู้ส่งออก</th>
-               <th>จำนวนข้าว</th>
-             </tr>
-         </thead>
-     </table>
-     <template is="dom-repeat" items="[[data.shipment_detail]]">
-       <paper-item>
-         <div>
-           <paper-icon-button icon="expand-more" on-tap="_toggleSub" aria-controls$="collapse[[item.shm_det_id]]"></paper-icon-button>
-         </div>
-         <div>
-           [[_ObcountIndex(index)]]
-         </div>
-         <div>
-           [[item.seller_name_en]]
-         </div>
-         <div>
-           [[item.shm_det_quantity]]
-         </div>
-       </paper-item>
-       <iron-collapse id="collapse[[item.shm_det_id]]">
-         <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" ></detail-exporter-ship>
-       </iron-collapse>
-     </template>
 
-     <div class="horizontal end-justified layout">
-         <paper-button class="gl-btn-danger" raised on-tap="backPageShipment">ย้อนกลับ</paper-button>
-         <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
-     </div>
     </template>
 
   </template>
@@ -126,7 +129,8 @@
       ],
       listeners:{
         'send-Bl-no':'_lisNerBlNos',
-        'add-bl-no':'_lisNerAddBlNo'
+        'add-bl-no':'_lisNerAddBlNo',
+        'cancel-insert-shipment':'_lisNerCanInSm'
       },
       properties: {
         confirmLetterObject: {
@@ -145,7 +149,7 @@
         },
         pageBl:{
           type:String,
-          value:''
+          value:'listOfExporter'
         },
         checkRenderPageShipment:{
           type: Object,
@@ -166,6 +170,9 @@
       },
       _lisNerAddBlNo:function () {
         this.pageBl= 'BlDetail';
+      },
+      _lisNerCanInSm:function () {
+        this.pageBl= 'listOfExporter';
       },
       editBlShm:function () {
         this.pageBl= 'listOfBl';

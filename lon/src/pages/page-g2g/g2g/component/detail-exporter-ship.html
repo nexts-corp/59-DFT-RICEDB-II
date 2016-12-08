@@ -30,7 +30,7 @@
         <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" always-float-label item-label-path="seller_name_en"
          item-value-path="exporter_id"  items="{{dataForSelect.seller}}" value="{{data.exporter_id}}" ></gl-combo-box>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">//[[data.exporter_id]]
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
         <gl-form-input disabled label="Tel." placeholder="ใส่รายละเอียด" value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
       </gl-grid-col>
 
@@ -185,6 +185,8 @@
   </gl-form-panel-body>
   <gl-form-panel-footer set-padding="10px 20px 0px 20px">
     <!-- <template is="dom-if" if="[[checkBtnView(checkBtn)]]"> -->
+    <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
+      ยกเลิก</paper-button>
       <paper-button  class="gl-btn-success" raised on-tap="saveShipment" >
         <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
       <!-- </template> -->
@@ -193,9 +195,9 @@
   <!-- <template is="dom-if" if="[[insertShipment]]"> -->
     <gl-form-panel-footer>
       <paper-button class="gl-btn-danger" raised on-tap="cancalShow">
-        </iron-icon>ยกเลิก</paper-button>
+        ยกเลิก</paper-button>
       <paper-button class="gl-btn-success" raised on-tap="addExporter">
-      </iron-icon>เพิ่ม</paper-button>
+      เพิ่ม</paper-button>
     </gl-form-panel-footer>
   <!-- </template> -->
   </template>
@@ -313,6 +315,7 @@
           // });
         // })
       },
+      
       _cleanShipmentData:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
