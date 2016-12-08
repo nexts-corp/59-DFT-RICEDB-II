@@ -57,18 +57,19 @@
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 								<gl-form-input label="ปีโควต้า" class="saveData" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
-									id="" name="" disabled$="{{checkStatus(status)}}"> 
+									id="" name="" autocomplete disabled$="{{checkStatus(status)}}"> 
                                 </gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-dropdown-menu label="ประเภทข้าว" class="saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
+                                <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
+                                item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+								<!--<gl-form-dropdown-menu label="ประเภทข้าว" class="saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
 										</template>
-										<!--<paper-item rice-type-id="513aa18a-e0d9-4408-9ec2-62fa271958e5">ข้าวหัก</paper-item>-->
 									</paper-listbox>
-								</gl-form-dropdown-menu>
+								</gl-form-dropdown-menu>-->
 
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -95,25 +96,27 @@
 									<tr>
 										<td>งวดที่ : {{getIndex(index)}}</td>
                                         <td>
-                                            	<gl-form-dropdown-menu class="saveData" required no-label-float error-message="กรุณาเลือกเดือน">
-                                                    <paper-listbox class="dropdown-content" attr-for-selected="mounth" selected="{{item.month}}">
-                                                        <template is="dom-repeat" items="{{month}}">
-                                                            <paper-item class="font" mounth="{{item.id}}">{{item.name}}</paper-item>
-                                                        </template>
-                                                    </paper-listbox>
-                                                </gl-form-dropdown-menu>
+                                         <gl-combo-box class="saveData" style="margin-top: -21px;" items="{{getMonth()}}" value="{{item.month}}"
+                                         item-label-path="name" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+                                            <!--<gl-form-dropdown-menu class="saveData" required no-label-float error-message="กรุณาเลือกเดือน">
+                                                <paper-listbox class="dropdown-content" attr-for-selected="mounth" selected="{{item.month}}">
+                                                    <template is="dom-repeat" items="{{getMonth()}}">
+                                                        <paper-item class="font" mounth="{{item.id}}">{{item.name}}</paper-item>
+                                                    </template>
+                                                </paper-listbox>
+                                            </gl-form-dropdown-menu>-->
                                         </td>
 										<!--{{item.proportion}}-->
 										<td>
 											[[testNum(item.*,'percent')]]
                                             [[disabledMath(item.percent,item.quantity)]]
-											<gl-form-input label="" class="mathData number saveData" auto-validate error-message="กรุณาใสจำนวน" value="{{item.percent}}" required placeholder="กรุณาใส่จำนวน" no-label-float>
+											<gl-form-input label="" class="mathData number saveData" error-message="กรุณาใสจำนวน" value="{{item.percent}}" required no-label-float>
                                                 <div suffix>%</div>
                                             </gl-form-input>
 										</td>
 										<td>
 											<gl-form-input class="saveData" value="[[item.quantity]]" format-number="on"
-												index="{{index}}" required id="{{index}}" no-label-float></gl-form-input>
+												index="{{index}}" required id="{{index}}" error-message="กรุณาใสจำนวน" no-label-float></gl-form-input>
 										</td>
 										<td>
 											<paper-button on-tap="_confirmDelPeriod" item="{{item}}">
@@ -126,7 +129,7 @@
                                  <tbody>
 								<tr class="pointer" on-tap="_addPeriod">
                                     <td colspan="5">	
-                                        <paper-button on-tap="">
+                                        <paper-button>
 											<iron-icon icon="add"></iron-icon> เพิ่มงวด
                                         </paper-button>
                                     </td>
@@ -278,7 +281,7 @@
                             type_rice_id:this.typeRice,
                         }
                     }
-                    // console.log(datas);
+                    console.log(datas);
                     var num = 0;
                     this.Period.map((item)=>{
                         num += item.percent;
@@ -327,7 +330,7 @@
                 axios.get('./eu/type_rice/')
                 .then((response)=>{
                     //console.log("success!!");
-                    //console.log(response.data);
+                    console.log(response.data);
                     this.getTypeRice = response.data;
                 })
                 .catch((error)=>{
