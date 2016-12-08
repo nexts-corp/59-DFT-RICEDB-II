@@ -97,6 +97,7 @@ Polymer({
   ],
   listeners:{
     'get-list-shipment-page':'_getListShipmentPage',
+    'get-list-shipment-detail':'_getListShipmentDetail'
   },
   properties: {
     pageSelected: {
@@ -161,6 +162,13 @@ Polymer({
           });
          });
     },1000);
+  },
+  _getListShipmentDetail:function (e) {
+    this._getShipment(e.detail.sm_id,(data)=>{
+      //  console.log(data;);
+       this.dataSelected = data;
+       this.notifyPath('dataSelected');
+   });
   },
   _getShipment:function (shmId,callback) {
     this.read('./g2g/shipment/id/'+shmId,(data)=>{

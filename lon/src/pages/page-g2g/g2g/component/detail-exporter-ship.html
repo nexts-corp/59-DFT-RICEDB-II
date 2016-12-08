@@ -27,7 +27,7 @@
   <gl-form-panel-body>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" always-float-label item-label-path="seller_name_en"
+        <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" always-float-label item-label-path="seller_name_en" disabled="[[!isInputDisabled]]"
          item-value-path="exporter_id"  items="{{dataForSelect.seller}}" value="{{data.exporter_id}}" ></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
@@ -35,7 +35,7 @@
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no"
+        <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no" disabled="[[!isInputDisabled]]"
            item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}"></gl-combo-box>
         <!-- <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด"   value="{{data.bl_no}}"></gl-form-input> -->
       </gl-grid-col>
@@ -130,11 +130,11 @@
         <gl-form-input disabled label="Confirmation Letter" value="[[dataForSelect.cl_no]]" always-float-label></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en"
+        <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="type_rice_id" items="[[dataForSelect.cl_type_rice]]" value="{{data.type_rice_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name"
+        <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="package_id" items="[[_getRiceTypeForPackage(data.type_rice_id,dataForSelect)]]" value="{{data.package_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
       [[_getPackageForPrice(data.package_id,dataForSelect)]]
@@ -146,7 +146,7 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'shm_det_quantity')]]
-        <gl-form-input class="required" required label="จำนวน/ตัน" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label></gl-form-input>
+        <gl-form-input class="required" required label="จำนวน/ตัน" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -172,25 +172,27 @@
       <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
         [[changeString2Num(data.*,'origin_page')]]
-        <gl-form-input class="required" required  label="ORIGINALS"  class="w padL" value="{{data.origin_page}}" always-float-label></gl-form-input>
+        <gl-form-input class="required" required  label="ORIGINALS"  class="w padL" value="{{data.origin_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <div class="top">/</div>
       <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
         [[changeString2Num(data.*,'nn_page')]]
-        <gl-form-input id="testtttt" class="required" required  label="N/N"  class="w" value="{{data.nn_page}}" always-float-label></gl-form-input>
+        <gl-form-input id="testtttt" class="required" required  label="N/N"  class="w" value="{{data.nn_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
     <!-- <paper-button  class="gl-btn-success" raised on-tap="checkData" index="[[index]]">
       <iron-icon class="gl-icon-size" icon="save"></iron-icon>checkData</paper-button> -->
   </gl-form-panel-body>
   <gl-form-panel-footer set-padding="10px 20px 0px 20px">
-    //[[isViewSeleted]]
-  <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
-    <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
-      ยกเลิก</paper-button>
-    <paper-button  class="gl-btn-success" raised on-tap="editExporter" >
-        <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+  <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
+    <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
+      <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
+        ยกเลิก</paper-button>
+      <paper-button  class="gl-btn-success" raised on-tap="editExporter" >
+          <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
+    </template>
   </template>
+
   <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
     <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
           ยกเลิก</paper-button>
@@ -336,6 +338,7 @@
               this.update('./g2g/shipment/detail/update', detail.data,() => {
                 //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
                 this.fire('refresh-contract',{detail:'refresh-contract'});
+                this.editInput();
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                   callback:function(){
                        console.log(1111);

@@ -36,9 +36,9 @@
   </style>
   <template>
     <div class="horizontal end-justified layout">
-      <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment" ></paper-icon-button>
+      <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment"  hidden="[[data.shm_status]]"></paper-icon-button>
       <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
-      <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment"></paper-icon-button>
+      <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment" hidden="[[data.shm_status]]"></paper-icon-button>
       <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
      </div>
 [[insertData]]//[[isInputDisabled]]//[[isViewSeleted]]//
@@ -58,7 +58,7 @@
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
       <template is="dom-if" if="[[!_isViewing(insertData)]]">
          <div class="horizontal end-justified layout">
-           <paper-button class="gl-btn-danger" on-tap="backPageShipment" raised>ย้อนกลับ</paper-button>
+           <paper-button class="gl-btn-danger" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
            <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>เพิ่ม</paper-button>
          </div>
        </template>
@@ -74,8 +74,8 @@
 
     <template is="dom-if" if="[[_isViewing(insertData)]]">
       <div class="layout horizontal end-justified">
-         <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl">จัดการ B/l No</paper-button>
-         <paper-button  class="gl-btn-primary" raised on-tap="addExporter" name="addShmdt">เพิ่มผู้ส่งออก</paper-button>
+         <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl" hidden="[[data.shm_status]]">จัดการ B/l No</paper-button>
+         <paper-button  class="gl-btn-primary" raised on-tap="addExporter" name="addShmdt" hidden="[[data.shm_status]]">เพิ่มผู้ส่งออก</paper-button>
       </div>
       <iron-pages selected="[[pageBl]]" attr-for-selected="name">
         <div name="listOfBl">
@@ -114,12 +114,12 @@
              </div>
            </paper-item>
            <iron-collapse id="collapse[[item.shm_det_id]]">
-             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]"></detail-exporter-ship>
+             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]"></detail-exporter-ship>
            </iron-collapse>
          </template>
          <div class="horizontal end-justified layout">
-             <paper-button class="gl-btn-danger" raised on-tap="backPageShipmentList">ย้อนกลับ</paper-button>
-               <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
+             <paper-button class="gl-btn-danger" raised on-tap="backPageShipmentList" >ย้อนกลับ</paper-button>
+               <paper-button class="gl-btn-info" raised on-tap="approveShipment" hidden="[[data.shm_status]]">ยืนยันผู้ส่งออก</paper-button>
          </div>
         </div>
 
@@ -138,6 +138,7 @@
       ],
       observers:[
         '_getConfirm(confirmLetter)',
+        'check(data)'
       ],
       listeners:{
         'send-Bl-no':'_lisNerBlNos',
@@ -168,6 +169,9 @@
           type:Object,
         },
 
+      },
+      check:function (data) {
+        console.log(data);
       },
       _lisNerBlNos:function (e) {
         this.push('dataForSelect.blNos', e.detail.detail);
@@ -215,7 +219,7 @@
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
              callback:()=>{
                 this.fire('get-list-shipment',{contractId:data.contract_id});
-                this.backPageShipment();
+                this.backPageShipmentList();
               }
             });
           });
@@ -265,18 +269,20 @@
       _approveShipment:function (result,detail) {
         if (result == true) {
           console.log(detail.data);
-             this.update('./g2g/shipment/update', detail.data,() => {
-
-            //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
-            //    this.fire('refresh-contract',{detail:'refresh-contract'});
-               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-                 callback:function(){
-                      console.log(1111);
-                     //  detail.el.editInput();
-                     //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
-                   }
-               });
-             });
+            //  this.update('./g2g/shipment/update', detail.data,() => {
+            //
+            // //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
+            this.fire('refresh-contract',{detail:'refresh-contract'});
+            this.fire('get-list-shipment',{contractId:detail.data.contract_id});
+            this.fire('get-list-shipment-detail',{sm_id:detail.data.id});
+            //    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+            //      callback:function(){
+            //           console.log(1111);
+            //          //  detail.el.editInput();
+            //          //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+            //        }
+            //    });
+            //  });
          }
       },
       _toggleSub:function(e){
