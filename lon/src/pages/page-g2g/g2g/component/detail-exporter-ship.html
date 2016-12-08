@@ -19,7 +19,7 @@
         <template is="dom-if" if="[[!_isViewing(shmStatus)]]">
           <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit"></paper-icon-button>
           <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
-          <paper-icon-button icon="delete" id="delExporter" raised on-tap="shipmentDelete" title="Delete"></paper-icon-button>
+          <paper-icon-button icon="delete" id="delExporter" raised on-tap="deleteShipmentDetail" title="Delete"></paper-icon-button>
           <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
         </template>
       </gl-form-panel-head>
@@ -318,11 +318,14 @@
         // console.log(this.data);
         this._cleanShipmentData(this.data,(data)=>{
           data.shm_id=this.dataForSelect.shm_id;
-          console.log(data);
-          console.log(this.data);
-          console.log(this.dataForSelect);
           this.insert('./g2g/shipment/detail/insert',data, () => {
-            console.log('เพิ่มได้');
+            this.fire('refresh-contract',{detail:'refresh-contract'});
+            // this.fire('get-list-shipment',{contractId:this.data.contract_id});
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:()=>{
+                  this.cancelInsertShipment();
+                }
+            });
           });
         })
       },
@@ -347,13 +350,36 @@
                 this.editInput();
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                   callback:function(){
-                       console.log(1111);
-                      //  detail.el.editInput();
                       //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
                     }
                 });
               });
           }
+     },
+     deleteShipmentDetail:function () {
+       this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+           status:'dialog',
+           text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+           confirmed:this._deleteExporter.bind(this), //function ที่ใช้รับค่า ปุ่ม
+           el: this, // compontents
+           data:this.data// ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+       })
+     },
+     _deleteExporter:function (result,detail) {
+        if (result == true) {
+          console.log(detail.data.shm_det_id);
+           this.delete('./g2g/shipment/detail/delete/id/',detail.data.shm_det_id, () => {
+             this.fire('refresh-contract',{detail:'refresh-contract'});
+             this.fire('get-list-shipment',{contractId:detail.data.contract_id});
+            //  this.fire('get-list-shipment-detail',{sm_id:detail.data.id});
+             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+               callback:()=>{
+                   //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                 }
+             });
+           });
+
+        }
      },
      cancelInsertShipment:function () {
         this.fire('cancel-insert-shipment',{detail:'cancel-insert-shipment'})

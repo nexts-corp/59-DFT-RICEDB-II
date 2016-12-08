@@ -60,7 +60,7 @@
           </tr>
         </tfoot> -->
         <tbody class="table-body">
-          <template is="dom-if" if="[[!_isHave(data.shipment)]]">
+          <template is="dom-if" if="[[!_isHaveMany(data.shipment,1)]]">
             <template is="dom-repeat" items="[[data.shipment]]">
               <tr on-tap="getShipmentDetail" data="[[item]]">
                 <td>[[_ObcountIndex(index)]]</td>
@@ -70,7 +70,7 @@
               </tr>
             </template>
           </template>
-          <template is="dom-if" if="[[_isHave(data.shipment)]]">
+          <template is="dom-if" if="[[_isHaveMany(data.shipment,1)]]">
               <tr >
                 <td colspan="4">  ไม่มีข้อมูล</td>
               </tr>
@@ -165,7 +165,7 @@ Polymer({
   },
   _getListShipmentDetail:function (e) {
     this._getShipment(e.detail.sm_id,(data)=>{
-      //  console.log(data;);
+       console.log(data);
        this.dataSelected = data;
        this.notifyPath('dataSelected');
    });
