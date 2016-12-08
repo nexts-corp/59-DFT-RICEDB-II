@@ -81,10 +81,10 @@
   </div>
   </div>
   <div name="cretaeShipment">
-    <shipment-detail insert-data="[[insertData]]" confirm-letter="[[confirmTrue]]"></shipment-detail>
+    <shipment-detail insert-data="[[insertData]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]" confirm-letter="[[confirmTrue]]"></shipment-detail>
   </div>
   <div name="shipmentDetail">
-    <shipment-detail data-for-select="[[dataForSelect]]" data="[[dataSelected]]" insert-data="[[!insertData]]" confirm-letter="[[confirmTrue]]"></shipment-detail>
+    <shipment-detail data-for-select="[[dataForSelect]]" is-view-seleted="[[!isViewSeleted]]" data="[[dataSelected]]" insert-data="[[!insertData]]" confirm-letter="[[confirmTrue]]" is-input-disabled="[[!isInputDisabled]]"></shipment-detail>
   </div>
 </iron-pages>
 </template>
@@ -113,7 +113,10 @@ Polymer({
     dataForSelect:{
       type:Object,
     },
-
+    shipmentPage:{
+      type:Boolean,
+      value:true
+    }
   },
   observers:[
     '_getCml(data.contract_id)',

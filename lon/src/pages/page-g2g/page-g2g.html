@@ -51,7 +51,7 @@
               </template>
             </div>
           </div>
-          <nylon-panel-right title="หัวข้อ" id="test">
+          <nylon-panel-right title="{{titlePanelRight}}" id="test">
 
             <div class="rightdata" align="left" >
         <iron-pages selected="{{g2gPageSeleted}}" attr-for-selected="name">
@@ -150,6 +150,10 @@
                   listOfShipment:false
                 }
               },
+              titlePanelRight:{
+                type:String,
+                value:'การซื้อขายข้าวระหว่างประเทศ'
+              }
             },
             ready: function() {
               Polymer.RenderStatus.afterNextRender(this, () => {
@@ -230,6 +234,7 @@
             //addContract
             addContract:function () {
               this.g2gPageSeleted = 'addContract';
+              this.titlePanelRight = 'เพิ่มสัญญาการซื้อขาย'
               this.fire('toast',{status:'load'});
               if (this.checkRenderPage.contractDetail != true) {
                 this.async(()=>{
@@ -252,6 +257,7 @@
             },
             _getContractDetail:function (e) {
               this.g2gPageSeleted = 'contractDetail';
+              this.titlePanelRight = 'รายละเอียดสัญญาการซื้อขาย'
               if(typeof e.detail.contractId == "undefined") {
                 this.fire('toast',{status:'load'});
                 if (this.checkRenderPage.contractDetail != true) {
@@ -282,6 +288,7 @@
             _getListConfirm:function (e) {
               // listOfConfirm
               console.log('1212=>',e.detail);
+              this.titlePanelRight = 'การยืนยันทำสัญญา'
               this.g2gPageSeleted = 'listOfConfirm';
               if(typeof e.detail.contractId == "undefined") {
                 this.fire('toast',{status:'load'});
@@ -317,6 +324,7 @@
             _getListShipment:function (e) {
               // console.log(e.detail.detail);
               this.g2gPageSeleted = 'listOfShipment';
+              this.titlePanelRight = 'การส่งมอบสิ้นค้า';
               if(typeof e.detail.contractId == "undefined") {
                 this.fire('toast',{status:'load'});
                 if (this.checkRenderPage.listOfShipment != true) {

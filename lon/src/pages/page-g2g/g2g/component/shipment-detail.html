@@ -41,25 +41,37 @@
       <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment"></paper-icon-button>
       <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
      </div>
-
+[[insertData]]//[[isInputDisabled]]//[[isViewSeleted]]//
      <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input class="required insetShipment" label="Shipment Id" always-float-label placeholder="ลำดับ" value="{{data.shm_no}}"></gl-form-input>
+        <gl-form-input class="required insetShipment" label="Shipment Id" disabled="[[!isInputDisabled]]" always-float-label placeholder="ลำดับ" value="{{data.shm_no}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,8]]">
-        <gl-form-input class="required insetShipment" label="Shipment Name" always-float-label placeholder="ชื่องวดการส่งมอบ" value="{{data.shm_name}}"></gl-form-input>
+        <gl-form-input class="required insetShipment" label="Shipment Name" disabled="[[!isInputDisabled]]" always-float-label placeholder="ชื่องวดการส่งมอบ" value="{{data.shm_name}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,8]]">
-       <gl-combo-box class="required insetShipment" required id="confirmLetterTrue" always-float-label label="กรุณาเลือกชื่อสัญญา" placeholder="ชื่อสัญญา" value="{{data.cl_id}}" >
+       <gl-combo-box class="required insetShipment" required id="confirmLetterTrue" disabled="[[!isInputDisabled]]" always-float-label label="กรุณาเลือกชื่อสัญญา" placeholder="ชื่อสัญญา" value="{{data.cl_id}}" >
      </gl-grid-col>
      </gl-grid-row>
-     <div class="horizontal end-justified layout">[[insertData]]
-       <paper-button class="gl-btn-danger" on-tap="backPageShipment" raised hidden="[[_isViewing(insertData)]]">ยกเลิก--55</paper-button>
-       <paper-button  class="gl-btn-success" raised on-tap="editShimpent" hidden="[[!_isViewing(insertData)]]">บันทึก</paper-button>
-       <paper-button  class="gl-btn-primary" raised on-tap="addShimpent" hidden="[[_isViewing(insertData)]]">เพิ่ม</paper-button>
-     </div>
+    <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+      <template is="dom-if" if="[[!_isViewing(insertData)]]">
+         <div class="horizontal end-justified layout">
+           <paper-button class="gl-btn-danger" on-tap="backPageShipment" raised>ย้อนกลับ</paper-button>
+           <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>+เพิ่ม</paper-button>
+         </div>
+       </template>
+     </template>
+     <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
+       <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
+          <div class="horizontal end-justified layout">
+              <paper-button class="gl-btn-danger" on-tap="backPageShipment" raised>ย้อนกลับ</paper-button>
+             <paper-button  class="gl-btn-success" on-tap="editShimpent" raised>บันทึก</paper-button>
+          </div>  
+       </template>
+     </template>
+
     <template is="dom-if" if="[[_isViewing(insertData)]]">
       <div class="layout horizontal end-justified">
          <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl">จัดการ B/l No</paper-button>
@@ -154,7 +166,8 @@
         },
         dataSelected:{
           type:Object,
-        }
+        },
+
       },
       _lisNerBlNos:function (e) {
         this.push('dataForSelect.blNos', e.detail.detail);
@@ -173,6 +186,12 @@
       },
       _lisNerCanInSm:function () {
         this.pageBl= 'listOfExporter';
+      },
+      editShipment:function () {
+        console.log(1);
+        this.editInput();
+        this.insertData = !this.insertData;
+        // console.log(this.insertData);
       },
       editBlShm:function () {
         this.pageBl= 'listOfBl';
@@ -206,9 +225,10 @@
         });
       },
       editShimpent:function () {
-        this.data.id = this.data.shm_id;
+
         // this.data.shm_status = this.el.data.shm_status;
         this._cleanDataInsertShimment(this.data,(data)=>{
+          data.id = this.data.shm_id;
           this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
               status:'dialog',
               text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
