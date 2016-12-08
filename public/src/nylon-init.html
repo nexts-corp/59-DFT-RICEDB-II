@@ -10,6 +10,8 @@
 <link rel="import" href="../bower_components/gl-styles/gl-size.html">
 <link rel="import" href="../bower_components/gl-styles/gl-toast.html">
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
+
+  <link rel="import" href="nylon-mqtt-behavior.html">
 <!-- // -->
 <!--<link rel="import" href="./import.html">-->
 
@@ -56,7 +58,23 @@
 	<script>
         Polymer({
             is:'nylon-init',
+			behaviors:[nylonMqttBehavior],
 			ready:function(){
+				this.nylonMqttConnect("eu","mqtt.codeunbug.com", Number(80), "1234");
+				
+				this.nylonMqttOn('eu','connected',function(connect){
+					connect.subscribe('eu-quota-updated');
+					console.log('connected');
+				});
+
+				this.nylonMqttOn('eu','message',function(topic,msg){
+					console.log(topic,msg);
+				});
+
+				this.nylonMqttOn('eu','lost',function(res){
+					console.log(res);
+				});
+
 				Polymer.RenderStatus.afterNextRender(this,function(){
 					this.importHref(this.resolveUrl('/src/import.html'), (e)=>{
 						this.rendered = true;
