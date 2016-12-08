@@ -1,0 +1,58 @@
+<dom-module id="taps-payment">
+  <style include="gl-styles">
+    paper-tabs{
+      /*margin-left: 100px;*/
+      background-color: #f7941e;
+      /*color:var(--gl-gray-light-color);*/
+      /*height: 60px;*/
+      /*font-weight: bold;*/
+      color: #F2F2F2;
+      --paper-tabs-selection-bar:{
+        height: 5px;
+        background-color: var(--gl-info-color);
+      }
+    }
+    paper-tab:focus > div.tab-content{
+      background-color: yellow;
+      opacity: 1;
+      font-weight: 0;
+    }
+    paper-tab:not(:last-of-type) {
+      border-right: 3px solid var(--gl-gray-light-color);
+      font-size: var(--font-size-h5);
+      font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    paper-tabs paper-tab.iron-selected {
+      font-size: var(--font-size-h4);
+      color: var(--gl-white-color);
+      background-color: var(--gl-info-color);
+    }
+  </style>
+  <template>
+    <paper-tabs selected="{{selected}}" align-bottom no-slide>
+      <paper-tab>ใบตราส่งสินค้าทางทะเล</paper-tab>
+      <paper-tab>ใบแจ้งหนี้</paper-tab>
+      <paper-tab>ค่าธรรมเนียม</paper-tab>
+      <paper-tab>จ่ายเงิน</paper-tab>
+    </paper-tabs>
+    <iron-pages selected="{{selected}}">
+      <content select="section-content[name=bl]"></content>
+      <content select="section-content[name=invoice]"></content>
+      <content select="section-content[name=fee]"></content>
+      <content select="section-content[name=payment]"></content>
+    </iron-pages>
+  </template>
+  <script>
+    Polymer({
+      is: "taps-payment",
+      properties: {
+        selected: {
+          type: Number,
+          value: 0
+        }
+      }
+
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,61 @@
+<dom-module id="list-of-fee">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .labelSearch{
+    font-size: var(--font-size-h4);
+    margin: 10px 10px 10px 10px;
+    }
+    .table-body >tr > td{
+      cursor:pointer;
+    }
+    .title {
+      margin: 1em;
+      text-align: center;
+      font-size: var(--font-size-h4);
+    }
+  </style>
+  <template>
+    <div class="title">ค่าธรรมเนียม</div>
+    <div class="flex searchInput ">
+       <div class="horizontal end-justified layout">
+         <div class="labelSearch">FEE No.</div>{{searchInput}}
+         <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+         <paper-icon-button icon="search"></paper-icon-button>
+       </div>
+   </div>
+    <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>Shipment No</th>
+              <th>Fee No</th>
+              <th>Confirmation Letter</th>
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <template is="dom-repeat" items="[[data]]" as="contract">
+              <template is="dom-repeat" items="[[contract.fee_detail]]" >
+                <tr data="[[item]]" on-tap="getFeeDetail">
+                  <td>[[contract.shm_no]]</td>
+                  <td>[[item.shm_name]]</td>
+                  <td>[[item.cl_name]]</td>
+                </tr>
+              </template>
+            </template>
+         </tbody>
+      </table>
+  </template>
+  <script>
+    Polymer({
+      is: "list-of-fee",
+      getFeeDetail:function (e) {
+        this.fire('get-fee-detail',{detail:e.currentTarget.data.fee_id});
+      }
+    });
+  </script>
+</dom-module>

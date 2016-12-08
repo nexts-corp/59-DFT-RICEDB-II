@@ -1,0 +1,294 @@
+<dom-module id="contract-detail">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+      *{
+        font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      gl-form-dropdown-menu{
+        width: 100%;
+      }
+      paper-icon-button.crud {
+        margin: 5px 5px 5px 5px;
+       }
+       paper-icon-button.crud:hover {
+         background-color: var(--paper-grey-200);
+         border-radius: 5px;
+         box-shadow: inset 0 0 3px 3px rgba(0,0,0,.2);
+       }
+       .riceName{
+         /*color: red;*/
+         margin-top: 25px;
+         font-size: var(--font-size-h5);
+       }
+      paper-button.btnInTable {
+         --paper-button:{
+          margin-top: 0px;
+           height: 2em;
+         }
+       }
+       .titleName {
+         margin-bottom: 10px;
+       }
+       .table-head > tr > th:nth-child(1),
+       .table-head > tr > th:nth-child(3),
+       .table-body > tr > td:nth-child(1),
+       .table-body > tr > td:nth-child(3),
+       .table-foot > tr > td:nth-child(1),
+       .table-foot > tr > td:nth-child(3) {
+         width: 20%;
+         text-align: center;
+       }
+       .table-head > tr > th:nth-child(2),
+       .table-body > tr > th:nth-child(2),
+       .table-foot > tr > th:nth-child(2) {
+         width: 60%;
+       }
+       .gl-table-default{
+         margin-bottom: 20px;
+       }
+       .upGlComboBox {
+         margin-top: -20px;
+       }
+       paper-button[disabled]{
+          background: #eaeaea;
+          color: #a8a8a8;
+        }
+
+      </style>
+    <template>
+
+    <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+      <div class="horizontal end-justified layout">
+        <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
+        <paper-tooltip for="editConfirm" offset="0">Edit Contract</paper-tooltip>
+        <template is="dom-if" if="[[!_isViewing(data.contract_status)]]">
+          <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteContract"></paper-icon-button>
+          <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
+        </template>
+      </div>
+    </template>
+   <gl-grid-row width="{{getWidth}}">
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+       <gl-form-input required class="required" disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อสัญญา" label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
+     </gl-grid-col>
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+       <vaadin-date-picker class="required" required  disabled="[[isInputDisabled]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+     </gl-grid-col>
+     </gl-grid-row>
+     <gl-grid-row width="{{getWidth}}">
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+         [[_getBuyerAddressFromData(data)]]
+       <gl-combo-box class="required" required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
+       item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{dataForSelect.buyer}}" on-value-changed="_getBuyerAddress">
+       </gl-combo-box>
+       </gl-grid-col>
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
+         <gl-form-input class="required" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="น้ำหนักสินค้า (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+     </gl-grid-col>
+     </gl-grid-row>
+     <gl-grid-row>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+             <gl-form-textarea rows="2" disabled label="ที่อยู่ผู้สั่งซื้อ" placeholder="ใส่รายละเอียด" value="{{data.buyerAddress}}" name="buyer_address"></gl-form-textarea>
+         </gl-grid-col>
+     </gl-grid-row>
+
+     <gl-grid-row>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
+
+       <div class="titleName">รายชื่อชนิดข้าว</div>
+     <table class="gl-table-default">
+       <thead class="table-head">
+         <tr>
+           <th>ลำดับที่</th>
+           <th>ชนิดข้าว</th>
+           <th>
+             <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+               กระทำการ
+               </template>
+           </th>
+         </tr>
+       </thead>
+         <tfoot class="table-foot">
+           <tr>
+             <td></td>
+             <td></td>
+             <td>
+               <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
+               <paper-button disabled="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" >เพิ่มชนิดข้าว</paper-button>
+                <!-- </template> -->
+              </td>
+           </tr>
+         </tfoot>
+       <tbody class="table-body">
+         <template is="dom-repeat" items="[[data.contract_type_rice]]">
+           <tr>
+               <td>
+                 [[_ObcountIndex(index)]]
+               </td>
+               <td>
+                 <div class="upGlComboBox">
+                   <gl-combo-box id="riceSelected" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name"
+                 item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{dataForSelect.typeRice}}" >
+                   </gl-combo-box >
+                 </div>
+               </td>
+               <td>
+                 <template is="dom-if" if="[[!_isViewing(data.isInputDisabled)]]">
+                   <paper-button disabled="[[isInputDisabled]]" raised id="[[index]]" on-tap="deleteTypeRice" class="btnInTable gl-btn-danger"title="ลบชนิดข้าว">ลบข้อมูล</paper-button>
+                  </template>
+                </td>
+           </tr>
+         </template>
+       </tbody>
+     </table>
+      </gl-grid-col>
+     </gl-grid-row>
+
+ <gl-grid-row>
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+         <gl-form-textarea class="required" required  disabled="[[isInputDisabled]]" rows="2" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+     </gl-grid-col>
+ </gl-grid-row>
+      <div class="horizontal end-justified layout">
+        <paper-button class="gl-btn-danger" on-tap="saveContract" raised >ยกเลิก</paper-button>
+       <template is="dom-if" if="[[!_isViewing(data.contract_status)]]">
+         <paper-button class="gl-btn-primary" on-tap="insertContract" raised hidden="[[_isViewing(data.contract_status)]]" >เพิ่มสัญญา</paper-button>
+       </template>
+         <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+       <paper-button class="gl-btn-success" on-tap="saveContract" raised hidden="[[_isViewing(isInputDisabled)]]">บันทึก</paper-button>
+        </template>
+        <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+          <paper-button class="gl-btn-info" raised on-tap="confirmDrawer" hidden="[[_isViewing(data.contract_status)]]" >ยืนยันสัญญา</paper-button>
+        </template>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: "contract-detail",
+      behaviors: [
+          g2gModelBehavior,
+          g2gCongtroller
+      ],
+      properties: {
+        dataForSelect:{
+          type: Object,
+        },
+        data: {
+          type: Object,
+          value:{contract_type_rice:[{}]}
+        },
+        dataForUse:{
+          type: Object,
+        }
+      },
+      _getBuyerAddress:function (e) {
+        let selectedItem = e.detail.value;
+            if (selectedItem) {
+                let buyer_id = this.dataForSelect.buyer.filter(function (buyer) { return buyer.buyer_id == selectedItem });
+                    this.data.buyerAddress=buyer_id[0].buyer_address;
+                    this.notifyPath('data.buyerAddress');
+            }
+      },
+      _getBuyerAddressFromData:function (data) {
+        this.data.buyerAddress=data.buyer_address;
+        this.notifyPath('data.buyerAddress');
+      },
+      addTypeRice:function () {
+        this.push('data.contract_type_rice', {});
+      },
+      deleteTypeRice:function (e) {
+        this.splice('data.contract_type_rice', e.currentTarget.id, 1);
+      },
+      insertContract:function () {
+        this._clearnData(this.data,(data)=>{
+            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+            data.contract_status=false;
+            this.insert('./g2g/contract/insert',data, () => {
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                 callback:()=>{
+                    this.fire('refresh-contract',{detail:'refresh-contract'});
+                    this.fire('flipDrawer',{detail:'refresh-contract'});
+                }
+              });
+            });
+        });
+      },
+      saveContract:function () {
+        this._clearnData(this.data,(data)=>{
+            data.id = this.data.contract_id;
+            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                status:'dialog',
+                text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+                confirmed:this._saveData, //function ที่ใช้รับค่า ปุ่ม
+                el: this, // compontents
+                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+            })
+        });
+      },
+      _saveData:function(result,detail){
+         if (result == true) {
+           detail.el.update('./g2g/contract/update',detail.data, () => {
+               detail.el.fire('refresh-contract',{detail:'refresh-contract'});
+               detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                   callback:function(){
+                     detail.el.editInput();
+                     detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                  }
+                });
+            });
+          }
+     },
+     confirmDrawer:function () {
+       this._clearnData(this.data,(data)=>{
+           data.id = this.data.contract_id;
+           data.contract_status=this.approve(data.contract_status);
+           this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+               status:'dialog',
+               text:'ต้องการบันทึกข้อมูลใช่หรือไม่ ?',
+               confirmed:this._saveData, //function ที่ใช้รับค่า ปุ่ม
+               el: this, // compontents
+               data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+           })
+       });
+     },
+     deleteContract:function () {
+        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+            status:'dialog',
+            text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+            confirmed:this._deleteData, //function ที่ใช้รับค่า ปุ่ม
+            el: this, // compontents
+            data:this.data.contract_id // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+        })
+     },
+       _deleteData:function(result,detail){
+         if (result == true) {
+            detail.el.delete('./g2g/contract/delete/id/',detail.data, () => {
+              detail.el.fire('refresh-contract',{detail:'refresh-contract'});
+              detail.el.fire('flipDrawer',{detail:'flip-drawer'});
+              detail.el.fire('toast',{status:'success',text:'ลบสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                  callback:function(){
+                 }
+               });
+           });
+         }
+      },
+      _clearnData:function (data,callback) {
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        let stat = el.map((el)=> el.validate());
+          if (stat.every(elem => elem == true)) {
+            let {buyer_id,contract_date,contract_desc,contract_name,contract_status}=data;
+            let {contract_quantity}=data;
+            let news = {buyer_id,contract_date,contract_desc,contract_name,contract_quantity,contract_status};
+            news.contract_type_rice=[];
+            news.contract_date= new Date(news.contract_date);
+            data.contract_type_rice.map((riceCode)=>{
+              news.contract_type_rice.push({type_rice_id:riceCode.type_rice_id});
+            });
+          el.map((el)=> {el.reset()})
+          callback(news);
+        }
+      },
+
+    });
+  </script>
+</dom-module>

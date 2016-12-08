@@ -1,0 +1,15 @@
+<script>
+  g2gShipmentController={
+    _getShip:function (shipline_id,dataForSelect) {
+      // let shipline_id = e.detail.value;
+      if(shipline_id){
+        let ships = this.dataForSelect.shipInShipline.filter((shipline)=>{ return shipline.shipline_id == shipline_id });
+        this.dataForSelect.ships = ships[0].ship;
+        // console.log(this.dataForSelect.ships );
+        this.notifyPath('dataForSelect.ships');
+        return ships[0].ship;
+      }
+    },
+
+  }
+</script>

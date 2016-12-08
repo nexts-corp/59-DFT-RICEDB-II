@@ -1,0 +1,360 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="g2g/controller/g2gModelbehavior.html">
+<link rel="import" href="g2g/controller/g2gCongtroller.html">
+
+<link rel="import" href="g2g/component/chart-bar-g2g.html">
+<link rel="import" href="g2g/component/chart-pie-g2g.html">
+<link rel="import" href="g2g/component/taps-g2g.html">
+
+<!-- <link rel="import" href="g2g/component/contract-detail.html">
+<link rel="import" href="g2g/component/print-files.html">
+<link rel="import" href="g2g/component/upload-files.html">
+
+<link rel="import" href="g2g/component/list-of-confirm.html">
+<link rel="import" href="g2g/component/list-of-shipments.html">
+
+<link rel="import" href="g2g/component/confirm-detail.html">
+<link rel="import" href="g2g/component/shipment-detail.html"> -->
+<dom-module id="page-g2g">
+    <style media="screen" include="iron-flex gl-styles">
+      :host{
+        --paper-fab-background:var(--paper-light-blue-500);
+        --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+      }
+      *{
+        font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      paper-fab {
+           position: fixed;
+           right: 1em;
+           bottom: 1em;
+           color: #fff;
+         }
+      .addContract{
+        margin: 1em;
+        margin-bottom: 5em;
+        padding: 0.5em;
+        /*border: 1px solid var(--gl-gray-light-color);*/
+      }
+    </style>
+    <template>
+
+          <div class="layout vertical">
+            <div class="xx">
+              <chart-bar-g2g chart-name="ทำสัญญา"></chart-bar-g2g>
+              <chart-bar-g2g chart-name="ส่งแล้ว"></chart-bar-g2g>
+            </div>
+            <div class="xx">
+              <template is="dom-repeat" items="[[contractList]]">
+                <chart-pie-g2g on-okload="okload" chart-name="[[item.contract_name]]" data="[[item]]"></chart-pie-g2g>
+              </template>
+            </div>
+          </div>
+          <nylon-panel-right title="หัวข้อ" id="test">
+
+            <div class="rightdata" align="left" >
+        <iron-pages selected="{{g2gPageSeleted}}" attr-for-selected="name">
+          <div class="addContract" name="addContract">
+            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[!isEdit]]" is-input-disabled="[[!isInputDisabled]]"></contract-detail>
+          </div>
+          <div class="addContract" name="contractDetail">
+            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[isEdit]]" data="[[dataSelected]]"></contract-detail>
+          </div>
+          <div class="addContract" name="listOfConfirm">
+            <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]"> </list-of-confirm>
+          </div>
+          <div class="addContract" name="listOfShipment">
+            <list-of-shipments  data-for-select="[[dataForShipment]]" data="[[dataSelected]]"></list-of-shipments>
+          </div>
+          <!-- <taps-g2g name="contractDetail">
+            <section-content name="detail"> -->
+              <!-- <contract-detail name="contractDetail"></contract-detail> -->
+            <!-- </section-content>
+            <section-content name="print">
+              <print-files></print-files>
+            </section-content>
+            <section-content name="file">
+              <upload-files></upload-files>
+            </section-content>
+          </taps-g2g> -->
+          <!-- <confirm-detail name="addConfirm"></confirm-detail> -->
+          <!-- <list-of-confirm name=""> </list-of-confirm>
+          <list-of-shipments name=""></list-of-shipments>
+
+          <shipment-detail name=""></shipment-detail>
+          <taps-g2g>
+            <section-content name="detail">
+              <contract-detail></contract-detail>
+            </section-content>
+            <section-content name="print">
+              <print-files></print-files>
+            </section-content>
+            <section-content name="file">
+              <upload-files></upload-files>
+            </section-content>
+          </taps-g2g> -->
+        </iron-pages>
+      </div>
+
+      </nylon-panel-right>
+      <div class="btnFab">
+        <paper-fab icon="add" title="สร้างสัญญา" id="addContract" on-tap="addContract"></paper-fab>
+        <paper-tooltip for="addContract" offset="0">สร้างสัญญา</paper-tooltip>
+      </div>
+    </template>
+    <script>
+        Polymer({
+            is:'page-g2g',
+            behaviors: [
+                g2gModelBehavior,
+                g2gCongtroller
+            ],
+            listeners: {
+              'refresh-contract':'_getContractList',
+              'get-contract-detail':'_getContractDetail',
+              'get-list-confirm':'_getListConfirm',
+              'get-list-shipment':'_getListShipment',
+              'flipDrawer':'_flipDrawer',
+            },
+            properties: {
+              contractList: {
+                type: Object
+              },
+              dataSelected: {
+                type: Object
+              },
+              dataForContract:{
+                type: Object,
+                value:{}
+              },
+              dataForConfirm:{
+                type: Object,
+                value:{}
+              },
+              dataForShipment:{
+                type: Object,
+                value:{}
+              },
+              g2gPageSeleted:{
+                type:String,
+                value:'addContract'
+              },
+              checkRenderPage:{
+                type: Object,
+                value:
+                {
+                  contractDetail:false,
+                  listOfConfirm:false,
+                  listOfShipments:false,
+                  listOfShipment:false
+                }
+              },
+            },
+            ready: function() {
+              Polymer.RenderStatus.afterNextRender(this, () => {
+                this._getContractList();
+                this._getDataForContract();
+                this._getDataForConfirm();
+                this._getDataForShipment();
+              });
+            },
+            // _getContractList
+            _getContractList:function () {
+              console.log('re');
+              this.read('./g2g/contract/list',(data)=>{
+                this.contractList=data;
+              });
+            },
+            _getDataForContract:function () {
+              //use data for contract
+              this.read('./common/buyer',(data)=>{
+                this.dataForContract.buyer=data;
+                this.notifyPath('dataForContract.buyer');
+              });
+              this.read('./common/typeRice',(data)=>{
+                this.dataForContract.typeRice=data;
+                this.notifyPath('dataForContract.typeRice');
+              });
+              this.read('./common/incoterms',(data)=>{
+                this.dataForContract.incoterms=data;
+                this.notifyPath('dataForContract.incoterms');
+              });
+              //end use data for contract
+            },
+            _getDataForShipment:function () {
+              // call data
+              this.read('./external/exporter?exporter_active=true&trader_active=true',(data)=>{
+                this.dataForShipment.seller= data;
+                this.notifyPath('dataForShipment.seller');
+                // console.log(this.common.seller);
+              });
+              this.read('./common/carrier',(data)=>{
+                this.dataForShipment.carrier= data;
+                this.notifyPath('dataForShipment.carrier');
+              });
+              //shipline_id
+              this.read('./common/shipline/',(data)=>{
+                this.dataForShipment.shipline = data;
+                this.notifyPath('dataForShipment.shipline');
+              });
+              //ship in shipline
+              this.read('./common/shipline/ship',(data)=>{
+                this.dataForShipment.shipInShipline = data;
+                this.notifyPath('dataForShipment.shipInShipline');
+              });
+              //get surveyor_id
+              this.read('./common/surveyor',(data)=>{
+                this.dataForShipment.surveyor = data;
+                this.notifyPath('dataForShipment.surveyor');
+              });
+              // list port
+              this.read('./common/port/',(data)=>{
+                this.dataForShipment.countryPort =  data;
+                this.notifyPath('dataForShipment.countryport');
+              });
+              console.log(this.dataForShipment);
+            },
+            // end_getContractList
+            _getDataForConfirm:function () {
+              //ชนิดข้าวเอามาจากสัญญา
+              this.read('./common/package',(data)=>{
+                this.dataForConfirm.package=data;
+                this.notifyPath('dataForConfirm.package');
+              });
+              this.read('./common/incoterms',(data)=>{
+                this.dataForConfirm.incoterms=data;
+                this.notifyPath('dataForConfirm.incoterms');
+              });
+            },
+            //addContract
+            addContract:function () {
+              this.g2gPageSeleted = 'addContract';
+              this.fire('toast',{status:'load'});
+              if (this.checkRenderPage.contractDetail != true) {
+                this.async(()=>{
+                  this.importHref(
+                      this.resolveUrl('./g2g/component/contract-detail.html'),
+                      ()=>{
+                        this.async(()=>{
+                          this.fire('toast',{status:'load'});
+                          // console.log(this.dataForContract);
+                          this._flipDrawer();
+                          this.checkRenderPage.contractDetail=true;
+                        },500)
+                      }, null, true
+                  );
+                },1000);
+              } else {
+                this.fire('toast',{status:'load'});
+                this._flipDrawer();
+              }
+            },
+            _getContractDetail:function (e) {
+              this.g2gPageSeleted = 'contractDetail';
+              if(typeof e.detail.contractId == "undefined") {
+                this.fire('toast',{status:'load'});
+                if (this.checkRenderPage.contractDetail != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/contract-detail.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.contractDetail=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+                this.dataSelected = e.detail.data;
+              } else {
+                let contractId = e.detail.contractId;
+                let dataContract = this.contractList.filter((contractList)=> contractList.contract_id == contractId );
+                    this.dataSelected = dataContract[0];
+              }
+            },
+            _getListConfirm:function (e) {
+              // listOfConfirm
+              console.log('1212=>',e.detail);
+              this.g2gPageSeleted = 'listOfConfirm';
+              if(typeof e.detail.contractId == "undefined") {
+                this.fire('toast',{status:'load'});
+                if (this.checkRenderPage.listOfConfirm != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/list-of-confirm.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.listOfConfirm=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+                this.dataSelected = e.detail.data;
+                // console.log(  this.dataSelected);
+              } else {
+                this._getContractList();
+                this.read('./g2g/contract/list',(data)=>{
+                  let contractId = e.detail.contractId;
+                  let dataContract = data.filter((contractList)=> contractList.contract_id == contractId );
+                      this.dataSelected = dataContract[0];
+                });
+              }
+            },
+            _getListShipment:function (e) {
+              // console.log(e.detail.detail);
+              this.g2gPageSeleted = 'listOfShipment';
+              if(typeof e.detail.contractId == "undefined") {
+                this.fire('toast',{status:'load'});
+                if (this.checkRenderPage.listOfShipment != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/list-of-shipments.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.listOfShipment=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+                this.dataSelected = e.detail.data;
+                console.log(this.dataSelected);
+              } else {
+                let contractId = e.detail.contractId;
+                this.read('./g2g/contract/list',(data)=>{
+                  let dataContract = data.filter((contractList)=> contractList.contract_id == contractId );
+                      this.dataSelected = dataContract[0];
+                });
+              }
+            },
+            okload:function(){
+              this.checkLoad = true;
+            },
+            // end_addContract
+            _flipDrawer:function () {
+              // this.$.drawerRight.actionDrawer();
+              Polymer.dom(this.root).querySelector('#test').toggle();
+            }
+        });
+    </script>
+</dom-module>

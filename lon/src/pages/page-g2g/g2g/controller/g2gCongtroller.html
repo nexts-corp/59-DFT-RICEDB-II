@@ -1,0 +1,76 @@
+<script>
+  g2gCongtroller={
+    properties: {
+      isInputDisabled:{
+        type:Boolean,
+        value:true
+      },
+      isEdit:{
+        type:Boolean,
+        value:true
+      },
+      isViewSeleted:{
+        type:Boolean,
+      },
+    },
+    _isViewing:function (data) {
+      return data == true;
+    },
+    _isEditing:function (data) {
+      return data == true;
+    },
+    test:function () {
+      console.log('ถึงแล้วววว');
+    },
+    editInput:function () {
+      this.isInputDisabled = !this.isInputDisabled;
+    },
+    checkBtnView:function (data) {
+      return data == true;
+    },
+    //approve function
+    approve:function (data) {
+      // console.log(data);
+      return data = !data;
+    },
+    //เช็คว่ามีข้อมูลในอาเรย์ไหม
+    _isHave:function (data) {
+      if (data.length < 1) {
+        return true;
+      }
+    },
+    _isHaveMany:function (data,count) {
+      console.log(data.length);
+      if (data.length < count) {
+        return true;
+      }
+    },
+    _ObcountIndex:function (index) {
+      return index+1;
+    },
+    _getUrl:function () {
+      // get cookie
+      let cookie = document.cookie.split(';');
+      let url;
+      cookie.map((ee)=>{
+        ee = ee.replace(' ', '');
+        if (ee.indexOf("url") == 0 ) {
+          url=ee.substring(4, 40);
+        }
+      });
+      return url;
+    },
+    changeString2Num:function(ob,param){
+      //console.log(typeof ob.value);
+      if(typeof ob.value == "string"){
+        var pathChange = ob.path.split(".");
+        if(pathChange.length == 2){
+            if(pathChange[1]==param){
+              ob.base[param]=parseFloat(ob.value);
+              // console.log(typeof ob.value);
+            }
+        }
+      }
+    },
+  }
+</script>
