@@ -60,13 +60,15 @@
               </div>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"> 
-            		<gl-form-dropdown-menu class="saveData" label="ประเภทข้าว" required>
+               <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
+                item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+            		<!--<gl-form-dropdown-menu class="saveData" label="ประเภทข้าว" required>
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
 										</template>
 									</paper-listbox>
-								</gl-form-dropdown-menu>
+								</gl-form-dropdown-menu>-->
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <gl-form-input class="saveData" label="การคำนวณครั้งที่" value="{{ordinum}}" required ></gl-form-input>  
@@ -84,24 +86,26 @@
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-               		<gl-form-dropdown-menu class="saveData" label="แสดงข้อมูลรายปี" required>
+                 <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYearFirst}}"></gl-combo-box>
+               		<!--<gl-form-dropdown-menu class="saveData" label="แสดงข้อมูลรายปี" required>
                     <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearFirst}}">
                       <template is="dom-repeat" items="{{getYear}}">
                         <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                       </template>
                     </paper-listbox>
-                  </gl-form-dropdown-menu>
+                  </gl-form-dropdown-menu>-->
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
               </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                 <gl-form-dropdown-menu class="saveData" label="แสดงข้อมูลรายปี" required>
+              <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYearLast}}"></gl-combo-box> 
+                 <!--<gl-form-dropdown-menu class="saveData" label="แสดงข้อมูลรายปี" required>
                     <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearLast}}">
                       <template is="dom-repeat" items="{{getYear}}">
                         <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                       </template>
                     </paper-listbox>
-                  </gl-form-dropdown-menu>
+                  </gl-form-dropdown-menu>-->
               </gl-grid-col>
              
            </gl-grid-row>
@@ -137,22 +141,22 @@
            <div class="vertical layout flex marginTL">
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
-            <div class="flex"><gl-form-input class="saveData" no-label-float value="{{formatNumber(sumAnswer.sum_export)}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" format-number="on" no-label-float value="{{sumAnswer.sum_export}}" required></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</div>
-            <div class="flex"><gl-form-input class="saveData" no-label-float value="{{formatNumber(sumAnswer.sum_for_cal)}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" format-number="on" no-label-float value="{{sumAnswer.sum_for_cal}}" required></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
-            <div class="flex"><gl-form-input class="saveData" no-label-float value="{{formatNumber(sumAnswer.sum_quota)}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" format-number="on" no-label-float value="{{sumAnswer.sum_quota}}" required></gl-form-input></div>
             <div class="flex"></div>
           </div>
            <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา 100%</div>
-            <div class="flex"><gl-form-input class="saveData" no-label-float value="{{formatNumber(sumAnswer.quota_amount)}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" format-number="on" no-label-float value="{{sumAnswer.quota_amount}}" required></gl-form-input></div>
             <div class="flex"></div>
           </div>
           </div>
@@ -302,6 +306,7 @@
           this.quotaYear = quotaYear;
         },
       _getlistCompany:function(fistYear,lastYear,typeRice){
+        if(fistYear != ''&& lastYear != ''&& typeRice != ''){
         this.firstYear = fistYear;
         this.lastYear = lastYear; 
         this.typeRice = typeRice;
@@ -339,6 +344,7 @@
               //console.log('test');
             }})
         });
+        }
       },
       _saveData:function(){
         var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{

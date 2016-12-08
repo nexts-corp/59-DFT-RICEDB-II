@@ -78,14 +78,15 @@
 			</div>
 
 			<div class="layout horizontal">
-				<div class="container flex-equal-justified">
-					<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
+				<div class="container">
+          <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
+					<!--<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
 						<paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
 							<template is="dom-repeat" items="{{getYear}}">
 								<paper-item class="font" year="{{item}}">{{item}}</paper-item>
 							</template>
 						</paper-listbox>
-					</gl-form-dropdown-menu>
+					</gl-form-dropdown-menu>-->
 				</div>
 			</div>
 
@@ -217,8 +218,10 @@
           });
         },
         _yearChanged:function(val){
-          this._getDatalist(val);
-          this.sendYear = val;
+          if(val != ''){
+            this._getDatalist(val);
+            this.sendYear = val;
+          }
         },
         _postData:function(e){
           //console.log('post-data:',e.detail);

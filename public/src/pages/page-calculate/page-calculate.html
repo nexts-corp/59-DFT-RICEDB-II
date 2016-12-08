@@ -83,14 +83,15 @@
           <div class="fontContent">
               การคำนวณส่วนจัดสรรข้าวภายใต้โควตาภาษีสหภาพยุโรป
           </div>
-          <div class="container">
-            <gl-form-dropdown-menu label="ปีโควตา">
+          <div class="container layout horizontal">
+            <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
+            <!--<gl-form-dropdown-menu label="ปีโควตา">
               <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
                 <template is="dom-repeat" items="{{getYear}}">
                   <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                 </template>
               </paper-listbox>
-            </gl-form-dropdown-menu>
+            </gl-form-dropdown-menu>-->
           </div>
           
           <div style="overflow-x:auto; padding:20px;">
@@ -119,7 +120,7 @@
             is: "page-calculate",
             behaviors:[nylonBehavior],
             observers:[
-              '_yearQuoataChaged(selectQuotaYear)'
+              '_yearQuoataChaged(selectYear)'
             ],
             properties: {
                 layerContent: {
@@ -169,9 +170,11 @@
               });
           },
           _yearQuoataChaged:function(quota){
-            this.sendQuotaYear = quota;
-            this.hide = false;
-            this._getDatalist();
+            if(quota != ''){
+              this.sendQuotaYear = quota;
+              this.hide = false;
+              this._getDatalist();
+            }
           },
           _postSumData:function(e){
               // console.log(e.detail);
