@@ -1,4 +1,5 @@
 <link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/data-manage-behavior.html">
 <dom-module id="calculate-list">
     <template>
         <style is="custom-style" include="gl-table">
@@ -37,11 +38,38 @@
                 @apply(--layout-justified);
             }
         </style>
-
-
+        <template is="dom-if" if="{{dataStat}}">
+            <div class="container">
+                <div class="flex-equal-justified">
+                    <div>ประเภท : </div>
+                    <paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
+                    <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>
+                </div>
+                 <table class="gl-table-default" style="border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th>คำนวณครั้งที่</th>
+                        <th class="right">ยอดรวมการส่งออกที่ผ่านมา</th>
+                        <th class="right">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
+                        <th class="right">ยอดรวมโควตาที่เคยได้รับ</th>
+                        <th class="right">ปริมาณโควตา 100%</th>
+                        <th class="right">สถานะ</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    <tr>
+                        <td colspan="6">ไม่พบข้อมูล</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </template>
+        <template is="dom-repeat" items="{{listData}}">
         <div class="container">
+            
             <div class="flex-equal-justified">
-                <div>ประเภท : {{typeRiceName}}</div>
+                <div>ประเภท : {{item.type_rice_name_th}}</div>
                 <paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
                 <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>
             </div>
@@ -57,7 +85,7 @@
                         <th class="right">สถานะ</th>
                     </tr>
                 </thead>
-                <template is="dom-repeat" items="{{listData}}">
+               
                     <tbody>
                         <template is="dom-repeat" items="{{item.detail}}">
                             <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
@@ -70,16 +98,17 @@
                             </tr>
                         </template>
                     </tbody>
-                </template>
+                
             </table>
-
+           
         </div>
-
+         </template>
     </template>
     <script>
         Polymer({
             is: 'calculate-list',
-            behaviors:[FormatNumberBehavior],
+            behaviors:[FormatNumberBehavior,DataManageBehavior],
+            observers:['checkData(listData)'],
             properties:{
                 active:{
                     type: Boolean,

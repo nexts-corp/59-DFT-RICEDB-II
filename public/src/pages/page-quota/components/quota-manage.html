@@ -56,12 +56,12 @@
 						<gl-grid-row width="{{getWidth}}">
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-input label="ปีโควต้า" class="mathData saveData" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
+								<gl-form-input label="ปีโควต้า" class="saveData" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
 									id="" name="" disabled$="{{checkStatus(status)}}"> 
                                 </gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-dropdown-menu label="ประเภทข้าว" class="mathData saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
+								<gl-form-dropdown-menu label="ประเภทข้าว" class="saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
@@ -72,7 +72,7 @@
 
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-								<gl-form-input class="mathData saveData" id="sum" label="ยอดรวม" value="[[formatNumber(sum)]]" always-float-label auto-validate error-message="กรุณาใสจำนวน" required>
+								<gl-form-input class="mathData saveData" id="sum" label="ยอดรวม" format-number="on" value="[[sum]]" always-float-label auto-validate error-message="กรุณาใสจำนวน" required>
                                      <div class="font" suffix>ตัน</div>
                                 </gl-form-input>
 							</gl-grid-col>
@@ -112,7 +112,7 @@
                                             </gl-form-input>
 										</td>
 										<td>
-											<gl-form-input class="saveData" value="[[formatNumber(item.quantity)]]" on-input="inputProportionChange"
+											<gl-form-input class="saveData" value="[[item.quantity]]" format-number="on"
 												index="{{index}}" required id="{{index}}" no-label-float></gl-form-input>
 										</td>
 										<td>
@@ -223,9 +223,9 @@
                 });
                 return this.formatNumber(sum);
             },
-            inputProportionChange:function(e){
-                this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
-            },
+            // inputProportionChange:function(e){
+            //     this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
+            // },
             _mathData:function(){
                 if(this.Period == ''){
                      this.fire('toast',

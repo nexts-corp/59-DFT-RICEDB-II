@@ -1,6 +1,7 @@
 
 <link rel="import" href="./../../components/format-number-behavior.html">
 <link rel="import" href="./../../components/month-behavior.html">
+<link rel="import" href="./../../components/data-manage-behavior.html">
 
 <dom-module id="allocate-list">
     <template>
@@ -43,7 +44,24 @@
             }
         </style>
         <div style="overflow-x:auto;">
-            <table class="gl-table-default" style="">
+            
+        <template is="dom-if" if={{dataStat}}>
+            <table class="gl-table-default">
+              <tr>
+                <th>ลำดับที่</th>
+                <th>ผู้ส่งออก</th>
+                <th>งวดที่</th>
+                <th>ยอดปรับปรุงงวดที่</th>
+                <th>ปริมาณโควต้ารวม</th>
+                <th>รวมยอดปรับปรุง</th>
+              </tr>
+              <tr>
+                <td colspan="6">ไม่พบข้อมูล</td>    
+              </tr>
+            </table>
+        </template>
+        <template is="dom-if" if={{!dataStat}}>     
+            <table class="gl-table-default">
               <tr>
                 <th>ลำดับที่</th>
                 <th>ผู้ส่งออก</th>
@@ -68,16 +86,17 @@
                     </tr>
                 </template>
               
-              <tr>
-                <th colspan="2">รวมปริมาณโควตา</th>
-                <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
-                    <th>[[_sumPeriod(index,'quantity')]]</th>
-                    <th>[[_sumPeriod(index,'quantity_update')]]</th>
-                </template>
-                <th>[[_sumQuantity(dataAllocate,'quantity')]]</th>
-                <th>[[_sumQuantity(dataAllocate,'quantity_update')]]</th>
-              </tr>
+                <tr>
+                    <th colspan="2">รวมปริมาณโควตา</th>
+                    <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
+                        <th>[[_sumPeriod(index,'quantity')]]</th>
+                        <th>[[_sumPeriod(index,'quantity_update')]]</th>
+                    </template>
+                    <th>[[_sumQuantity(dataAllocate,'quantity')]]</th>
+                    <th>[[_sumQuantity(dataAllocate,'quantity_update')]]</th>
+                </tr>
             </table>
+            </template>
           </div>
     </template>
     <script>
@@ -85,8 +104,10 @@
             is: 'allocate-list',
             behaviors: [
                 FormatNumberBehavior,
-                MonthBehavior
+                MonthBehavior,
+                DataManageBehavior
             ],
+            observers:['checkData(dataAllocate.exporter)'],
             _num:function(index){
                 return index+1;
             },
