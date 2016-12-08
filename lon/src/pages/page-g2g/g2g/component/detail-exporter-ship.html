@@ -15,7 +15,7 @@
     <!-- <template is="dom-if" if="[[!checkBtnView(approve)]]"> -->
       <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
         <paper-icon-button icon="create" raised on-tap="editInput" title="Edit" index="[[index]]"></paper-icon-button>
-        <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" id="[[itemPrimary.shm_det_id]]"></paper-icon-button>
+        <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" ></paper-icon-button>
       </gl-form-panel-head>
     <!-- </template> -->
 
@@ -31,16 +31,16 @@
          item-value-path="exporter_id"  items="{{dataForSelect.seller}}" value="{{data.exporter_id}}" ></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-        <gl-form-input disabled label="Tel." placeholder="ใส่รายละเอียด" value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
+        <gl-form-input disabled label="Tel."  value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no"
            item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}"></gl-combo-box>
-        <!-- <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.bl_no}}"></gl-form-input> -->
+        <!-- <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด"   value="{{data.bl_no}}"></gl-form-input> -->
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input  disabled required class="required" label="Booking No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.book_no}}"></gl-form-input>
+        <gl-form-input  disabled required class="required" label="Booking No."always-float-labelerror-message="กรุณาใส่รายละเอียด"   value="{{data.book_no}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box disabled  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name"
@@ -58,7 +58,7 @@
            item-value-path="ship_id" items="[[_getShip(data.shipline_id,dataForSelect)]]" value="{{item.ship_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input disabled required class="required"label="Voy No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{item.ship_voy_no}}"
+          <gl-form-input disabled required class="required"label="Voy No."always-float-label  error-message="กรุณาใส่รายละเอียด"  value="{{item.ship_voy_no}}"
           name="voidNo"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
@@ -72,7 +72,7 @@
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input disabled required class="required"label="Lot No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}"
+        <gl-form-input disabled required class="required"label="Lot No."always-float-label  error-message="กรุณาใส่รายละเอียด"  value="{{data.ship_lot_no}}"
         name="lotNo"></gl-form-input>
       </gl-grid-col>
 
@@ -101,17 +101,17 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input disabled required class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}"></gl-form-input>
+          <gl-form-input disabled required class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input disabled required class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" value="{{data.weight_per_container}}" ></gl-form-input>
+        <gl-form-input disabled required class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <vaadin-date-picker disabled required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input disabled label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" ></gl-form-input>
+        <gl-form-input disabled label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด"  value="{{data.packing_time}}" ></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -146,7 +146,7 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'shm_det_quantity')]]
-        <gl-form-input class="required" required label="จำนวน/ตัน" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.shm_det_quantity}}" always-float-label></gl-form-input>
+        <gl-form-input class="required" required label="จำนวน/ตัน" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -187,7 +187,7 @@
     <!-- <template is="dom-if" if="[[checkBtnView(checkBtn)]]"> -->
     <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
       ยกเลิก</paper-button>
-      <paper-button  class="gl-btn-success" raised on-tap="saveShipment" >
+      <paper-button  class="gl-btn-success" raised on-tap="editExporter" >
         <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
       <!-- </template> -->
   </gl-form-panel-footer>
@@ -305,17 +305,44 @@
       },
       addExporter:function () {
         // console.log(this.data);
-        // this._cleanShipmentData(this.data,(data)=>{
-          // data.shm_id=this.dataForSelect.shm_id;
-          // console.log(data);
-          // console.log(this.data);
+        this._cleanShipmentData(this.data,(data)=>{
+          data.shm_id=this.dataForSelect.shm_id;
+          console.log(data);
+          console.log(this.data);
           console.log(this.dataForSelect);
-          // this.insert('./g2g/shipment/detail/insert',data, () => {
-          //   console.log('เพิ่มได้');
-          // });
-        // })
+          this.insert('./g2g/shipment/detail/insert',data, () => {
+            console.log('เพิ่มได้');
+          });
+        })
       },
-      
+      editExporter:function () {
+        this._cleanShipmentData(this.data,(data)=>{
+            data.shm_id = this.data.shm_id;
+            data.id = this.data.shm_det_id;
+            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                status:'dialog',
+                text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+                confirmed:this._saveExporter.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                el: this, // compontents
+                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+            })
+        });
+      },
+      _saveExporter:function(result,detail){
+         if (result == true) {
+              this.update('./g2g/shipment/detail/update', detail.data,() => {
+                //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
+                this.fire('refresh-contract',{detail:'refresh-contract'});
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                  callback:function(){
+                       console.log(1111);
+                      //  detail.el.editInput();
+                      //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                    }
+                });
+              });
+          }
+     },
       _cleanShipmentData:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());

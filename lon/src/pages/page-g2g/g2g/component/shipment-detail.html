@@ -70,7 +70,7 @@
           <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
         </div>
         <div name="BlDetail">
-          <bill-detail-sm data-for-select="[[dataForSelect]]"></bill-detail-sm>
+          <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]"></bill-detail-sm>
         </div>
         <div name="addExporter">
           <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" ></detail-exporter-ship>
@@ -129,6 +129,7 @@
       ],
       listeners:{
         'send-Bl-no':'_lisNerBlNos',
+        'edit-bl-detail':'_lisNerBlDetail',
         'add-bl-no':'_lisNerAddBlNo',
         'cancel-insert-shipment':'_lisNerCanInSm'
       },
@@ -151,15 +152,9 @@
           type:String,
           value:'listOfExporter'
         },
-        checkRenderPageShipment:{
-          type: Object,
-          value:
-          {
-            contractDetail:false,
-            listOfConfirm:false,
-            listOfShipments:false
-          }
-        },
+        dataSelected:{
+          type:Object,
+        }
       },
       _lisNerBlNos:function (e) {
         this.push('dataForSelect.blNos', e.detail.detail);
@@ -167,6 +162,11 @@
         this.pageBl= 'listOfBl';
         // console.log(this.dataForSelect.blNos);
         // console.log(this.data);
+      },
+      _lisNerBlDetail:function (e) {
+        console.log(e.detail.detail);
+        this.dataSelected = e.detail.detail;
+        this.pageBl= 'BlDetail';
       },
       _lisNerAddBlNo:function () {
         this.pageBl= 'BlDetail';
@@ -192,8 +192,9 @@
       addShimpent:function () {
         // console.log(this.confirmLetter[0].contract_id);
         this.data.contract_id = this.confirmLetter[0].contract_id;
+        this.data.shm_status = false;
         this._cleanDataInsertShimment(this.data,(data)=>{
-          data.shm_status = false;
+          // data.shm_status = false;
           this.insert('./g2g/shipment/insert',data, () => {
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
              callback:()=>{
@@ -205,6 +206,8 @@
         });
       },
       editShimpent:function () {
+        this.data.id = this.data.shm_id;
+        // this.data.shm_status = this.el.data.shm_status;
         this._cleanDataInsertShimment(this.data,(data)=>{
           this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
               status:'dialog',
@@ -217,8 +220,7 @@
       },
       _editData:function (result,detail) {
         if (result == true) {
-          detail.data.id = detail.el.data.shm_id;
-          detail.data.shm_status = detail.el.data.shm_status;
+
           // console.log(detail.data);
           detail.el.update('./g2g/shipment/update',detail.data, () => {
             detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
@@ -227,6 +229,38 @@
               }
             });
            });
+         }
+      },
+      approveShipment:function () {
+        console.log(11);
+        this.data.shm_status= this.approve(this.data.shm_status);
+        this._cleanDataInsertShimment(this.data,(data)=>{
+            // data.shm_id = this.data.shm_id;
+            data.id = this.data.shm_id;
+            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                status:'dialog',
+                text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
+                confirmed:this._approveShipment.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                el: this, // compontents
+                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+            })
+        });
+      },
+      _approveShipment:function (result,detail) {
+        if (result == true) {
+          console.log(detail.data);
+             this.update('./g2g/shipment/update', detail.data,() => {
+
+            //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
+            //    this.fire('refresh-contract',{detail:'refresh-contract'});
+               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                 callback:function(){
+                      console.log(1111);
+                     //  detail.el.editInput();
+                     //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                   }
+               });
+             });
          }
       },
       _toggleSub:function(e){
@@ -242,8 +276,8 @@
         let el = Polymer.dom(this.root).querySelectorAll('.insetShipment');
         let stat = el.map((el)=> el.validate());
         if (stat.every(elem => elem == true)) {
-          let {cl_id,shm_name,shm_no,contract_id} = data;
-          let newData = {cl_id,shm_name,shm_no,contract_id};
+          let {cl_id,shm_name,shm_no,contract_id,shm_status} = data;
+          let newData = {cl_id,shm_name,shm_no,contract_id,shm_status};
           callback(newData);
         }
       },

@@ -26,6 +26,9 @@
        text-align: center;
        font-size: var(--font-size-h4);
      }
+     table.gl-table-default >tbody.table-body > tr > td{
+        cursor: pointer;
+     }
   </style>
   <template>
     <div class="title">
@@ -42,7 +45,7 @@
 
           <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]">
-              <tr>
+              <tr on-tap="getBlDetail" data="[[item]]">
                <td>[[item.bl_no]]</td>
                <td>1</td>
              </tr>
@@ -65,6 +68,11 @@
       behaviors: [
           g2gShipmentController
       ],
+      properties: {
+        dataSelected: {
+          type: Object,
+        }
+      },
       // observers:[
       //   'check(data)'
       // ],
@@ -73,7 +81,11 @@
       // },
       addBlDetail:function () {
         this.fire('add-bl-no',{detail:'addbl'});
-      }
+      },
+      getBlDetail:function (e) {
+        this.dataSelected = e.currentTarget.data;
+        this.fire('edit-bl-detail',{detail:this.dataSelected});
+      },
     });
   </script>
 </dom-module>
