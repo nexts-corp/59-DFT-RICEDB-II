@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var DataContext = require('../../class/DataContext.js');
+var datacontext = new DataContext();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -54,13 +57,13 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id","cl_status"]
+    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id", "cl_status"]
 };
 var validate = ajv.compile(schema);
 
 router.get('/id/:cl_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("confirm_letter")
+        r.db('g2g').table("confirm_letter")
             .get(req.params.cl_id)
             .merge(function (row) {
                 return {
@@ -71,13 +74,13 @@ router.get('/id/:cl_id', function (req, res, next) {
                             return {
                                 package: row_type_rice('package').map(function (arr_package) {
                                     return arr_package.merge(function (row_package) {
-                                        return r.table('package').get(row_package('package_id')).without('id')
+                                        return r.db('common').table('package').get(row_package('package_id')).without('id')
                                     })
                                 })
-                            }//, r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                            }//, r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                         })
                             .merge(function (row_type_rice) {
-                                return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                                return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
                     }),
                     cl_total_quantity: row('cl_type_rice').sum('type_rice_quantity')
@@ -95,7 +98,7 @@ router.get('/id/:cl_id', function (req, res, next) {
 });
 router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
-        r.table("confirm_letter")
+        r.db('g2g').table("confirm_letter")
             .filter({ "contract_id": req.params.contract_id, "cl_status": true })
             .merge(function (row) {
                 return {
@@ -106,13 +109,13 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                             return {
                                 package: row_type_rice('package').map(function (arr_package) {
                                     return arr_package.merge(function (row_package) {
-                                        return r.table('package').get(row_package('package_id')).without('id')
+                                        return r.db('common').table('package').get(row_package('package_id')).without('id')
                                     })
                                 })
                             }
                         })
                             .merge(function (row_type_rice) {
-                                return r.table('type_rice').get(row_type_rice('type_rice_id')).without('id')
+                                return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
                     })
                 }
@@ -141,27 +144,7 @@ router.post('/insert', function (req, res, next) {
     if (valid) {
         //console.log(req.body);
         if (req.body.id == null) {
-            //result.id = req.body.id;
-            db.query(function (conn) {
-                r.table("confirm_letter")
-                    //.get(req.body.id)
-                    .insert(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                            result.id = response.generated_keys;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
+            datacontext.insert("g2g", "confirm_letter", req.body, res);
         } else {
             result.message = 'field "id" must do not have data';
             res.json(result);
@@ -176,101 +159,37 @@ router.put('/update', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        //console.log(req.body);
-        if (req.body.id != '' && req.body.id != null) {
-            result.id = req.body.id;
-            db.query(function (conn) {
-                r.table("confirm_letter")
-                    .get(req.body.id)
-                    .update(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'require field id';
-            res.json(result);
-        }
+        datacontext.update("g2g", "confirm_letter", req.body, res);
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
     }
 });
 router.delete('/delete/id/:id', function (req, res, next) {
-    var result = { result: false, message: null, id: null };
-    if (req.params.id != '' && req.params.id != null) {
-        result.id = req.params.id;
-        db.query(function (conn) {
-            var q = r.table("confirm_letter").get(req.params.id).do(function (result) {
-                return r.branch(
-                    result('cl_status').eq(false)
-                    , r.table("confirm_letter").get(req.params.id).delete()
-                    , r.expr("Can't delete because this status = true.")
-                )
-            })
-            q.run(conn)
-                .then(function (response) {
-                    result.message = response;
-                    if (response.errors == 0) {
-                        result.result = true;
-                    }
-                    res.json(result);
-                })
-                .error(function (err) {
-                    result.message = err;
-                    res.json(result);
-                    console.log(result);
-                })
+    var result = { result: false, message: null, id: req.params.id };
+    db.query(function (conn) {
+        var q = r.db('g2g').table("confirm_letter").get(req.params.id).do(function (result) {
+            return r.branch(
+                result('cl_status').eq(false)
+                , r.expr("delete")
+                , r.expr("Can't delete because this status = true.")
+            )
         })
-    } else {
-        result.message = 'require field id';
-        res.json(result);
-    }
+        q.run(conn)
+            .then(function (response) {
+                if (response == "delete") {
+                    datacontext.delete("g2g", "confirm_letter", req.params.id, res);
+                } else {
+                    result.message = response;
+                    res.json(result);
+                }
+            })
+            .error(function (err) {
+                result.message = err;
+                res.json(result);
+                console.log(result);
+            })
+    })
 });
-// router.delete('/delete/id/:cl_id', function (req, res, next) {
-//     //var valid = validate(req.body);
-//     var result = { result: false, message: null, id: null };
-//     //  if (valid) {
-//     //console.log(req.body);
-//     if (req.params.cl_id != '' && req.params.cl_id != null) {
-//         result.id = req.params.cl_id;
-//         db.query(function (conn) {
-//             r.table("confirm_letter")
-//                 .get(req.params.cl_id)
-//                 .delete()
-//                 .run(conn)
-//                 .then(function (response) {
-//                     result.message = response;
-//                     if (response.errors == 0) {
-//                         result.result = true;
-//                     }
-//                     res.json(result);
-//                     console.log(result);
-//                 })
-//                 .error(function (err) {
-//                     result.message = err;
-//                     res.json(result);
-//                     console.log(result);
-//                 })
-//         })
-//     } else {
-//         result.message = 'require field id';
-//         res.json(result);
-//     }
-//     // } else {
-//     //     result.message = ajv.errorsText(validate.errors);
-//     //     res.json(result);
-//     // }
-// });
+
 module.exports = router;

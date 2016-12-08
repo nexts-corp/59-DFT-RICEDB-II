@@ -4,6 +4,9 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
+var DataContext = require('../../class/DataContext.js');
+var datacontext = new DataContext();
+
 var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true });
 var schema = {
@@ -114,11 +117,12 @@ router.get('/', function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: "id" }).zip()
-            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: "id" }).zip()
-            .eqJoin("country_id", r.table("country")).without({ right: "id" }).zip()
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .filter(q)
             .filter(d)
+            .orderBy('exporter_no')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -158,9 +162,9 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 }),
             r.db('external_f3').table("seller").get(r.row("seller_id")),
             r.db('external_f3').table("type_license").get(r.row("type_lic_id")),
-            r.table("country").get(r.row("country_id"))
+            r.db('common').table("country").get(r.row("country_id"))
             )
-            //  .merge(r.table("country").get(r.row("country_id")))
+            //  .merge(r.db('common').table("country").get(r.row("country_id")))
             .without('id')
             .run(conn, function (err, cursor) {
                 //console.log(err);
@@ -185,23 +189,7 @@ router.post('/insert', function (req, res, next) {
                         if (response > 0) {
                             req.body.exporter_no = response;
                             req.body.exporter_date_approve = req.body.exporter_date_update;
-                            r.db('external_f3').table("exporter")
-                                .insert(req.body)
-                                .run(conn)
-                                .then(function (response) {
-                                    result.message = response;
-                                    if (response.errors == 0) {
-                                        result.result = true;
-                                        result.id = response.generated_keys;
-                                    }
-                                    res.json(result);
-                                    console.log(result);
-                                })
-                                .error(function (err) {
-                                    result.message = err;
-                                    res.json(result);
-                                    console.log(result);
-                                })
+                            datacontext.insert("external_f3", "exporter", req.body, res);
                         }
                     })
             })
@@ -219,70 +207,13 @@ router.put('/update', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        //console.log(req.body);
-        if (req.body.id != '' && req.body.id != null) {
-            result.id = req.body.id;
-            db.query(function (conn) {
-                r.db('external_f3').table("exporter")
-                    .get(req.body.id)
-                    .update(req.body)
-                    .run(conn)
-                    .then(function (response) {
-                        result.message = response;
-                        if (response.errors == 0) {
-                            result.result = true;
-                        }
-                        res.json(result);
-                        console.log(result);
-                    })
-                    .error(function (err) {
-                        result.message = err;
-                        res.json(result);
-                        console.log(result);
-                    })
-            })
-        } else {
-            result.message = 'require field id';
-            res.json(result);
-        }
+        datacontext.update("external_f3", "exporter", req.body, res);
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
     }
 });
-router.delete('/delete/id/:exporter_id', function (req, res, next) {
-    //var valid = validate(req.body);
-    var result = { result: false, message: null, id: null };
-    //  if (valid) {
-    //console.log(req.body);
-    if (req.params.exporter_id != '' || req.params.exporter_id != null) {
-        result.id = req.params.exporter_id;
-        db.query(function (conn) {
-            r.db('external_f3').table("exporter")
-                .get(req.params.exporter_id)
-                .delete()
-                .run(conn)
-                .then(function (response) {
-                    result.message = response;
-                    if (response.errors == 0) {
-                        result.result = true;
-                    }
-                    res.json(result);
-                    console.log(result);
-                })
-                .error(function (err) {
-                    result.message = err;
-                    res.json(result);
-                    console.log(result);
-                })
-        })
-    } else {
-        result.message = 'require field id';
-        res.json(result);
-    }
-    // } else {
-    //     result.message = ajv.errorsText(validate.errors);
-    //     res.json(result);
-    // }
+router.delete('/delete/id/:id', function (req, res, next) {
+    datacontext.delete("external_f3", "exporter", req.params.id, res);
 });
 module.exports = router;

@@ -16,7 +16,7 @@
             color: white;
             background-color: orange;
             font-size: 22px;
-            /*user-drag: none; 
+            /*user-drag: none;
             user-select: none;
             -moz-user-select: none;
             -webkit-user-drag: none;
@@ -45,7 +45,7 @@
                         Menu
                      </app-toolbar>
 				<div role="listbox">
-                    
+
                     <template is="dom-repeat" items="{{listMenu}}">
                         <paper-icon-item on-tap="selectPage" path$="{{item.path}}" focused  index="{{index}}">
                             <iron-icon icon="chevron-right" item-icon></iron-icon>
@@ -55,7 +55,7 @@
                             </div>
 					    </paper-icon-item>
                     </template>
-                    
+
 				</div>
 			</div>
     </template>
@@ -67,24 +67,16 @@
                     type:Array,
                     value:[
                         {
-                            name: 'รายการจัดสรรปีโควตา',
-                            path: '/quota'
+                            name: 'รายชื่อผู้ส่งออกข้าวไปต่างประเทศ',
+                            path: '/report-exporter'
                         },
                         {
-                            name: 'การคำนวณส่วนจัดสรร',
-                            path: '/calculate'
+                            name: 'ต่ออายุทะเบียนผู้ส่งออกข้าวไปต่างประเทศ',
+                            path: '/ban-exporter'
                         },
                         {
-                            name: 'ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท',
-                            path: '/amount'
-                        },
-                        {
-                            name: 'ยืนยันส่วนจัดสรร',
-                            path: '/confirm'
-                        },
-                        {
-                            name: 'รับชำระเงินและออกใบเสร็จ',
-                            path: '/fee'
+                            name: 'ต่ออายุคน. ทะเบียนผู้ส่งออกข้าวไปต่างประเทศ',
+                            path: '/dit-exporter'
                         }
                     ]
                 },
@@ -93,7 +85,7 @@
                     value: false
                 }
             },
-            
+
             selectPage:function(e){
                 if((('/'+this.path) != e.currentTarget.getAttribute('path')) && (e.currentTarget.getAttribute('path')!='')){
                     this.set('listMenu.'+e.currentTarget.index+'.loading',true);
@@ -102,12 +94,12 @@
                         this.sendElement = true;
                     }
                     this.fire('nylon-change-page',{
-                        path:e.currentTarget.getAttribute('path') 
+                        path:e.currentTarget.getAttribute('path')
                     });
                 }else{
                     this.fire('open-drawer');
                 }
-                
+
             },
             _loaded:function(){
                 this.async(()=>{
@@ -116,7 +108,7 @@
                     });
                     this.fire('close-drawer');
                 },200)
-                
+
             }
         });
     </script>

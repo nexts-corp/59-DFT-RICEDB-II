@@ -1,0 +1,336 @@
+<link rel="import" href="renew/renew-page.html">
+<link rel="import" href="register/register-pageRegister.html">
+<link rel="import" href="../../components/dataBehavior.html">
+<link rel="import" href="../../components/panel-right/panel-right.html">
+
+<dom-module id="report-exporter">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table gl-toast">
+    * {
+        font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    .buttonSearch{
+      margin: 30px 0px 10px 50px;
+    }
+    .header {
+    padding: 10px 0px 10px 10px;
+    background-color: var(--paper-grey-100);
+    color: var(--paper-grey-600);
+    font-size: var(--font-size-h4);
+    font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .registor{
+      margin: 20px;
+    }
+    .title {
+      text-align: center;
+       font-size: var(--font-size-h3);
+       font-family: 'rsuregular', sans-serif;
+         -webkit-font-smoothing: antialiased;
+    }
+    .text-table{
+      text-align: center;
+       font-size: var(--font-size-h4);
+    }
+    .textSearch{
+      text-align: center;
+       font-size: var(--font-size-h4);
+       font-family: 'rsuregular', sans-serif;
+         -webkit-font-smoothing: antialiased;
+      margin-top: 25px;
+      margin-left: 20px;
+    }
+    .searchBox{
+      padding: 5px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    .elevation{
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+    }
+    .searchBorder{
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px;
+    }
+    .gl-table-default{
+         border-collapse: collapse;
+         width: 100%;
+         white-space: nowrap;
+     }
+    paper-material {
+      background-color: var(--gl-white-color);
+    }
+    gl-search-input {
+        margin: 30px 0px 0px 0px;
+        width: 60%;
+    }
+    </style>
+    <template>
+      <paper-material elevation="1" class="elevation">
+
+        <div class="layout vertical registor">
+          <div class="layout horizontal justified">
+            <div class="horizontal layout">
+              <!-- <div class="flex"></div> -->
+                <div style="margin:30px 10px 0px 20px;"><iron-icon icon="print"></iron-icon></div>
+                <gl-form-dropdown-menu style="width:100%;" placeholder="เลือกประเภทรายงาน" name="report">
+                  <paper-menu class="dropdown-content" attr-for-selected="report" selected="{{report}}">
+                    <paper-item id="reEx"  on-tap="_print" report="reportExporter" src="../../../../report/rpt_exporter.pdf">รายชื่อผู้ได้รับหนังสืออนุญาต</paper-item>
+                    <paper-item id="reCom" on-tap="_print" report="reportNameCompany" src="../../../../report/rpt_board.pdf">รายชื่อคณะกรรมการบริษัท</paper-item>
+                    <paper-item id="reAdd" on-tap="_print" report="reportAddress" src="../../../../report/rpt_address.pdf">รายชื่อและที่อยู่ของผู้ส่งออกข้าว</paper-item>
+                    <!--<paper-item id="reName" on-tap="_print" report="reportNameExporter" src="/report/reportNameExporter.pdf">รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ</paper-item>-->
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+                <!-- <paper-button class="gl-btn-info gl-small" on-tap="_print" raised><iron-icon icon="print"></iron-icon>พิมพ์</paper-button> -->
+            </div>
+            <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" title="เพิ่มผู้ส่งออกข้าว" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
+          </div>
+
+          <div class="flex title">
+              ข้อมูลผู้ส่งออกข้าวไปต่างประเทศ
+          </div>
+
+          <div class="searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                    item-value-path="exporter_id" value="{{dataSelected.exporter_id}}" name="exporter_id"></gl-combo-box>
+              </gl-grid-col>
+            </gl-grid-row>
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <gl-form-dropdown-menu label="ประเภทใบอนุญาต" placeholder="ทั้งหมด">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.type_lic_id}}" name="type_lic_id">
+                    <paper-item>ทั้งหมด</paper-item>
+                    <paper-item value="KK6">ทั่วไป</paper-item>
+                    <paper-item value="KK7">ไม่เกิน 12 ก.ก.</paper-item>
+                    <paper-item value="KK8">ชายแดน</paper-item>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <gl-form-dropdown-menu label="สถานะสมาชิกสมาคมผู้ส่งออก" placeholder="ทั้งหมด">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.exporter_status}}" name="exporter_status">
+                    <paper-item>ทั้งหมด</paper-item>
+                    <paper-item value="true">เป็นสมาชิก</paper-item>
+                    <paper-item value="false">ไม่เป็นสมาชิก</paper-item>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <gl-form-dropdown-menu label="สถานะ คน." placeholder="ทั้งหมด">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.trader_active}}" name="trader_active">
+                    <paper-item>ทั้งหมด</paper-item>
+                    <paper-item value="true">ปกติ</paper-item>
+                    <paper-item value="false">ถูกระงับ</paper-item>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <gl-form-dropdown-menu label="สถานะผู้ส่งออก" placeholder="ทั้งหมด">
+                  <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.exporter_active}}" name="exporter_active">
+                    <paper-item>ทั้งหมด</paper-item>
+                    <paper-item value="true">ปกติ</paper-item>
+                    <paper-item value="false">ถูกระงับ</paper-item>
+                  </paper-menu>
+                </gl-form-dropdown-menu>
+              </gl-grid-col>
+            </gl-grid-row>
+
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <vaadin-date-picker label="จากวันที่" value="{{dataSelected.date_start}}" name="date_start"></vaadin-date-picker>
+              </gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                <vaadin-date-picker label="ถึงวันที่" value="{{dataSelected.date_end}}" name="date_end"></vaadin-date-picker>
+              </gl-grid-col>
+            </gl-grid-row>
+            <gl-grid-row>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]"></gl-grid-col>
+              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <paper-button class="gl-btn-info buttonSearch" on-tap="_search" title="ค้นหาข้อมูล" raised>ค้นหา</paper-button>
+              </gl-grid-col>
+            </gl-grid-row>
+          </div>
+
+
+          <div id="found" hidden>
+            <div class="searchBorder" style="overflow-x:auto;">
+              <table class="gl-table-default">
+                <thead class="table-head">
+                  <tr>
+                    <th><div class="text-table">เลข ทบ.</div></th>
+                    <th><div class="text-table">เลขที่ผู้เสียภาษี</div></th>
+                    <th><div class="text-table">ชื่อบริษัท</div></th>
+                    <th><div class="text-table">ประเภทใบอนุญาต</div></th>
+                    <th><div class="text-table">สถานะสมาชิกสมาคมฯ</div></th>
+                    <th><div class="text-table">สถานะ คน.</div></th>
+                    <th><div class="text-table">สถานะผู้ส่งออก</div></th>
+                    <th><div class="text-table">วันที่ลงทะเบียน</div></th>
+                  </tr>
+                </thead>
+
+
+                <template is="dom-repeat" items="{{exporters}}">
+                  <tbody>
+                    <tr id="detailRegExporter" on-tap="_selectData" data="[[item]]" style="cursor:pointer;">
+                      <td><div class="text-table">{{item.exporter_no_name}}</div></td>
+                      <td><div class="text-table">{{item.seller_tax_id}}</div></td>
+                      <td><div class="text-table">{{item.seller_name_th}}</div></td>
+                      <td><div class="text-table">{{item.type_lic_name}}</div></td>
+                      <td><div class="text-table">{{item.exporter_status_name}}</div></td>
+                      <td><div class="text-table">{{item.trader_active_name}}</div></td>
+                      <td><div class="text-table">{{item.exporter_active_name}}</div></td>
+                      <td><div class="text-table">{{item.exporter_date_approve}}</div></td>
+                    </tr>
+                  </tbody>
+                </template>
+              </table>
+
+            </div>
+          </div>
+        </div>
+
+        <div id="notfound" hidden>
+        <div class="horizontal center-justified layout searchBorder">
+          <div class="title" style="margin:20px">ไม่พบข้อมูลที่ค้นหา</div>
+        </div>
+        </div>
+
+        </paper-material>
+
+        <panel-right title="{{titleName}}">
+          <div class="left">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]"></register-pageRegister></div>
+              <div name="detailRegExporter">
+                <renew-page data={{dataSelect}}></renew-page>
+              </div>
+            </iron-pages>
+          </div>
+        </panel-right>
+
+    </template>
+    <script>
+        Polymer({
+            is: "report-exporter",
+            properties: {
+              layerContent: {
+                  type: String,
+                  value: "detailRegExporter"
+              },
+              dataSelected:{
+                type:Object,
+                value:{}
+              },
+              exporterId:{
+                type: String,
+                observer: '_exporterIdChanged'
+              },
+              traderId:{
+                type: String,
+                observer: '_search'
+              }
+            },
+            behaviors: [dataBehavior],
+            listeners:{
+              'refresh-exporter':'getExporters',
+              'close-toggle':'_closeToggle'
+            },
+            _exporterIdChanged:function(val){
+              // console.log(val);
+              if(val!=""){
+                this.layerContent = "detailRegExporter";
+              }
+            },
+            _toggleDrawer: function(e) {
+              // this.layerContent = e.target.id;
+              this.layerContent = "addRedRegExporter";
+              this.titleName = 'ลงทะเบียนผู้ส่งออก';
+              this.$$('panel-right').toggle();
+            },
+            attached: function() {
+              this.getExporters();
+              this.getIdExporters();
+            },
+            ready: function() {
+              this.$$('#found').removeAttribute("hidden");
+              this.$$('#notfound').setAttribute("hidden", "hidden");
+            },
+            getExporters: function() {
+              this.read('./external/exporter',(data)=>{
+                data.map((empty)=>{
+                  if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
+                    empty.exporter_no_name = '-';
+                    empty.exporter_active_name = '-';
+                    empty.exporter_date_approve = '-';
+                  }
+                });
+                this.exporters = data;
+              });
+            },
+            getIdExporters:function(){
+              this.exporter_id = this.exporter_id || this.$.exporter_id;
+              this.read('./external/exporter?exporter_status=true',(data)=>{
+                data.map((type)=>{
+                  type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+                });
+                this.exporter_id.items = data;
+              });
+            },
+            _search: function(){
+              // console.log(this.dataSelected);
+              var str='';
+              for( key in this.dataSelected){
+                  if(this.dataSelected[key] != '' && this.dataSelected[key] != null){
+                    if(str==''){str += '?'}else{str += '&'}
+                    str += key+'='+this.dataSelected[key];
+                  }
+              }
+              if (this.dataSelected.date_start != undefined && this.dataSelected.date_start != '' && (this.dataSelected.date_end == undefined || this.dataSelected.date_end == '')) {
+                this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่สิ้นสุดค้นหา'})
+              }
+              else if (this.dataSelected.date_end != undefined && this.dataSelected.date_end != '' && (this.dataSelected.date_start == undefined || this.dataSelected.date_start == '')) {
+                this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่เริ่มต้นค้นหา'})
+              }
+              this.read('./external/exporter'+str,(data)=>{
+                data.map((empty)=>{
+                  if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
+                    empty.exporter_no_name = '-';
+                    empty.exporter_active_name = '-';
+                    empty.exporter_date_approve = '-';
+                  }
+                });
+                if (data == '') {
+                  this.$$('#notfound').removeAttribute("hidden");
+                  this.$$('#found').setAttribute("hidden", "hidden");
+                }
+                else if (data != '') {
+                  this.exporters = data;
+                  this.$$('#found').removeAttribute("hidden");
+                  this.$$('#notfound').setAttribute("hidden", "hidden");
+                }
+              })
+            },
+            _print:function(e) {
+              window.open(e.target.getAttribute('src'),'_blank');
+            },
+            _selectData:function(e){
+              this.layerContent = "detailRegExporter";
+              this.titleName = 'ข้อมูลผู้ส่งออก';
+              this.$$('panel-right').toggle();
+              // this.layerContent = e.currentTarget.id;
+              this.dataSelect = e.currentTarget.data;
+            },
+            _closeToggle:function() {
+              this.$$('panel-right').close();
+            }
+        });
+    </script>
+</dom-module>

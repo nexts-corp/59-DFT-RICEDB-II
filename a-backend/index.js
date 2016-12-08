@@ -5,14 +5,11 @@ var app = express();
 
 
 const cluster = require('cluster');
-//const numCPUs = require('os').cpus().length;
-const numCPUs = 1;
 
 if (cluster.isMaster) {
-  for (var i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
-  
+
+  cluster.fork();
+
   cluster.on('exit', (worker, code, signal) => {
     console.log(`[worker] ${worker.process.pid} died (T_T)`);
     cluster.fork();
@@ -21,9 +18,10 @@ if (cluster.isMaster) {
   cluster.on('listening',(worker) => {
     console.log(`[worker] ${worker.process.pid} start (^.^)`);
   });
+
 } else {
 
-　
+
   var test = require('./routes/test');
   var g2g = require('./routes/g2g');
   var common = require('./routes/common');
@@ -55,7 +53,4 @@ if (cluster.isMaster) {
   public.use('/api', app);
   public.listen(3000);
 
-
-
 }
-
