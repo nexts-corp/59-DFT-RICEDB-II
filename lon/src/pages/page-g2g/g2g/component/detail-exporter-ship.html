@@ -30,7 +30,7 @@
         <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" always-float-label item-label-path="seller_name_en"
          item-value-path="exporter_id"  items="{{dataForSelect.seller}}" value="{{data.exporter_id}}" ></gl-combo-box>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">//[[data.exporter_id]]
         <gl-form-input disabled label="Tel." placeholder="ใส่รายละเอียด" value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
       </gl-grid-col>
 
@@ -210,12 +210,14 @@
       properties: {
         data: {
           type: Object,
+          value:{}
         },
         price:{
           type: Object,
+          value:{}
         },
         dataForSelect:{
-          type:Object
+          type:Object,
         }
       },
       observers:[
@@ -304,6 +306,7 @@
         // this._cleanShipmentData(this.data,(data)=>{
           // data.shm_id=this.dataForSelect.shm_id;
           // console.log(data);
+          // console.log(this.data);
           console.log(this.dataForSelect);
           // this.insert('./g2g/shipment/detail/insert',data, () => {
           //   console.log('เพิ่มได้');
