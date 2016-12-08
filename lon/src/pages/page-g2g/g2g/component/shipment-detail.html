@@ -59,16 +59,16 @@
       <template is="dom-if" if="[[!_isViewing(insertData)]]">
          <div class="horizontal end-justified layout">
            <paper-button class="gl-btn-danger" on-tap="backPageShipment" raised>ย้อนกลับ</paper-button>
-           <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>+เพิ่ม</paper-button>
+           <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>เพิ่ม</paper-button>
          </div>
        </template>
      </template>
      <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
        <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
           <div class="horizontal end-justified layout">
-              <paper-button class="gl-btn-danger" on-tap="backPageShipment" raised>ย้อนกลับ</paper-button>
+              <paper-button class="gl-btn-danger" on-tap="backPageShipmentDetail" raised>ย้อนกลับ</paper-button>
              <paper-button  class="gl-btn-success" on-tap="editShimpent" raised>บันทึก</paper-button>
-          </div>  
+          </div>
        </template>
      </template>
 
@@ -85,7 +85,7 @@
           <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]"></bill-detail-sm>
         </div>
         <div name="addExporter">
-          <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" ></detail-exporter-ship>
+          <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[!isViewSeleted]]"></detail-exporter-ship>
         </div>
         <div name="listOfExporter">
           <table class="gl-table-default">
@@ -114,15 +114,15 @@
              </div>
            </paper-item>
            <iron-collapse id="collapse[[item.shm_det_id]]">
-             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" ></detail-exporter-ship>
+             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]"></detail-exporter-ship>
            </iron-collapse>
          </template>
-
          <div class="horizontal end-justified layout">
-             <paper-button class="gl-btn-danger" raised on-tap="backPageShipment">ย้อนกลับ</paper-button>
-             <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
+             <paper-button class="gl-btn-danger" raised on-tap="backPageShipmentList">ย้อนกลับ</paper-button>
+               <paper-button class="gl-btn-info" raised on-tap="approveShipment">ยืนยันผู้ส่งออก</paper-button>
          </div>
         </div>
+
       </iron-pages>
 
 
@@ -188,10 +188,7 @@
         this.pageBl= 'listOfExporter';
       },
       editShipment:function () {
-        console.log(1);
-        this.editInput();
-        this.insertData = !this.insertData;
-        // console.log(this.insertData);
+        this.backPageShipmentDetail();
       },
       editBlShm:function () {
         this.pageBl= 'listOfBl';
@@ -252,7 +249,6 @@
          }
       },
       approveShipment:function () {
-        console.log(11);
         this.data.shm_status= this.approve(this.data.shm_status);
         this._cleanDataInsertShimment(this.data,(data)=>{
             // data.shm_id = this.data.shm_id;
@@ -301,9 +297,13 @@
           callback(newData);
         }
       },
-      backPageShipment:function ()  {
+      backPageShipmentList:function ()  {
         this.fire('get-list-shipment-page',{detail:'fin'});
       },
+      backPageShipmentDetail:function () {
+        this.editInput();
+        this.insertData = !this.insertData;
+      }
 
     });
   </script>

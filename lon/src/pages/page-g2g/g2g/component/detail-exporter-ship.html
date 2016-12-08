@@ -12,12 +12,12 @@
   </style>
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px">
-    <!-- <template is="dom-if" if="[[!checkBtnView(approve)]]"> -->
+
       <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
         <paper-icon-button icon="create" raised on-tap="editInput" title="Edit" index="[[index]]"></paper-icon-button>
         <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" ></paper-icon-button>
       </gl-form-panel-head>
-    <!-- </template> -->
+
 
 
     <gl-form-panel-body>
@@ -184,22 +184,25 @@
       <iron-icon class="gl-icon-size" icon="save"></iron-icon>checkData</paper-button> -->
   </gl-form-panel-body>
   <gl-form-panel-footer set-padding="10px 20px 0px 20px">
-    <!-- <template is="dom-if" if="[[checkBtnView(checkBtn)]]"> -->
+    //[[isViewSeleted]]
+  <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
     <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
       ยกเลิก</paper-button>
-      <paper-button  class="gl-btn-success" raised on-tap="editExporter" >
+    <paper-button  class="gl-btn-success" raised on-tap="editExporter" >
         <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
-      <!-- </template> -->
+  </template>
+  <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+    <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
+          ยกเลิก</paper-button>
+    <paper-button class="gl-btn-success" raised on-tap="addExporter">
+        เพิ่ม</paper-button>
+  </template>
+
   </gl-form-panel-footer>
 
-  <!-- <template is="dom-if" if="[[insertShipment]]"> -->
-    <gl-form-panel-footer>
-      <paper-button class="gl-btn-danger" raised on-tap="cancalShow">
-        ยกเลิก</paper-button>
-      <paper-button class="gl-btn-success" raised on-tap="addExporter">
-      เพิ่ม</paper-button>
-    </gl-form-panel-footer>
-  <!-- </template> -->
+
+
+
   </template>
   <script>
     Polymer({
@@ -343,6 +346,9 @@
               });
           }
      },
+     cancelInsertShipment:function () {
+        this.fire('cancel-insert-shipment',{detail:'cancel-insert-shipment'})
+     },
       _cleanShipmentData:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
@@ -366,7 +372,7 @@
             });
             callback(newData)
           }
-      }
+      },
 
     });
   </script>
