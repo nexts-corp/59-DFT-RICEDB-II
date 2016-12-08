@@ -114,7 +114,7 @@
              </div>
            </paper-item>
            <iron-collapse id="collapse[[item.shm_det_id]]">
-             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]"></detail-exporter-ship>
+             <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]" shm-status="[[data.shm_status]]"></detail-exporter-ship>
            </iron-collapse>
          </template>
          <div class="horizontal end-justified layout">
@@ -269,20 +269,18 @@
       _approveShipment:function (result,detail) {
         if (result == true) {
           console.log(detail.data);
-            //  this.update('./g2g/shipment/update', detail.data,() => {
+             this.update('./g2g/shipment/update', detail.data,() => {
             //
             // //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:detail.data.contract_id});
             this.fire('get-list-shipment-detail',{sm_id:detail.data.id});
-            //    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-            //      callback:function(){
-            //           console.log(1111);
-            //          //  detail.el.editInput();
-            //          //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
-            //        }
-            //    });
-            //  });
+               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                 callback:function(){
+
+                   }
+               });
+             });
          }
       },
       _toggleSub:function(e){

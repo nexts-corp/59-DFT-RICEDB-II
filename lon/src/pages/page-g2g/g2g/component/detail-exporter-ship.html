@@ -13,9 +13,11 @@
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px">
 
-      <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-        <paper-icon-button icon="create" raised on-tap="editInput" title="Edit" index="[[index]]"></paper-icon-button>
-        <paper-icon-button icon="delete" raised on-tap="shipmentDelete" title="Delete" ></paper-icon-button>
+      <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">[[shmStatus]]//
+        <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" hidden="[[shmStatus]]"></paper-icon-button>
+        <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
+        <paper-icon-button icon="delete" id="delExporter" raised on-tap="shipmentDelete" title="Delete" hidden="[[shmStatus]]"></paper-icon-button>
+        <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
       </gl-form-panel-head>
 
 
