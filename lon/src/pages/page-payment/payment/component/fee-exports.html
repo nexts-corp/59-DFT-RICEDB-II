@@ -9,28 +9,29 @@
       font-family: 'CSChatThaiUI', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-    div.right{
-      margin: 10px;
-      padding: 5px;
-      border: 1px solid #000;
-    }
   </style>
   <template>
-    <div class="right">
-      <button type="button" name="button" on-tap="deleteFee">ลบ</button>
+  <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+    <gl-form-panel-head label="" set-padding="10px" set-border="1px">
+      <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
+      <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
+      <paper-icon-button icon="delete" id="delFee" raised on-tap="deleteFee" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
+      <paper-tooltip for="delFee" offset="0">Delete Exporter</paper-tooltip>
+    </gl-form-panel-head>
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <div class="header flex-center-justified">
        <gl-form-label-input label="" class="inputHeader" value="รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ" ></gl-form-label-input >
      </div>
      <div class="container">
        <gl-grid-row width="{{getWidth}}">
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
-           <gl-form-input label="ครั้งที่" value="{{data.fee_no}}"></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,5]]">
-           <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}"></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,5]]">
-           <vaadin-date-picker label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}"></vaadin-date-picker>
+           <vaadin-date-picker class="required" required  disabled="[[isInputDisabled]]"label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}" always-float-label></vaadin-date-picker>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -38,7 +39,7 @@
        <gl-grid-row>
 
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-           <gl-form-input label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}"></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
            <div class="setText">อัตราแลกเปลี่ยน</div>
@@ -49,14 +50,14 @@
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                  [[changeString2Num(data.*,'rate_tt')]]
-                 <gl-form-input style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
+                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                  <div class="text">ธ.กรุงไทยเสนอ</div>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                  [[changeString2Num(data.*,'rate_bank')]]
-                 <gl-form-input style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
+                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
                </gl-grid-col>
              </gl-grid-row>
            </gl-grid-col>
@@ -71,18 +72,18 @@
        <gl-grid-row>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_internal')]]
-           <gl-form-input label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_foreign')]]
-           <gl-form-input label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_other')]]
-           <gl-form-input label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
-           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -106,14 +107,23 @@
          <li>FE = ค่าธรรมเนียมธนาคาร</li>
        </ul>
      </div>
+   </gl-form-panel-body>
+           <gl-form-panel-footer label="" set-padding="10px">
+             <div class="horizontal end-justified layout">
+               <paper-button raised class="gl-btn-danger">ยกเลิก</paper-button>
 
-     <div class="horizontal end-justified layout">
-       <paper-button raised class="gl-btn-danger">ยกเลิก</paper-button>
-       <paper-button raised on-tap="confirmPayment" class="gl-btn-success">ยื่นยัน</paper-button>
-       <paper-button raised on-tap="savePayment" class="gl-btn-success">บันทึก</paper-button>
-     </div>
-     </div>
-</div>
+               <paper-button raised on-tap="confirmPayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยื่นยัน</paper-button>
+
+               <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+                 <paper-button raised on-tap="addPayment" class="gl-btn-success">เพิ่ม</paper-button>
+               </template>
+               <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
+                 <paper-button raised on-tap="addPayment" class="gl-btn-success" hidden="[[isViewSeleted]]">บันทึก</paper-button>
+               <!-- </template> -->
+             </div>
+           </gl-form-panel-footer>
+       </gl-form-panel>
+
   </template>
   <script>
     Polymer({
@@ -137,17 +147,17 @@
       _countFee:function (fee) {
         return fee/this.data.invoice.length;
       },
-      savePayment:function () {
+      addPayment:function () {
         this._clearDatafee(this.data,'insert',(data)=>{
             data.fee_status = false;
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
             this.insert('./g2g/fee/insert',data, () => {
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
-                  this.fire('flipDrawer',{detail:'flipDrawer'});
                   let shmid= this._getUrl();
-                  console.log('save shmid=>>',shmid);
+                  this.fire('close-drawer',{detail:'close-drawer'});
                   this.fire('get-fee-list',{detail:shmid});
+                  this.editInput();
               }
              });
             });
@@ -160,13 +170,13 @@
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
                 text:'ต้องการยืนยันใช่หรือไม่ ?',
-                confirmed:this._saveData, //function ที่ใช้รับค่า ปุ่ม
+                confirmed:this._approveFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
                 el: this, // compontents
                 data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
             })
         });
       },
-      _saveData:function(result,detail){
+      _approveFee:function(result,detail){
          if (result == true) {
            console.log(detail.data);
           //  detail.el.update('./g2g/confirm/update',detail.data, () => {
@@ -186,20 +196,21 @@
      deleteFee:function () {
        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
            status:'dialog',
-           text:'ต้องการแก้ลบใช่หรือไม่ ?',
-           confirmed:this._deleteDataFee, //function ที่ใช้รับค่า ปุ่ม
+           text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+           confirmed:this._deleteDataFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
            el: this, // compontents
            data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
        })
      },
      _deleteDataFee:function(result,detail){
        if (result == true) {
-         detail.el.data.invoice.map((el,indexShmid)=>{
-          detail.el._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
+         this.data.invoice.map((el,indexShmid)=>{
+          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
         });
-         detail.el.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
-            let shmid= detail.el._getUrl();
-            detail.el.fire('get-fee-list',{detail:shmid});
+         this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
+            let shmid= this._getUrl();
+            this.fire('get-fee-list',{detail:shmid});
+            this.fire('close-drawer',{detail:'close-drawer'})
          });
        }
     },
@@ -247,7 +258,7 @@
           this.fire('get-invoice-list',{detail:shmId});
         });
       },
-      
+
     });
   </script>
 </dom-module>

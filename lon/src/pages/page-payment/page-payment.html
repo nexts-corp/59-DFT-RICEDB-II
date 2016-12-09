@@ -52,10 +52,18 @@
     <nylon-panel-right title="หัวข้อ" id="test">
       <div class="rightdata" align="left" >
         <iron-pages selected="{{paymentsPageSeleted}}" attr-for-selected="name">
-          <commercial-invoice  name="blPage" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></commercial-invoice>
-          <commercial-invoice  name="invoicePage" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></commercial-invoice>
-          <fee-exports name="blInvoicePage" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
-          <fee-exports name="feePage" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports>
+          <div name="blPage">
+            <commercial-invoice data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></commercial-invoice>
+          </div>
+          <div name="invoicePage">
+            <commercial-invoice data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></commercial-invoice>
+          </div>
+          <div name="blInvoicePage">
+            <fee-exports data="[[dataSelectedfee.draft]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
+          </div>
+          <div name="feePage">
+            <fee-exports data="[[dataSelectedfee.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports>
+          </div>
         </iron-pages>
       </div>
     </nylon-panel-right>
@@ -79,7 +87,7 @@
                 type: Object,
                 // value:{}
               },
-              dataSelectedInvoice: {
+              dataSelectedfee: {
                 type: Object,
                 value:{}
               },
@@ -155,7 +163,6 @@
             _getBlInvoiceDetail:function (e) {
               this.read('./g2g/invoice/id/'+e.detail.detail.invoice_id,(data)=>{
                 this.dataSelected = data;
-                console.log(this.dataSelected);
                 this.paymentsPageSeleted = 'invoicePage';
                 this._flipDrawer();
               });
@@ -172,15 +179,17 @@
                 }
               });
               this.read('./g2g/fee/invoice/id/'+url,(data)=>{
-                this.dataSelected = data;
-                console.log(this.dataSelected);
+                this.dataSelectedfee.draft = data;
+                this.notifyPath('dataSelectedfee.draft');
                 this.paymentsPageSeleted = 'blInvoicePage';
                 this._flipDrawer();
               });
             },
             _getFeeDetail:function (e) {
               this.read('./g2g/fee/id/'+e.detail.detail,(data)=>{
-                  this.dataSelected = data;
+                  this.dataSelectedfee.fee = data;
+                  console.log(this.dataSelectedfee.fee);
+                  this.notifyPath('dataSelectedfee.fee');
                   this.paymentsPageSeleted = 'feePage';
                   this._flipDrawer();
               });
