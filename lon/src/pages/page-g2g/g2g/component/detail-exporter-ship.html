@@ -320,7 +320,8 @@
           data.shm_id=this.dataForSelect.shm_id;
           this.insert('./g2g/shipment/detail/insert',data, () => {
             this.fire('refresh-contract',{detail:'refresh-contract'});
-            // this.fire('get-list-shipment',{contractId:this.data.contract_id});
+            this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
+            this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
               callback:()=>{
                   this.cancelInsertShipment();
@@ -359,7 +360,7 @@
      deleteShipmentDetail:function () {
        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
            status:'dialog',
-           text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+           text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
            confirmed:this._deleteExporter.bind(this), //function ที่ใช้รับค่า ปุ่ม
            el: this, // compontents
            data:this.data// ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
@@ -368,10 +369,12 @@
      _deleteExporter:function (result,detail) {
         if (result == true) {
           console.log(detail.data);
+          this.fire('min-size-collapse-shipment-detail',{collapse:'collapse'+detail.data.shm_det_id});
            this.delete('./g2g/shipment/detail/delete/id/',detail.data.shm_det_id, () => {
              this.fire('refresh-contract',{detail:'refresh-contract'});
              this.fire('get-list-shipment',{contractId:detail.data.contract_id});
              this.fire('get-list-shipment-detail',{sm_id:detail.data.shm_id});
+             //สั่งปิดแล้วค่อยลบ
              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                    //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});

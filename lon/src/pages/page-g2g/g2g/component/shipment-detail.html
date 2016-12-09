@@ -144,7 +144,8 @@
         'send-Bl-no':'_lisNerBlNos',
         'edit-bl-detail':'_lisNerBlDetail',
         'add-bl-no':'_lisNerAddBlNo',
-        'cancel-insert-shipment':'_lisNerCanInSm'
+        'cancel-insert-shipment':'_lisNerCanInSm',
+        'min-size-collapse-shipment-detail' : '_lisNerMinCollapse'
       },
       properties: {
         confirmLetterObject: {
@@ -191,6 +192,11 @@
       _lisNerCanInSm:function () {
         this.pageBl= 'listOfExporter';
       },
+      _lisNerMinCollapse:function (e) {
+        let targetAttribute = e.detail.collapse;
+        console.log(targetAttribute);
+        this.$$('#'+targetAttribute).toggle();
+      },
       editShipment:function () {
         this.backPageShipmentDetail();
       },
@@ -198,6 +204,8 @@
         this.pageBl= 'listOfBl';
       },
       addExporter:function () {
+        this.dataForSelect.contract_id = this.data.contract_id;
+        this.notifyPath('dataForSelect.contract_id');
         this.pageBl= 'addExporter';
       },
       _getConfirm:function (confirmLetter) {
