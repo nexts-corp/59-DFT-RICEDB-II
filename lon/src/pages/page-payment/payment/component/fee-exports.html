@@ -1,7 +1,7 @@
 <link rel="import" href="fee-exports-sum.html">
 <link rel="import" href="fee-exports-invoice.html">
 <dom-module id="fee-exports">
-  <style include="iron-flex iron-flex-factors iron-flex-alignment  gl-styles">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
       display: block;
     }
@@ -109,17 +109,18 @@
      </div>
    </gl-form-panel-body>
            <gl-form-panel-footer label="" set-padding="10px">
-             <div class="horizontal end-justified layout">
-               <paper-button raised class="gl-btn-danger">ยกเลิก</paper-button>
-
-               <paper-button raised on-tap="confirmPayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยื่นยัน</paper-button>
-
+             <div class="horizontal end-justified layout">[[isInputDisabled]]
+               <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
+               <paper-button raised class="gl-btn-danger" on-tap="closeDrawerFee">ยกเลิก</paper-button>
+               <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[!isViewSeleted]]">ยื่นยัน</paper-button>
+                </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-                 <paper-button raised on-tap="addPayment" class="gl-btn-success">เพิ่ม</paper-button>
+                 <paper-button raised class="gl-btn-danger" on-tap="closeDrawerFee" hidden="[[!isViewSeleted]]">ยกเลิก</paper-button>
+                 <paper-button raised on-tap="addPayment" class="gl-btn-success" hidden="[[!isViewSeleted]]">เพิ่ม</paper-button>
                </template>
-               <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
-                 <paper-button raised on-tap="addPayment" class="gl-btn-success" hidden="[[isViewSeleted]]">บันทึก</paper-button>
-               <!-- </template> -->
+               <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+                 <paper-button raised on-tap="savePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">บันทึก</paper-button>
+               </template>
              </div>
            </gl-form-panel-footer>
        </gl-form-panel>
@@ -147,6 +148,9 @@
       _countFee:function (fee) {
         return fee/this.data.invoice.length;
       },
+      closeDrawerFee:function () {
+        this.fire('close-drawer',{detail:'close-drawer'});
+      },
       addPayment:function () {
         this._clearDatafee(this.data,'insert',(data)=>{
             data.fee_status = false;
@@ -163,7 +167,36 @@
             });
         });
       },
-      confirmPayment:function () {
+      savePayment:function () {
+        this._clearDatafee(this.data,'update',(data)=>{
+            data.id=this.data.fee_id;
+            data.fee_status = false;
+            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                status:'dialog',
+                text:'ต้องการแก้ไขข้อมูลใช่หรือไม่ ?',
+                confirmed:this._editFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                el: this, // compontents
+                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+            })
+        });
+      },
+      _editFee:function (result,detail){
+         if (result == true) {
+           console.log(detail.data);
+           console.log(this.data);
+           this.update('./g2g/fee/update',detail.data, () => {
+             let contract_id= this._getUrl();
+             this.fire('get-fee-list',{detail:contract_id});
+             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+               callback:()=>{
+                 this.editInput();
+                   //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                 }
+             });
+           });
+         }
+      },
+      approvePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
             data.fee_status = true;
             data.id=this.data.fee_id;
@@ -179,18 +212,16 @@
       _approveFee:function(result,detail){
          if (result == true) {
            console.log(detail.data);
-          //  detail.el.update('./g2g/confirm/update',detail.data, () => {
-          //      detail.el.fire('refresh-contract',{detail:'refresh-contract'});
-          //      detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-          //          callback:function(){
-          //           //  detail.el.editInput();
-          //           detail.el.editInput();
-          //           detail.el.fire('get-confirm-detail',{clId:detail.data.id});
-          //           // detail.el.data = detail.data;
-          //           detail.el.fire('get-list-confirm',{contractId:detail.data.contract_id});
-          //         }
-          //       });
-          //   });
+           this.update('./g2g/fee/update',detail.data, () => {
+               this.fire('refresh-contract',{detail:'refresh-contract'});
+               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                   callback:()=>{
+                    this.fire('close-drawer',{detail:'close-drawer'})
+                    let contract_id= this._getUrl();
+                    this.fire('get-fee-list',{detail:contract_id});
+                  }
+                });
+            });
           }
      },
      deleteFee:function () {
@@ -208,8 +239,8 @@
           this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
         });
          this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
-            let shmid= this._getUrl();
-            this.fire('get-fee-list',{detail:shmid});
+           let contract_id= this._getUrl();
+           this.fire('get-fee-list',{detail:contract_id});
             this.fire('close-drawer',{detail:'close-drawer'})
          });
        }

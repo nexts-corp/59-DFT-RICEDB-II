@@ -39,7 +39,7 @@
           </thead>
           <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]" as="contract">
-              <template is="dom-repeat" items="[[contract.bl_detail]]" filter="{{_filter(searchInput)}}">
+              <template is="dom-repeat" items="[[contract.bl_detail]]" >
                 <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
                   <td>[[contract.shm_no]]</td>
                   <td>[[item.bl_no]]</td>
@@ -54,6 +54,7 @@
     Polymer({
       is: "list-of-bl-pm",
       getBlDetail:function (e) {
+        console.log(this.data);
         this.fire('get-bl-detail',{detail:e.currentTarget.data});
       }
     });
