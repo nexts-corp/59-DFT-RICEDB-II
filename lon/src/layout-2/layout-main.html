@@ -1,0 +1,96 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+
+
+
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<style media="screen">
+   body{
+     background-color: #eee;
+   }
+</style>
+
+<dom-module id="layout-main">
+	<template>
+		<style is="custom-style">
+			app-toolbar {
+				/* Toolbar is the main header, so give it some color */
+        background-color:#f7941e;
+        color: #fff;
+				/*font-family: 'Roboto', Helvetica, sans-serif;*/
+				/*color: white;*/
+        font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+				--app-toolbar-font-size: 24px;
+				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+			}
+      app-drawer{
+        z-index: 999;
+      }
+		</style>
+
+
+		<app-header-layout>
+
+			<app-header fixed condenses effects="waterfall">
+				<app-toolbar sticky>
+					<paper-icon-button icon="menu" on-tap="toggleAppMenu"></paper-icon-button>
+					<div main-title>ระบบการซื้อขายข้าว</div>
+				</app-toolbar>
+			</app-header>
+
+			<app-drawer id="appMenu">
+				<div class="menu">
+                    <app-toolbar>Menu</app-toolbar>
+                    <!--<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                        <a name="page1" href="/page1">View One</a>
+                        <a name="page2" href="/page2">View Two</a>
+                    </iron-selector>-->
+                    <div role="listbox">
+                        <!-- <paper-icon-item on-tap="selectPage" path="/page1" focused>
+                            <iron-icon icon="inbox" item-icon></iron-icon>
+                            สัญญา
+                        </paper-icon-item>
+                        <paper-icon-item on-tap="selectPage" path="/page2">
+                            <iron-icon icon="star" item-icon></iron-icon>
+                            page2
+                        </paper-icon-item> -->
+                        <paper-icon-item on-tap="selectPage" path="/g2g" >
+                            <iron-icon icon="star" item-icon></iron-icon>
+                            g2g
+                        </paper-icon-item>
+                        <paper-icon-item on-tap="selectPage" path="/payment" >
+                            <iron-icon icon="star" item-icon></iron-icon>
+                            payment
+                        </paper-icon-item>
+                    </div>
+                </div>
+			</app-drawer>
+      <nylon-toast>
+			  <content></content>
+      </nylon-toast>
+		</app-header-layout>
+
+	</template>
+
+
+	<script>
+        Polymer({
+            is:'layout-main',
+  			toggleAppMenu:function(){
+  				this.$.appMenu.toggle();
+  			},
+            selectPage:function(e){
+                this.fire('nylon-change-page',{
+                    path:e.currentTarget.getAttribute('path')
+                });
+                this.$.appMenu.toggle();
+            }
+        });
+    </script>
+</dom-module>

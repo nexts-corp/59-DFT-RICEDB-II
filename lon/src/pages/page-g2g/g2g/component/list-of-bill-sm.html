@@ -1,0 +1,91 @@
+<link rel="import" href="../controller/g2gShipmentController.html">
+<dom-module id="list-of-bill-sm">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    paper-button.btnInTable {
+       --paper-button:{
+        margin-top: 0px;
+         height: 2em;
+       }
+     }
+     paper-button.btnInTable > iron-icon{
+       height: 1em;
+       width: 1em;
+       margin-right: 0.5em;
+     }
+     table {
+       border: 0.1em solid #F1F1F1;
+       margin-top: 1em;
+       margin-bottom: 1em;
+     }
+     div.title{
+       margin-top: 1em;
+       text-align: center;
+       font-size: var(--font-size-h4);
+     }
+     table.gl-table-default >tbody.table-body > tr > td{
+        cursor: pointer;
+     }
+  </style>
+  <template>
+    <div class="title">
+      Bill of Landing Number
+    </div>
+
+    <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>B/L No </th>
+              <th>Booking No</th>
+            </tr>
+          </thead>
+
+          <tbody class="table-body">
+            <template is="dom-repeat" items="[[data]]">
+              <tr on-tap="getBlDetail" data="[[item]]">
+               <td>[[item.bl_no]]</td>
+               <td>1</td>
+             </tr>
+            </template>
+
+         </tbody>
+      </table>
+      <div class="horizontal end-justified layout" style="margin-bottom:1em;">
+        <paper-button raised class="gl-btn-danger" on-tap="cancelInsertShipment">
+          <!-- <iron-icon icon="add"></iron-icon> -->
+          ปิดการแสดง B/L</paper-button>
+        <paper-button raised class=" gl-btn-primary" on-tap="addBlDetail">
+          <!-- <iron-icon icon="add"></iron-icon> -->
+          เพิ่ม B/L</paper-button>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: "list-of-bill-sm",
+      behaviors: [
+          g2gShipmentController
+      ],
+      properties: {
+        dataSelected: {
+          type: Object,
+        }
+      },
+      // observers:[
+      //   'check(data)'
+      // ],
+      // check:function (data) {
+      //   console.log(data);
+      // },
+      addBlDetail:function () {
+        this.fire('add-bl-no',{detail:'addbl'});
+      },
+      getBlDetail:function (e) {
+        this.dataSelected = e.currentTarget.data;
+        this.fire('edit-bl-detail',{detail:this.dataSelected});
+      },
+    });
+  </script>
+</dom-module>
