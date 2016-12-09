@@ -1,5 +1,6 @@
 <link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
-<dom-module id="list-registration-pause">
+<link rel="import" href="../../data/dataBehavior.html">
+<dom-module id="list-registration-ban">
     <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .header {
       padding: 10px 0px 0px 10px;
@@ -69,8 +70,8 @@
     </template>
     <script>
         Polymer({
-            is: "list-registration-pause",
-            behaviors: [listEditBehavior,gl.behavior.core],
+            is: "list-registration-ban",
+            behaviors: [listEditBehavior,gl.behavior.core,dataBehavior],
             properties: {
               data:{
                 type: Array,
@@ -80,7 +81,11 @@
                 type: Boolean,
                 value: false,
                 observer: '_changeselectDataAll'
-              }
+              },
+                dataExporters:{
+                  type: Array,
+                  value: []
+                }
             },
             _changeselectDataAll:function (val) {
               // console.log(this.data);
@@ -94,52 +99,36 @@
               }
               // console.log(this.data.filter(check));
               this.data.filter(check).map((datas)=>{
-                datas.id = datas.exporter_id;
-                datas.exporter_date_update = new Date;
-                datas.exporter_date_approve = new Date;
-                delete datas.exporter_id;
-                delete datas.country_fullname_en;
-                delete datas.country_id;
-                delete datas.country_name_en;
-                delete datas.country_name_th;
-                delete datas.exporter_active;
-                delete datas.exporter_status;
-                delete datas.exporter_status_name;
-                delete datas.seller_address_en;
-                delete datas.seller_address_th;
-                delete datas.seller_id;
-                delete datas.seller_email;
-                delete datas.seller_fax;
-                delete datas.seller_name_en;
-                delete datas.seller_name_th;
-                delete datas.seller_phone;
-                delete datas.seller_tax_id;
-                delete datas.trader_date_approve;
-                delete datas.trader_date_expire;
-                delete datas.trader_distric;
-                delete datas.trader_name;
-                delete datas.trader_no;
-                delete datas.trader_office;
-                delete datas.trader_province;
-                delete datas.type_lic_fullname;
-                delete datas.type_lic_id;
-                delete datas.type_lic_name;
-                delete datas.check;
-                // console.log(datas);
-                this.updateExporter(datas);
-              });
+                let {exporter_id,exporter_date_update,exporter_date_approve,trader_id,exporter_no} = datas;
+                let newData = {exporter_id,exporter_date_update,exporter_date_approve,trader_id,exporter_no};
+                this.dataExporters.push(newData);
+                });
+                this.fire('toast',{status:'dialog',
+                text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+                confirmed : this._confirm.bind(this)
+                });
             },
-            updateExporter:function (datas) {
-              axios.put('./external/exporter/update', datas)
-                        .then(function (response) {
-                          console.log("success");
-                          console.log(response);
-                          this.glQuery('pauseExporter').getExporters();
-                        }.bind(this))
-                        .catch(function (error) {
-                          console.log("error");
-                          console.log(error);
-                        })
+            _confirm:function(result,detail){
+              // console.log(this.dataExporters);
+              this.dataExporters.map((datas)=>{
+                datas={
+                  id : datas.exporter_id,
+                  trader_id : datas.trader_id,
+                  exporter_no : datas.exporter_no,
+                  exporter_date_approve : new Date,
+                  exporter_date_update : new Date
+                }
+              if(result == true){
+                // console.log(datas);
+                this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                this.update('./external/exporter/update', datas, () => {
+                  this.glQuery('pauseExporter').getExporters();
+                  this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
+                }
+              });
             }
         });
     </script>

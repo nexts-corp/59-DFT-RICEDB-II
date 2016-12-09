@@ -2,10 +2,10 @@
 <link rel="import" href="components/list-edit/list-registration.html">
 <link rel="import" href="components/renew/renew-memberShow.html">
 <link rel="import" href="data/dataBehavior.html">
-<link rel="import" href="components/list-edit/list-registration-pause.html">
+<link rel="import" href="components/list-edit/list-registration-ban.html">
 
 
-<dom-module id="listregistion-pause-registion-exporter">
+<dom-module id="listregistion-ban-registion-exporter">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
@@ -88,15 +88,15 @@
           </div>
 
           <div class="flex searchBorder">
-            <list-registration-pause data="{{exporters}}">
+            <list-registration-ban data="{{exporters}}">
               <items type="primary">
-                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
+                <list item="exporter_no_name" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
                 <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
                 <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
                 <list item="exporter_date_approve" label="วันที่อนุมัติ" width="flex"></list>
                 <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
               </items>
-            </list-registration-pause>
+            </list-registration-ban>
 
           </div>
         </div>
@@ -111,6 +111,7 @@
               <div class="horizontal center-justified layout">
                 <paper-button raised class="gl-btn-success button" on-tap="_active">ยกเลิกการระงับ</paper-button>
               </div>
+              <div style="margin-bottom:70px;"></div>
             </div>
 
           </iron-pages>
@@ -120,7 +121,7 @@
     </template>
     <script>
         Polymer({
-            is: "listregistion-pause-registion-exporter",
+            is: "listregistion-ban-registion-exporter",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
@@ -190,19 +191,29 @@
             },
             _active: function(){
               // console.log(this.dataSelect);
-              var datas = {
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+              confirmed : this._confirmToast.bind(this),
+              datas: {
                 exporter_date_update: new Date,
                 exporter_date_approve:new Date,
                 exporter_no:this.dataSelect.exporter_no,
                 trader_id:this.dataSelect.trader_id,
-                seller_agent:this.dataSelect.seller_agent,
                 id : this.dataSelect.exporter_id
               }
-              // console.log(datas);
-              this.update('./external/exporter/update', datas, () => {
-                this.glQuery('contentPanel').changDrawer();
-                this.glQuery('pauseExporter').getExporters();
-               });
+              });
+            },
+            _confirmToast:function(result,detail){
+              if(result == true){
+                this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                this.update('./external/exporter/update', detail.datas, () => {
+                  this.glQuery('contentPanel').changDrawer();
+                  this.glQuery('pauseExporter').getExporters();
+                  this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
+                }
             }
         });
     </script>
