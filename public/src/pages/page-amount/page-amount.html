@@ -29,7 +29,7 @@
     }
     
     .searchBox {
-      padding: 5px;
+      padding: 10px;
       background-color: var(--gl-gray-lighter-color);
     }
     
@@ -40,7 +40,7 @@
     }
     
     .searchBorder {
-      border: 1px solid var(--gl-gray-light-color);
+      border: 1px solid var(--gl-gray-lighter-color);
       margin: 15px;
       border-radius: 3px
     }
@@ -112,32 +112,36 @@
           <div class="flex searchBox searchBorder">
             <div class="layout horizontal">
               <div class="flex"></div>
-              <div class="flex-2">
-                <gl-form-dropdown-menu label="ปีโควตา">
+              <div class="flex-2 layout horizontal">
+                 <gl-combo-box label="แสดงข้อมูลรายปี" error-message="กรุณาเลือกปีโควตา" class="searchAllocate" required items="{{getQuotaYear}}" value="{{selectQuotaYear}}"></gl-combo-box>
+                <!--<gl-form-dropdown-menu label="ปีโควตา">
                   <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
                     <template is="dom-repeat" items="{{getQuotaYear}}">
                       <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                     </template>
                   </paper-listbox>
-                </gl-form-dropdown-menu>
+                </gl-form-dropdown-menu>-->
               </div>
-              <div class="flex-2">
-                <gl-form-dropdown-menu label="ประเภทข้าว">
+              <div class="flex-2 layout horizontal">
+                 <gl-combo-box class="searchAllocate"  error-message="กรุณาเลือกประเภทข้าว" required id="typeRiceName" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}"
+                                item-label-path="type_rice_name_th" item-value-path="id"></gl-combo-box>
+                <!--<gl-form-dropdown-menu label="ประเภทข้าว">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
 											<paper-item class="font" on-tap="_typeRiceName_th" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
 										</template>
 									</paper-listbox>
-								</gl-form-dropdown-menu>
+								</gl-form-dropdown-menu>-->
               </div>
-              <div class="flex-2">
-                <gl-form-dropdown-menu label="การคำนวณครั้งที่">
+              <div class="flex-2 layout horizontal">
+                 <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                   <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaOrdinal}}">
                     <template is="dom-repeat" items="{{getQuotaOrdinal}}">
                       <paper-item class="font" year="{{item}}">{{item}}</paper-item>
                     </template>
                   </paper-listbox>
-                </gl-form-dropdown-menu>
+                </gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2">
                 <paper-button class="gl-btn-primary" raised on-tap="_getAllocate" disabled$="[[_disableSearch(selectQuotaYear,selectTypeRice,selectQuotaOrdinal)]]">ค้นหา</paper-button>
@@ -251,9 +255,10 @@
               this.dataQuota = {
                 allocate_id : '',
                 quota_id : this.selectQuotaYear,
-                type_rice_id : this.getTypeRiceName,
+                type_rice_id : this.$$('#typeRiceName').selectedItem.type_rice_name_th,
                 ordinal_number : this.selectQuotaOrdinal
               }
+              // console.log('dataQuota',this.$$('#typeRiceName').selectedItem.type_rice_name_th);
               this.fire('toast',{
                 status:'success',
                 callback:()=>{
@@ -262,7 +267,14 @@
               });
             },
             _getAllocate:function(){
-                this.fire('toast',{status:'load'});
+              var stat = Polymer.dom(this.root).querySelectorAll('.searchAllocate').map((item)=>{
+                return item.validate();
+              });
+              const chkStat = function(stat){
+                return stat == true;
+              }
+              if(stat.every(chkStat) == true){
+                 this.fire('toast',{status:'load'});
                 axios.get('./eu/allocate/allocate',{
                   params:{
                     quota_id:this.selectQuotaYear,
@@ -282,6 +294,8 @@
                 .catch((error)=>{
                     console.log(error);
                 });
+              }
+               
              },
              _disableSearch:function(quota_id,type_rice_id,ordinal_number){
                console.log(quota_id,type_rice_id,ordinal_number);
