@@ -65,24 +65,24 @@ router.get('/contract/id/:contract_id', function(req, res, next) {
                 .and(r.row('shm_status').eq(true))
                 .and(r.row('contract_id').eq(req.params.contract_id))
             )
-            .merge(function (m) {
+            .merge(function(m) {
                 return {
                     cl_date: m('cl_date').split('T')(0),
                     contract_date: m('contract_date').split('T')(0),
-                    ship: m('ship').map(function (arr_ship) {
-                        return arr_ship.merge(function (row_ship) {
+                    ship: m('ship').map(function(arr_ship) {
+                        return arr_ship.merge(function(row_ship) {
                             return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated')
                         })
                     })
                 }
             })
-            .group(function (g) {
+            .group(function(g) {
                 return g.pluck(
                     "shm_id", "shm_no", "shm_name", "cl_id", "cl_no", "cl_name"
                 )
             })
             .ungroup()
-            .merge(function (me) {
+            .merge(function(me) {
                 return {
                     shm_id: me('group')('shm_id'),
                     shm_no: me('group')('shm_no'),
@@ -218,7 +218,10 @@ router.get('/no/:bl_no', function(req, res, next) {
             .filter({ bl_no: req.params.bl_no })
             .group(function(g) {
                 return g.pluck(
-                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "shipline_id"
+                    "ship", "load_port_id", "dest_port_id", "deli_port_id",
+                    "bl_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
+
                 )
             })
             .sum("shm_det_quantity")
@@ -228,10 +231,20 @@ router.get('/no/:bl_no', function(req, res, next) {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
                     ship: me('group')('ship'),
-                    shipline_id: me('group')('shipline_id'),
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),
                     deli_port_id: me('group')('deli_port_id'),
+                    surveyor_id: me('group')('surveyor_id'),
+                    ship_lot_no: me('group')('ship_lot_no'),
+                    carrier_id: me('group')('carrier_id'),
+                    shipline_id: me('group')('shipline_id'),
+                    etd_date: me('group')('etd_date'),
+                    eta_date: me('group')('eta_date'),
+                    num_of_container: me('group')('num_of_container'),
+                    weight_per_container: me('group')('weight_per_container'),
+                    packing_date: me('group')('packing_date'),
+                    packing_time: me('group')('packing_time'),
+                    product_date: me('group')('product_date'),
                     quantity: me('reduction')
                 }
             })
@@ -298,6 +311,10 @@ router.get('/no/:bl_no', function(req, res, next) {
                     amount_usd: me('bl_detail').sum('amount_usd'),
                     cl_date: me('cl_date').split('T')(0),
                     contract_date: me('contract_date').split('T')(0),
+                    eta_date: me('eta_date').split('T')(0),
+                    etd_date: me('etd_date').split('T')(0),
+                    packing_date: me('packing_date').split('T')(0),
+                    product_date: me('product_date').split('T')(0),
                     ship: me('ship').map(function(arr_ship) {
                         return arr_ship.merge(function(row_ship) {
                             return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated')
@@ -382,6 +399,8 @@ router.get('/no/:bl_no', function(req, res, next) {
             }).without({ right: ["id", "date_created", "date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
             // //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             (0)
             .run(conn, function(err, cursor) {
