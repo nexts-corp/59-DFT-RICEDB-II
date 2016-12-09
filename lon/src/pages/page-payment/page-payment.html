@@ -52,10 +52,10 @@
     <nylon-panel-right title="หัวข้อ" id="test">
       <div class="rightdata" align="left" >
         <iron-pages selected="{{paymentsPageSeleted}}" attr-for-selected="name">
-          <commercial-invoice  name="blPage" data="[[dataSelected]]"></commercial-invoice>
-          <commercial-invoice  name="invoicePage" data="[[dataSelected]]"></commercial-invoice>
-          <fee-exports name="blInvoicePage" data="[[dataSelected]]"></fee-exports>
-          <fee-exports name="feePage" data="[[dataSelected]]"></fee-exports>
+          <commercial-invoice  name="blPage" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></commercial-invoice>
+          <commercial-invoice  name="invoicePage" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></commercial-invoice>
+          <fee-exports name="blInvoicePage" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
+          <fee-exports name="feePage" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports>
         </iron-pages>
       </div>
     </nylon-panel-right>
@@ -76,7 +76,12 @@
                 value:{blShipment:{}}
               },
               dataSelected: {
-                type: Object
+                type: Object,
+                // value:{}
+              },
+              dataSelectedInvoice: {
+                type: Object,
+                value:{}
               },
               paymentsPageSeleted:{
                 type:String,
@@ -92,6 +97,7 @@
               'get-select-draftPayment':'_getInvoiceDetail',
               'get-fee-detail':'_getFeeDetail',
               'flipDrawer':'_flipDrawer',
+              'close-drawer':'_flipDrawerClose'
             },
             ready: function() {
               let shmId = this._getUrl();
@@ -117,7 +123,6 @@
             _getBlList:function (shmId) {
               this.read('./g2g/bl/contract/id/'+shmId,(data)=>{
                 this.dataListPay.blShipment=data;
-                console.log(this.dataListPay.blShipment);
                 this.notifyPath('dataListPay.blShipment');
               });
             },
@@ -127,7 +132,6 @@
             _getInvoiceList:function (shmId) {
               this.read('./g2g/invoice/contract/id/'+shmId,(data)=>{
                 this.dataListPay.invoiceList=data;
-                console.log(this.dataListPay.invoiceList);
                 this.notifyPath('dataListPay.invoiceList');
               });
             },
@@ -149,9 +153,13 @@
                 });
             },
             _getBlInvoiceDetail:function (e) {
-              this.dataSelected = e.detail.detail;
-              this.paymentsPageSeleted = 'invoicePage';
-              this._flipDrawer();
+              this.read('./g2g/invoice/id/'+e.detail.detail.invoice_id,(data)=>{
+                this.dataSelected = data;
+                console.log(this.dataSelected);
+                this.paymentsPageSeleted = 'invoicePage';
+                this._flipDrawer();
+              });
+
             },
             _getInvoiceDetail:function (e) {
               // this.dataSelected = e.detail.detail;
@@ -165,6 +173,7 @@
               });
               this.read('./g2g/fee/invoice/id/'+url,(data)=>{
                 this.dataSelected = data;
+                console.log(this.dataSelected);
                 this.paymentsPageSeleted = 'blInvoicePage';
                 this._flipDrawer();
               });
@@ -177,7 +186,10 @@
               });
             },
             _flipDrawer:function () {
-              Polymer.dom(this.root).querySelector('#test').toggle();
+              Polymer.dom(this.root).querySelector('#test').open();
+            },
+            _flipDrawerClose:function () {
+              Polymer.dom(this.root).querySelector('#test').close();
             }
         });
     </script>

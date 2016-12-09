@@ -81,10 +81,10 @@
           <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
         </div>
         <div name="editBlDetail">
-          <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]" is-view-seleted="[[isViewSeleted]]"></bill-detail-sm>
+          <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]" is-view-seleted="[[!isViewSeleted]]" is-input-disabled="[[!isInputDisabled]]"></bill-detail-sm>
         </div>
         <div name="BlDetail">
-          <bill-detail-sm data-for-select="[[dataForSelect]]" ></bill-detail-sm>
+          <bill-detail-sm data-for-select="[[dataForSelect]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]"></bill-detail-sm>
         </div>
         <div name="addExporter">
           <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[!isViewSeleted]]"></detail-exporter-ship>
@@ -154,6 +154,7 @@
         'edit-bl-detail':'_lisNerBlDetail',
         'add-bl-no':'_lisNerAddBlNo',
         'cancel-insert-shipment':'_lisNerCanInSm',
+        'cancel-insert-bl':'_lisNerCanInBl',
         'min-size-collapse-shipment-detail' : '_lisNerMinCollapse'
       },
       properties: {
@@ -200,6 +201,9 @@
       },
       _lisNerCanInSm:function () {
         this.pageBl= 'listOfExporter';
+      },
+      _lisNerCanInBl:function () {
+        this.pageBl= 'listOfBl';
       },
       _lisNerMinCollapse:function (e) {
         let targetAttribute = e.detail.collapse;
