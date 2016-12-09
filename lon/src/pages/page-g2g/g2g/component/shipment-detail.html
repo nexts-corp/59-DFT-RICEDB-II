@@ -101,7 +101,7 @@
          <template is="dom-repeat" items="[[data.shipment_detail]]">
            <paper-item>
              <div>
-               <paper-icon-button icon="expand-more" on-tap="_toggleSub" aria-controls$="collapse[[item.shm_det_id]]"></paper-icon-button>
+               <paper-icon-button id="iconcollapse[[item.shm_det_id]]" icon="expand-more" on-tap="_toggleSub" aria-controls$="collapse[[item.shm_det_id]]"></paper-icon-button>
              </div>
              <div>
                [[_ObcountIndex(index)]]
@@ -194,7 +194,12 @@
       },
       _lisNerMinCollapse:function (e) {
         let targetAttribute = e.detail.collapse;
-        console.log(targetAttribute);
+        let icon = 'icon'+e.detail.collapse;
+        if (this.$$('#'+icon).icon == 'expand-more') {
+          this.$$('#'+icon).icon = 'chevron-right';
+        }else {
+          this.$$('#'+icon).icon = 'expand-more'
+        }
         this.$$('#'+targetAttribute).toggle();
       },
       editShipment:function () {

@@ -368,7 +368,6 @@
      },
      _deleteExporter:function (result,detail) {
         if (result == true) {
-          console.log(detail.data);
           this.fire('min-size-collapse-shipment-detail',{collapse:'collapse'+detail.data.shm_det_id});
            this.delete('./g2g/shipment/detail/delete/id/',detail.data.shm_det_id, () => {
              this.fire('refresh-contract',{detail:'refresh-contract'});
