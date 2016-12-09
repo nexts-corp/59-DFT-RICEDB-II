@@ -36,9 +36,9 @@
 
     <gl-form-panel set-padding="10px 20px 10px 20px">
         <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-        <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit"></paper-icon-button>
+        <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
         <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
-        <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete"></paper-icon-button>
+        <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
         <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
       </gl-form-panel-head>
     <gl-form-panel-body>
@@ -252,9 +252,11 @@
 
 
     <gl-form-panel-footer set-padding="20px 0px 0px 20px">
-          <paper-button class="gl-btn-info" raised on-tap="createInvoice">Create Invoice</paper-button>
 
-          <paper-button class="gl-btn-info" raised on-tap="deteleInvoice">Delete Invoice</paper-button>
+          <paper-button class="gl-btn-primary" raised on-tap="createInvoice" hidden="[[!isViewSeleted]]">Create Invoice</paper-button>
+        <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+          <paper-button class="gl-btn-success" raised on-tap="saveInvoice" hidden="[[isViewSeleted]]">Save Invoice</paper-button>
+        </template>
     </gl-form-panel-footer>
 
   </gl-form-panel-body>
@@ -299,6 +301,33 @@
          });
         });
       },
+      saveInvoice:function(){
+        this._cleanDataInvoice(this.data,(data)=>{
+          data.id = this.data.invoice_id;
+          data.contract_id = this.data.contract_id;
+          this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+              status:'dialog',
+              text:'ต้องการแก้ไขข้อมูลใช่หรือไม่ ?',
+              confirmed:this._saveInvoice.bind(this), //function ที่ใช้รับค่า ปุ่ม
+              el: this, // compontents
+              data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+          })
+        });
+      },
+      _saveInvoice:function (result,detail) {
+        if (result == true) {
+          this.update('./g2g/invoice/update',detail.data, () => {
+            console.log(detail.data);
+            this.fire('get-invoice-list',{detail:detail.data.contract_id});
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:()=>{
+                this.editInput();
+                  //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                }
+            });
+          });
+        }
+      },
       deteleInvoice:function () {
         this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
             status:'dialog',
@@ -306,16 +335,17 @@
             confirmed:this._deleteInvoice.bind(this), //function ที่ใช้รับค่า ปุ่ม
             el: this, // compontents
             data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-        })
+        });
       },
       _deleteInvoice:function (result,detail) {
         if (result == true) {
           this.delete('./g2g/invoice/delete/id/',detail.data.invoice_id, () => {
             this.fire('get-bl-list',{detail:detail.data.contract_id});
             this.fire('get-invoice-list',{detail:detail.data.contract_id});
-            //สั่งปิดแล้วค่อยลบ
+            this.fire('close-drawer',{detail:'close-drawer'});
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
               callback:()=>{
+
                   //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
                 }
             });
