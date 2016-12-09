@@ -63,7 +63,8 @@
 				this.nylonMqttConnect("eu","mqtt.codeunbug.com", Number(80));
 				
 				this.nylonMqttOn('eu','connected',function(connect){
-					console.log('connected');
+					console.log(connect._getClientId());
+					connect.subscribe('eu-quota-updated');
 				});
 
 				this.nylonMqttOn('eu','message',function(topic,msg){

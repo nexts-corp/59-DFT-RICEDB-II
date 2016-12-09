@@ -39,6 +39,10 @@ client.on('message', function (topic, message) {
           if (!err) {
             console.log(cursor);
             client.publish('eu-quota-updated',JSON.stringify(cursor));
+            // setInterval(function(){
+            //   client.publish('eu-quota-updated',JSON.stringify(cursor));
+            // },1000);
+            
           } else {
             console.log(err);
           }
