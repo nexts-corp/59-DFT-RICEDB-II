@@ -70,7 +70,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-              item-value-path="exporter_id" items="[[dataForSelected.exporter_id]]" value="{{dataSelected}}" on-value-changed="getPayment"></gl-combo-box>
+              item-value-path="exporter_id" items="[[dataForSelected.exporter_id]]" value="{{dataForSelected.exporterSelected}}" on-value-changed="_searchExporter"></gl-combo-box>
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -104,13 +104,13 @@
 
         <tbody>
           <tr>
-            <template is="dom-repeat" as="datapay" items="{{data}}">
+            <template is="dom-repeat" as="datapay" items="{{dataForSelected.exporterDetail}}">
               <td></td>
-              <td><div style="margin-left:10px;">{{datapay.shm_no}}</div></td>
-              <td><div style="margin-left:10px;">{{datapay.fee_no}}</div></td>
+              <td><div style="margin-left:10px;">[[datapay.shm_no]]</div></td>
+              <td><div style="margin-left:10px;">[[datapay.fee_no]]</div></td>
               <td><div class="text-right">[[datapay.amount_thb_balance]]</div></td>
               <td></td>
-              <td><div class="text-center">{{datapay.pay_date}}</div></td>
+              <td><div class="text-center">[[datapay.pay_date]]</div></td>
               <td></td>
               <td hidden="{{!datapay.pay_status}}"><div class="text-center">จ่ายเช็คแล้ว</div></td>
               <td hidden="{{datapay.pay_status}}">
@@ -126,7 +126,7 @@
       <div class="textheader-center">กรอกข้อมูลรับเช็ค</div>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">{{data.bank_id}}
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="bank" label="ธนาคาร" item-label-path="bank_name_th"
               item-value-path="bank_id" items="[[dataForSelected.dataBank]]" value="{{data.bank_id}}" ></gl-combo-box>
           <!-- <gl-form-dropdown-menu style="width:100%;" label="ธนาคาร" placeholder="กรุณาเลือกธนาคาร">
@@ -138,16 +138,16 @@
           </gl-form-dropdown-menu> -->
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="สาขา :" placeholder="กรุณาใส่ชื่อสาขา" value="{{dataCheck.bank_branch}}" name="bank_branch"></gl-form-input>
+          <gl-form-input  label="สาขา :" placeholder="กรุณาใส่ชื่อสาขา" value="{{data.bank_branch}}" name="bank_branch"></gl-form-input>
         </gl-grid-col>
       </gl-grid-row>
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="เลขที่เช็ค :" allowed-pattern="[0-9]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{dataCheck.pay_no}}" name="pay_no"></gl-form-input>
+          <gl-form-input  label="เลขที่เช็ค :" allowed-pattern="[0-9]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{data.pay_no}}" name="pay_no"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker label="วันที่เช็ค" value="{{dataCheck.pay_date}}" name="pay_date"></vaadin-date-picker>
+          <vaadin-date-picker label="วันที่เช็ค" value="{{data.pay_date}}" name="pay_date"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
       <div class="buttons">
@@ -173,15 +173,12 @@
           type:Object,
           value:{}
         },
-        dataSelected:{
-          type:Object,
-          observer:'_search'
-        },
         dataName:{
           type:Array
         },
         data:{
-          type:Array
+          type:Object,
+          value:{bank_id:'KTB'}
         },
         dataCheck:{
           type:Object,
@@ -191,10 +188,6 @@
           type:Object,
           value:{}
         },
-        bank_id:{
-          type:String,
-          value:'KTB'
-        }
       },
       attached: function() {
         this.getExporters();
@@ -209,67 +202,54 @@
       getBank: function(){
         this.read('./common/bank',(data)=>{
           this.dataForSelected.dataBank = data;
-          console.log(this.dataForSelected);
           this.notifyPath('dataForSelected.dataBank')
-        },false,'');
+        });
       },
-      getPayment: function(e){
-        // console.log(e.detail.value);
-        this.dataSelected = e.detail.value
-      },
-      _search:function(val){
-        if(val!=""){
-          // console.log(this.dataSelected);
-          this.read('./g2g/payment/exporter/id/'+this.dataSelected,(data)=>{
-            this.data = data;
-            this.$$('#notfound').setAttribute("hidden", "hidden");
-            if (this.data == null) {
+      _searchExporter:function(e){
+        let exporter_id = e.detail.value;
+        if (exporter_id) {
+          this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
+            this.dataForSelected.exporterDetail = data;
+            console.log(this.dataForSelected);
+            this.notifyPath('dataForSelected.exporterDetail');
+            if (this.dataForSelected.exporterDetail != null) {
+              this.$$('#notfound').setAttribute("hidden", "hidden");
+            } else {
               this.$$('#notfound').removeAttribute("hidden");
             }
-          },false,'');
-          this.read('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
-            this.dataName = data;
-          },false,'');
-        }
-        else {
-          this.data = [];
-          this.dataName = [];
-          this.$$('#notfound').setAttribute("hidden", "hidden");
+          });
+
         }
       },
       _pay:function(e) {
-        this.dataPay = e.target.data;
+        this.dataForSelected.dataPay = e.target.data;
+        this.notifyPath('dataForSelected.dataPay');
+        this.data.fee_id = e.target.data.fee_id;
+        this.data.pay_amount = e.target.data.amount_thb_balance;
+        this.data.exporter_id = this.dataForSelected.exporterSelected;
+        // this.notifyPath('data.amount_thb_balance');
         this.$.dialog.toggle();
       },
       _save:function() {
-      // console.log(this.dataCheck);
-      // console.log(this.dataPay);
-      // console.log(this.dataSelected);
+
           this.fire('toast',{status:'dialog',
           text:'ยืนยันในการจ่ายเช็ค ?',
           confirmed : this._confirmToast.bind(this),
           el: this,
-          datas: {
-            exporter_id : this.dataSelected,
-            pay_amount : this.dataPay.amount_thb_balance,
-            fee_id : this.dataPay.fee_id,
-            pay_date : this.dataCheck.pay_date,
-            pay_no : this.dataCheck.pay_no,
-            bank_branch : this.dataCheck.bank_branch,
-            bank_id : this.data.bank_id
-          }
+          data:this.data,
         });
       },
         _confirmToast:function(result,detail){
           if(result == true){
             // console.log(detail.datas);
-            detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-            detail.el.insert('./g2g/payment/insert', detail.datas, () => {
-              detail.el.glQuery('refreshBank')._search();
-              detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+            console.log(detail.data);
+            this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+            this.insert('./g2g/payment/insert', detail.data, () => {
+              // this.glQuery('refreshBank')._searchExporter();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                 console.log('success');
               }});
-              detail.el.$.dialog.toggle();
+              this.$.dialog.toggle();
              });
           }
         },
