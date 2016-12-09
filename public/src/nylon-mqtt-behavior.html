@@ -4,7 +4,18 @@
 nylonMqtt = {} || nylonMqtt;
 
 nylonMqttBehavior = {
-    nylonMqttConnect:function(connectionName,hostName,port,clientId){
+    nylonMqttConnect:function(connectionName,hostName,port,clientId=null){
+
+        const guid = function() {
+            if(clientId==null){
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+                }
+                return s4() + s4() + s4() +  s4() + s4() + s4() + s4() + s4();
+            }else{
+                return clientId;
+            }
+        }
 
         nylonMqtt[connectionName] = {
              connected:false,
@@ -13,13 +24,13 @@ nylonMqttBehavior = {
              onLost:new Rx.Subject()
         };
 
-        nylonMqtt[connectionName].client = new Paho.MQTT.Client(hostName, Number(port), clientId);
+        nylonMqtt[connectionName].client = new Paho.MQTT.Client(hostName, Number(port), guid());
 
         nylonMqtt[connectionName].client.onMessageArrived = function(msg){
             nylonMqtt[connectionName].onMessage.onNext(msg);
         }
         nylonMqtt[connectionName].client.onConnectionLost = function(response){
-            nylonMqtt[connectionName].onConnect.onNext(response);
+            nylonMqtt[connectionName].onLost.onNext(response);
         }
 
         nylonMqtt[connectionName].client.connect({onSuccess:function(){
@@ -29,7 +40,6 @@ nylonMqttBehavior = {
     },
     nylonMqttOn:function(connectionName,event,callback){
         if(event=="connected"){
-
             if(nylonMqtt[connectionName].connected==false){
                 nylonMqtt[connectionName].onConnect.subscribe(function (data) {
                     callback(data);
