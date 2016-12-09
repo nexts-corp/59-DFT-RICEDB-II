@@ -32,7 +32,6 @@
       width: 30%;
       text-align: center;
     }
-
   </style>
   <template>
     <div class="horizontal end-justified layout">
@@ -97,6 +96,13 @@
                    <th>จำนวนข้าว</th>
                  </tr>
              </thead>
+             <template is="dom-if" if="[[_isHaveMany(data.shipment_detail,1)]]">
+               <tbody class="table-body">
+                 <tr >
+                   <td colspan="4" style="text-align: center;">  ไม่มีข้อมูล</td>
+                 </tr>
+               </tbody>
+             </template>
          </table>
          <template is="dom-repeat" items="[[data.shipment_detail]]">
            <paper-item>
