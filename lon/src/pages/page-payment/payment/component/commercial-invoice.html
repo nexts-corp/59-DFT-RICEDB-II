@@ -54,18 +54,20 @@
       </gl-grid-row>
 
       <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input disabled value="[[data.ship_name]]" label="Shippped per :"></gl-form-input>
-        </gl-grid-col>
+
+        <template is="dom-repeat" items="[[data.ship]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input disabled value="[[item.ship_name]]" label="Shippped per : [[_ObcountIndex(index)]]"></gl-form-input>
+          </gl-grid-col>
+        </template>
+
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input disabled value="[[data.load_port_name]],[[data.load_country_name_en]]" label="Port of loading :"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-textarea disabled value="[[data.deli_port_name]],[[data.deli_country_fullname_en]]" label="Port of Discharge :"></gl-form-label-textarea>
         </gl-grid-col>
-      </gl-grid-row>
 
-      <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-textarea  disabled value="[[data.dest_port_name]],[[data.dest_country_fullname_en]]" label="Place of Delivery :"></gl-form-textarea>
         </gl-grid-col>
@@ -73,7 +75,7 @@
           <gl-form-input disabled  value="[[data.bl_no]]" label="Bill of Lading Number :"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <vaadin-date-picker disabled label="Dated" value="2015-09-21"></vaadin-date-picker>
+          <vaadin-date-picker disabled label="Dated" value="[[data.etd_date]]"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
 
@@ -160,9 +162,8 @@
                               METRIC TONS
                             </gl-grid-col>
                           </gl-grid-row >
-                          [[checkPrice(item.*,'amount_usd')]]
                           <br>
-                          (US.DOLLARS [[priceWords]] ONLY)
+                          (US.DOLLARS [[_toWords(item.amount_usd)]] ONLY)
                         </td>
                         <td>USD  [[item.amount_usd]]</td>
                     </tr>
@@ -171,7 +172,7 @@
                 <tfoot class="table-foor">
                   <tr style="font-size:14px">
                     <td></td>
-                    <td>[[formatNumberInt(data.quantity)]] BAGS</td>
+                    <td>[[data.quantity]] BAGS</td>
                     <td>
                       TOTAL <br>
                       <gl-grid-row>
@@ -194,7 +195,7 @@
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,1]]">
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                          TRAP
+                          TRAP WEIGTH
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,1]]">
                           :
@@ -223,11 +224,11 @@
                           METRIC TONS
                         </gl-grid-col>
                       </gl-grid-row >
-                      [[checkPrice(data.*,'amount_usd')]]
+
                       <br>
-                      (US.DOLLARS [[priceWords]] ONLY)
+                      (US.DOLLARS [[_toWords(data.amount_usd)]] ONLY)
                       <br> UNDER THE SELLS AND PURCHASE CONTRACT NO.[[data.contract_name]] BETWEEN [[data.buyer_fullname]]
-                    AND DEPARTMENT OF FOREIGN TRADE, MINISTRY OF COMMERCE OF THAILAND DATED [[contractDate]]. <br>
+                    AND DEPARTMENT OF FOREIGN TRADE, MINISTRY OF COMMERCE OF THAILAND DATED   [[checkPrice(data)]]. <br>
                     PAYMENT BY T/T TO : KRUNG THAI BANK PUBLIC COMPANY LIMITED, BANGKOK, THAILAND <br>
                     SWIFT CODE : KRTHTHBK <br>
                     NAME ACCOUNT: DEPARTMENT OF FOREIGN TRADE <br>
@@ -287,17 +288,19 @@
         });
       },
       checkPrice:function (data) {
-        // console.log(data.base.amount_usd);
-        this._toWords(data.base.amount_usd);
+        console.log(data.contract_date);
+        // this._toWords(data.base.amount_usd);
+        // console.log(this._toWords(data.base.amount_usd));
         var monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"
                           ];
         // console.log(Number(this.data.contract_date.substring(5, 7))-1);
         var monthNum= Number(this.data.contract_date.substring(5, 7))-1;
-        this.contractDate = this.data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+this.data.contract_date.substring(0, 4);
+        let contractDate = this.data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+this.data.contract_date.substring(0, 4);
+        return contractDate.toUpperCase();
       },
-      _toWords: function(num) {
-          // num = num || 0;
+      _toWords: function(amount_usd) {
+          // num = num.base.amount_usd || 0;
           // Convert numbers to words
           // copyright 25th July 2006, by Stephen Chapman http://javascript.about.com
           // permission to use this Javascript on your web page is granted
@@ -310,7 +313,7 @@
           var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
           var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
           var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-          var s = num.toString();
+          var s = amount_usd.toString();
           s = s.replace(/[\, ]/g, '');
           if (s != parseFloat(s)) return 'not a number';
           var x = s.indexOf('.');
@@ -347,9 +350,8 @@
                   'point ';
               for (var i = x + 1; i < y; i++) str += dg[n[i]] + ' ';
           }
-          this.priceWords = str.replace(/\s+/g, ' ').toUpperCase() ;
-          //  str.replace(/\s+/g,' ');
-          // console.log(this.quantityWords);
+          let priceWords = str.replace(/\s+/g, ' ').toUpperCase() ;
+          return priceWords;
       },
       _cleanDataInvoice:function (data,callback) {
         let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to}=data;

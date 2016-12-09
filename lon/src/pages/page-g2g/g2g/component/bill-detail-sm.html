@@ -21,36 +21,42 @@
     }
   </style>
   <template>
+    <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
+      <div class="horizontal end-justified layout">
+        <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
+        <paper-tooltip for="editConfirm" offset="0">Edit Bl/NO</paper-tooltip>
+       </div>
+    </template>
+
       <gl-form-panel-body>
         <div class="title">Bill of Landing Number</div>
       </gl-form-panel-body>
-      //[[isViewSeleted]]
     <gl-form-panel-body>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.bl_no}}"></gl-form-input>
+        <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.bl_no}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input  required class="required"label="Booking No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.book_no}}"></gl-form-input>
+        <gl-form-input  required class="required"label="Booking No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.book_no}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name"
+        <gl-combo-box  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name" disabled="[[isInputDisabled]]"
            item-value-path="carrier_id" items="{{dataForSelect.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Shipping Line"always-float-label item-label-path="shipline_name"
+        <gl-combo-box required class="required"label="Shipping Line"always-float-label item-label-path="shipline_name" disabled="[[isInputDisabled]]"
            item-value-path="shipline_id" items="{{dataForSelect.shipline}}" value="{{data.shipline_id}}" ></gl-combo-box>
       </gl-grid-col>
 
       <template is="dom-repeat" items="[[data.ship]]">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box required class="required"label="Vessel [[_ObcountIndex(index)]]"always-float-label item-label-path="ship_name"
+          <gl-combo-box required class="required"label="Vessel [[_ObcountIndex(index)]]" always-float-label item-label-path="ship_name" disabled="[[isInputDisabled]]"
            item-value-path="ship_id" items="[[_getShip(data.shipline_id,dataForSelect)]]" value="{{item.ship_id}}"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input required class="required"label="Voy No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{item.ship_voy_no}}"
-          name="voidNo"></gl-form-input>
+          <gl-form-input required class="required"label="Voy No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{item.ship_voy_no}}" disabled="[[isInputDisabled]]"
+          name="voyNo"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       </template>
@@ -64,73 +70,76 @@
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Surveyor"always-float-label item-label-path="surveyor_name"
+        <gl-combo-box required class="required"label="Surveyor"always-float-label item-label-path="surveyor_name" disabled="[[isInputDisabled]]"
           item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input required class="required"label="Lot No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}"
+        <gl-form-input required class="required"label="Lot No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}" disabled="[[isInputDisabled]]"
         name="lotNo"></gl-form-input>
       </gl-grid-col>
 
 
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Port of loading"always-float-label item-label-path="port_name"
+        <gl-combo-box required class="required"label="Port of loading"always-float-label item-label-path="port_name" disabled="[[isInputDisabled]]"
          item-value-path="port_id" items="{{dataForSelect.pol}}" value="{{data.load_port_id}}"></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker required class="required" label="ETD"always-float-label  value="{{data.etd_date}}"></vaadin-date-picker>
+        <vaadin-date-picker required class="required" label="ETD"always-float-label  value="{{data.etd_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker required class="required"  label="ETA"always-float-label value="{{data.eta_date}}"></vaadin-date-picker>
+        <vaadin-date-picker required class="required"  label="ETA"always-float-label value="{{data.eta_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Port of destination"always-float-label  item-label-path="port_name"
+        <gl-combo-box required class="required"label="Port of destination"always-float-label  item-label-path="port_name" disabled="[[isInputDisabled]]"
         item-value-path="port_id" items="{{dataForSelect.pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Place of Delivery"always-float-label  item-label-path="port_name"
+        <gl-combo-box required class="required"label="Place of Delivery"always-float-label  item-label-path="port_name" disabled="[[isInputDisabled]]"
         item-value-path="port_id" items="{{dataForSelect.pod}}" value="{{data.deli_port_id}}"></gl-combo-box>
       </gl-grid-col>
 
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input required class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}"></gl-form-input>
+          <gl-form-input required class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input required class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด"
+        <gl-form-input required class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" disabled="[[isInputDisabled]]"
           value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
+        <vaadin-date-picker required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" ></gl-form-input>
+        <gl-form-input label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker label="Production Date"always-float-label required class="required" value="{{data.product_date}}" ></vaadin-date-picker>
+        <vaadin-date-picker label="Production Date"always-float-label required class="required" value="{{data.product_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
     </gl-grid-row>
       </gl-form-panel-body>
 
+    <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
       <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
-        ยกเลิก</paper-button>
+        ย้อนกลับ</paper-button>
       <paper-button class="gl-btn-success" raised on-tap="addBl">
       เพิ่ม</paper-button>
     </gl-form-panel-footer>
-
+    </template>
+    <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
       <paper-button class="gl-btn-danger" raised on-tap="cancelInsertShipment">
-        ยกเลิก</paper-button>
-      <paper-button class="gl-btn-primary" raised on-tap="editBl">
+        ย้อนกลับ</paper-button>
+      <paper-button class="gl-btn-primary" raised on-tap="editBl" hidden="[[isInputDisabled]]">
       บันทึก</paper-button>
     </gl-form-panel-footer>
+    </template>
   </template>
   <script>
     Polymer({
