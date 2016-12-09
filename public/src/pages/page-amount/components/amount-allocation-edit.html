@@ -54,6 +54,11 @@
 			text-align: center;
 			font-size: 22px;
 		}
+		.right{
+			--paper-input-container-input:{
+				text-align:right;
+			}
+		}
 	</style>
 	<template>
 		<gl-form-panel set-padding="0px 0px 20px 0px">
@@ -102,11 +107,13 @@
 					<gl-grid-row width="{{getWidth}}">
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-							<gl-form-input label="งวดที่ [[_num(index)]] [[getMonthName(item.month)]]" value="{{formatNumber(item.quantity)}}" id="" disabled name=""></gl-form-input>
+							<gl-form-input class="" label="งวดที่ [[_num(index)]] [[getMonthName(item.month)]]" value="{{formatNumber(item.quantity)}}" id="" disabled name=""></gl-form-input>
 						</gl-grid-col>
+							<!--<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>-->
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-							<gl-form-input label="ยอดปรับปรุง" always-float-label value="{{item.quantity_update}}"></gl-form-input>
+							<gl-form-input class="" label="ยอดปรับปรุง" format-number="on" always-float-label value="{{item.quantity_update}}"></gl-form-input>
 						</gl-grid-col>
+						
 					</gl-grid-row>
 
 				</template>
@@ -116,11 +123,11 @@
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 						<!--<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="{{dataSelect.quantity}}"></gl-form-input>-->
-						<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="[[_sumAllocation(dataSelect.period.*,'quantity')]]"></gl-form-input>
+						<gl-form-input class="" label="ปริมาณโควต้ารวม" always-float-label id="" disabled name="" value="[[_sumAllocation(dataSelect.period.*,'quantity')]]"></gl-form-input>
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>-->
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-						<gl-form-input label="ยอดปรับปรุงรวม" value="[[_sumAllocationUpdate(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
+						<gl-form-input class="" label="ยอดปรับปรุงรวม" always-float-label value="[[_sumAllocationUpdate(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 					</gl-form-panel-body>
@@ -172,6 +179,7 @@
         return this.formatNumber(answer);
       },
 			_sumAllocationUpdate:function(item,key){
+				
         var answer = 0;
         // console.log(item.base);
         
@@ -181,7 +189,13 @@
         })
         // console.log(answer);
 				this.dataSelect.quantity_update = answer;
-        return this.formatNumber(answer);
+				console.log(isNaN(answer));
+				if(isNaN(answer) == true){
+					return '';
+				}
+				else {
+					return this.formatNumber(answer);
+				}
       },
 			_saveData:function(){
 				// this.fire('post-data')
