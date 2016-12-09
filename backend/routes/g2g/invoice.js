@@ -155,7 +155,9 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .filter({ shm_id: req.params.shm_id })
             .group(function (g) {
                 return g.pluck(
-                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "shipline_id"//, "ship_voy_no"
+                    "ship", "load_port_id", "dest_port_id", "deli_port_id",
+                    "bl_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
                 )
             })
             .ungroup()
@@ -164,11 +166,20 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
                     ship: me('group')('ship'),
-                    // ship_voy_no: me('group')('ship_voy_no'),
-                    shipline_id: me('group')('shipline_id'),
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),
                     deli_port_id: me('group')('deli_port_id'),
+                    surveyor_id: me('group')('surveyor_id'),
+                    ship_lot_no: me('group')('ship_lot_no'),
+                    carrier_id: me('group')('carrier_id'),
+                    shipline_id: me('group')('shipline_id'),
+                    etd_date: me('group')('etd_date'),
+                    eta_date: me('group')('eta_date'),
+                    num_of_container: me('group')('num_of_container'),
+                    weight_per_container: me('group')('weight_per_container'),
+                    packing_date: me('group')('packing_date'),
+                    packing_time: me('group')('packing_time'),
+                    product_date: me('group')('product_date')
                     //quantity: me('reduction')
                 }
             })
@@ -214,7 +225,9 @@ router.get('/id/:invoice_id', function (req, res, next) {
                     .filter({ bl_no: m('bl_no') })
                     .group(function (g) {
                         return g.pluck(
-                            "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "shipline_id"
+                            "ship", "load_port_id", "dest_port_id", "deli_port_id",
+                            "bl_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                            "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
                         )
                     })
                     .sum("shm_det_quantity")
@@ -224,10 +237,20 @@ router.get('/id/:invoice_id', function (req, res, next) {
                             shm_id: me('group')('shm_id'),
                             bl_no: me('group')('bl_no'),
                             ship: me('group')('ship'),
-                            shipline_id: me('group')('shipline_id'),
                             load_port_id: me('group')('load_port_id'),
                             dest_port_id: me('group')('dest_port_id'),
                             deli_port_id: me('group')('deli_port_id'),
+                            surveyor_id: me('group')('surveyor_id'),
+                            ship_lot_no: me('group')('ship_lot_no'),
+                            carrier_id: me('group')('carrier_id'),
+                            shipline_id: me('group')('shipline_id'),
+                            etd_date: me('group')('etd_date'),
+                            eta_date: me('group')('eta_date'),
+                            num_of_container: me('group')('num_of_container'),
+                            weight_per_container: me('group')('weight_per_container'),
+                            packing_date: me('group')('packing_date'),
+                            packing_time: me('group')('packing_time'),
+                            product_date: me('group')('product_date'),
                             quantity: me('reduction')
                         }
                     })
