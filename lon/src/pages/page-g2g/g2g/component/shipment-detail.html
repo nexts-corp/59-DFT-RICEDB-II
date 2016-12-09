@@ -43,10 +43,10 @@
 <!-- [[insertData]]//[[isInputDisabled]]//[[isViewSeleted]]// -->
      <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
-        <gl-form-input class="required insetShipment" label="Shipment Id" disabled="[[!isInputDisabled]]" always-float-label placeholder="ลำดับ" value="{{data.shm_no}}"></gl-form-input>
+        <gl-form-input class="required insetShipment" label="ลำดับ" disabled="[[!isInputDisabled]]" always-float-label placeholder="ลำดับที่การส่งมอบสินค้า" value="{{data.shm_no}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,8]]">
-        <gl-form-input class="required insetShipment" label="Shipment Name" disabled="[[!isInputDisabled]]" always-float-label placeholder="ชื่องวดการส่งมอบ" value="{{data.shm_name}}"></gl-form-input>
+        <gl-form-input class="required insetShipment" label="ชื่อ" disabled="[[!isInputDisabled]]" always-float-label placeholder="่ชื่องวดการส่งมอบสินค้า" value="{{data.shm_name}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
@@ -80,8 +80,11 @@
         <div name="listOfBl">
           <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
         </div>
+        <div name="editBlDetail">
+          <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]" is-view-seleted="[[isViewSeleted]]"></bill-detail-sm>
+        </div>
         <div name="BlDetail">
-          <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]"></bill-detail-sm>
+          <bill-detail-sm data-for-select="[[dataForSelect]]" ></bill-detail-sm>
         </div>
         <div name="addExporter">
           <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[!isViewSeleted]]"></detail-exporter-ship>
@@ -190,7 +193,7 @@
       _lisNerBlDetail:function (e) {
         console.log(e.detail.detail);
         this.dataSelected = e.detail.detail;
-        this.pageBl= 'BlDetail';
+        this.pageBl= 'editBlDetail';
       },
       _lisNerAddBlNo:function () {
         this.pageBl= 'BlDetail';
