@@ -35,7 +35,7 @@ if (cluster.isMaster) {
   app.use(bodyParser.json())
 
   app.use(function (req, res, next) {
-    // Website you wish to allow to connect 
+    // Website you wish to allow to connect
     // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
     // res.setHeader('Access-Control-Allow-Headers', 'content-Type,x-requested-with');
     res.header("Access-Control-Allow-Origin", "*");
@@ -49,8 +49,17 @@ if (cluster.isMaster) {
   app.use('/external', ext_f3);
   app.use('/eu', eu);
 
+  app.use(function (req, res, next) {
+    res.status(404).send('Sorry cant find API that!')
+  })
 
   public.use('/api', app);
+  public.use(express.static('public'));
+
+  public.use(function (req, res, next) {
+    res.sendfile("./public/index.html");
+  });
+  
   public.listen(3000);
 
 }
