@@ -33,17 +33,25 @@
     }
   </style>
   <template>
+
+    <gl-form-panel set-padding="10px 20px 10px 20px">
+        <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
+        <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit"></paper-icon-button>
+        <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
+        <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete"></paper-icon-button>
+        <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
+      </gl-form-panel-head>
     <gl-form-panel-body>
 
     <div class="text">NEW COMMERCIAL INVOICE</div>
 
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-          <gl-form-input class="resetInput" label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด"  required value="{{data.invoice_no}}"></gl-form-input>
+          <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" value="{{data.invoice_no}}"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,0],[500,8]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-          <vaadin-date-picker  id="invoiceData" label="Date" value="{{data.invoice_date}}"></vaadin-date-picker>
+          <vaadin-date-picker class="required" required   disabled="[[isInputDisabled]]" label="Date" value="{{data.invoice_date}}"></vaadin-date-picker>
         </gl-grid-col>
       </gl-grid-row>
 
@@ -88,7 +96,7 @@
 
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
-          <gl-form-textarea class="resetInput" rows="2" value="{{data.made_out_to}}" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" auto-validate required></gl-form-textarea>
+          <gl-form-textarea class="required" required disabled="[[isInputDisabled]]" rows="2" value="{{data.made_out_to}}" placeholder="ใส่รายละเอียด" label="MADE OUT TO :" error-message="กรุณาใส่รายละเอียด" ></gl-form-textarea>
         </gl-grid-col>
       </gl-grid-row>
         <br>
@@ -245,9 +253,12 @@
 
     <gl-form-panel-footer set-padding="20px 0px 0px 20px">
           <paper-button class="gl-btn-info" raised on-tap="createInvoice">Create Invoice</paper-button>
+
+          <paper-button class="gl-btn-info" raised on-tap="deteleInvoice">Delete Invoice</paper-button>
     </gl-form-panel-footer>
 
   </gl-form-panel-body>
+   </gl-form-panel>
   </template>
   <script>
     Polymer({
@@ -282,10 +293,34 @@
         this._cleanDataInvoice(this.data,(data)=>{
           let shmId = this._getUrl();
           this.insert('./g2g/invoice/insert',data, () => {
+            this.fire('close-drawer',{detail:'close-drawer'})
             this.fire('get-bl-list',{detail:shmId});
             this.fire('get-invoice-list',{detail:shmId});
          });
         });
+      },
+      deteleInvoice:function () {
+        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+            status:'dialog',
+            text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+            confirmed:this._deleteInvoice.bind(this), //function ที่ใช้รับค่า ปุ่ม
+            el: this, // compontents
+            data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+        })
+      },
+      _deleteInvoice:function (result,detail) {
+        if (result == true) {
+          this.delete('./g2g/invoice/delete/id/',detail.data.invoice_id, () => {
+            this.fire('get-bl-list',{detail:detail.data.contract_id});
+            this.fire('get-invoice-list',{detail:detail.data.contract_id});
+            //สั่งปิดแล้วค่อยลบ
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:()=>{
+                  //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                }
+            });
+          });
+        }
       },
       checkPrice:function (data) {
         console.log(data.contract_date);
@@ -295,8 +330,8 @@
                             "July", "August", "September", "October", "November", "December"
                           ];
         // console.log(Number(this.data.contract_date.substring(5, 7))-1);
-        var monthNum= Number(this.data.contract_date.substring(5, 7))-1;
-        let contractDate = this.data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+this.data.contract_date.substring(0, 4);
+        var monthNum= Number(data.contract_date.substring(5, 7))-1;
+        let contractDate = data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+data.contract_date.substring(0, 4);
         return contractDate.toUpperCase();
       },
       _toWords: function(amount_usd) {
@@ -313,6 +348,7 @@
           var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
           var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
           var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+          console.log(amount_usd);
           var s = amount_usd.toString();
           s = s.replace(/[\, ]/g, '');
           if (s != parseFloat(s)) return 'not a number';
@@ -354,10 +390,14 @@
           return priceWords;
       },
       _cleanDataInvoice:function (data,callback) {
-        let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to}=data;
-        let newDate = {invoice_no,invoice_date,bl_no,invoice_status,made_out_to};
-        newDate.invoice_date = new Date(newDate.invoice_date);
-        callback(newDate)
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        let stat = el.map((el)=> el.validate());
+        if (stat.every(elem => elem == true)) {
+            let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to}=data;
+            let newDate = {invoice_no,invoice_date,bl_no,invoice_status,made_out_to};
+            newDate.invoice_date = new Date(newDate.invoice_date);
+            callback(newDate)
+        }
       },
     });
   </script>
