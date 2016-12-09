@@ -367,11 +367,11 @@
      },
      _deleteExporter:function (result,detail) {
         if (result == true) {
-          console.log(detail.data.shm_det_id);
+          console.log(detail.data);
            this.delete('./g2g/shipment/detail/delete/id/',detail.data.shm_det_id, () => {
              this.fire('refresh-contract',{detail:'refresh-contract'});
              this.fire('get-list-shipment',{contractId:detail.data.contract_id});
-            //  this.fire('get-list-shipment-detail',{sm_id:detail.data.id});
+             this.fire('get-list-shipment-detail',{sm_id:detail.data.shm_id});
              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                    //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
