@@ -42,7 +42,7 @@
     }
     th,
     td {
-    padding: 15px;
+    padding: 7px;
     }
     th {
     text-align: center;
@@ -62,7 +62,11 @@
         <gl-form-panel-body set-padding="5px" set-border="0px">
           <div class="horizontal justified layout">
                <div>Invoice No : [[data.invoice_no]]</div>
-               <div>Vessel : [[data.ship_name]]</div>
+               <div>Vessel :
+                <template is="dom-repeat" items="[[data.ship]]">
+                  [[item.ship_name]] ,
+                </template>
+               </div>
                <div>LotNo : [[data.ship_lot_no]]</div>
                <div style="width:20px"></div>
                <div>[[invoiceIndex]]/[[invoicePage]]</div>

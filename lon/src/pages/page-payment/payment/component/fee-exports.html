@@ -90,7 +90,7 @@
      <template is="dom-repeat" items="{{data.invoice}}" as="invoice">
        <fee-exports-invoice data="{{invoice}}"
                             rate-bank="{{data.rate_bank}}"
-                            invoice-index="{{_ObcountIndex(index)}}"
+                            invoice-index="[[_ObcountIndex(index)]]"
                             fee-total="[[_countFee(data.feeTotal)]] "
                             invoice-page="[[data.invoicePage]]"
        ></fee-exports-invoice>
@@ -133,6 +133,9 @@
           g2gModelBehavior,
           g2gCongtroller
       ],
+      observers:[
+        '_invoicePage(data.invoice)'
+      ],
       _totalMoney:function (rate_bank,amount_usd) {
         return rate_bank*amount_usd;
       },
@@ -141,8 +144,8 @@
         this.notifyPath('data.feeTotal');
       },
       //นับหน้า
-      _invoicePage:function (data) {
-        this.data.invoicePage = data.length;
+      _invoicePage:function (invoice) {
+        this.data.invoicePage = invoice.length;
         this.notifyPath('data.invoicePage');
       },
       _countFee:function (fee) {
