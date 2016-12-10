@@ -11,9 +11,14 @@ const _ = require('lodash');
 
 client.on('connect', function () {
   client.subscribe('eu-quotaPut-'+global.mqttId);
+  client.subscribe('eu/quota/req');
+
+  setTimeout(function(){
+    client.publish('eu/quota','data form server');
+  },3000);
 })
 
-client.on('message', function (topic, message) {
+client.on('message', function (topic, message, data) {
   
   if(topic=="eu-quotaPut-"+global.mqttId){
     
@@ -48,6 +53,8 @@ client.on('message', function (topic, message) {
           }
       });
     });
+  }else if(topic='eu/quota/req'){
+    console.log(data);
   }
   //client.publish('testzz','123456');
   //setInterval(()=>{ client.publish('testzz','testzz'); }, 1000);

@@ -57,6 +57,11 @@ nylonMqttBehavior = {
                 callback(response);
             });
         }
+    },
+    nylonMqttPublish:function(connectionName,topic,msg){
+        var message = new Paho.MQTT.Message(msg);
+        message.destinationName = topic;
+        nylonMqtt[connectionName].client.send(message);
     }
 };
 
