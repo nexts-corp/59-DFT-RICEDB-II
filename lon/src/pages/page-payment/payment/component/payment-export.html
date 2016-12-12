@@ -70,11 +70,8 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-<<<<<<< HEAD
               item-value-path="exporter_id" items="[[dataForSelected.exporter_id]]" value="{{dataForSelected.exporterSelected}}" on-value-changed="_searchExporter"></gl-combo-box>
-=======
-              item-value-path="exporter_id" items="[[dataForSelected.exporter_id]]" value="{{data.exporter_id}}" ></gl-combo-box>
->>>>>>> 4235e19792cb045382b85995ed7d4a155b3e8abc
+
         </gl-grid-col>
         <!-- on-value-changed="getPayment" -->
       </gl-grid-row>
@@ -182,12 +179,8 @@
           type:Array
         },
         data:{
-<<<<<<< HEAD
           type:Object,
           value:{bank_id:'KTB'}
-=======
-          type:Object
->>>>>>> 4235e19792cb045382b85995ed7d4a155b3e8abc
         },
         dataCheck:{
           type:Object,
@@ -199,7 +192,7 @@
         },
       },
       observers:[
-        '_search(data.exporter_id)'
+        // '_searchExporter(data.exporter_id)'
       ],
       attached: function() {
         this.getExporters();
@@ -217,12 +210,14 @@
           this.notifyPath('dataForSelected.dataBank')
         });
       },
-<<<<<<< HEAD
+
       _searchExporter:function(e){
         let exporter_id = e.detail.value;
+        console.log(exporter_id);
         if (exporter_id) {
           this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
             this.dataForSelected.exporterDetail = data;
+            console.log(data);
             console.log(this.dataForSelected);
             this.notifyPath('dataForSelected.exporterDetail');
             if (this.dataForSelected.exporterDetail != null) {
@@ -231,27 +226,6 @@
               this.$$('#notfound').removeAttribute("hidden");
             }
           });
-
-=======
-      _search:function(val){
-
-          this.read('./g2g/payment/exporter/id/'this.dataSelected+,(data)=>{
-              console.log(data);
-            this.dataForSelected.exporterDetail = data;
-            this.$$('#notfound').setAttribute("hidden", "hidden");
-            if (this.data == null) {
-              this.$$('#notfound').removeAttribute("hidden");
-            }
-          });
-          this.read('./external/exporter?exporter_id='+this.dataSelected,(data)=>{
-            this.dataName = data;
-          });
-        }
-        else {
-          this.data = [];
-          this.dataName = [];
-          this.$$('#notfound').setAttribute("hidden", "hidden");
->>>>>>> 4235e19792cb045382b85995ed7d4a155b3e8abc
         }
       },
       _pay:function(e) {
