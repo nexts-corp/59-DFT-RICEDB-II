@@ -27,10 +27,10 @@
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
            <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
          </gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,5]]">
+         <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>
          </gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,5]]">
+         <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <vaadin-date-picker class="required" required  disabled="[[isInputDisabled]]"label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}" always-float-label></vaadin-date-picker>
          </gl-grid-col>
        </gl-grid-row>
@@ -56,7 +56,7 @@
                  <div class="text">ธ.กรุงไทยเสนอ</div>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                 [[changeString2Num(data.*,'rate_bank')]]
+                 [[changeString2Num(data.*,'rate_bank')]]//{{num.rate_bank}}
                  <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
                </gl-grid-col>
              </gl-grid-row>
@@ -132,7 +132,11 @@
       properties: {
         data: {
           type: Object,
-          value:{rate_bank:0}
+          value:{rate_bank:'0'}
+        },
+        num:{
+          type: Object,
+          value:{rate_bank:'0'}
         }
       },
       behaviors: [
@@ -142,16 +146,23 @@
       observers:[
         '_invoicePage(data.invoice)'
       ],
-      ready: function() {
-        // this.set('data',{rate_bank:0,invoice:0,invoice:[]});
-        console.log(this.data);
-        this.notifyPath('data.rate_bank');
+      attached: function() {
+        // this.set('data',{rate_bank:0});
+        // console.log(typeof this.data);
+        // if (this.data != undefined) {
+        //   console.log(this.data.rate_bank=0);
+        //
+        // }
+        // this.notifyPath('data.rate_bank');
+        // console.log(this.data.rate_bank=0);
+        // this.notifyPath('data.rate_bank');
       },
       _totalMoney:function (rate_bank,amount_usd) {
         return rate_bank*amount_usd;
       },
       _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
         this.data.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
+        console.log(this.data.feeTotal);
         this.notifyPath('data.feeTotal');
       },
       //นับหน้า

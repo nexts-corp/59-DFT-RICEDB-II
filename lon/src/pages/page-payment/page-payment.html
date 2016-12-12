@@ -7,7 +7,7 @@
 <link rel="import" href="payment/component/list-of-invoice.html">
 <link rel="import" href="payment/component/list-of-fee.html">
 <link rel="import" href="payment/component/commercial-invoice.html">
-<link rel="import" href="payment/component/fee-exports.html">
+<!-- <link rel="import" href="payment/component/fee-exports.html"> -->
 <link rel="import" href="payment/component/payment-export.html">
 <dom-module id="page-payment">
     <style media="screen" include="iron-flex gl-styles">
@@ -183,7 +183,15 @@
                 this.dataSelectedfee.draft = data;
                 this.notifyPath('dataSelectedfee.draft');
                 this.paymentsPageSeleted = 'blInvoicePage';
-                this._flipDrawer();
+                this.importHref(
+                    this.resolveUrl('./payment/component/fee-exports.html'),
+                    ()=>{
+                      this.async(()=>{
+                        this._flipDrawer();
+                      },500)
+                    }, null, true
+                );
+
               });
             },
             _getFeeDetail:function (e) {
