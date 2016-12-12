@@ -39,7 +39,7 @@
        <gl-grid-row>
 
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled format-number="on" label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
            <div class="setText">อัตราแลกเปลี่ยน</div>
@@ -50,20 +50,20 @@
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                  [[changeString2Num(data.*,'rate_tt')]]
-                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
+                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                  <div class="text">ธ.กรุงไทยเสนอ</div>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                  [[changeString2Num(data.*,'rate_bank')]]
-                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
+                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
                </gl-grid-col>
              </gl-grid-row>
            </gl-grid-col>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-           <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="{{_totalMoney(data.rate_bank,data.amount_usd)}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" format-number="on" value="{{_totalMoney(data.rate_bank,data.amount_usd)}}" placeholder="0.00"></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -72,15 +72,15 @@
        <gl-grid-row>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_internal')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_foreign')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_other')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
            <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" placeholder="0.00" always-float-label></gl-form-input>
@@ -129,6 +129,12 @@
   <script>
     Polymer({
       is: "fee-exports",
+      properties: {
+        data: {
+          type: Object,
+          value:{rate_bank:0}
+        }
+      },
       behaviors: [
           g2gModelBehavior,
           g2gCongtroller
@@ -136,6 +142,11 @@
       observers:[
         '_invoicePage(data.invoice)'
       ],
+      ready: function() {
+        // this.set('data',{rate_bank:0,invoice:0,invoice:[]});
+        console.log(this.data);
+        this.notifyPath('data.rate_bank');
+      },
       _totalMoney:function (rate_bank,amount_usd) {
         return rate_bank*amount_usd;
       },
