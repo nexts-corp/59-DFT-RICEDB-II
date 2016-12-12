@@ -13,7 +13,7 @@ router.post(['/'], function (req, res, next) {
     var params = req.body;
     var statement;
 
-    console.log(params);
+    //console.log(params);
 
     db.query(function (conn) {
         statement = r.db('eu2').table('transaction').insert(_.omit(params,['code']));
