@@ -9,16 +9,18 @@ var client  = mqtt.connect('mqtt://mqtt.codeunbug.com');
 
 const _ = require('lodash');
 
-router.put(['/'], function (req, res, next) {
+router.post(['/'], function (req, res, next) {
     var params = req.body;
     var statement;
+
+    console.log(params);
 
     db.query(function (conn) {
         statement = r.db('eu2').table('transaction').insert(_.omit(params,['code']));
         statement.run(conn, function (err, cursor) {
             if (!err) {
                 //client.publish(params.code+'-'+global.mqttId, JSON.stringify(_.omit(params,['code'])));
-                res.json(cursor);
+                res.json(params);
             } else {
                 res.status(500).send(err);
                 res.json(err);

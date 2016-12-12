@@ -72,23 +72,25 @@ if (cluster.isMaster) {
     res.status(404).send('Sorry cant find API that!')
   })
 
-  // const injectPage = (res)=>{
-  //   var html = fs.readFileSync(__dirname + '/public/index.html', 'utf8');
-  //   var $ = cheerio.load(html);
-  //   var scriptNode = `window.mqttId = "${global.mqttId}";`;
-  //   $('script[mqtt]').text(scriptNode);
-  //   res.send($.html());
-  // };
+  const injectPage = (res)=>{
+    var html = fs.readFileSync(__dirname + '/public/index.html', 'utf8');
+    var $ = cheerio.load(html);
+    var scriptNode = `window.mqttId = "${global.mqttId}";`;
+    $('script[mqtt]').text(scriptNode);
+    res.send($.html());
+  };
 
   public.use('/api', app);
-  // public.get('/', function(req, res){
-  //   injectPage(res);
-  // });
+
+  public.get('/', function(req, res){
+    injectPage(res);
+  });
+
   public.use(express.static('public'));
   
   public.use(function (req, res, next) {
-    //injectPage(res);
-    res.sendfile("./public/index.html");
+    injectPage(res);
+    //res.sendfile("./public/index.html");
   });
 
   public.listen(3000);
