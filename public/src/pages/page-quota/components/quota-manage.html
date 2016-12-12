@@ -57,19 +57,13 @@
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 								<gl-form-input label="ปีโควต้า" class="saveData" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
-									id="" name="" autocomplete disabled$="{{checkStatus(status)}}"> 
+									id="" name="" disabled$="{{checkStatus(status)}}"> 
                                 </gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                                 <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
                                 item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
-								<!--<gl-form-dropdown-menu label="ประเภทข้าว" class="saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
-									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
-										<template is="dom-repeat" items="{{getTypeRice}}">
-											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
-										</template>
-									</paper-listbox>
-								</gl-form-dropdown-menu>-->
+			
 
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -94,22 +88,15 @@
                                 <tbody>
 								<template is="dom-repeat" items="{{Period}}">
 									<tr>
-										<td>งวดที่ : {{getIndex(index)}}</td>
+										<td>งวดที่ : {{getIndex(index)}}</td> 
                                         <td>
                                          <gl-combo-box class="saveData" style="margin-top: -21px;" items="{{getMonth()}}" value="{{item.month}}"
                                          item-label-path="name" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
-                                            <!--<gl-form-dropdown-menu class="saveData" required no-label-float error-message="กรุณาเลือกเดือน">
-                                                <paper-listbox class="dropdown-content" attr-for-selected="mounth" selected="{{item.month}}">
-                                                    <template is="dom-repeat" items="{{getMonth()}}">
-                                                        <paper-item class="font" mounth="{{item.id}}">{{item.name}}</paper-item>
-                                                    </template>
-                                                </paper-listbox>
-                                            </gl-form-dropdown-menu>-->
                                         </td>
-										<!--{{item.proportion}}-->
 										<td>
 											[[testNum(item.*,'percent')]]
-                                            [[disabledMath(item.percent,item.quantity)]]
+                                            [[testNum(item.*,'month')]]
+                                            <!--[[disabledMath(item.percent,item.quantity)]]-->
 											<gl-form-input label="" class="mathData number saveData" error-message="กรุณาใสจำนวน" value="{{item.percent}}" required no-label-float>
                                                 <div suffix>%</div>
                                             </gl-form-input>
@@ -186,16 +173,21 @@
                 data:{
                     type: Object,
                     observer: '_getData'
+                },
+                noPeriod:{
+                    type: Number,
+                    value : 0
                 }
             },
             ready:function(){
                 this._getTypeRice();
             },
             getIndex:function(index){
-                return parseInt(index)+1;
+                return  parseInt(index)+1;
             },
             _addPeriod:function(){
-                this.push('Period',{percent:'',quantity:''});
+                this.noPeriod++;
+                this.push('Period',{period:this.noPeriod,percent:'',quantity:''});
             },
             _confirmDelPeriod:function(e){
                 this.fire('toast',{
@@ -207,7 +199,7 @@
                 })
             },
             _delPeriod:function(resalut,detail){
-                console.log(resalut,detail.data);
+                // console.log(resalut,detail.data);
                 if(resalut==true){
                     detail.el.splice('Period', detail.el.Period.indexOf(detail.data),1);
                 }
@@ -255,6 +247,7 @@
               
             },
             _saveData:function(){
+                
                 var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
                     return  item.validate();
                 });
@@ -273,13 +266,13 @@
                 else if(stat.every(chkStat) == true){
                     var amount = this.$$('#sum').value; 
                     var datas = {
-                        id:this.year,
-                        type_rice:
-                        {
-                            amount:parseInt(this.unFormat(amount)),
-                            period:this.Period,
-                            type_rice_id:this.typeRice,
-                        }
+                        code:"eu/quota/create",
+                        year:parseInt(this.year),
+                        quantity:
+                        { 
+                            period:this.Period
+                        },
+                        type_rice_id:this.typeRice
                     }
                     console.log(datas);
                     var num = 0;
@@ -287,10 +280,10 @@
                         num += item.percent;
                     });
                     if(num == 100){
-                        if(this.status == 'post')
-                            this.fire('post-data',datas); 
-                        else if (this.status == 'update')
-                            this.fire('put-data',datas); 
+                        // if(this.status == 'post')
+                        //     this.fire('post-data',datas); 
+                        // else if (this.status == 'update')
+                        //     this.fire('put-data',datas); 
                     }
                     else {
                         this.fire('toast',
@@ -350,9 +343,9 @@
                 return status=='update';
             },
             disabledMath:function(percent,quantity){
-                // console.log('percent',percent);
-                // console.log('quantity',quantity);
-               //this.hide=false;
+            //     console.log('percent',percent);
+            //     console.log('quantity',quantity);
+            //    this.hide=false;
             }
         });
     </script>

@@ -107,7 +107,7 @@
     Polymer({
       is: 'page-quota',
       observers:['_yearChanged(selectYear)'],
-      behaviors: [nylonBehavior],
+      behaviors: [nylonBehavior,nylonMqttBehavior],
       properties: {
           layerContent: {
               type: String,
@@ -216,11 +216,11 @@
         _postData:function(e){
           //console.log('post-data:',e.detail);
           this.fire('toast',{status:'load'});
-          axios.post('/eu/quota',e.detail)
+          axios.post('/eu2/transaction',e.detail)
           .then((response)=>{
             console.log("success");
             this.textToast = 'บันทึกข้อมูลสำเร็จ';
-            console.log(response);
+            console.log('response:',response);
             this._getYear();
             this._getDatalist(this.selectYear);
           })
