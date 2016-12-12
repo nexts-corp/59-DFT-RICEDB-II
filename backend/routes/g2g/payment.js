@@ -129,6 +129,7 @@ router.get('/exporter/id/:id', function (req, res, next) {
             .merge(function (me1) {
                 return {
                     fee_id: me1('id'),
+                    fee_date_receipt : me1('fee_date_receipt').split('T')(0),
                     shm_id: me1('invoice')('shm_id')(0),
                     amount_usd: me1('invoice').sum('amount_usd'),
                     amount_thb: me1('invoice').sum('amount_usd').mul(me1('rate_bank')),
