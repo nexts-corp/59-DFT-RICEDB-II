@@ -27,7 +27,7 @@
         <paper-tooltip for="editConfirm" offset="0">Edit Bl/NO</paper-tooltip>
        </div>
     </template>
-
+[[dataBlDetail]]//
       <gl-form-panel-body>
         <div class="title">Bill of Landing Number</div>
       </gl-form-panel-body>
@@ -60,11 +60,13 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       </template>
-
-          <div class="horizontal end-justified layout">
-          <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[hiddenInsertVessel]]">
-            <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
+      <template is="dom-if" if="[[!isInputDisabled]]">
+        <div class="horizontal end-justified layout">
+        <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[hiddenInsertVessel]]">
+          <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
         </div>
+      </template>
+
 
 
     </gl-grid-row>
@@ -202,6 +204,12 @@
       },
       addShip:function () {
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
+      },
+      editBl:function () {
+        // console.log(this.data);
+        this._cleanDataBl(this.data,(data)=>{
+          console.log(data);
+        });
       },
       _oBChangeBooking:function (bl_no) {
         this.data.book_no = bl_no;

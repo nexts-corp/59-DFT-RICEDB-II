@@ -53,7 +53,9 @@
           background: #eaeaea;
           color: #a8a8a8;
         }
-
+        gl-form-input.number [value]{
+          text-align: right;
+        }
       </style>
     <template>
 
@@ -76,17 +78,26 @@
      </gl-grid-col>
      </gl-grid-row>
      <gl-grid-row width="{{getWidth}}">
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
+           <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="น้ำหนักสินค้า (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+       </gl-grid-col>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'tolerance_rate')]]
+           <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{data.tolerance_rate}}" placeholder="ใส่รายละเอียด" name="tolerance_rate">
+              <div suffix>%</div>
+           </gl-form-input>
+       </gl-grid-col>
+     </gl-grid-row>
+
+     <gl-grid-row>
        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
          [[_getBuyerAddressFromData(data)]]
-       <gl-combo-box class="required" required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
-       item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{dataForSelect.buyer}}" on-value-changed="_getBuyerAddress">
-       </gl-combo-box>
+         <gl-combo-box class="required" required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
+         item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{dataForSelect.buyer}}" on-value-changed="_getBuyerAddress">
+         </gl-combo-box>
        </gl-grid-col>
-     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
-         <gl-form-input class="required" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" pattern="[0-9,.,,]{1,12}" required label="น้ำหนักสินค้า (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
-     </gl-grid-col>
-     </gl-grid-row>
+        </gl-grid-row>
      <gl-grid-row>
+
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
              <gl-form-textarea rows="2" disabled label="ที่อยู่ผู้สั่งซื้อ" placeholder="ใส่รายละเอียด" value="{{data.buyerAddress}}" name="buyer_address"></gl-form-textarea>
          </gl-grid-col>
@@ -114,7 +125,7 @@
              <td></td>
              <td>
                <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
-               <paper-button disabled="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" >เพิ่มชนิดข้าว</paper-button>
+               <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" >เพิ่มชนิดข้าว</paper-button>
                 <!-- </template> -->
               </td>
            </tr>
@@ -134,7 +145,7 @@
                </td>
                <td>
                  <template is="dom-if" if="[[!_isViewing(data.isInputDisabled)]]">
-                   <paper-button disabled="[[isInputDisabled]]" raised id="[[index]]" on-tap="deleteTypeRice" class="btnInTable gl-btn-danger"title="ลบชนิดข้าว">ลบข้อมูล</paper-button>
+                   <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="deleteTypeRice" class="btnInTable gl-btn-danger"title="ลบชนิดข้าว">ลบข้อมูล</paper-button>
                   </template>
                 </td>
            </tr>
@@ -151,13 +162,13 @@
  </gl-grid-row>
       <div class="horizontal end-justified layout">
         <paper-button class="gl-btn-danger" on-tap="saveContract" raised >ยกเลิก</paper-button>
-       <template is="dom-if" if="[[!_isViewing(data.contract_status)]]">
+       <template is="dom-if" if="[[!_isViewing(isEdit)]]">
          <paper-button class="gl-btn-primary" on-tap="insertContract" raised hidden="[[_isViewing(data.contract_status)]]" >เพิ่มสัญญา</paper-button>
        </template>
          <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
        <paper-button class="gl-btn-success" on-tap="saveContract" raised hidden="[[_isViewing(isInputDisabled)]]">บันทึก</paper-button>
         </template>
-        <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+        <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
           <paper-button class="gl-btn-info" raised on-tap="confirmDrawer" hidden="[[_isViewing(data.contract_status)]]" >ยืนยันสัญญา</paper-button>
         </template>
       </div>
@@ -207,7 +218,9 @@
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                  callback:()=>{
                     this.fire('refresh-contract',{detail:'refresh-contract'});
-                    this.fire('flipDrawer',{detail:'refresh-contract'});
+                    console.log('close-drawer');
+                    this.fire('close-drawer',{detail:'refresh-contract'});
+                    console.log(222);
                 }
               });
             });
@@ -219,7 +232,7 @@
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
                 text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
-                confirmed:this._saveData, //function ที่ใช้รับค่า ปุ่ม
+                confirmed:this._saveData.bind(this), //function ที่ใช้รับค่า ปุ่ม
                 el: this, // compontents
                 data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
             })
@@ -227,12 +240,12 @@
       },
       _saveData:function(result,detail){
          if (result == true) {
-           detail.el.update('./g2g/contract/update',detail.data, () => {
-               detail.el.fire('refresh-contract',{detail:'refresh-contract'});
-               detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-                   callback:function(){
-                     detail.el.editInput();
-                     detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+           this.update('./g2g/contract/update',detail.data, () => {
+               this.fire('refresh-contract',{detail:'refresh-contract'});
+               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                   callback:()=>{
+                     this.editInput();
+                     this.fire('get-contract-detail',{contractId:detail.data.id});
                   }
                 });
             });
@@ -245,27 +258,39 @@
            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                status:'dialog',
                text:'ต้องการบันทึกข้อมูลใช่หรือไม่ ?',
-               confirmed:this._saveData, //function ที่ใช้รับค่า ปุ่ม
+               confirmed:this._confirmContract.bind(this), //function ที่ใช้รับค่า ปุ่ม
                el: this, // compontents
                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
            })
        });
      },
+     _confirmContract:function(result,detail){
+        if (result == true) {
+          this.update('./g2g/contract/update',detail.data, () => {
+              this.fire('refresh-contract',{detail:'refresh-contract'});
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                  callback:()=>{
+                    this.fire('get-contract-detail',{contractId:detail.data.id});
+                 }
+               });
+           });
+         }
+    },
      deleteContract:function () {
         this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
             status:'dialog',
             text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
-            confirmed:this._deleteData, //function ที่ใช้รับค่า ปุ่ม
+            confirmed:this._deleteData.bind(this), //function ที่ใช้รับค่า ปุ่ม
             el: this, // compontents
             data:this.data.contract_id // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
         })
      },
        _deleteData:function(result,detail){
          if (result == true) {
-            detail.el.delete('./g2g/contract/delete/id/',detail.data, () => {
-              detail.el.fire('refresh-contract',{detail:'refresh-contract'});
-              detail.el.fire('flipDrawer',{detail:'flip-drawer'});
-              detail.el.fire('toast',{status:'success',text:'ลบสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+            this.delete('./g2g/contract/delete/id/',detail.data, () => {
+              this.fire('refresh-contract',{detail:'refresh-contract'});
+              this.fire('close-drawer',{detail:'flip-drawer'});
+              this.fire('toast',{status:'success',text:'ลบสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                   callback:function(){
                  }
                });
@@ -276,9 +301,9 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-            let {buyer_id,contract_date,contract_desc,contract_name,contract_status}=data;
+            let {buyer_id,contract_date,contract_desc,contract_name,contract_status,tolerance_rate}=data;
             let {contract_quantity}=data;
-            let news = {buyer_id,contract_date,contract_desc,contract_name,contract_quantity,contract_status};
+            let news = {buyer_id,contract_date,contract_desc,contract_name,contract_quantity,contract_status,tolerance_rate};
             news.contract_type_rice=[];
             news.contract_date= new Date(news.contract_date);
             data.contract_type_rice.map((riceCode)=>{
