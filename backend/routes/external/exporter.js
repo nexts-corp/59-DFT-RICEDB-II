@@ -150,7 +150,20 @@ router.get('/id/:exporter_id', function (req, res, next) {
                 exporter_date_approve: r.row('exporter_date_approve').split('T')(0),
                 exporter_date_update: r.row('exporter_date_update').split('T')(0),
                 exporter_status: r.row.hasFields('exporter_no'),
-                exporter_status_name: r.branch(r.row.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก')
+                exporter_status_name: r.branch(r.row.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก'),
+                exporter_no_name: r.branch(
+                    r.row('exporter_no').lt(10)
+                    , r.expr('ข.000')
+                    , r.branch(
+                        r.row('exporter_no').lt(100)
+                        , r.expr('ข.00')
+                        , r.branch(
+                            r.row('exporter_no').lt(1000)
+                            , r.expr('ข.0')
+                            , r.expr('ข.')
+                        )
+                    )
+                ).add(r.row('exporter_no').coerceTo('string'))
             },
             r.db('external_f3').table("trader").get(r.row("trader_id"))
                 .merge(function (m) {
