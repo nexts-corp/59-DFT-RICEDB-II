@@ -66,7 +66,7 @@
                     <div class="flex">คงเหลือ</div>
                   </div>
                   <div class="flex">
-                    <div class="flex">[[formatNumber(data.contract_quantity)]]</div>
+                    <div class="flex">[[formatNumberNoZero(data.contract_quantity)]]</div>
                     <div class="flex">[[_calConfirm(seleteChartPie,data)]]</div>
                     <div class="flex">[[_calTotal(seleteChartPie,data)]]</div>
                   </div>
@@ -184,16 +184,16 @@
       },
       _calConfirm:function (seleteChartPie,data) {
         if (seleteChartPie == 0) {
-          return this.formatNumber(data.contract_quantity_confirm);
+          return this.formatNumberNoZero(data.contract_quantity_confirm);
         }else {
-          return this.formatNumber(data.contract_quantity_shipment);
+          return this.formatNumberNoZero(data.contract_quantity_shipment);
         }
       },
       _calTotal:function (seleteChartPie,data) {
         if (seleteChartPie == 0) {
-          return this.formatNumber(data.contract_quantity_confirm_balance);
+          return this.formatNumberNoZero(data.contract_quantity_confirm_balance);
         }else {
-          return this.formatNumber(data.contract_quantity_shipment_balance);
+          return this.formatNumberNoZero(data.contract_quantity_shipment_balance);
         }
       },
       //end_observe

@@ -63,11 +63,23 @@
     },
     changeString2Num:function(ob,param){
       //console.log(typeof ob.value);
+      // if(typeof ob.value == "string"){
+      //   console.log(numeral().unformat(ob.value));
+      //   var pathChange = ob.path.split(".");
+      //   if(pathChange.length == 2){
+      //       if(pathChange[1]==param){
+      //         ob.base[param]=parseFloat(ob.value);
+      //         // console.log(typeof ob.value);
+      //       }
+      //   }
+      // }
       if(typeof ob.value == "string"){
         var pathChange = ob.path.split(".");
+        console.log(ob.value);
+        // undefined
         if(pathChange.length == 2){
             if(pathChange[1]==param){
-              ob.base[param]=parseFloat(ob.value);
+              ob.base[param]=numeral().unformat(ob.value);
               // console.log(typeof ob.value);
             }
         }
