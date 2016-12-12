@@ -118,8 +118,8 @@
              <div>
                [[item.seller_name_en]]
              </div>
-             <div>
-               [[item.shm_det_quantity]]
+             <div style="text-align:right;">
+               [[formatNumberNoZero(item.shm_det_quantity)]]
              </div>
            </paper-item>
            <iron-collapse id="collapse[[item.shm_det_id]]">
@@ -143,7 +143,8 @@
       is: "shipment-detail",
       behaviors: [
           g2gCongtroller,
-          g2gModelBehavior
+          g2gModelBehavior,
+          FormatNumberBehavior
       ],
       observers:[
         '_getConfirm(confirmLetter)',

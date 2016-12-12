@@ -12,11 +12,14 @@
 .table-head > tr > th:nth-child(1),
 .table-head > tr > th:nth-child(3),
 .table-body > tr > td:nth-child(1),
-.table-body > tr > td:nth-child(3),
 .table-foot > tr > td:nth-child(1),
 .table-foot > tr > td:nth-child(3) {
   width: 20%;
   text-align: center;
+}
+.table-body > tr > td:nth-child(3){
+  width: 20%;
+  text-align: right;
 }
 .table-head > tr > th:nth-child(2),
 .table-body > tr > th:nth-child(2),
@@ -65,7 +68,7 @@
               <tr on-tap="getShipmentDetail" data="[[item]]">
                 <td>[[_ObcountIndex(index)]]</td>
                 <td>[[item.shm_name]]</td>
-                <td>[[item.shm_quantity]]</td>
+                <td>[[formatNumberNoZero(item.shm_quantity)]]</td>
                 <td>[[item.shm_status_name]]</td>
               </tr>
             </template>
@@ -93,7 +96,8 @@ Polymer({
   is: "list-of-shipments",
   behaviors: [
       g2gCongtroller,
-      g2gModelBehavior
+      g2gModelBehavior,
+      FormatNumberBehavior
   ],
   listeners:{
     'get-list-shipment-page':'_getListShipmentPage',

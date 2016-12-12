@@ -107,11 +107,11 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input disabled required class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
+          <gl-form-input disabled required format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input disabled required class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
+        <gl-form-input disabled required format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <vaadin-date-picker disabled required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
@@ -152,7 +152,7 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'shm_det_quantity')]]
-        <gl-form-input class="required" required label="จำนวน/ตัน" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
+        <gl-form-input class="required" required format-number="on" label="จำนวน/ตัน" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -178,12 +178,12 @@
       <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
         [[changeString2Num(data.*,'origin_page')]]
-        <gl-form-input class="required" required  label="ORIGINALS"  class="w padL" value="{{data.origin_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
+        <gl-form-input class="required" required  format-number="on" label="ORIGINALS"  class="w padL" value="{{data.origin_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <div class="top">/</div>
       <gl-grid-col width="[[getWidth]]" grid="[[500,12],[700,2]]">
         [[changeString2Num(data.*,'nn_page')]]
-        <gl-form-input id="testtttt" class="required" required  label="N/N"  class="w" value="{{data.nn_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
+        <gl-form-input id="testtttt" class="required" required  format-number="on" label="N/N"  class="w" value="{{data.nn_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
     <!-- <paper-button  class="gl-btn-success" raised on-tap="checkData" index="[[index]]">
@@ -223,11 +223,11 @@
       properties: {
         data: {
           type: Object,
-          value:{}
+          value:{shm_det_quantity:0}
         },
         price:{
           type: Object,
-          value:{}
+          value:{quantityBag:0,gw:0,nw:0,tw:0,}
         },
         dataForSelect:{
           type:Object,
@@ -302,15 +302,17 @@
       _obCalWeight:function (shm_det_quantity,dataForSelect) {
         let pack = this.price;
         if (typeof pack != 'undefined') {
-             this.price.quantityBag = ((parseFloat(shm_det_quantity) * parseFloat(1000)) / parseFloat(pack.package_kg_per_bag));
+             shm_det_quantity = numeral().unformat(shm_det_quantity);
+             let quantityBag = ((parseFloat(shm_det_quantity) * parseFloat(1000)) / parseFloat(pack.package_kg_per_bag));
+             this.price.quantityBag =numeral(quantityBag).format('0,0');
              this.notifyPath('price.quantityBag');
-             this.price.sumGW = ((parseFloat(this.price.quantityBag) * (parseFloat(pack.package_kg_per_bag) + (parseFloat(pack.package_weight_bag) / parseFloat(1000))) / parseFloat(1000)));
+             this.price.sumGW = ((parseFloat(quantityBag) * (parseFloat(pack.package_kg_per_bag) + (parseFloat(pack.package_weight_bag) / parseFloat(1000))) / parseFloat(1000)));
              this.notifyPath('price.sumGW');
-             this.price.gw = this.price.sumGW.toFixed(3);
+             this.price.gw = numeral(this.price.sumGW).format('0,0.00');
              this.notifyPath('price.gw');
-             this.price.nw = parseFloat(shm_det_quantity).toFixed(3);
+             this.price.nw = numeral(parseFloat(shm_det_quantity)).format('0,0.00');
              this.notifyPath('price.nw');
-             this.price.tw = ((parseFloat(this.price.quantityBag)*(parseFloat(pack.package_weight_bag)/parseFloat(1000)))/parseFloat(1000)).toFixed(3);
+             this.price.tw = numeral(((parseFloat(quantityBag)*(parseFloat(pack.package_weight_bag)/parseFloat(1000)))/parseFloat(1000))).format('0,0.00');
              this.notifyPath('price.tw');
         }
       },
