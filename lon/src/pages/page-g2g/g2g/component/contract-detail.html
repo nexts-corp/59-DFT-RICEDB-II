@@ -53,8 +53,10 @@
           background: #eaeaea;
           color: #a8a8a8;
         }
-        gl-form-input.number [value]{
-          text-align: right;
+        gl-form-input.number{
+          --paper-input-container-input:{
+            text-align: right;
+          }
         }
       </style>
     <template>
@@ -79,10 +81,10 @@
      </gl-grid-row>
      <gl-grid-row width="{{getWidth}}">
        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
-           <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="น้ำหนักสินค้า (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
+           <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="น้ำหนักสินค้า (ตัน)" value="{{formatNumber(data.contract_quantity)}}" placeholder="ใส่รายละเอียด" name="contract_quantity"></gl-form-input>
        </gl-grid-col>
        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'tolerance_rate')]]
-           <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{data.tolerance_rate}}" placeholder="ใส่รายละเอียด" name="tolerance_rate">
+           <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{formatNumber(data.tolerance_rate)}}" placeholder="ใส่รายละเอียด" name="tolerance_rate">
               <div suffix>%</div>
            </gl-form-input>
        </gl-grid-col>
@@ -178,7 +180,8 @@
       is: "contract-detail",
       behaviors: [
           g2gModelBehavior,
-          g2gCongtroller
+          g2gCongtroller,
+          FormatNumberBehavior
       ],
       properties: {
         dataForSelect:{
@@ -240,6 +243,7 @@
       },
       _saveData:function(result,detail){
          if (result == true) {
+           console.log(detail.data);
            this.update('./g2g/contract/update',detail.data, () => {
                this.fire('refresh-contract',{detail:'refresh-contract'});
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
