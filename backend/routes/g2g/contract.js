@@ -31,7 +31,7 @@ var schema = {
         "contract_quantity": {
             "type": "number"
         },
-        "flexible_rate": {
+        "tolerance_rate": {
             "type": "number"
         },
         "contract_type_rice": {
