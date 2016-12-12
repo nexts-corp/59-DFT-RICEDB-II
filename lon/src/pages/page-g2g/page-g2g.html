@@ -51,15 +51,15 @@
               </template>
             </div>
           </div>
-          <nylon-panel-right title="{{titlePanelRight}}" id="test">
+          <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight">
 
             <div class="rightdata" align="left" >
         <iron-pages selected="{{g2gPageSeleted}}" attr-for-selected="name">
           <div class="addContract" name="addContract">
-            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[!isEdit]]" is-input-disabled="[[!isInputDisabled]]"></contract-detail>
+            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[!isViewSeleted]]" is-edit="[[!isEdit]]" is-input-disabled="[[!isInputDisabled]]"></contract-detail>
           </div>
           <div class="addContract" name="contractDetail">
-            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[isEdit]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></contract-detail>
+            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[isViewSeleted]]" is-edit="[[isEdit]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></contract-detail>
           </div>
           <div class="addContract" name="listOfConfirm">
             <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm>
@@ -116,6 +116,7 @@
               'get-list-confirm':'_getListConfirm',
               'get-list-shipment':'_getListShipment',
               'flipDrawer':'_flipDrawer',
+              'close-drawer':'_flipDrawerClose'
             },
             properties: {
               contractList: {
@@ -361,7 +362,10 @@
             // end_addContract
             _flipDrawer:function () {
               // this.$.drawerRight.actionDrawer();
-              Polymer.dom(this.root).querySelector('#test').open();
+              Polymer.dom(this.root).querySelector('#drawerRight').open();
+            },
+            _flipDrawerClose:function () {
+              Polymer.dom(this.root).querySelector('#drawerRight').close();
             }
         });
     </script>

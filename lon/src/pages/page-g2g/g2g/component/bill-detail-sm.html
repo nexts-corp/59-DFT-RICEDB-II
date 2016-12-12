@@ -27,7 +27,6 @@
         <paper-tooltip for="editConfirm" offset="0">Edit Bl/NO</paper-tooltip>
        </div>
     </template>
-
       <gl-form-panel-body>
         <div class="title">Bill of Landing Number</div>
       </gl-form-panel-body>
@@ -60,11 +59,13 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       </template>
-
-          <div class="horizontal end-justified layout">
-          <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[hiddenInsertVessel]]">
-            <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
+      <template is="dom-if" if="[[!isInputDisabled]]">
+        <div class="horizontal end-justified layout">
+        <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[hiddenInsertVessel]]">
+          <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
         </div>
+      </template>
+
 
 
     </gl-grid-row>
@@ -146,7 +147,8 @@
       is: "bill-detail-sm",
       behaviors: [
           g2gCongtroller,
-          g2gShipmentController
+          g2gShipmentController,
+          g2gModelBehavior
       ],
       properties: {
         data: {
@@ -170,38 +172,56 @@
       addBl:function () {
         // console.log(this.data);
         this._cleanDataBl(this.data,(data)=>{
-//   let  data =
-// {bl_no:"45",
-// book_no:"45",
-// carrier_id:"fe095c0f-c697-4200-affe-4dda4253c221",
-// deli_port_id:"CNHUA",
-// dest_port_id:"CNHUA",
-// eta_date:"2016-12-29",
-// etd_date:"2016-12-26",
-// load_port_id:"THLCH",
-// num_of_container:80,
-// packing_date:"2016-12-20",
-// packing_time:"12:00",
-// product_date:"2016-12-29",
-// ship:[
-//   {
-//     ship_id:"4a1136d5-1e51-4838-a233-4b846940a435",
-//     ship_voy_no:"4545",
-//   },
-//   {
-//     ship_id:"b0ee3bc9-ff85-4621-8c32-a9b6a66b0174",
-//     ship_voy_no:"454545",
-//   }
-// ],
-// ship_lot_no:"45",
-// shipline_id:"53da78d4-06c6-4433-b14b-e36405609611",
-// surveyor_id:"73ed2a97-2852-48b2-bd69-6d4c651ba39b",
-// weight_per_container:45,};
           this.fire('send-Bl-no',{detail:data});
         })
       },
       addShip:function () {
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
+      },
+      editBl:function () {
+        // let blNo = this.data.bl_no;
+        this._cleanDataBl(this.data,(data)=>{
+          this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+              status:'dialog',
+              text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+              confirmed:this._editBlExporter.bind(this), //function ที่ใช้รับค่า ปุ่ม
+              el: this, // compontents
+              data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+          });
+        });
+      },
+      _editBlExporter:function (result,detail) {
+        if (result == true) {
+          this.editInput();
+          let data = detail.data;
+          let listShipmentdetails = this.dataBlDetail.shipment_detail;
+          let blNo = data.bl_no;
+          let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
+          let newShipment=[];
+          shipmentDetail.map((shipDetail,index)=>{
+            shipDetail[index]= Object.assign(shipDetail,data)
+            this._cleanShipmentData(shipDetail[index],(data)=>{
+                data.id = shipDetail[index].shm_det_id;
+                data.shm_id = shipDetail[index].shm_id;
+                newShipment.push(data);
+            });
+
+          });
+          // console.log(newShipment);
+          this._changeShipment(newShipment)
+        }
+      },
+      _changeShipment:function (shipmentDetail) {
+        shipmentDetail.map((data)=>{
+          this.update('./g2g/shipment/detail/update', data,() => {});
+        });
+        this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+         callback:()=>{
+            this.fire('refresh-contract',{detail:'refresh-contract'});
+            this.fire('get-list-shipment',{contractId:this.data.contract_id});
+            this.fire('get-list-shipment-detail',{sm_id:this.data.shm_id});
+          }
+        });
       },
       _oBChangeBooking:function (bl_no) {
         this.data.book_no = bl_no;
@@ -230,7 +250,7 @@
       },
       _oBCheckVessel:function (shipMany) {
         // set btnvessel
-        if (shipMany.value < 3) {
+        if (shipMany.value.length < 3) {
           this.hiddenInsertVessel = true;
         }
       },
@@ -251,7 +271,31 @@
             });
             callback(newData)
           }
-      }
+      },
+      _cleanShipmentData:function (data,callback) {
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        let stat = el.map((el)=> el.validate());
+          if (stat.every(elem => elem == true)) {
+            let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+                  load_port_id,num_of_container,packing_date,packing_time,product_date,
+                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,
+                  type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
+                  exporter_id} = data;
+            let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+                            load_port_id,num_of_container,packing_date,packing_time,product_date,
+                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,
+                            type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
+            newData.ship = new Array();
+            newData.eta_date = new Date (newData.eta_date);
+            newData.etd_date = new Date (newData.etd_date);
+            newData.packing_date = new Date (newData.packing_date);
+            newData.product_date = new Date (newData.product_date);
+            data.ship.map((ships)=>{
+              newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+            });
+            callback(newData)
+          }
+      },
     });
   </script>
 </dom-module>
