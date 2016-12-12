@@ -146,12 +146,24 @@
         });
 
         this.nylonMqttOn('eu','connected',(connect)=>{
-              this.nylonMqttPublish('eu','eu/quota/year',JSON.stringify({
-                method:'req',
-                fromClientId:connect.clientId,
-                toClientId:window.mqttId
-              }));
+            
+            this.nylonMqttPublish('eu','eu/quota/year',JSON.stringify({
+              method:'req',
+              fromClientId:connect.clientId,
+              toClientId:window.mqttId
+            }));
+
+            connect.subscribe('eu/quota/year');
+
 			  });
+
+        this.nylonMqttOn('eu','message',(topic,msg,data)=>{
+          var ctrl = JSON.parse(msg);
+          if(topic=="eu/quota/year" && ctrl.method=="res"){
+            this.getYear = ctrl.payload;
+          }
+				});
+
 
 
       },
@@ -179,7 +191,7 @@
           axios.get('./eu/quota/year')
           .then((response)=>{
             //console.log("success");
-            this.getYear = response.data;
+            //this.getYear = response.data;
             //console.log(this.getYear);
           })
           .catch((error)=>{

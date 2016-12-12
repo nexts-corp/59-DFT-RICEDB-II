@@ -38,26 +38,52 @@ client.on('message', function (topic, message, data) {
 
         ;
 
-        statement.run(conn, function (err, cursor) {
+        statement.run(conn, (err, cursor)=>{
             if (!err) {
               console.log(cursor);
-              client.publish('eu-quota-updated',JSON.stringify(cursor));
-
+ 
+              var statement = r.db('eu2').table('quota').orderBy('id')('id');
+              statement.run(conn, function (err, cursor) {
+                  if (!err) {
+                    client.publish('eu/quota/year',JSON.stringify({
+                      method:'res',
+                      toClientId:ctrl.fromClientId,
+                      formClientId:global.mqttId,
+                      payload:cursor
+                    }));
+                  } else {
+                    console.log(err);
+                  }
+              });
               
             } else {
               console.log(err);
             }
+
         });
     });
 
   }else if(
      (topic=="eu/quota/year" && ctrl.method=="req") && 
-     (typeof ctrl.clientId=="undefined" || ctrl.clientId==global.mqttId) 
+     (typeof ctrl.toClientId=="undefined" || ctrl.toClientId==global.mqttId) 
   ){
-    console.log(ctrl);
+    db.query(function (conn) {
+      var statement = r.db('eu2').table('quota').orderBy('id')('id');
+      statement.run(conn, function (err, cursor) {
+          if (!err) {
+            client.publish('eu/quota/year',JSON.stringify({
+              method:'res',
+              toClientId:ctrl.fromClientId,
+              formClientId:global.mqttId,
+              payload:cursor
+            }));
+          } else {
+            console.log(err);
+          }
+      });
+    });
   }
   
-
   // if( 
   //   (topic=="eu/quota/create" && ctrl.method=="req") && 
   //   (typeof ctrl.clientId=="undefined" || ctrl.clientId==global.mqttId) 
