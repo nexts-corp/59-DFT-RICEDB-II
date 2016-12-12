@@ -213,10 +213,8 @@
       },
       _changeShipment:function (shipmentDetail) {
         shipmentDetail.map((data)=>{
-          console.log(data);
           this.update('./g2g/shipment/detail/update', data,() => {});
         });
-        console.log(this.data);
         this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
          callback:()=>{
             this.fire('refresh-contract',{detail:'refresh-contract'});
@@ -252,7 +250,7 @@
       },
       _oBCheckVessel:function (shipMany) {
         // set btnvessel
-        if (shipMany.value < 3) {
+        if (shipMany.value.length < 3) {
           this.hiddenInsertVessel = true;
         }
       },
