@@ -60,15 +60,17 @@
             is:'nylon-init',
 			behaviors:[nylonMqttBehavior],
 			ready:function(){
-				this.nylonMqttConnect("eu","mqtt.codeunbug.com", Number(80), "1234");
+				this.nylonMqttConnect("eu","mqtt.codeunbug.com", Number(80));
 				
-				this.nylonMqttOn('eu','connected',function(connect){
-					connect.subscribe('eu-quota-updated');
-					console.log('connected');
+				this.nylonMqttOn('eu','connected',(connect)=>{
+					console.log(connect._getClientId());
+					//connect.subscribe('eu-quota-updated');
+					connect.subscribe('eu/quota');
+					this.nylonMqttPublish('eu','eu/quota/req','zz');
 				});
 
-				this.nylonMqttOn('eu','message',function(topic,msg){
-					console.log(topic,msg);
+				this.nylonMqttOn('eu','message',function(topic,msg,data){
+					console.log(topic,msg,data);
 				});
 
 				this.nylonMqttOn('eu','lost',function(res){
