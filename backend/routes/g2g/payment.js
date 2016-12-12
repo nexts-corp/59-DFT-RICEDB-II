@@ -51,15 +51,15 @@ router.get('/exporter/id/:id', function (req, res, next) {
                         return {
                             invoice_detail: me2('invoice_detail').merge(function (me3) {
                                 return r.branch(r.db('g2g').table('shipment_detail').filter({
-                                    id: me3('shm_det_id')
-                                    , exporter_id: req.params.id
+                                    id: me3('shm_det_id'),
+                                    exporter_id: req.params.id
                                 }).coerceTo('array').eq([])
                                     , 0
                                     , r.db('g2g')
                                         .table('shipment_detail')
                                         .filter({
-                                            id: me3('shm_det_id')
-                                            , exporter_id: req.params.id
+                                            id: me3('shm_det_id'),
+                                            exporter_id: req.params.id
                                         })
                                         .merge({ shm_det_id: me3('shm_det_id') })
                                         .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated"] }).zip()
@@ -104,22 +104,26 @@ router.get('/exporter/id/:id', function (req, res, next) {
                             })
                         }
                     })
-                        .map(function (me2) {
-                            return r.branch(
-                                me2('invoice_detail')(0).eq(0)
-                                , 0
-                                , me2.merge(function (me3) {
-                                    return {
-                                        amount_usd: me3('invoice_detail').sum('amount_usd'),
-                                        amount_fee: me3('invoice_detail').sum('invoice_fee'),
-                                        shm_id: me3('invoice_detail')('shm_id')(0)
-                                    }
-                                })
-                            )
+                        .merge(function (me2) {
+                            return {
+                                invoice_detail: me2('invoice_detail').filter(function (child) {
+                                    return child.eq(0).not()
+                                }),
+
+                            }
                         })
-                        .filter(function (f) {
-                            return f.eq(0).not()
+                        .merge(function (me2) {
+                            return me2.merge(function (me3) {
+                                return {
+                                    amount_usd: me3('invoice_detail').sum('amount_usd'),
+                                    amount_fee: me3('invoice_detail').sum('invoice_fee'),
+                                    shm_id: me3('invoice_detail')('shm_id')(0)
+                                }
+                            })
                         })
+                    // .filter(function (f) {
+                    //     return f.eq(0).not()
+                    // })
                 }
             })
             .merge(function (me1) {
