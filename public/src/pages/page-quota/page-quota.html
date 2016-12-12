@@ -134,12 +134,9 @@
       nylonPageActive:function(){
         this._getYear();
       },
-      attached: function(){
+      ready: function(){
         this.layerContent = "addRedRegExporter";
-        
         //this.textToast = 'โหลดข้อมูลสำเร็จ';
-
-
         Polymer.RenderStatus.afterNextRender(this,function(){
           this.importHref(this.resolveUrl('./components/quota-manage.html'), (e)=>{
               this.rendered = true;
@@ -147,6 +144,16 @@
               console.log('error')
           });
         });
+
+        this.nylonMqttOn('eu','connected',(connect)=>{
+              this.nylonMqttPublish('eu','eu/quota/year',JSON.stringify({
+                method:'req',
+                fromClientId:connect.clientId,
+                toClientId:window.mqttId
+              }));
+			  });
+
+
       },
       _insertData:function(){
           this.dataSelect = {
@@ -195,7 +202,7 @@
               callback:function(){
               }
             });
-            this.$$('panel-right').close();
+            // this.$$('panel-right').close();
             console.log(response.data);
             this.dataList = response.data;
           })
@@ -219,10 +226,25 @@
           axios.post('/eu2/transaction',e.detail)
           .then((response)=>{
             console.log("success");
-            this.textToast = 'บันทึกข้อมูลสำเร็จ';
             console.log('response:',response);
-            this._getYear();
-            this._getDatalist(this.selectYear);
+            this.fire('toast',{
+              status:'success',
+              text:'บันทึกข้อมูลสำเร็จ',
+              callback:function(){
+              }
+            });
+
+            this.nylonMqttOn('eu','connected',(connect)=>{
+              this.nylonMqttPublish('eu','eu/quota/create',JSON.stringify({
+                method:'req',
+                fromClientId:connect.clientId,
+                payload:response.data
+              }));
+				    });
+
+            //this.nylonMqttPublish('eu','eu/quota/create',JSON.stringify(response.data));
+            // this._getYear();
+            // this._getDatalist(this.selectYear);
           })
           .catch((error)=>{
           console.log("error");
