@@ -44,11 +44,18 @@
           </thead>
 
           <tbody class="table-body">
-            <template is="dom-repeat" items="[[data]]">
-              <tr on-tap="getBlDetail" data="[[item]]">
-               <td>[[item.bl_no]]</td>
-               <td>1</td>
-             </tr>
+            <template is="dom-if" if="[[!_isHave(data)]]">
+              <template is="dom-repeat" items="[[data]]">
+                <tr on-tap="getBlDetail" data="[[item]]">
+                 <td>[[item.bl_no]]</td>
+                 <td>1</td>
+               </tr>
+              </template>
+            </template>
+            <template is="dom-if" if="[[_isHave(data)]]">
+                <tr >
+                  <td colspan="4" style="text-align:center;">  ไม่มีข้อมูล</td>
+                </tr>
             </template>
 
          </tbody>
@@ -66,7 +73,8 @@
     Polymer({
       is: "list-of-bill-sm",
       behaviors: [
-          g2gShipmentController
+          g2gShipmentController,
+          g2gCongtroller
       ],
       properties: {
         dataSelected: {
