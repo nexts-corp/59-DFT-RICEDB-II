@@ -117,7 +117,7 @@ router.get('/shipment/id/:shm_id', function(req, res, next) {
             .group(function(g) {
                 return g.pluck(
                     "ship", "load_port_id", "dest_port_id", "deli_port_id",
-                    "bl_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                    "bl_no","book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
                     "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
                 )
             })
@@ -126,6 +126,7 @@ router.get('/shipment/id/:shm_id', function(req, res, next) {
                 return {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
+                    book_no:me('group')('book_no'),
                     ship: me('group')('ship'),
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),
@@ -219,7 +220,7 @@ router.get('/no/:bl_no', function(req, res, next) {
             .group(function(g) {
                 return g.pluck(
                     "ship", "load_port_id", "dest_port_id", "deli_port_id",
-                    "bl_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                    "bl_no","book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
                     "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
 
                 )
@@ -230,6 +231,7 @@ router.get('/no/:bl_no', function(req, res, next) {
                 return {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
+                    book_no:me('group')('book_no'),
                     ship: me('group')('ship'),
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),

@@ -305,7 +305,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .filter({ shm_id: req.params.shm_id })
             .group(function (g) {
                 return g.pluck(
-                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "shm_id", "shipline_id"//, "ship_voy_no"
+                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no","book_no", "shm_id", "shipline_id"//, "ship_voy_no"
                 )
             })
             .ungroup()
@@ -314,6 +314,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
                     ship: me('group')('ship'),
+                    book_no:me('group')('book_no'),
                     //ship_voy_no: me('group')('ship_voy_no'),
                     shipline_id: me('group')('shipline_id'),
                     load_port_id: me('group')('load_port_id'),
