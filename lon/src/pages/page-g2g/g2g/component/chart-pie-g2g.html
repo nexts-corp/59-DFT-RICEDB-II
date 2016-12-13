@@ -51,8 +51,9 @@
           <div class="flex">
           <!-- <iron-pages selected="{{seleteChartPie}}"> -->
             <div>
-              <div class="title">
-                 ยอดทำสัญญา
+              <div class="title" id="titleChart">
+                ปริมาณข้าวที่ทำสัญญา /
+                 ปริมาณข้าวทีส่งมอบ
               </div>
               <div class="horizontal layout">
                 <div class="flex-8">
@@ -199,6 +200,9 @@
       //end_observe
       chartPiePrevious:function () {
         this.seleteChartPie=0;
+        // ปริมาณข้าวที่ทำสัญญา /
+        //  ปริมาณข้าวทีส่งมอบ
+        this.$$('#titleChart').innerHTML = 'ปริมาณข้าวที่ทำสัญญา';
         this.$.chartContract.icon = 'radio-button-checked';
         this.$.chartShipment.icon = 'radio-button-unchecked';
         this.dataChartPie = this._computeChartPie(this.data.contract_quantity_shipment,this.data.contract_quantity_shipment_balance,this.nameChart[1]);
@@ -206,6 +210,7 @@
       },
       chartPieNext:function () {
         this.seleteChartPie=1;
+        this.$$('#titleChart').innerHTML = 'ปริมาณข้าวที่ส่งมอบ';
         this.$.chartContract.icon = 'radio-button-unchecked';
         this.$.chartShipment.icon = 'radio-button-checked';
         this.dataChartPie = this._computeChartPie(this.data.contract_quantity_confirm,this.data.contract_quantity_confirm_balance,this.nameChart[0]);
