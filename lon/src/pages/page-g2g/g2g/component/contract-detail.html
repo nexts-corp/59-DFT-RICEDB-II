@@ -60,7 +60,12 @@
         }
         gl-form-input.number{
           --paper-input-container-input:{
-            text-align: right;
+            text-align: left;
+          }
+        }
+        gl-form-input.number[disabled]{
+          --paper-input-container-input:{
+            text-align: left !important;
           }
         }
       </style>
@@ -82,10 +87,10 @@
 
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
    <gl-grid-row width="{{getWidth}}">
-     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,9]]">
        <gl-form-input required class="required" disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อสัญญา" label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
      </gl-grid-col>
-     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
        <vaadin-date-picker always-float-label class="required" required  disabled="[[isInputDisabled]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
      </gl-grid-col>
      </gl-grid-row>
@@ -93,7 +98,7 @@
        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'contract_quantity')]]
            <gl-form-input class="required number" required format-number="on" disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="น้ำหนักสินค้า (ตัน)" value="{{data.contract_quantity}}" placeholder="ใส่รายละเอียด" id="contract_quantity"></gl-form-input>
        </gl-grid-col>
-       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">[[changeString2Num(data.*,'tolerance_rate')]]
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">[[changeString2Num(data.*,'tolerance_rate')]]
            <gl-form-input class="required number" required disabled="[[isInputDisabled]]" error-message="กรุณาใส่จำนวน" required label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{data.tolerance_rate}}" placeholder="ใส่รายละเอียด" id="tolerance_rate">
               <div suffix>%</div>
            </gl-form-input>
@@ -101,10 +106,10 @@
      </gl-grid-row>
 
      <gl-grid-row>
-       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,9]]">
          [[_getBuyerAddressFromData(data)]]
-         <gl-combo-box class="required" always-float-label  required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
-         item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{dataForSelect.buyer}}" on-value-changed="_getBuyerAddress">
+         <gl-combo-box class="required" always-float-label  required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" error-message="กรุณาเลือกผู้ซื้อ"
+          value="{{data.buyer_id}}"  on-value-changed="_getBuyerAddress">
          </gl-combo-box>
        </gl-grid-col>
         </gl-grid-row>
@@ -209,8 +214,18 @@
         }
       },
       observers:[
-        '_changeDataContract(data.contract_date)'
+        '_changeDataContract(data.contract_date)',
+        '_getBuyer(dataForSelect.buyer)'
       ],
+      _getBuyer:function (buyers) {
+        let elements = this.$$('#buyer_id');
+        let buyer = new Array();
+        buyers.map((el,index)=>{
+          console.log(el);
+          buyer.push({ label:el.buyer_fullname+' ['+el.country_name_en+'] ' , value:el.buyer_id});
+        });
+        elements.items = buyer;
+      },
       _getBuyerAddress:function (e) {
         let selectedItem = e.detail.value;
             if (selectedItem) {

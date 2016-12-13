@@ -35,16 +35,21 @@
   </style>
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
-      <gl-form-panel-head label="" set-padding="10px" set-border="1px">
-    <div class="horizontal end-justified layout">
-      <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment"  hidden="[[data.shm_status]]"></paper-icon-button>
-      <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
-      <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment" hidden="[[data.shm_status]]"></paper-icon-button>
-      <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
-     </div>
-     </gl-form-panel-head>
+      <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
+        <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
+          <gl-form-panel-head label="" set-padding="10px" set-border="1px">
+            <div class="horizontal end-justified layout">
+              <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment"  hidden="[[data.shm_status]]"></paper-icon-button>
+              <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
+              <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment" hidden="[[data.shm_status]]"></paper-icon-button>
+              <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
+             </div>
+         </gl-form-panel-head>
+        </template>
+      </template>
+
 <!-- [[insertData]]//[[isInputDisabled]]//[[isViewSeleted]]// -->
-  <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+
      <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
         <gl-form-input class="required insetShipment" label="ลำดับ" disabled="[[!isInputDisabled]]" always-float-label placeholder="ลำดับที่การส่งมอบสินค้า" value="{{data.shm_no}}"></gl-form-input>
@@ -77,7 +82,7 @@
 
     <template is="dom-if" if="[[_isViewing(insertData)]]">
       <div class="layout horizontal end-justified">
-         <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl" hidden="[[data.shm_status]]">จัดการ</paper-button>
+         <paper-button class="gl-btn-primary" raised on-tap="editBlShm" name="addBl" hidden="[[data.shm_status]]">จัดการ BL</paper-button>
          <paper-button  class="gl-btn-primary" raised on-tap="addExporter" name="addShmdt" hidden="[[data.shm_status]]">เพิ่มผู้ส่งออก</paper-button>
       </div>
       <iron-pages selected="[[pageBl]]" attr-for-selected="name">
@@ -130,7 +135,7 @@
              <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]" shm-status="[[data.shm_status]]"></detail-exporter-ship>
            </iron-collapse>
          </template>
-          </gl-form-panel-body>
+
            <gl-form-panel-footer label="" set-padding="10px">
          <div class="horizontal end-justified layout">
              <paper-button class="gl-btn-danger" raised on-tap="backPageShipmentList" >ย้อนกลับ</paper-button>

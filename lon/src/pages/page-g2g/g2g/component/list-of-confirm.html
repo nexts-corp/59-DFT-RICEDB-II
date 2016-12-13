@@ -38,19 +38,19 @@
 </style>
 <template>
   <iron-pages selected="{{pageSelected}}" attr-for-selected="name">
-    <div class="gl-panel-default" name="listOfConfirm">
-      <div class="gl-panel-default-header">
-        การยืนยันทำสัญญา
-      </div>
-      <div class="gl-panel-default-content">
+    <div name="listOfConfirm">
+  <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+    <gl-form-panel-head label="" set-padding="10px" set-border="1px">
         <div class="addconfirm horizontal end-justified layout">
           <paper-button raised class="gl-btn-primary" on-tap="createConfirm">สร้าง</paper-button>
         </div>
+          </gl-form-panel-head>
+        <!-- <gl-form-panel-body label="" set-padding="10px" set-border="1px"> -->
         <table class="gl-table-default">
           <thead class="table-head">
             <tr>
               <th>ลำดับที่</th>
-              <th>ชื่อจดหมาย</th>
+              <th>ชื่อสัญญาย่อย</th>
               <th>จำนวนข้าว (ตัน)</th>
               <th>สถานนะ</th>
             </tr>
@@ -68,7 +68,7 @@
               <template is="dom-repeat" items="[[data.confirm_letter]]">
                 <tr on-tap="getConfirmDetail" data="[[item]]">
                   <td>  [[item.cl_no]] </td>
-                  <td> [[formatNumberNoZero(item.cl_name)]]</td>
+                  <td> [[item.cl_name]]</td>
                   <td> [[formatNumberNoZero(item.cl_quantity_total)]] </td>
                   <td style="text-align: center;"> [[item.cl_status_name]]</td>
                 </tr>
@@ -81,7 +81,8 @@
             </template>
           </tbody>
         </table>
-      </div>
+        <!-- </gl-form-panel-body> -->
+    </gl-form-panel>
     </div>
     <div name="addConfirm">
       <confirm-detail data-for-select="[[dataForSelect]]" is-view-seleted="[[!isEdit]]" is-input-disabled="[[isInputDisabled]]"></confirm-detail>

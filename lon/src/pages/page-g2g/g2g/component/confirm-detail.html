@@ -60,20 +60,18 @@
     <!-- disabled="[[checkInput]]" -->
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input class="required" required    disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="ลำดับ" placeholder="ใส่รายละเอียด" value="{{data.cl_no}}"></gl-form-input>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+            <gl-form-input class="required" required    disabled="[[isInputDisabled]]" error-message="กรุณาลำดับ" required label="ลำดับ" always-float-label value="{{data.cl_no}}"></gl-form-input>
           </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-            <gl-form-input class="required" required   disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อจดหมายคอนเฟริม" required label="ชื่อ" placeholder="ใส่รายละเอียด" value="{{data.cl_name}}"></gl-form-input>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+            <gl-form-input class="required" required   disabled="[[isInputDisabled]]" error-message="กรุณาใสชื่อสัญญาย่อย" required label="ชื่อสัญญาย่อย" always-float-label value="{{data.cl_name}}"></gl-form-input>
           </gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
             <vaadin-date-picker class="required" required    disabled="[[isInputDisabled]]" label="วันที่" value="{{data.cl_date}}" name="cl_date"></vaadin-date-picker>
           </gl-grid-col>
       </gl-grid-row>
-      <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มชนิดข้าว</paper-button>
-      </div>
-    <div class="top ">รายละเอียดของราคาข้าว</div>
+
+    <div class="top ">รายละเอียด</div>
 
 
     <template is="dom-repeat" items="[[data.cl_type_rice]]">
@@ -99,7 +97,6 @@
             </gl-grid-col>
           </gl-grid-row>
           </gl-form-panel-body>
-<gl-form-panel-body label="" set-padding="10px" set-border="1px">
           <table class="gl-table-default" id="[[index]]">
             <thead class="table-head">
             <tr>
@@ -133,20 +130,20 @@
               </tr>
             </template>
             </tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td style="text-align:center;">
-                    <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่ม</paper-button>
-                  </td>
-                </tr>
-          </table>
 
-        </gl-form-panel-body>
+          </table>
+          <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+              <div class="horizontal end-justified layout">
+                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มบรรจุภัณฑ์</paper-button>
+                </div>
+              </template>
+
         </gl-form-panel>
           </div>
       </template>
+      <div class="horizontal end-justified layout">
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มชนิดข้าว</paper-button>
+      </div>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
           <gl-combo-box id="package" class="required" required  disabled="[[isInputDisabled]]" label="วิธีการชำระเงิน" error-message="กรุณาเลือกรูปแบบการชำระเงิน" placeholder="เลือกประเภท" name="package_name"
@@ -156,7 +153,7 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 
-            <gl-form-input class="numberBack" disabled  label="น้ำหนักรวมทั้งหมด (ตัน)" placeholder="0" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+            <gl-form-input class="numberBack" disabled  label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -167,7 +164,7 @@
   <gl-form-panel-footer label="" set-padding="10px">
 
     <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-danger" raised on-tap="backPage">ย้อนกลับ</paper-button>
+        <paper-button  raised on-tap="backPage">ย้อนกลับ</paper-button>
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
         <paper-button class="gl-btn-primary" on-tap="insertConfirm" raised hidden="[[_isViewing(isViewSeleted)]]">เพิ่มสัญญา</paper-button>
         </template>
@@ -225,9 +222,10 @@
                 total += parseFloat(datas[index].type_rice_quantity);
           }
         this.cl_total_quantity = numeral(total).format('0,0');
-        if (isNaN(this.cl_total_quantity)) {
-          this.cl_total_quantity=0;
-        }
+        console.log(this.cl_total_quantity);
+        // if (isNaN(this.cl_total_quantity)) {
+        //   this.cl_total_quantity=0;
+        // }
       },
       addNewTypeRice:function () {
         this.push('data.cl_type_rice', {
