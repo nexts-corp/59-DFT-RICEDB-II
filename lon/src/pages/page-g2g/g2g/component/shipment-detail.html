@@ -91,7 +91,7 @@
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
       <template is="dom-if" if="[[!_isViewing(insertData)]]">
          <div class="horizontal end-justified layout">
-           <paper-button class="gl-btn-danger" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
+           <paper-button class="gl-btn-defalse" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
            <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>เพิ่ม</paper-button>
          </div>
        </template>
@@ -99,7 +99,7 @@
      <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
        <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
           <div class="horizontal end-justified layout">
-              <paper-button class="gl-btn-danger" on-tap="backPageShipmentDetail" raised>ย้อนกลับ</paper-button>
+              <paper-button class="gl-btn-defalse" on-tap="backPageShipmentDetail" raised>ย้อนกลับ</paper-button>
              <paper-button  class="gl-btn-success" on-tap="editShimpent" raised>บันทึก</paper-button>
           </div>
        </template>
@@ -115,68 +115,85 @@
               <paper-tab name="listOfExporter">รายชื่อผู้ส่งออก</paper-tab>
               <paper-tab name="listOfBl">รายการ B/L</paper-tab>
       </paper-tabs>
+      //[[dataForSelect.pol]]
+      <!-- <gl-combo-box required class="required"label="Port of loading"always-float-label item-label-path="port_name"
+         item-value-path="port_id" items="{{dataForSelect.pol}}" value="{{data.load_port_id}}"></gl-combo-box> -->
       <iron-pages selected="[[pageBl]]" attr-for-selected="name">
         <div name="listOfExporter">
-        <iron-pages selected="[[pageShipment]]" attr-for-selected="name">
-            <div name="listOfExporter">
-                <table class="gl-table-default">
-                   <thead class="table-head">
-                       <tr>
-                         <th></th>
-                         <th>ลำดับที่</th>
-                         <th>ผู้ส่งออก</th>
-                         <th>จำนวนข้าว</th>
-                       </tr>
-                   </thead>
-                   <template is="dom-if" if="[[_isHaveMany(data.shipment_detail,1)]]">
-                     <tbody class="table-body">
-                       <tr >
-                         <td colspan="4" style="text-align: center;">  ไม่มีข้อมูล</td>
-                       </tr>
-                     </tbody>
-                   </template>
-               </table>
-               <template is="dom-repeat" items="[[data.shipment_detail]]">
-                 <paper-item>
-                   <div>
-                     <paper-icon-button id="iconcollapse[[item.shm_det_id]]" icon="expand-more" on-tap="_toggleSub" aria-controls$="collapse[[item.shm_det_id]]"></paper-icon-button>
-                   </div>
-                   <div>
-                     [[_ObcountIndex(index)]]
-                   </div>
-                   <div>
-                     [[item.seller_name_en]]
-                   </div>
-                   <div style="text-align:right;">
-                     [[formatNumberNoZero(item.shm_det_quantity)]]
-                   </div>
-                 </paper-item>
-                 <iron-collapse id="collapse[[item.shm_det_id]]">
-                   <detail-exporter-ship data-for-select="[[dataForSelect]]"  data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]" shm-status="[[data.shm_status]]"></detail-exporter-ship>
-                 </iron-collapse>
-               </template>
+          <iron-pages selected="[[pageShipment]]" attr-for-selected="name">
+              <div name="listOfExporter">
+                  <table class="gl-table-default">
+                     <thead class="table-head">
+                         <tr>
+                           <th></th>
+                           <th>ลำดับที่</th>
+                           <th>ผู้ส่งออก</th>
+                           <th>จำนวนข้าว</th>
+                         </tr>
+                     </thead>
+                     <template is="dom-if" if="[[_isHaveMany(data.shipment_detail,1)]]">
+                       <tbody class="table-body">
+                         <tr >
+                           <td colspan="4" style="text-align: center;">  ไม่มีข้อมูล</td>
+                         </tr>
+                       </tbody>
+                     </template>
+                 </table>
+                 <template is="dom-repeat" items="[[data.shipment_detail]]">
+                   <paper-item>
+                     <div>
+                       <paper-icon-button id="iconcollapse[[item.shm_det_id]]" icon="expand-more" on-tap="_toggleSub" aria-controls$="collapse[[item.shm_det_id]]"></paper-icon-button>
+                     </div>
+                     <div>
+                       [[_ObcountIndex(index)]]
+                     </div>
+                     <div>
+                       [[item.seller_name_en]]
+                     </div>
+                     <div style="text-align:right;">
+                       [[formatNumberNoZero(item.shm_det_quantity)]]
+                     </div>
+                   </paper-item>
+                   <iron-collapse id="collapse[[item.shm_det_id]]">
+                     <detail-exporter-ship data-for-select="[[dataForSelect]]" pol="[[dataForSelect.pol]]"
+                     pod="[[dataForSelect.pod]]"   data="[[item]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]" shm-status="[[data.shm_status]]"></detail-exporter-ship>
+                   </iron-collapse>
+                 </template>
 
-                 <gl-form-panel-footer label="" set-padding="10px">
-                   <div class="layout horizontal end-justified">
-                     <paper-button  class="gl-btn-primary" raised on-tap="addExporter" name="addShmdt" hidden="[[data.shm_status]]">เพิ่มผู้ส่งออก</paper-button>
-                   </div>
-               <div class="horizontal end-justified layout">
-                   <paper-button class="gl-btn-danger" raised on-tap="backPageShipmentList" >ย้อนกลับ</paper-button>
-                     <paper-button class="gl-btn-info" raised on-tap="approveShipment" hidden="[[data.shm_status]]">ยืนยันผู้ส่งออก</paper-button>
-               </div>
-                 </gl-form-panel-footer>
+                   <gl-form-panel-footer label="" set-padding="10px">
+                     <div class="layout horizontal end-justified">
+                       <paper-button  class="gl-btn-primary" raised on-tap="addExporter" name="addShmdt" hidden="[[data.shm_status]]">เพิ่มผู้ส่งออก</paper-button>
+                     </div>
+                 <div class="horizontal end-justified layout">
+                     <paper-button class="gl-btn-defalse" raised on-tap="backPageShipmentList" >ย้อนกลับ</paper-button>
+                       <paper-button class="gl-btn-info" raised on-tap="approveShipment" hidden="[[data.shm_status]]">ยืนยันผู้ส่งออก</paper-button>
+                 </div>
+                   </gl-form-panel-footer>
+              </div>
+            <div name="addExporter">
+              <detail-exporter-ship data-for-select="[[dataForSelect]]"
+                                    pol="[[dataForSelect.pol]]"
+                                    pod="[[dataForSelect.pod]]"
+                                    bl-nos="[[dataForSelect.blNos]]"
+                                    is-view-seleted="[[!isViewSeleted]]"></detail-exporter-ship>
             </div>
-          <div name="addExporter">
-            <detail-exporter-ship data-for-select="[[dataForSelect]]" bl-nos="[[dataForSelect.blNos]]" is-view-seleted="[[!isViewSeleted]]"></detail-exporter-ship>
-          </div>
-        </iron-pages>
+          </iron-pages>
         </div>
         <div name="listOfBl">
-          <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
+          <iron-pages selected="[[pageShipmentBL]]" attr-for-selected="name">
+            <div name="listOfBl">
+              <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
+            </div>
+            <div name="BlDetail">
+              <bill-detail-sm data-for-select="[[dataForSelect]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]"></bill-detail-sm>
+            </div>
+            <div name="editBlDetail">
+              <bill-detail-sm data-for-select="[[dataForSelect]]"  data="[[dataSelected]]" is-view-seleted="[[!isViewSeleted]]" is-input-disabled="[[!isInputDisabled]]" data-bl-detail="[[data]]"></bill-detail-sm>
+            </div>
+          </iron-pages>
         </div>
-        <div name="editBlDetail">
-          <bill-detail-sm data-for-select="[[dataForSelect]]" data="[[dataSelected]]" is-view-seleted="[[!isViewSeleted]]" is-input-disabled="[[!isInputDisabled]]" data-bl-detail="[[data]]"></bill-detail-sm>
-        </div>
+
+
         <!-- <div name="BlDetail">
           <bill-detail-sm data-for-select="[[dataForSelect]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]"></bill-detail-sm>
         </div> -->
@@ -207,6 +224,7 @@
         'edit-bl-detail':'_lisNerBlDetail',
         'add-bl-no':'_lisNerAddBlNo',
         'cancel-insert-shipment':'_lisNerCanInSm',
+        'cancel-edit-shipment':'_lisNerCanEdSm',
         'cancel-insert-bl':'_lisNerCanInBl',
         'min-size-collapse-shipment-detail' : '_lisNerMinCollapse'
       },
@@ -233,6 +251,10 @@
           type:String,
           value:'listOfExporter'
         },
+        pageShipmentBL:{
+          type:String,
+          value:'listOfBl'
+        },
         dataSelected:{
           type:Object,
         },
@@ -251,16 +273,21 @@
       _lisNerBlDetail:function (e) {
         console.log(e.detail.detail);
         this.dataSelected = e.detail.detail;
-        this.pageBl= 'editBlDetail';
+        this.pageShipmentBL= 'editBlDetail';
       },
       _lisNerAddBlNo:function () {
-        this.pageBl= 'BlDetail';
+        console.log(111);
+        this.pageShipmentBL='BlDetail';
       },
       _lisNerCanInSm:function () {
         this.pageBl= 'listOfExporter';
       },
+      _lisNerCanEdSm:function () {
+        this.pageBl= 'listOfExporter';
+        this.pageShipment='listOfExporter';
+      },
       _lisNerCanInBl:function () {
-        this.pageBl= 'listOfBl';
+        this.pageShipmentBL= 'listOfBl';
       },
       _lisNerMinCollapse:function (e) {
         let targetAttribute = e.detail.collapse;
