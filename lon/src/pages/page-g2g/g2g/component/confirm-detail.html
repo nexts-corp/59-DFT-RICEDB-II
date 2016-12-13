@@ -194,7 +194,7 @@
         },
         data: {
           type: Object,
-          value:{cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}]}
+          value:{type_rice_quantity:0,cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}]}
         },
         cl_total_quantity: {
           type: Number,
@@ -225,6 +225,9 @@
                 total += parseFloat(datas[index].type_rice_quantity);
           }
         this.cl_total_quantity = numeral(total).format('0,0');
+        if (isNaN(this.cl_total_quantity)) {
+          this.cl_total_quantity=0;
+        }
       },
       addNewTypeRice:function () {
         this.push('data.cl_type_rice', {
