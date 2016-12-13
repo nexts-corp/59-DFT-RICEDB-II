@@ -110,7 +110,7 @@
               <td></td>
               <td><div style="margin-left:10px;">[[datapay.shm_no]]</div></td>
               <td><div style="margin-left:10px;">[[datapay.fee_no]]</div></td>
-              <td><div class="text-right">[[datapay.amount_thb_balance]]</div></td>
+              <td><div class="text-right">[[formatNumber(datapay.amount_thb_balance)]]</div></td>
               <td></td>
               <td><div class="text-center">[[datapay.pay_date]]</div></td>
               <td></td>
@@ -168,7 +168,8 @@
     Polymer({
       is: "payment-export",
       behaviors: [
-        g2gModelBehavior
+        g2gModelBehavior,
+        FormatNumberBehavior
       ],
       properties: {
         dataForSelected:{

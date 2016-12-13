@@ -12,7 +12,6 @@
 .table-head > tr > th:nth-child(1),
 .table-head > tr > th:nth-child(3),
 .table-body > tr > td:nth-child(1),
-.table-body > tr > td:nth-child(3),
 .table-foot > tr > td:nth-child(1),
 .table-foot > tr > td:nth-child(3),
 .table-head > tr > th:nth-child(4),
@@ -20,6 +19,10 @@
 .table-foot > tr > th:nth-child(4)  {
   width: 20%;
   text-align: center;
+}
+.table-body > tr > td:nth-child(3){
+  width: 20%;
+  text-align: right;
 }
 .table-head > tr > th:nth-child(2),
 .table-body > tr > th:nth-child(2),
@@ -65,8 +68,8 @@
               <template is="dom-repeat" items="[[data.confirm_letter]]">
                 <tr on-tap="getConfirmDetail" data="[[item]]">
                   <td>  [[item.cl_no]] </td>
-                  <td> [[item.cl_name]]</td>
-                  <td> [[item.cl_quantity_total]] </td>
+                  <td> [[formatNumberNoZero(item.cl_name)]]</td>
+                  <td> [[formatNumberNoZero(item.cl_quantity_total)]] </td>
                   <td style="text-align: center;"> [[item.cl_status_name]]</td>
                 </tr>
               </template>
@@ -92,7 +95,8 @@
 Polymer({
   is: "list-of-confirm",
   behaviors: [
-      g2gCongtroller
+      g2gCongtroller,
+      FormatNumberBehavior
   ],
   listeners:{
     'back-page-confirm':'_backPageConfirm',

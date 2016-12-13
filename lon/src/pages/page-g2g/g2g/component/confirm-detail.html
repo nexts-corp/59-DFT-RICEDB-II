@@ -44,15 +44,21 @@
   }
   </style>
   <template>
+    <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+      <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
+        <gl-form-panel-head label="" set-padding="10px" set-border="1px">
     <div class="horizontal end-justified layout">
-          <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
+
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Confirmmation Letter</paper-tooltip>
             <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteConfirm" ></paper-icon-button>
             <paper-tooltip for="deleteConfirm" offset="0">Delete Confirmmation Letter</paper-tooltip>
-          </template>
+
     </div>
+  </gl-form-panel-head>
+          </template>
     <!-- disabled="[[checkInput]]" -->
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input class="required" required    disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="ลำดับ" placeholder="ใส่รายละเอียด" value="{{data.cl_no}}"></gl-form-input>
@@ -81,9 +87,10 @@
               </gl-combo-box >
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              [[_obCalcWeight(item.*)]]
+
               [[changeString2Num(item.*,'type_rice_quantity')]]
-              <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+              [[_obCalcWeight(item.*)]]
+              <gl-form-input class="required" required  format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
             </gl-grid-col>
@@ -115,13 +122,13 @@
                   </gl-combo-box >
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
-                  <gl-form-input class="required numberBack" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  <gl-form-input class="required numberBack" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                 </td>
                 <td >
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                 </td>
                 <td style="text-align:center;">
-                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]">ลบขนาดบรรจุภัณฑ์</paper-button>
+                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]">ลบ</paper-button>
                 </td>
               </tr>
             </template>
@@ -131,7 +138,7 @@
                   <td></td>
                   <td></td>
                   <td style="text-align:center;">
-                    <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มขนาดบรรจุภัณฑ์</paper-button>
+                    <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่ม</paper-button>
                   </td>
                 </tr>
           </table>
@@ -156,7 +163,8 @@
             <gl-form-textarea class="required" required  disabled="[[isInputDisabled]]" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.cl_quality}}" name="cl_quality"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
-
+  </gl-form-panel-body>
+  <gl-form-panel-footer label="" set-padding="10px">
 
     <div class="horizontal end-justified layout">
         <paper-button class="gl-btn-danger" raised on-tap="backPage">ย้อนกลับ</paper-button>
@@ -170,6 +178,8 @@
         <paper-button class="gl-btn-success" on-tap="saveConfirm" raised hidden="[[_isViewing(isInputDisabled)]]">บันทึก</paper-button>
         </template>
     </div>
+  </gl-form-panel-footer>
+</gl-form-panel>
   </template>
   <script>
     Polymer({
@@ -184,12 +194,22 @@
         },
         data: {
           type: Object,
-          value:{cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}]}
+          value:{type_rice_quantity:0,cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}]}
         },
         cl_total_quantity: {
           type: Number,
           value:0
         },
+      },
+      observers:[
+        '_changeDataConfirm(data.cl_date)'
+      ],
+      _changeDataConfirm:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          console.log(date);
+          this.set('data.cl_date', date);
+          this.notifyPath('data.cl_date');
+        });
       },
       deleteRiceType:function (e) {
         this.splice('data.cl_type_rice', e.currentTarget.id, 1);
@@ -204,7 +224,10 @@
           for(index in datas){
                 total += parseFloat(datas[index].type_rice_quantity);
           }
-        this.cl_total_quantity = total;
+        this.cl_total_quantity = numeral(total).format('0,0');
+        if (isNaN(this.cl_total_quantity)) {
+          this.cl_total_quantity=0;
+        }
       },
       addNewTypeRice:function () {
         this.push('data.cl_type_rice', {

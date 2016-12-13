@@ -115,7 +115,7 @@
                   <template is="dom-repeat" items="[[data.bl_detail]]">
                     <tr style="font-size:14px">
                         <td>[[data.buyer_masks]]</td>
-                        <td>[[item.quantity_bags]] BAGS</td>
+                        <td>[[formatNumberNoZero(item.quantity_bags)]] BAGS</td>
                         <td>
                           [[item.type_rice_desc_en]] CURRENT NEW CROP,DOUBLE POLISHED AND SORTEXED QUALITY.<br>
                           PACKING: INSTRONG EXPORT SEA WORTHY NEWSINGLE PP BAGS OF [[item.package_kg_per_bag]] KILOGRAMS NET WITH MINIMUM TARE WEIGHT TO BE AT [[item.package_weight_bag]] GRAM/BAG.
@@ -131,7 +131,7 @@
                               :
                             </gl-grid-col>
                             <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                              [[item.weight_gross]]
+                              [[formatNumber(item.weight_gross)]]
                             </gl-grid-col>
                             <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
                               METRIC TONS
@@ -147,7 +147,7 @@
                               :
                             </gl-grid-col>
                             <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                              [[item.weight_tare]]
+                              [[formatNumber(item.weight_tare)]]
                             </gl-grid-col>
                             <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
                               METRIC TONS
@@ -164,7 +164,7 @@
                               :
                             </gl-grid-col>
                             <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                              [[item.weight_net]]
+                              [[formatNumber(item.weight_net)]]
                             </gl-grid-col>
                             <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
                               METRIC TONS
@@ -173,14 +173,14 @@
                           <br>
                           (US.DOLLARS [[_toWords(item.amount_usd)]] ONLY)
                         </td>
-                        <td>USD  [[item.amount_usd]]</td>
+                        <td>USD  [[formatNumber(item.amount_usd)]]</td>
                     </tr>
                   </template>
                 </tbody>
                 <tfoot class="table-foor">
                   <tr style="font-size:14px">
                     <td></td>
-                    <td>[[data.quantity]] BAGS</td>
+                    <td>[[formatNumberNoZero(data.quantity)]] BAGS</td>
                     <td>
                       TOTAL <br>
                       <gl-grid-row>
@@ -193,7 +193,7 @@
                           :
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                          [[data.weight_gross]]
+                          [[formatNumber(data.weight_gross)]]
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
                           METRIC TONS
@@ -209,7 +209,7 @@
                           :
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                          [[data.weight_tare]]
+                          [[formatNumber(data.weight_tare)]]
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
                           METRIC TONS
@@ -226,7 +226,7 @@
                           :
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                          [[data.weight_net]]
+                          [[formatNumber(data.weight_net)]]
                         </gl-grid-col>
                         <gl-grid-col class="desWeigth" width="[[getWidth]]" grid="[[300,12],[500,3]]">
                           METRIC TONS
@@ -243,7 +243,7 @@
                     BANK ACCOUNT NUMBER 385-0-12421-5<br>
                     ADDRESS : 44/100 NONTHABURI 1 ROAD, NONTHABURI 11000, THAILAND
                     </td>
-                    <td>USD [[data.amount_usd]]</td>
+                    <td>USD [[formatNumber(data.amount_usd)]]</td>
                   </tr>
                 </tfoot>
             </table>
@@ -267,7 +267,8 @@
       is: "commercial-invoice",
       behaviors: [
           g2gModelBehavior,
-          g2gCongtroller
+          g2gCongtroller,
+          FormatNumberBehavior
       ],
       properties: {
         data: {
@@ -298,7 +299,7 @@
             this.fire('close-drawer',{detail:'close-drawer'})
             this.fire('get-bl-list',{detail:shmId});
             this.fire('get-invoice-list',{detail:shmId});
-            
+
          });
         });
       },

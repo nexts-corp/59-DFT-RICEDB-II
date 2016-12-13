@@ -61,14 +61,32 @@
       });
       return url;
     },
+    getDateg2g:function (date,callback) {
+      if (date == undefined) {
+        let date = new Date;
+        let dateNow = date.toISOString().split("T");
+        callback(dateNow[0]);
+      }
+    },
     changeString2Num:function(ob,param){
       //console.log(typeof ob.value);
+      // if(typeof ob.value == "string"){
+      //   console.log(numeral().unformat(ob.value));
+      //   var pathChange = ob.path.split(".");
+      //   if(pathChange.length == 2){
+      //       if(pathChange[1]==param){
+      //         ob.base[param]=parseFloat(ob.value);
+      //         // console.log(typeof ob.value);
+      //       }
+      //   }
+      // }
       if(typeof ob.value == "string"){
         var pathChange = ob.path.split(".");
+        // undefined
         if(pathChange.length == 2){
             if(pathChange[1]==param){
-              ob.base[param]=parseFloat(ob.value);
-              // console.log(typeof ob.value);
+              ob.base[param]=numeral().unformat(ob.value);
+              console.log(ob.base[param]);
             }
         }
       }

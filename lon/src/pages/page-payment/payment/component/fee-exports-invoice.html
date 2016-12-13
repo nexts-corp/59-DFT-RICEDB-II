@@ -98,33 +98,33 @@
                 <vaadin-date-picker style="width:110px;" label="" value="{{invoiceDetail.invoice_date}}" ></vaadin-date-picker>
               </td>
                 [[_totalQuantityTons(invoiceDetail.quantity_tons,index)]]
-              <td><gl-form-input style="width:140px;" value="[[invoiceDetail.quantity_tons]]" disabled ></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;" value="[[invoiceDetail.quantity_tons]]" disabled ></gl-form-input></td>
                 [[_totalPricePerTon(invoiceDetail.price_per_ton,index)]]
-              <td><gl-form-input style="width:140px;" value="[[invoiceDetail.price_per_ton]]" disabled ></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;" value="[[invoiceDetail.price_per_ton]]" disabled ></gl-form-input></td>
                 [[_totalAmountUsd(invoiceDetail.amount_usd,index)]]
-              <td><gl-form-input style="width:140px;" value="[[invoiceDetail.amount_usd]]" disabled ></gl-form-input></td>
-              <td><gl-form-input style="width:140px;" value="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" disabled ></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;" value="[[invoiceDetail.amount_usd]]" disabled ></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" disabled ></gl-form-input></td>
               <td>
                 [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
                 <!-- [[_averageFees(invoiceDetail.*,invoice_fee)]] -->
                 <!-- [[_averageFee(invoiceDetail.invoice_fee,index,feeTotal,invoice)]] -->
                 [[_totalfee(invoiceDetail.invoice_fee,index)]]
-                <gl-form-input value="{{invoiceDetail.invoice_fee}}"></gl-form-input>
+                <gl-form-input format-number="on" value="{{invoiceDetail.invoice_fee}}"></gl-form-input>
               </td>
-              <td><gl-form-input style="width:140px;" value="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled ></gl-form-input></td>
-              <td><gl-form-input style="width:140px;" value="[[_totalMoneyInvoice(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;" value="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled ></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalMoneyInvoice(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled></gl-form-input></td>
             </tr>
           </template>
 
           <tr>
             <td colspan="3">รวม</td>
-            <td><gl-form-input style="width:140px;" value="[[_totalTonInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input style="width:140px;" value="[[_totalPricePerTonUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input style="width:140px;" value="[[_totalAmountUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input style="width:140px;" value="[[_totalBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input style="width:140px;" value="[[_totalFeeInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input style="width:140px;" value="[[_totalIncomeTaxInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input style="width:140px;" value="[[_totalMoneyBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalTonInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalPricePerTonUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalAmountUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalFeeInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalIncomeTaxInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalMoneyBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
           </tr>
         </table>
       </div>
@@ -223,7 +223,11 @@
             result+=item.testza;
           }.bind(this));
             this.set('data.totalBathInvoices',result);
-          return result;
+            if (isNaN(result)){
+              return ''
+            }  else {
+              return result;
+            }
       },
       _totalFeeInvoices:function (index,test) {
         var result = 0;
@@ -231,7 +235,11 @@
             result+=item.invoice_fee;
           }.bind(this));
           this.set('data.totalFeeInvoices',result);
-          return result;
+          if (isNaN(result)){
+            return ''
+          }  else {
+            return result;
+          }
       },
       _totalIncomeTaxInvoices:function (index,test) {
         var result = 0;
@@ -239,7 +247,11 @@
             result+=item.incomeTax;
           }.bind(this));
           this.set('data.totalIncomeTaxInvoices',result);
-          return result;
+          if (isNaN(result)){
+            return ''
+          }  else {
+            return result;
+          }
       },
       _totalMoneyBathInvoices:function (index,test) {
         var result = 0;
@@ -248,7 +260,11 @@
             result+=item.moneyInvoice ;
           }.bind(this));
             this.set('data.totalMoneyBathInvoices',result);
-          return result;
+            if (isNaN(result)){
+              return ''
+            }  else {
+              return result;
+            }
       },
     });
   </script>
