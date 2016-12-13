@@ -49,6 +49,11 @@
        .upGlComboBox {
          margin-top: -20px;
        }
+       vaadin-date-picker {
+         font-family: 'CSChatThaiUI', sans-serif !important;
+         -webkit-font-smoothing: antialiased !important;
+        color: red !important;
+       }
        paper-button[disabled]{
           background: #eaeaea;
           color: #a8a8a8;
@@ -60,8 +65,10 @@
         }
       </style>
     <template>
+<gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
 
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+      <gl-form-panel-head label="" set-padding="10px" set-border="1px">
       <div class="horizontal end-justified layout">
         <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
         <paper-tooltip for="editConfirm" offset="0">Edit Contract</paper-tooltip>
@@ -70,13 +77,16 @@
           <paper-tooltip for="deleteConfirm" offset="0">Delete Contract</paper-tooltip>
         </template>
       </div>
+      </gl-form-panel-head>
     </template>
+
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
    <gl-grid-row width="{{getWidth}}">
-     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
        <gl-form-input required class="required" disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อสัญญา" label="ชื่อสัญญา" value="{{data.contract_name}}" placeholder="ใส่รายละเอียด" name="contract_name"></gl-form-input>
      </gl-grid-col>
      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-       <vaadin-date-picker class="required" required  disabled="[[isInputDisabled]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
+       <vaadin-date-picker always-float-label class="required" required  disabled="[[isInputDisabled]]" label="วันที่" value="{{data.contract_date}}" name="contract_date"></vaadin-date-picker>
      </gl-grid-col>
      </gl-grid-row>
      <gl-grid-row width="{{getWidth}}">
@@ -93,7 +103,7 @@
      <gl-grid-row>
        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
          [[_getBuyerAddressFromData(data)]]
-         <gl-combo-box class="required" required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
+         <gl-combo-box class="required" always-float-label  required id="buyer_id" disabled="[[isInputDisabled]]" label="ผู้สั่งซื้อสินค้า" item-label-path="buyer_name" error-message="กรุณาเลือกผู้ซื้อ"
          item-value-path="buyer_id" value="{{data.buyer_id}}" items="{{dataForSelect.buyer}}" on-value-changed="_getBuyerAddress">
          </gl-combo-box>
        </gl-grid-col>
@@ -162,6 +172,8 @@
          <gl-form-textarea class="required" required  disabled="[[isInputDisabled]]" rows="2" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
      </gl-grid-col>
  </gl-grid-row>
+ </gl-form-panel-body>
+ <gl-form-panel-footer label="" set-padding="10px">
       <div class="horizontal end-justified layout">
         <paper-button class="gl-btn-danger" on-tap="saveContract" raised >ยกเลิก</paper-button>
        <template is="dom-if" if="[[!_isViewing(isEdit)]]">
@@ -174,6 +186,8 @@
           <paper-button class="gl-btn-info" raised on-tap="confirmDrawer" hidden="[[_isViewing(data.contract_status)]]" >ยืนยันสัญญา</paper-button>
         </template>
       </div>
+    </gl-form-panel-footer>
+ </gl-form-panel>
   </template>
   <script>
     Polymer({
@@ -188,12 +202,15 @@
         },
         data: {
           type: Object,
-          value:{contract_quantity:0,contract_type_rice:[{}]}
+          value:{contract_quantity:0,contract_type_rice:[{}],tolerance_rate:0,}
         },
         dataForUse:{
           type: Object,
         }
       },
+      observers:[
+        '_changeDataContract(data.contract_date)'
+      ],
       _getBuyerAddress:function (e) {
         let selectedItem = e.detail.value;
             if (selectedItem) {
@@ -205,6 +222,12 @@
       _getBuyerAddressFromData:function (data) {
         this.data.buyerAddress=data.buyer_address;
         this.notifyPath('data.buyerAddress');
+      },
+      _changeDataContract:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          this.set('data.contract_date', date);
+          this.notifyPath('data.contract_date');
+        });
       },
       addTypeRice:function () {
         this.push('data.contract_type_rice', {});

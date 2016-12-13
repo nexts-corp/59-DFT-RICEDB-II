@@ -59,12 +59,15 @@
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       </template>
-      <template is="dom-if" if="[[!isInputDisabled]]">
-        <div class="horizontal end-justified layout">
-        <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[hiddenInsertVessel]]">
-          <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
-        </div>
-      </template>
+      <!-- <template is="dom-if" if="[[inserVessel(index)]]"> -->
+        <template is="dom-if" if="[[!isInputDisabled]]">
+          <div class="horizontal end-justified layout">
+          <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[hiddenInsertVessel]]">
+            <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
+          </div>
+        </template>
+      <!-- </template> -->
+
 
 
 
@@ -167,8 +170,23 @@
         '_oBChangeBooking(data.bl_no)',
         '_oBChangePod(data.dest_port_id)',
         '_getPod(dataForSelect)',
-        '_oBCheckVessel(data.ship.*)'
+        '_oBCheckVessel(data.ship.*)',
+        '_changeDataBl(data.etd_date)'
       ],
+
+      _changeDataBl:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          console.log(date);
+          this.set('data.etd_date', date);
+          this.notifyPath('data.etd_date');
+          this.set('data.eta_date', date);
+          this.notifyPath('data.eta_date');
+          this.set('data.packing_date', date);
+          this.notifyPath('data.packing_date');
+          this.set('data.product_date', date);
+          this.notifyPath('data.product_date');
+        });
+      },
       addBl:function () {
         // console.log(this.data);
         this._cleanDataBl(this.data,(data)=>{
@@ -178,6 +196,13 @@
       addShip:function () {
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
       },
+      // inserVessel:function (index) {
+      //   if (index < 3) {
+      //     return false;
+      //   } else {
+      //     return true;
+      //   }
+      // },
       editBl:function () {
         // let blNo = this.data.bl_no;
         this._cleanDataBl(this.data,(data)=>{
@@ -250,14 +275,13 @@
       },
       _oBCheckVessel:function (shipMany) {
         // set btnvessel
-        console.log(shipMany.value.length);
-        if (shipMany.value.length < 3) {
-          // this.hiddenInsertVessel = true;
+        console.log(shipMany.value);
+        if (shipMany.value.length > 3) {
+          this.hiddenInsertVessel = false;
         }else {
-          // this.hiddenInsertVessel = false;
+          this.hiddenInsertVessel = true;
         }
       },
-      // hiddenInsertVessel
       _cleanDataBl:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());

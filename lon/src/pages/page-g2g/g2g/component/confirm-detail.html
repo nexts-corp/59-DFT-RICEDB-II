@@ -44,15 +44,21 @@
   }
   </style>
   <template>
+    <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+      <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
+        <gl-form-panel-head label="" set-padding="10px" set-border="1px">
     <div class="horizontal end-justified layout">
-          <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
+
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Confirmmation Letter</paper-tooltip>
             <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteConfirm" ></paper-icon-button>
             <paper-tooltip for="deleteConfirm" offset="0">Delete Confirmmation Letter</paper-tooltip>
-          </template>
+
     </div>
+  </gl-form-panel-head>
+          </template>
     <!-- disabled="[[checkInput]]" -->
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input class="required" required    disabled="[[isInputDisabled]]" error-message="กรุณาใส่ชื่อเลขจดหมายคอนเฟริม" required label="ลำดับ" placeholder="ใส่รายละเอียด" value="{{data.cl_no}}"></gl-form-input>
@@ -122,7 +128,7 @@
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                 </td>
                 <td style="text-align:center;">
-                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]">ลบขนาดบรรจุภัณฑ์</paper-button>
+                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]">ลบ</paper-button>
                 </td>
               </tr>
             </template>
@@ -132,7 +138,7 @@
                   <td></td>
                   <td></td>
                   <td style="text-align:center;">
-                    <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มขนาดบรรจุภัณฑ์</paper-button>
+                    <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่ม</paper-button>
                   </td>
                 </tr>
           </table>
@@ -157,7 +163,8 @@
             <gl-form-textarea class="required" required  disabled="[[isInputDisabled]]" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.cl_quality}}" name="cl_quality"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
-
+  </gl-form-panel-body>
+  <gl-form-panel-footer label="" set-padding="10px">
 
     <div class="horizontal end-justified layout">
         <paper-button class="gl-btn-danger" raised on-tap="backPage">ย้อนกลับ</paper-button>
@@ -171,6 +178,8 @@
         <paper-button class="gl-btn-success" on-tap="saveConfirm" raised hidden="[[_isViewing(isInputDisabled)]]">บันทึก</paper-button>
         </template>
     </div>
+  </gl-form-panel-footer>
+</gl-form-panel>
   </template>
   <script>
     Polymer({
@@ -191,6 +200,16 @@
           type: Number,
           value:0
         },
+      },
+      observers:[
+        '_changeDataConfirm(data.cl_date)'
+      ],
+      _changeDataConfirm:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          console.log(date);
+          this.set('data.cl_date', date);
+          this.notifyPath('data.cl_date');
+        });
       },
       deleteRiceType:function (e) {
         this.splice('data.cl_type_rice', e.currentTarget.id, 1);
