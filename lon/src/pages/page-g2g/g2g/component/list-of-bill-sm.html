@@ -42,8 +42,7 @@
               <th>Booking No</th>
             </tr>
           </thead>
-
-          <tbody class="table-body">
+         <tbody class="table-body">
             <template is="dom-if" if="[[!_isHave(data)]]">
               <template is="dom-repeat" items="[[data]]">
                 <tr on-tap="getBlDetail" data="[[item]]">
@@ -81,12 +80,12 @@
           type: Object,
         }
       },
-      // observers:[
-      //   'check(data)'
-      // ],
-      // check:function (data) {
-      //   console.log(data);
-      // },
+      observers:[
+        'check(data)'
+      ],
+      check:function (data) {
+        console.log(data);
+      },
       addBlDetail:function () {
         this.fire('add-bl-no',{detail:'addbl'});
       },
