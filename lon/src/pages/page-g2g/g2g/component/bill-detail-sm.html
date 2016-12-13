@@ -64,6 +64,8 @@
           <div class="horizontal end-justified layout">
           <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip">
             <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
+            <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteShip">
+              <iron-icon icon="remove"></iron-icon>ลบเรือ</paper-button>
           </div>
         </template>
       <!-- </template> -->
@@ -164,6 +166,9 @@
         hiddenInsertVessel:{
           type:Boolean,
           value:false
+        },
+        blNoOld:{
+          type:String,
         }
       },
       observers:[
@@ -171,9 +176,13 @@
         '_oBChangePod(data.dest_port_id)',
         '_getPod(dataForSelect)',
         '_oBCheckVessel(data.ship.*)',
-        '_changeDataBl(data.etd_date)'
+        '_changeDataBl(data.etd_date)',
+        '_foredit(data)'
       ],
-
+      _foredit:function (data) {
+          this.blNoOld = JSON.parse(JSON.stringify(data));
+          console.log('this.blNoOld',this.blNoOld);
+      },
       _changeDataBl:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           console.log(date);
@@ -204,12 +213,18 @@
       //     return true;
       //   }
       // },
+      deleteShip:function () {
+        if (this.data.ship.length > 1) {
+          this.pop('data.ship');
+        }
+
+      },
       cancelInsertShipment:function () {
         console.log(this.isInputDisabled);
         if (this.isInputDisabled != true) {
           this.editInput();
         }
-        
+
         this.fire('cancel-insert-bl',{detail:'addbl'});
       },
       editBl:function () {
@@ -228,21 +243,25 @@
         if (result == true) {
           this.editInput();
           let data = detail.data;
+          // console.log('this.dataBlDetail.shipment_detail=>',this.dataBlDetail.shipment_detail.length);
           let listShipmentdetails = this.dataBlDetail.shipment_detail;
-          let blNo = data.bl_no;
+          let blNo = this.blNoOld.bl_no;
           let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
+          console.log('shipmentDetail=>',shipmentDetail.length);
           let newShipment=[];
-          shipmentDetail.map((shipDetail,index)=>{
-            shipDetail[index]= Object.assign(shipDetail,data)
-            this._cleanShipmentData(shipDetail[index],(data)=>{
-                data.id = shipDetail[index].shm_det_id;
-                data.shm_id = shipDetail[index].shm_id;
-                newShipment.push(data);
+          // console.log('this.blNoOld',this.blNoOld.bl_no);
+          if (shipmentDetail.length > 0) {
+            shipmentDetail.map((shipDetail,index)=>{
+              shipDetail[index]= Object.assign(shipDetail,data)
+              this._cleanShipmentData(shipDetail[index],(data)=>{
+                  data.id = shipDetail[index].shm_det_id;
+                  data.shm_id = shipDetail[index].shm_id;
+                  newShipment.push(data);
+              });
             });
-
-          });
-          // console.log(newShipment);
-          this._changeShipment(newShipment)
+            this._changeShipment(newShipment);
+            console.log('fsfsdfdsfsdf');
+          }
         }
       },
       _changeShipment:function (shipmentDetail) {
