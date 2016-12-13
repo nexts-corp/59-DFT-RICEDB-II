@@ -18,7 +18,7 @@
      }
      table {
        border: 0.1em solid #F1F1F1;
-       margin-top: 1em;
+       /*margin-top: 1em;*/
        margin-bottom: 1em;
      }
      div.title{
@@ -31,9 +31,9 @@
      }
   </style>
   <template>
-    <div class="title">
+    <!-- <div class="title">
       Bill of Landing Number
-    </div>
+    </div> -->
 
     <table class="gl-table-default">
           <thead class="table-head">
@@ -47,7 +47,7 @@
               <template is="dom-repeat" items="[[data]]">
                 <tr on-tap="getBlDetail" data="[[item]]">
                  <td>[[item.bl_no]]</td>
-                 <td>1</td>
+                 <td>[[item.book_no]]</td>
                </tr>
               </template>
             </template>
@@ -60,9 +60,9 @@
          </tbody>
       </table>
       <div class="horizontal end-justified layout" style="margin-bottom:1em;">
-        <paper-button raised class="gl-btn-danger" on-tap="cancelInsertShipment">
+        <paper-button raised class=" gl-btn-primary" on-tap="cancelBlDetail">
           <!-- <iron-icon icon="add"></iron-icon> -->
-          ปิดการแสดง B/L</paper-button>
+          ย้อนกลับ</paper-button>
         <paper-button raised class=" gl-btn-primary" on-tap="addBlDetail">
           <!-- <iron-icon icon="add"></iron-icon> -->
           เพิ่ม B/L</paper-button>
@@ -88,6 +88,9 @@
       },
       addBlDetail:function () {
         this.fire('add-bl-no',{detail:'addbl'});
+      },
+      cancelBlDetail:function () {
+        this.fire('cancel-insert-shipment',{detail:'addbl'});
       },
       getBlDetail:function (e) {
         this.dataSelected = e.currentTarget.data;
