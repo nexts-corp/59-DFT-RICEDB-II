@@ -33,6 +33,7 @@ router.get(['/', '/list'], function(req, res, next) {
                 return { type_rice_id: row('id') }
             })
             .without('id')
+            .orderBy('type_rice_id')
             .run(conn, function(err, cursor) {
                 if (!err) {
                     cursor.toArray(function(err, result) {
