@@ -4,9 +4,6 @@ var router = express.Router();
 var r = require('rethinkdb');
 var db = require('../../db.js');
 
-var mqtt = require('mqtt');
-var client  = mqtt.connect('mqtt://mqtt.codeunbug.com');
-
 const _ = require('lodash');
 
 router.put(['/'], function (req, res, next) {
@@ -17,7 +14,6 @@ router.put(['/'], function (req, res, next) {
         statement = r.db('eu2').table('transaction').insert(_.omit(params,['code']));
         statement.run(conn, function (err, cursor) {
             if (!err) {
-                //client.publish(params.code+'-'+global.mqttId, JSON.stringify(_.omit(params,['code'])));
                 res.json(cursor);
             } else {
                 res.status(500).send(err);
