@@ -159,6 +159,7 @@
       is: "payment-export",
       behaviors: [
         g2gModelBehavior,
+        g2gCongtroller,
         FormatNumberBehavior
       ],
       properties: {
@@ -184,7 +185,14 @@
       },
       observers:[
         // '_searchExporter(data.exporter_id)'
+        '_changeDataPayment(data.pay_date)'
       ],
+      _changeDataPayment:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          this.set('data.pay_date', date);
+          this.notifyPath('data.pay_date');
+        });
+      },
       attached: function() {
         this.getExporters();
         this.getBank();
