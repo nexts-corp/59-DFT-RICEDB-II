@@ -251,7 +251,7 @@
           let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
           // console.log('shipmentDetail=>',shipmentDetail.length);
           let newShipment=[];
-          // this.fire('editing-bl-detail',{blOld:blNo,newBl:data,shm_id:this.blNoOld.shm_id});
+
           // console.log('this.blNoOld',this.blNoOld.bl_no);
           if (shipmentDetail.length > 0) {
             shipmentDetail.map((shipDetail,index)=>{
@@ -263,6 +263,8 @@
               });
             });
             this._changeShipment(newShipment);
+          }else {
+            this.fire('editing-bl-detail',{shm_id:this.blNoOld.shm_id});
           }
         }
       },
