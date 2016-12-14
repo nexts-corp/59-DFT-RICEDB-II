@@ -29,11 +29,15 @@
 				font-size: 16px;
 				padding-bottom: 5px;
 			}
+			paper-button{
+				font-size: 16px;
+			}
 		</style>
 		<app-toolbar>
 				<paper-icon-button icon="menu" on-tap="toggleDrawer"></paper-icon-button>
 				<iron-image src="./../../images/manifest/icon-32.png"></iron-image>
 				<div main-title>ระบบจัดการโควตาข้าวภายใต้โควตาภาษีสหภาพยุโรป</div>
+				<paper-button on-tap="changeLanguage">{{localize('Meg')}}</paper-button>
 				<!--<div class="sectionContent" bottom-item>
 					<iron-icon icon="chevron-right"></iron-icon>
 					รายการจัดสรรปีโควตา
@@ -44,9 +48,20 @@
 	<script>
         Polymer({
             is: 'layout-main-toolbar',
+			behaviors:[nylonLocalizeBehavior],
+			attached:function(){
+				 this.nylonLocalizeImport('/i18n-page1.json');
+			},
             toggleDrawer:function(){
                 this.fire('toggle-drawer');
-            }
+            },
+			changeLanguage:function(){
+              if(this.language=='th'){
+                this.nylonLocalizeChange('en');
+              }else{
+                this.nylonLocalizeChange('th');
+              } 
+            },
         });
     </script>
 </dom-module>
