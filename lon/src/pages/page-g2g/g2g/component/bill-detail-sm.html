@@ -110,11 +110,11 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input required class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด" pattern="[0-9]*" placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" disabled="[[isInputDisabled]]"></gl-form-input>
+          <gl-form-input required class="required" allowed-pattern="[0-9]" format-number="on" label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input required class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" disabled="[[isInputDisabled]]"
+        <gl-form-input required class="required" allowed-pattern="[0-9]" format-number="on"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" disabled="[[isInputDisabled]]"
           value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -134,6 +134,7 @@
     <gl-form-panel-footer>
       <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">
         ย้อนกลับ</paper-button>
+
       <paper-button class="gl-btn-success" raised on-tap="addBl">
       เพิ่ม</paper-button>
     </gl-form-panel-footer>
@@ -142,6 +143,7 @@
     <gl-form-panel-footer>
       <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">
         ย้อนกลับ</paper-button>
+      <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[isInputDisabled]]">ยกเลิก</paper-button>
       <paper-button class="gl-btn-primary" raised on-tap="editBl" hidden="[[isInputDisabled]]">
       บันทึก</paper-button>
     </gl-form-panel-footer>
@@ -202,6 +204,9 @@
         // console.log(this.data);
         this._cleanDataBl(this.data,(data)=>{
           this.fire('send-Bl-no',{detail:data});
+          this.fire('editing-bl-detail',{shm_id:data.shm_id});
+          let el = Polymer.dom(this.root).querySelectorAll('.required');
+          el.map((el)=> {el.value='';});
           this.cancelInsertShipment();
         })
       },
@@ -219,14 +224,8 @@
         if (this.data.ship.length > 1) {
           this.pop('data.ship');
         }
-
       },
       cancelInsertShipment:function () {
-        // console.log(this.isInputDisabled);
-        if (this.isInputDisabled != true) {
-          this.editInput();
-        }
-
         this.fire('cancel-insert-bl',{detail:'addbl'});
       },
       editBl:function () {
@@ -329,6 +328,7 @@
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
+            el.map((el)=> {el.reset();});
             callback(newData)
           }
       },

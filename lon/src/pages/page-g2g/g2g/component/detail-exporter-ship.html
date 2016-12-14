@@ -13,7 +13,7 @@
   <template>
 
 <gl-form-panel set-padding="10px 20px 10px 20px">
-
+<div class="horizontal end-justified layout">
       <!-- <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px"> -->
         <template is="dom-if" if="[[!_isViewing(shmStatus)]]">
           <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit"></paper-icon-button>
@@ -22,7 +22,7 @@
           <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
         </template>
       <!-- </gl-form-panel-head> -->
-
+   </div>
 
 
     <gl-form-panel-body>
@@ -107,11 +107,11 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input disabled required format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
+          <gl-form-input disabled required allowed-pattern="[0-9]" format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input disabled required format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
+        <gl-form-input disabled required allowed-pattern="[0-9]" format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <vaadin-date-picker disabled required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
@@ -152,7 +152,7 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'shm_det_quantity')]]
-        <gl-form-input class="required" required format-number="on" label="ปริมาณ (ตัน)" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
+        <gl-form-input class="required" required allowed-pattern="[0-9]" format-number="on" label="ปริมาณ (ตัน)" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -192,8 +192,8 @@
   <gl-form-panel-footer set-padding="10px 20px 0px 20px">
   <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
     <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
-      <paper-button class="gl-btn-danger" raised on-tap="cancelEditShipmentDetail">
-        ยกเลิก</paper-button>
+      <paper-button class="gl-btn-danger" on-tap="calcelContract" raised >ยกเลิก</paper-button>
+
       <paper-button  class="gl-btn-success" raised on-tap="editExporter" >
           <iron-icon class="gl-icon-size" icon="save"></iron-icon>บันทึก</paper-button>
     </template>
@@ -202,6 +202,7 @@
   <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
     <paper-button class="gl-btn-defalse" raised on-tap="cancelEditShipment">
           ย้อนกลับ</paper-button>
+    <paper-button class="gl-btn-danger" on-tap="calcelShipmentInsert" raised >ยกเลิก</paper-button>
     <paper-button class="gl-btn-success" raised on-tap="addExporter">
         เพิ่ม</paper-button>
   </template>
@@ -245,6 +246,10 @@
       ],
       _checkpol:function (pol) {
         // console.log('pol',pol);
+      },
+      calcelShipmentInsert:function () {
+        this.editInput();
+        this.calcelContract();
       },
       check:function (data) {
          this.set('dataOld', JSON.parse(JSON.stringify(data)));
@@ -351,6 +356,8 @@
                 }
             });
           });
+          let el = Polymer.dom(this.root).querySelectorAll('.required');
+          el.map((el)=> {el.reset();el.value=''});
         })
       },
       editExporter:function () {
@@ -462,6 +469,7 @@
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
+            el.map((el)=> {el.reset();});
             callback(newData)
           }
       },

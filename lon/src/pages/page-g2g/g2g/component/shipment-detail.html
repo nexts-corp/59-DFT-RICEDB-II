@@ -92,6 +92,7 @@
       <template is="dom-if" if="[[!_isViewing(insertData)]]">
          <div class="horizontal end-justified layout">
            <paper-button class="gl-btn-defalse" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
+           <!-- <paper-button class="gl-btn-danger" on-tap="calcelContract" raised >ยกเลิก</paper-button> -->
            <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>เพิ่ม</paper-button>
          </div>
        </template>
@@ -100,6 +101,7 @@
        <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
           <div class="horizontal end-justified layout">
               <paper-button class="gl-btn-defalse" on-tap="backPageShipmentDetail" raised>ย้อนกลับ</paper-button>
+              <paper-button class="gl-btn-danger" on-tap="calcelShipmentIn" raised >ยกเลิก</paper-button>
              <paper-button  class="gl-btn-success" on-tap="editShimpent" raised>บันทึก</paper-button>
           </div>
        </template>
@@ -279,7 +281,7 @@
         // let blOld = e.detail.blOld;
         // let indexBl = this.dataForSelect.blNos.map((bl)=>  bl.bl_no ).indexOf(blOld);
         // Object.assign(this.dataForSelect.blNos[indexBl] ,e.detail.newBl);
-        console.log('new',this.dataForSelect.blNos[1].bl_no);
+        // console.log('new',this.dataForSelect.blNos[1].bl_no);
         this.fire('get-list-bl',{detail:JSON.parse(JSON.stringify(this.dataForSelect.blNos)),shm_id:e.detail.shm_id});
         // console.log(this.dataForSelect.blNos[indexBl]);
         // this.notifyPath('dataForSelect.blNos.'+indexBl+'.blNos');
@@ -313,6 +315,11 @@
           this.$$('#'+icon).icon = 'expand-more'
         }
         this.$$('#'+targetAttribute).toggle();
+      },
+      calcelShipmentIn:function () {
+
+          this.calcelContract();
+          this.editInput();
       },
       editShipment:function () {
         this.backPageShipmentDetail();
@@ -416,7 +423,7 @@
         // console.log('deleteShipment');
         this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
             status:'dialog',
-            text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
+            text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
             confirmed:this._deleteShipment.bind(this), //function ที่ใช้รับค่า ปุ่ม
             el: this, // compontents
             data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
@@ -452,6 +459,7 @@
         if (stat.every(elem => elem == true)) {
           let {cl_id,shm_name,shm_no,contract_id,shm_status} = data;
           let newData = {cl_id,shm_name,shm_no,contract_id,shm_status};
+          el.map((el)=> {el.reset();el.value=''});
           callback(newData);
         }
       },
