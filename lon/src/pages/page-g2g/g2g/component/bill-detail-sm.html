@@ -205,7 +205,8 @@
         this._cleanDataBl(this.data,(data)=>{
           this.fire('send-Bl-no',{detail:data});
           this.fire('editing-bl-detail',{shm_id:data.shm_id});
-          this.editInput();
+          let el = Polymer.dom(this.root).querySelectorAll('.required');
+          el.map((el)=> {el.value='';});
           this.cancelInsertShipment();
         })
       },
@@ -225,11 +226,6 @@
         }
       },
       cancelInsertShipment:function () {
-        // console.log(this.isInputDisabled);
-        if (this.isInputDisabled != true) {
-          this.editInput();
-        }
-
         this.fire('cancel-insert-bl',{detail:'addbl'});
       },
       editBl:function () {
@@ -332,6 +328,7 @@
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
+            el.map((el)=> {el.reset();});
             callback(newData)
           }
       },
