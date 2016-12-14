@@ -45,7 +45,11 @@ router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("country")
             .merge(function (row) {
-                return { country_id: row('id') }
+                return {
+                    country_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -69,7 +73,9 @@ router.get('/id/:country_id', function (req, res, next) {
         r.db('common').table("country")
             .get(req.params.country_id.toUpperCase())
             .merge({
-                country_id: r.row('id')
+                country_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
             })
             .without('id')
             .run(conn, function (err, cursor) {
@@ -97,7 +103,7 @@ router.get('/port', function (req, res, next) {
                                     port_id: p('id')
                                 }
                             })
-                            .without('id')
+                            .without('id', 'date_created', 'date_updated', 'creater', 'updater')
                             .coerceTo('array')
                     }
                 })

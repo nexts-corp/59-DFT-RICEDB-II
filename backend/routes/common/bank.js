@@ -29,7 +29,11 @@ router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("bank")
             .merge(function (row) {
-                return { bank_id: row('id') }
+                return {
+                    bank_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
             .orderBy('bank_name_th')
@@ -53,7 +57,9 @@ router.get('/id/:bank_id', function (req, res, next) {
         r.db('common').table("bank")
             .get(req.params.bank_id.toUpperCase())
             .merge({
-                bank_id: r.row('id')
+                bank_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
             })
             .without('id')
             .run(conn, function (err, cursor) {

@@ -27,9 +27,14 @@ router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("surveyor")
             .merge(function (row) {
-                return { surveyor_id: row('id') }
+                return {
+                    surveyor_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
+            .orderBy('surveyor_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -51,7 +56,9 @@ router.get('/id/:surveyor_id', function (req, res, next) {
         r.db('common').table("surveyor")
             .get(req.params.surveyor_id)
             .merge({
-                surveyor_id: r.row('id')
+                surveyor_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
             })
             .without('id')
             .run(conn, function (err, cursor) {

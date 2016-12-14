@@ -1,12 +1,13 @@
 var r = require('rethinkdb');
 var db = require('../db.js');
+
 // Constructor
 function DataContext() {
     // always initialize all instance properties
     this.creater = 'admin';
     this.updater = 'admin';
-    this.date_created = new Date();
-    this.date_updated = new Date();
+    this.date_created = new Date().toISOString();
+    this.date_updated = new Date().toISOString();
 }
 // // class methods
 

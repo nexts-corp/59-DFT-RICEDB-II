@@ -26,17 +26,22 @@ var schema = {
 };
 var validate = ajv.compile(schema);
 
-router.get(['/', '/list'], function (req, res, next) {
-    db.query(function (conn) {
+router.get(['/', '/list'], function(req, res, next) {
+    db.query(function(conn) {
         r.db('common').table("ship")
-            .merge(function (row) {
-                return { ship_id: row('id') }
+            .merge(function(row) {
+                return {
+                    ship_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated"] }).zip()
-            .run(conn, function (err, cursor) {
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .orderBy('shipline_name','ship_name')
+            .run(conn, function(err, cursor) {
                 if (!err) {
-                    cursor.toArray(function (err, result) {
+                    cursor.toArray(function(err, result) {
                         if (!err) {
                             //console.log(JSON.stringify(result, null, 2));
                             res.json(result);
@@ -50,16 +55,20 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/id/:ship_id', function (req, res, next) {
-    db.query(function (conn) {
+router.get('/id/:ship_id', function(req, res, next) {
+    db.query(function(conn) {
         r.db('common').table("ship")
             .get(req.params.ship_id)
             .merge(
-            { ship_id: r.row('id') },
+            {
+                ship_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
+            },
             r.db('common').table("shipline").get(r.row("shipline_id"))
             )
             .without('id')
-            .run(conn, function (err, cursor) {
+            .run(conn, function(err, cursor) {
                 console.log(err);
                 if (!err) {
                     res.json(cursor);
@@ -69,7 +78,7 @@ router.get('/id/:ship_id', function (req, res, next) {
             });
     })
 });
-router.post('/insert', function (req, res, next) {
+router.post('/insert', function(req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
@@ -84,7 +93,7 @@ router.post('/insert', function (req, res, next) {
         res.json(result);
     }
 });
-router.put('/update', function (req, res, next) {
+router.put('/update', function(req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
@@ -95,7 +104,7 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:id', function (req, res, next) {
+router.delete('/delete/id/:id', function(req, res, next) {
     datacontext.delete("common", "ship", req.params.id, res);
 });
 module.exports = router;
