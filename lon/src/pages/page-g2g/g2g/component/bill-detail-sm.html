@@ -132,18 +132,15 @@
 
     <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
-      <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">
-        ย้อนกลับ</paper-button>
-
-      <paper-button class="gl-btn-success" raised on-tap="addBl">
-      เพิ่ม</paper-button>
+      <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">     ย้อนกลับ</paper-button>
+      <paper-button class="gl-btn-success" raised on-tap="addBl">  เพิ่ม</paper-button>
     </gl-form-panel-footer>
     </template>
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
-      <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">
+      <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment" hidden="[[!isInputDisabled]]">
         ย้อนกลับ</paper-button>
-      <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[isInputDisabled]]">ยกเลิก</paper-button>
+      <paper-button class="gl-btn-danger" on-tap="calcelBl" raised hidden="[[isInputDisabled]]">ยกเลิก</paper-button>
       <paper-button class="gl-btn-primary" raised on-tap="editBl" hidden="[[isInputDisabled]]">
       บันทึก</paper-button>
     </gl-form-panel-footer>
@@ -181,12 +178,12 @@
         '_getPod(dataForSelect)',
         '_oBCheckVessel(data.ship.*)',
         '_changeDataBl(data.etd_date)',
-        '_foredit(data)'
+        // '_foredit(data)'
       ],
-      _foredit:function (data) {
-          this.blNoOld = JSON.parse(JSON.stringify(data));
-          // console.log('this.blNoOld',this.blNoOld);
-      },
+      // _foredit:function (data) {
+      //     this.blNoOld = JSON.parse(JSON.stringify(data));
+      //     // console.log('this.blNoOld',this.blNoOld);
+      // },
       _changeDataBl:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           // console.log(date);
@@ -212,6 +209,12 @@
       },
       addShip:function () {
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
+      },
+      calcelBl:function () {
+        // let el = Polymer.dom(this.root).querySelectorAll('.required');
+        console.log(151215121541212);
+        // el.map((el)=> {el.reset();});
+        this.calcelContract();
       },
       // inserVessel:function (index) {
       //   if (index < 3) {
@@ -245,8 +248,9 @@
           this.editInput();
           let data = detail.data;
           // console.log('this.dataBlDetail.shipment_detail=>',this.dataBlDetail.shipment_detail.length);
+          console.log(this.dataBlDetail.shipment_detail);
           let listShipmentdetails = this.dataBlDetail.shipment_detail;
-          let blNo = this.blNoOld.bl_no;
+          let blNo = this.oldData.bl_no;
           let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
           // console.log('shipmentDetail=>',shipmentDetail.length);
           let newShipment=[];
