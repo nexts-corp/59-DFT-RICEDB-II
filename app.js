@@ -87,8 +87,11 @@ if (cluster.isMaster) {
   public.use(express.static('public'));
   
   public.use(function (req, res, next) {
-    //injectPage(res);
-    res.sendfile("./public/index.html");
+    if(req._parsedOriginalUrl.pathname.indexOf('.')==-1){
+      res.sendfile("./public/index.html");
+    }else{
+      res.status(404).send('Not found');
+    }
   });
 
   public.listen(3000);

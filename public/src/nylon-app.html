@@ -58,6 +58,7 @@
                 this.page = page || 'quota';
             },
             _pageChanged: function(page, oldPage) {
+                console.log(page);
                 if (page != null) {
                     this.importHref(
                         this.resolveUrl('/src/pages/page-' + page + '/page-' + page + '.html'),
@@ -65,7 +66,12 @@
                             if(this.elementLayoutMainDrawer){
                                 this.elementLayoutMainDrawer._loaded();
                             }
-                        }, null, true
+                        },
+                        ()=>{
+                            console.log('ok');
+                            this._routePageChanged('404');
+                        }
+                        , true
                     );
                 }
             },
