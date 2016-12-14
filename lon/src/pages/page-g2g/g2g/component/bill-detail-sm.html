@@ -158,10 +158,12 @@
       properties: {
         data: {
           type: Object,
-          value:{ship:[{ship_id:'',ship_voy_no:''}]}
+          value:{ship:[{ship_id:'',ship_voy_no:''}]},
+          notify: true
         },
         dataForSelect:{
           type: Object,
+          notify: true
         },
         hiddenInsertVessel:{
           type:Boolean,
@@ -181,11 +183,11 @@
       ],
       _foredit:function (data) {
           this.blNoOld = JSON.parse(JSON.stringify(data));
-          console.log('this.blNoOld',this.blNoOld);
+          // console.log('this.blNoOld',this.blNoOld);
       },
       _changeDataBl:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
-          console.log(date);
+          // console.log(date);
           this.set('data.etd_date', date);
           this.notifyPath('data.etd_date');
           this.set('data.eta_date', date);
@@ -220,7 +222,7 @@
 
       },
       cancelInsertShipment:function () {
-        console.log(this.isInputDisabled);
+        // console.log(this.isInputDisabled);
         if (this.isInputDisabled != true) {
           this.editInput();
         }
@@ -247,8 +249,9 @@
           let listShipmentdetails = this.dataBlDetail.shipment_detail;
           let blNo = this.blNoOld.bl_no;
           let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
-          console.log('shipmentDetail=>',shipmentDetail.length);
+          // console.log('shipmentDetail=>',shipmentDetail.length);
           let newShipment=[];
+
           // console.log('this.blNoOld',this.blNoOld.bl_no);
           if (shipmentDetail.length > 0) {
             shipmentDetail.map((shipDetail,index)=>{
@@ -260,7 +263,8 @@
               });
             });
             this._changeShipment(newShipment);
-            console.log('fsfsdfdsfsdf');
+          }else {
+            this.fire('editing-bl-detail',{shm_id:this.blNoOld.shm_id});
           }
         }
       },
@@ -273,6 +277,7 @@
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:this.data.contract_id});
             this.fire('get-list-shipment-detail',{sm_id:this.data.shm_id});
+            this.fire('editing-bl-detail',{shm_id:this.data.shm_id});
           }
         });
       },

@@ -68,6 +68,11 @@
             text-align: left !important;
           }
         }
+        iron-icon{
+          height: 1em;
+          width: 1em;
+          margin-right: 0.5em;
+        }
       </style>
     <template>
 <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
@@ -136,17 +141,20 @@
            </th>
          </tr>
        </thead>
+       <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
          <tfoot class="table-foot">
            <tr>
              <td></td>
              <td></td>
              <td>
                <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
-               <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" >เพิ่มชนิดข้าว</paper-button>
+               <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" ><iron-icon icon="add"></iron-icon>
+เพิ่ม</paper-button>
                 <!-- </template> -->
               </td>
            </tr>
          </tfoot>
+            </template>
        <tbody class="table-body">
          <template is="dom-repeat" items="[[data.contract_type_rice]]">
            <tr>
@@ -162,7 +170,7 @@
                </td>
                <td>
                  <template is="dom-if" if="[[!_isViewing(data.isInputDisabled)]]">
-                   <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="deleteTypeRice" class="btnInTable gl-btn-danger"title="ลบชนิดข้าว">ลบข้อมูล</paper-button>
+                   <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="deleteTypeRice" class="btnInTable gl-btn-danger"title="ลบชนิดข้าว"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
                   </template>
                 </td>
            </tr>

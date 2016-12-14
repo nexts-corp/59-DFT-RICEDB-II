@@ -179,13 +179,13 @@
         <div name="listOfBl">
           <iron-pages selected="[[pageShipmentBL]]" attr-for-selected="name">
             <div name="listOfBl">
-              <list-of-bill-sm data="[[dataForSelect.blNos]]" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
+              <list-of-bill-sm data="{{dataForSelect.blNos}}" data-for-select="[[dataForSelect]]"></list-of-bill-sm>
             </div>
             <div name="BlDetail">
               <bill-detail-sm data-for-select="[[dataForSelect]]" is-view-seleted="[[isViewSeleted]]" is-input-disabled="[[isInputDisabled]]"></bill-detail-sm>
             </div>
             <div name="editBlDetail">
-              <bill-detail-sm data-for-select="[[dataForSelect]]"  data="[[dataSelected]]" is-view-seleted="[[!isViewSeleted]]" is-input-disabled="[[!isInputDisabled]]" data-bl-detail="[[data]]"></bill-detail-sm>
+              <bill-detail-sm data-for-select="[[dataForSelect]]"  data="{{dataSelected}}" is-view-seleted="[[!isViewSeleted]]" is-input-disabled="[[!isInputDisabled]]" data-bl-detail="[[data]]"></bill-detail-sm>
             </div>
           </iron-pages>
         </div>
@@ -214,11 +214,12 @@
       ],
       observers:[
         '_getConfirm(confirmLetter)',
-        'check(data)'
+        'check(dataForSelect)'
       ],
       listeners:{
         'send-Bl-no':'_lisNerBlNos',
         'edit-bl-detail':'_lisNerBlDetail',
+        'editing-bl-detail':'_lisNerBlDetailEdit',
         'add-bl-no':'_lisNerAddBlNo',
         'cancel-insert-shipment':'_lisNerCanInSm',
         'cancel-edit-shipment':'_lisNerCanEdSm',
@@ -258,7 +259,7 @@
 
       },
       check:function (data) {
-        console.log(data);
+        console.log('dataForSelect=>',data);
       },
       _lisNerBlNos:function (e) {
         this.push('dataForSelect.blNos', e.detail.detail);
@@ -268,12 +269,29 @@
         // console.log(this.data);
       },
       _lisNerBlDetail:function (e) {
-        console.log(e.detail.detail);
-        this.dataSelected = e.detail.detail;
+        // console.log(e.detail.detail);
+        this.dataSelected=e.detail.detail;
+        // this.dataSelected = JSON.parse(JSON.stringify(e.detail.detail));
         this.pageShipmentBL= 'editBlDetail';
       },
+      _lisNerBlDetailEdit:function (e) {
+        // console.log('e.detail',e.detail);
+        // let blOld = e.detail.blOld;
+        // let indexBl = this.dataForSelect.blNos.map((bl)=>  bl.bl_no ).indexOf(blOld);
+        // Object.assign(this.dataForSelect.blNos[indexBl] ,e.detail.newBl);
+        console.log('new',this.dataForSelect.blNos[1].bl_no);
+        this.fire('get-list-bl',{detail:JSON.parse(JSON.stringify(this.dataForSelect.blNos)),shm_id:e.detail.shm_id});
+        // console.log(this.dataForSelect.blNos[indexBl]);
+        // this.notifyPath('dataForSelect.blNos.'+indexBl+'.blNos');
+
+        // let newBlnos = this.dataForSelect.blNos.filter((blDetails)=> blDetails.bl_no == blOld );
+        // console.log('old',this.dataForSelect.blNos[1].bl_no);
+        // let newBlo = Object.assign(newBlnos[0] ,e.detail.newBl);
+        // this.notifyPath('dataForSelect.blNos');
+        // console.log('new',this.dataForSelect.blNos[1].bl_no);
+      },
       _lisNerAddBlNo:function () {
-        console.log(111);
+        // console.log(111);
         this.pageShipmentBL='BlDetail';
       },
       _lisNerCanInSm:function () {
@@ -379,7 +397,7 @@
       },
       _approveShipment:function (result,detail) {
         if (result == true) {
-          console.log(detail.data);
+          // console.log(detail.data);
              this.update('./g2g/shipment/update', detail.data,() => {
             //
             // //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
@@ -395,7 +413,7 @@
          }
       },
       deleteShipment:function () {
-        console.log('deleteShipment');
+        // console.log('deleteShipment');
         this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
             status:'dialog',
             text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
@@ -406,7 +424,7 @@
       },
       _deleteShipment:function (result,detail) {
         if (result == true) {
-          console.log(detail.data.shm_id);
+          // console.log(detail.data.shm_id);
           this.delete('./g2g/shipment/delete/id/',detail.data.shm_id, () => {
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:detail.data.contract_id});

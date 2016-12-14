@@ -42,6 +42,11 @@
     text-align: center;
 
   }
+  iron-icon{
+    height: 1em;
+    width: 1em;
+    margin-right: 0.5em;
+  }
   </style>
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
@@ -79,7 +84,7 @@
           <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
                  <gl-form-panel-body label="" set-padding="10px" set-border="1px">
           <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
               <gl-combo-box id="riceType" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
             item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{dataForSelect.contract_type_rice}}" >
               </gl-combo-box >
@@ -92,8 +97,8 @@
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:1em" hidden="[[_isViewing(isInputDisabled)]]">ลบชนิดข้าว</paper-button>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:1em" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบชนิดข้าว</paper-button>
             </gl-grid-col>
           </gl-grid-row>
           </gl-form-panel-body>
@@ -125,7 +130,7 @@
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                 </td>
                 <td style="text-align:center;">
-                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]">ลบ</paper-button>
+                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
                 </td>
               </tr>
             </template>
@@ -134,7 +139,8 @@
           </table>
           <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
               <div class="horizontal end-justified layout">
-                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มบรรจุภัณฑ์</paper-button>
+                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>
+เพิ่มบรรจุภัณฑ์</paper-button>
                 </div>
               </template>
 
@@ -142,7 +148,8 @@
           </div>
       </template>
       <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]">เพิ่มชนิดข้าว</paper-button>
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>
+เพิ่มชนิดข้าว</paper-button>
       </div>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">

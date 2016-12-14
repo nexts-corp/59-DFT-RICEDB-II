@@ -244,7 +244,7 @@
         '_checkpol(pol)'
       ],
       _checkpol:function (pol) {
-        console.log('pol',pol);
+        // console.log('pol',pol);
       },
       check:function (data) {
          this.set('dataOld', JSON.parse(JSON.stringify(data)));
@@ -252,7 +252,7 @@
         this.notifyPath('dataOld');
       },
       _dataSelected:function (dataForSelect) {
-        console.log('dataForSelect.pol=>',dataForSelect.pol);
+        // console.log('dataForSelect.pol=>',dataForSelect.pol);
         // if (dataForSelect.pol != undefined) {
         //   let elements = this.$$('#load_port_id');
         //   let pol = new Array();
@@ -268,8 +268,8 @@
         if (bl_no) {
           let dataContract = this.blNos.filter((blNos)=> blNos.bl_no == bl_no );
           let blNo =  Object.assign(this.data ,dataContract[0]);
-          console.log(this.dataForSelect);
-          console.log(this.data.load_port_id );
+          // console.log(this.dataForSelect);
+          // console.log(this.data.load_port_id );
           this.data = blNo;
           this.notifyPath('data.bl_no');
           this.notifyPath('data.book_no');
@@ -371,6 +371,8 @@
               this.update('./g2g/shipment/detail/update', detail.data,() => {
                 //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
                 this.fire('refresh-contract',{detail:'refresh-contract'});
+                this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
+                this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
                 this.editInput();
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                   callback:function(){
