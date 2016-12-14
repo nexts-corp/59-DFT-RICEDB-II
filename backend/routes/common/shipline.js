@@ -26,9 +26,14 @@ router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("shipline")
             .merge(function (row) {
-                return { shipline_id: row('id') }
+                return {
+                    shipline_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
+            .orderBy('shipline_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -50,7 +55,11 @@ router.get('/id/:shipline_id', function (req, res, next) {
         r.db('common').table("shipline")
             .get(req.params.shipline_id)
             .merge(
-            { shipline_id: r.row('id') }
+            {
+                shipline_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
+            }
             )
             .without('id')
             .run(conn, function (err, cursor) {
@@ -67,7 +76,11 @@ router.get('/ship', function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("shipline")
             .merge(function (row) {
-                return { shipline_id: row('id') }
+                return {
+                    shipline_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .map(function (m) {
                 return m.merge(function (me) {
@@ -79,7 +92,7 @@ router.get('/ship', function (req, res, next) {
                                     ship_id: p('id')
                                 }
                             })
-                            .without('id')
+                            .without('id', 'date_created', 'date_updated', 'creater', 'updater')
                             .coerceTo('array')
                     }
                 })

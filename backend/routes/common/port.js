@@ -33,10 +33,15 @@ router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('common').table("port")
             .merge(function (row) {
-                return { port_id: row('id') }
+                return {
+                    port_id: row('id'),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .orderBy('port_id')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -58,8 +63,12 @@ router.get('/id/:port_id', function (req, res, next) {
         r.db('common').table("port")
             .get(req.params.port_id.toUpperCase())
             .merge(
-            { port_id: r.row('id') },
-            r.db('common').table("country").get(r.row("country_id"))
+            {
+                port_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
+            },
+            r.db('common').table("country").get(r.row("country_id")).without('id', 'date_created', 'date_updated', 'creater', 'updater')
             )
             .without('id')
             .run(conn, function (err, cursor) {

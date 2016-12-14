@@ -28,16 +28,21 @@ var schema = {
     "required": ["id", "package_name", "package_kg_per_bag", "package_weight_bag"]
 };
 var validate = ajv.compile(schema);
-router.get(['/', '/list'], function (req, res, next) {
-    db.query(function (conn) {
+router.get(['/', '/list'], function(req, res, next) {
+    db.query(function(conn) {
         r.db('common').table("package")
-            .merge(function (row) {
-                return { package_id: row('id') }
+            .merge(function(row) {
+                return {
+                    package_id: row('id'),
+                    // date_created: row('date_created').split('T')(0),
+                    // date_updated: row('date_updated').split('T')(0)
+                }
             })
             .without('id')
-            .run(conn, function (err, cursor) {
+            .orderBy('package_id')
+            .run(conn, function(err, cursor) {
                 if (!err) {
-                    cursor.toArray(function (err, result) {
+                    cursor.toArray(function(err, result) {
                         if (!err) {
                             //console.log(JSON.stringify(result, null, 2));
                             res.json(result);
@@ -51,15 +56,17 @@ router.get(['/', '/list'], function (req, res, next) {
             });
     })
 });
-router.get('/id/:package_id', function (req, res, next) {
-    db.query(function (conn) {
+router.get('/id/:package_id', function(req, res, next) {
+    db.query(function(conn) {
         r.db('common').table("package")
             .get(req.params.package_id.toUpperCase())
             .merge({
-                package_id: r.row('id')
+                package_id: r.row('id'),
+                date_created: r.row('date_created').split('T')(0),
+                date_updated: r.row('date_updated').split('T')(0)
             })
             .without('id')
-            .run(conn, function (err, cursor) {
+            .run(conn, function(err, cursor) {
                 if (!err) {
                     res.json(cursor);
                 } else {
@@ -68,7 +75,7 @@ router.get('/id/:package_id', function (req, res, next) {
             });
     })
 });
-router.post('/insert', function (req, res, next) {
+router.post('/insert', function(req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
@@ -78,7 +85,7 @@ router.post('/insert', function (req, res, next) {
         res.json(result);
     }
 });
-router.put('/update', function (req, res, next) {
+router.put('/update', function(req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
@@ -89,7 +96,7 @@ router.put('/update', function (req, res, next) {
         res.json(result);
     }
 });
-router.delete('/delete/id/:id', function (req, res, next) {
+router.delete('/delete/id/:id', function(req, res, next) {
     datacontext.delete("common", "package", req.params.id, res);
 });
 module.exports = router;
