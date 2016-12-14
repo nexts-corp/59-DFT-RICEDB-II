@@ -53,10 +53,10 @@
                  <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-                 <div class="text">ธ.กรุงไทยเสนอ</div>
+                 <div class="text">ธนาคารเสนอ</div>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                 [[changeString2Num(data.*,'rate_bank')]]//{{num.rate_bank}}
+                 [[changeString2Num(data.*,'rate_bank')]]
                  <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
                </gl-grid-col>
              </gl-grid-row>
@@ -72,24 +72,25 @@
        <gl-grid-row>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_internal')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_foreign')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_other')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
-           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
      <template is="dom-repeat" items="{{data.invoice}}" as="invoice">
        <fee-exports-invoice data="{{invoice}}"
                             rate-bank="{{data.rate_bank}}"
+                            is-input-disabled="[[isInputDisabled]]"
                             invoice-index="[[_ObcountIndex(index)]]"
                             fee-total="[[_countFee(data.feeTotal)]] "
                             invoice-page="[[data.invoicePage]]"
@@ -132,41 +133,35 @@
       properties: {
         data: {
           type: Object,
-          value:{rate_bank:'0'}
+          value:{}
         },
-        num:{
-          type: Object,
-          value:{rate_bank:'0'}
-        }
       },
       behaviors: [
           g2gModelBehavior,
           g2gCongtroller
       ],
       observers:[
-        '_invoicePage(data.invoice)'
+        '_invoicePage(data.invoice)',
+        '_changeDataFee(data.fee_date_receipt)'
       ],
-      attached: function() {
-        // this.set('data',{rate_bank:0});
-        // console.log(typeof this.data);
-        // if (this.data != undefined) {
-        //   console.log(this.data.rate_bank=0);
-        //
-        // }
-        // this.notifyPath('data.rate_bank');
-        // console.log(this.data.rate_bank=0);
-        // this.notifyPath('data.rate_bank');
+      _changeDataFee:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          this.set('data.fee_date_receipt', date);
+          this.notifyPath('data.fee_date_receipt');
+        });
       },
       _totalMoney:function (rate_bank,amount_usd) {
         return rate_bank*amount_usd;
       },
       _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
         this.data.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
-        console.log(this.data.feeTotal);
+        // console.log(this.data.feeTotal);
+        // this.data.feeTotal = ((fee_internal)*rate_bank)+(feBath)+(fee_other);
+
         this.notifyPath('data.feeTotal');
       },
       //นับหน้า
-      _invoicePage:function (invoice) {
+      _invoicePage:function (invoice=1) {
         this.data.invoicePage = invoice.length;
         this.notifyPath('data.invoicePage');
       },
