@@ -13,10 +13,12 @@
   <template>
   <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
     <gl-form-panel-head label="" set-padding="10px" set-border="1px">
-      <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
-      <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
-      <paper-icon-button icon="delete" id="delFee" raised on-tap="deleteFee" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
-      <paper-tooltip for="delFee" offset="0">Delete Exporter</paper-tooltip>
+      <template is="dom-if" if="[[!isViewSeleted]]">
+        <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
+        <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
+        <paper-icon-button icon="delete" id="delFee" raised on-tap="deleteFee" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
+        <paper-tooltip for="delFee" offset="0">Delete Exporter</paper-tooltip>
+      </template>
     </gl-form-panel-head>
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <div class="header flex-center-justified">
@@ -112,14 +114,15 @@
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
-               <paper-button raised class="gl-btn-danger" on-tap="closeDrawerFee" hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
+               <!-- <paper-button raised class="gl-btn-danger" on-tap="closeDrawerFee" hidden="[[isViewSeleted]]">ยกเลิก</paper-button> -->
                <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยื่นยัน</paper-button>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-                 <paper-button raised class="gl-btn-danger" on-tap="closeDrawerFee" hidden="[[!isViewSeleted]]">ยกเลิก</paper-button>
+                 <paper-button raised class="gl-btn-danger" on-tap="cancelFee" hidden="[[!isViewSeleted]]">ยกเลิก</paper-button>
                  <paper-button raised on-tap="addPayment" class="gl-btn-success" hidden="[[!isViewSeleted]]">เพิ่ม</paper-button>
                </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+                 <paper-button raised class="gl-btn-danger" on-tap="calcelContract" hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
                  <paper-button raised on-tap="savePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">บันทึก</paper-button>
                </template>
              </div>
@@ -150,6 +153,10 @@
           this.notifyPath('data.fee_date_receipt');
         });
       },
+      cancelFee:function () {
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        el.map((el)=> {el.reset();el.value=''});
+      },
       _totalMoney:function (rate_bank,amount_usd) {
         return rate_bank*amount_usd;
       },
@@ -169,7 +176,7 @@
         return fee/this.data.invoice.length;
       },
       closeDrawerFee:function () {
-        this.fire('close-drawer',{detail:'close-drawer'});
+        // this.fire('close-drawer',{detail:'close-drawer'});
       },
       addPayment:function () {
         this._clearDatafee(this.data,'insert',(data)=>{
