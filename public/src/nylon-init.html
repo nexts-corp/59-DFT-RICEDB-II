@@ -56,13 +56,11 @@
         Polymer({
             is:'nylon-init',
 			ready:function(){
-				Polymer.RenderStatus.afterNextRender(this,function(){
-					this.importHref(this.resolveUrl('/src/import.html'), (e)=>{
-						this.rendered = true;
-					}, (e)=> {
-						console.log('error')
-					});
-        		});
+				this.importHref(this.resolveUrl('/src/import.html'), (e)=>{
+					this.rendered = true;
+				}, (e)=> {
+					console.log('error')
+				});
 			}
         });
     </script>
