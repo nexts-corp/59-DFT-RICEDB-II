@@ -204,6 +204,8 @@
         // console.log(this.data);
         this._cleanDataBl(this.data,(data)=>{
           this.fire('send-Bl-no',{detail:data});
+          this.fire('editing-bl-detail',{shm_id:data.shm_id});
+          this.editInput();
           this.cancelInsertShipment();
         })
       },
@@ -221,7 +223,6 @@
         if (this.data.ship.length > 1) {
           this.pop('data.ship');
         }
-
       },
       cancelInsertShipment:function () {
         // console.log(this.isInputDisabled);
