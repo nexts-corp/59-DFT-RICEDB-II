@@ -99,7 +99,8 @@ Polymer({
   ],
   listeners:{
     'get-list-shipment-page':'_getListShipmentPage',
-    'get-list-shipment-detail':'_getListShipmentDetail'
+    'get-list-shipment-detail':'_getListShipmentDetail',
+    'get-list-bl':'_getListBL',
   },
   properties: {
     pageSelected: {
@@ -165,9 +166,21 @@ Polymer({
          });
     },1000);
   },
+  _getListBL:function (e) {
+    // console.log(e.detail.detail);
+    // this.dataForSelect.blNos=e.detail.detail;
+    // Object.assign(this.dataForSelect.blNos,e.detail.detail);
+    // console.log(this.dataForSelect.blNos);
+    // this.notifyPath('dataForSelect.blNos');
+    this.read('./g2g/bl/shipment/id/'+e.detail.shm_id,(data)=>{
+      this.dataForSelect.blNos=data;
+      // this.dataForSelect.blNos=e.detail.detail;
+      console.log(this.dataForSelect.blNos);
+      this.notifyPath('dataForSelect.blNos');
+    });
+  },
   _getListShipmentDetail:function (e) {
     this._getShipment(e.detail.sm_id,(data)=>{
-       console.log(data);
        this.dataSelected = data;
        this.notifyPath('dataSelected');
    });
