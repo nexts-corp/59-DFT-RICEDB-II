@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/package/insert-package.html">
 <link rel="import" href="components/package/edit-package.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-package">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -54,20 +55,20 @@
 
           <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
 
-          <div class="text-head">ระบบจัดการแพ็คเกต</div>
+          <div class="text-head">ระบบจัดการแพ็คเกจ</div>
 
           <div class="horizontal end-justified layout">
-            <paper-button class="gl-btn-primary button-top" title="เพิ่ม Package" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่ม Package</paper-button>
+            <paper-button class="gl-btn-primary button-top" title="เพิ่มแพ็คเกจ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มแพ็คเกจ</paper-button>
           </div>
 
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
                 <th><div class="text-center">No<p>(ลำดับ)</div></th>
-                <th><div class="text-center">Package Code<p>(รหัสแพ็คเกต)</div></th>
-                <th><div class="text-center">Package Weight (kg)<p>(น้ำหนักแพ็คเกต (กก.))</div></th>
-                <th><div class="text-center">Package Name<p>(ชื่อแพ็คเกต)</div></th>
-                <th><div class="text-center">Package Weight_bag (g)<p>(น้ำหนักกระสอบ (ก.))</div></th>
+                <th><div class="text-center">Package Code<p>(รหัสแพ็คเกจ)</div></th>
+                <th><div class="text-center">Package Weight (kg)<p>(น้ำหนักแพ็คเกจ กก.)</div></th>
+                <th><div class="text-center">Package Name<p>(ชื่อแพ็คเกจ)</div></th>
+                <th><div class="text-center">Package Weight_bag (g)<p>(น้ำหนักกระสอบ ก.)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -119,7 +120,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getPackage();
@@ -152,35 +154,21 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/package/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshPackage').getPackage();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/package/delete/id/',detail.datas.id, () => {
+                detail.el.glQuery('refreshPackage').getPackage();
+                detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getPackage: function() {
-                this.getDb('./common/package', (data) => {
-                  this.dataPackage = data;
-                  for (var i = 0; i < this.dataPackage.length; i++) {
-                    this.dataPackage[i]['no'] = i+1;
-                  }
-                });
+              this.read('./common/package', (data)=>{
+                this.dataPackage = data;
+                for (var i = 0; i < this.dataPackage.length; i++) {
+                  this.dataPackage[i]['no'] = i+1;
+                }
+              });
             },
             _back:function() {
               window.history.back();

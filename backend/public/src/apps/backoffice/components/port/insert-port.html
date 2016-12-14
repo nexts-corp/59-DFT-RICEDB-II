@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/dataBehavior.html">
 <dom-module id="insert-port">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
     .text-center {
@@ -14,24 +15,24 @@
     }
   </style>
   <template>
-    <div class="text-center">เพิ่มข้อมูล Port</div>
+    <div class="text-center">เพิ่มข้อมูลท่าเรือ</div>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Port ID (เลขประจำตัวท่าเรือ) :" placeholder="กรอกรหัสท่าเรือ" value="{{data.port_id}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกเลขประจำตัวท่าเรือ" required label="Port ID (เลขประจำตัวท่าเรือ) :" placeholder="กรอกรหัสท่าเรือ" value="{{data.port_id}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Port Code (รหัสท่าเรือ) :" placeholder="port_code" value="{{data.port_code}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกรหัสท่าเรือ" required label="Port Code (รหัสท่าเรือ) :" placeholder="port_code" value="{{data.port_code}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Port Name (ชื่อท่าเรือ) :" placeholder="กรอกชื่อท่าเรือ" value="{{data.port_name}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อท่าเรือ" required label="Port Name (ชื่อท่าเรือ) :" placeholder="กรอกชื่อท่าเรือ" value="{{data.port_name}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box style="margin-top:15px" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
+        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกประเทศ" required style="margin-top:15px" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
             item-value-path="country_id" value="{{data.country_id}}"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
@@ -55,7 +56,8 @@
       },
       behaviors: [
           gl.behavior.core,
-          gl.behavior.locales
+          gl.behavior.locales,
+          dataBehavior
       ],
       attached: function() {
         this.getCountry();
@@ -67,36 +69,35 @@
           port_code : this.data.port_code,
           country_id : this.data.country_id
         }
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.post('./common/port/insert', datas)
-            .then(function(response) {
-                console.log("success");
-                console.log(response);
-                this.data = {};
-                this.glQuery('refreshPort').getPort();
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                  console.log('success');
-                }});
-            }.bind(this))
-            .catch(function(error) {
-                console.log("error");
-                console.log(error);
-            })
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.insert('./common/port/insert', datas, () => {
+          this.data = {};
+          this.glQuery('refreshPort').getPort();
+          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+            console.log('success');
+          }});
+         });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
       },
       _cancel:function() {
         this.glQuery('contentPanel').changDrawer();
         this.data = {};
       },
-      getDb: function(url, callback) {
-          axios.get(url)
-              .then(function(response) {
-                  callback(response.data);
-              }.bind(this))
-              .catch(function(error) {}.bind(this));
-      },
       getCountry: function() {
         this.country_id = this.country_id || this.$.country_id;
-          this.getDb('./common/country', (data) => {
+          this.read('./common/country', (data) => {
             this.country = data;
             this.country_id.items = data;
           });

@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/shipline/insert-shipline.html">
 <link rel="import" href="components/shipline/edit-shipline.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-shipline">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -104,7 +105,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getShipline();
@@ -137,35 +139,21 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/shipline/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshShipline').getShipline();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/shipline/delete/id/',detail.datas.id, () => {
+                  detail.el.glQuery('refreshShipline').getShipline();
+                  detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getShipline: function() {
-                this.getDb('./common/shipline', (data) => {
-                  this.dataShipline = data;
-                  for (var i = 0; i < this.dataShipline.length; i++) {
-                    this.dataShipline[i]['no'] = i+1;
-                  }
-                });
+              this.read('./common/shipline', (data)=>{
+                this.dataShipline = data;
+                for (var i = 0; i < this.dataShipline.length; i++) {
+                  this.dataShipline[i]['no'] = i+1;
+                }
+              });
             },
             _back:function() {
               window.history.back();

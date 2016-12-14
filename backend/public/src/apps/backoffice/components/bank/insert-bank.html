@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/dataBehavior.html">
 <dom-module id="insert-bank">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
     .text-center {
@@ -19,7 +20,7 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Bank Code (รหัสธนาคาร) :" placeholder="กรอกรหัสธนาคาร" value="{{data.bank_id}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกรหัสธนาคาร" required label="Bank Code (รหัสธนาคาร) :" placeholder="กรอกรหัสธนาคาร" value="{{data.bank_id}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -27,7 +28,7 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Bank Name(TH) (ชื่อธนาคาร (ภาษาไทย)) :" placeholder="กรอกชื่อธนาคาร (ภาษาไทย)" value="{{data.bank_name_th}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อธนาคาร" required label="Bank Name (ชื่อธนาคาร ภาษาไทย) :" placeholder="กรอกชื่อธนาคาร (ภาษาไทย)" value="{{data.bank_name_th}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -35,7 +36,7 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Bank Name(EN) (ชื่อธนาคาร (ภาษาอังกฤษ)) :" placeholder="กรอกชื่อธนาคาร (ภาษาอังกฤษ)" value="{{data.bank_name_en}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อธนาคาร" required label="Bank Name (ชื่อธนาคาร ภาษาอังกฤษ) :" placeholder="กรอกชื่อธนาคาร (ภาษาอังกฤษ)" value="{{data.bank_name_en}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -58,7 +59,8 @@
       },
       behaviors: [
           gl.behavior.core,
-          gl.behavior.locales
+          gl.behavior.locales,
+          dataBehavior
       ],
       _save:function functionName() {
         var datas = {
@@ -67,21 +69,27 @@
           bank_name_en: this.data.bank_name_en
         }
         // console.log(datas);
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.post('./common/bank/insert', datas)
-            .then(function(response) {
-                console.log("success");
-                console.log(response);
-                this.data = {};
-                this.glQuery('refreshBank').getBank();
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                  console.log('success');
-                }});
-            }.bind(this))
-            .catch(function(error) {
-                console.log("error");
-                console.log(error);
-            })
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.insert('./common/bank/insert', datas, () => {
+            this.data = {};
+            this.glQuery('refreshBank').getBank();
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+           });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
       },
       _cancel:function() {
         this.glQuery('contentPanel').changDrawer();

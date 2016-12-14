@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/dataBehavior.html">
 <dom-module id="edit-package">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
@@ -14,11 +15,11 @@
   }
 </style>
   <template>
-    <div class="text-center">แก้ไขข้อมูล Package</div>
+    <div class="text-center">แก้ไขข้อมูลแพ็คเกจ</div>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-label-input class="margin-top" label="Package Code (รหัสแพ็คเกต) :" placeholder="กรอกรหัส Package" value="{{data.package_id}}"></gl-form-label-input>
+        <gl-form-label-input class="margin-top" label="Package Code (รหัสแพ็คเกจ) :" placeholder="กรอกรหัสแพ็คเกจ" value="{{data.package_id}}"></gl-form-label-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -26,7 +27,7 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Package Weight (น้ำหนักแพ็คเกต (kg)) :" placeholder="กรอกน้ำหนัก Package" value="{{data.package_kg_per_bag}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกน้ำหนักแพ็คเกจ" required label="Package Weight (น้ำหนักแพ็คเกจ กก.) :" placeholder="กรอกน้ำหนักแพ็คเกจ" value="{{data.package_kg_per_bag}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -34,7 +35,7 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Package Name (ชื่อแพ็คเกต) :" placeholder="กรอกชื่อ Package" value="{{data.package_name}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อแพ็คเกจ" required label="Package Name (ชื่อแพ็คเกจ) :" placeholder="กรอกชื่อแพ็คเกจ" value="{{data.package_name}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -42,7 +43,7 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Package Weight_bag (น้ำหนักกระสอบ (g)) :" placeholder="กรอกน้ำหนักกระสอบ" value="{{data.package_weight_bag}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกน้ำหนักกระสอบ" required label="Package Weight_bag (น้ำหนักกระสอบ ก.) :" placeholder="กรอกน้ำหนักกระสอบ" value="{{data.package_weight_bag}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -66,7 +67,8 @@
       },
       behaviors: [
           gl.behavior.core,
-          gl.behavior.locales
+          gl.behavior.locales,
+          dataBehavior
       ],
       _edit:function(){
         // console.log(this.data);
@@ -76,20 +78,26 @@
           package_name: this.data.package_name,
           package_weight_bag: parseInt(this.data.package_weight_bag)
         }
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.put('./common/package/update', datas)
-            .then(function(response) {
-                console.log("success");
-                console.log(response);
-                this.glQuery('refreshPackage').getPackage();
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                  console.log('success');
-                }});
-            }.bind(this))
-            .catch(function(error) {
-                console.log("error");
-                console.log(error);
-            })
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.update('./common/package/update', datas, () => {
+          this.glQuery('refreshPackage').getPackage();
+          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+            console.log('success');
+          }});
+         });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
       },
       _cancel:function() {
         this.glQuery('contentPanel').changDrawer();

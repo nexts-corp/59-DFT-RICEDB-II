@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/incoterms/insert-incoterms.html">
 <link rel="import" href="components/incoterms/edit-incoterms.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-incoterms">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -54,7 +55,7 @@
           <div class="text-head">ระบบจัดการข้อกำหนดการส่งสินค้า</div>
 
           <div class="horizontal end-justified layout">
-            <paper-button class="gl-btn-primary button-top" title="เพิ่มข้อกำหนดส่งสินค้า" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มข้อกำหนดส่งสินค้า</paper-button>
+            <paper-button class="gl-btn-primary button-top" title="เพิ่มข้อกำหนดการส่งสินค้า" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มข้อกำหนดการส่งสินค้า</paper-button>
           </div>
 
           <table class="gl-table-default">
@@ -114,7 +115,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getIncoterms();
@@ -147,35 +149,21 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/incoterms/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshIncoterms').getIncoterms();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/incoterms/delete/id/',detail.datas.id, () => {
+                  detail.el.glQuery('refreshIncoterms').getIncoterms();
+                  detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getIncoterms: function() {
-                this.getDb('./common/incoterms', (data) => {
-                  this.dataIncoterms = data;
-                  for (var i = 0; i < this.dataIncoterms.length; i++) {
-                    this.dataIncoterms[i]['no'] = i+1;
-                  }
-                });
+              this.read('./common/incoterms', (data)=>{
+                this.dataIncoterms = data;
+                for (var i = 0; i < this.dataIncoterms.length; i++) {
+                  this.dataIncoterms[i]['no'] = i+1;
+                }
+              });
             },
             _back:function() {
               window.history.back();

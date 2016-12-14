@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/Harmonizedcode/insert-Harmonizedcode.html">
 <link rel="import" href="components/Harmonizedcode/edit-Harmonizedcode.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-Harmonizedcode">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -58,8 +59,8 @@
             <thead class="table-head">
               <tr>
                 <th><div class="text-center">Harmonized Code<p>(พิกัดข้าว)</div></th>
-                <th><div class="text-center">Rice Name(TH)<p>(ชื่อข้าว (ภาษาไทย))</div></th>
-                <th><div class="text-center">Rice Name(EN)<p>(ชื่อข้าว (ภาษาอังกฤษ))</div></th>
+                <th><div class="text-center">Rice Name<p>(ชื่อข้าว ภาษาไทย)</div></th>
+                <th><div class="text-center">Rice Name<p>(ชื่อข้าว ภาษาอังกฤษ)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -113,7 +114,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getTyperices();
@@ -146,32 +148,18 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/typerice/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshRice').getTyperices();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/typerice/delete/id/',detail.datas.id, () => {
+                  detail.el.glQuery('refreshRice').getTyperices();
+                  detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getTyperices: function() {
-                this.getDb('./common/typerice', (data) => {
-                  this.dataRice = data;
-                });
+              this.read('./common/typerice', (data)=>{
+                this.dataRice = data;
+              });
             },
             _back:function() {
               window.history.back();
