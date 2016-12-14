@@ -351,6 +351,8 @@
                 }
             });
           });
+          let el = Polymer.dom(this.root).querySelectorAll('.required');
+          el.map((el)=> {el.reset();el.value=''});
         })
       },
       editExporter:function () {
@@ -462,6 +464,7 @@
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
+            el.map((el)=> {el.reset();});
             callback(newData)
           }
       },

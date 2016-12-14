@@ -62,7 +62,7 @@
     </div>
   </gl-form-panel-head>
           </template>
-    <!-- disabled="[[checkInput]]" -->
+    <!-- disabled="[[checkInput]]" -->[[isInputDisabled]]
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -230,7 +230,7 @@
                 total += parseFloat(datas[index].type_rice_quantity);
           }
         this.cl_total_quantity = numeral(total).format('0,0');
-        console.log(this.cl_total_quantity);
+        // console.log(this.cl_total_quantity);
         // if (isNaN(this.cl_total_quantity)) {
         //   this.cl_total_quantity=0;
         // }
@@ -287,13 +287,16 @@
                   }
                 });
             });
+            let el = Polymer.dom(this.root).querySelectorAll('.required');
+            el.map((el)=> {el.reset();el.value=''});
+            console.log(this.isInputDisabled);
+            // this.editInput();
         });
       },
       saveConfirm:function () {
         this._clearnDataConfirm(this.data,(data)=>{
             data.contract_id=this.dataForSelect.contract_id;
             data.id=this.data.cl_id;
-            console.log(data);
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
                 text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
@@ -370,7 +373,7 @@
                             );
               });
             });
-          el.map((el)=> {el.reset()})
+          el.map((el)=> {el.reset()});
           callback(news);
         }
       },
