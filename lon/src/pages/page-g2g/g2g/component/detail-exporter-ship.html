@@ -202,6 +202,7 @@
   <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
     <paper-button class="gl-btn-defalse" raised on-tap="cancelEditShipment">
           ย้อนกลับ</paper-button>
+    <paper-button class="gl-btn-danger" on-tap="calcelShipmentInsert" raised >ยกเลิก</paper-button>
     <paper-button class="gl-btn-success" raised on-tap="addExporter">
         เพิ่ม</paper-button>
   </template>
@@ -245,6 +246,10 @@
       ],
       _checkpol:function (pol) {
         // console.log('pol',pol);
+      },
+      calcelShipmentInsert:function () {
+        this.editInput();
+        this.calcelContract();
       },
       check:function (data) {
          this.set('dataOld', JSON.parse(JSON.stringify(data)));

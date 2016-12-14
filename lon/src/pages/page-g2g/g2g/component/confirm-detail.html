@@ -62,7 +62,7 @@
     </div>
   </gl-form-panel-head>
           </template>
-    <!-- disabled="[[checkInput]]" -->[[isInputDisabled]]
+    <!-- disabled="[[checkInput]]" -->
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -172,7 +172,7 @@
 
     <div class="horizontal end-justified layout">
         <paper-button  raised on-tap="backPage" class="gl-btn-defalse">ย้อนกลับ</paper-button>
-        <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[_isViewing(isInputDisabled)]]">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[_isViewing(isInputDisabled)]]">ยกเลิก</paper-button>
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
         <paper-button class="gl-btn-primary" on-tap="insertConfirm" raised hidden="[[_isViewing(isViewSeleted)]]">เพิ่มสัญญา</paper-button>
         </template>
@@ -211,10 +211,13 @@
       ],
       _changeDataConfirm:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
-          console.log(date);
           this.set('data.cl_date', date);
           this.notifyPath('data.cl_date');
         });
+      },
+      canncelConfirm:function () {
+        this.editInput();
+        this.calcelContract();
       },
       deleteRiceType:function (e) {
         this.splice('data.cl_type_rice', e.currentTarget.id, 1);
