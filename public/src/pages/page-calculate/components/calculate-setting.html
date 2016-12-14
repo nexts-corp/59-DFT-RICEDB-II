@@ -115,7 +115,7 @@
             <div class="bg"> 
               <div class="flex-equal-justified">
                 <paper-checkbox checked="{{selectAll}}" style="padding:10px">Select All </paper-checkbox>
-                <paper-button raised on-tap="cal">คำนวณ</paper-button>       
+                <paper-button raised on-tap="cal" disabled$="{{active}}">คำนวณ</paper-button>       
               </div>
             </div> 
             <div>
@@ -206,6 +206,10 @@
         sumAnswer:{
           type : Object,
           value: {}
+        },
+        active:{
+          type: Boolean,
+          value : true
         }
       },
       ready:function(){
@@ -307,6 +311,7 @@
         },
       _getlistCompany:function(fistYear,lastYear,typeRice){
         if(fistYear != ''&& lastYear != ''&& typeRice != ''){
+        this.active = false;
         this.firstYear = fistYear;
         this.lastYear = lastYear; 
         this.typeRice = typeRice;
