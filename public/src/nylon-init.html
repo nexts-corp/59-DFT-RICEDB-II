@@ -12,7 +12,10 @@
 <link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 
 
-<link rel="import" href="layout/layout-main.html">
+<link rel="import" href="./layout/layout-main.html">
+
+<link rel="import" href="./nylon-auth.html">
+
 
 <dom-module id="nylon-init">
 	<template>
@@ -29,11 +32,9 @@
 
     
 		<layout-main path="[[selected]]">
+
 			<iron-pages role="main" selected="[[selected]]" attr-for-selected="path" selected-attribute="visible">
-				
-                <!--<page-page1 path="page1"></page-page1>
-                <page-page2 path="page2"></page-page2>-->
-				<!-- component -->
+			
 				<page-quota path="quota" current-path="[[selected]]"></page-quota>
 				<page-amount path="amount" current-path="[[selected]]"></page-amount>
 				<page-calculate path="calculate" current-path="[[selected]]"></page-calculate>
@@ -47,6 +48,8 @@
                 <page-404 path="404"></page-404> <!-- ไม่พบไฟล์ -->
 
             </iron-pages>
+
+			<nylon-auth></nylon-auth>
 		</layout-main>
 
 	</template>
