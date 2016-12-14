@@ -29,7 +29,7 @@
         </style>
         <div class="container">
             <div class="header"> 404 </div>
-            <div class="content"> Oops , This Page Not Found !!</div>
+            <div class="content"> {{localize('msg')}} </div>
             <div>
                 <paper-button>Home Page</paper-button>
             </div>
@@ -39,7 +39,11 @@
     </template>
     <script>
         Polymer({
-            is: 'page-404'
+            is: 'page-404',
+            behaviors:[nylonLocalizeBehavior],
+            created:function(){
+                this.nylonLocalizeImport('/404.json');
+            }
         });
     </script>
 </dom-module>
