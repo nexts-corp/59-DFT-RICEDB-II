@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/ship/insert-ship.html">
 <link rel="import" href="components/ship/edit-ship.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-ship">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -111,7 +112,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getShip();
@@ -144,35 +146,21 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/ship/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshShip').getShip();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/ship/delete/id/',detail.datas.id, () => {
+                detail.el.glQuery('refreshShip').getShip();
+                detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getShip: function() {
-                this.getDb('./common/ship', (data) => {
-                  this.dataShip = data;
-                  for (var i = 0; i < this.dataShip.length; i++) {
-                    this.dataShip[i]['no'] = i+1;
-                  }
-                });
+              this.read('./common/ship', (data)=>{
+              this.dataShip = data;
+              for (var i = 0; i < this.dataShip.length; i++) {
+                this.dataShip[i]['no'] = i+1;
+              }
+              });
             },
             _back:function() {
               window.history.back();

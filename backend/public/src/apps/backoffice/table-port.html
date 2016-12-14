@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/port/insert-port.html">
 <link rel="import" href="components/port/edit-port.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-port">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -57,7 +58,7 @@
           <div class="text-head">ระบบจัดการท่าเรือ</div>
 
           <div class="horizontal end-justified layout">
-            <paper-button class="gl-btn-primary button-top" title="เพิ่มport" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มport</paper-button>
+            <paper-button class="gl-btn-primary button-top" title="เพิ่มท่าเรือ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มท่าเรือ</paper-button>
           </div>
 
           <table class="gl-table-default">
@@ -117,7 +118,8 @@
             },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getPort();
@@ -150,35 +152,21 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/port/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshPort').getPort();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/port/delete/id/',detail.datas.id, () => {
+                detail.el.glQuery('refreshPort').getPort();
+                  detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getPort: function() {
-                this.getDb('./common/port', (data) => {
-                  this.dataPort = data;
-                  for (var i = 0; i < this.dataPort.length; i++) {
-                    this.dataPort[i]['no'] = i+1;
-                  }
-                });
+              this.read('./common/port', (data)=>{
+              this.dataPort = data;
+              for (var i = 0; i < this.dataPort.length; i++) {
+                this.dataPort[i]['no'] = i+1;
+              }
+              });
             },
             _back:function() {
               window.history.back();

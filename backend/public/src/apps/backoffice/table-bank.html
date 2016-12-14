@@ -3,6 +3,7 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/bank/insert-bank.html">
 <link rel="import" href="components/bank/edit-bank.html">
+<link rel="import" href="data/dataBehavior.html">
 <dom-module id="backoffice-table-bank">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -62,8 +63,8 @@
               <tr>
                 <th><div class="text-center">No<p>(ลำดับ)</div></th>
                 <th><div class="text-center">Bank Code<p>(รหัสธนาคาร)</div></th>
-                <th><div class="text-center">Bank Name<p>(ชื่อธนาคารภาษาไทย)</div></th>
-                <th><div class="text-center">Bank Name<p>(ชื่อธนาคารภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">Bank Name<p>(ชื่อธนาคาร ภาษาไทย)</div></th>
+                <th><div class="text-center">Bank Name<p>(ชื่อธนาคาร ภาษาอังกฤษ)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
                 </th>
@@ -107,14 +108,10 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
-            properties: {
-              dataSurveyor:{
-                type:Array
-              }
-            },
             behaviors: [
                 gl.behavior.core,
-                gl.behavior.locales
+                gl.behavior.locales,
+                dataBehavior
             ],
             attached: function() {
               this.getBank();
@@ -147,35 +144,21 @@
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                axios.delete('./common/bank/delete/id/'+detail.datas.id)
-                    .then(function(response) {
-                        console.log("success");
-                        console.log(response);
-                        detail.el.glQuery('refreshBank').getBank();
-                        detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                          console.log('success');
-                        }});
-                    }.bind(this))
-                    .catch(function(error) {
-                        console.log("error");
-                        console.log(error);
-                    })
+                detail.el.delete('./common/bank/delete/id/',detail.datas.id, () => {
+                  detail.el.glQuery('refreshBank').getBank();
+                  detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
               }
             },
-            getDb: function(url, callback) {
-                axios.get(url)
-                    .then(function(response) {
-                        callback(response.data);
-                    }.bind(this))
-                    .catch(function(error) {}.bind(this));
-            },
             getBank: function() {
-                this.getDb('./common/bank', (data) => {
-                  this.dataBank = data;
-                  for (var i = 0; i < this.dataBank.length; i++) {
-                    this.dataBank[i]['no'] = i+1;
-                  }
-                });
+              this.read('./common/bank', (data)=>{
+                this.dataBank = data;
+                for (var i = 0; i < this.dataBank.length; i++) {
+                  this.dataBank[i]['no'] = i+1;
+                }
+              });
             },
             _back:function() {
               window.history.back();

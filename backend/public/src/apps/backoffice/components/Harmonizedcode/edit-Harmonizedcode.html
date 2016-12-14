@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/dataBehavior.html">
 <dom-module id="edit-Harmonizedcode">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
@@ -26,7 +27,7 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top" label="Rice Name(TH) (ชื่อข้าว (ภาษาไทย)) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_th}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อข้าวภาษาไทย" required label="Rice Name (ชื่อข้าวภาษาไทย) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_th}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -34,7 +35,7 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-textarea class="margin-top" label="Rice Name(EN) (ชื่อข้าว (ภาษาอังกฤษ)) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_en}}"></gl-form-textarea>
+        <gl-form-textarea class="margin-top checkData" error-message="กรุณากรอกชื่อข้าวภาษาอังกฤษ" required label="Rice Name (ชื่อข้าวภาษาอังกฤษ) :" placeholder="กรอกชื่อข้าว" value="{{data.type_rice_name_en}}"></gl-form-textarea>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -58,7 +59,8 @@
       },
       behaviors: [
           gl.behavior.core,
-          gl.behavior.locales
+          gl.behavior.locales,
+          dataBehavior
       ],
       _edit:function(){
         // console.log(this.data);
@@ -67,20 +69,26 @@
           type_rice_name_th: this.data.type_rice_name_th,
           type_rice_name_en: this.data.type_rice_name_en
         }
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.put('./common/typerice/update', datas)
-            .then(function(response) {
-                console.log("success");
-                console.log(response);
-                this.glQuery('refreshRice').getTyperices();
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                  console.log('success');
-                }});
-            }.bind(this))
-            .catch(function(error) {
-                console.log("error");
-                console.log(error);
-            })
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.update('./common/typerice/update', datas, () => {
+            this.glQuery('refreshRice').getTyperices();
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+           });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
       },
       _cancel:function() {
         this.glQuery('contentPanel').changDrawer();

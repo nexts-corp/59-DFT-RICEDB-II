@@ -1,3 +1,4 @@
+<link rel="import" href="../../data/dataBehavior.html">
 <dom-module id="insert-incoterms">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
     .text-center {
@@ -14,11 +15,11 @@
     }
   </style>
   <template>
-    <div class="text-center">เพิ่มข้อมูลข้อกำหนดส่งสินค้า</div>
+    <div class="text-center">เพิ่มข้อมูลข้อกำหนดการส่งสินค้า</div>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Incoterms Code (รหัสข้อกำหนดส่งสินค้า) :" placeholder="กรอกรหัส" value="{{data.inct_id}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกรหัสข้อกำหนดส่งสินค้า" required label="Incoterms Code (รหัสข้อกำหนดส่งสินค้า) :" placeholder="กรอกรหัส" value="{{data.inct_id}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -26,7 +27,7 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top" label="Incoterms Name (ชื่อข้อกำหนดส่งสินค้า) :" placeholder="กรอกชื่อข้อกำหนดส่งสินค้า" value="{{data.inct_name}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อข้อกำหนดส่งสินค้า" required label="Incoterms Name (ชื่อข้อกำหนดส่งสินค้า) :" placeholder="กรอกชื่อข้อกำหนดส่งสินค้า" value="{{data.inct_name}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -49,7 +50,8 @@
       },
       behaviors: [
           gl.behavior.core,
-          gl.behavior.locales
+          gl.behavior.locales,
+          dataBehavior
       ],
       _save:function functionName() {
         var datas = {
@@ -57,21 +59,27 @@
           inct_name: this.data.inct_name
         }
         // console.log(datas);
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        axios.post('./common/incoterms/insert', datas)
-            .then(function(response) {
-                console.log("success");
-                console.log(response);
-                this.data = {};
-                this.glQuery('refreshIncoterms').getIncoterms();
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                  console.log('success');
-                }});
-            }.bind(this))
-            .catch(function(error) {
-                console.log("error");
-                console.log(error);
-            })
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.insert('./common/incoterms/insert', datas, () => {
+            this.data = {};
+            this.glQuery('refreshIncoterms').getIncoterms();
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+           });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
       },
       _cancel:function() {
         this.glQuery('contentPanel').changDrawer();
