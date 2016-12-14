@@ -92,7 +92,7 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 
               [[changeString2Num(item.*,'type_rice_quantity')]]
-              [[_obCalcWeight(item.*)]]
+              [[_obCalcWeight(item.*,'type_rice_quantity')]]
               <gl-form-input class="required" required allowed-pattern="[0-9]" format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
@@ -160,7 +160,7 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 
-            <gl-form-input class="numberBack" disabled  label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+            <gl-form-input class="numberBack" disabled always-float-label  label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -171,18 +171,20 @@
   <gl-form-panel-footer label="" set-padding="10px">
 
     <div class="horizontal end-justified layout">
-        <paper-button  raised on-tap="backPage" class="gl-btn-defalse">ย้อนกลับ</paper-button>
+
 
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-          <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[_isViewing(isViewSeleted)]]">ยกเลิก</paper-button>
-        <paper-button class="gl-btn-primary" on-tap="insertConfirm" raised hidden="[[_isViewing(isViewSeleted)]]">เพิ่มสัญญา</paper-button>
+          <paper-button  raised on-tap="backPageInsert" class="gl-btn-defalse">ย้อนกลับ</paper-button>
+          <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-primary" on-tap="insertConfirm" raised hidden="[[isViewSeleted]]">เพิ่มสัญญา</paper-button>
         </template>
         <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
-        <paper-button class="gl-btn-info" raised on-tap="confirmConfirm" hidden="[[_isViewing(data.cl_status)]]">ยืนยันสัญญา</paper-button>
+        <paper-button  raised on-tap="backPage" class="gl-btn-defalse">ย้อนกลับ</paper-button>
+        <paper-button class="gl-btn-info" raised on-tap="confirmConfirm" hidden="[[data.cl_status]]">ยืนยันสัญญา</paper-button>
         </template>
          <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
-           <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[_isViewing(isInputDisabled)]]">ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" on-tap="saveConfirm" raised hidden="[[_isViewing(isInputDisabled)]]">บันทึก</paper-button>
+           <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[isInputDisabled]]">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="saveConfirm" raised hidden="[[isInputDisabled]]">บันทึก</paper-button>
         </template>
     </div>
   </gl-form-panel-footer>
@@ -228,17 +230,19 @@
         let table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
           this.splice('data.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
       },
-      _obCalcWeight:function (data) {
+      _obCalcWeight:function (data,type_rice_quantity) {
         let total = 0;
+        console.log(data,type_rice_quantity);
         let datas = this.data.cl_type_rice;
           for(index in datas){
                 total += parseFloat(datas[index].type_rice_quantity);
           }
         this.cl_total_quantity = numeral(total).format('0,0');
+        console.log(typeof this.cl_total_quantity);
         // console.log(this.cl_total_quantity);
-        // if (isNaN(this.cl_total_quantity)) {
-        //   this.cl_total_quantity=0;
-        // }
+        if (this.cl_total_quantity == 'NaN') {
+          this.cl_total_quantity=0;
+        }
       },
       addNewTypeRice:function () {
         this.push('data.cl_type_rice', {
@@ -279,6 +283,9 @@
         }
           this.fire('back-page-confirm',{detail:'_back-page-confirm'});
       },
+      backPageInsert:function () {
+        this.fire('back-page-confirm',{detail:'_back-page-confirm'});
+      },
       insertConfirm:function () {
         this.data.cl_status=false;
         this._clearnDataConfirm(this.data,(data)=>{
@@ -288,13 +295,12 @@
                 this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                  callback:()=>{
                     this.fire('get-list-confirm',{contractId:data.contract_id});
-                    this.backPage();
+                    this.fire('back-page-confirm',{detail:'_back-page-confirm'});
                   }
                 });
             });
             let el = Polymer.dom(this.root).querySelectorAll('.required');
             el.map((el)=> {el.reset();el.value=''});
-            console.log(this.isInputDisabled);
             // this.editInput();
         });
       },
