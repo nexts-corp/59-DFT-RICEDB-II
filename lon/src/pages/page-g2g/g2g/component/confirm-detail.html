@@ -93,7 +93,7 @@
 
               [[changeString2Num(item.*,'type_rice_quantity')]]
               [[_obCalcWeight(item.*)]]
-              <gl-form-input class="required" required  format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+              <gl-form-input class="required" required allowed-pattern="[0-9]" format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
             </gl-grid-col>
@@ -124,7 +124,7 @@
                   </gl-combo-box >
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
-                  <gl-form-input class="required numberBack" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  <gl-form-input class="required numberBack" allowed-pattern="[0-9]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                 </td>
                 <td >
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
@@ -172,14 +172,16 @@
 
     <div class="horizontal end-justified layout">
         <paper-button  raised on-tap="backPage" class="gl-btn-defalse">ย้อนกลับ</paper-button>
-        <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[_isViewing(isInputDisabled)]]">ยกเลิก</paper-button>
+
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+          <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[_isViewing(isViewSeleted)]]">ยกเลิก</paper-button>
         <paper-button class="gl-btn-primary" on-tap="insertConfirm" raised hidden="[[_isViewing(isViewSeleted)]]">เพิ่มสัญญา</paper-button>
         </template>
         <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
         <paper-button class="gl-btn-info" raised on-tap="confirmConfirm" hidden="[[_isViewing(data.cl_status)]]">ยืนยันสัญญา</paper-button>
         </template>
          <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+           <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[_isViewing(isInputDisabled)]]">ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" on-tap="saveConfirm" raised hidden="[[_isViewing(isInputDisabled)]]">บันทึก</paper-button>
         </template>
     </div>
