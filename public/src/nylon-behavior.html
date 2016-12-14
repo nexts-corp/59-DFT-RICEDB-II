@@ -9,4 +9,21 @@
             }
         }
     };
+
+    nylonLocalize = {
+        attached:function(){
+            nylonLocalize.subscribe((x)=>{ 
+                this.language = x;
+            });
+        },
+        nylonLocalizeImport:function(path){
+            this.loadResources(this.resolveUrl('/src/localize'+path));
+        },
+        nylonLocalizeChange:function(lang){
+            nylonLocalize.onNext(lang);
+        }
+    }
+    nylonLocalizeBehavior = [ Polymer.AppLocalizeBehavior, nylonLocalize ]
+
+
 </script>

@@ -78,7 +78,8 @@
             </div>
           </div>
           <div class="flex title">
-            การคำนวณส่วนจัดสรร
+            {{localize('test')}} <button on-tap="changeLanguage">{{localize('change')}}</button>
+            <br>การคำนวณส่วนจัดสรร
           </div>
           <div class="fontContent">
               การคำนวณส่วนจัดสรรข้าวภายใต้โควตาภาษีสหภาพยุโรป
@@ -118,7 +119,7 @@
     <script>
         Polymer({
             is: "page-calculate",
-            behaviors:[nylonBehavior],
+            behaviors:[nylonBehavior,nylonLocalizeBehavior],
             observers:[
               '_yearQuoataChaged(selectYear)'
             ],
@@ -128,10 +129,21 @@
                     value: "detailRegExporter"
                 }
             },
+            changeLanguage:function(){
+              if(this.language=='th'){
+                this.nylonLocalizeChange('en');
+              }else{
+                this.nylonLocalizeChange('th');
+              }
+              
+            },
             nylonPageActive:function(){
                 this._getYear();
             },
             attached: function(){
+              
+              this.nylonLocalizeImport('/i18n-page1.json');
+
               this.hide = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/calculate-setting.html'), (e)=>{
