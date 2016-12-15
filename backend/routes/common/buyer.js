@@ -24,7 +24,7 @@ var schema = {
         "buyer_fax": {
             "type": "string"
         },
-        "buyer_fullname": {
+        "buyer_name": {
             "type": "string"
         },
         "buyer_masks": {
@@ -37,7 +37,7 @@ var schema = {
             "type": "string"
         }
     },
-    "required": ["buyer_address", "buyer_email", "buyer_fullname", "buyer_masks", "buyer_tel", "buyer_fax", "country_id"]
+    "required": ["buyer_address", "buyer_email", "buyer_name", "buyer_masks", "buyer_tel", "buyer_fax", "country_id"]
 };
 var validate = ajv.compile(schema);
 
@@ -53,7 +53,7 @@ router.get(['/', '/list'], function (req, res, next) {
             })
             .without('id')
             .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
-            .orderBy('country_code3', 'buyer_fullname')
+            .orderBy('country_code3', 'buyer_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
