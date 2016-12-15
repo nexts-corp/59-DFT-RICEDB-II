@@ -57,12 +57,9 @@
     background-color: #F1F1F1;
     }
     gl-form-input.number{
-      color:red;
-
       --paper-input-container-input:{
-        text-align: left;
+        text-align: right;
       }
-
     }
   </style>
   <template>
@@ -109,7 +106,7 @@
                 [[_totalQuantityTons(invoiceDetail.quantity_tons,index)]]
               <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.quantity_tons]]" disabled ></gl-form-input></td>
                 [[_totalPricePerTon(invoiceDetail.price_per_ton,index)]]
-              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.price_per_ton]]" disabled ></gl-form-input></td>
+              <td><gl-form-input format-number="on" style="width:140px;text-align:center;" value="[[invoiceDetail.price_per_ton]]" disabled ></gl-form-input></td>
                 [[_totalAmountUsd(invoiceDetail.amount_usd,index)]]
               <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.amount_usd]]" disabled ></gl-form-input></td>
               <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" disabled ></gl-form-input></td>
@@ -127,13 +124,13 @@
 
           <tr>
             <td colspan="3">รวม</td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalTonInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalPricePerTonUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalAmountUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalFeeInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalIncomeTaxInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
-            <td><gl-form-input format-number="on" style="width:140px;" value="[[_totalMoneyBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalTonInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input  format-number="on" style="width:140px;text-align:center;" value="[[_totalPricePerTonUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalAmountUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalFeeInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalIncomeTaxInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalMoneyBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
           </tr>
         </table>
       </div>

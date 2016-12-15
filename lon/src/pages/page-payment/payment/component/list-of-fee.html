@@ -32,18 +32,19 @@
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
-              <th>Shipment No</th>
-              <th>Shipment Name</th>
-              <th>Confirmation Letter</th>
+              <th>ชื่อการทำสัญญา</th>
+              <th>งวดการส่งมอบ</th>
+              <th>ครั้งที่คิดค่าธรรมเนียม</th>
+
             </tr>
           </thead>
           <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]" as="contract">
               <template is="dom-repeat" items="[[contract.fee_detail]]" >
                 <tr data="[[item]]" on-tap="getFeeDetail">
-                  <td>[[contract.shm_no]]</td>
-                  <td>[[item.shm_name]]</td>
-                  <td>[[item.cl_name]]</td>
+                  <td>[[contract.cl_name]]</td>
+                  <td>[[contract.shm_name]] ([[contract.shm_no]])</td>
+                  <td>[[item.fee_name]] ([[item.fee_no]])</td>
                 </tr>
               </template>
             </template>
@@ -53,6 +54,12 @@
   <script>
     Polymer({
       is: "list-of-fee",
+      observers:[
+        'check(data)'
+      ],
+      check:function (data) {
+        console.log(data);
+      },
       getFeeDetail:function (e) {
         this.fire('get-fee-detail',{detail:e.currentTarget.data.fee_id});
       }

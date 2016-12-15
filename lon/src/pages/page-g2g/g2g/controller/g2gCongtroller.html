@@ -23,7 +23,7 @@
     _cloneData:function (data) {
 
       let old = this.g2gClone(data);
-      // let old = data;
+      // let old = Object.assign({}, data);
       this.oldData =old;
     },
     _isViewing:function (data) {
@@ -33,7 +33,20 @@
     //   return data == true;
     // },
     g2gClone:function (data) {
-      return JSON.parse(JSON.stringify(data));
+      if(typeof data !== 'undefined' && data !== 'undefined'){
+        return JSON.parse(JSON.stringify(data));
+      }
+    },
+    clone: function(obj){
+        let newObj = {};
+        for(let i in obj){
+            if(typeof(obj[i]) === 'object' && Object.keys(obj[i]).length){
+                newObj[i] = clone(obj[i]);
+            } else{
+                newObj[i] = obj[i];
+            }
+        }
+        return Object.assign({},newObj);
     },
     test:function () {
       console.log('ถึงแล้วววว');
