@@ -65,11 +65,14 @@
 
       <gl-grid-row>
 
-        <template is="dom-repeat" items="[[data.ship]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+          <gl-form-input disabled value="[[_getVessel(data.ship)]]" label="Shippped per : [[_ObcountIndex(index)]]"></gl-form-input>
+        </gl-grid-col>
+        <!-- <template is="dom-repeat" items="[[data.ship]]">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             <gl-form-input disabled value="[[item.ship_name]]" label="Shippped per : [[_ObcountIndex(index)]]"></gl-form-input>
           </gl-grid-col>
-        </template>
+        </template> -->
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input disabled value="[[data.load_port_name]],[[data.load_country_name_en]]" label="Port of loading :"></gl-form-input>
@@ -255,10 +258,10 @@
 
     <gl-form-panel-footer set-padding="20px 0px 0px 20px">
 
-          <paper-button class="gl-btn-primary" raised on-tap="createInvoice" hidden="[[!isViewSeleted]]">Create Invoice</paper-button>
+          <paper-button class="gl-btn-primary" raised on-tap="createInvoice" hidden="[[!isViewSeleted]]">สร้างใบแจ้งหนี้</paper-button>
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
           <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
-          <paper-button class="gl-btn-success" raised on-tap="saveInvoice" hidden="[[isViewSeleted]]">Save Invoice</paper-button>
+          <paper-button class="gl-btn-success" raised on-tap="saveInvoice" hidden="[[isViewSeleted]]">บันทึกใบแจ้งหนี้</paper-button>
         </template>
     </gl-form-panel-footer>
 
@@ -286,6 +289,11 @@
         '_obCheckDataForWrite(data)',
         '_changeDataCommercial(data.invoice_date)'
       ],
+      _getVessel:function (data) {
+        if(typeof data !== 'undefined' && data !== 'undefined'){
+          return data.map((e)=> e.ship_name).join(", ");
+        }
+      },
       _changeDataCommercial:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.invoice_date', date);

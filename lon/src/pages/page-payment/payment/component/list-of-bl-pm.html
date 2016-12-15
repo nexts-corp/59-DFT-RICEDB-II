@@ -23,8 +23,8 @@
   <template>
     <div class="title">ใบตราส่งสินค้าทางทะเล</div>
     <div class="flex searchInput ">
-       <div class="horizontal end-justified layout">
-         <div class="labelSearch">B/L No.</div>{{searchInput}}
+       <div class="horizontal end-justified layout">{{searchInput}}
+         <div class="labelSearch">B/L No.</div>{{_searchInArray(searchInput)}}
          <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
          <paper-icon-button icon="search"></paper-icon-button>
        </div>
@@ -32,18 +32,22 @@
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
-              <th>Shipment No</th>
-              <th>Bill of Landing Number (B/L No.)</th>
-              <th>Confirmation Letter</th>
+              <th>ชื่อการทำสัญญา</th>
+              <th>งวดการส่งมอบ</th>
+
+              <th>B/L No.</th>
+
             </tr>
           </thead>
           <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]" as="contract">
               <template is="dom-repeat" items="[[contract.bl_detail]]" >
                 <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
-                  <td>[[contract.shm_no]]</td>
-                  <td>[[item.bl_no]]</td>
                   <td>[[item.cl_name]]</td>
+                  <td>[[contract.shm_name]] ([[contract.shm_no]])</td>
+
+                  <td>[[item.bl_no]]</td>
+
                 </tr>
               </template>
             </template>
@@ -53,6 +57,20 @@
   <script>
     Polymer({
       is: "list-of-bl-pm",
+      observers:[
+        // 'check(data)'
+      ],
+      properties: {
+        vessel: {
+          type: Boolean
+        }
+      },
+      // check:function (data) {
+      //   // console.log(data);
+      // },
+      _searchInArray:function (searchInput) {
+
+      },
       getBlDetail:function (e) {
         console.log(this.data);
         this.fire('get-bl-detail',{detail:e.currentTarget.data});

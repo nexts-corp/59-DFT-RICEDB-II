@@ -34,9 +34,10 @@
           <thead class="table-head">
             <tr>
               <th></th>
-              <th>Shipment No</th>
-              <th>Invoice Name</th>
-              <th>Confirmation Letter</th>
+              <th>ชื่อการทำสัญญา</th>
+              <th>งวดการส่งมอบ</th>
+              <th>เลขที่ใบแจ้งหนี้</th>
+
             </tr>
           </thead>
           <tbody class="table-body">
@@ -44,9 +45,10 @@
           <template is="dom-repeat" items="{{payment.invoice_detail}}">
             <tr >
               <td class="item"><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
+              <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
               <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
               <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
-              <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
+
             </tr>
           </template>
           <tr>
