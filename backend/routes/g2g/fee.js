@@ -29,7 +29,7 @@ var schema = {
             "format": "date-time"
         },
         "fee_no": {
-            "type": "string"
+            "type": "number"
         },
         "fee_name": {
             "type": "string"
@@ -128,27 +128,28 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                     fee_date_receipt: m('fee_date_receipt').split('T')(0)
                 }
             })
-            .group(function (g) {
-                return g.pluck(
-                    'contract_id', 'cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status'
-                )
-            })
-            .ungroup()
-            .merge(function (me) {
-                return {
-                    contract_id: me('group')('contract_id'),
-                    cl_id: me('group')('cl_id'),
-                    cl_no: me('group')('cl_no'),
-                    cl_name: me('group')('cl_name'),
-                    cl_status: me('group')('cl_status'),
-                    shm_id: me('group')('shm_id'),
-                    shm_no: me('group')('shm_no'),
-                    shm_name: me('group')('shm_name'),
-                    shm_status: me('group')('shm_status'),
-                    fee_detail: me('reduction')
-                }
-            })
-            .without("group", "reduction")
+            // .group(function (g) {
+            //     return g.pluck(
+            //         'contract_id', 'cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status'
+            //     )
+            // })
+            // .ungroup()
+            // .merge(function (me) {
+            //     return {
+            //         contract_id: me('group')('contract_id'),
+            //         cl_id: me('group')('cl_id'),
+            //         cl_no: me('group')('cl_no'),
+            //         cl_name: me('group')('cl_name'),
+            //         cl_status: me('group')('cl_status'),
+            //         shm_id: me('group')('shm_id'),
+            //         shm_no: me('group')('shm_no'),
+            //         shm_name: me('group')('shm_name'),
+            //         shm_status: me('group')('shm_status'),
+            //         fee_detail: me('reduction')
+            //     }
+            // })
+            // .without("group", "reduction")
+            .orderBy('cl_no','shm_no','fee_no')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

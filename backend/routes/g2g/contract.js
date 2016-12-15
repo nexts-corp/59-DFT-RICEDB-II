@@ -60,6 +60,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 return {
                     contract_id: row('id'),
                     contract_date: row('contract_date').split('T')(0),
+                    date_created: row('date_created').split('T')(0),
+                    date_updated: row('date_updated').split('T')(0),
                     contract_type_rice: row('contract_type_rice').map(function (arr_type_rice) {
                         return arr_type_rice.merge(function (row_type_rice) {
                             return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
@@ -131,7 +133,7 @@ router.get(['/', '/list'], function (req, res, next) {
             .without('id')
             .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
-            .orderBy('contract_name')
+            .orderBy('date_updated')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
