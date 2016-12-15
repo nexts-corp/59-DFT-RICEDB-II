@@ -46,6 +46,12 @@
                 @apply(--layout-horizontal);
                 @apply(--layout-justified);
             }
+            gl-form-input{
+                --paper-input-container-input:{
+                    font-size: 13px !important;
+                    text-align : right;
+                }
+            }
         </style>
         <section class="container">
             <div class="gl-panel-default">
@@ -57,7 +63,7 @@
                     ยอดรวมส่งออก {{countYear}} ปี เพื่อการคำนวณ: {{formatNumber(data.sum_for_cal)}} ยอดรวมการส่งออก [[formatNumber(data.sum_export)]]
                     ยอดรวมโควตา [[formatNumber(data.sum_quota)]]</div>
                     <div style="overflow-x:auto;">
-                    <table class="gl-table-default" style="border: 1px solid #ddd;">
+                    <table class="gl-table-default" width="100%" style="border: 1px solid #ddd;">
                         <thead>
                             <tr>
                                 <th rowspan="2">
@@ -84,7 +90,7 @@
                                 <th rowspan="2">
                                     ปริมาณการจัดสรร
                                 </th>
-                                 <th rowspan="2">ยอดปรับปรุง</th>
+                                 <th rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ยอดปรับปรุง</th>
                             </tr>
                             <tr>
                                 <template is="dom-repeat" items="{{quotaYear}}">
@@ -110,7 +116,7 @@
                                    <td class="right">[[formatNumber(item.sum_export)]]</td>
                                    <td class="right">[[formatNumber(item.sum_export_convert)]]</td>
                                    <td class="right">[[formatNumber(item.quantity)]]</td>
-                                   <td><gl-form-input style="margin-top: -22px"  format-number="on" value="[[formatNumber(item.quantity)]]"></gl-form-input></td>
+                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" value="{{item.editQuantity}}"></gl-form-input></td>
                                 </tr>
                             </template>
                             <tr>
@@ -152,13 +158,22 @@
             _getYear:function(){
                this.data.spreadsheets.map((item)=>{
                    this.quotaYear = item.confirmed;
+                   if(item.quantity == 0){
+                       item.editQuantity = 0;
+                   }
+                   else {
+                        item.editQuantity = item.quantity.toFixed(5);
+                   }
+                  
+                //    console.log('datalist',item.quantity);
                });
                this.countYear = this.quotaYear.length;
             //    console.log(this.quotaYear.length);
-               console.log('datalist',this.datalist);
+               
             },
             _saveData:function(){
-                this.fire('save-data',this.data.id);
+                
+                // this.fire('save-data',this.data.id);
             },
             _deleteData:function(){
                 this.fire('delete-data');

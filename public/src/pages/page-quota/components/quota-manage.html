@@ -72,7 +72,7 @@
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                                 <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
-                                item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+                                item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกประเภทข้าว" required></gl-combo-box>
 								<!--<gl-form-dropdown-menu label="ประเภทข้าว" class="saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
 									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
 										<template is="dom-repeat" items="{{getTypeRice}}">
@@ -168,7 +168,7 @@
                         <paper-button hidden$="{{!checkStatus(status)}}" on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
                     </div>
                     <div style="margin-right:10px;">
-                        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+                        <paper-button class="gl-btn-danger" hidden$="{{checkStatus(status)}}" on-tap="_resetData" raised>ยกเลิก</paper-button>
                         <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
                     </div>
                  
@@ -349,20 +349,44 @@
                 });
             },
             _deleteData:function(){
-                data = {
-                    year : this.year,
-                    type_rice_id : this.typeRice
+                // console.log(this.$$('gl-combo-box').value);
+                if(this.$$('gl-combo-box').value != ''){
+                    data = {
+                        year : this.year,
+                        type_rice_id : this.typeRice
+                    }
+                    this.fire('delete-data',data);
                 }
-                //console.log(data);
-                this.fire('delete-data',data);
+                else {
+                    this.$$('gl-combo-box').validate();
+                    this.fire('toast',
+                    {
+                        status:'connectError',
+                        text:'กรุณาเลือกประเภทข้าว',
+                        callback:function(){
+                        }
+                    });
+                }
+               
             },
             checkStatus:function(status){
+                console.log(status);
+                 Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                    item.reset();
+                });
                 return status=='update';
             },
             disabledMath:function(percent,quantity){
                 // console.log('percent',percent);
                 // console.log('quantity',quantity);
                //this.hide=false;
+            },
+            _resetData:function(){
+                 Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                    item.value = '';
+                    item.reset();
+                });
+                this.Period = [];
             }
         });
     </script>

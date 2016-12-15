@@ -12,8 +12,16 @@
                 return "";
             }
             else {
-                var num = numeral(number).format(this._defaultFormat);
-                return num
+                if(Number.isInteger(number)== true){
+                    this._defaultFormat = '0,0'
+                    var num = numeral(number).format(this._defaultFormat);
+                    return num
+                }
+                else if(Number.isInteger(number)==false){
+                    this._defaultFormat = '0,0.00'
+                    var num = numeral(number).format(this._defaultFormat);
+                    return num
+                }
             }
            
         },
