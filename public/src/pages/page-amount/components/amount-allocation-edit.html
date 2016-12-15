@@ -55,6 +55,7 @@
 			font-size: 22px;
 		}
 		.right{
+			width: 70%;
 			--paper-input-container-input:{
 				text-align:right;
 			}
@@ -107,11 +108,11 @@
 					<gl-grid-row width="{{getWidth}}">
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-							<gl-form-input label="งวดที่ [[_num(index)]] [[getMonthName(item.month)]]" value="{{formatNumber(item.quantity)}}" disabled></gl-form-input>
+							<gl-form-input class="right" label="งวดที่ [[_num(index)]] [[getMonthName(item.month)]]" value="{{formatNumber(item.quantity)}}" disabled></gl-form-input>
 						</gl-grid-col>
 							<!--<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>-->
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-							<gl-form-input class="saveData" required label="ยอดปรับปรุง" allowed-pattern="[0-9||,||.]" format-number="on" error-message="กรุณาระบุยอดปรับปรุง" always-float-label value="{{item.quantity_update}}"></gl-form-input>
+							<gl-form-input class="saveData right" required label="ยอดปรับปรุง" allowed-pattern="[0-9||,||.]" format-number="on" error-message="กรุณาระบุยอดปรับปรุง" always-float-label value="{{item.quantity_update}}"></gl-form-input>
 						</gl-grid-col>
 						
 					</gl-grid-row>
@@ -123,11 +124,11 @@
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 						<!--<gl-form-input label="ปริมาณโควต้ารวม" id="" disabled name="" value="{{dataSelect.quantity}}"></gl-form-input>-->
-						<gl-form-input label="ปริมาณโควต้ารวม" always-float-label id="" disabled name="" value="[[_sumAllocation(dataSelect.period.*,'quantity')]]"></gl-form-input>
+						<gl-form-input class="right" label="ปริมาณโควต้ารวม" always-float-label id="" disabled name="" value="[[_sumAllocation(dataSelect.period.*,'quantity')]]"></gl-form-input>
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควต้ารวม</div>-->
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-						<gl-form-input class="saveData" label="ยอดปรับปรุงรวม" always-float-label value="[[_sumAllocationUpdate(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
+						<gl-form-input class="saveData right" label="ยอดปรับปรุงรวม" always-float-label value="[[_sumAllocationUpdate(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 					</gl-form-panel-body>
