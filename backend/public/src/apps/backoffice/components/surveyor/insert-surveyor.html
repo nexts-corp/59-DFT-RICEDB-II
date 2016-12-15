@@ -58,14 +58,23 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.insert('./common/surveyor/insert', datas, () => {
-          this.data = {};
-          this.glQuery('refreshSurveyor').getSurveyor();
-          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-            console.log('success');
-          }});
-         });
+          this.read('./common/check/duplicate?table=surveyor&field=surveyor_name&value='+datas.surveyor_name, (response) => {
+            if (response == 0) {
+              this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+              this.insert('./common/surveyor/insert', datas, () => {
+              this.data = {};
+              this.glQuery('refreshSurveyor').getSurveyor();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+             });
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'ชื่อหน่วยงานนี้มีอยู่แล้ว',
+                callback:function(){
+                }})
+            }
+            });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
