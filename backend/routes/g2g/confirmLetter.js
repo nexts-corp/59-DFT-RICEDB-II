@@ -19,7 +19,7 @@ var schema = {
             "type": "string"
         },
         "cl_no": {
-            "type": "string"
+            "type": "number"
         },
         "cl_date": {
             "type": "string",
@@ -121,6 +121,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                 }
             })
             .without('id')
+            .orderBy('cl_no')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

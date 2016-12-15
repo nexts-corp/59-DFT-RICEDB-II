@@ -22,7 +22,7 @@ var schema = {
             "type": "string"
         },
         "shm_no": {
-            "type": "string"
+            "type": "number"
         },
         "shm_name": {
             "type": "string"
