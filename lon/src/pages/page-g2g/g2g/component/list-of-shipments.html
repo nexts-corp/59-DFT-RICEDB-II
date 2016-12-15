@@ -158,7 +158,7 @@ Polymer({
               this.dataSelected = data;
               // console.log('this.dataSelected =>',this.dataSelected);
               this.dataForSelect.shm_id=this.dataSelected.shm_id;
-              // console.log('this.dataForSelect=>',this.dataForSelect);
+              console.log('this.dataSelected=>',this.dataSelected);
               this.notifyPath('dataForSelect.shm_id');
               this.pageSelected = 'shipmentDetail';
               this.fire('toast',{status:'load'});
@@ -167,16 +167,11 @@ Polymer({
     },1000);
   },
   _getListBL:function (e) {
-    // console.log(e.detail.detail);
-    // this.dataForSelect.blNos=e.detail.detail;
-    // Object.assign(this.dataForSelect.blNos,e.detail.detail);
-    // console.log(this.dataForSelect.blNos);
-    // this.notifyPath('dataForSelect.blNos');
     this.read('./g2g/bl/shipment/id/'+e.detail.shm_id,(data)=>{
       // Object.assign(this.dataForSelect.blNos,data);
       // this.dataForSelect.blNos=data;
       this.dataForSelect.blNos=e.detail.detail;
-      console.log(this.dataForSelect.blNos);
+      // console.log(this.dataForSelect.blNos);
       this.notifyPath('dataForSelect.blNos');
     });
   },
