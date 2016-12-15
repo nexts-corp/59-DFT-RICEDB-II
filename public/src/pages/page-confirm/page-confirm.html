@@ -155,15 +155,18 @@
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                        <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" 
-                        item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+                        item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกประเภทข้าว" required></gl-combo-box>
                     </gl-grid-col>  
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                         <gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                        <div class="layout horizontal">
+                        <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                        </div>
+                         <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                             <paper-listbox class="dropdown-content">
                                 <paper-item>1</paper-item>
                                 <paper-item>2</paper-item>
                             </paper-listbox>
-                        </gl-form-dropdown-menu>
+                        </gl-form-dropdown-menu>-->
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                     
@@ -228,6 +231,7 @@
             behaviors:[nylonBehavior],
             observers:[
                 '_chageCompanyName(selectName)',
+                '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
             ],
             properties: {
                 layerContent: {
@@ -339,6 +343,24 @@
                     console.log(error);
                 });
             },
+            _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
+                this.selectQuotaOrdinal = "";
+                axios.get('./eu/allocate/quota_ordinal',{
+                    params:{
+                    quota_id:yearQuoata,
+                    type_rice_id:typeRice
+                    }
+                })
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getQuotaOrdinal = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            }
         });
     </script>
 </dom-module>
