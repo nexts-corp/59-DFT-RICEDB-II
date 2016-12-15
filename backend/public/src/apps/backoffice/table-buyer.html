@@ -1,4 +1,4 @@
-<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="components/panel-right.html">
 <link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/buyer/insert-buyer.html">
@@ -46,7 +46,7 @@
     }
     </style>
     <template>
-      <content-panel>
+      <panel-right>
         <grid>
           <paper-material elevation="1" class="elevation">
 
@@ -102,7 +102,7 @@
             </iron-pages>
           </div>
         </panel>
-      </content-panel>
+      </panel-right>
     </template>
     <script>
         Polymer({
@@ -129,13 +129,13 @@
                 this.glQuery('refreshBuyer',this)
             },
             _toggleDrawer: function(e) {
-              this.glQuery('contentPanel').changDrawer();
+              this.glQuery('panelRight').changDrawer();
               this.layerContent ="addRedRegBuyer";
             },
             _edit: function(e) {
               // console.log(e.target.data);
               this.dataSelect = e.target.data;
-              this.glQuery('contentPanel').changDrawer();
+              this.glQuery('panelRight').changDrawer();
               this.layerContent ="editRegBuyer";
             },
             _delete: function(e){
