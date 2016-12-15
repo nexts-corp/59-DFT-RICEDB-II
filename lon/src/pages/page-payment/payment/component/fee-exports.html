@@ -27,7 +27,8 @@
      <div class="container">
        <gl-grid-row width="{{getWidth}}">
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
+           [[changeString2Num(data.*,'fee_no')]]
+           <gl-form-input class="required" required autofocus allowed-pattern="[0-9]" format-number="on" disabled="[[isInputDisabled]]"label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>

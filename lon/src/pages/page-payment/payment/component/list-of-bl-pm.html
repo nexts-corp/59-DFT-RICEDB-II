@@ -23,7 +23,7 @@
   <template>
     <div class="title">ใบตราส่งสินค้าทางทะเล</div>
     <div class="flex searchInput ">
-       <div class="horizontal end-justified layout">{{searchInput}}
+       <div class="horizontal end-justified layout">
          <div class="labelSearch">B/L No.</div>{{_searchInArray(searchInput)}}
          <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
          <paper-icon-button icon="search"></paper-icon-button>
@@ -59,20 +59,17 @@
     Polymer({
       is: "list-of-bl-pm",
       observers:[
-        'check(data)'
+        'initDatabl(data)'
       ],
       behaviors: [
           g2gCongtroller
       ],
       properties: {
-        vessel: {
-          type: Boolean
-        },
         newData:{
           type:Object
         }
       },
-      check:function (data) {
+      initDatabl:function (data) {
         // console.log(data);
         this.newData = this.g2gClone(data);
         // console.log('clone new==>',this.newData);
@@ -90,7 +87,7 @@
             });
             this.newData=arr;
           }else{
-            this.check(this.data);
+            this.initDatabl(this.data);
           }
       },
       getBlDetail:function (e) {

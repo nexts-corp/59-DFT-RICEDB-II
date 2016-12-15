@@ -24,7 +24,7 @@
     <div class="title">ค่าธรรมเนียม</div>
     <div class="flex searchInput ">
        <div class="horizontal end-justified layout">
-         <div class="labelSearch">FEE No.</div>{{searchInput}}
+         <div class="labelSearch">FEE No.</div>{{_searchInArray(searchInput)}}
          <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
          <paper-icon-button icon="search"></paper-icon-button>
        </div>
@@ -39,15 +39,15 @@
             </tr>
           </thead>
           <tbody class="table-body">
-            <template is="dom-repeat" items="[[data]]" as="contract">
-              <template is="dom-repeat" items="[[contract.fee_detail]]" >
+            <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
+              <template is="dom-repeat" items="[[newData]]" >
                 <tr data="[[item]]" on-tap="getFeeDetail">
-                  <td>[[contract.cl_name]]</td>
-                  <td>[[contract.shm_name]] ([[contract.shm_no]])</td>
+                  <td>[[item.cl_name]]</td>
+                  <td>[[item.shm_name]] ([[item.shm_no]])</td>
                   <td>[[item.fee_name]] ([[item.fee_no]])</td>
                 </tr>
               </template>
-            </template>
+            <!-- </template> -->
          </tbody>
       </table>
   </template>
@@ -55,10 +55,34 @@
     Polymer({
       is: "list-of-fee",
       observers:[
-        'check(data)'
+        'initDataFee(data)'
       ],
-      check:function (data) {
-        console.log(data);
+      behaviors: [
+          g2gCongtroller
+      ],
+      properties: {
+        newData:{
+          type:Object
+        }
+      },
+      initDataFee:function (data) {
+        // console.log(data);
+        this.newData = this.g2gClone(data);
+      },
+      _searchInArray:function (searchInput) {
+          // console.log(searchInput == '');
+          if (searchInput != '') {
+            let arr=[];
+            this.data.map((el)=>{
+              if (el.fee_name.search(searchInput) > -1) {
+                   console.log('search==> ',el);
+                    arr.push(el);
+              }
+            });
+            this.newData=arr;
+          }else{
+            this.initDataFee(this.data);
+          }
       },
       getFeeDetail:function (e) {
         this.fire('get-fee-detail',{detail:e.currentTarget.data.fee_id});
