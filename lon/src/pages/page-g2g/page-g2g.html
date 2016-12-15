@@ -67,33 +67,6 @@
           <div class="addContract" name="listOfShipment">
             <list-of-shipments  data-for-select="[[dataForShipment]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></list-of-shipments>
           </div>
-          <!-- <taps-g2g name="contractDetail">
-            <section-content name="detail"> -->
-              <!-- <contract-detail name="contractDetail"></contract-detail> -->
-            <!-- </section-content>
-            <section-content name="print">
-              <print-files></print-files>
-            </section-content>
-            <section-content name="file">
-              <upload-files></upload-files>
-            </section-content>
-          </taps-g2g> -->
-          <!-- <confirm-detail name="addConfirm"></confirm-detail> -->
-          <!-- <list-of-confirm name=""> </list-of-confirm>
-          <list-of-shipments name=""></list-of-shipments>
-
-          <shipment-detail name=""></shipment-detail>
-          <taps-g2g>
-            <section-content name="detail">
-              <contract-detail></contract-detail>
-            </section-content>
-            <section-content name="print">
-              <print-files></print-files>
-            </section-content>
-            <section-content name="file">
-              <upload-files></upload-files>
-            </section-content>
-          </taps-g2g> -->
         </iron-pages>
       </div>
 
@@ -154,6 +127,11 @@
               titlePanelRight:{
                 type:String,
                 value:'การซื้อขายข้าวระหว่างประเทศ'
+              },
+
+              pageInConponents:{
+                type: Object,
+                value:{listOfConfirm:'listOfConfirm',listOfShipment:'listOfShipment'}
               }
             },
             ready: function() {
@@ -218,7 +196,7 @@
                 this.dataForShipment.countryPort =  data;
                 this.notifyPath('dataForShipment.countryport');
               });
-              console.log(this.dataForShipment);
+              // console.log(this.dataForShipment);
             },
             // end_getContractList
             _getDataForConfirm:function () {

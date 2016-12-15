@@ -5,21 +5,17 @@
       text-align: center;
       font-size: var(--font-size-large);
     }
-
     .text-center{
       text-align: center;
     }
-
     .text-right{
       text-align: right;
     }
-
     .header-grey {
       background-color: var(--paper-grey-100);
       color: var(--paper-grey-600);
       font-size: var(--font-size-h4);
     }
-
     .header-black {
       color: var(--paper-black-600);
       font-size: var(--font-size-h4);
@@ -44,20 +40,14 @@
     .table-head > tr > th:nth-child(1) {
       width: 5%;
     }
-    .table-head > tr > th:nth-child(2) {
+    .table-head > tr > th:nth-child(2),
+    .table-head > tr > th:nth-child(4),
+    .table-head > tr > th:nth-child(6)  {
       width: 15%;
     }
-    .table-head > tr > th:nth-child(3) {
-      width: 10%;
-    }
-    .table-head > tr > th:nth-child(4) {
-      width: 15%;
-    }
+    .table-head > tr > th:nth-child(3),
     .table-head > tr > th:nth-child(5) {
       width: 10%;
-    }
-    .table-head > tr > th:nth-child(6) {
-      width: 15%;
     }
     .table-head > tr > th:nth-child(7) {
       width: 20%;
@@ -84,9 +74,9 @@
           <div class="header-black">ชื่อผู้ส่งออก</div>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <template is="dom-repeat" items="{{dataName}}">
-            <div class="header-black">{{item.seller_name_th}}</div>
-          </template>
+          <!-- <template is="dom-repeat" items="{{dataName}}"> -->
+            <div class="header-black">[[_getNameExport(dataForSelected.exporterSelected)]]</div>
+          <!-- </template> -->
         </gl-grid-col>
       </gl-grid-row>
     </div>
@@ -169,6 +159,7 @@
       is: "payment-export",
       behaviors: [
         g2gModelBehavior,
+        g2gCongtroller,
         FormatNumberBehavior
       ],
       properties: {
@@ -194,7 +185,14 @@
       },
       observers:[
         // '_searchExporter(data.exporter_id)'
+        '_changeDataPayment(data.pay_date)'
       ],
+      _changeDataPayment:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          this.set('data.pay_date', date);
+          this.notifyPath('data.pay_date');
+        });
+      },
       attached: function() {
         this.getExporters();
         this.getBank();
@@ -211,15 +209,19 @@
           this.notifyPath('dataForSelected.dataBank')
         });
       },
-
+      _getNameExport:function (exporter_id) {
+        if (exporter_id) {
+          let nameExport = this.dataForSelected.exporter_id.filter((exporter)=> exporter.exporter_id == exporter_id );
+          return nameExport[0].seller_name_th;
+        }
+      },
       _searchExporter:function(e){
         let exporter_id = e.detail.value;
-        console.log('exporter_id =>',exporter_id);
         if (exporter_id) {
           this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
             this.dataForSelected.exporterDetail = data;
-            console.log(data);
-            console.log(this.dataForSelected);
+            // console.log(this.dataForSelected.exporterDetail);
+            // console.log(this.dataForSelected);
             this.notifyPath('dataForSelected.exporterDetail');
             if (this.dataForSelected.exporterDetail != null) {
               this.$$('#notfound').setAttribute("hidden", "hidden");
@@ -250,12 +252,12 @@
         _confirmToast:function(result,detail){
           if(result == true){
             // console.log(detail.datas);
-            console.log(detail.data);
+            // console.log(detail.data);
             this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
             this.insert('./g2g/payment/insert', detail.data, () => {
               // this.glQuery('refreshBank')._searchExporter();
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                console.log('success');
+                // console.log('success');
               }});
               this.$.dialog.toggle();
              });

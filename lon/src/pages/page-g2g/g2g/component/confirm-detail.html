@@ -232,13 +232,13 @@
       },
       _obCalcWeight:function (data,type_rice_quantity) {
         let total = 0;
-        console.log(data,type_rice_quantity);
+        // console.log(data,type_rice_quantity);
         let datas = this.data.cl_type_rice;
           for(index in datas){
                 total += parseFloat(datas[index].type_rice_quantity);
           }
         this.cl_total_quantity = numeral(total).format('0,0');
-        console.log(typeof this.cl_total_quantity);
+        // console.log(typeof this.cl_total_quantity);
         // console.log(this.cl_total_quantity);
         if (this.cl_total_quantity == 'NaN') {
           this.cl_total_quantity=0;
@@ -352,16 +352,18 @@
        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
            status:'dialog',
            text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
-           confirmed:this._deleteDataConfirm, //function ที่ใช้รับค่า ปุ่ม
+           confirmed:this._deleteDataConfirm.bind(this), //function ที่ใช้รับค่า ปุ่ม
            el: this, // compontents
            data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
        })
      },
      _deleteDataConfirm:function(result,detail){
        if (result == true) {
-         detail.el.delete('./g2g/confirm/delete/id/',detail.data.cl_id, () => {
-           detail.el.fire('get-list-confirm',{contractId:detail.data.contract_id});
-           detail.el.backPage();
+         this.delete('./g2g/confirm/delete/id/',detail.data.cl_id, () => {
+           this.fire('get-list-confirm',{contractId:detail.data.contract_id});
+              //  this.oldData={};
+           this.backPage();
+
          });
        }
     },

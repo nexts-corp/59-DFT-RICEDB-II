@@ -35,12 +35,14 @@
   <template>
 
     <gl-form-panel set-padding="10px 20px 10px 20px">
-      <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-        <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
-        <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
-        <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
-        <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
-      </gl-form-panel-head>
+      <template is="dom-if" if="[[!isViewSeleted]]">
+        <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
+          <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
+          <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
+          <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
+          <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
+        </gl-form-panel-head>
+      </template>
     <gl-form-panel-body>
 
     <div class="text">NEW COMMERCIAL INVOICE</div>
@@ -255,6 +257,7 @@
 
           <paper-button class="gl-btn-primary" raised on-tap="createInvoice" hidden="[[!isViewSeleted]]">Create Invoice</paper-button>
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+          <paper-button class="gl-btn-danger" on-tap="calcelContract" raised hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
           <paper-button class="gl-btn-success" raised on-tap="saveInvoice" hidden="[[isViewSeleted]]">Save Invoice</paper-button>
         </template>
     </gl-form-panel-footer>
@@ -279,7 +282,16 @@
           value:''
         },
       },
-      observers:['_obCheckDataForWrite(data)'],
+      observers:[
+        '_obCheckDataForWrite(data)',
+        '_changeDataCommercial(data.invoice_date)'
+      ],
+      _changeDataCommercial:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          this.set('data.invoice_date', date);
+          this.notifyPath('data.invoice_date');
+        });
+      },
       _obCheckDataForWrite:function (data) {
         if (data.cl_quality != null) {
           this.cl_quality = data.cl_quality.toUpperCase();
@@ -319,7 +331,7 @@
       _saveInvoice:function (result,detail) {
         if (result == true) {
           this.update('./g2g/invoice/update',detail.data, () => {
-            console.log(detail.data);
+            // console.log(detail.data);
             this.fire('get-invoice-list',{detail:detail.data.contract_id});
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
               callback:()=>{
@@ -355,7 +367,7 @@
         }
       },
       checkPrice:function (data) {
-        console.log(data.contract_date);
+        // console.log(data.contract_date);
         // this._toWords(data.base.amount_usd);
         // console.log(this._toWords(data.base.amount_usd));
         var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -380,7 +392,7 @@
           var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
           var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
           var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-          console.log(amount_usd);
+          // console.log(amount_usd);
           var s = amount_usd.toString();
           s = s.replace(/[\, ]/g, '');
           if (s != parseFloat(s)) return 'not a number';
