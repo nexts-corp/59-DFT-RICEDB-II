@@ -66,14 +66,23 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.insert('./common/carrier/insert', datas, () => {
-            this.data = {};
-            this.glQuery('refreshCarrier').getCarrier();
-            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-              console.log('success');
-            }});
-           });
+          this.read('./common/check/duplicate?table=carrier&field=carrier_name&value='+datas.carrier_name, (response) => {
+            if (response == 0) {
+              this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+              this.insert('./common/carrier/insert', datas, () => {
+                this.data = {};
+                this.glQuery('refreshCarrier').getCarrier();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'ชื่อผู้ให้บริการเรือนี้มีอยู่แล้ว',
+                callback:function(){
+                }})
+            }
+            });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
