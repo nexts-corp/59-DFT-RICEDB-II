@@ -44,7 +44,7 @@
               <template is="dom-repeat" items="[[contract.bl_detail]]" >
                 <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
                   <td>[[item.cl_name]]</td>
-                  <td>[[contract.shm_name]] ([[contract.shm_no]])</td>
+                  <td>[[item.shm_name]] ([[item.shm_no]])</td>
 
                   <td>[[item.bl_no]]</td>
 
@@ -76,12 +76,39 @@
           // var str = "The rain in SPAIN stays mainly in the plain";
           // var res = str.match(/ain/gi);
           // console.log(res);
-          this.data.map((el)=>{
-              console.log(el);
-          });
+          if (searchInput != '') {
+            // let cc = this.data.filter(x => x.shm_name == 'งวด');
+            // console.log(cc);
+            // console.log(this.data.find(x => x.shm_name === searchInput));
+            this.oldData.map((el,index)=>{
+
+              // let re = el.bl_detail.map((bl,index)=>{
+              //   // console.log(bl.bl_no.search(searchInput));
+              //   if (bl.bl_no.search(searchInput) > -1) {
+              //      console.log(bl,index);
+              //     return bl;
+              //   }
+              // });
+              // if(typeof re !== 'undefined' && re !== 'undefined'){
+              //   console.log(re);
+              // }
+              // console.log(el.cl_name = 'confirm 1 sdfdfsd confirm 1');
+              // console.log(el.cl_name.match(/'confirm 1'/gi));
+              // el.map((blNo)=>{
+              //       console.log(blNo);
+              //     });
+            });
+          }
+
+
+          // ss.map((el)=>{
+          //     // el.map((blNo)=>{
+          //     //   console.log(blNo);
+          //     // });
+          // });
       },
       getBlDetail:function (e) {
-        console.log(this.data);
+        // console.log(this.data);
         this.fire('get-bl-detail',{detail:e.currentTarget.data});
       }
     });

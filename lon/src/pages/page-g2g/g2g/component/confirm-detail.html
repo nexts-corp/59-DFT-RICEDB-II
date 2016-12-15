@@ -66,7 +66,8 @@
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-            <gl-form-input class="required" required  autofocus  disabled="[[isInputDisabled]]" error-message="กรุณาลำดับ" required label="ลำดับ" always-float-label value="{{data.cl_no}}"></gl-form-input>
+            [[changeString2Num(data.*,'cl_no')]]
+            <gl-form-input class="required" required  autofocus allowed-pattern="[0-9]" format-number="on" disabled="[[isInputDisabled]]" error-message="กรุณาลำดับ" required label="ลำดับ" always-float-label value="{{data.cl_no}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
             <gl-form-input class="required" required   disabled="[[isInputDisabled]]" error-message="กรุณาใสชื่อสัญญาย่อย" required label="ชื่อสัญญาย่อย" always-float-label value="{{data.cl_name}}"></gl-form-input>
