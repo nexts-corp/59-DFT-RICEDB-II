@@ -128,7 +128,7 @@
                                 <td></td>
                                 <td class="right">[[formatNumber(data.sum_for_cal)]]</td>
                                 <td class="right">[[formatNumber(data.quota_amount)]]</td>
-                                <td></td>
+                                <td class="right">[[_sumQuantity(data.spreadsheets.*)]]</td>
                             </tr>
                         </tbody>
                     </table>
@@ -154,6 +154,27 @@
                     type: Array,
                     observer: '_getYear'
                 }
+            },
+            _sumQuantity:function(item){
+                var answer = 0;
+                
+                item.base.map((data)=>{
+                    if(typeof data.editQuantity == 'undefined'){
+                        // console.log(data.editQuantity);
+                        answer = this.data.quota_amount;
+                    }
+                    else {
+                        answer += parseInt(data.editQuantity);
+                    }
+                   
+                });
+                if(isNaN(answer)==true){
+                    return ''
+                }
+                else {  
+                    return this.formatNumber(answer);
+                }
+               
             },
             _getYear:function(){
                this.data.spreadsheets.map((item)=>{
