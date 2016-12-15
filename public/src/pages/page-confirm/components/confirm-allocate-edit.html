@@ -137,7 +137,7 @@
         <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
         <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
     </div>
-
+   
   </template>
   <script>
     Polymer({
@@ -146,7 +146,14 @@
         status:{
           type: String,
           value: '??'
+        },
+        data:{
+            type: Object,
+            observer: '_getData'
         }
+      },
+      _getData:function(){
+        console.log(this.data);
       }
     });
   </script>
