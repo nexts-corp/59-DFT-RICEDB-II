@@ -17,14 +17,6 @@
   <template>
     <div class="text-center">แก้ไขข้อมูลสายเรือ</div>
 
-    <!-- <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-label-input class="margin-top" label="รหัสสายเรือ :" value="{{data.shipline_id}}"></gl-form-label-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-    </gl-grid-row> -->
-
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -68,13 +60,22 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.update('./common/shipline/update', datas, () => {
-          this.glQuery('refreshShipline').getShipline();
-          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-            console.log('success');
-          }});
-         });
+          this.read('./common/check/duplicate?table=shipline&field=shipline_name&value='+datas.shipline_name, (response) => {
+            if (response == 0) {
+              this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+              this.update('./common/shipline/update', datas, () => {
+              this.glQuery('refreshShipline').getShipline();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+             });
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'ชื่อสายเรือนี้มีอยู่แล้ว',
+                callback:function(){
+                }})
+            }
+            });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',

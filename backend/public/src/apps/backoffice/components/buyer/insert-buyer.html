@@ -20,10 +20,11 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top checkData" label="Buyer Name (ชื่อผู้ซื่อ) :" placeholder="กรอกชื่อ" value="{{data.buyer_name}}" error-message="กรุณากรอกชื่อผู้ซื้อ" required></gl-form-input>
+        <gl-combo-box class="checkData" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
+            item-value-path="country_id" value="{{data.country_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top checkData" label="Buyer Fullname (ชื่อเต็มผู้ซื้อ) :" placeholder="กรอกชื่อเต็ม" value="{{data.buyer_fullname}}" error-message="กรุณากรอกชื่อผู้ซื้อ" required></gl-form-input>
+        <gl-form-input class="margin-top checkData" label="Buyer Name (ชื่อผู้ซื้อ) :" placeholder="กรอกชื่อผู้ซื้อ" value="{{data.buyer_name}}" error-message="กรุณากรอกชื่อผู้ซื้อ" required></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -45,14 +46,6 @@
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input class="margin-top checkData" label="Tel (เบอร์โทรศัพท์) :" placeholder="กรอกเบอร์โทรศัพท์" value="{{data.buyer_tel}}" error-message="กรุณากรอกเบอร์โทรศัพท์" required></gl-form-input>
-      </gl-grid-col>
-    </gl-grid-row>
-
-    <gl-grid-row>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="checkData" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
-            item-value-path="country_id" value="{{data.country_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -92,13 +85,12 @@
       },
       _save:function functionName() {
         var datas = {
+          country_id: this.data.country_id,
           buyer_name: this.data.buyer_name,
-          buyer_fullname: this.data.buyer_fullname,
           buyer_masks: this.data.buyer_masks,
           buyer_email: this.data.buyer_email,
           buyer_fax: this.data.buyer_fax,
           buyer_tel: this.data.buyer_tel,
-          country_id: this.data.country_id,
           buyer_address: this.data.buyer_address
         }
         // console.log(datas);
@@ -109,14 +101,23 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.insert('./common/buyer/insert', datas, () => {
-            this.data = {};
-            this.glQuery('refreshBuyer').getBuyer();
-            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-              console.log('success');
-            }});
-           });
+          this.read('./common/check/duplicate?table=buyer&field=buyer_name&value='+datas.buyer_name, (response) => {
+            if (response == 0) {
+              this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+              this.insert('./common/buyer/insert', datas, () => {
+                this.data = {};
+                this.glQuery('refreshBuyer').getBuyer();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'ชื่อผู้ส่งออกนี้มีอยู่แล้ว',
+                callback:function(){
+                }})
+            }
+            });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -131,7 +132,6 @@
       getCountry: function() {
         this.country_id = this.country_id || this.$.country_id;
         this.read('./common/country', (data) => {
-          this.dataCountry = data;
           this.country_id.items = data;
         });
       }
