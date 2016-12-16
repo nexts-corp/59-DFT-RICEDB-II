@@ -4,7 +4,7 @@
 <!--<link rel="import" href="./components/calculate-listQuota.html">-->
 
 <dom-module id="page-calculate">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    <style is="custom-style" include="gl-size gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -67,6 +67,10 @@
           font-family: 'CSChatThaiUI', sans-serif !important;
           -webkit-font-smoothing: antialiased;
         }
+        .flex-equal-justified {
+          @apply(--layout-horizontal);
+          @apply(--layout-justified);
+        }
     </style>
     <template>
     <content-panel>
@@ -84,15 +88,11 @@
           <div class="fontContent">
               การคำนวณส่วนจัดสรรข้าวภายใต้โควตาภาษีสหภาพยุโรป
           </div>
-          <div class="container layout horizontal">
-            <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
-            <!--<gl-form-dropdown-menu label="ปีโควตา">
-              <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
-                <template is="dom-repeat" items="{{getYear}}">
-                  <paper-item class="font" year="{{item}}">{{item}}</paper-item>
-                </template>
-              </paper-listbox>
-            </gl-form-dropdown-menu>-->
+          <div class="layout horizontal">
+            <div class="container flex-equal-justified">
+              <div><gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box></div>
+              <div><paper-button hidden="{{hide}}" raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter">ตั้งค่าการคำนวณโควตา</paper-button></div>
+            </div>
           </div>
           
           <div style="overflow-x:auto; padding:20px;">
