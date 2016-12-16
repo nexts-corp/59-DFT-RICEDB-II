@@ -158,7 +158,7 @@
       properties: {
         data: {
           type: Object,
-          value:{ship:[{ship_id:'',ship_voy_no:''}]},
+          value:{bl_no:'',ship:[{ship_id:'',ship_voy_no:''}]},
           notify: true
         },
         dataForSelect:{
@@ -286,14 +286,16 @@
         });
       },
       _oBChangeBooking:function (book_no) {
-
-        if (typeof this.data.bl_no !== 'undefined' && this.data.bl_no !== 'undefined') {
-          console.log(this.data.book_no.length);
-          console.log(this.data.bl_no.length);
-          this.data.bl_no = book_no;
-          this.notifyPath('data.bl_no');
+        // console.log(book_no);
+        if (typeof book_no !== 'undefined' && book_no!== 'undefined') {
+          // console.log('book_no',book_no);
+          // console.log(this.data.book_no.length);
+          // console.log(this.data.bl_no.length);
+          if (this.data.bl_no.length < this.data.book_no.length) {
+            this.data.bl_no = book_no;
+            this.notifyPath('data.bl_no')
+          }
         }
-
       },
       _oBChangePod:function (dest_port_id) {
         this.data.deli_port_id = dest_port_id;

@@ -38,14 +38,20 @@
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
         <gl-form-input disabled label="Tel."  value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
       </gl-grid-col>
+      <!-- 121 -->
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-combo-box  required class="required" label="Booking No." always-float-label item-label-path="book_no" disabled="[[!isInputDisabled]]"
+           item-value-path="book_no" items="{{blNos}}" value="{{data.book_no}}"></gl-combo-box>
+        <!-- <gl-form-input  disabled required class="required" label="Booking No."always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.book_no}}"></gl-form-input> -->
+      </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no" disabled="[[!isInputDisabled]]"
-           item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}"></gl-combo-box>
+        <gl-form-input  disabled required class="required" label="B/L No." always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.bl_no}}" ></gl-form-input>
+        <!-- <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no" disabled="[[!isInputDisabled]]"
+           item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}"></gl-combo-box> -->
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input  disabled required class="required" label="Booking No."always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.book_no}}"></gl-form-input>
-      </gl-grid-col>
+
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box disabled  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name"
            item-value-path="carrier_id" items="{{dataForSelect.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
@@ -238,7 +244,7 @@
         },
       },
       observers:[
-        '_oBcheckBl(data.bl_no,dataForSelect)',
+        '_oBcheckBl(data.book_no,dataForSelect)',
         '_obCalWeight(data.shm_det_quantity,dataForSelect)',
         'check(data)',
         '_dataSelected(dataForSelect)',
@@ -269,9 +275,9 @@
         // }
 
       },
-      _oBcheckBl:function (bl_no,dataForSelect) {
-        if (bl_no) {
-          let dataContract = this.blNos.filter((blNos)=> blNos.bl_no == bl_no );
+      _oBcheckBl:function (book_no,dataForSelect) {
+        if (book_no) {
+          let dataContract = this.blNos.filter((blNos)=> blNos.book_no == book_no );
           let blNo =  Object.assign(this.data ,dataContract[0]);
           // console.log(dataContract[0]);
 
@@ -425,7 +431,6 @@
      },
      cancelEditShipmentDetail:function () {
          Object.assign(this.data ,this.dataOld);
-         this.notifyPath('data.bl_no');
          this.notifyPath('data.bl_no');
          this.notifyPath('data.book_no');
          this.notifyPath('data.carrier_id');
