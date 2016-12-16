@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/dataBehavior.html">
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="edit-carrier">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
@@ -16,13 +16,6 @@
 </style>
   <template>
     <div class="text-center">แก้ไขข้อมูลผู้ให้บริการเรือ</div>
-    <!-- <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-label-input class="margin-top" label="รหัสผู้ให้บริการ :" placeholder="กรอกรหัสผู้ให้บริการ" value="{{data.carrier_id}}"></gl-form-label-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-    </gl-grid-row> -->
 
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
@@ -67,8 +60,8 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.read('./common/check/duplicate?table=carrier&field=carrier_name&value='+datas.carrier_name, (response) => {
-            if (response == 0) {
+          // this.read('./common/check/duplicate?table=carrier&field=carrier_name&value='+datas.carrier_name, (response) => {
+          //   if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.update('./common/carrier/update', datas, () => {
               this.glQuery('refreshCarrier').getCarrier();
@@ -76,13 +69,13 @@
                 console.log('success');
               }});
              });
-            }
-            else {
-              this.fire('toast',{status:'connectError',text:'ชื่อผู้ให้บริการเรือนี้มีอยู่แล้ว',
-                callback:function(){
-                }})
-            }
-            });
+            // }
+            // else {
+            //   this.fire('toast',{status:'connectError',text:'ชื่อผู้ให้บริการเรือนี้มีอยู่แล้ว',
+            //     callback:function(){
+            //     }})
+            // }
+            // });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -91,7 +84,7 @@
         }
       },
       _cancel:function() {
-        this.glQuery('contentPanel').changDrawer();
+        this.glQuery('panelRight').changDrawer();
         this.data = {};
       }
     });

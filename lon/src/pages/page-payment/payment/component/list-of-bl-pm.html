@@ -23,12 +23,13 @@
   <template>
     <div class="title">ใบตราส่งสินค้าทางทะเล</div>
     <div class="flex searchInput ">
-       <div class="horizontal end-justified layout">{{searchInput}}
+       <div class="horizontal end-justified layout">
          <div class="labelSearch">B/L No.</div>{{_searchInArray(searchInput)}}
          <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
          <paper-icon-button icon="search"></paper-icon-button>
        </div>
    </div>
+
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
@@ -40,8 +41,8 @@
             </tr>
           </thead>
           <tbody class="table-body">
-            <template is="dom-repeat" items="[[data]]" as="contract">
-              <template is="dom-repeat" items="[[contract.bl_detail]]" >
+            <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
+              <template is="dom-repeat" items="[[newData]]" >
                 <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
                   <td>[[item.cl_name]]</td>
                   <td>[[item.shm_name]] ([[item.shm_no]])</td>
@@ -50,7 +51,7 @@
 
                 </tr>
               </template>
-            </template>
+            <!-- </template> -->
          </tbody>
       </table>
   </template>
@@ -58,54 +59,36 @@
     Polymer({
       is: "list-of-bl-pm",
       observers:[
-        // 'check(data)'
+        'initDatabl(data)'
       ],
       behaviors: [
           g2gCongtroller
       ],
       properties: {
-        vessel: {
-          type: Boolean
+        newData:{
+          type:Object
         }
       },
-      // check:function (data) {
-      //   // console.log(data);
-      // },
+      initDatabl:function (data) {
+        // console.log(data);
+        this.newData = this.g2gClone(data);
+        // console.log('clone new==>',this.newData);
+        // console.log('org==>',this.data);
+      },
       _searchInArray:function (searchInput) {
-          console.log(searchInput == '');
-          // var str = "The rain in SPAIN stays mainly in the plain";
-          // var res = str.match(/ain/gi);
-          // console.log(res);
+          // console.log(searchInput == '');
           if (searchInput != '') {
-            // let cc = this.data.filter(x => x.shm_name == 'งวด');
-            // console.log(cc);
-            // console.log(this.data.find(x => x.shm_name === searchInput));
-            this.oldData.map((el,index)=>{
-
-              // let re = el.bl_detail.map((bl,index)=>{
-              //   // console.log(bl.bl_no.search(searchInput));
-              //   if (bl.bl_no.search(searchInput) > -1) {
-              //      console.log(bl,index);
-              //     return bl;
-              //   }
-              // });
-              // if(typeof re !== 'undefined' && re !== 'undefined'){
-              //   console.log(re);
-              // }
-              // console.log(el.cl_name = 'confirm 1 sdfdfsd confirm 1');
-              // console.log(el.cl_name.match(/'confirm 1'/gi));
-              // el.map((blNo)=>{
-              //       console.log(blNo);
-              //     });
+            let arr=[];
+            this.data.map((el)=>{
+              if (el.bl_no.search(searchInput) > -1) {
+                  //  console.log('search==> ',el);
+                    arr.push(el);
+              }
             });
+            this.newData=arr;
+          }else{
+            this.initDatabl(this.data);
           }
-
-
-          // ss.map((el)=>{
-          //     // el.map((blNo)=>{
-          //     //   console.log(blNo);
-          //     // });
-          // });
       },
       getBlDetail:function (e) {
         // console.log(this.data);

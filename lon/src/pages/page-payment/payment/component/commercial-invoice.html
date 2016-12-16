@@ -378,6 +378,7 @@
         // console.log(data.contract_date);
         // this._toWords(data.base.amount_usd);
         // console.log(this._toWords(data.base.amount_usd));
+        if(typeof data.contract_date !== 'undefined' && data.contract_date !== 'undefined'){
         var monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"
                           ];
@@ -385,8 +386,10 @@
         var monthNum= Number(data.contract_date.substring(5, 7))-1;
         let contractDate = data.contract_date.substring(8, 10)+" "+monthNames[monthNum]+" "+data.contract_date.substring(0, 4);
         return contractDate.toUpperCase();
+        }
       },
       _toWords: function(amount_usd) {
+        if(typeof amount_usd !== 'undefined' && amount_usd !== 'undefined'){
           // num = num.base.amount_usd || 0;
           // Convert numbers to words
           // copyright 25th July 2006, by Stephen Chapman http://javascript.about.com
@@ -400,7 +403,7 @@
           var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
           var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
           var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-          // console.log(amount_usd);
+          console.log(amount_usd);
           var s = amount_usd.toString();
           s = s.replace(/[\, ]/g, '');
           if (s != parseFloat(s)) return 'not a number';
@@ -440,6 +443,9 @@
           }
           let priceWords = str.replace(/\s+/g, ' ').toUpperCase() ;
           return priceWords;
+        }else {
+          return 0;
+        }
       },
       _cleanDataInvoice:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
@@ -448,7 +454,8 @@
             let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to}=data;
             let newDate = {invoice_no,invoice_date,bl_no,invoice_status,made_out_to};
             newDate.invoice_date = new Date(newDate.invoice_date);
-            callback(newDate)
+            el.map((el)=> {el.reset();});
+            callback(newDate);
         }
       },
     });

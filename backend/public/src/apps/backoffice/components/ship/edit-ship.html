@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/dataBehavior.html">
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="edit-ship">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
@@ -16,19 +16,10 @@
 </style>
   <template>
     <div class="text-center">แก้ไขข้อมูลเรือ</div>
-
-    <!-- <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-label-input class="margin-top" label="รหัสเรือ :" value="{{data.ship_id}}"></gl-form-label-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-    </gl-grid-row> -->
-
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกสายเรือ" required style="margin-top:15px" id="shipline_id" label="Shipline Name (สายเรือ)" item-label-path="shipline_name"
+        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกสายเรือ" required style="margin-top:15px" items="{{shiplines}}" label="Shipline Name (สายเรือ)" item-label-path="shipline_name"
             item-value-path="shipline_id" value="{{data.shipline_id}}"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
@@ -65,9 +56,6 @@
           gl.behavior.locales,
           dataBehavior
       ],
-      attached: function() {
-        this.getShipline();
-      },
       _edit:function(){
         // console.log(this.data);
         var datas = {
@@ -82,8 +70,8 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.read('./common/check/duplicate?table=ship&field=ship_name&value='+datas.ship_name, (response) => {
-            if (response == 0) {
+          // this.read('./common/check/duplicate?table=ship&field=ship_name&value='+datas.ship_name, (response) => {
+          //   if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.update('./common/ship/update', datas, () => {
               this.glQuery('refreshShip').getShip();
@@ -91,13 +79,13 @@
                 console.log('success');
               }});
              });
-            }
-            else {
-              this.fire('toast',{status:'connectError',text:'ชื่อเรือนี้มีอยู่แล้ว',
-                callback:function(){
-                }})
-            }
-            });
+            // }
+            // else {
+            //   this.fire('toast',{status:'connectError',text:'ชื่อเรือนี้มีอยู่แล้ว',
+            //     callback:function(){
+            //     }})
+            // }
+            // });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -106,15 +94,8 @@
         }
       },
       _cancel:function() {
-        this.glQuery('contentPanel').changDrawer();
+        this.glQuery('panelRight').changDrawer();
         this.data = {};
-      },
-      getShipline: function() {
-        this.shipline_id = this.shipline_id || this.$.shipline_id;
-          this.read('./common/shipline', (data) => {
-            this.dataShipline = data;
-            this.shipline_id.items = data;
-          });
       }
     });
   </script>

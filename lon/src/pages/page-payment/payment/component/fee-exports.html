@@ -27,7 +27,8 @@
      <div class="container">
        <gl-grid-row width="{{getWidth}}">
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
+           [[changeString2Num(data.*,'fee_no')]]
+           <gl-form-input class="required" required autofocus allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]" label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>
@@ -52,20 +53,20 @@
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                  [[changeString2Num(data.*,'rate_tt')]]
-                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
+                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                  <div class="text">ธนาคารเสนอ</div>
                </gl-grid-col>
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                  [[changeString2Num(data.*,'rate_bank')]]
-                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" format-number="on" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
+                 <gl-form-input class="required" required disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
                </gl-grid-col>
              </gl-grid-row>
            </gl-grid-col>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-           <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" format-number="on" value="{{_totalMoney(data.rate_bank,data.amount_usd)}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" allowed-pattern="[0-9||,||.]" format-number="on" value="{{_totalMoney(data.rate_bank,data.amount_usd)}}" placeholder="0.00"></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -74,18 +75,18 @@
        <gl-grid-row>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_internal')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_foreign')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"  always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
            [[changeString2Num(data.*,'fee_other')]]
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"  always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
-           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
+           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" allowed-pattern="[0-9||,||.]" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -188,7 +189,7 @@
                   let shmid= this._getUrl();
                   this.fire('close-drawer',{detail:'close-drawer'});
                   this.fire('get-fee-list',{detail:shmid});
-                  this.editInput();
+                  // this.editInput();
               }
              });
             });
@@ -209,8 +210,8 @@
       },
       _editFee:function (result,detail){
          if (result == true) {
-           console.log(detail.data);
-           console.log(this.data);
+          //  console.log(detail.data);
+          //  console.log(this.data);
            this.update('./g2g/fee/update',detail.data, () => {
              let contract_id= this._getUrl();
              this.fire('get-fee-list',{detail:contract_id});
@@ -273,27 +274,32 @@
        }
     },
       _clearDatafee:function (data,action,callback) {
-        let {rate_bank,rate_tt,fee_other,fee_no,fee_name,fee_internal,fee_foreign}=data;
-        let newData={rate_bank,rate_tt,fee_other,fee_no,fee_name,fee_internal,fee_foreign};
-        newData.invoice=[];
-        this.data.invoice.map((el,indexShmid)=>{
-          if (action == 'insert') {
-            this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
-          } else if (action == 'delete') {
-            this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
-          }
-          newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
-          el.invoice_detail.map((shmDet,indexshmdet)=>{
-            newData.invoice[indexShmid].invoice_detail.push({
-                                  shm_det_id:shmDet.shm_det_id,
-                                  invoice_no:shmDet.invoice_no,
-                                  invoice_date:new Date (shmDet.invoice_date),
-                                  invoice_fee:shmDet.invoice_fee,
-                                });
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        let stat = el.map((el)=> el.validate());
+          if (stat.every(elem => elem == true)) {
+          let {rate_bank,rate_tt,fee_other,fee_no,fee_name,fee_internal,fee_foreign}=data;
+          let newData={rate_bank,rate_tt,fee_other,fee_no,fee_name,fee_internal,fee_foreign};
+          newData.invoice=[];
+          this.data.invoice.map((el,indexShmid)=>{
+            if (action == 'insert') {
+              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
+            } else if (action == 'delete') {
+              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
+            }
+            newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
+            el.invoice_detail.map((shmDet,indexshmdet)=>{
+              newData.invoice[indexShmid].invoice_detail.push({
+                                    shm_det_id:shmDet.shm_det_id,
+                                    invoice_no:shmDet.invoice_no,
+                                    invoice_date:new Date (shmDet.invoice_date),
+                                    invoice_fee:shmDet.invoice_fee,
+                                  });
+            });
           });
-        });
-        newData.fee_date_receipt = new Date(this.data.fee_date_receipt);
-        callback(newData);
+          el.map((el)=> {el.reset();});
+          newData.fee_date_receipt = new Date(this.data.fee_date_receipt);
+          callback(newData);
+        }
       },
       _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,contract_id) {
         let data = {

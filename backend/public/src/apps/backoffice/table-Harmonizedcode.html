@@ -1,9 +1,10 @@
-<link rel="import" href="../g2g/components/content-panel.html">
+<link rel="import" href="components/panel-right.html">
 <link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/Harmonizedcode/insert-Harmonizedcode.html">
 <link rel="import" href="components/Harmonizedcode/edit-Harmonizedcode.html">
-<link rel="import" href="data/dataBehavior.html">
+<link rel="import" href="functionBehavior/dataBehavior.html">
+<link rel="import" href="functionBehavior/searchBehavior.html">
 <dom-module id="backoffice-table-Harmonizedcode">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -41,9 +42,13 @@
       padding: 5px;
       background-color: white;
     }
+    .labelSearch{
+      font-size: var(--font-size-h5);
+      margin: 10px 10px 10px 10px;
+    }
     </style>
     <template>
-      <content-panel>
+      <panel-right>
         <grid>
           <paper-material elevation="1" class="elevation">
 
@@ -51,8 +56,15 @@
 
           <div class="text-head">ระบบจัดการพิกัดข้าว</div>
 
-          <div class="horizontal end-justified layout">
-            <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button>
+          <div class="horizontal justified layout">
+            <div class="horizontal layout" style="margin-top:25px;">
+              <div class="labelSearch">พิกัดข้าว</div>{{_searchInArray(searchInput)}}
+              <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+              <iron-icon icon="search" style="margin-top:10px;"></iron-icon>
+            </div>
+            <div>
+              <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button>
+            </div>
           </div>
 
           <table class="gl-table-default">
@@ -68,7 +80,8 @@
               </tr>
             </thead>
 
-            <template is="dom-repeat" items="{{dataRice}}">
+            <!-- <template is="dom-repeat" items="{{dataRice}}"> -->
+            <template is="dom-repeat" items="[[newData]]">
               <tbody>
                 <tr>
                   <td><div class="text-center">{{item.type_rice_id}}</div></td>
@@ -82,6 +95,7 @@
                 </tr>
               </tbody>
             </template>
+            <!-- </template> -->
 
           </table>
           </paper-material>
@@ -97,7 +111,7 @@
             </iron-pages>
           </div>
         </panel>
-      </content-panel>
+      </panel-right>
     </template>
     <script>
         Polymer({
@@ -105,6 +119,9 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
+            observers:[
+              'initDatabl(data)'
+            ],
             properties: {
               layerContent: {
                   type: String,
@@ -112,12 +129,16 @@
               },
               dataRice:{
                 type:Array
+              },
+              newData:{
+                type:Object
               }
             },
             behaviors: [
                 gl.behavior.core,
                 gl.behavior.locales,
-                dataBehavior
+                dataBehavior,
+                searchBehavior
             ],
             attached: function() {
               this.getTyperices();
@@ -128,13 +149,13 @@
                 this.glQuery('refreshRice',this)
             },
             _toggleDrawer: function(e) {
-              this.glQuery('contentPanel').changDrawer();
+              this.glQuery('panelRight').changDrawer();
               this.layerContent ="addRedRegRice";
             },
             _edit: function(e) {
               // console.log(e.target.data);
               this.dataSelect = e.target.data;
-              this.glQuery('contentPanel').changDrawer();
+              this.glQuery('panelRight').changDrawer();
               this.layerContent ="editRegRice";
             },
             _delete: function(e){
@@ -161,10 +182,32 @@
             getTyperices: function() {
               this.read('./common/typerice', (data)=>{
                 this.dataRice = data;
+                this.initDatabl(this.dataRice);
               });
             },
             _back:function() {
               window.history.back();
+            },
+            initDatabl:function (data) {
+              // console.log(data);
+              this.newData = this.Clone(data);
+              // console.log('clone new==>',this.newData);
+              // console.log('org==>',this.data);
+            },
+            _searchInArray:function (searchInput) {
+                // console.log(searchInput == '');
+                if (searchInput != '') {
+                  let arr=[];
+                  this.dataRice.map((el)=>{
+                    if (el.type_rice_id.search(searchInput) > -1) {
+                        //  console.log('search==> ',el);
+                          arr.push(el);
+                    }
+                  });
+                  this.newData=arr;
+                }else{
+                  this.initDatabl(this.dataRice);
+                }
             }
         });
     </script>

@@ -1,4 +1,5 @@
 <link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../../../bower_components/iron-icons/editor-icons.html">
 <dom-module id="payment-export">
 <style include="iron-flex iron-flex-alignment gl-styles" is="custom-style">
     .textheader-center {
@@ -60,7 +61,7 @@
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-              item-value-path="exporter_id" items="[[dataForSelected.exporter_id]]" value="{{dataForSelected.exporterSelected}}" on-value-changed="_searchExporter"></gl-combo-box>
+              item-value-path="exporter_id" items="[[dataForSelected.exporters]]" value="{{dataForSelected.exporterSelected}}" on-value-changed="_searchExporter"></gl-combo-box>
 
         </gl-grid-col>
         <!-- on-value-changed="getPayment" -->
@@ -93,11 +94,10 @@
           <th><div class="text-center">สถานะ</div></th>
         </tr>
       </thead>
-
         <tbody>
+          <template is="dom-repeat" as="datapay" items="{{dataForSelected.exporterDetail}}">
           <tr>
-            <template is="dom-repeat" as="datapay" items="{{dataForSelected.exporterDetail}}">
-              <td></td>
+            <td></td>
               <td><div style="margin-left:10px;">[[datapay.shm_no]]</div></td>
               <td><div style="margin-left:10px;">[[datapay.fee_no]]</div></td>
               <td><div class="text-right">[[formatNumber(datapay.amount_thb_balance)]]</div></td>
@@ -106,10 +106,10 @@
               <td></td>
               <td hidden="{{!datapay.pay_status}}"><div class="text-center">จ่ายเช็คแล้ว</div></td>
               <td hidden="{{datapay.pay_status}}">
-                  <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay"><iron-icon icon="editor:attach-money"></iron-icon>จ่ายเช็ค</paper-button>
+                  <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay" icon="favorite">จ่ายเช็ค</paper-button>
               </td>
-            </template>
           </tr>
+          </template>
         </tbody>
 
     </table>
@@ -136,7 +136,7 @@
       <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-form-input  label="เลขที่เช็ค :" allowed-pattern="[0-9]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{data.pay_no}}" name="pay_no"></gl-form-input>
+          <gl-form-input  label="เลขที่เช็ค :" allowed-pattern="[0-9||,||.]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{data.pay_no}}" name="pay_no"></gl-form-input>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <vaadin-date-picker label="วันที่เช็ค" value="{{data.pay_date}}" name="pay_date"></vaadin-date-picker>
@@ -148,7 +148,7 @@
       </div>
     </paper-dialog>
 
-    <div id="notfound" hidden>
+    <div id="notfound" >
       <div class="horizontal center-justified layout searchBorder">
         <div class="title" style="margin:20px">ไม่พบข้อมูล</div>
       </div>
@@ -199,8 +199,8 @@
       },
       getExporters: function() {
         this.read('./external/exporter?exporter_status=true',(data)=>{
-          this.dataForSelected.exporter_id = data;
-          this.notifyPath('dataForSelected.exporter_id')
+          this.dataForSelected.exporters = data;
+          this.notifyPath('dataForSelected.exporters')
         });
       },
       getBank: function(){
@@ -211,25 +211,37 @@
       },
       _getNameExport:function (exporter_id) {
         if (exporter_id) {
-          let nameExport = this.dataForSelected.exporter_id.filter((exporter)=> exporter.exporter_id == exporter_id );
+          console.log(this.dataForSelected.exporter_id=exporter_id);
+          let nameExport = this.dataForSelected.exporters.filter((exporter)=> exporter.exporter_id == exporter_id );
           return nameExport[0].seller_name_th;
         }
       },
       _searchExporter:function(e){
         let exporter_id = e.detail.value;
         if (exporter_id) {
-          this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
-            this.dataForSelected.exporterDetail = data;
-            // console.log(this.dataForSelected.exporterDetail);
-            // console.log(this.dataForSelected);
-            this.notifyPath('dataForSelected.exporterDetail');
-            if (this.dataForSelected.exporterDetail != null) {
-              this.$$('#notfound').setAttribute("hidden", "hidden");
-            } else {
-              this.$$('#notfound').removeAttribute("hidden");
-            }
-          });
+          this.getExporter(exporter_id);
+
+        }else {
+          // if (this.dataForSelected.exporterDetail != null) {
+          //   this.$$('#notfound').setAttribute("hidden", "hidden");
+          // } else {
+          //   this.$$('#notfound').removeAttribute("hidden");
+          // }
         }
+      },
+      getExporter:function (exporter_id) {
+        console.log(exporter_id);
+        this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
+          this.dataForSelected.exporterDetail = data;
+          // console.log(this.dataForSelected.exporterDetail);
+          // console.log(this.dataForSelected);
+          this.notifyPath('dataForSelected.exporterDetail');
+          if (this.dataForSelected.exporterDetail != null) {
+            this.$$('#notfound').setAttribute("hidden", "hidden");
+          } else {
+            this.$$('#notfound').removeAttribute("hidden");
+          }
+        });
       },
       _pay:function(e) {
         this.dataForSelected.dataPay = e.target.data;
@@ -254,11 +266,14 @@
             // console.log(detail.datas);
             // console.log(detail.data);
             this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+            // console.log(this.dataForSelected.exporter_id);
+
             this.insert('./g2g/payment/insert', detail.data, () => {
               // this.glQuery('refreshBank')._searchExporter();
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                // console.log('success');
+              // this.getExporter(this.dataForSelected.exporter_id);
               }});
+              this.getExporter(this.dataForSelected.exporter_id);
               this.$.dialog.toggle();
              });
           }

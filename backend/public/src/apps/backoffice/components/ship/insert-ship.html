@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/dataBehavior.html">
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="insert-ship">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
     .text-center {
@@ -27,7 +27,7 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกสายเรือ" required style="margin-top:15px" id="shipline_id" label="Shipline Name (สายเรือ)" item-label-path="shipline_name"
+        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกสายเรือ" required style="margin-top:15px" items="{{shiplines}}" label="Shipline Name (สายเรือ)" item-label-path="shipline_name"
             item-value-path="shipline_id" value="{{data.shipline_id}}"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
@@ -63,9 +63,6 @@
           gl.behavior.locales,
           dataBehavior
       ],
-      attached: function() {
-        this.getShipline();
-      },
       _save:function functionName() {
         var datas = {
           ship_name: this.data.ship_name,
@@ -104,15 +101,8 @@
         }
       },
       _cancel:function() {
-        this.glQuery('contentPanel').changDrawer();
+        this.glQuery('panelRight').changDrawer();
         this.data = {};
-      },
-      getShipline: function() {
-        this.shipline_id = this.shipline_id || this.$.shipline_id;
-          this.read('./common/shipline', (data) => {
-            this.dataShipline = data;
-            this.shipline_id.items = data;
-          });
       }
     });
   </script>

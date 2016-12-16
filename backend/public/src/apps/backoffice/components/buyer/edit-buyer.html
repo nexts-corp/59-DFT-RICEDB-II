@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/dataBehavior.html">
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="edit-buyer">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
@@ -20,8 +20,8 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="checkData" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
-            item-value-path="country_id" value="{{data.country_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
+        <gl-combo-box class="checkData" items="{{countrys}}" item-label-path="country_name_th" label="Country (ประเทศ)" item-value-path="country_id"
+        value="{{data.country_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input class="margin-top checkData" label="Buyer Name (ชื่อผู้ซื่อ) :" placeholder="กรอกชื่อผู้ซื้อ" value="{{data.buyer_name}}" error-message="กรุณากรอกชื่อผู้ซื้อ" required></gl-form-input>
@@ -81,9 +81,6 @@
           gl.behavior.locales,
           dataBehavior
       ],
-      attached: function() {
-        this.getCountry();
-      },
       _edit:function(){
         // console.log(this.data);
         var datas = {
@@ -103,8 +100,8 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          this.read('./common/check/duplicate?table=buyer&field=buyer_name&value='+datas.buyer_name, (response) => {
-            if (response == 0) {
+          // this.read('./common/check/duplicate?table=buyer&field=buyer_name&value='+datas.buyer_name, (response) => {
+          //   if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.update('./common/buyer/update', datas, () => {
                 this.glQuery('refreshBuyer').getBuyer();
@@ -112,13 +109,13 @@
                   console.log('success');
                 }});
                });
-            }
-            else {
-              this.fire('toast',{status:'connectError',text:'ชื่อผู้ส่งออกนี้มีอยู่แล้ว',
-                callback:function(){
-                }})
-            }
-            });
+            // }
+            // else {
+            //   this.fire('toast',{status:'connectError',text:'ชื่อผู้ส่งออกนี้มีอยู่แล้ว',
+            //     callback:function(){
+            //     }})
+            // }
+            // });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -127,14 +124,8 @@
         }
       },
       _cancel:function() {
-        this.glQuery('contentPanel').changDrawer();
+        this.glQuery('panelRight').changDrawer();
         // this.data = {};
-      },
-      getCountry: function() {
-        this.country_id = this.country_id || this.$.country_id;
-          this.read('./common/country', (data) => {
-            this.country_id.items = data;
-          });
       }
     });
   </script>
