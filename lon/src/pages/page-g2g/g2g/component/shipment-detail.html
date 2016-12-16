@@ -78,7 +78,7 @@
      <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
         [[changeString2Num(data.*,'shm_no')]]
-        <gl-form-input class="required insetShipment"allowed-pattern="[0-9]" format-number="on" label="ลำดับ" disabled="[[!isInputDisabled]]" always-float-label placeholder="ลำดับที่การส่งมอบสินค้า" value="{{data.shm_no}}"></gl-form-input>
+        <gl-form-input class="required insetShipment"allowed-pattern="[0-9||,||.]" format-number="on" label="ลำดับ" disabled="[[!isInputDisabled]]" always-float-label placeholder="ลำดับที่การส่งมอบสินค้า" value="{{data.shm_no}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,8]]">
         <gl-form-input class="required insetShipment" label="ชื่อ" disabled="[[!isInputDisabled]]" always-float-label placeholder="่ชื่องวดการส่งมอบสินค้า" value="{{data.shm_name}}"></gl-form-input>
@@ -356,6 +356,7 @@
         this.data.shm_status = false;
         this._cleanDataInsertShimment(this.data,(data)=>{
           // data.shm_status = false;
+          this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
           this.insert('./g2g/shipment/insert',data, () => {
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
              callback:()=>{

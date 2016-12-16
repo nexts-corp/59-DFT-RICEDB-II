@@ -41,6 +41,11 @@
     div.textSum >div.flex:nth-child(2)  {
       text-align: right;
     }
+    a:link, a:visited {
+    color: (internal value);
+    text-decoration: underline;
+    cursor: auto;
+}
   </style>
   <template>
       <paper-card class="statistic" heading="{{chartName}}" alt="{{chartName}}">
@@ -112,7 +117,9 @@
           <paper-button raised on-tap="contractDetail">รายละเอียดของสัญญา</paper-button>
           <paper-button raised on-tap="listConfirm">ยืนยันทำสัญญา</paper-button>
           <paper-button raised on-tap="listShipment">ส่งมอบสินค้า</paper-button>
-          <paper-button raised on-tap="listPayment">ชำระเงิน</paper-button>
+          <a href="/payment" tabindex="-1">
+            <paper-button raised on-tap="listPayment">ชำระเงิน</paper-button>
+          </a>
         </div>
       </paper-card>
 

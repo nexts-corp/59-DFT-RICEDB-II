@@ -176,10 +176,19 @@ Polymer({
     });
   },
   _getListShipmentDetail:function (e) {
-    this._getShipment(e.detail.sm_id,(data)=>{
-       this.dataSelected = data;
-       this.notifyPath('dataSelected');
-   });
+    this.read('./g2g/bl/shipment/id/'+e.detail.sm_id,(data)=>{
+      // Object.assign(this.dataForSelect.blNos,data);
+      // this.dataForSelect.blNos=data;
+      this.dataForSelect.blNos=data;
+      // console.log(this.dataForSelect.blNos);
+      this.notifyPath('dataForSelect.blNos');
+
+      this._getShipment(e.detail.sm_id,(data)=>{
+         this.dataSelected = data;
+         this.notifyPath('dataSelected');
+     });
+    });
+
   },
   _getShipment:function (shmId,callback) {
     this.read('./g2g/shipment/id/'+shmId,(data)=>{

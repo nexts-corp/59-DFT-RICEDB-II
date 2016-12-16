@@ -67,7 +67,7 @@
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
             [[changeString2Num(data.*,'cl_no')]]
-            <gl-form-input class="required" required  autofocus allowed-pattern="[0-9]" format-number="on" disabled="[[isInputDisabled]]" error-message="กรุณาลำดับ" required label="ลำดับ" always-float-label value="{{data.cl_no}}"></gl-form-input>
+            <gl-form-input class="required" required  autofocus allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]" error-message="กรุณาลำดับ" required label="ลำดับ" always-float-label value="{{data.cl_no}}"></gl-form-input>
           </gl-grid-col>
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
             <gl-form-input class="required" required   disabled="[[isInputDisabled]]" error-message="กรุณาใสชื่อสัญญาย่อย" required label="ชื่อสัญญาย่อย" always-float-label value="{{data.cl_name}}"></gl-form-input>
@@ -94,7 +94,7 @@
 
               [[changeString2Num(item.*,'type_rice_quantity')]]
               [[_obCalcWeight(item.*,'type_rice_quantity')]]
-              <gl-form-input class="required" required allowed-pattern="[0-9]" format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+              <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
             </gl-grid-col>
@@ -125,7 +125,7 @@
                   </gl-combo-box >
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
-                  <gl-form-input class="required numberBack" allowed-pattern="[0-9]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  <gl-form-input class="required numberBack" allowed-pattern="[0-9||,||.]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                 </td>
                 <td >
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
