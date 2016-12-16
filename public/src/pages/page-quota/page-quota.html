@@ -4,7 +4,7 @@
 
 <dom-module id="page-quota">
 	<template>
-		<style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
+		<style is="custom-style" include="gl-size gl-color gl-table">
 			* {
 				font-family: 'rsuregular', sans-serif;
 				-webkit-font-smoothing: antialiased;
@@ -28,6 +28,7 @@
 				font-size: var(--font-size-h3);
 				font-family: 'rsuregular', sans-serif;
 				-webkit-font-smoothing: antialiased;
+        padding: 10px;
 			}
 			
 			.searchBox {
@@ -56,20 +57,23 @@
 			}
 			
 			.container {
-				margin-left: 30px;
+				padding : 10px;
 			}
       .font{
         font-family: 'CSChatThaiUI', sans-serif !important;
         -webkit-font-smoothing: antialiased;
+      }
+      .flex-equal-justified {
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
       }
 		</style>
 
 		<div class="layout vertical registor">
 
 			<div class="flex">
-				<div class="layout horizontal end-justified">
-					<paper-button raised class="gl-btn-primary" on-tap="_insertData" id="addRedRegExporter">
-						<iron-icon icon="add"></iron-icon> เพิ่ม</paper-button>
+				<div class="layout horizontal">
+				
 				</div>
 			</div>
 
@@ -78,19 +82,14 @@
 			</div>
 
 			<div class="layout horizontal">
-				<div class="container">
-          <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
-					<!--<gl-form-dropdown-menu label="แสดงข้อมูลรายปี">
-						<paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYear}}">
-							<template is="dom-repeat" items="{{getYear}}">
-								<paper-item class="font" year="{{item}}">{{item}}</paper-item>
-							</template>
-						</paper-listbox>
-					</gl-form-dropdown-menu>-->
-				</div>
+        <div class="container flex-equal-justified">
+          <div> <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box></div>
+          <div>	<paper-button raised class="gl-btn-primary" on-tap="_insertData" id="addRedRegExporter">
+          <iron-icon icon="add"></iron-icon> เพิ่มโควตา</paper-button></div>
+        </div>
 			</div>
 
-			<div style="padding:22px">
+			<div class="container">
 				<quota-list data="{{dataList}}" on-data-select="_onDataSelect"></quota-list>
 			</div>
 
