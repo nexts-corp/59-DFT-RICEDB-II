@@ -38,15 +38,20 @@
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
         <gl-form-input disabled label="Tel."  value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
       </gl-grid-col>
+      <!-- 121 -->
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-combo-box  required class="required" label="Booking No." always-float-label item-label-path="book_no" disabled="[[!isInputDisabled]]"
+           item-value-path="book_no" items="{{blNos}}" value="{{data.book_no}}"></gl-combo-box>
+        <!-- <gl-form-input  disabled required class="required" label="Booking No."always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.book_no}}"></gl-form-input> -->
+      </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no" disabled="[[!isInputDisabled]]"
-           item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}"></gl-combo-box>
-        <!-- <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด"   value="{{data.bl_no}}"></gl-form-input> -->
+        <gl-form-input  disabled required class="required" label="B/L No." always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.bl_no}}" ></gl-form-input>
+        <!-- <gl-combo-box  required class="required" label="B/L No." always-float-label item-label-path="bl_no" disabled="[[!isInputDisabled]]"
+           item-value-path="bl_no" items="{{blNos}}" value="{{data.bl_no}}"></gl-combo-box> -->
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input  disabled required class="required" label="Booking No."always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.book_no}}"></gl-form-input>
-      </gl-grid-col>
+
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box disabled  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name"
            item-value-path="carrier_id" items="{{dataForSelect.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
@@ -107,14 +112,14 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input disabled required allowed-pattern="[0-9]" format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
+          <gl-form-input disabled required allowed-pattern="[0-9||,||.]" format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input disabled required allowed-pattern="[0-9]" format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
+        <gl-form-input disabled required allowed-pattern="[0-9||,||.]" format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker disabled required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
+        <vaadin-date-picker disabled required class="required"label="Cut of Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input disabled label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด"  value="{{data.packing_time}}" ></gl-form-input>
@@ -135,13 +140,17 @@
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input disabled label="Confirmation Letter" value="[[dataForSelect.cl_no]]" always-float-label></gl-form-input>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
         <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="type_rice_id" items="[[dataForSelect.cl_type_rice]]" value="{{data.type_rice_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="package_id" items="[[_getRiceTypeForPackage(data.type_rice_id,dataForSelect)]]" value="{{data.package_id}}" always-float-label></gl-combo-box>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        [[changeString2Num(data.*,'shm_det_quantity')]]
+        <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" label="ปริมาณ (ตัน)" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       [[_getPackageForPrice(data.package_id,dataForSelect)]]
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -150,10 +159,7 @@
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input disabled label="น้ำหนักกระสอบ (gram/bag)"  value="[[price.package_weight_bag]]" always-float-label></gl-form-input>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        [[changeString2Num(data.*,'shm_det_quantity')]]
-        <gl-form-input class="required" required allowed-pattern="[0-9]" format-number="on" label="ปริมาณ (ตัน)" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
-      </gl-grid-col>
+
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input disabled label="MARKS"  value="[[dataForSelect.buyer_masks]]" always-float-label></gl-form-input>
@@ -238,7 +244,7 @@
         },
       },
       observers:[
-        '_oBcheckBl(data.bl_no,dataForSelect)',
+        '_oBcheckBl(data.book_no,dataForSelect)',
         '_obCalWeight(data.shm_det_quantity,dataForSelect)',
         'check(data)',
         '_dataSelected(dataForSelect)',
@@ -269,16 +275,17 @@
         // }
 
       },
-      _oBcheckBl:function (bl_no,dataForSelect) {
-        if (bl_no) {
-          let dataContract = this.blNos.filter((blNos)=> blNos.bl_no == bl_no );
+      _oBcheckBl:function (book_no,dataForSelect) {
+        if (book_no) {
+          let dataContract = this.blNos.filter((blNos)=> blNos.book_no == book_no );
           let blNo =  Object.assign(this.data ,dataContract[0]);
-          // console.log(this.dataForSelect);
+          // console.log(dataContract[0]);
 
           this.data = blNo;
 
           this.notifyPath('data.ship');
           this.data.ship.map((ships,index)=>{
+            // console.log(ships);
             this.notifyPath('data.'+index+'.ship_id');
             this.notifyPath('data.'+index+'.ship_voy_no');
           });
@@ -318,7 +325,7 @@
             // this.data.shm_det_quantity='',
             this.notifyPath('data.package_id');
             this.notifyPath('data.shm_det_quantity');
-            return typeRice[0].package
+            return typeRice[0].package;
         }
       },
       _getPackageForPrice:function (package_id,dataForSelect) {
@@ -352,6 +359,7 @@
         // console.log(this.data);
         this._cleanShipmentData(this.data,(data)=>{
           data.shm_id=this.dataForSelect.shm_id;
+            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
           this.insert('./g2g/shipment/detail/insert',data, () => {
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
@@ -423,7 +431,6 @@
      },
      cancelEditShipmentDetail:function () {
          Object.assign(this.data ,this.dataOld);
-         this.notifyPath('data.bl_no');
          this.notifyPath('data.bl_no');
          this.notifyPath('data.book_no');
          this.notifyPath('data.carrier_id');

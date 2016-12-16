@@ -24,20 +24,21 @@
     <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
       <div class="horizontal end-justified layout">
         <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
-        <paper-tooltip for="editConfirm" offset="0">Edit Bl/NO</paper-tooltip>
+        <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
        </div>
     </template>
       <gl-form-panel-body>
-        <div class="title">Bill of Landing Number</div>
+        <div class="title">Booking</div>
       </gl-form-panel-body>
     <gl-form-panel-body>
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.bl_no}}" disabled="[[isInputDisabled]]"></gl-form-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input  required class="required"label="Booking No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.book_no}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input  required class="required"label="B/L No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.bl_no}}" disabled="[[isInputDisabled]]"></gl-form-input>
+      </gl-grid-col>
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name" disabled="[[isInputDisabled]]"
            item-value-path="carrier_id" items="{{dataForSelect.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
@@ -110,19 +111,24 @@
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
-          <gl-form-input required class="required" allowed-pattern="[0-9]" format-number="on" label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" disabled="[[isInputDisabled]]"></gl-form-input>
+          <gl-form-input required class="required" allowed-pattern="[0-9||,||.]" format-number="on" label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
-        <gl-form-input required class="required" allowed-pattern="[0-9]" format-number="on"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" disabled="[[isInputDisabled]]"
+        <gl-form-input required class="required" allowed-pattern="[0-9||,||.]" format-number="on"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" disabled="[[isInputDisabled]]"
           value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
+        <vaadin-date-picker required class="required"label="Cut of Date"always-float-label class="requested" value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" disabled="[[isInputDisabled]]"></gl-form-input>
+        <vaadin-date-picker required class="required"label="Out of Date"always-float-label class="requested" value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
+
+      <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input label="Out of Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" disabled="[[isInputDisabled]]"></gl-form-input>
+      </gl-grid-col> -->
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <vaadin-date-picker label="Production Date"always-float-label required class="required" value="{{data.product_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
@@ -157,7 +163,7 @@
       properties: {
         data: {
           type: Object,
-          value:{ship:[{ship_id:'',ship_voy_no:''}]},
+          value:{bl_no:'',ship:[{ship_id:'',ship_voy_no:''}]},
           notify: true
         },
         dataForSelect:{
@@ -173,7 +179,7 @@
         }
       },
       observers:[
-        '_oBChangeBooking(data.bl_no)',
+        '_oBChangeBooking(data.book_no)',
         '_oBChangePod(data.dest_port_id)',
         '_getPod(dataForSelect)',
         '_oBCheckVessel(data.ship.*)',
@@ -284,9 +290,17 @@
           }
         });
       },
-      _oBChangeBooking:function (bl_no) {
-        this.data.book_no = bl_no;
-        this.notifyPath('data.book_no');
+      _oBChangeBooking:function (book_no) {
+        // console.log(book_no);
+        if (typeof book_no !== 'undefined' && book_no!== 'undefined') {
+          // console.log('book_no',book_no);
+          // console.log(this.data.book_no.length);
+          // console.log(this.data.bl_no.length);
+          if (this.data.bl_no.length < this.data.book_no.length) {
+            this.data.bl_no = book_no;
+            this.notifyPath('data.bl_no')
+          }
+        }
       },
       _oBChangePod:function (dest_port_id) {
         this.data.deli_port_id = dest_port_id;
