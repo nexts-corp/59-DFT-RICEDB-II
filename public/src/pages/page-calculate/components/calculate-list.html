@@ -2,7 +2,7 @@
 <link rel="import" href="./../../components/data-manage-behavior.html">
 <dom-module id="calculate-list">
     <template>
-        <style is="custom-style" include="gl-table">
+        <style is="custom-style" include="gl-table gl-size gl-color">
             .container {
                 padding: 20px;
                 border: 1px solid #ddd;
@@ -37,13 +37,19 @@
                 @apply(--layout-horizontal);
                 @apply(--layout-justified);
             }
+            paper-button{
+                font-size : 16px;
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
         </style>
         <template is="dom-if" if="{{dataStat}}">
             <div class="container">
                 <div class="flex-equal-justified">
                     <div>ประเภท : </div>
-                    <paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
-                    <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>
+                    <!--<paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
+                    <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>-->
+                    <paper-button hidden="{{active}}" raised class="gl-btn-primary"on-tap="_settingData">ตั้งค่าการคำนวณโควตา</paper-button>
                 </div>
                  <table class="gl-table-default" style="border: 1px solid #ddd;">
                 <thead>
@@ -70,8 +76,9 @@
             
             <div class="flex-equal-justified">
                 <div>ประเภท : {{item.type_rice_name_th}}</div>
-                <paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
-                <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>
+                <!--<paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
+                <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>-->
+                 <paper-button hidden="{{active}}" raised class="gl-btn-primary"on-tap="_settingData">ตั้งค่าการคำนวณโควตา</paper-button>
             </div>
             
             <table class="gl-table-default" style="border: 1px solid #ddd;">
