@@ -44,7 +44,7 @@
         <div class="container">
             <div class="flex-equal-justified">
                 <div class="content">
-                    <gl-form-dropdown-menu label="รายงานการส่งออกข้าวไป EU">
+                    <gl-form-dropdown-menu label="รายงานการส่งออกข้าวไป EU" always-float-label>
                         <paper-listbox class="dropdown-content">
                             <paper-item>ในโควตา</paper-item>
                             <paper-item>นอกโควตา</paper-item>
@@ -52,23 +52,18 @@
                     </gl-form-dropdown-menu>
                 </div> 
                 <div class="content">
-                    <gl-form-dropdown-menu label="เดือน">
-                        <paper-listbox class="dropdown-content">
-                            <template is="dom-repeat" items="{{month}}">
-                                <paper-item>[[item.name]]</paper-item>
-                            </template>
-                        </paper-listbox>
-                    </gl-form-dropdown-menu>
+                     <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{item.month}}"
+                     item-label-path="name" item-value-path="id" error-message="กรุณาเลือกเดือน" always-float-label required></gl-combo-box>
                 </div>
                 <div class="content">
-                    <gl-form-dropdown-menu label="ปี">
+                    <gl-form-dropdown-menu label="ปี" always-float-label>
                         <paper-listbox class="dropdown-content">
                             <paper-item>2559</paper-item>
                         </paper-listbox>
                     </gl-form-dropdown-menu>
                 </div>
                 <div class="content">
-                    <gl-form-dropdown-menu label="บริษัท">
+                    <gl-form-dropdown-menu label="บริษัท" always-float-label>
                         <paper-listbox class="dropdown-content">
                             <paper-item>กรุงไทย</paper-item>
                         </paper-listbox>
