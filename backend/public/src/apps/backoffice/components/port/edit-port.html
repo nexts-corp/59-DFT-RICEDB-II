@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/dataBehavior.html">
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="edit-port">
 <style include="iron-flex iron-flex-alignment gl-color gl-size">
   .text-center {
@@ -32,7 +32,7 @@
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อท่าเรือ" required label="Port Name (ชื่อท่าเรือ) :" placeholder="กรอกชื่อท่าเรือ" value="{{data.port_name}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกประเทศ" required style="margin-top:15px" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
+        <gl-combo-box class="margin-top checkData" error-message="กรุณาเลือกประเทศ" required style="margin-top:15px" items="{{countrys}}" label="Country (ประเทศ)" item-label-path="country_name_th"
             item-value-path="country_id" value="{{data.country_id}}"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
@@ -59,9 +59,6 @@
           gl.behavior.locales,
           dataBehavior
       ],
-      attached: function() {
-        this.getCountry();
-      },
       _edit:function(){
         // console.log(this.data);
         var datas = {
@@ -94,13 +91,6 @@
       _cancel:function() {
         this.glQuery('panelRight').changDrawer();
         this.data = {};
-      },
-      getCountry: function() {
-        this.country_id = this.country_id || this.$.country_id;
-          this.read('./common/country', (data) => {
-            this.country = data;
-            this.country_id.items = data;
-          });
       }
     });
   </script>

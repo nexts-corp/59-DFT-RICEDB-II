@@ -1,4 +1,4 @@
-<link rel="import" href="../../data/dataBehavior.html">
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="insert-buyer">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
     .text-center {
@@ -16,12 +16,11 @@
   </style>
   <template>
     <div class="text-center">เพิ่มข้อมูลผู้ซื้อ</div>
-
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="checkData" id="country_id" label="Country (ประเทศ)" item-label-path="country_name_th"
-            item-value-path="country_id" value="{{data.country_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
+        <gl-combo-box class="checkData" items="{{countrys}}" item-label-path="country_name_th" label="Country (ประเทศ)" item-value-path="country_id"
+        value="{{data.country_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input class="margin-top checkData" label="Buyer Name (ชื่อผู้ซื้อ) :" placeholder="กรอกชื่อผู้ซื้อ" value="{{data.buyer_name}}" error-message="กรุณากรอกชื่อผู้ซื้อ" required></gl-form-input>
@@ -80,9 +79,6 @@
           gl.behavior.locales,
           dataBehavior
       ],
-      attached: function() {
-        this.getCountry();
-      },
       _save:function functionName() {
         var datas = {
           country_id: this.data.country_id,
@@ -128,12 +124,6 @@
       _cancel:function() {
         this.glQuery('panelRight').changDrawer();
         this.data = {};
-      },
-      getCountry: function() {
-        this.country_id = this.country_id || this.$.country_id;
-        this.read('./common/country', (data) => {
-          this.country_id.items = data;
-        });
       }
     });
   </script>

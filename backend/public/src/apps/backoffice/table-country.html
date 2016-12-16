@@ -3,7 +3,8 @@
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 <link rel="import" href="components/country/insert-country.html">
 <link rel="import" href="components/country/edit-country.html">
-<link rel="import" href="data/dataBehavior.html">
+<link rel="import" href="functionBehavior/dataBehavior.html">
+<link rel="import" href="functionBehavior/searchBehavior.html">
 <dom-module id="backoffice-table-country">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
@@ -47,6 +48,10 @@
       padding: 5px;
       background-color: white;
     }
+    .labelSearch{
+      font-size: var(--font-size-h5);
+      margin: 10px 10px 10px 10px;
+    }
     </style>
     <template>
       <panel-right>
@@ -57,8 +62,15 @@
 
           <div class="text-head">ระบบจัดการประเทศ</div>
 
-          <div class="horizontal end-justified layout">
-            <paper-button class="gl-btn-primary button-top" title="เพิ่มประเทศ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มประเทศ</paper-button>
+          <div class="horizontal justified layout">
+            <div class="horizontal layout" style="margin-top:25px;">
+              <div class="labelSearch">ชื่อประเทศ (ภาษาไทย)</div>{{_searchInArray(searchInput)}}
+              <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+              <iron-icon icon="search" style="margin-top:10px;"></iron-icon>
+            </div>
+            <div>
+              <paper-button class="gl-btn-primary button-top" title="เพิ่มประเทศ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มประเทศ</paper-button>
+            </div>
           </div>
 
           <table class="gl-table-default">
@@ -76,7 +88,8 @@
               </tr>
             </thead>
 
-            <template is="dom-repeat" items="{{dataCountry}}">
+            <!-- <template is="dom-repeat" items="{{dataCountry}}"> -->
+            <template is="dom-repeat" items="[[newData]]">
               <tbody>
                 <tr>
                   <td><div class="text-center">{{item.country_id}}</div></td>
@@ -92,6 +105,7 @@
                 </tr>
               </tbody>
             </template>
+            <!-- </template> -->
 
           </table>
           </paper-material>
@@ -115,15 +129,22 @@
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
+            observers:[
+              'initDatabl(data)'
+            ],
             properties: {
               dataCountry:{
                 type:Array
+              },
+              newData:{
+                type:Object
               }
             },
             behaviors: [
                 gl.behavior.core,
                 gl.behavior.locales,
-                dataBehavior
+                dataBehavior,
+                searchBehavior
             ],
             attached: function() {
               this.getCountry();
@@ -167,10 +188,32 @@
             getCountry: function() {
               this.read('./common/country', (data)=>{
                 this.dataCountry = data;
+                this.initDatabl(this.dataCountry);
               });
             },
             _back:function() {
               window.history.back();
+            },
+            initDatabl:function (data) {
+              // console.log(data);
+              this.newData = this.Clone(data);
+              // console.log('clone new==>',this.newData);
+              // console.log('org==>',this.data);
+            },
+            _searchInArray:function (searchInput) {
+                // console.log(searchInput == '');
+                if (searchInput != '') {
+                  let arr=[];
+                  this.dataCountry.map((el)=>{
+                    if (el.country_name_th.search(searchInput) > -1) {
+                        //  console.log('search==> ',el);
+                          arr.push(el);
+                    }
+                  });
+                  this.newData=arr;
+                }else{
+                  this.initDatabl(this.dataCountry);
+                }
             }
         });
     </script>
