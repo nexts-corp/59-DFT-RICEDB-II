@@ -112,18 +112,19 @@ router.get('/exporter/id/:id', function (req, res, next) {
 
                             }
                         })
-                        .merge(function (me2) {
-                            return me2.merge(function (me3) {
-                                return {
-                                    amount_usd: me3('invoice_detail').sum('amount_usd'),
-                                    amount_fee: me3('invoice_detail').sum('invoice_fee'),
-                                    shm_id: me3('invoice_detail')('shm_id')(0)
-                                }
-                            })
+                        .filter(function (f) {
+                            return f('invoice_detail').eq([]).not()
                         })
-                    // .filter(function (f) {
-                    //     return f.eq(0).not()
-                    // })
+                    .merge(function (me2) {
+                        return me2.merge(function (me3) {
+                            return {
+                                amount_usd: me3('invoice_detail').sum('amount_usd'),
+                                amount_fee: me3('invoice_detail').sum('invoice_fee'),
+                                shm_id: me3('invoice_detail')('shm_id')(0)
+                            }
+                        })
+                    })
+
                 }
             })
             .merge(function (me1) {
