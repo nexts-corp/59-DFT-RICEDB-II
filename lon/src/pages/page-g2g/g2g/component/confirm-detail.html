@@ -83,7 +83,12 @@
     <template is="dom-repeat" items="[[data.cl_type_rice]]">
         <div class="bg">
           <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
-                 <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+            <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+          <div class="horizontal end-justified layout">
+                       <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:1em" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบชนิดข้าว</paper-button>
+            </div>
+              </gl-form-panel-body>
+              <gl-form-panel-body label="" set-padding="10px" set-border="1px">
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
               <gl-combo-box id="riceType" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
@@ -94,13 +99,40 @@
 
               [[changeString2Num(item.*,'type_rice_quantity')]]
               [[_obCalcWeight(item.*,'type_rice_quantity')]]
-              <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]" label="จำนวน (ตัน)" placeholder="กรุณาใส่จำนวน" auto-validate error-message="กรุณาใส่ราคา" required
+              <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]" label="ปริมาณ (ตัน)" placeholder="กรุณาใสปริมาณ" auto-validate error-message="กรุณาใส่ราคา" required
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:1em" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบชนิดข้าว</paper-button>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">[[changeString2Num(data.*,'tolerance_rate')]]
+                <gl-form-input class="required number"maxlength="3" allowed-pattern="[0-9||,||.]" required error-message="กรุณาใส่จำนวน" disabled="[[isInputDisabled]]" label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{item.tolerance_rate}}" placeholder="ใส่รายละเอียด" id="tolerance_rate">
+                   <div suffix>%</div>
+                </gl-form-input>
             </gl-grid-col>
+
+          </gl-grid-row>
+
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ปีโครงการ (พ.ศ.)" placeholder="กรุณาใส่ปีโครงการ" value="{{item.project_th}}"  name="project_th"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ปีโครงการ (ค.ศ.)" placeholder="กรุณาใส่ปีโครงการ" value="{{item.project_en}}"  name="project_en"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ฤูดกาล (ไทย)" placeholder="กรุณาใส่ฤูดกาล" value="{{item.season_th}}"  name="season_th"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ฤูดกาล (อังกฤษ)" placeholder="กรุณาใส่ฤูดกาล" value="{{item.season_en}}"  name="season_en"></gl-form-input>
+            </gl-grid-col>
+          </gl-grid-row>
+          <gl-grid-row>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="คำอธิบาย (ไทย)" placeholder="กรุณาใส่คำอธิบาย" value="{{item.deseription_th}}"  name="deseription_th"></gl-form-input>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="คำอธิบาย (อังกฤษ)" placeholder="กรุณาใส่คำอธิบาย" value="{{item.deseription_en}}"  name="deseription_en"></gl-form-input>
+            </gl-grid-col>
+
           </gl-grid-row>
           </gl-form-panel-body>
           <table class="gl-table-default" id="[[index]]">
@@ -125,7 +157,7 @@
                   </gl-combo-box >
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
-                  <gl-form-input class="required numberBack" allowed-pattern="[0-9||,||.]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่จำนวน"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  <gl-form-input class="required numberBack" allowed-pattern="[0-9||,||.]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่ราคา"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                 </td>
                 <td >
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
@@ -309,17 +341,23 @@
         });
       },
       saveConfirm:function () {
-        this._clearnDataConfirm(this.data,(data)=>{
-            data.contract_id=this.dataForSelect.contract_id;
-            data.id=this.data.cl_id;
-            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
-                status:'dialog',
-                text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
-                confirmed:this._saveData, //function ที่ใช้รับค่า ปุ่ม
-                el: this, // compontents
-                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-            })
-        });
+        if (this.cl_total_quantity > 15000) {
+          this._clearnDataConfirm(this.data,(data)=>{
+              data.contract_id=this.dataForSelect.contract_id;
+              data.id=this.data.cl_id;
+              this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                  status:'dialog',
+                  text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+                  confirmed:this._saveData.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                  el: this, // compontents
+                  data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+              })
+          });
+        }  else {
+          this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
+          callback:function(){
+          }})
+        }
       },
       _saveData:function(result,detail){
          if (result == true) {
