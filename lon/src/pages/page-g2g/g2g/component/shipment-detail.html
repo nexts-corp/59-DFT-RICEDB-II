@@ -24,12 +24,22 @@
     }
     .table-head > tr > th:nth-child(3),
     paper-item > div:nth-child(3) {
-      width: 55%;
+      width: 25%;
       text-align: center;
     }
     .table-head > tr > th:nth-child(4),
     paper-item > div:nth-child(4) {
-      width: 30%;
+      width: 25%;
+      text-align: center;
+    }
+    .table-head > tr > th:nth-child(5),
+    paper-item > div:nth-child(5) {
+      width: 15%;
+      text-align: right;
+    }
+    .table-head > tr > th:nth-child(6),
+    paper-item > div:nth-child(6) {
+      width: 20%;
       text-align: center;
     }
     paper-tabs{
@@ -127,8 +137,10 @@
                          <tr>
                            <th></th>
                            <th>ลำดับที่</th>
+                           <th>B/L No </th>
                            <th>ผู้ส่งออก</th>
                            <th>ปริมาณ (ตัน)</th>
+                           <th>Port of Destination </th>
                          </tr>
                      </thead>
                      <template is="dom-if" if="[[_isHaveMany(data.shipment_detail,1)]]">
@@ -148,10 +160,16 @@
                        [[_ObcountIndex(index)]]
                      </div>
                      <div>
+                       [[item.bl_no]]
+                     </div>
+                     <div>
                        [[item.seller_name_en]]
                      </div>
                      <div style="text-align:right;">
                        [[formatNumberNoZero(item.shm_det_quantity)]]
+                     </div>
+                     <div>
+                       [[item.dest_port_name]]
                      </div>
                    </paper-item>
                    <iron-collapse id="collapse[[item.shm_det_id]]">
