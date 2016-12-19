@@ -49,6 +49,7 @@
   }
   </style>
   <template>
+    <!-- [[limitTotalRice]]//limitTotalRice -->
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
       <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
         <gl-form-panel-head label="" set-padding="10px" set-border="1px">
@@ -88,6 +89,7 @@
                        <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:1em" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบชนิดข้าว</paper-button>
             </div>
               </gl-form-panel-body>
+
               <gl-form-panel-body label="" set-padding="10px" set-border="1px">
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
@@ -103,7 +105,7 @@
                 value="{{item.type_rice_quantity}}"   name="type_rice_quantity"></gl-form-input>
 
             </gl-grid-col>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">[[changeString2Num(data.*,'tolerance_rate')]]
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">[[changeString2Num(item.*,'tolerance_rate')]]
                 <gl-form-input class="required number"maxlength="3" allowed-pattern="[0-9||,||.]" required error-message="กรุณาใส่จำนวน" disabled="[[isInputDisabled]]" label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{item.tolerance_rate}}" placeholder="ใส่รายละเอียด" id="tolerance_rate">
                    <div suffix>%</div>
                 </gl-form-input>
@@ -153,7 +155,7 @@
               <tr >
                 <td>
                   <gl-combo-box id="riceType" class="required InTable" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" name="package_name"
-                item-label-path="package_name"   item-value-path="package_id" value="{{packageitem.package_id}}" items="{{dataForSelect.package}}" >
+                item-label-path="package_name_th"   item-value-path="package_id" value="{{packageitem.package_id}}" items="{{dataForSelect.package}}" >
                   </gl-combo-box >
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
@@ -172,8 +174,7 @@
           </table>
           <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
               <div class="horizontal end-justified layout">
-                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>
-เพิ่มบรรจุภัณฑ์</paper-button>
+                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>เพิ่มบรรจุภัณฑ์</paper-button>
                 </div>
               </template>
 
@@ -181,8 +182,7 @@
           </div>
       </template>
       <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>
-เพิ่มชนิดข้าว</paper-button>
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
       </div>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
@@ -193,7 +193,7 @@
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 
-            <gl-form-input class="numberBack" disabled always-float-label  label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+            <gl-form-input class="numberBack" disabled always-float-label allowed-pattern="[0-9||,||.]" format-number="on" label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
         </gl-grid-col>
 
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
@@ -242,6 +242,9 @@
           type: Number,
           value:0
         },
+        limitTotalRice:{
+          type:Number
+        }
       },
       observers:[
         '_changeDataConfirm(data.cl_date)'
@@ -270,8 +273,9 @@
           for(index in datas){
                 total += parseFloat(datas[index].type_rice_quantity);
           }
-        this.cl_total_quantity = numeral(total).format('0,0');
-        this.data.cl_quality = this.cl_total_quantity  ;
+          this.cl_total_quantity=total;
+        // this.cl_total_quantity = numeral(total).format('0,0');
+        // this.data.cl_quality = this.cl_total_quantity  ;
         // console.log(typeof this.cl_total_quantity);
         // console.log(this.cl_total_quantity);
         if (this.cl_total_quantity == 'NaN') {
@@ -312,7 +316,7 @@
         }
       },
       backPage:function () {
-        console.log(this.isInputDisabled );
+        // console.log(this.isInputDisabled );
         if (this.isInputDisabled == false) {
           this.editInput();
         }
@@ -324,24 +328,32 @@
       },
       insertConfirm:function () {
         this.data.cl_status=false;
-        this._clearnDataConfirm(this.data,(data)=>{
-            data.contract_id=this.dataForSelect.contract_id;
-            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
-            this.insert('./g2g/confirm/insert',data, () => {
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-                 callback:()=>{
-                    this.fire('get-list-confirm',{contractId:data.contract_id});
-                    this.fire('back-page-confirm',{detail:'_back-page-confirm'});
-                  }
+        if (this.cl_total_quantity <= this.limitTotalRice) {
+            this._clearnDataConfirm(this.data,(data)=>{
+                data.contract_id=this.dataForSelect.contract_id;
+                this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+                // console.log(data);
+                this.insert('./g2g/confirm/insert',data, () => {
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                     callback:()=>{
+                        this.fire('get-list-confirm',{contractId:data.contract_id});
+                        this.fire('back-page-confirm',{detail:'_back-page-confirm'});
+                      }
+                    });
                 });
+                let el = Polymer.dom(this.root).querySelectorAll('.required');
+                el.map((el)=> {el.reset();el.value=''});
+                // this.editInput();
             });
-            let el = Polymer.dom(this.root).querySelectorAll('.required');
-            el.map((el)=> {el.reset();el.value=''});
-            // this.editInput();
-        });
+          }  else {
+            this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
+            callback:function(){
+            }})
+          }
       },
       saveConfirm:function () {
-        if (this.cl_total_quantity > 15000) {
+        console.log(this.cl_total_quantity,'=',this.limitTotalRice);
+        if (this.cl_total_quantity <= this.limitTotalRice) {
           this._clearnDataConfirm(this.data,(data)=>{
               data.contract_id=this.dataForSelect.contract_id;
               data.id=this.data.cl_id;
@@ -420,6 +432,13 @@
             data.cl_type_rice.map((cl_type_rice,index)=>{
               news.cl_type_rice.push({type_rice_id:cl_type_rice.type_rice_id,
                                       type_rice_quantity:cl_type_rice.type_rice_quantity,
+                                      tolerance_rate:cl_type_rice.tolerance_rate,
+                                      project_th:cl_type_rice.project_th,
+                                      project_en:cl_type_rice.project_en,
+                                      season_th:cl_type_rice.season_th,
+                                      season_en:cl_type_rice.season_en,
+                                      deseription_th:cl_type_rice.deseription_th,
+                                      deseription_en:cl_type_rice.deseription_en,
                                       package:[]});
               cl_type_rice.package.map((packages)=>{
                   news.cl_type_rice[index].package.push({
@@ -430,6 +449,10 @@
             });
           el.map((el)=> {el.reset()});
           callback(news);
+        }else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error
+          callback:function(){
+          }})
         }
       },
     });
