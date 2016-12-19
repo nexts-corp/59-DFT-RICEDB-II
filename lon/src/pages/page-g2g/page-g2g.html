@@ -51,7 +51,7 @@
               </template>
             </div>
           </div>
-          <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight">
+          <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
 
             <div class="rightdata" align="left" >
         <iron-pages selected="{{g2gPageSeleted}}" attr-for-selected="name">
@@ -89,7 +89,8 @@
               'get-list-confirm':'_getListConfirm',
               'get-list-shipment':'_getListShipment',
               'flipDrawer':'_flipDrawer',
-              'close-drawer':'_flipDrawerClose'
+              'close-drawer':'_flipDrawerClose',
+              'name-panel-right':'_namePanelRight'
             },
             properties: {
               contractList: {
@@ -344,6 +345,9 @@
             },
             _flipDrawerClose:function () {
               Polymer.dom(this.root).querySelector('#drawerRight').close();
+            },
+            _namePanelRight:function (name) {
+              this.titlePanelRight = name;
             }
         });
     </script>
