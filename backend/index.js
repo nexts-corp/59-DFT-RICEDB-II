@@ -63,7 +63,7 @@ if (cluster.isMaster) {
   //     return global.public;
   //   }
   // }
-  var publicStatic = "public2";
+  var publicStatic = "public";
   public.use(express.static(publicStatic));
 
   public.use(function (req, res, next) {
