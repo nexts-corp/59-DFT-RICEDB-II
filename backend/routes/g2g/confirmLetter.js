@@ -35,6 +35,13 @@ var schema = {
                 "properties": {
                     "type_rice_id": { "type": "string" },
                     "type_rice_quantity": { "type": "number" },
+                    "project_th": { "type": "string" },
+                    "project_en": { "type": "string" },
+                    "season_th": { "type": "string" },
+                    "season_en": { "type": "string" },
+                    "description_th": { "type": "string" },
+                    "description_en": { "type": "string" },
+                    "tolerance_rate": { "type": "number" },
                     "package": {
                         "type": "array",
                         "items": {

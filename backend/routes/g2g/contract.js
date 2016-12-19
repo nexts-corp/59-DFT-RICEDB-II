@@ -31,9 +31,6 @@ var schema = {
         "contract_quantity": {
             "type": "number"
         },
-        "tolerance_rate": {
-            "type": "number"
-        },
         "contract_type_rice": {
             "type": "array",
             "items": {
@@ -48,7 +45,7 @@ var schema = {
             "type": "boolean"
         }
     },
-    "required": ["contract_name", "buyer_id", "contract_date", "contract_quantity", "tolerance_rate", "contract_type_rice", "contract_status"]
+    "required": ["contract_name", "buyer_id", "contract_date", "contract_quantity", "contract_type_rice", "contract_status"]
 };
 var validate = ajv.compile(schema);
 
