@@ -42,17 +42,6 @@
         return JSON.parse(JSON.stringify(data));
       }
     },
-    clone: function(obj){
-        let newObj = {};
-        for(let i in obj){
-            if(typeof(obj[i]) === 'object' && Object.keys(obj[i]).length){
-                newObj[i] = clone(obj[i]);
-            } else{
-                newObj[i] = obj[i];
-            }
-        }
-        return Object.assign({},newObj);
-    },
     test:function () {
       console.log('ถึงแล้วววว');
     },
@@ -69,9 +58,14 @@
     },
     //เช็คว่ามีข้อมูลในอาเรย์ไหม
     _isHave:function (data) {
-      if (data.length < 1) {
-        return true;
+      if (typeof data !== 'undefined' && data !== 'undefined') {
+        if (data.length < 1) {
+          return true;
+        }
+      }else {
+        return 0;
       }
+
     },
     _isHaveMany:function (data,count) {
       // console.log(data.length);

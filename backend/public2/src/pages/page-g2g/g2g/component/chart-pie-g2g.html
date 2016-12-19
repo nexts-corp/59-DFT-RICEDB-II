@@ -115,9 +115,9 @@
           <paper-button raised on-tap="contractDetail">รายละเอียดของสัญญา</paper-button>
           <paper-button raised on-tap="listConfirm">ยืนยันทำสัญญา</paper-button>
           <paper-button raised on-tap="listShipment">ส่งมอบสินค้า</paper-button>
-          <a href="/payment" tabindex="-1">
+          <!-- <a href="/payment" tabindex="-1"> -->
             <paper-button raised on-tap="listPayment">ชำระเงิน</paper-button>
-          </a>
+          <!-- </a> -->
         </div>
       </paper-card>
 
@@ -242,6 +242,7 @@
       listPayment:function () {
         document.cookie = "url="+this.data.contract_id;
         console.log(this.data.contract_id);
+        this.fire('nylon-change-page',{path:'/payment'})
               // console.log(x.indexOf("url"));
         // this.glChangePath('/g2g/add-draft/');
       },

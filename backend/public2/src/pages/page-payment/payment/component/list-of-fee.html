@@ -40,12 +40,19 @@
           </thead>
           <tbody class="table-body">
             <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
+            <template is="dom-if" if="[[!_isHave(newData)]]">
               <template is="dom-repeat" items="[[newData]]" >
                 <tr data="[[item]]" on-tap="getFeeDetail">
                   <td>[[item.cl_name]]</td>
                   <td>[[item.shm_name]] ([[item.shm_no]])</td>
                   <td>[[item.fee_name]] ([[item.fee_no]])</td>
                 </tr>
+              </template>
+              </template>
+              <template is="dom-if" if="[[_isHave(newData)]]">
+                  <tr >
+                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                  </tr>
               </template>
             <!-- </template> -->
          </tbody>
