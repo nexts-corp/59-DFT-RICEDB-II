@@ -1,0 +1,157 @@
+<dom-module id="list-menubo" inclue="iron-flex iron-flex-factors iron-flex-alignment">
+  <style>
+    /*.subMenu{
+      padding-left: 15%;
+    }*/
+    .bd{
+      border: 1px solid #000;
+    }
+    .getUrl{
+      background-color: red;
+    }
+    paper-icon-item ,paper-item{
+      cursor: pointer;
+
+      --paper-item-focused: {
+        background-color: var(--gl-info-color);
+        /*opacity: 0;*/
+    }
+  </style>
+  <template>
+    <paper-menu>
+      <template is="dom-repeat" items="[[menuData]]">
+        <!-- <paper-submenu> -->
+        <paper-icon-item class="menu-trigger" style="padding:0px;">
+          <iron-icon icon="{{item.img}}" style="margin-right:15px;"></iron-icon>
+          <!-- <template is="dom-if" if="[[item.subMenu]]">
+            <paper-icon-button icon="chevron-right" item-icon  on-tap="_getSub"></paper-icon-button>
+          </template> -->
+          <div on-tap="getUrl" url$="[[item.url]]">
+                [[item.nameMenu]]
+          </div>
+        </paper-icon-item>
+        <!-- <template is="dom-if" if="[[item.subMenu]]">
+          <paper-menu class="menu-content">
+            <template is="dom-repeat" items="[[item.subMenu]]">
+                <paper-item>
+                  <div class="subMenu" on-tap="getUrl" url$="[[item.url]]">
+                    [[item.nameMenu]]
+                  </div>
+                </paper-item>
+            </template>
+          </paper-menu>
+        </template> -->
+
+      <!-- </paper-submenu> -->
+      </template>
+
+    </paper-menu>
+  </template>
+  <script>
+    Polymer({
+      is: "list-menubo",
+      behaviors: [
+        gl.behavior.core
+      ],
+      properties: {
+        menuData: {
+          type: Object,
+          value:
+          [
+            {
+              id:0,
+              nameMenu:'หน้าแรก',
+              url:'/backoffice/main-table',
+              img:''
+            },
+            {
+              id:1,
+              nameMenu:'ธนาคาร',
+              url:'/backoffice/table-bank',
+              img:'maps:local-atm'
+            },
+            {
+              id:2,
+              nameMenu:'ผู้ซื้อ',
+              url:'/backoffice/table-buyer',
+              img:'icons:account-box'
+            },
+            {
+              id:3,
+              nameMenu:'ผู้ให้บริการเรือ',
+              url:'/backoffice/table-carrier',
+              img:''
+            },
+            {
+              id:4,
+              nameMenu:'ประเทศ',
+              url:'/backoffice/table-country',
+              img:''
+            },
+            {
+              id:5,
+              nameMenu:'ข้อกำหนดการส่งสินค้า',
+              url:'/backoffice/table-incoterms',
+              img:''
+            },
+            {
+              id:6,
+              nameMenu:'แพ็คเกจ',
+              url:'/backoffice/table-package',
+              img:''
+            },
+            {
+              id:7,
+              nameMenu:'ท่าเรือ',
+              url:'/backoffice/table-port',
+              img:''
+            },
+            {
+              id:8,
+              nameMenu:'เรือ',
+              url:'/backoffice/table-ship',
+              img:'maps:directions-boat'
+            },
+            {
+              id:9,
+              nameMenu:'สายเรือ',
+              url:'/backoffice/table-shipline',
+              img:''
+            },
+            {
+              id:10,
+              nameMenu:'หน่วยงานตรวจสอบสินค้า',
+              url:'/backoffice/table-surveyor',
+              img:'social:people'
+            },
+            {
+              id:11,
+              nameMenu:'พิกัดข้าว',
+              url:'/backoffice/table-Harmonizedcode',
+              img:''
+            },
+            {
+              id:12,
+              nameMenu:'ที่อยู่ผู้รับสินค้า',
+              url:'/backoffice/table-notifyparty',
+              img:'communication:contacts'
+            },
+          ]
+        }
+      },
+      getUrl:function (e) {
+        // console.log(e.target.getAttribute("url"));
+        var url = e.target.getAttribute('url')
+        this.glChangePath(url);
+      },
+      _getSub:function (e) {
+        var targetAttribute = e.currentTarget.getAttribute('aria-controls');
+        if (e.target.icon == 'expand-more') {
+          e.target.icon = 'chevron-right';
+        }else {
+          e.target.icon = 'expand-more'
+        }
+      }
+    });
+  </script>
+</dom-module>
