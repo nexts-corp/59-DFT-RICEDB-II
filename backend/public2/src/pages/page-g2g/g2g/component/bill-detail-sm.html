@@ -21,12 +21,14 @@
     }
   </style>
   <template>
+    <template is="dom-if" if="[[!checkBtnView(shmStatus)]]">
     <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
       <div class="horizontal end-justified layout">
         <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
         <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
        </div>
     </template>
+      </template>
       <gl-form-panel-body>
         <div class="title">Booking</div>
       </gl-form-panel-body>
