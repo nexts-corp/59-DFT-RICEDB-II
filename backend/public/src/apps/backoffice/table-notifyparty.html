@@ -1,11 +1,11 @@
 <link rel="import" href="components/panel-right.html">
 <link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
-<link rel="import" href="components/shipline/insert-shipline.html">
-<link rel="import" href="components/shipline/edit-shipline.html">
+<link rel="import" href="components/notifyparty/insert-notifyparty.html">
+<link rel="import" href="components/notifyparty/edit-notifyparty.html">
 <link rel="import" href="functionBehavior/dataBehavior.html">
 <link rel="import" href="functionBehavior/searchBehavior.html">
-<dom-module id="backoffice-table-shipline">
+<dom-module id="backoffice-table-notifyparty">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
     *{
       font-family: 'CSChatThaiUI', sans-serif;
@@ -27,18 +27,15 @@
       /*font-family: 'rsuregular', sans-serif;
         -webkit-font-smoothing: antialiased;*/
     }
-    .table-head > tr > th:nth-child(1) {
+    /*.table-head > tr > th:nth-child(1) {
       width: 5%;
     }
     .table-head > tr > th:nth-child(2) {
       width: 25%;
     }
     .table-head > tr > th:nth-child(3) {
-      width: 20%;
-    }
-    .table-head > tr > th:nth-child(4) {
       width: 15%;
-    }
+    }*/
     .elevation{
       border-radius: 5px;
       margin: 10px;
@@ -57,16 +54,16 @@
 
           <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
 
-          <div class="text-head">ระบบจัดการสายเรือ</div>
+          <div class="text-head">ที่อยู่ผู้รับสินค้า</div>
 
           <div class="horizontal justified layout">
             <div class="horizontal layout" style="margin-top:25px;">
-              <div class="labelSearch">ชื่อสายเรือ</div>{{_searchInArray(searchInput)}}
+              <div class="labelSearch">ชื่อที่อยู่ผู้รับสินค้า</div>{{_searchInArray(searchInput)}}
               <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
               <iron-icon icon="search" style="margin-top:10px;"></iron-icon>
             </div>
             <div>
-              <paper-button class="gl-btn-primary button-top" title="เพิ่มสายเรือ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มสายเรือ</paper-button>
+              <paper-button class="gl-btn-primary button-top" title="เพิ่มหน่วยงานตรวจสอบสินค้า" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มหน่วยงาน</paper-button>
             </div>
           </div>
 
@@ -74,8 +71,9 @@
             <thead class="table-head">
               <tr>
                 <th><div class="text-center">No<p>(ลำดับ)</div></th>
-                <th><div class="text-center">Shipline Name<p>(ชื่อสายเรือ)</div></th>
-                <th><div class="text-center">Tel.<p>(เบอร์โทรศัพท์)</div></th>
+                <th><div class="text-center">Port Name<p>(ชื่อท่าเรือ)</div></th>
+                <th><div class="text-center">Buyer Name<p>(ชื่อผู้ซื้อ)</div></th>
+                <th><div class="text-center">Notify Name<p>(ชื่อที่อยู่ผู้รับสินค้า)</div></th>
                 <th><div class="text-center">Date Update<p>(วันที่อัพเดทล่าสุด)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มพิกัดข้าว" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มพิกัดข้าว</paper-button> -->
@@ -83,13 +81,14 @@
               </tr>
             </thead>
 
-            <!-- <template is="dom-repeat" items="{{dataShipline}}"> -->
+            <!-- <template is="dom-repeat" items="{{dataSurveyor}}"> -->
             <template is="dom-repeat" items="[[newData]]">
               <tbody>
                 <tr>
                   <td><div class="text-center">{{item.no}}</div></td>
-                  <td><div class="text-center">{{item.shipline_name}}</div></td>
-                  <td><div class="text-center">{{item.shipline_tel}}</div></td>
+                  <td><div class="text-center">{{item.port_name}}</div></td>
+                  <td><div class="text-center">{{item.buyer_name}}</div></td>
+                  <td><div class="text-center">{{item.notify_name}}</div></td>
                   <td><div class="text-center">{{item.date_updated}}</div></td>
                   <td style="text-align:right;">
                     <paper-icon-button data="{{item}}" on-tap="_edit" icon="icons:create"></paper-icon-button>
@@ -108,8 +107,8 @@
         <panel>
           <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <div name="addRedRegShipline"><insert-shipline></insert-shipline></div>
-              <div name="editRegShipline"><edit-shipline data="{{dataSelect}}"></edit-shipline></div>
+              <div name="addRedRegNotify"><insert-notifyparty ports="{{port}}" buyers="{{buyer}}"></insert-notifyparty></div>
+              <div name="editRegNotify"><edit-notifyparty ports="{{port}}" buyers="{{buyer}}" data="{{dataSelect}}"></edit-notifyparty></div>
 
             </iron-pages>
           </div>
@@ -118,7 +117,7 @@
     </template>
     <script>
         Polymer({
-            is: "backoffice-table-shipline",
+            is: "backoffice-table-notifyparty",
             listeners: {
                 'nx-grid-tap': 'nxGridTap'
             },
@@ -126,7 +125,7 @@
               'initDatabl(data)'
             ],
             properties: {
-              dataShipline:{
+              dataSurveyor:{
                 type:Array
               },
               newData:{
@@ -140,22 +139,22 @@
                 searchBehavior
             ],
             attached: function() {
-              this.getShipline();
+              this.getNotify();
             },
             created: function() {
                 this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
                 this.glSetLayout('layout-backoffice');
-                this.glQuery('refreshShipline',this)
+                this.glQuery('refreshNotify',this)
             },
             _toggleDrawer: function(e) {
               this.glQuery('panelRight').changDrawer();
-              this.layerContent ="addRedRegShipline";
+              this.layerContent ="addRedRegNotify";
             },
             _edit: function(e) {
               // console.log(e.target.data);
               this.dataSelect = e.target.data;
               this.glQuery('panelRight').changDrawer();
-              this.layerContent ="editRegShipline";
+              this.layerContent ="editRegNotify";
             },
             _delete: function(e){
               this.fire('toast',{status:'dialog',
@@ -163,29 +162,38 @@
               confirmed : this._confirmToast,
               el: this,
               datas: {
-                 id : e.target.data.shipline_id
+                 id : e.target.data.notify_id
               }
             });
             },
             _confirmToast:function(result,detail){
               if(result == true){
                 detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                detail.el.delete('./common/shipline/delete/id/',detail.datas.id, () => {
-                  detail.el.glQuery('refreshShipline').getShipline();
-                  detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                    console.log('success');
-                  }});
-                 });
+                detail.el.delete('./common/notify/delete/id/',detail.datas.id, () => {
+                detail.el.glQuery('refreshNotify').getNotify();
+                detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
               }
             },
-            getShipline: function() {
-              this.read('./common/shipline', (data)=>{
-                this.dataShipline = data;
-                for (var i = 0; i < this.dataShipline.length; i++) {
-                  this.dataShipline[i]['no'] = i+1;
+            getNotify: function() {
+              this.read('./common/notify', (data)=>{
+                this.dataNotify = data;
+                for (var i = 0; i < this.dataNotify.length; i++) {
+                  this.dataNotify[i]['no'] = i+1;
                 }
-                this.initDatabl(this.dataShipline);
+                this.initDatabl(this.dataNotify);
               });
+
+              this.read('./common/port', (data) => {
+                this.port = data;
+              });
+
+              this.read('./common/buyer', (data) => {
+                this.buyer = data;
+              });
+
             },
             _back:function() {
               window.history.back();
@@ -200,15 +208,15 @@
                 // console.log(searchInput == '');
                 if (searchInput != '') {
                   let arr=[];
-                  this.dataShipline.map((el)=>{
-                    if (el.shipline_name.search(searchInput) > -1) {
+                  this.dataNotify.map((el)=>{
+                    if (el.notify_name.search(searchInput) > -1) {
                         //  console.log('search==> ',el);
                           arr.push(el);
                     }
                   });
                   this.newData=arr;
                 }else{
-                  this.initDatabl(this.dataShipline);
+                  this.initDatabl(this.dataNotify);
                 }
             }
         });
