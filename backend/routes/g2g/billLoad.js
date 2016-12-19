@@ -196,7 +196,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     packing_date: m('packing_date').split('T')(0),
                     product_date: m('product_date').split('T')(0),
                     cl_date: m('cl_date').split('T')(0),
-                    contract_date: m('contract_date').split('T')(0)
+                    contract_date: m('contract_date').split('T')(0),
+                    cut_of_date: m('cut_of_date').split('T')(0)
                 }
             })
             .orderBy('bl_no')
