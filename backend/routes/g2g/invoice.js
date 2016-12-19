@@ -40,7 +40,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
         r.db('g2g').table('shipment_detail')
             .group(function (g) {
                 return g.pluck(
-                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no","book_no", "shm_id", "shipline_id"//, "ship_voy_no"
+                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no", "book_no", "shm_id", "shipline_id"//, "ship_voy_no"
                 )
             })
             .ungroup()
@@ -49,7 +49,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
                     ship: me('group')('ship'),
-                    book_no:me('group')('book_no'),
+                    book_no: me('group')('book_no'),
                     // ship_voy_no: me('group')('ship_voy_no'),
                     shipline_id: me('group')('shipline_id'),
                     load_port_id: me('group')('load_port_id'),
@@ -95,8 +95,8 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                 })
             }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
             //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip().filter(r.row('shm_status').eq(true))
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip().filter(r.row('shm_status').eq(true))
             .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice"] }).zip()
             .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "date_created", "date_updated", "contract_type_rice"] }).zip()
             .filter(
@@ -157,8 +157,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .group(function (g) {
                 return g.pluck(
                     "ship", "load_port_id", "dest_port_id", "deli_port_id",
-                    "bl_no","book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
-                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
+                    "bl_no", "book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "cut_of_date", "cut_of_time", "product_date"
                 )
             })
             .ungroup()
@@ -166,7 +166,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                 return {
                     shm_id: me('group')('shm_id'),
                     bl_no: me('group')('bl_no'),
-                    book_no:me('group')('book_no'),
+                    book_no: me('group')('book_no'),
                     ship: me('group')('ship'),
                     load_port_id: me('group')('load_port_id'),
                     dest_port_id: me('group')('dest_port_id'),
@@ -180,7 +180,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     num_of_container: me('group')('num_of_container'),
                     weight_per_container: me('group')('weight_per_container'),
                     packing_date: me('group')('packing_date'),
-                    packing_time: me('group')('packing_time'),
+                    cut_of_date: me('group')('cut_of_date'),
+                    cut_of_time: me('group')('cut_of_time'),
                     product_date: me('group')('product_date')
                     //quantity: me('reduction')
                 }
@@ -228,8 +229,8 @@ router.get('/id/:invoice_id', function (req, res, next) {
                     .group(function (g) {
                         return g.pluck(
                             "ship", "load_port_id", "dest_port_id", "deli_port_id",
-                            "bl_no","book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
-                            "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
+                            "bl_no", "book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
+                            "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "cut_of_date", "cut_of_time", "product_date"
                         )
                     })
                     .sum("shm_det_quantity")
@@ -238,7 +239,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                         return {
                             shm_id: me('group')('shm_id'),
                             bl_no: me('group')('bl_no'),
-                            book_no:me('group')('book_no'),
+                            book_no: me('group')('book_no'),
                             ship: me('group')('ship'),
                             load_port_id: me('group')('load_port_id'),
                             dest_port_id: me('group')('dest_port_id'),
@@ -252,14 +253,15 @@ router.get('/id/:invoice_id', function (req, res, next) {
                             num_of_container: me('group')('num_of_container'),
                             weight_per_container: me('group')('weight_per_container'),
                             packing_date: me('group')('packing_date'),
-                            packing_time: me('group')('packing_time'),
+                            cut_of_date: me('group')('cut_of_date'),
+                            cut_of_time: me('group')('cut_of_time'),
                             product_date: me('group')('product_date'),
                             quantity: me('reduction')
                         }
                     })
                     .without("group", "reduction")
-                    .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                    .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                    .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                    .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                     .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "date_created", "date_updated", "contract_type_rice"] }).zip()
                     .merge(function (me) {
                         return {
@@ -289,7 +291,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                     }
                                 })
                                 .without("group", "reduction")
-                                .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                                .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                 .merge(function (me2) {
                                     return {
                                         quantity_bags: me2('quantity_tons').mul(1000).div(me2('package_kg_per_bag'))
@@ -308,7 +310,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                         amount_usd: me2('price_per_ton').mul(me2('weight_net'))
                                     }
                                 })
-                                .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                                .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                 .coerceTo('array')
                         }
                     })
@@ -398,8 +400,8 @@ router.get('/id/:invoice_id', function (req, res, next) {
                         })
                     }).without({ right: ["id", "date_created", "date_updated", "country_fullname_en", "country_name_en", "country_name_th", "country_id"] }).zip()
                     //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                    .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                    .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                    .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                    .eqJoin("inct_id", r.db('common').table("incoterms")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                     (0)
             })
             .merge(function (m) {

@@ -119,7 +119,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                 return g.pluck(
                     "ship", "load_port_id", "dest_port_id", "deli_port_id",
                     "bl_no", "book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
-                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
+                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date","cut_of_date", "cut_of_time", "product_date"
                 )
             })
             .ungroup()
@@ -141,7 +141,8 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     num_of_container: me('group')('num_of_container'),
                     weight_per_container: me('group')('weight_per_container'),
                     packing_date: me('group')('packing_date'),
-                    packing_time: me('group')('packing_time'),
+                    cut_of_date:me('group')('cut_of_date'),
+                    cut_of_time: me('group')('cut_of_time'),
                     product_date: me('group')('product_date')
                 }
             })
@@ -223,7 +224,7 @@ router.get('/no/:bl_no', function (req, res, next) {
                 return g.pluck(
                     "ship", "load_port_id", "dest_port_id", "deli_port_id",
                     "bl_no", "book_no", "shm_id", "surveyor_id", "ship_lot_no", "carrier_id", "shipline_id",
-                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date", "packing_time", "product_date"
+                    "etd_date", "eta_date", "num_of_container", "weight_per_container", "packing_date","cut_of_date", "cut_of_time", "product_date"
 
                 )
             })
@@ -247,7 +248,8 @@ router.get('/no/:bl_no', function (req, res, next) {
                     num_of_container: me('group')('num_of_container'),
                     weight_per_container: me('group')('weight_per_container'),
                     packing_date: me('group')('packing_date'),
-                    packing_time: me('group')('packing_time'),
+                    cut_of_date: me('group')('cut_of_date'),
+                    cut_of_time: me('group')('cut_of_time'),
                     product_date: me('group')('product_date'),
                     quantity: me('reduction')
                 }

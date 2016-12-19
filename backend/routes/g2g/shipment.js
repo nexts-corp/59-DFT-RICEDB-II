@@ -70,15 +70,15 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 }
                             })
                         }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
                         //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         // .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
 
                         .merge(function (me) {
@@ -87,10 +87,11 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 eta_date: me('eta_date').split('T')(0),
                                 etd_date: me('etd_date').split('T')(0),
                                 packing_date: me('packing_date').split('T')(0),
+                                cut_of_date: me('cut_of_date').split('T')(0),
                                 product_date: me('product_date').split('T')(0),
                                 ship: me('ship').map(function (arr_ship) {
                                     return arr_ship.merge(function (row_ship) {
-                                        return r.db('common').table('ship').get(row_ship('ship_id')).without('id','date_created','date_updated')
+                                        return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated')
                                     })
                                 })
                             }
@@ -114,7 +115,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 .merge(function (limit) {
                                     return {
                                         type_rice_quantity_confirm: r.db('g2g').table('shipment_detail')
-                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                             .filter({
                                                 cl_id: m('cl_id'),
                                                 //shm_id: m('shm_id'),

@@ -62,7 +62,11 @@ var schema = {
                 "type": "string",
                 "format": "date-time"
             },
-            "packing_time": {
+            "cut_of_date": {
+                "type": "string",
+                "format": "date-time"
+            },
+            "cut_of_time": {
                 "type": "string",
                 "pattern": "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
             },
