@@ -77,7 +77,8 @@
             is:'page-payment',
             behaviors: [
                 g2gModelBehavior,
-                g2gCongtroller
+                g2gCongtroller,
+                nylonBehavior
             ],
             properties: {
               dataListPay: {
@@ -121,6 +122,13 @@
               'close-drawer':'_flipDrawerClose'
             },
             ready: function() {
+              let shmId = this._getUrl();
+              this._getBlList(shmId);
+              this._getInvoiceList(shmId);
+              this._getFeeList(shmId);
+            },
+            nylonPageActive:function() {
+              console.log(111);
               let shmId = this._getUrl();
               this._getBlList(shmId);
               this._getInvoiceList(shmId);

@@ -15,7 +15,7 @@
       cursor:pointer;
     }
     .title {
-      margin: 1em;
+      margin: 16px;
       text-align: center;
       font-size: var(--font-size-h4);
     }
@@ -35,21 +35,28 @@
             <tr>
               <th>ชื่อการทำสัญญา</th>
               <th>งวดการส่งมอบ</th>
-
               <th>B/L No.</th>
-
+              <th>Port of Delivery </th>
+              <th>Port of Destination </th>
             </tr>
           </thead>
           <tbody class="table-body">
             <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
+            <template is="dom-if" if="[[!_isHave(newData)]]">
               <template is="dom-repeat" items="[[newData]]" >
                 <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
                   <td>[[item.cl_name]]</td>
                   <td>[[item.shm_name]] ([[item.shm_no]])</td>
-
                   <td>[[item.bl_no]]</td>
-
+                  <td>[[item.deli_port_name]]</td>
+                 <td>[[item.dest_port_name]]</td>
                 </tr>
+              </template>
+              </template>
+              <template is="dom-if" if="[[_isHave(newData)]]">
+                  <tr >
+                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                  </tr>
               </template>
             <!-- </template> -->
          </tbody>
@@ -70,7 +77,7 @@
         }
       },
       initDatabl:function (data) {
-        // console.log(data);
+        console.log(data);
         this.newData = this.g2gClone(data);
         // console.log('clone new==>',this.newData);
         // console.log('org==>',this.data);

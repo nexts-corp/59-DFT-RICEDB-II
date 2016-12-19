@@ -418,30 +418,31 @@
          }
       },
       approveShipment:function () {
-        this.data.shm_status= this.approve(this.data.shm_status);
-        this._cleanDataInsertShimment(this.data,(data)=>{
-            // data.shm_id = this.data.shm_id;
-            data.id = this.data.shm_id;
-            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
-                status:'dialog',
-                text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
-                confirmed:this._approveShipment.bind(this), //function ที่ใช้รับค่า ปุ่ม
-                el: this, // compontents
-                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-            })
-        });
+        if (this.data.shm_quantity <= this.dataForSelect.contract_quantity_shipment_balance) {
+            this.data.shm_status= this.approve(this.data.shm_status);
+            this._cleanDataInsertShimment(this.data,(data)=>{
+                // data.shm_id = this.data.shm_id;
+                data.id = this.data.shm_id;
+                this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                    status:'dialog',
+                    text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
+                    confirmed:this._approveShipment.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                    el: this, // compontents
+                    data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+                })
+            });
+          } else {
+              this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+        }
       },
       _approveShipment:function (result,detail) {
         if (result == true) {
           // console.log(detail.data);
-          // console.log(this.dataForSelect.contract_quantity_shipment_balance);
-          // console.log(this.data);
-          if (shm_quantity <= this.dataForSelect.contract_quantity_shipment_balance) {
 
-
-             this.update('./g2g/shipment/update', detail.data,() => {
-            //
-            // //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
+            this.update('./g2g/shipment/update', detail.data,() => {
+               //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:detail.data.contract_id});
             this.fire('get-list-shipment-detail',{sm_id:detail.data.id});
@@ -451,11 +452,6 @@
                    }
                });
              });
-          }else {
-            this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
-            callback:function(){
-            }})
-          }
          }
       },
       deleteShipment:function () {
