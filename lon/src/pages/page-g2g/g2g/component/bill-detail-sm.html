@@ -119,15 +119,15 @@
           value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker required class="required"label="Cut of Date"always-float-label class="requested" value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
+        <vaadin-date-picker required class="required"label="Packing Date"always-float-label  value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
 
-      <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker required class="required"label="Out of Date"always-float-label class="requested" value="{{data.packing_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
-      </gl-grid-col> -->
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <vaadin-date-picker required class="required"label="Cut of Date"always-float-label  value="{{data.cut_of_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
+      </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input label="Out of Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.packing_time}}" disabled="[[isInputDisabled]]"></gl-form-input>
+        <gl-form-input label="Cut of Time" always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.cut_of_time}}" disabled="[[isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -199,6 +199,8 @@
           this.notifyPath('data.eta_date');
           this.set('data.packing_date', date);
           this.notifyPath('data.packing_date');
+          this.set('data.cut_of_date', date);
+          this.notifyPath('data.cut_of_date');
           this.set('data.product_date', date);
           this.notifyPath('data.product_date');
         });
@@ -337,10 +339,10 @@
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
             let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                  load_port_id,num_of_container,packing_date,packing_time,product_date,
+                  load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
                   ship_lot_no,shipline_id,surveyor_id,weight_per_container} = data;
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                            load_port_id,num_of_container,packing_date,packing_time,product_date,
+                            load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
                             ship_lot_no,shipline_id,surveyor_id,weight_per_container};
             newData.ship = new Array();
             data.ship.map((ships)=>{
@@ -355,12 +357,12 @@
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
             let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                  load_port_id,num_of_container,packing_date,packing_time,product_date,
+                  load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
                   ship_lot_no,shipline_id,surveyor_id,weight_per_container,
                   type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
                   exporter_id} = data;
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                            load_port_id,num_of_container,packing_date,packing_time,product_date,
+                            load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
                             ship_lot_no,shipline_id,surveyor_id,weight_per_container,
                             type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
             newData.ship = new Array();

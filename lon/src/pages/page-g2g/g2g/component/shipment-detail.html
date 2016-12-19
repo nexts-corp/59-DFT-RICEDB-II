@@ -146,7 +146,7 @@
                      <template is="dom-if" if="[[_isHaveMany(data.shipment_detail,1)]]">
                        <tbody class="table-body">
                          <tr >
-                           <td colspan="4" style="text-align: center;">  ไม่มีข้อมูล</td>
+                           <td colspan="6" style="text-align: center;">  ไม่มีข้อมูล</td>
                          </tr>
                        </tbody>
                      </template>
@@ -364,7 +364,8 @@
         let elements = this.$$('#confirmLetterTrue');
         let confirm = new Array();
         this.confirmLetter.map((el,index)=>{
-          confirm.push({ label:'No. '+ el.cl_no+' '+el.cl_name+' ('+el.cl_quality+' ตัน.) '+el.cl_date , value:el.cl_id});
+          // console.log(el);
+          confirm.push({ label:'No. '+ el.cl_no+' '+el.cl_name+' ('+el.cl_quantity_total+' ตัน.) '+el.cl_date , value:el.cl_id});
         });
         elements.items = confirm;
       },

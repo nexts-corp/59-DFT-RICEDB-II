@@ -119,10 +119,15 @@
         <gl-form-input disabled required allowed-pattern="[0-9||,||.]" format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <vaadin-date-picker disabled required class="required"label="Cut of Date"always-float-label class="requested" value="{{data.packing_date}}"></vaadin-date-picker>
+        <vaadin-date-picker required class="required"label="Packing Date"always-float-label class="requested" value="{{data.packing_date}}" disabled></vaadin-date-picker>
       </gl-grid-col>
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input disabled label="Packing Time"always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด"  value="{{data.packing_time}}" ></gl-form-input>
+        <vaadin-date-picker required class="required"label="Cut of Date"always-float-label class="requested" value="{{data.cut_of_date}}" disabled></vaadin-date-picker>
+      </gl-grid-col>
+
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input label="Cut of Time" always-float-label required class="required" type="time" error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.cut_of_time}}" disabled></gl-form-input>
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -299,7 +304,8 @@
           this.notifyPath('data.load_port_id');
           this.notifyPath('data.num_of_container');
           this.notifyPath('data.packing_date');
-          this.notifyPath('data.packing_time');
+          this.notifyPath('data.cut_of_date');
+          this.notifyPath('data.cut_of_time');
           this.notifyPath('data.product_date');
           this.notifyPath('data.ship_lot_no');
           this.notifyPath('data.shipline_id');
@@ -441,7 +447,8 @@
         this.notifyPath('data.load_port_id');
         this.notifyPath('data.num_of_container');
         this.notifyPath('data.packing_date');
-        this.notifyPath('data.packing_time');
+        this.notifyPath('data.cut_of_time');
+        this.notifyPath('data.cut_of_date');
         this.notifyPath('data.product_date');
         this.notifyPath('data.ship_lot_no');
         this.notifyPath('data.shipline_id');
@@ -466,12 +473,12 @@
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
             let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                  load_port_id,num_of_container,packing_date,packing_time,product_date,
+                  load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
                   ship_lot_no,shipline_id,surveyor_id,weight_per_container,
                   type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
                   exporter_id} = data;
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                            load_port_id,num_of_container,packing_date,packing_time,product_date,
+                            load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
                             ship_lot_no,shipline_id,surveyor_id,weight_per_container,
                             type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
             newData.ship = new Array();
