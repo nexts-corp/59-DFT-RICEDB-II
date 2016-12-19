@@ -150,7 +150,7 @@
          class="required" required  item-value-path="type_rice_id" items="[[dataForSelect.cl_type_rice]]" value="{{data.type_rice_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name" disabled="[[!isInputDisabled]]"
+        <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name_en" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="package_id" items="[[_getRiceTypeForPackage(data.type_rice_id,dataForSelect)]]" value="{{data.package_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -326,6 +326,8 @@
             // let type_rice_id = e.detail.value;
             let typeRice = this.dataForSelect.cl_type_rice.filter((typeRices)=> typeRices.type_rice_id == type_rice_id );
             this.dataForSelect.package = typeRice[0].package;
+            console.log(typeRice);
+            console.log('this.dataForSelect.package=>',this.dataForSelect.package);
             this.notifyPath('dataForSelect.package');
             // this.data.package_id='',
             // this.data.shm_det_quantity='',

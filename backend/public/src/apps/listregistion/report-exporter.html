@@ -70,6 +70,9 @@
         margin: 30px 0px 0px 0px;
         width: 60%;
     }
+    gl-form-dropdown-menu{
+      width: 100%;
+    }
     </style>
     <template>
     <content-panel>
@@ -304,7 +307,7 @@
             attached: function() {
               this.getExporters();
               this.getIdExporters();
-              this._dateEnd();
+              // this._dateEnd();
             },
             ready: function() {
               this.$$('#found').removeAttribute("hidden");
@@ -331,12 +334,12 @@
                 this.exporter_id.items = data;
               });
             },
-            _dateEnd:function() {
-              if (this.dataSelected.date_end == undefined || this.dataSelected.date_end == '') {
-                this.set('dataSelected.date_end',new Date().toISOString().split('T')[0]);
-                console.log(this.dataSelected.date_end);
-              }
-            },
+            // _dateEnd:function() {
+            //   if (this.dataSelected.date_end == undefined || this.dataSelected.date_end == '') {
+            //     this.set('dataSelected.date_end',new Date().toISOString().split('T')[0]);
+            //     console.log(this.dataSelected.date_end);
+            //   }
+            // },
             _search: function(){
               // console.log(this.dataSelected);
               var str='';

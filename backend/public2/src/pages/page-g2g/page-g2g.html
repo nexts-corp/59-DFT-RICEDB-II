@@ -16,7 +16,7 @@
 <link rel="import" href="g2g/component/confirm-detail.html">
 <link rel="import" href="g2g/component/shipment-detail.html"> -->
 <dom-module id="page-g2g">
-    <style media="screen" include="iron-flex gl-styles">
+    <style media="screen" include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
       :host{
         --paper-fab-background:var(--paper-light-blue-500);
         --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
@@ -27,30 +27,31 @@
       }
       paper-fab {
            position: fixed;
-           right: 1em;
-           bottom: 1em;
+           right: 16px;
+           bottom: 16px;
            color: #fff;
          }
       .addContract{
-        margin: 1em;
-        margin-bottom: 5em;
-        padding: 0.5em;
+        margin: 16px;
+        margin-bottom: 80px;
+        padding: 7.5px;
         /*border: 1px solid var(--gl-gray-light-color);*/
       }
     </style>
     <template>
 
           <div class="layout vertical">
-            <div class="xx">
+            <div class="xx horizontal center-justified layout wrap" style="width: 1300px">
               <chart-bar-g2g chart-name="ทำสัญญา"></chart-bar-g2g>
               <chart-bar-g2g chart-name="ส่งแล้ว"></chart-bar-g2g>
             </div>
-            <div class="xx">
+            <div class="xx horizontal center-justified layout wrap" style="width: 1300px">
               <template is="dom-repeat" items="[[contractList]]">
                 <chart-pie-g2g on-okload="okload" chart-name="[[item.contract_name]]" data="[[item]]"></chart-pie-g2g>
               </template>
             </div>
           </div>
+
           <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
 
             <div class="rightdata" align="left" >
@@ -71,9 +72,10 @@
       </div>
 
       </nylon-panel-right>
+
       <div class="btnFab">
-        <paper-fab icon="add" title="สร้างสัญญา" id="addContract" on-tap="addContract"></paper-fab>
-        <paper-tooltip for="addContract" offset="0">สร้างสัญญา</paper-tooltip>
+        <paper-fab icon="add" title="เพิ่มสัญญา" id="addContract" on-tap="addContract"></paper-fab>
+        <paper-tooltip for="addContract" offset="0">เพิ่มสัญญา</paper-tooltip>
       </div>
     </template>
     <script>

@@ -70,19 +70,27 @@
   </style>
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+      <!-- <div class="horizontal end-justified layout">
+        <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
+        <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
+      </div> -->
+      <gl-form-panel-head label="" set-padding="10px" set-border="1px">
+        <div class="horizontal end-justified layout">
+          <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
+          <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
       <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
         <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
-          <gl-form-panel-head label="" set-padding="10px" set-border="1px">
-            <div class="horizontal end-justified layout">
+
               <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment"  hidden="[[data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
               <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment" hidden="[[data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
-             </div>
-         </gl-form-panel-head>
+
+
         </template>
       </template>
-
+       </div>
+        </gl-form-panel-head>
 <!-- [[insertData]]//[[isInputDisabled]]//[[isViewSeleted]]// -->
 
      <gl-grid-row width="{{getWidth}}">
@@ -343,6 +351,14 @@
         }
         this.$$('#'+targetAttribute).toggle();
       },
+      printShipment:function () {
+        console.log('shm_id=>',this.data.shm_id);
+        // this.fire('nylon-change-page',{path:'/report6?'})
+        window.open('http://localhost:8080/report6?shm_id='+this.data.shm_id,'1');
+        window.open('http://localhost:8080/report7?shm_id='+this.data.shm_id,'2');
+        window.open('http://localhost:8080/report13?shm_id='+this.data.shm_id,'3');
+        // window.location.href = 'http://www.google.com';
+      },
       calcelShipmentIn:function () {
 
           this.calcelContract();
@@ -418,30 +434,31 @@
          }
       },
       approveShipment:function () {
-        this.data.shm_status= this.approve(this.data.shm_status);
-        this._cleanDataInsertShimment(this.data,(data)=>{
-            // data.shm_id = this.data.shm_id;
-            data.id = this.data.shm_id;
-            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
-                status:'dialog',
-                text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
-                confirmed:this._approveShipment.bind(this), //function ที่ใช้รับค่า ปุ่ม
-                el: this, // compontents
-                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-            })
-        });
+        if (this.data.shm_quantity <= this.dataForSelect.contract_quantity_shipment_balance) {
+            this.data.shm_status= this.approve(this.data.shm_status);
+            this._cleanDataInsertShimment(this.data,(data)=>{
+                // data.shm_id = this.data.shm_id;
+                data.id = this.data.shm_id;
+                this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                    status:'dialog',
+                    text:'ต้องการยืนยันข้อมูลใช่หรือไม่ ?',
+                    confirmed:this._approveShipment.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                    el: this, // compontents
+                    data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+                })
+            });
+          } else {
+              this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+        }
       },
       _approveShipment:function (result,detail) {
         if (result == true) {
           // console.log(detail.data);
-          // console.log(this.dataForSelect.contract_quantity_shipment_balance);
-          // console.log(this.data);
-          if (shm_quantity <= this.dataForSelect.contract_quantity_shipment_balance) {
 
-
-             this.update('./g2g/shipment/update', detail.data,() => {
-            //
-            // //    //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
+            this.update('./g2g/shipment/update', detail.data,() => {
+               //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:detail.data.contract_id});
             this.fire('get-list-shipment-detail',{sm_id:detail.data.id});
@@ -451,11 +468,6 @@
                    }
                });
              });
-          }else {
-            this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
-            callback:function(){
-            }})
-          }
          }
       },
       deleteShipment:function () {
