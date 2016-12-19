@@ -39,6 +39,7 @@
               <th>เลขที่ใบแจ้งหนี้</th>
               <th>Port of Delivery </th>
               <th>Port of Destination </th>
+              <th style="width:3%">Print</th>
             </tr>
           </thead>
           <tbody class="table-body">
@@ -52,9 +53,14 @@
                     <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
                     <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.deli_port_name]]</td>
                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.dest_port_name]]</td>
+                   <td class="item"  >
+                     <paper-icon-button id="printShipment" data="[[item]]" class="crud" icon="print" raised on-tap="getInvoiceid"  hidden="[[!data.shm_status]]"></paper-icon-button>
+                     <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
+                   </td>
                   </tr>
                 </template>
                 <tr>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -93,6 +99,10 @@
       // },
       getInvoiceDetail:function (e) {
         this.fire('get-invoice-detail',{detail:e.currentTarget.data});
+      },
+      getInvoiceid:function (e) {
+        // console.log(e.currentTarget.data.invoice_id);
+        window.open('http://localhost:8080/report4?invoice_id='+e.currentTarget.data.invoice_id,'1');
       },
       payMoney:function () {
         let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');

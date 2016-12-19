@@ -35,17 +35,21 @@
   <template>
 
     <gl-form-panel set-padding="10px 20px 10px 20px">
+      <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
+        <template is="dom-if" if="[[_checkUndefined(data.invoice_id)]]">
+          <paper-icon-button id="printInvoice" class="crud" icon="print" raised on-tap="printInvoice"  hidden="[[!data.shm_status]]"></paper-icon-button>
+          <paper-tooltip for="printInvoice" offset="0">Print Invoice</paper-tooltip>
+        </template>
       <template is="dom-if" if="[[!isViewSeleted]]">
-        <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
           <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
           <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
           <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
           <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
-        </gl-form-panel-head>
       </template>
+      </gl-form-panel-head>
     <gl-form-panel-body>
 
-    <div class="text">NEW COMMERCIAL INVOICE</div>
+    <div class="text">COMMERCIAL INVOICE</div>
 
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -121,6 +125,7 @@
                     <tr style="font-size:14px">
                         <td>[[data.buyer_masks]]</td>
                         <td>[[formatNumberNoZero(item.quantity_bags)]] BAGS</td>
+                        <!-- [[_countBag(item.quantity_bags)]] -->
                         <td>
                           [[item.type_rice_desc_en]] CURRENT NEW CROP,DOUBLE POLISHED AND SORTEXED QUALITY.<br>
                           PACKING: INSTRONG EXPORT SEA WORTHY NEWSINGLE PP BAGS OF [[item.package_kg_per_bag]] KILOGRAMS NET WITH MINIMUM TARE WEIGHT TO BE AT [[item.package_weight_bag]] GRAM/BAG.
@@ -185,7 +190,7 @@
                 <tfoot class="table-foor">
                   <tr style="font-size:14px">
                     <td></td>
-                    <td>[[formatNumberNoZero(data.quantity)]] BAGS</td>
+                    <td>[[formatNumberNoZero(data.quantity_bags)]] BAGS</td>
                     <td>
                       TOTAL <br>
                       <gl-grid-row>
@@ -294,6 +299,9 @@
           return data.map((e)=> e.ship_name).join(", ");
         }
       },
+      _countBag:function (data) {
+        console.log(data);
+      },
       _changeDataCommercial:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.invoice_date', date);
@@ -301,15 +309,23 @@
         });
       },
       _obCheckDataForWrite:function (data) {
-        if (data.cl_quality != null) {
-          this.cl_quality = data.cl_quality.toUpperCase();
-        }
+        // if (data.cl_quality != null) {
+        //   this.cl_quality = data.cl_quality.toUpperCase();
+        // }
         let rice = data.bl_detail;
         if (this.nameRice.length == 0){
           rice.map((el)=>{
             this.nameRice += el.type_rice_name_en.toUpperCase()+', ';
           })
         }
+      },
+      _checkUndefined:function (data) {
+        if (data != undefined) {
+          return true
+        }
+      },
+      printInvoice:function () {
+        window.open('http://localhost:8080/report4?invoice_id='+this.data.invoice_id,'1');
       },
       createInvoice:function () {
         this.data.invoice_status=false;
@@ -403,7 +419,7 @@
           var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
           var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
           var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-          console.log(amount_usd);
+          // console.log(amount_usd);
           var s = amount_usd.toString();
           s = s.replace(/[\, ]/g, '');
           if (s != parseFloat(s)) return 'not a number';
