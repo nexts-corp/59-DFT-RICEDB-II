@@ -29,11 +29,11 @@ var schema = {
         "buyer_id": {
             "type": "string"
         },
-        "deli_port_id": {
+        "port_id": {
             "type": "string"
         }
     },
-    "required": ["notify_name", "notify_address", "notify_tel", "notify_fax", "buyer_id", "deli_port_id"]
+    "required": ["notify_name", "notify_address", "notify_tel", "notify_fax", "buyer_id", "port_id"]
 };
 var validate = ajv.compile(schema);
 
