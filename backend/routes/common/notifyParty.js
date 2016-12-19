@@ -14,46 +14,44 @@ var schema = {
         "id": {
             "type": "string"
         },
-        "buyer_address": {
+        "notify_name": {
             "type": "string"
         },
-        "buyer_email": {
-            "type": "string",
-            "format": "email"
-        },
-        "buyer_fax": {
+        "notify_address": {
             "type": "string"
         },
-        "buyer_name": {
+        "notify_tel": {
             "type": "string"
         },
-        "buyer_masks": {
+        "notify_fax": {
             "type": "string"
         },
-        "buyer_tel": {
+        "buyer_id": {
             "type": "string"
         },
-        "country_id": {
+        "deli_port_id": {
             "type": "string"
         }
     },
-    "required": ["buyer_address", "buyer_email", "buyer_name", "buyer_masks", "buyer_tel", "buyer_fax", "country_id"]
+    "required": ["notify_name", "notify_address", "notify_tel", "notify_fax", "buyer_id", "deli_port_id"]
 };
 var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
-        r.db('common').table("buyer")
+        r.db('common').table("notify_party")
             .merge(function (row) {
                 return {
-                    buyer_id: row('id'),
+                    notify_id: row('id'),
                     date_created: row('date_created').split('T')(0),
                     date_updated: row('date_updated').split('T')(0)
                 }
             })
             .without('id')
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-            .orderBy('country_code3', 'buyer_name')
+            .eqJoin("port_id", r.db('common').table("port")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .orderBy('country_code3', 'notify_party_name')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -65,22 +63,24 @@ router.get(['/', '/list'], function (req, res, next) {
                         }
                     });
                 } else {
-                    res.json(null);
+                    res.json(err);
                 }
             });
     })
 });
-router.get('/id/:buyer_id', function (req, res, next) {
+router.get('/id/:notify_id', function (req, res, next) {
     db.query(function (conn) {
-        r.db('common').table("buyer")
-            .get(req.params.buyer_id)
+        r.db('common').table("notify_party")
+            .get(req.params.notify_id)
             .merge(
-            {
-                buyer_id: r.row('id'),
-                date_created: r.row('date_created').split('T')(0),
-                date_updated: r.row('date_updated').split('T')(0)
-            },
-            r.db('common').table("country").get(r.row("country_id")).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                {
+                    notify_id: r.row('id'),
+                    date_created: r.row('date_created').split('T')(0),
+                    date_updated: r.row('date_updated').split('T')(0)
+                },
+                r.db('common').table("port").get(r.row("port_id")).without('id', 'date_created', 'date_updated', 'creater', 'updater'),
+                r.db('common').table("country").get(r.row("country_id")).without('id', 'date_created', 'date_updated', 'creater', 'updater'),
+                r.db('common').table("buyer").get(r.row("buyer_id")).without('id', 'date_created', 'date_updated', 'creater', 'updater')
             )
             .without('id')
             .run(conn, function (err, cursor) {
@@ -98,7 +98,7 @@ router.post('/insert', function (req, res, next) {
     var result = { result: false, message: null, id: null };
     if (valid) {
         if (req.body.id == null) {
-            datacontext.insert("common", "buyer", req.body, res);
+            datacontext.insert("common", "notify_party", req.body, res);
         } else {
             result.message = 'field "id" must do not have data';
             res.json(result);
@@ -113,13 +113,13 @@ router.put('/update', function (req, res, next) {
     var valid = validate(req.body);
     var result = { result: false, message: null, id: null };
     if (valid) {
-        datacontext.update("common", "buyer", req.body, res);
+        datacontext.update("common", "notify_party", req.body, res);
     } else {
         result.message = ajv.errorsText(validate.errors);
         res.json(result);
     }
 });
 router.delete('/delete/id/:id', function (req, res, next) {
-    datacontext.delete("common", "buyer", req.params.id, res);
+    datacontext.delete("common", "notify_party", req.params.id, res);
 });
 module.exports = router;

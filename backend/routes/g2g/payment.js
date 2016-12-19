@@ -62,9 +62,9 @@ router.get('/exporter/id/:id', function (req, res, next) {
                                             exporter_id: req.params.id
                                         })
                                         .merge({ shm_det_id: me3('shm_det_id') })
-                                        .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                                        .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
                                         .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_date", "cl_name", "cl_quality"] }).zip()
-                                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
                                         // .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id","date_created","date_updated"] }).zip()
                                         // .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id","date_created","date_updated"] }).zip()
                                         // .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","date_created","date_updated", "country_id"] }).zip()
@@ -155,7 +155,7 @@ router.get('/exporter/id/:id', function (req, res, next) {
                             fee_id: me1('fee_id'),
                             exporter_id: req.params.id
                         })
-                        .eqJoin("bank_id", r.db('common').table("bank")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+                        .eqJoin("bank_id", r.db('common').table("bank")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
                         .coerceTo('array')(0)
                         .merge(function (me2) {
                             return {

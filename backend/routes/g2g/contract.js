@@ -131,8 +131,8 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id", "date_created", "date_updated"] }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("buyer_id", r.db('common').table("buyer")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
             .orderBy('date_updated')
             .run(conn, function (err, cursor) {
                 if (!err) {
