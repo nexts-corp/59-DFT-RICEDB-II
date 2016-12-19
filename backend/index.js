@@ -67,7 +67,7 @@ if (cluster.isMaster) {
   public.use(express.static(publicStatic));
 
   public.use(function (req, res, next) {
-    res.sendfile("./${publicStatic}/index.html");
+    res.sendfile("./"+publicStatic+"/index.html");
   });
   
   public.listen(3000);
