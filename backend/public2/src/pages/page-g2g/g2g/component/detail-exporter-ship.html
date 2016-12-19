@@ -484,14 +484,16 @@
                             ship_lot_no,shipline_id,surveyor_id,weight_per_container,
                             type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
             newData.ship = new Array();
-            newData.eta_date = new Date (newData.eta_date);
-            newData.etd_date = new Date (newData.etd_date);
-            newData.packing_date = new Date (newData.packing_date);
-            newData.product_date = new Date (newData.product_date);
+            newData.eta_date = new Date (newData.eta_date).toISOString();
+            newData.etd_date = new Date (newData.etd_date).toISOString();
+            newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
+            newData.packing_date = new Date (newData.packing_date).toISOString();
+            newData.product_date = new Date (newData.product_date).toISOString();
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
             el.map((el)=> {el.reset();});
+            // console.log(newData);
             callback(newData)
           } else {
             this.fire('toast',{status:'connectError',text:'กรุณากรอกให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error

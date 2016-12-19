@@ -121,6 +121,7 @@
                     <tr style="font-size:14px">
                         <td>[[data.buyer_masks]]</td>
                         <td>[[formatNumberNoZero(item.quantity_bags)]] BAGS</td>
+                        [[_countBag(item.quantity_bags)]]
                         <td>
                           [[item.type_rice_desc_en]] CURRENT NEW CROP,DOUBLE POLISHED AND SORTEXED QUALITY.<br>
                           PACKING: INSTRONG EXPORT SEA WORTHY NEWSINGLE PP BAGS OF [[item.package_kg_per_bag]] KILOGRAMS NET WITH MINIMUM TARE WEIGHT TO BE AT [[item.package_weight_bag]] GRAM/BAG.
@@ -294,6 +295,9 @@
           return data.map((e)=> e.ship_name).join(", ");
         }
       },
+      _countBag:function (data) {
+        console.log(data);
+      },
       _changeDataCommercial:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.invoice_date', date);
@@ -301,9 +305,9 @@
         });
       },
       _obCheckDataForWrite:function (data) {
-        if (data.cl_quality != null) {
-          this.cl_quality = data.cl_quality.toUpperCase();
-        }
+        // if (data.cl_quality != null) {
+        //   this.cl_quality = data.cl_quality.toUpperCase();
+        // }
         let rice = data.bl_detail;
         if (this.nameRice.length == 0){
           rice.map((el)=>{
@@ -403,7 +407,7 @@
           var dg = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
           var tn = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
           var tw = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-          console.log(amount_usd);
+          // console.log(amount_usd);
           var s = amount_usd.toString();
           s = s.replace(/[\, ]/g, '');
           if (s != parseFloat(s)) return 'not a number';

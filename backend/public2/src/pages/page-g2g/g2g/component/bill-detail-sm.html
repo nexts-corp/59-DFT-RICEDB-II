@@ -139,7 +139,7 @@
     <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
       <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">     ย้อนกลับ</paper-button>
-      <paper-button class="gl-btn-success" raised on-tap="addBl">  เพิ่ม</paper-button>
+      <paper-button class="gl-btn-primary" raised on-tap="addBl">  เพิ่ม</paper-button>
     </gl-form-panel-footer>
     </template>
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
@@ -147,8 +147,7 @@
       <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment" hidden="[[!isInputDisabled]]">
         ย้อนกลับ</paper-button>
       <paper-button class="gl-btn-danger" on-tap="calcelBl" raised hidden="[[isInputDisabled]]">ยกเลิก</paper-button>
-      <paper-button class="gl-btn-primary" raised on-tap="editBl" hidden="[[isInputDisabled]]">
-      บันทึก</paper-button>
+      <paper-button class="gl-btn-success" raised on-tap="editBl" hidden="[[isInputDisabled]]">  บันทึก</paper-button>
     </gl-form-panel-footer>
     </template>
   </template>
@@ -370,10 +369,12 @@
                             ship_lot_no,shipline_id,surveyor_id,weight_per_container,
                             type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
             newData.ship = new Array();
-            newData.eta_date = new Date (newData.eta_date);
-            newData.etd_date = new Date (newData.etd_date);
-            newData.packing_date = new Date (newData.packing_date);
-            newData.product_date = new Date (newData.product_date);
+            newData.eta_date = new Date (newData.eta_date).toISOString();
+            newData.etd_date = new Date (newData.etd_date).toISOString();
+            newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
+            newData.packing_date = new Date (newData.packing_date).toISOString();
+            newData.product_date = new Date (newData.product_date).toISOString();
+            console.log(newData.cut_of_date);
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
