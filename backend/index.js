@@ -54,10 +54,20 @@ if (cluster.isMaster) {
   })
 
   public.use('/api', app);
-  public.use(express.static('public'));
+
+  // var publicStatic = function(){
+  //   console.log(global.public);
+  //   if(typeof global.public == "undefined"){
+  //     return "public";
+  //   }else{
+  //     return global.public;
+  //   }
+  // }
+  var publicStatic = "public";
+  public.use(express.static(publicStatic));
 
   public.use(function (req, res, next) {
-    res.sendfile("./public/index.html");
+    res.sendfile("./${publicStatic}/index.html");
   });
   
   public.listen(3000);

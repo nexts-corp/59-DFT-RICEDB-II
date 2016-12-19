@@ -1,0 +1,99 @@
+<dom-module id="list-of-bl-pm">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .labelSearch{
+    font-size: var(--font-size-h4);
+    margin: 10px 10px 10px 10px;
+    }
+    .table-body >tr > td{
+      cursor:pointer;
+    }
+    .title {
+      margin: 1em;
+      text-align: center;
+      font-size: var(--font-size-h4);
+    }
+  </style>
+  <template>
+    <div class="title">ใบตราส่งสินค้าทางทะเล</div>
+    <div class="flex searchInput ">
+       <div class="horizontal end-justified layout">
+         <div class="labelSearch">B/L No.</div>{{_searchInArray(searchInput)}}
+         <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+         <paper-icon-button icon="search"></paper-icon-button>
+       </div>
+   </div>
+
+    <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>ชื่อการทำสัญญา</th>
+              <th>งวดการส่งมอบ</th>
+
+              <th>B/L No.</th>
+
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
+              <template is="dom-repeat" items="[[newData]]" >
+                <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
+                  <td>[[item.cl_name]]</td>
+                  <td>[[item.shm_name]] ([[item.shm_no]])</td>
+
+                  <td>[[item.bl_no]]</td>
+
+                </tr>
+              </template>
+            <!-- </template> -->
+         </tbody>
+      </table>
+  </template>
+  <script>
+    Polymer({
+      is: "list-of-bl-pm",
+      observers:[
+        'initDatabl(data)'
+      ],
+      behaviors: [
+          g2gCongtroller
+      ],
+      properties: {
+        newData:{
+          type:Object
+        }
+      },
+      initDatabl:function (data) {
+        // console.log(data);
+        this.newData = this.g2gClone(data);
+        // console.log('clone new==>',this.newData);
+        // console.log('org==>',this.data);
+      },
+      _searchInArray:function (searchInput) {
+          // console.log(searchInput == '');
+          if (searchInput != '') {
+            let arr=[];
+            this.data.map((el)=>{
+              if (el.bl_no.search(searchInput) > -1) {
+                  //  console.log('search==> ',el);
+                    arr.push(el);
+              }
+            });
+            this.newData=arr;
+          }else{
+            this.initDatabl(this.data);
+          }
+      },
+      getBlDetail:function (e) {
+        // console.log(this.data);
+        this.fire('get-bl-detail',{detail:e.currentTarget.data});
+      }
+    });
+  </script>
+</dom-module>
