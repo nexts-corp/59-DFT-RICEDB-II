@@ -1,0 +1,296 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../page-g2g/g2g/controller/g2gModelbehavior.html">
+<link rel="import" href="../page-g2g/g2g/controller/g2gCongtroller.html">
+<link rel="import" href="../components/format-number-behavior.html">
+<link rel="import" href="payment/component/taps-payment.html">
+<link rel="import" href="payment/component/list-of-bl-pm.html">
+<link rel="import" href="payment/component/list-of-invoice.html">
+<link rel="import" href="payment/component/list-of-fee.html">
+<!-- <link rel="import" href="payment/component/commercial-invoice.html"> -->
+<!-- <link rel="import" href="payment/component/fee-exports.html"> -->
+<link rel="import" href="payment/component/payment-export.html">
+<dom-module id="page-payment">
+    <style media="screen" include="iron-flex gl-styles">
+      :host{
+        --paper-fab-background:var(--paper-light-blue-500);
+        --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+      }
+      *{
+        font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      paper-fab {
+           position: fixed;
+           right: 16px;
+           bottom: 16px;
+           color: var(--gl-white-color);
+    }
+    paper-material{
+      margin: 10px;
+      background-color: var(--gl-white-color);
+    }
+    </style>
+    <template>
+
+
+        <paper-material elevation="1">
+          <taps-payment>
+            <section-content name="bl">
+              <list-of-bl-pm data="[[dataListPay.blShipment]]"></list-of-bl-pm>
+            </section-content>
+            <section-content name="invoice">
+              <list-of-invoice data="[[dataListPay.invoiceList]]"></list-of-invoice>
+            </section-content>
+            <section-content name="fee">
+              <list-of-fee data="[[dataListPay.feeList]]"></list-of-fee>
+            </section-content>
+            <section-content name="payment">
+              <payment-export></payment-export>
+            </section-content>
+          </taps-payment>
+        </paper-material>
+
+    <nylon-panel-right title="{{titlePanelRight}}" id="test" set-width="95%">
+      <div class="rightdata" align="left" >
+        <iron-pages selected="{{paymentsPageSeleted}}" attr-for-selected="name">
+          <div name="blPage">
+            <commercial-invoice data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></commercial-invoice>
+          </div>
+          <div name="invoicePage">
+            <commercial-invoice data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></commercial-invoice>
+          </div>
+          <div name="blInvoicePage">
+            <fee-exports data="[[dataSelectedfee.draft]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
+          </div>
+          <div name="feePage">
+            <fee-exports data="[[dataSelectedfee.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports>
+          </div>
+        </iron-pages>
+      </div>
+    </nylon-panel-right>
+
+
+
+    </template>
+    <script>
+        Polymer({
+            is:'page-payment',
+            behaviors: [
+                g2gModelBehavior,
+                g2gCongtroller
+            ],
+            properties: {
+              dataListPay: {
+                type: Object,
+                value:{}
+              },
+              dataSelected: {
+                type: Object,
+                // value:{}
+              },
+              dataSelectedfee: {
+                type: Object,
+                value:{}
+              },
+              paymentsPageSeleted:{
+                type:String,
+                value:'blPage'
+              },
+              checkRenderPage:{
+                type: Object,
+                value:
+                  {
+                    commercialInvoice:false,
+                    feeExports:false,
+                  }
+              },
+              titlePanelRight:{
+                type:String,
+                value:'การซื้อขายข้าวระหว่างประเทศ'
+              },
+            },
+            listeners: {
+              'get-bl-list':'_getBlListFire',
+              'get-bl-detail':'_getBlDetail',
+              'get-invoice-list':'_getInvoiceListFire',
+              'get-invoice-detail':'_getBlInvoiceDetail',
+              'get-fee-list':'_getFeeListFire',
+              'get-select-draftPayment':'_getInvoiceDetail',
+              'get-fee-detail':'_getFeeDetail',
+              'flipDrawer':'_flipDrawer',
+              'close-drawer':'_flipDrawerClose'
+            },
+            ready: function() {
+              let shmId = this._getUrl();
+              this._getBlList(shmId);
+              this._getInvoiceList(shmId);
+              this._getFeeList(shmId);
+            },
+            _getUrl:function () {
+              // get cookie
+              let cookie = document.cookie.split(';');
+              let url;
+              cookie.map((ee)=>{
+                ee = ee.replace(' ', '');
+                if (ee.indexOf("url") == 0 ) {
+                  url=ee.substring(4, 40);
+                }
+              });
+              return url;
+            },
+            _getBlListFire:function (e) {
+              this._getBlList(e.detail.detail);
+            },
+            _getBlList:function (shmId) {
+              this.read('./g2g/bl/contract/id/'+shmId,(data)=>{
+                this.dataListPay.blShipment=data;
+                this.notifyPath('dataListPay.blShipment');
+              });
+            },
+            _getInvoiceListFire:function (e) {
+              this._getInvoiceList(e.detail.detail);
+            },
+            _getInvoiceList:function (shmId) {
+              this.read('./g2g/invoice/contract/id/'+shmId,(data)=>{
+                this.dataListPay.invoiceList=data;
+                this.notifyPath('dataListPay.invoiceList');
+              });
+            },
+            _getFeeListFire:function (e) {
+                this._getFeeList(e.detail.detail);
+            },
+            _getFeeList:function (shmId) {
+              this.read('./g2g/fee/contract/id/'+shmId,(data)=>{
+                this.dataListPay.feeList=data;
+                this.notifyPath('dataListPay.feeList');
+              });
+            },
+            _getBlDetail:function (e) {
+              let bl_no = e.detail.detail.bl_no;
+              this.titlePanelRight = 'รายละเอียด Bl'
+              this.fire('toast',{status:'load'});
+              this.read('./g2g/bl/no/'+bl_no,(data)=>{
+                    this.dataSelected = data;
+                    this.paymentsPageSeleted = 'blPage';
+                });
+              if (this.checkRenderPage.commercialInvoice != true) {
+                this.async(()=>{
+                  this.importHref(
+                      this.resolveUrl('./payment/component/commercial-invoice.html'),
+                      ()=>{
+                        this.async(()=>{
+                          this.fire('toast',{status:'load'});
+
+                          this._flipDrawer();
+                          this.checkRenderPage.commercialInvoice=true;
+                        },500)
+                      }, null, true
+                  );
+                },1000);
+              } else {
+                this.fire('toast',{status:'load'});
+                this._flipDrawer();
+              }
+
+            },
+            _getBlInvoiceDetail:function (e) {
+              this.titlePanelRight = 'รายละเอียด Invoice'
+              this.fire('toast',{status:'load'});
+              this.read('./g2g/invoice/id/'+e.detail.detail.invoice_id,(data)=>{
+                this.dataSelected = data;
+                this.paymentsPageSeleted = 'invoicePage';
+              });
+              if (this.checkRenderPage.commercialInvoice != true) {
+                this.async(()=>{
+                  this.importHref(
+                      this.resolveUrl('./payment/component/commercial-invoice.html'),
+                      ()=>{
+                        this.async(()=>{
+                          this.fire('toast',{status:'load'});
+
+                          this._flipDrawer();
+                          this.checkRenderPage.commercialInvoice=true;
+                        },500)
+                      }, null, true
+                  );
+                },1000);
+              } else {
+                this.fire('toast',{status:'load'});
+                this._flipDrawer();
+              }
+            },
+            _getInvoiceDetail:function (e) {
+              // this.dataSelected = e.detail.detail;
+              let url='';
+              e.detail.detail.map((el,index)=>{
+                if (index == 0) {
+                  url = url +el.data;
+                }else {
+                  url = url+'_' +el.data;
+                }
+              });
+              this.fire('toast',{status:'load'});
+              this.read('./g2g/fee/invoice/id/'+url,(data)=>{
+                this.dataSelectedfee.draft = data;
+                this.dataSelectedfee.draft.rate_tt =0;
+                this.dataSelectedfee.draft.rate_bank  =0;
+                this.dataSelectedfee.draft.fee_internal=0;
+                this.dataSelectedfee.draft.fee_foreign=0;
+                this.dataSelectedfee.draft.fee_other=0;
+                this.notifyPath('dataSelectedfee.draft');
+                this.paymentsPageSeleted = 'blInvoicePage';
+                if (this.checkRenderPage.feeExports != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./payment/component/fee-exports.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            this._flipDrawer();
+                            this.checkRenderPage.feeExports=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+
+              });
+            },
+            _getFeeDetail:function (e) {
+              this.fire('toast',{status:'load'});
+              this.read('./g2g/fee/id/'+e.detail.detail,(data)=>{
+                  this.dataSelectedfee.fee = data;
+                  this.notifyPath('dataSelectedfee.fee');
+                  this.paymentsPageSeleted = 'feePage';
+                  if (this.checkRenderPage.feeExports != true) {
+                    this.async(()=>{
+                      this.importHref(
+                          this.resolveUrl('./payment/component/fee-exports.html'),
+                          ()=>{
+                            this.async(()=>{
+                              this.fire('toast',{status:'load'});
+                              this._flipDrawer();
+                              this.checkRenderPage.feeExports=true;
+                            },500)
+                          }, null, true
+                      );
+                    },1000);
+                  } else {
+                    this.fire('toast',{status:'load'});
+                    this._flipDrawer();
+                  }
+              });
+            },
+            _flipDrawer:function () {
+              Polymer.dom(this.root).querySelector('#test').open();
+            },
+            _flipDrawerClose:function () {
+              console.log(111);
+              Polymer.dom(this.root).querySelector('#test').close();
+            }
+        });
+    </script>
+</dom-module>

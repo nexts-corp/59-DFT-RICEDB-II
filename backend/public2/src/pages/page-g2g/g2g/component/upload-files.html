@@ -1,0 +1,147 @@
+<dom-module id="upload-files">
+  <style is="custom-style" include="iron-flex iron-flex-alignment gl-styles">
+  .flexchild-1 {
+    @apply(--layout-flex);
+  }
+  .top{
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .content{
+    padding-left: 15px;
+  }
+  .content2{
+    padding-left: 20px;
+  }
+  .text{
+    text-align: center;
+    color: gray;
+    margin-top: 10px;
+  }
+  iron-icon{
+    width: 3em;
+    height: 3em;
+    color: gray;
+    align-self: center;
+  }
+  .upload input {
+    visibility: hidden;
+    position: absolute;
+  }
+  .dropzone{
+    @apply(--layout-vertical);
+    @apply(--layout-wrap);
+  }
+  .zone{
+    /*background-color:#ccc;*/
+    height:300px;
+  }
+  .bd {
+    border: 1px solid #000;
+    margin: 5px;
+  }
+  </style>
+  <template>
+    <div class="layout vertical">
+      <div class="layout horizontal top">
+          <div class="flexchild-1">
+            <div class="content">ชื่อไฟล์</div>
+          </div>
+          <div class="flexchild-1">วันที่</div>
+      </div>
+
+      <div>
+        <div id="dropzone" class="dropzone">
+            <!-- dropfile -->
+            <template is="dom-if" if="{{!seleted}}">
+              <div class="zone">
+                <div class="text" style="margin-top:50px;"><iron-icon icon="icons:description"></iron-icon></div>
+                <div class="text">ไม่มีไฟล์</div>
+                <div class="text">ลากไฟล์มาวางหรือกดเพิ่ม</div>
+                <div class="text">ไฟล์</div>
+              </div>
+            </template>
+
+            <template is="dom-if" if="{{seleted}}">
+              <paper-menu multi>
+                 <template is="dom-repeat" items="{{files}}">
+                    <!-- <paper-item>{{item.name}}</paper-item> -->
+                    <paper-item class="flex-horizontal bd">
+                          <div class="flexchild-1">{{item.name}}</div>
+                          <div class="flexchild-1">
+                            <div class="content2">29/01/2558</div>
+                          </div>
+                          <paper-icon-button icon="icons:delete" style="color: gray;" on-tap="del"></paper-icon-button>
+                    </paper-item>
+                 </template>
+              </paper-menu>
+            </template>
+        </div>
+
+      </div>
+    </div>
+    <div class="horizontal end-justified layout">
+        <label class="upload">
+          <input id="dropSelect" type="file" id="input" multiple>
+          <paper-button class="gl-btn-primary" raised>เพิ่มไฟล์</paper-button>
+        </label>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "upload-files",
+      properties:{
+        seleted:{
+          type:Boolean,
+          value:false
+        },
+        files:{
+          type:Object,
+          value:function(){
+            return [];
+          },
+          notify:true
+        }
+      },
+      observers:['checkSeleted(files.*)'],
+      ready:function(){
+        this.testza = this;
+        var dropzone = this.$.dropzone;
+        dropzone.ondragover = dropzone.ondragenter = function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+        }
+        var rootDom = this;
+        dropzone.ondrop = function(event){
+          event.stopPropagation();
+          event.preventDefault();
+
+          var files = event.dataTransfer.files;
+          for (var i=0; i<files.length; i++) {
+            //console.log(files[i]);
+            rootDom.push('files',files[i]);
+          }
+        }
+        this.$.dropSelect.onchange = function(){
+          var files = this.files;
+          for (var i = 0; i < files.length; i++) {
+            //console.log(files[i]);
+            rootDom.push('files',files[i]);
+          }
+        }
+      },
+      checkSeleted:function(arr){
+        if(this.files.length!=0){
+          this.seleted = true;
+        }
+      },
+      del:function(e){
+        var dele = this.files;
+        this.splice('files',dele, 1);
+        if(dele.length==0){
+          this.seleted = false;
+        }
+      }
+    });
+  </script>
+</dom-module>

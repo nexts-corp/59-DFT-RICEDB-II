@@ -1,0 +1,288 @@
+<link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../../../bower_components/iron-icons/editor-icons.html">
+<dom-module id="payment-export">
+<style include="iron-flex iron-flex-alignment gl-styles" is="custom-style">
+    .textheader-center {
+      text-align: center;
+      font-size: var(--font-size-large);
+    }
+    .text-center{
+      text-align: center;
+    }
+    .text-right{
+      text-align: right;
+    }
+    .header-grey {
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h4);
+    }
+    .header-black {
+      color: var(--paper-black-600);
+      font-size: var(--font-size-h4);
+    }
+
+    .text-top{
+      margin: 15px 0px 15px 15px;
+    }
+
+    .number-align{
+      margin-top: 15px;
+    }
+
+    .button-size{
+      height: 30px;
+    }
+
+    .margin-head{
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+    .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2),
+    .table-head > tr > th:nth-child(4),
+    .table-head > tr > th:nth-child(6)  {
+      width: 15%;
+    }
+    .table-head > tr > th:nth-child(3),
+    .table-head > tr > th:nth-child(5) {
+      width: 10%;
+    }
+    .table-head > tr > th:nth-child(7) {
+      width: 20%;
+    }
+  </style>
+  <template>
+    <div class="textheader-center margin-head">จ่ายเงินค่าข้าวให้ผู้ส่งออก</div>
+    <div class="header-grey margin-head">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+              item-value-path="exporter_id" items="[[dataForSelected.exporters]]" value="{{dataForSelected.exporterSelected}}" on-value-changed="_searchExporter"></gl-combo-box>
+
+        </gl-grid-col>
+        <!-- on-value-changed="getPayment" -->
+      </gl-grid-row>
+    </div>
+
+    <div class="margin-head">
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+          <div class="header-black">ชื่อผู้ส่งออก</div>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <!-- <template is="dom-repeat" items="{{dataName}}"> -->
+            <div class="header-black">[[_getNameExport(dataForSelected.exporterSelected)]]</div>
+          <!-- </template> -->
+        </gl-grid-col>
+      </gl-grid-row>
+    </div>
+    <table class="gl-table-default">
+      <thead class="table-head">
+        <tr>
+          <th></th>
+          <th>งวดที่</th>
+          <th>ครั้งที่</th>
+          <th><div class="text-right">จำนวนเงิน(บาท)</div></th>
+          <th></th>
+          <th><div class="text-center">วันที่จ่ายเงิน</div></th>
+          <th></th>
+          <th><div class="text-center">สถานะ</div></th>
+        </tr>
+      </thead>
+        <tbody>
+          <template is="dom-repeat" as="datapay" items="{{dataForSelected.exporterDetail}}">
+          <tr>
+            <td></td>
+              <td><div style="margin-left:10px;">[[datapay.shm_no]]</div></td>
+              <td><div style="margin-left:10px;">[[datapay.fee_no]]</div></td>
+              <td><div class="text-right">[[formatNumber(datapay.amount_thb_balance)]]</div></td>
+              <td></td>
+              <td><div class="text-center">[[datapay.pay_date]]</div></td>
+              <td></td>
+              <td hidden="{{!datapay.pay_status}}"><div class="text-center">จ่ายเช็คแล้ว</div></td>
+              <td hidden="{{datapay.pay_status}}">
+                  <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay" icon="favorite">จ่ายเช็ค</paper-button>
+              </td>
+          </tr>
+          </template>
+        </tbody>
+
+    </table>
+
+    <paper-dialog id="dialog" style="width:60%;">
+      <div class="textheader-center">กรอกข้อมูลรับเช็ค</div>
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-combo-box id="bank" label="ธนาคาร" item-label-path="bank_name_th"
+              item-value-path="bank_id" items="[[dataForSelected.dataBank]]" value="{{data.bank_id}}" ></gl-combo-box>
+          <!-- <gl-form-dropdown-menu style="width:100%;" label="ธนาคาร" placeholder="กรุณาเลือกธนาคาร">
+            <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{bank_id}}" name="bank_id">
+              <template is="dom-repeat" as="bank" items="[[dataForSelected.dataBank]]">
+                <paper-item value="{{bank.bank_id}}">{{bank.bank_name_th}}</paper-item>
+              </template>
+            </paper-menu>
+          </gl-form-dropdown-menu> -->
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-input  label="สาขา :" placeholder="กรุณาใส่ชื่อสาขา" value="{{data.bank_branch}}" name="bank_branch"></gl-form-input>
+        </gl-grid-col>
+      </gl-grid-row>
+      <gl-grid-row>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-input  label="เลขที่เช็ค :" allowed-pattern="[0-9||,||.]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{data.pay_no}}" name="pay_no"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <vaadin-date-picker label="วันที่เช็ค" value="{{data.pay_date}}" name="pay_date"></vaadin-date-picker>
+        </gl-grid-col>
+      </gl-grid-row>
+      <div class="buttons">
+        <paper-button class="gl-btn-danger button-size" raised on-tap="_cancel">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-primary button-size" raised on-tap="_save">บันทึก</paper-button>
+      </div>
+    </paper-dialog>
+
+    <div id="notfound" >
+      <div class="horizontal center-justified layout searchBorder">
+        <div class="title" style="margin:20px">ไม่พบข้อมูล</div>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "payment-export",
+      behaviors: [
+        g2gModelBehavior,
+        g2gCongtroller,
+        FormatNumberBehavior
+      ],
+      properties: {
+        dataForSelected:{
+          type:Object,
+          value:{}
+        },
+        dataName:{
+          type:Array
+        },
+        data:{
+          type:Object,
+          value:{bank_id:'KTB'}
+        },
+        dataCheck:{
+          type:Object,
+          value:{}
+        },
+        dataPay:{
+          type:Object,
+          value:{}
+        },
+      },
+      observers:[
+        // '_searchExporter(data.exporter_id)'
+        '_changeDataPayment(data.pay_date)'
+      ],
+      _changeDataPayment:function (dateUn) {
+        this.getDateg2g(dateUn,(date)=>{
+          this.set('data.pay_date', date);
+          this.notifyPath('data.pay_date');
+        });
+      },
+      attached: function() {
+        this.getExporters();
+        this.getBank();
+      },
+      getExporters: function() {
+        this.read('./external/exporter?exporter_status=true',(data)=>{
+          this.dataForSelected.exporters = data;
+          this.notifyPath('dataForSelected.exporters')
+        });
+      },
+      getBank: function(){
+        this.read('./common/bank',(data)=>{
+          this.dataForSelected.dataBank = data;
+          this.notifyPath('dataForSelected.dataBank')
+        });
+      },
+      _getNameExport:function (exporter_id) {
+        if (exporter_id) {
+          console.log(this.dataForSelected.exporter_id=exporter_id);
+          let nameExport = this.dataForSelected.exporters.filter((exporter)=> exporter.exporter_id == exporter_id );
+          return nameExport[0].seller_name_th;
+        }
+      },
+      _searchExporter:function(e){
+        let exporter_id = e.detail.value;
+        if (exporter_id) {
+          this.getExporter(exporter_id);
+
+        }else {
+          // if (this.dataForSelected.exporterDetail != null) {
+          //   this.$$('#notfound').setAttribute("hidden", "hidden");
+          // } else {
+          //   this.$$('#notfound').removeAttribute("hidden");
+          // }
+        }
+      },
+      getExporter:function (exporter_id) {
+        console.log(exporter_id);
+        this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
+          this.dataForSelected.exporterDetail = data;
+          // console.log(this.dataForSelected.exporterDetail);
+          // console.log(this.dataForSelected);
+          this.notifyPath('dataForSelected.exporterDetail');
+          if (this.dataForSelected.exporterDetail != null) {
+            this.$$('#notfound').setAttribute("hidden", "hidden");
+          } else {
+            this.$$('#notfound').removeAttribute("hidden");
+          }
+        });
+      },
+      _pay:function(e) {
+        this.dataForSelected.dataPay = e.target.data;
+        this.notifyPath('dataForSelected.dataPay');
+        this.data.fee_id = e.target.data.fee_id;
+        this.data.pay_amount = e.target.data.amount_thb_balance;
+        this.data.exporter_id = this.dataForSelected.exporterSelected;
+        // this.notifyPath('data.amount_thb_balance');
+        this.$.dialog.toggle();
+      },
+      _save:function() {
+
+          this.fire('toast',{status:'dialog',
+          text:'ยืนยันในการจ่ายเช็ค ?',
+          confirmed : this._confirmToast.bind(this),
+          el: this,
+          data:this.data,
+        });
+      },
+        _confirmToast:function(result,detail){
+          if(result == true){
+            // console.log(detail.datas);
+            // console.log(detail.data);
+            this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+            // console.log(this.dataForSelected.exporter_id);
+
+            this.insert('./g2g/payment/insert', detail.data, () => {
+              // this.glQuery('refreshBank')._searchExporter();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              // this.getExporter(this.dataForSelected.exporter_id);
+              }});
+              this.getExporter(this.dataForSelected.exporter_id);
+              this.$.dialog.toggle();
+             });
+          }
+        },
+      _cancel:function() {
+        this.$.dialog.toggle();
+        this.dataCheck = {};
+        this.dataPay = {};
+      }
+    });
+  </script>
+</dom-module>
