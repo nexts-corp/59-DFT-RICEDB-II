@@ -17,9 +17,12 @@ var schema = {
         },
         "shipline_name": {
             "type": "string"
-        }
+        },
+        "shipline_tel": {
+            "type": "string"
+        },
     },
-    "required": ["shipline_name"]
+    "required": ["shipline_name", "shipline_tel"]
 };
 var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {

@@ -17,12 +17,9 @@ var schema = {
         },
         "carrier_name": {
             "type": "string"
-        },
-        "carrier_tel": {
-            "type": "string"
         }
     },
-    "required": ["carrier_name", "carrier_tel"]
+    "required": ["carrier_name"]
 };
 var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
