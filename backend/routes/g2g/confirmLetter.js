@@ -90,7 +90,7 @@ router.get('/id/:cl_id', function (req, res, next) {
                                 return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
                     }),
-                    cl_total_quantity: row('cl_type_rice').sum('type_rice_quantity')
+                    cl_quantity_total: row('cl_type_rice').sum('type_rice_quantity')
                 }
             })
             .without('id')
@@ -124,7 +124,8 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                             .merge(function (row_type_rice) {
                                 return r.db('common').table('type_rice').get(row_type_rice('type_rice_id')).without('id')
                             })
-                    })
+                    }),
+                    cl_quantity_total: row('cl_type_rice').sum('type_rice_quantity')
                 }
             })
             .without('id')
