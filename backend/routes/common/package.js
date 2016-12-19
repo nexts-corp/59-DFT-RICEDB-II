@@ -15,7 +15,10 @@ var schema = {
         "id": {
             "type": "string"
         },
-        "package_name": {
+        "package_name_th": {
+            "type": "string"
+        },
+        "package_name_en": {
             "type": "string"
         },
         "package_kg_per_bag": {
@@ -25,7 +28,7 @@ var schema = {
             "type": "number"
         }
     },
-    "required": ["id", "package_name", "package_kg_per_bag", "package_weight_bag"]
+    "required": ["id", "package_name_th", "package_name_en", "package_kg_per_bag", "package_weight_bag"]
 };
 var validate = ajv.compile(schema);
 router.get(['/', '/list'], function (req, res, next) {
