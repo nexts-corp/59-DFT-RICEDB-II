@@ -24,7 +24,6 @@
             .flex-end-justified {
                 @apply(--layout-horizontal);
                 @apply(--layout-end-justified);
-                padding-right:33px;
             }
             .searchBox {
                 padding: 10px;
@@ -35,7 +34,7 @@
                 margin: 15px;
                 border-radius: 3px;
             }
-            paper-button{
+            paper-button,.font{
                  font-family: 'CSChatThaiUI', sans-serif !important;
                 -webkit-font-smoothing: antialiased;
             }
@@ -54,7 +53,7 @@
                 <vaadin-date-picker label="วันที่สิ้นสุด"></vaadin-date-picker>
               </div>
               <div class="flex-2 layout horizontal">
-                <paper-button class="gl-btn-primary" raised >ค้นหา</paper-button>
+                <paper-button class="gl-btn-primary" on-tap="showData"raised >ค้นหา</paper-button>
               </div>
             </div>
             <div class="flex"></div>
@@ -64,7 +63,7 @@
                 แสดงข้อมูล
             </div>
             <div class="gl-panel-default-content">
-                <div class="layout horizontal">
+                <!--<div class="layout horizontal">
                     <div class="flex"></div>
                     <div class="flex-4">
                         <gl-combo-box label="บริษัท" items="{{companyName}}"></gl-combo-box>
@@ -72,10 +71,22 @@
                      <div class="flex-2" style="margin-top: 10px;">
                         <paper-button class="gl-btn-primary" raised >ออกรายงาน</paper-button>
                      </div>
-                </div>
-                <div style="overflow-x:auto;">
-                    <money-list></money-list>
-                </div>
+                </div>-->
+                
+                <template is="dom-if" if={{isEnabled}}>
+                    <div class="font">ไม่พบข้อมูล</div>
+                </template>
+                
+                <template is="dom-if" if={{isEnabled2}}>
+                    <div style="overflow-x:auto;">
+                        <money-list></money-list>
+                    </div>
+                    <div class="flex-end-justified" style="padding:10px;">
+                        <paper-button class="gl-btn-primary" raised >ออกรายงาน</paper-button>
+                    </div>
+                </template>
+               
+               
             </div>
         </div>
         <!--<money-panel></money-panel>-->
@@ -91,7 +102,15 @@
                     'บริษัท ปองค้าข้าว จำกัด',
                     'บริษัท พงษ์ลาภ จำกัด'
                 ]
+                },
             },
+            ready:function(){
+                this.isEnabled = true;
+                this.isEnabled2 = false;
+            },
+            showData:function(){
+                this.isEnabled = false;
+                this.isEnabled2 = true;
             }
         });
     </script>
