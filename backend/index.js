@@ -1,5 +1,6 @@
 var express = require('express');
 var public = express();
+var public1 = express();
 var bodyParser = require('body-parser');
 var app = express();
 
@@ -54,6 +55,7 @@ if (cluster.isMaster) {
   })
 
   public.use('/api', app);
+  public1.use('/api', app);
 
   // var publicStatic = function(){
   //   console.log(global.public);
@@ -66,10 +68,17 @@ if (cluster.isMaster) {
   var publicStatic = "public2";
   public.use(express.static(publicStatic));
 
+  var publicStatic1 = "public";
+  public1.use(express.static(publicStatic1));
+
   public.use(function (req, res, next) {
     res.sendfile("./"+publicStatic+"/index.html");
   });
+  public1.use(function (req, res, next) {
+    res.sendfile("./"+publicStatic1+"/index.html");
+  });
   
   public.listen(3000);
+  public1.listen(4000);
 
 }
