@@ -70,7 +70,7 @@
 						<gl-grid-row width="{{getWidth}}">
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-								<gl-form-input label="ปีโควต้า" class="saveData left" allowed-pattern="[0-9]" error-message="กรุณาใสปีโควต้า" required placeholder="ใส่ปีโควต้า" value="{{year}}"
+								<gl-form-input label="ปีโควตา" class="saveData left" allowed-pattern="[0-9]" error-message="กรุณาใสปีโควตา" required placeholder="ใส่ปีโควตา" value="{{year}}"
 									id="" name="" disabled$="{{checkStatus(status)}}"> 
                                 </gl-form-input>
 							</gl-grid-col>
@@ -88,7 +88,7 @@
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
 								<gl-form-input class="mathData saveData" id="sum" label="ยอดรวม" allowed-pattern="[0-9||,||.]" format-number="on" value="[[sum]]" always-float-label auto-validate error-message="กรุณาใสจำนวน" required>
-                                     <div class="font" suffix>ตัน</div>
+                                     <div class="font" suffix>&nbsp;ตัน</div>
                                 </gl-form-input>
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
@@ -101,7 +101,7 @@
 									<th>จำนวนงวด</th>
                                     <th style="text-align: center;">เดือน</th>
 									<th style="text-align: right;">สัดส่วน % </th>
-									<th>ปริมาณ</th>
+									<th style="text-align: right;">ปริมาณ</th>
 									<th></th>
 								</tr>
                                 </thead>
@@ -125,7 +125,7 @@
 											[[testNum(item.*,'percent')]]
                                             [[disabledMath(item.percent,item.quantity)]]
 											<gl-form-input label="" class="mathData number saveData" maxlength="3"  allowed-pattern="[0-9]" error-message="กรุณาใสจำนวน" value="{{item.percent}}" required no-label-float>
-                                                <div suffix>%</div>
+                                                <div suffix>&nbsp;%</div>
                                             </gl-form-input>
 										</td>
 										<td>
@@ -151,7 +151,7 @@
                                  </tbody>
                                 <thead>
 								<tr>
-									<th colspan="2">ปริมาณโควต้ารวม : {{_crossCheck(Period.*)}}</th>
+									<th colspan="2">ปริมาณโควตารวม : {{_crossCheck(Period.*)}} ตัน</th>
                                     <th></th>
                                     <th></th>
 									<th>
@@ -172,7 +172,7 @@
                         <paper-button hidden$="{{!checkStatus(status)}}" on-tap="_deleteData" raised><iron-icon icon="delete"></iron-icon>delete</paper-button>
                     </div>
                     <div style="margin-right:10px;">
-                        <paper-button class="gl-btn-danger" hidden$="{{checkStatus(status)}}" on-tap="_resetData" raised>ยกเลิก</paper-button>
+                        <paper-button class="gl-btn-danger" hidden$="{{checkStatus(status)}}" on-tap="confirmClose" raised>ยกเลิก</paper-button>
                         <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
                     </div>
                  
@@ -384,6 +384,9 @@
                 // console.log('percent',percent);
                 // console.log('quantity',quantity);
                //this.hide=false;
+            },
+            confirmClose:function(){
+                this.fire('cancel-data');
             },
             _resetData:function(){
                  Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{

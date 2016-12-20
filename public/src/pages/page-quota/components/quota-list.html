@@ -30,6 +30,9 @@
            .right{
                text-align: right !important;
            }
+           .left{
+                text-align: left !important;
+           }
            .center{
                text-align: center !important;
            }
@@ -38,9 +41,9 @@
             <table class="gl-table-default" style="border: 1px solid #ddd;">
                 <thead>
                     <th class="center">ประเภทข้าว</th>
-                    <th class="right">งวดที่/เดือน</th>
-                    <th>ปริมาณโควตา</th>
-                    <th>ปริมาณโควตารวม</th>
+                    <th class="left">งวดที่/เดือน</th>
+                    <th class="right">ปริมาณโควตา</th>
+                    <th class="right">ปริมาณโควตารวม</th>
                 </thead>
                 <tbody>
                      <template is="dom-if" if="{{dataStat}}">
@@ -53,15 +56,15 @@
                                 <td class="center">{{item.type_rice_name_th}}</td>
                                 <td>
                                     <template is="dom-repeat" items="{{item.period}}">
-                                        <div class="right">งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]]</div>    
+                                        <div class="left">งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]]</div>    
                                     </template>
                                 </td>
                                 <td>
                                     <template is="dom-repeat" items="{{item.period}}">
-                                        <div>[[formatNumber(item.quantity)]]</div>
+                                        <div class="right">[[formatNumber(item.quantity)]]</div>
                                     </template> 
                                 </td>
-                                <td>[[formatNumber(item.amount)]]</td>
+                                <td class="right">[[formatNumber(item.amount)]]</td>
                             </tr>
                         </template>
                      

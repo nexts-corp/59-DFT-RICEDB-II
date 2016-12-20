@@ -98,7 +98,7 @@
 		<panel-right title="การกำหนดปีโควตา">
       <template is="dom-if" if="[[rendered]]">
         <quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"
-        on-delete-data="_confirmData"></quota-manage>
+        on-delete-data="_confirmData" on-cancel-data="_confirmCancel"></quota-manage>
       </template>
 		</panel-right>
 	</template>
@@ -252,6 +252,13 @@
             data:e.detail
           })
         },
+        _confirmCancel:function(e){
+           this.fire('toast',{
+            status:'openDialog',
+            text:'ต้องการยกเลิกใช่หรือไม่ ?',
+            confirmed:this._cancelData.bind(this)
+          })
+        },    
         _deleteData:function(result,detail){
           var data = detail.data;
           if(result == true){
@@ -275,6 +282,13 @@
                 console.log(error);
               });
           }
+        },
+        _cancelData:function(result){
+          if(result == true){
+            this.$$('quota-manage')._resetData();
+            this.$$('panel-right').close();
+          } 
+         
         },
         _onDataSelect:function(e){
           this.status = 'update';
