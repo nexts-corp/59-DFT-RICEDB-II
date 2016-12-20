@@ -34,8 +34,16 @@
 
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อแพ็คเกจ" required label="Package Name (ชื่อแพ็คเกจ) :" placeholder="กรอกชื่อแพ็คเกจ" value="{{data.package_name}}"></gl-form-input>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อแพ็คเกจ" required label="Package Name (ชื่อแพ็คเกจ ภาษาอังกฤษ) :" placeholder="กรอกชื่อแพ็คเกจ" value="{{data.package_name_en}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อแพ็คเกจ" required label="Package Name (ชื่อแพ็คเกจ ภาษาไทย) :" placeholder="กรอกชื่อแพ็คเกจ" value="{{data.package_name_th}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
     </gl-grid-row>
@@ -75,7 +83,8 @@
         var datas = {
           id: this.data.package_id,
           package_kg_per_bag: parseInt(this.data.package_kg_per_bag),
-          package_name: this.data.package_name,
+          package_name_en: this.data.package_name_en,
+          package_name_th: this.data.package_name_th,
           package_weight_bag: parseInt(this.data.package_weight_bag)
         }
         var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
