@@ -79,7 +79,7 @@
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;
 		}
-		table{
+		paper-button,table{
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;	
 		}
@@ -144,8 +144,7 @@
             </div>
         </section>
         <div class="flex-end-justified" style="padding-right:20px;">
-            <paper-button class="gl-btn-primary btn" raised style="font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;"> {{btnName}} </paper-button>
+            <paper-button class="gl-btn-primary btn" raised  hidden="{{active}}"> {{btnName}} </paper-button>
         </div>
 
 	</template>
@@ -185,10 +184,13 @@
 					value: 'บันทึก/ออกใบเสร็จ'
 				}
             },
+			ready:function(){
+				this.active = true;
+			},
 			_getPay:function(e){
 				this.selectPage = e.target.value;
 				console.log(this.selectPage);
-				
+				this.active = false;
 				if(e.target.value == '0'){
 					this.pageName = 'แบบปกติ';
 					this.btnName = 'บันทึก/ออกใบเสร็จ'

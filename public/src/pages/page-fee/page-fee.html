@@ -88,15 +88,12 @@
             @apply(--layout-horizontal);
             @apply(--layout-end-justified);
         }
-        table{
+        table,paper-button{
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;
         }
     </style>
     <template>
-
-    <content-panel>
-      <grid>
         <!-- <paper-material elevation="1" class="elevation"> -->
 
 
@@ -113,7 +110,7 @@
         <div class="flex searchBox searchBorder" style="margin:20px">
             <!--<div class="titleContent">ค้นหาข้อมูล</div> -->
             <gl-grid-row width="{{getWidth}}">
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
             </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                 <gl-form-dropdown-menu label="กรุณาเลือกบริษัท" style="width: 100%">
@@ -122,13 +119,20 @@
                     </paper-listbox>
                 </gl-form-dropdown-menu>
              </gl-grid-col>
-             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]" style="margin-top: 10px;">
+                 <paper-button class="gl-btn-primary" on-tap="showData" raised>ค้นหา</paper-button>
             </gl-grid-col>
             </gl-grid-row>
         </div>
-
+    
         <div class="flex searchBorder">
             <div class="titleContent">ข้อมูลส่งออก</div> 
+            <template is="dom-if" if="{{dataCheck}}">
+                <div style="padding : 20px;">
+                    ไม่พบข้อมูล
+                </div>
+            </template>
+            <template is="dom-if" if="{{dataStat}}">
             <div>
                  <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -162,12 +166,19 @@
                     </gl-grid-col>
                 </gl-grid-row>
             </div>
+            </template>
         </div>
 
         <div class="flex searchBorder">
             <div class="titleContent">ข้อมูลรายการ EC</div> 
             <!--<div class="container">จำนวนรายการทั้งหมด 4 รายการ</div>-->
-              <div class="flex searchBorder">
+            <template is="dom-if" if="{{dataCheck}}">
+            <div style="padding : 20px;">
+                    ไม่พบข้อมูล
+                </div>
+            </template>
+            <template is="dom-if" if="{{dataStat}}">
+            <div class="flex searchBorder">
              
           <div style="overflow-x:auto;">
           <table class="gl-table-default">
@@ -185,10 +196,11 @@
           </table>
           </div>
           </div>
+            </template>
             <div class="container flex-end-justified">
                 <div>
                 <paper-button class="gl-btn-primary" on-tap="_toggleDrawer" style="font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;" raised>ออกใบเสร็จ</paper-button>
+            -webkit-font-smoothing: antialiased;" hidden="{{active}}" raised>ออกใบเสร็จ</paper-button>
                 </div>
             </div>
         </div>
@@ -199,13 +211,11 @@
         </div>
         <!-- </paper-material> -->
 
-      </grid>
         <panel-right title="พิมพ์ใบเสร็จ">
             <template is="dom-if" if="[[rendered]]">
                <print-recipt></print-recipt>
             </template>
 		</panel-right>
-    </content-panel>
     </template>
     <script>
         Polymer({
@@ -254,6 +264,9 @@
                 }
             },
             ready:function(){
+                this.dataCheck = true;
+                this.dataStat = false;
+                this.active = true;
                 Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/print-recipt.html'), (e)=>{
                     this.rendered = true;
@@ -264,6 +277,11 @@
             },
             _toggleDrawer: function(e) {
                 this.$$('panel-right').toggle();
+            },
+            showData:function(){
+                 this.dataCheck = false;
+                this.dataStat = true;
+                 this.active = false;
             }
         });
     </script>
