@@ -48,7 +48,7 @@
         <tbody class="table-body">
             <template is="dom-repeat" items="{{data}}">
                 <tr on-tap="_selectData" data2="{{item}}">
-                    <td>1</td>
+                    <td>[[getIndex(index)]]</td>
                     <td>{{item.month}}</td>
                     <td>{{item.company}}</td>
                     <td>{{item.type_rice11}}</td>
@@ -61,23 +61,26 @@
                     <td>{{item.type_rice42}}</td>
                 </tr>
             </template>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>รวมทั้งสิ้น</td>
-                <td>100.12</td>
-                <td>100.12</td>
-                <td>100.12</td>
-                <td>100.12</td>
-                <td>100.12</td>
-                <td>100.12</td>
-                <td>300.37</td>
-                <td>300.37</td>
+            
+             <tr on-tap="_selectData">
+                
+                    <td></td>
+                    <td></td>
+                    <td>รวมทั้งสิ้น</td>
+                    <td>100.12</td>
+                    <td>100.12</td>
+                    <td>100.12</td>
+                    <td>100.12</td>
+                    <td>100.12</td>
+                    <td>100.12</td>
+                    <td>300.37</td>
+                    <td>300.37</td>
             </tr>
+
             
         </tbody>
     </table>
-
+    [[sumData(data)]]
     </template>
     <script>
         Polymer({
@@ -97,13 +100,31 @@
                             "type_rice32":"100.12",
                             "type_rice41":"300.37",
                             "type_rice42":"300.37"
-                        }
+                        },
+                        
                     ]
                 }
+            },
+            ready:function(){
+                this.amswer = 0;
+                console.log('1234',this.dataQuota);
+            },
+            getIndex:function(item){
+                return item + 1; 
             },
             _selectData: function(e) {
                 console.log("pageReport:: "+e.currentTarget.data2);
                 this.fire("data-select",e.currentTarget.data2);
+            },
+            sumData:function(data){
+                data.map((item)=>{
+                    console.log(data.type_rice11)
+                    console.log('item',item);
+                });
+            //    this.data.map(function(item){
+            //         sum += item[key];
+            //     });
+            //    return this.amswer += parseFloat(data);
             }
         });
     </script>

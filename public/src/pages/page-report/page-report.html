@@ -113,7 +113,7 @@ input:checked + label {
   <label for="tab2">นอกโควตา</label>
     
   <section id="content1">
-    <report-list></report-list>
+    <report-list data="{{getData}}"></report-list>
   </section>
     
   <section id="content2">
@@ -142,7 +142,7 @@ input:checked + label {
                 <report-panel data="{{dataSelect}}"></report-panel>
         </panel-right>-->
         <panel-right title="นำเข้ารายงานการส่งออกข้าวไปสหภาพยุโรป">
-            <report-panel></report-panel>
+            <report-panel on-save-data="_getData"></report-panel>
         </panel-right>
     </template>
     <script>
@@ -161,6 +161,10 @@ input:checked + label {
             },
             _toggleDrawer: function(e) {
                 this.$$('panel-right').open();
+            },
+            _getData:function(e){
+                this.getData = e.detail;
+                this.$$('panel-right').close();
             }
         });
     </script>
