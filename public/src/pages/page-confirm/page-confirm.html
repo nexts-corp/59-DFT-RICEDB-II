@@ -253,17 +253,17 @@ input:checked + label {
 <main>
   
   <input id="tab1" type="radio" name="tabs" checked>
-  <label for="tab1">ยืนยันแล้ว</label>
+  <label for="tab1">ยังไม่ยืนยัน</label>
     
   <input id="tab2" type="radio" name="tabs">
-  <label for="tab2">ยังไม่ยืนยัน</label>
+  <label for="tab2">ยืนยัน</label>
     
   <section id="content1">
-    <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
+    <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect"></confirm-list>
   </section>
     
   <section id="content2">
-    <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="nonConfirm"></confirm-list>
+    <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect"></confirm-list>
   </section>
 </main>
 <!--  -->
@@ -339,18 +339,26 @@ input:checked + label {
                         ],
                         content:[
                             {
-                                a:'กมลกิจ บจก',
-                                b:'899.00',
-                                c:'449.00',
-                                d:'225.00',
-                                e:'225.00'
+                                a:'บริษัท ปองค้าข้าว จำกัด',
+                                b:'426.00',
+                                c:'214.00',
+                                d:'106.00',
+                                e:'106.00'
                             },
                             {
-                                a:'กรุงเทพค้าข้าว',
-                                b:'135.00',
-                                c:'67.00',
-                                d:'34.00',
-                                e:'34.00'
+                                a:'บริษัท พงษ์ลาภ จำกัด',
+                                b:'1,574.00',
+                                c:'768.00',
+                                d:'394.00',
+                                e:'394.00'
+                            }
+                        ],
+                        sum:[
+                            {
+                                sumb: '2,000.00',
+                                sumc: '1,000.00',
+                                sumd: '500.00',
+                                sume: '500.00'
                             }
                         ]
                        
@@ -383,6 +391,33 @@ input:checked + label {
                     console.log('error')
                 });
                 });
+                
+                this.dataConfirm = {
+                      header:[
+                            'ผู้ส่งออก',
+                            'ปริมาณโควตารวม',
+                            'งวดที่ 1 (มกราคม)',
+                            'งวดที่ 2 (เมษายน)',
+                            'งวดที่ 3 (กรกฏาคม)'
+                        ],
+                        content:[
+                            {
+                                a:'บริษัท ปองค้าข้าว จำกัด',
+                                b:'1,574.00',
+                                c:'768.00',
+                                d:'394.00',
+                                e:'394.00'
+                            }
+                        ],
+                        sum:[
+                            {
+                                sumb: '1,574.00',
+                                sumc: '768.00',
+                                sumd: '394.00',
+                                sume: '394.00'
+                            }
+                        ]
+                }
             },
             _onDataSelect:function(e){
                 this.pageSelected = 0;
