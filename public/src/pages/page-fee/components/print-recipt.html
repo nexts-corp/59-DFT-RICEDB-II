@@ -190,20 +190,22 @@
 			_getPay:function(e){
 				this.selectPage = e.target.value;
 				console.log(this.selectPage);
-				this.active = false;
 				if(e.target.value == '0'){
 					this.pageName = 'แบบปกติ';
 					this.btnName = 'บันทึก/ออกใบเสร็จ'
+					this.active = false;
 				}
 
 				else if (e.target.value == '1'){
 					this.pageName = 'แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)';
 					this.btnName = 'บันทึก/ไม่ออกใบเสร็จ';
+					this.active = true;
 				}
 	
 				else if (e.target.value == '2'){
 					this.pageName = 'แบบจ่ายเงินเกิน (ออกใบเสร็จ)';
 					this.btnName = 'บันทึก/ออกใบเสร็จ';
+					this.active = true;
 				}
 					
 			}
