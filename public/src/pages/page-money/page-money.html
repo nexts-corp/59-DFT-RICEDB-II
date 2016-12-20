@@ -2,7 +2,7 @@
 <link rel="import" href="./components/money-panel.html">
 <dom-module id="page-money">
     <template>
-        <style include="gl-size gl-panel gl-color">
+        <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-panel">
             *{
                 font-family: 'rsuregular', sans-serif;
                 -webkit-font-smoothing: antialiased;
@@ -25,17 +25,68 @@
                 @apply(--layout-end-justified);
                 padding-right:33px;
             }
+            .searchBox {
+                padding: 10px;
+                background-color: var(--gl-gray-lighter-color);
+            }
+            .searchBorder {
+                border: 1px solid var(--gl-gray-lighter-color);
+                margin: 15px;
+                border-radius: 3px;
+            }
+            paper-button{
+                 font-family: 'CSChatThaiUI', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+            }
         </style>
 
         <div class="flex title">
             รายงานการรับเงินค่าธรรมเนียมพิเศษ
         </div>
-        <money-panel></money-panel>
+            <div class="flex searchBox searchBorder">
+            <div class="layout horizontal">
+              <div class="flex"></div>
+              <div class="flex-2 layout horizontal">
+                <vaadin-date-picker label="วันที่เริ่มต้น"></vaadin-date-picker>
+              </div>
+              <div class="flex-2 layout horizontal">
+                <vaadin-date-picker label="วันที่สิ้นสุด"></vaadin-date-picker>
+              </div>
+              <div class="flex-2 layout horizontal">
+                <paper-button class="gl-btn-primary" raised >ค้นหา</paper-button>
+              </div>
+            </div>
+            <div class="flex"></div>
+          </div>
+          <div class="gl-panel-default">
+            <div class="gl-panel-default-header">
+                Header
+            </div>
+            <div class="gl-panel-default-content">
+                <div class="layout horizontal">
+                    <div class="flex"></div>
+                    <div class="flex-4">
+                        <gl-combo-box label="บริษัท" items="{{companyName}}"></gl-combo-box>
+                    </div>
+                     <div class="flex-2" style="margin-top: 10px;">
+                        <paper-button class="gl-btn-primary" raised >ออกรายงาน</paper-button>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <!--<money-panel></money-panel>-->
     </template>
     <script>
         Polymer({
             is: 'page-money',
             properties:{
+                companyName: {
+                type: Array,
+                value: [
+                    'บริษัท ปองค้าข้าว จำกัด',
+                    'บริษัท พงษ์ลาภ จำกัด'
+                ]
+            },
             }
         });
     </script>
