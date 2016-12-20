@@ -88,15 +88,12 @@
             @apply(--layout-horizontal);
             @apply(--layout-end-justified);
         }
-        table{
+        table,paper-button{
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;
         }
     </style>
     <template>
-
-    <content-panel>
-      <grid>
         <!-- <paper-material elevation="1" class="elevation"> -->
         <div class="layout vertical registor">
           <div class="flex">
@@ -111,29 +108,35 @@
         <div class="flex searchBox searchBorder" style="margin:20px">
             <!--<div class="titleContent">ค้นหาข้อมูล</div> -->
             <gl-grid-row width="{{getWidth}}">
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
             </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                 <gl-form-dropdown-menu label="กรุณาเลือกบริษัท" style="width: 100%">
                     <paper-listbox class="dropdown-content">
-                        <paper-item>กมลกิจ บจก.</paper-item>
-                        <paper-item>กรุงเทพค้าข้าว บจก.</paper-item>
+                        <paper-item>บริษัท พงษ์ลาภ จำกัด</paper-item>
                     </paper-listbox>
                 </gl-form-dropdown-menu>
              </gl-grid-col>
-             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]" style="margin-top: 10px;">
+                 <paper-button class="gl-btn-primary" on-tap="showData" raised>ค้นหา</paper-button>
             </gl-grid-col>
             </gl-grid-row>
         </div>
-
+    
         <div class="flex searchBorder">
             <div class="titleContent">ข้อมูลส่งออก</div> 
+            <template is="dom-if" if="{{dataCheck}}">
+                <div style="padding : 20px;">
+                    ไม่พบข้อมูล
+                </div>
+            </template>
+            <template is="dom-if" if="{{dataStat}}">
             <div>
                  <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-label-input label="บริษัท" value="ยูนิเวอร์แซลไรซ์"></gl-form-label-input>
+                        <gl-form-label-input label="บริษัท" value="บริษัท พงษ์ลาภ จำกัด"></gl-form-label-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี" value="034490290"></gl-form-label-input>
@@ -145,7 +148,7 @@
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                     </gl-grid-col>
                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-label-textarea label="ที่อยู่" value="39/95 หมู่ที่ 2 ต. บางกระเจ้า อ.เมือง สมุทรสาคร 74000"></gl-form-label-textarea>
+                        <gl-form-label-textarea label="ที่อยู่" value="3 หมู่ 3 ตำบลบางคูวัด อำเภอเมืองปทุมธานี จังหวัดปทุมธานี 12000"></gl-form-label-textarea>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                     </gl-grid-col>
@@ -154,19 +157,26 @@
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                     </gl-grid-col>
                      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-label-input label="โทร" value="034-490290-3"></gl-form-label-input>
+                        <gl-form-label-input label="โทร" value="0982769513"></gl-form-label-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-label-input label="โทรสาร" value="034-490290-3"></gl-form-label-input>
+                        <gl-form-label-input label="โทรสาร" value="029766191"></gl-form-label-input>
                     </gl-grid-col>
                 </gl-grid-row>
             </div>
+            </template>
         </div>
 
         <div class="flex searchBorder">
             <div class="titleContent">ข้อมูลรายการ EC</div> 
-            <div class="container">จำนวนรายการทั้งหมด 4 รายการ</div>
-              <div class="flex searchBorder">
+            <!--<div class="container">จำนวนรายการทั้งหมด 4 รายการ</div>-->
+            <template is="dom-if" if="{{dataCheck}}">
+            <div style="padding : 20px;">
+                    ไม่พบข้อมูล
+                </div>
+            </template>
+            <template is="dom-if" if="{{dataStat}}">
+            <div class="flex searchBorder">
              
           <div style="overflow-x:auto;">
           <table class="gl-table-default">
@@ -181,19 +191,14 @@
                     <td id="addRedRegExporter">{{item}}</td>
                 </template>
               </tr>
-              <tr>
-                  <td><paper-checkbox></paper-checkbox></td>
-                <template is="dom-repeat" items={{dataAmount.row2}}>
-                    <td id="addRedRegExporter">{{item}}</td>
-                </template>
-              </tr>
           </table>
           </div>
           </div>
+            </template>
             <div class="container flex-end-justified">
                 <div>
                 <paper-button class="gl-btn-primary" on-tap="_toggleDrawer" style="font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;" raised>ออกใบเสร็จ</paper-button>
+            -webkit-font-smoothing: antialiased;" hidden="{{active}}" raised>ออกใบเสร็จ</paper-button>
                 </div>
             </div>
         </div>
@@ -203,13 +208,11 @@
         </div>
         <!-- </paper-material> -->
 
-      </grid>
         <panel-right title="พิมพ์ใบเสร็จ">
             <template is="dom-if" if="[[rendered]]">
                <print-recipt></print-recipt>
             </template>
 		</panel-right>
-    </content-panel>
     </template>
     <script>
         Polymer({
@@ -237,20 +240,12 @@
                         ],
                         row1:[
                             'EC ข้าวในโควตา EU',
-                            '20160701-0001',
-                            '012/2016',
+                            '20161225-0001',
+                            '0102/2016',
                             'นายสมพร มานะ',
-                            '03/07/2016',
-                            '120.00'
-                          ],
-                          row2:[
-                            'EC ข้าวในโควตา EU',
-                            '20160701-0002',
-                            '013/2016',
-                            'นายสมพร มานะ',
-                            '03/07/2016',
-                            '100.00'
-                          ]  
+                            '25/12/2016',
+                            '768.00'
+                          ]
                       }
                 },
 
@@ -266,6 +261,9 @@
                 }
             },
             ready:function(){
+                this.dataCheck = true;
+                this.dataStat = false;
+                this.active = true;
                 Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/print-recipt.html'), (e)=>{
                     this.rendered = true;
@@ -276,6 +274,11 @@
             },
             _toggleDrawer: function(e) {
                 this.$$('panel-right').toggle();
+            },
+            showData:function(){
+                 this.dataCheck = false;
+                this.dataStat = true;
+                 this.active = false;
             }
         });
     </script>

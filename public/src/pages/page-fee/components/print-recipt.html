@@ -79,7 +79,7 @@
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;
 		}
-		table{
+		paper-button,table{
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;	
 		}
@@ -95,21 +95,13 @@
 						<div style="overflow-x:auto;">
 							<table class="gl-table-default">
 								<tr>
-									<th></th>
 									<template is="dom-repeat" items="{{dataAmount.header}}">
 										<th>{{item}}</th>
 									</template>
 								</tr>
 								<tr>
-									<td><paper-checkbox></paper-checkbox></td>
 									<template is="dom-repeat" items={{dataAmount.row1}}>
 										
-										<td id="addRedRegExporter">{{item}}</td>
-									</template>
-								</tr>
-								<tr>
-									<td><paper-checkbox></paper-checkbox></td>
-									<template is="dom-repeat" items={{dataAmount.row2}}>
 										<td id="addRedRegExporter">{{item}}</td>
 									</template>
 								</tr>
@@ -117,12 +109,12 @@
 						</div>
 					</div>
                     <div class="container">  
-                        <div>                    
+                        <!--<div>                    
                             <label id="label1">วิธีการจ่ายเงิน : </label>
                             <paper-radio-group aria-labelledby="label1" selected="a">
                                 <paper-radio-button name="a" class="fontN">เช็คธนาคาร</paper-radio-button>
                             </paper-radio-group>
-                        </div>
+                        </div>-->
                         <div>
                             <label id="label1">กรณีใช้ยอดเงิน : </label>
                             <paper-radio-group aria-labelledby="label1" on-tap="_getPay">
@@ -152,8 +144,7 @@
             </div>
         </section>
         <div class="flex-end-justified" style="padding-right:20px;">
-            <paper-button class="gl-btn-primary btn" raised style="font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;"> {{btnName}} </paper-button>
+            <paper-button class="gl-btn-primary btn" raised  hidden="{{active}}"> {{btnName}} </paper-button>
         </div>
 
 	</template>
@@ -175,23 +166,14 @@
                           'รวมเงินทั้งหมด (บาท)'
                         ],
                         row1:[
-                            'EC ข้าวในโควตา EU',
-                            '20160701-0001',
-                            '012/2016',
+							'EC ข้าวในโควตา EU',
+                            '20161225-0001',
+                            '0102/2016',
                             'นายสมพร มานะ',
-                            '120.00',
-                            '2,500.00',
-                            '300,000.00'
-                          ],
-                          row2:[
-                            'EC ข้าวในโควตา EU',
-                            '20160701-0002',
-                            '013/2016',
-                            'นายสมพร มานะ',
-                            '100.00',
-                            '2,500.00',
-                            '250,000.00'
-                          ]  
+							'768.00',
+							'2,500.00',
+                            '1,920,000.00'
+                          ]
                       }
                 },
 				selectPage:{
@@ -202,10 +184,13 @@
 					value: 'บันทึก/ออกใบเสร็จ'
 				}
             },
+			ready:function(){
+				this.active = true;
+			},
 			_getPay:function(e){
 				this.selectPage = e.target.value;
 				console.log(this.selectPage);
-				
+				this.active = false;
 				if(e.target.value == '0'){
 					this.pageName = 'แบบปกติ';
 					this.btnName = 'บันทึก/ออกใบเสร็จ'
