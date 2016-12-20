@@ -77,6 +77,13 @@
 			opacity: 0.5;
 			z-index: 2;
 		}
+		.iconClose{
+			width: 30px;
+			height: auto;
+			position: relative;
+			left: 600px;
+			top: 50px;
+		}
 		/*span{
       		font-family: 'CSChatThaiUI', sans-serif !important;
       		-webkit-font-smoothing: antialiased;
@@ -106,6 +113,7 @@
 		</paper-toast>
 
 		<paper-toast class$="{{status.class}}" id="toastStatus">
+			<iron-icon class="iconClose" icon="close"></iron-icon>
 			<iron-icon icon="{{status.icon}}"></iron-icon>
 			<span>
 				{{status.content}}
@@ -194,6 +202,9 @@
 			},
 			openToastStatus:function(){
 				this.$.toastStatus.open();
+				 this.async(function(){
+					 this.$.toastStatus.close();
+                }.bind(this),800);
 			}
         });
     </script>
