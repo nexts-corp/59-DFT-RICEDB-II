@@ -1,54 +1,54 @@
-<dom-module id="content-panel">
+<dom-module id="panel-right">
 
-<style include="iron-flex iron-flex-factors gl-color">
-:host{
-  --app-drawer-width:80%;
-}
-.rightdata {
-    /*position: absolute;*/
-    /*float: left;*/
-    height: 100%;
-    border-left: 1px solid var(--paper-grey-300);
-    padding: 5px 10px 0px 10px;
-    height: 100%;
-    overflow-y: auto;
+  <style include="iron-flex iron-flex-factors gl-color">
+  :host{
+    --app-drawer-width:80%;
   }
-  app-drawer{
-    z-index: 1;
-    /*right: auto;*/
-  }
-  paper-icon-button{
-      width: 40px;
-      height: 40px;
-  }
-  paper-icon-button:hover{
-      /*background-color: #C8C8C8;*/
-      border-radius: 100%;
-  }
-  app-toolbar{
-      background-color: orange;
-      color: white;
-      font-size: 20px;
-      padding-left: 20px;
-  }
-  .iconLeft{
-      position: absolute;
-      left: 95%;
-  }
-  #bgPanel{
-      position: fixed;
-      background-color: #000;
-      width:100%;
-      height:100%;
-      top:0;
-      right:0;
-      opacity: 0.5;
+  .rightdata {
+      /*position: absolute;*/
+      /*float: left;*/
+      height: 100%;
+      border-left: 1px solid var(--paper-grey-300);
+      padding: 5px 10px 0px 10px;
+      height: 100%;
+      overflow-y: auto;
+    }
+    app-drawer{
       z-index: 1;
-  }
-  .content{
-    background-color: red;
-  }
-</style>
+      /*right: auto;*/
+    }
+    paper-icon-button{
+        width: 40px;
+        height: 40px;
+    }
+    paper-icon-button:hover{
+        /*background-color: #C8C8C8;*/
+        border-radius: 100%;
+    }
+    app-toolbar{
+        background-color: orange;
+        color: white;
+        font-size: 20px;
+        padding-left: 20px;
+    }
+    .iconLeft{
+        position: absolute;
+        left: 95%;
+    }
+    #bgPanel{
+        position: fixed;
+        background-color: #000;
+        width:100%;
+        height:100%;
+        top:0;
+        right:0;
+        opacity: 0.5;
+        z-index: 1;
+    }
+    .content{
+      background-color: red;
+    }
+  </style>
 
   <template >
 
@@ -74,7 +74,7 @@
 
   <script>
     Polymer({
-      is:'content-panel',
+      is:'panel-right',
       properties: {
         title:{
             type: String,
@@ -83,7 +83,7 @@
       },
       behaviors:[gl.behavior.core],
       created:function(){
-        this.glQuery('contentPanel',this);
+        this.glQuery('panelRight',this);
       },
       changDrawer:function(){
         //เรียกใช้ฟั่งชั้น togglePanel .ใน  drawer
