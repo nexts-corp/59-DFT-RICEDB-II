@@ -6,20 +6,28 @@
                 font-family: 'CSChatThaiUI', sans-serif !important;
                 -webkit-font-smoothing: antialiased;
             }
+            th,td{
+                text-align: right !important;
+            }
+            .left{
+                text-align: left !important;
+            }
         </style>
         <div>{{status}}</div>
        <table class="gl-table-default">
            <thead>
             <tr>
-                <template is="dom-repeat" items="{{data.header}}">
-                    <th>{{item}}</th>
-                </template>
+                <th class="left">ผู้ส่งออก</th>
+                <th>ปริมาณโควตารวม</th>
+                <th>งวดที่ 1 มกราคม</th>
+                <th>งวดที่ 2 เมษายน</th>
+                <th>งวดที่ 3 กรกฏาคม</th>
             </tr>
             </thead>
             <tbody>
             <template is="dom-repeat" items="{{data.content}}">
                 <tr on-tap="_selectData" data="{{item}}">
-                    <td>{{item.a}}</td>
+                    <td class="left">{{item.a}}</td>
                     <td>{{item.b}}</td>
                     <td>{{item.c}}</td>
                     <td>{{item.d}}</td>
@@ -29,7 +37,7 @@
              </tbody> 
              <thead>
             <tr>
-                <th></th>
+                <th class="left"></th>
                  <template is="dom-repeat" items="{{data.sum}}">
                     <th>{{item.sumb}}</th>
                     <th>{{item.sumc}}</th>

@@ -1,4 +1,6 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
+
 <dom-module id="confirm-allocate-edit">
   <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
     *{
@@ -11,9 +13,11 @@
       background-color: orange;
       /*width: 25%;*/
     }
-    .content{
+    .content,paper-button{
       font-size:18px;
       margin-top: 26px;
+      font-family: 'CSChatThaiUI', sans-serif !important;
+      -webkit-font-smoothing: antialiased;
     }
     table.default {
       border-collapse: collapse;
@@ -57,7 +61,7 @@
   <template>
     <!--<div class="textHeader">ยืนยันรับส่วนจัดสรร</div>-->
     <gl-form-panel set-padding = "0px 0px 20px 0px">
-      <div class="title">ข้อมูลบริษัท {{status}}</div>
+      <div class="title">ข้อมูลบริษัท</div>
      
       <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
          <gl-grid-row width="{{getWidth}}">
@@ -127,7 +131,7 @@
               <div class="content">ปริมาณโควตารวม :</div>
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input format-number="on" value="{{data.b}}" disabled></gl-form-input>
+               <gl-form-input format-number="on" value="[[sumData(data.c,data.d,data.e)]]" disabled></gl-form-input>
            </gl-grid-col>
         </gl-grid-row>
       </gl-form-panel-body>
@@ -142,6 +146,7 @@
   <script>
     Polymer({
       is: "confirm-allocate-edit",
+      behaviors:[FormatNumberBehavior],
       properties:{
         status:{
           type: String,
@@ -154,6 +159,13 @@
       },
       _getData:function(){
         console.log(this.data);
+      },
+      sumData:function(data1,data2,data3){
+        
+        return this.unFormat(data1) + this.unFormat(data2) + this.unFormat(data3);
+      },
+      _saveData:function(){
+        this.fire('save-data');
       }
     });
   </script>
