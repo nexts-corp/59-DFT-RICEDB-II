@@ -86,9 +86,9 @@
                 <div style="margin:30px 10px 0px 20px;"><iron-icon icon="print"></iron-icon></div>
                 <gl-form-dropdown-menu style="width:100%;" placeholder="เลือกประเภทรายงาน" name="report">
                   <paper-menu class="dropdown-content" attr-for-selected="report" selected="{{report}}">
-                    <paper-item id="reEx"  on-tap="_report" report="report5" >รายชื่อผู้ได้รับหนังสืออนุญาต</paper-item>
-                    <paper-item id="reCom" on-tap="_report" report="report6" >รายชื่อคณะกรรมการบริษัท</paper-item>
-                    <paper-item id="reAdd" on-tap="_report" report="report7" >รายชื่อและที่อยู่ของผู้ส่งออกข้าว</paper-item>
+                    <paper-item on-tap="_report" report="report5">รายชื่อผู้ได้รับหนังสืออนุญาต</paper-item>
+                    <paper-item on-tap="_report" report="report6">รายชื่อคณะกรรมการบริษัท</paper-item>
+                    <paper-item on-tap="_report" report="report7">รายชื่อและที่อยู่ของผู้ส่งออกข้าว</paper-item>
                     <!--<paper-item id="reName" on-tap="_report" report="reportNameExporter" src="/report/reportNameExporter.pdf">รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ</paper-item>-->
                   </paper-menu>
                 </gl-form-dropdown-menu>
@@ -96,15 +96,9 @@
             </div>
             <paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" title="เพิ่มผู้ส่งออกข้าว" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>
           </div>
-
-          <!-- <div class="flex title">
-              ค้นหาผู้ส่งออกข้าวไปต่างประเทศ
-          </div> -->
           <div class="flex title">
               ข้อมูลผู้ส่งออกข้าวไปต่างประเทศ
           </div>
-
-
           <div class="searchBox searchBorder">
             <gl-grid-row width="{{getWidth}}">
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
@@ -171,7 +165,6 @@
             </gl-grid-row>
           </div>
 
-
           <div id="found" hidden>
             <div class="searchBorder" style="overflow-x:auto;">
               <table class="gl-table-default">
@@ -187,7 +180,6 @@
                     <th><div class="text-table">วันที่ลงทะเบียน</div></th>
                   </tr>
                 </thead>
-
 
                 <template is="dom-repeat" items="{{exporters}}">
                   <tbody>
@@ -205,25 +197,14 @@
                 </template>
 
               </table>
-              <!-- <list-report data={{exporters}}>
-                <items type="primary">
-                  <list item="exporter_no_name" label="เลข ทบ." width="flex"></list>
-                  <list item="seller_tax_id" label="เลขที่ผู้เสียภาษี" width="flex"></list>
-                  <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
-                  <list item="type_lic_name" label="ประเภทใบอนุญาต" width="flex"></list>
-                  <list item="exporter_status_name" label="สถานะสมาชิกสมาคมฯ" width="flex"></list>
-                  <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
-                  <list item="exporter_active_name" label="สถานะผู้ส่งออก" width="flex"></list>
-                </items>
-              </list-report> -->
             </div>
           </div>
         </div>
 
         <div id="notfound" hidden>
-        <div class="horizontal center-justified layout searchBorder">
-          <div class="title" style="margin:20px">ไม่พบข้อมูลที่ค้นหา</div>
-        </div>
+          <div class="horizontal center-justified layout searchBorder">
+            <div class="title" style="margin:20px">ไม่พบข้อมูลที่ค้นหา</div>
+          </div>
         </div>
 
         </paper-material>
@@ -272,9 +253,6 @@
               traderId:{
                 type: String,
                 observer: '_search'
-              },
-              linkreport:{
-                type: String
               }
             },
             _exporterIdChanged:function(val){
@@ -359,9 +337,9 @@
                 this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่เริ่มต้นค้นหา'})
               }
               return str;
-
             },
             _btnFind:function(){
+              console.log(this._search());
               this.read('./external/exporter'+this._search(),(data)=>{
                 data.map((empty)=>{
                   if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
