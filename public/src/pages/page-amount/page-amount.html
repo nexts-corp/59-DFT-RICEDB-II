@@ -158,7 +158,7 @@
           <allocate-list on-toggle-drawer="_toggleDrawer" on-data-select="_onDataSelect" data-allocate="[[dataAllocate]]"></allocate-list>
         </div>
         <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
-          <paper-button raised class="gl-btn-primary">
+          <paper-button raised class="gl-btn-primary" on-tap="downloadFile">
             <iron-icon icon="print"></iron-icon>
             <span style="margin:0px 5px 0px 10px">ออกประกาศ</span>
           </paper-button>
@@ -329,6 +329,9 @@
                   console.log("error");
                   console.log(error);
                 });
+             },
+             downloadFile:function(){
+               window.open('/report/announce.pdf','_blank');
              }
         });
     </script>
