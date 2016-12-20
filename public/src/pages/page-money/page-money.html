@@ -82,7 +82,7 @@
                         <money-list></money-list>
                     </div>
                     <div class="flex-end-justified" style="padding:10px;">
-                        <paper-button class="gl-btn-primary" raised >ออกรายงาน</paper-button>
+                        <paper-button class="gl-btn-primary" raised on-tap="downloadFile">ออกรายงาน</paper-button>
                     </div>
                 </template>
                
@@ -111,7 +111,10 @@
             showData:function(){
                 this.isEnabled = false;
                 this.isEnabled2 = true;
-            }
+            },
+            downloadFile:function(){
+               window.open('/report/report.pdf','_blank');
+             }
         });
     </script>
 </dom-module>
