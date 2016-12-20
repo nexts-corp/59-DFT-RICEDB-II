@@ -54,15 +54,15 @@
                 <td>พงษ์ลาภ จำกัด</td>
                 <td>0102/2015</td>
                 <td>25-ธ.ค.-58</td>
-                <td>787.00</td>
-                <td>1,967,500.00</td>
+                <td>786.00</td>
+                <td>1,965,000.00</td>
                 <td>ยุบีโอ</td>
                 <td>กรุงธนบุรี</td>
                 <td>10225523</td>
                 <td>25-ธ.ค.-58</td>
                 <td></td>
                 <td></td>
-                <td><iron-icon icon="icons:content-paste"></iron-icon></td>
+                <td><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
             </tr>
         </tbody>
     </table>
@@ -94,6 +94,10 @@
                 console.log("pageReport:: "+e.currentTarget.data2);
                 this.fire("data-select",e.currentTarget.data2);
             }
+            ,
+            downloadFile:function(){
+               window.open('/report/receipt.pdf','_blank');
+             }
         });
     </script>
 </dom-module>
