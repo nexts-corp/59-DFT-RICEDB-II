@@ -2,14 +2,14 @@
 <link rel="import" href="./../components/panel-right/panel-right.html">
 
 <dom-module id="page-confirm">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-factors gl-table iron-flex-alignment gl-size gl-color">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-              paper-item{
-        font-family: 'CSChatThaiUI', sans-serif !important;
-        -webkit-font-smoothing: antialiased;
+        paper-item{
+            font-family: 'CSChatThaiUI', sans-serif !important;
+            -webkit-font-smoothing: antialiased;
       }
         .container {
             margin-right: 10px;
@@ -206,7 +206,7 @@
             <gl-grid-row width="{{getWidth}}">
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                    <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
+                    <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}" required></gl-combo-box>
                     <!--<gl-form-label-input label="ปีโควตา" value="2559"></gl-form-label-input>-->
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -259,6 +259,25 @@
         <input id="tab2" type="radio" name="tabs">
         <label for="tab2">ยืนยัน</label>
 
+        <template is="dom-if" if="{{dataCheck}}">
+            <div style="padding: 20px 0 0; border-top: 1px solid #ddd;">
+             <table class="gl-table-default">
+                 <thead>
+                    <tr>
+                        <th class="left">ผู้ส่งออก</th>
+                        <th>ปริมาณโควตารวม</th>
+                        <th>งวดที่ 1 มกราคม</th>
+                        <th>งวดที่ 2 เมษายน</th>
+                        <th>งวดที่ 3 กรกฏาคม</th>
+                    </tr>
+                </thead>
+                 <tbody>
+                     <td class="left" colspan="5">ไม่พบข้อมูล</td>
+                 </tbody>
+             </table>
+             </div>
+        </template>
+        <template is="dom-if" if="{{dataStat}}">
         <section id="content1">
             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect"></confirm-list>
         </section>
@@ -266,6 +285,7 @@
         <section id="content2">
             <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect"></confirm-list>
         </section>
+        </template>
     </main>
     <!--  -->
 
@@ -372,6 +392,35 @@
                     'บริษัท พงษ์ลาภ จำกัด'
                 ]
             },
+            dataConfirm:{
+                type: Object,
+                value: {
+                    header: [
+                        'ผู้ส่งออก',
+                        'ปริมาณโควตารวม',
+                        'งวดที่ 1 (มกราคม)',
+                        'งวดที่ 2 (เมษายน)',
+                        'งวดที่ 3 (กรกฏาคม)'
+                    ],
+                    content: [
+                        {
+                            a: 'บริษัท พงษ์ลาภ จำกัด',
+                            b: '1,574.00',
+                            c: '768.00',
+                            d: '394.00',
+                            e: '394.00'
+                        }
+                    ],
+                    sum: [
+                        {
+                            sumb: '1,574.00',
+                            sumc: '768.00',
+                            sumd: '394.00',
+                            sume: '394.00'
+                        }
+                    ]
+                }
+            },
             searchType: {
                 type: Object,
                 value: [{
@@ -389,7 +438,8 @@
             this._getTypeRice();
         },
         ready: function () {
-
+            this.dataCheck = true;
+            this.dataStat = false;
             this.btnName = 'ค้นหา';
             this.pageSelected = 0;
             Polymer.RenderStatus.afterNextRender(this, function () {
@@ -400,32 +450,7 @@
                 });
             });
 
-            this.dataConfirm = {
-                header: [
-                    'ผู้ส่งออก',
-                    'ปริมาณโควตารวม',
-                    'งวดที่ 1 (มกราคม)',
-                    'งวดที่ 2 (เมษายน)',
-                    'งวดที่ 3 (กรกฏาคม)'
-                ],
-                content: [
-                    {
-                        a: 'บริษัท พงษ์ลาภ จำกัด',
-                        b: '1,574.00',
-                        c: '768.00',
-                        d: '394.00',
-                        e: '394.00'
-                    }
-                ],
-                sum: [
-                    {
-                        sumb: '1,574.00',
-                        sumc: '768.00',
-                        sumd: '394.00',
-                        sume: '394.00'
-                    }
-                ]
-            }
+            
         },
         _onDataSelect: function (e) {
             this.pageSelected = 0;
@@ -462,6 +487,11 @@
                     console.log("error");
                     console.log(error);
                 });
+        },
+        _getDataCompanny:function(){
+            // this.$$('confirm-list')._setData();
+             this.dataCheck = false;
+                this.dataStat = true;
         },
         _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
             this.selectQuotaOrdinal = "";
