@@ -46,7 +46,7 @@ router.get(['/exporter'], function (req, res, next) {
             if (!err) {
                 res.json(cursor);
             } else {
-                res.json({ error: "error" });
+                res.json({ error: err });
             }
         });
     });
