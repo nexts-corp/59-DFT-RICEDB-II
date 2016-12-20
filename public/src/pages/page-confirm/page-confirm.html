@@ -231,7 +231,7 @@ input:checked + label {
                 <gl-grid-row>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-combo-box class="saveData" label="ชื่อบริษัท" items="" value="" 
+                        <gl-combo-box class="saveData" label="ชื่อบริษัท" items="[[companyName]]" value="" 
                         item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกบริษัท" required></gl-combo-box>
                         <!--<gl-form-dropdown-menu label="ชื่อบริษัท">
                             <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
@@ -296,7 +296,7 @@ input:checked + label {
             
         <panel-right title="ยืนยันรับส่วนจัดสรร">
             <template is="dom-if" if="[[rendered]]">
-               <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}"></confirm-allocate-edit>
+               <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
             </template>
 		</panel-right>
     </template>
@@ -363,6 +363,13 @@ input:checked + label {
                         ]
                        
                       }
+                },
+                companyName:{
+                    type: Array,
+                    value:[
+                        'บริษัท ปองค้าข้าว จำกัด',
+                        'บริษัท พงษ์ลาภ จำกัด'
+                    ]
                 },
                 searchType: {
                     type: Object,
@@ -470,6 +477,18 @@ input:checked + label {
                     console.log("error");
                     console.log(error);
                 });
+            },
+            _saveData:function(){
+                this.fire('toast',{status:'load'});
+                this.fire('toast',{
+                    status:'success',
+                    text:'บันทึกสำเร็จ',
+                    callback:()=>{
+                        this.$$("panel-right").close();
+                    }
+                 
+
+                })
             }
         });
     </script>
