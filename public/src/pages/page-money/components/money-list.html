@@ -1,0 +1,99 @@
+
+<dom-module id="money-list">
+    <template>
+    <style is="custom-style" include="gl-table">
+    *{
+        font-family: 'CSChatThaiUI', sans-serif !important;
+        -webkit-font-smoothing: antialiased;
+    }
+    table{
+        border: 1px solid #ddd;
+    }
+    table > thead > tr > th{
+        text-align: center !important;
+        white-space: nowrap;
+    }
+    table > tbody > tr > td{
+        text-align: center !important;
+        white-space: nowrap;
+    }
+    table > tbody > tr{
+        cursor:pointer;
+    }
+    </style>
+   
+    <table class="gl-table-default">
+        <thead class="table-head">
+            <tr>
+                <th rowspan="2">ที่</th>
+                <th rowspan="2">ว/ด/ป ที่รับเงิน</th>
+                <th rowspan="2">เลขที่ใบเสร็จ</th>
+                <th rowspan="2">บริษัท</th>
+                <th colspan="2">EC</th>
+                <th rowspan="2">ปริมาณ (ตัน)</th>
+                <th rowspan="2">ราคา/ตัน (*2500)</th>
+                <th colspan="4">เช็คค่าธรรมเนียม</th>
+                <th rowspan="2">จำนวนเงิน</th>
+                <th rowspan="2">หมายเหตุ</th>
+                <th rowspan="2">ออกใบเสร็จ</th>
+            </tr>
+            <tr>
+                <th>เลขที่</th>
+                <th>วันที่</th>
+                <th>ธนาคาร</th>
+                <th>สาขา</th>
+                <th>เลขที่</th>
+                <th>วันที่</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            <tr>
+                <td>1</td>
+                <td>25-ธ.ค.-58</td>
+                <td>2558-0223</td>
+                <td>พงษ์ลาภ จำกัด</td>
+                <td>0102/2015</td>
+                <td>25-ธ.ค.-58</td>
+                <td>787.00</td>
+                <td>1,967,500.00</td>
+                <td>ยุบีโอ</td>
+                <td>กรุงธนบุรี</td>
+                <td>10225523</td>
+                <td>25-ธ.ค.-58</td>
+                <td></td>
+                <td></td>
+                <td><iron-icon icon="icons:content-paste"></iron-icon></td>
+            </tr>
+        </tbody>
+    </table>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'money-list',
+            properties:{
+                data:{
+                    type:Array,
+                    value:[
+                        {
+                            "month":"มกราคม",
+                            "company":"กรุงเทพสตาชอินดาสเทรี่ยล",
+                            "type_rice11":"100.12",
+                            "type_rice12":"100.12",
+                            "type_rice21":"100.12",
+                            "type_rice22":"100.12",
+                            "type_rice31":"100.12",
+                            "type_rice32":"100.12",
+                            "type_rice41":"300.37",
+                            "type_rice42":"300.37"
+                        }
+                    ]
+                }
+            },
+            _selectData: function(e) {
+                console.log("pageReport:: "+e.currentTarget.data2);
+                this.fire("data-select",e.currentTarget.data2);
+            }
+        });
+    </script>
+</dom-module>
