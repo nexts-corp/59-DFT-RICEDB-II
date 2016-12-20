@@ -54,7 +54,7 @@ var schema = {
                         }
                     }
                 },
-                "required": ["type_rice_id", "type_rice_quantity", "package"]
+                "required": ["type_rice_id", "type_rice_quantity", "package", "project_th", "project_en", "season_th", "season_en", "description_th", "description_en", "tolerance_rate"]
             }
         },
         "inct_id": {

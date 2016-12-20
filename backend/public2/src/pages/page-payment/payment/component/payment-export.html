@@ -211,7 +211,7 @@
       },
       _getNameExport:function (exporter_id) {
         if (exporter_id) {
-          console.log(this.dataForSelected.exporter_id=exporter_id);
+          // console.log(this.dataForSelected.exporter_id=exporter_id);
           let nameExport = this.dataForSelected.exporters.filter((exporter)=> exporter.exporter_id == exporter_id );
           return nameExport[0].seller_name_th;
         }
@@ -230,10 +230,10 @@
         }
       },
       getExporter:function (exporter_id) {
-        console.log(exporter_id);
+        // console.log(exporter_id);
         this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
           this.dataForSelected.exporterDetail = data;
-          // console.log(this.dataForSelected.exporterDetail);
+          console.log(this.dataForSelected.exporterDetail);
           // console.log(this.dataForSelected);
           this.notifyPath('dataForSelected.exporterDetail');
           if (this.dataForSelected.exporterDetail != null) {
