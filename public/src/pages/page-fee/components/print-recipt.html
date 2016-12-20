@@ -144,7 +144,7 @@
             </div>
         </section>
         <div class="flex-end-justified" style="padding-right:20px;">
-            <paper-button class="gl-btn-primary btn" raised  hidden="{{active}}"> {{btnName}} </paper-button>
+            <paper-button class="gl-btn-primary btn" raised  hidden="{{active}}" on-tap="downloadFile"> {{btnName}} </paper-button>
         </div>
 
 	</template>
@@ -167,8 +167,8 @@
                         ],
                         row1:[
 							'EC ข้าวในโควตา EU',
-                            '20161225-0001',
-                            '0102/2016',
+                            '20151225-0001',
+                            '0102/2015',
                             'นายสมพร มานะ',
 							'786.00',
 							'2,500.00',
@@ -190,23 +190,28 @@
 			_getPay:function(e){
 				this.selectPage = e.target.value;
 				console.log(this.selectPage);
-				this.active = false;
 				if(e.target.value == '0'){
 					this.pageName = 'แบบปกติ';
 					this.btnName = 'บันทึก/ออกใบเสร็จ'
+					this.active = false;
 				}
 
 				else if (e.target.value == '1'){
 					this.pageName = 'แบบจ่ายโดยใช้ยอดเงินเดิม (ไม่ออกใบเสร็จ)';
 					this.btnName = 'บันทึก/ไม่ออกใบเสร็จ';
+					this.active = true;
 				}
 	
 				else if (e.target.value == '2'){
 					this.pageName = 'แบบจ่ายเงินเกิน (ออกใบเสร็จ)';
 					this.btnName = 'บันทึก/ออกใบเสร็จ';
+					this.active = true;
 				}
 					
-			}
+			},
+			downloadFile:function(){
+                window.open('/report/receipt.pdf','_blank');
+            }
         });
     </script>
 </dom-module>

@@ -158,7 +158,7 @@
           <allocate-list on-toggle-drawer="_toggleDrawer" on-data-select="_onDataSelect" data-allocate="[[dataAllocate]]"></allocate-list>
         </div>
         <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
-          <paper-button raised class="gl-btn-primary">
+          <paper-button raised class="gl-btn-primary" on-tap="downloadFile" hidden$="{{active}}">
             <iron-icon icon="print"></iron-icon>
             <span style="margin:0px 5px 0px 10px">ออกประกาศ</span>
           </paper-button>
@@ -191,6 +191,7 @@
             ready:function(){
               //var number = numeral('1000.32').format('0,0.00');
               //console.log(number);
+              this.active = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/amount-allocation-edit.html'), (e)=>{
                     this.rendered = true;
@@ -289,8 +290,8 @@
                     this.dataAllocate = response.data;
                     console.log('..',this.dataAllocate);
                     this.fire('toast',{status:'success',
-                    callback:function(){
-                      
+                    callback:()=>{
+                      this.active = false;
                     }});
                     
                 })
@@ -329,6 +330,9 @@
                   console.log("error");
                   console.log(error);
                 });
+             },
+             downloadFile:function(){
+               window.open('/report/announce.pdf','_blank');
              }
         });
     </script>
