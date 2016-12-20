@@ -62,7 +62,7 @@
                 <td>25-ธ.ค.-58</td>
                 <td></td>
                 <td></td>
-                <td><iron-icon icon="icons:content-paste"></iron-icon></td>
+                <td><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
             </tr>
         </tbody>
     </table>
@@ -94,6 +94,10 @@
                 console.log("pageReport:: "+e.currentTarget.data2);
                 this.fire("data-select",e.currentTarget.data2);
             }
+            ,
+            downloadFile:function(){
+               window.open('/report/receipt.pdf','_blank');
+             }
         });
     </script>
 </dom-module>
