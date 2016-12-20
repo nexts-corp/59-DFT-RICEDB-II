@@ -88,12 +88,12 @@
                         <td>[[formatNumber(item.quantity_update)]]</td>
                     </tr>
                 </template>
-              
+                {{test(dataAllocate.exporter)}}
                 <tr>
                     <th colspan="2">รวมปริมาณโควตา</th>
                     <template is="dom-repeat" items="[[dataAllocate.exporter.0.period]]">
-                        <th>[[_sumPeriod(index,'quantity')]]</th>
-                        <th>[[_sumPeriod(index,'quantity_update')]]</th>
+                        <th>[[_sumPeriod(index,'quantity',dataAllocate)]]</th>
+                        <th>[[_sumPeriod(index,'quantity_update',dataAllocate)]]</th>
                     </template>
                     <th>[[_sumQuantity(dataAllocate,'quantity')]]</th>
                     <th>[[_sumQuantity(dataAllocate,'quantity_update')]]</th>
@@ -115,9 +115,15 @@
                 return index+1;
             },
             _sumPeriod:function(index,key){
+                
                 var sum = 0;
                 this.dataAllocate.exporter.map((item)=>{
-                    sum += parseFloat(item.period[index][key]);
+                    if(index=="0"&&key=="quantity_update"){
+                        console.log(index,key);
+                        console.log(item.period[index][key]);
+                    }
+                    // this.unFormat(item.period[index][key])
+                    sum += this.unFormat(item.period[index][key]);
                 });
                  return this.formatNumber(sum);
             },
@@ -131,6 +137,9 @@
             },
             _selectData:function(e){
                 this.fire('data-select',e.currentTarget.data);
+            },
+            test:function(data){
+                console.log(data);
             }
         });
     </script>
