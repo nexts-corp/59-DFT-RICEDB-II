@@ -1,4 +1,3 @@
-
 <link rel="import" href="./components/confirm-list.html">
 <link rel="import" href="./../components/panel-right/panel-right.html">
 
@@ -193,84 +192,85 @@
             }
 
     </style>
-    <template>
-        <div class="layout vertical registor">
-            <div class="flex">
-                <div class="layout horizontal end-justified">
-                    <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
-                </div>
+<template>
+    <div class="layout vertical registor">
+        <div class="flex">
+            <div class="layout horizontal end-justified">
+                <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
             </div>
-            <div class="flex title">
-                ยืนยันรับส่วนจัดสรร
-            </div>
-              <div class="flex searchBox searchBorder">
-                <gl-grid-row width="{{getWidth}}">  
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                         <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
-                        <!--<gl-form-label-input label="ปีโควตา" value="2559"></gl-form-label-input>-->
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                       <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" 
-                        item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกประเภทข้าว" required></gl-combo-box>
-                    </gl-grid-col>  
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <div class="layout horizontal">
-                        <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
-                        </div>
-                         <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
+        </div>
+        <div class="flex title">
+            ยืนยันรับส่วนจัดสรร
+        </div>
+        <div class="flex searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
+                    <!--<gl-form-label-input label="ปีโควตา" value="2559"></gl-form-label-input>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" item-label-path="type_rice_name_th"
+                        item-value-path="id" error-message="กรุณาเลือกประเภทข้าว" required></gl-combo-box>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <div class="layout horizontal">
+                        <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}"
+                            value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                    </div>
+                    <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                             <paper-listbox class="dropdown-content">
                                 <paper-item>1</paper-item>
                                 <paper-item>2</paper-item>
                             </paper-listbox>
                         </gl-form-dropdown-menu>-->
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-                    
-                  
-                </gl-grid-row>
-                <gl-grid-row>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-combo-box class="saveData" label="ชื่อบริษัท" items="[[companyName]]" value="" 
-                        item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกบริษัท" required></gl-combo-box>
-                        <!--<gl-form-dropdown-menu label="ชื่อบริษัท">
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+
+
+            </gl-grid-row>
+            <gl-grid-row>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-combo-box class="saveData" label="ชื่อบริษัท" items="[[companyName]]" value="" item-label-path="type_rice_name_th" item-value-path="id"
+                        error-message="กรุณาเลือกบริษัท" required></gl-combo-box>
+                    <!--<gl-form-dropdown-menu label="ชื่อบริษัท">
                             <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
                                 <paper-item name="1">กมลกิจ บจก.</paper-item>
                                 <paper-item name="2">กรุงเทพค้าข้าว บจก.</paper-item>
                             </paper-listbox>
                         </gl-form-dropdown-menu>-->
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>{{btnName}}</paper-button>
-                    </gl-grid-col>
-                       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-                </gl-grid-row>
-            </div>
-            <!--<div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>{{btnName}}</paper-button>
+</gl-grid-col>
+<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+</gl-grid-row>
+</div>
+<!--<div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>-->
 
 <div>
-<!--   -->
-<main>
-  
-  <input id="tab1" type="radio" name="tabs" checked>
-  <label for="tab1">ยังไม่ยืนยัน</label>
-    
-  <input id="tab2" type="radio" name="tabs">
-  <label for="tab2">ยืนยัน</label>
-    
-  <section id="content1">
-    <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect"></confirm-list>
-  </section>
-    
-  <section id="content2">
-    <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect"></confirm-list>
-  </section>
-</main>
-<!--  -->
+    <!--   -->
+    <main>
+
+        <input id="tab1" type="radio" name="tabs" checked>
+        <label for="tab1">ยังไม่ยืนยัน</label>
+
+        <input id="tab2" type="radio" name="tabs">
+        <label for="tab2">ยืนยัน</label>
+
+        <section id="content1">
+            <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect"></confirm-list>
+        </section>
+
+        <section id="content2">
+            <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect"></confirm-list>
+        </section>
+    </main>
+    <!--  -->
 
 
-            <!--<div class="panelHead">
+    <!--<div class="panelHead">
                 <div>สรุปผลการยืนยันปริมาณจัดสรร</div>
                 <paper-tabs selected="{{pageSelected}}">
                     <paper-tab>ยืนยันแล้ว</paper-tab>
@@ -293,204 +293,206 @@
                 </div>
                 </div>
             </div>-->
-        </div>
-            
-        <panel-right title="ยืนยันรับส่วนจัดสรร">
-            <template is="dom-if" if="[[rendered]]">
-               <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
-            </template>
-		</panel-right>
+</div>
+
+<panel-right title="ยืนยันรับส่วนจัดสรร">
+    <template is="dom-if" if="[[rendered]]">
+        <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
     </template>
-    <script>
-        Polymer({
-            is: "page-confirm",
-            behaviors:[nylonBehavior],
-            observers:[
-                '_chageCompanyName(selectName)',
-                '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
-            ],
-            properties: {
-                layerContent: {
-                    type: String,
-                    value: "detailRegExporter"
-                },
-                data:{
-                    type: Object,
-                    value: {
-                        header:[
-                            'ผู้ส่งออก',
-                            'ปริมาณโควตารวม',
-                            'งวดที่ 1 (มกราคม)',
-                            'งวดที่ 2 (เมษายน)',
-                            'งวดที่ 3 (กรกฏาคม)'
-                        ]
-                    }
-                    
-                },
-                dataAmount:{
-                    type: Object,
-                    value:
-                      {
-                        header:[
-                            'ผู้ส่งออก',
-                            'ปริมาณโควตารวม',
-                            'งวดที่ 1 (มกราคม)',
-                            'งวดที่ 2 (เมษายน)',
-                            'งวดที่ 3 (กรกฏาคม)'
-                        ],
-                        content:[
-                            {
-                                a:'บริษัท ปองค้าข้าว จำกัด',
-                                b:'426.00',
-                                c:'214.00',
-                                d:'106.00',
-                                e:'106.00'
-                            },
-                            {
-                                a:'บริษัท พงษ์ลาภ จำกัด',
-                                b:'1,574.00',
-                                c:'768.00',
-                                d:'394.00',
-                                e:'394.00'
-                            }
-                        ],
-                        sum:[
-                            {
-                                sumb: '2,000.00',
-                                sumc: '1,000.00',
-                                sumd: '500.00',
-                                sume: '500.00'
-                            }
-                        ]
-                       
-                      }
-                },
-                companyName:{
-                    type: Array,
-                    value:[
-                        'บริษัท ปองค้าข้าว จำกัด',
-                        'บริษัท พงษ์ลาภ จำกัด'
+</panel-right>
+</template>
+<script>
+    Polymer({
+        is: "page-confirm",
+        behaviors: [nylonBehavior],
+        observers: [
+            '_chageCompanyName(selectName)',
+            '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
+        ],
+        properties: {
+            layerContent: {
+                type: String,
+                value: "detailRegExporter"
+            },
+            data: {
+                type: Object,
+                value: {
+                    header: [
+                        'ผู้ส่งออก',
+                        'ปริมาณโควตารวม',
+                        'งวดที่ 1 (มกราคม)',
+                        'งวดที่ 2 (เมษายน)',
+                        'งวดที่ 3 (กรกฏาคม)'
                     ]
-                },
-                searchType: {
-                    type: Object,
-                    value: [{
-                        id: 1,
-                        name: 'ทั้งหมด'
-                    }, {
-                        id: 2,
-                        name: 'ผู้ส่งออกที่ถูกระงับ'
-                    } ]
-                },
-            
+                }
+
             },
-            nylonPageActive:function(){
-                this._getYear(); 
-                this._getTypeRice();
-            },
-            ready:function(){    
-                      
-                this.btnName = 'แสดงทั้งหมด';
-                this.pageSelected = 0;
-                Polymer.RenderStatus.afterNextRender(this,function(){
-                this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e)=>{
-                    this.rendered = true;
-                }, (e)=> {
-                    console.log('error')
-                });
-                });
-                
-                this.dataConfirm = {
-                      header:[
-                            'ผู้ส่งออก',
-                            'ปริมาณโควตารวม',
-                            'งวดที่ 1 (มกราคม)',
-                            'งวดที่ 2 (เมษายน)',
-                            'งวดที่ 3 (กรกฏาคม)'
-                        ],
-                        content:[
-                            {
-                                a:'บริษัท พงษ์ลาภ จำกัด',
-                                b:'1,574.00',
-                                c:'768.00',
-                                d:'394.00',
-                                e:'394.00'
-                            }
-                        ],
-                        sum:[
-                            {
-                                sumb: '1,574.00',
-                                sumc: '768.00',
-                                sumd: '394.00',
-                                sume: '394.00'
-                            }
-                        ]
+            dataAmount: {
+                type: Object,
+                value:
+                {
+                    header: [
+                        'ผู้ส่งออก',
+                        'ปริมาณโควตารวม',
+                        'งวดที่ 1 (มกราคม)',
+                        'งวดที่ 2 (เมษายน)',
+                        'งวดที่ 3 (กรกฏาคม)'
+                    ],
+                    content: [
+                        {
+                            a: 'บริษัท ปองค้าข้าว จำกัด',
+                            b: '426.00',
+                            c: '214.00',
+                            d: '106.00',
+                            e: '106.00'
+                        },
+                        {
+                            a: 'บริษัท พงษ์ลาภ จำกัด',
+                            b: '1,574.00',
+                            c: '768.00',
+                            d: '394.00',
+                            e: '394.00'
+                        }
+                    ],
+                    sum: [
+                        {
+                            sumb: '2,000.00',
+                            sumc: '1,000.00',
+                            sumd: '500.00',
+                            sume: '500.00'
+                        }
+                    ]
+
                 }
             },
-            _onDataSelect:function(e){
-                this.pageSelected = 0;
-                this.$$('panel-right').open();
-                this.dataSelect = e.detail.data;
-                this.statusSelect = e.detail.status;
+            companyName: {
+                type: Array,
+                value: [
+                    'บริษัท ปองค้าข้าว จำกัด',
+                    'บริษัท พงษ์ลาภ จำกัด'
+                ]
             },
-            _getYear:function(){
-              axios.get('./eu/quota/year')
-              .then((response)=>{
-                console.log("success");
-                this.getYear = response.data;
-                //console.log(this.getYear);
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error.message);
-                this.fire('toast',{status:'connectError',text:error.message,
-                  callback:function(){
-                    //console.log('test');
-                  }})
-              });
-          },
-           _getTypeRice:function(){
-                axios.get('./eu/type_rice/')
-                .then((response)=>{
+            searchType: {
+                type: Object,
+                value: [{
+                    id: 1,
+                    name: 'ทั้งหมด'
+                }, {
+                    id: 2,
+                    name: 'ผู้ส่งออกที่ถูกระงับ'
+                }]
+            },
+
+        },
+        nylonPageActive: function () {
+            this._getYear();
+            this._getTypeRice();
+        },
+        ready: function () {
+
+            this.btnName = 'ค้นหา';
+            this.pageSelected = 0;
+            Polymer.RenderStatus.afterNextRender(this, function () {
+                this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e) => {
+                    this.rendered = true;
+                }, (e) => {
+                    console.log('error')
+                });
+            });
+
+            this.dataConfirm = {
+                header: [
+                    'ผู้ส่งออก',
+                    'ปริมาณโควตารวม',
+                    'งวดที่ 1 (มกราคม)',
+                    'งวดที่ 2 (เมษายน)',
+                    'งวดที่ 3 (กรกฏาคม)'
+                ],
+                content: [
+                    {
+                        a: 'บริษัท พงษ์ลาภ จำกัด',
+                        b: '1,574.00',
+                        c: '768.00',
+                        d: '394.00',
+                        e: '394.00'
+                    }
+                ],
+                sum: [
+                    {
+                        sumb: '1,574.00',
+                        sumc: '768.00',
+                        sumd: '394.00',
+                        sume: '394.00'
+                    }
+                ]
+            }
+        },
+        _onDataSelect: function (e) {
+            this.pageSelected = 0;
+            this.$$('panel-right').open();
+            this.dataSelect = e.detail.data;
+            this.statusSelect = e.detail.status;
+        },
+        _getYear: function () {
+            axios.get('./eu/quota/year')
+                .then((response) => {
+                    console.log("success");
+                    this.getYear = response.data;
+                    //console.log(this.getYear);
+                })
+                .catch((error) => {
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast', {
+                        status: 'connectError', text: error.message,
+                        callback: function () {
+                            //console.log('test');
+                        }
+                    })
+                });
+        },
+        _getTypeRice: function () {
+            axios.get('./eu/type_rice/')
+                .then((response) => {
                     //console.log("success!!");
                     console.log(response.data);
                     this.getTypeRice = response.data;
                 })
-                .catch((error)=>{
+                .catch((error) => {
                     console.log("error");
                     console.log(error);
                 });
-            },
-            _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
-                this.selectQuotaOrdinal = "";
-                axios.get('./eu/allocate/quota_ordinal',{
-                    params:{
-                    quota_id:yearQuoata,
-                    type_rice_id:typeRice
-                    }
-                })
-                .then((response)=>{
+        },
+        _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
+            this.selectQuotaOrdinal = "";
+            axios.get('./eu/allocate/quota_ordinal', {
+                params: {
+                    quota_id: yearQuoata,
+                    type_rice_id: typeRice
+                }
+            })
+                .then((response) => {
                     console.log("success!!");
                     console.log(response.data);
                     this.getQuotaOrdinal = response.data;
                 })
-                .catch((error)=>{
+                .catch((error) => {
                     console.log("error");
                     console.log(error);
                 });
-            },
-            _saveData:function(){
-                this.fire('toast',{status:'load'});
-                this.fire('toast',{
-                    status:'success',
-                    text:'บันทึกสำเร็จ',
-                    callback:()=>{
-                        this.$$("panel-right").close();
-                    }
-                 
+        },
+        _saveData: function () {
+            this.fire('toast', { status: 'load' });
+            this.fire('toast', {
+                status: 'success',
+                text: 'บันทึกสำเร็จ',
+                callback: () => {
+                    this.$$("panel-right").close();
+                }
 
-                })
-            }
-        });
-    </script>
+
+            })
+        }
+    });
+</script>
 </dom-module>
