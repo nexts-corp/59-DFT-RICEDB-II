@@ -64,8 +64,12 @@
       <!-- [[_getShip(data.shipline_id,dataForSelect)]] -->
       <template is="dom-repeat" items="[[data.ship]]">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box disabled required class="required"label="Vessel [[_ObcountIndex(index)]]"always-float-label item-label-path="ship_name"
-           item-value-path="ship_id" items="[[_getShip(data.shipline_id,dataForSelect)]]" value="{{item.ship_id}}"></gl-combo-box>
+
+          <!-- <gl-combo-box disabled required class="required"label="Vessel [[_ObcountIndex(index)]]"always-float-label item-label-path="ship_name"
+           item-value-path="ship_id" items="[[_getShip(data.shipline_id,dataForSelect)]]" value="{{item.ship_id}}"></gl-combo-box> -->
+           [[_getShip(data.shipline_id,dataForSelect)]]
+            <gl-combo-box id="ship-[[index]]" required class="required"label="Vessel [[_ObcountIndex(index)]]" always-float-label item-label-path="ship_name" disabled="[[isInputDisabled]]"
+             item-value-path="ship_id" value="{{item.ship_id}}" on-value-changed="_getResetShip"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input disabled required class="required"label="Voy No."always-float-label  error-message="กรุณาใส่รายละเอียด"  value="{{item.ship_voy_no}}"
@@ -253,7 +257,8 @@
         '_obCalWeight(data.shm_det_quantity,dataForSelect)',
         'check(data)',
         '_dataSelected(dataForSelect)',
-        '_checkpol(pol)'
+        '_checkpol(pol)',
+        '_getShip(data.shipline_id,dataForSelect)'
       ],
       _checkpol:function (pol) {
         // console.log('pol',pol);

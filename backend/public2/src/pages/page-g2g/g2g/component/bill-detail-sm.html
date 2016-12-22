@@ -53,8 +53,13 @@
 
       <template is="dom-repeat" items="[[data.ship]]">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <gl-combo-box required class="required"label="Vessel [[_ObcountIndex(index)]]" always-float-label item-label-path="ship_name" disabled="[[isInputDisabled]]"
-           item-value-path="ship_id" items="[[_getShip(data.shipline_id,dataForSelect)]]" value="{{item.ship_id}}"></gl-combo-box>
+          <!-- <gl-combo-box required class="required"label="Vessel [[_ObcountIndex(index)]]" always-float-label item-label-path="ship_name" disabled="[[isInputDisabled]]"
+           item-value-path="ship_id" items="[[_getShip(data.shipline_id,dataForSelect)]]" value="{{item.ship_id}}"></gl-combo-box> -->
+          [[_getShip(data.shipline_id,dataForSelect)]]
+           <gl-combo-box id="ship-[[index]]" required class="required"label="Vessel [[_ObcountIndex(index)]]" always-float-label item-label-path="ship_name" disabled="[[isInputDisabled]]"
+            item-value-path="ship_id" value="{{item.ship_id}}" on-value-changed="_getResetShip"></gl-combo-box>
+
+
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
           <gl-form-input required class="required"label="Voy No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{item.ship_voy_no}}" disabled="[[isInputDisabled]]"
@@ -185,6 +190,7 @@
         '_getPod(dataForSelect)',
         '_oBCheckVessel(data.ship.*)',
         '_changeDataBl(data.etd_date)',
+        '_getShip(data.shipline_id,dataForSelect)'
         // '_foredit(data)'
       ],
       // _foredit:function (data) {
@@ -321,7 +327,8 @@
         let pol = Pod.countryPort.filter((countryport)=>  countryport.country_id == 'THA' );
         this.dataForSelect.pol = pol;
         this.notifyPath('dataForSelect.pol');
-        let pod = Pod.countryPort.filter((countryport)=>  countryport.country_id == 'CHN' );
+        let county = this.dataForSelect.country_id;
+        let pod = Pod.countryPort.filter((countryport)=>  countryport.country_id == county );
         this.dataForSelect.pod = pod;
         this.notifyPath('dataForSelect.pod');
         // console.log(pod[0].ship);
