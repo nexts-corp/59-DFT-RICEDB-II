@@ -17,6 +17,13 @@ class index{
         res.json({r:'3445'});
     }
 
+    quota(req,res){
+        var r = req._r;
+        r.db('eu').table('quota').coerceTo('array').run().then(function(result) {
+            res.json(result);
+        });
+    }
+
 }
 
 module.exports = new index();

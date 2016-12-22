@@ -3,5 +3,6 @@ module.exports=function(app){
 
     app.get('/ec',feeIndexCtrl.ec);
     app.get('/receipt',feeIndexCtrl.receipt);
+    app.get('/quota',feeIndexCtrl.quota);
 
 }
