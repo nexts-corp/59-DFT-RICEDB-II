@@ -17,6 +17,10 @@
         type: Object,
         // readOnly: true,
       },
+      btnCheckDis:{
+        type:Boolean,
+        value:false
+      },
     },
     observers:[
       '_cloneData(data)'
@@ -76,6 +80,14 @@
       // console.log(data.length);
       if (data.length < count) {
         return true;
+      }
+    },
+    _isHaveForUse:function(arr1,arr2){
+      console.log(arr1,arr2.length);
+      if (arr1 < arr2.length) {
+        this.btnCheckDis=true;
+      }else {
+        this.btnCheckDis=false;
       }
     },
     _ObcountIndex:function (index) {

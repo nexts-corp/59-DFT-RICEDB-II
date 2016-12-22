@@ -93,8 +93,13 @@
               <gl-form-panel-body label="" set-padding="10px" set-border="1px">
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-              <gl-combo-box id="riceType" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
+
+              <!-- <gl-combo-box id="riceType" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
             item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{dataForSelect.contract_type_rice}}" >
+              </gl-combo-box > -->
+              [[_isHaveForUse(index,dataForSelect.contract_type_rice)]]
+              <gl-combo-box id="riceType-[[index]]" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
+            item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" on-value-changed="_typeRiceConfirm">
               </gl-combo-box >
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -182,7 +187,10 @@
           </div>
       </template>
       <div class="horizontal end-justified layout">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
+        <template is="dom-if" if="[[checkBtnView(btnCheckDis)]]">
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]"><iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
+
+        </template>
       </div>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
@@ -247,8 +255,12 @@
         }
       },
       observers:[
-        '_changeDataConfirm(data.cl_date)'
+        '_changeDataConfirm(data.cl_date)',
+        '_typeRiceConfirm(data.*)'
       ],
+      attached: function() {
+        this._typeRiceConfirm();
+      },
       _changeDataConfirm:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.cl_date', date);
@@ -420,6 +432,28 @@
 
          });
        }
+    },
+    _typeRiceConfirm:function () {
+      this.async(()=>{
+         let  comboboxs,arrForItem,itemif;
+         for (var i = 0; i < this.data.cl_type_rice.length; i++) {
+           arrForItem = JSON.parse(JSON.stringify(this.dataForSelect.contract_type_rice));
+          //  console.log('arrForItem',arrForItem);
+           this.data.cl_type_rice.map((item,index)=>{
+            //  console.log(item);
+             if (i != index) {
+               //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
+               if (arrForItem.filter((blDetail)=> blDetail.type_rice_id == item.type_rice_id )[0] != undefined) {
+                 itemif = arrForItem.indexOf(arrForItem.filter((blDetail)=> blDetail.type_rice_id == item.type_rice_id )[0]);
+                //  console.log(itemif);
+                 arrForItem.splice(itemif, 1);
+               }
+             }
+           });
+           comboboxs = Polymer.dom(this.root).querySelector('#riceType-'+i);
+           comboboxs.items = arrForItem;
+         }
+      },1);
     },
       _clearnDataConfirm:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
