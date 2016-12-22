@@ -1,0 +1,528 @@
+<link rel="import" href="./components/confirm-list.html">
+<link rel="import" href="./../components/panel-right/panel-right.html">
+
+<dom-module id="page-confirm">
+    <style is="custom-style" include="iron-flex iron-flex-factors gl-table iron-flex-alignment gl-size gl-color">
+        * {
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        paper-item{
+            font-family: 'CSChatThaiUI', sans-serif !important;
+            -webkit-font-smoothing: antialiased;
+      }
+        .container {
+            margin-right: 10px;
+        }
+        
+        .header {
+            padding: 10px 0px 10px 10px;
+            background-color: var(--paper-grey-100);
+            color: var(--paper-grey-600);
+            font-size: var(--font-size-h4);
+        }
+        
+        .registor {
+            margin: 20px;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: var(--font-size-h3);
+        }
+        
+        .searchBox {
+            padding: 5px;
+            background-color: var(--gl-gray-lighter-color);
+        }
+        
+        .elevation {
+            border-radius: 5px;
+            margin: 10px;
+            padding: 5px;
+        }
+        
+        .searchBorder {
+            border: 1px solid #ddd;
+            margin: 15px;
+            border-radius: 3px
+        }
+        
+        paper-material {
+            background-color: var(--gl-white-color);
+        }
+        
+        gl-search-input {
+            margin: 30px 0px 0px 0px;
+        }
+        
+        .contentHeader {
+            padding: 10px 0px 20px 0px;
+            font-size: 22px;
+            text-align: center;
+        }
+        paper-button{
+             font-family: 'CSChatThaiUI', sans-serif !important;
+            -webkit-font-smoothing: antialiased;
+            height: 40px;
+        }
+        /*flex*/
+        
+        .flex-horizontal-with-ratios {
+            @apply(--layout-horizontal);
+        }
+        
+        .flexchild {
+            @apply(--layout-flex);
+        }
+        
+        .flex2child {
+            @apply(--layout-flex-2);
+        }
+        
+        .flex3child {
+            @apply(--layout-flex-3);
+        }
+        
+        .flex-horizontal {
+            @apply(--layout-horizontal);
+        }
+        
+        .flexchild {
+            @apply(--layout-flex);
+        }
+        
+        .flex-equal-around-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-around-justified);
+        }
+        
+        .flex-center-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+        }
+        .panel{
+            border: 1px solid #ddd;
+        }
+        .panelHead{
+            background-color: orange;
+            color: white;
+            /*padding: 20px 0px 0px 0px;*/
+        }
+        .panelHead>div{
+            text-align: center;
+            font-size: 22px;
+            padding: 20px;
+        }
+        .panelBody{ 
+             padding:20px;
+        }
+        
+        paper-tabs{
+            font-size: 19px;
+            font-weight: bold;
+            --paper-tab-content-unselected:{
+                background-color: orange !important;
+                color: white;
+            }
+           --paper-tabs-selection-bar:{
+             border: 2px solid #feff3b;
+             border-radius: 10px;
+           } 
+           --paper-tabs-selection-bar-color: #feff3b;; 
+        }
+            /*paper-tab:hover{
+                border-radius: 6px;
+                background-color: white !important;
+            }*/
+/*--------------------------------------*/
+            main {
+                min-width: 320px;
+                max-width: 1000px;
+                padding: 5px;
+                margin: 0 auto;
+                background: #fff;
+            }
+
+            section {
+                display: none;
+                padding: 20px 0 0;
+                border-top: 1px solid #ddd;
+            }
+
+            input {
+                display: none;
+            }
+
+            label {
+                display: inline-block;
+                margin: 0 0 -1px;
+                padding: 15px 25px;
+                font-weight: 600;
+                text-align: center;
+                color: #bbb;
+                border: 1px solid transparent;
+            }
+
+            label:before {
+                font-family: fontawesome;
+                font-weight: normal;
+                margin-right: 10px;
+            }
+
+            /*label[for*='1']:before { content: '\f1cb'; }
+            label[for*='2']:before { content: '\f17d'; }*/
+
+
+            label:hover {
+                color: #888;
+                cursor: pointer;
+            }
+
+            input:checked + label {
+                color: #555;
+                border: 1px solid #ddd;
+                border-top: 3px solid orange;
+                border-bottom: 1px solid #fff;
+            }
+
+            #tab1:checked ~ #content1,
+            #tab2:checked ~ #content2 {
+                display: block;
+            }
+
+    </style>
+<template>
+    <div class="layout vertical registor">
+        <div class="flex">
+            <div class="layout horizontal end-justified">
+                <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
+            </div>
+        </div>
+        <div class="flex title">
+            ยืนยันรับส่วนจัดสรร
+        </div>
+        <div class="flex searchBox searchBorder">
+            <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box>
+                    <!--<gl-form-label-input label="ปีโควตา" value="2559"></gl-form-label-input>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                    <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" item-label-path="type_rice_name_th"
+                        item-value-path="id" error-message="กรุณาเลือกประเภทข้าว" required></gl-combo-box>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <div class="layout horizontal">
+                        <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}"
+                            value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                    </div>
+                    <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                            <paper-listbox class="dropdown-content">
+                                <paper-item>1</paper-item>
+                                <paper-item>2</paper-item>
+                            </paper-listbox>
+                        </gl-form-dropdown-menu>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+
+
+            </gl-grid-row>
+            <gl-grid-row>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <gl-combo-box class="saveData" label="ชื่อบริษัท" items="[[companyName]]" value="" item-label-path="type_rice_name_th" item-value-path="id"
+                        error-message="กรุณาเลือกบริษัท" required></gl-combo-box>
+                    <!--<gl-form-dropdown-menu label="ชื่อบริษัท">
+                            <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
+                                <paper-item name="1">กมลกิจ บจก.</paper-item>
+                                <paper-item name="2">กรุงเทพค้าข้าว บจก.</paper-item>
+                            </paper-listbox>
+                        </gl-form-dropdown-menu>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>{{btnName}}</paper-button>
+</gl-grid-col>
+<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+</gl-grid-row>
+</div>
+<!--<div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>-->
+
+<div>
+    <!--   -->
+    <main>
+
+        <input id="tab1" type="radio" name="tabs" checked>
+        <label for="tab1">ยังไม่ยืนยัน</label>
+
+        <input id="tab2" type="radio" name="tabs">
+        <label for="tab2">ยืนยัน</label>
+
+        <template is="dom-if" if="{{dataCheck}}">
+            <div style="padding: 20px 0 0; border-top: 1px solid #ddd;">
+             <table class="gl-table-default">
+                 <thead>
+                    <tr>
+                        <th class="left">ผู้ส่งออก</th>
+                        <th>ปริมาณโควตารวม</th>
+                        <th>งวดที่ 1 มกราคม</th>
+                        <th>งวดที่ 2 เมษายน</th>
+                        <th>งวดที่ 3 กรกฏาคม</th>
+                    </tr>
+                </thead>
+                 <tbody>
+                     <td class="left" colspan="5">ไม่พบข้อมูล</td>
+                 </tbody>
+             </table>
+             </div>
+        </template>
+        <template is="dom-if" if="{{dataStat}}">
+        <section id="content1">
+            <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
+        </section>
+
+        <section id="content2">
+            <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect" status="บันทึก"></confirm-list>
+        </section>
+        </template>
+    </main>
+    <!--  -->
+
+
+    <!--<div class="panelHead">
+                <div>สรุปผลการยืนยันปริมาณจัดสรร</div>
+                <paper-tabs selected="{{pageSelected}}">
+                    <paper-tab>ยืนยันแล้ว</paper-tab>
+                    <paper-tab>ยังไม่ยืนยัน</paper-tab>
+                </paper-tabs>
+            </div>
+            <div class="panelBody">
+            <div class="flex searchBorder">
+                <div style="overflow-x:auto;">
+                    
+                    <iron-pages selected="{{pageSelected}}">
+                        <section>
+                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
+                        </section>
+                        <section>
+                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="nonConfirm"></confirm-list>
+                        </section>
+                    </iron-pages>
+                   
+                </div>
+                </div>
+            </div>-->
+</div>
+
+<panel-right title="ยืนยันรับส่วนจัดสรร">
+    <template is="dom-if" if="[[rendered]]">
+        <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
+    </template>
+</panel-right>
+</template>
+<script>
+    Polymer({
+        is: "page-confirm",
+        behaviors: [nylonBehavior],
+        observers: [
+            '_chageCompanyName(selectName)',
+            '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
+        ],
+        properties: {
+            layerContent: {
+                type: String,
+                value: "detailRegExporter"
+            },
+            data: {
+                type: Object,
+                value: {
+                    header: [
+                        'ผู้ส่งออก',
+                        'ปริมาณโควตารวม',
+                        'งวดที่ 1 (มกราคม)',
+                        'งวดที่ 2 (เมษายน)',
+                        'งวดที่ 3 (กรกฏาคม)'
+                    ]
+                }
+
+            },
+            dataAmount: {
+                type: Object,
+                value:
+                {
+                    header: [
+                        'ผู้ส่งออก',
+                        'ปริมาณโควตารวม',
+                        'งวดที่ 1 (มกราคม)',
+                        'งวดที่ 2 (เมษายน)',
+                        'งวดที่ 3 (กรกฏาคม)'
+                    ],
+                    content: [
+                        {
+                            a: 'บริษัท ปองค้าข้าว จำกัด',
+                            b: '426.00',
+                            c: '214.00',
+                            d: '106.00',
+                            e: '106.00'
+                        },
+                        {
+                            a: 'บริษัท พงษ์ลาภ จำกัด',
+                            b: '1,574.00',
+                            c: '768.00',
+                            d: '394.00',
+                            e: '394.00'
+                        }
+                    ],
+                    sum: [
+                        {
+                            sumb: '2,000.00',
+                            sumc: '1,000.00',
+                            sumd: '500.00',
+                            sume: '500.00'
+                        }
+                    ]
+
+                }
+            },
+            companyName: {
+                type: Array,
+                value: [
+                    'บริษัท ปองค้าข้าว จำกัด',
+                    'บริษัท พงษ์ลาภ จำกัด'
+                ]
+            },
+            dataConfirm:{
+                type: Object,
+                value: {
+                    header: [
+                        'ผู้ส่งออก',
+                        'ปริมาณโควตารวม',
+                        'งวดที่ 1 (มกราคม)',
+                        'งวดที่ 2 (เมษายน)',
+                        'งวดที่ 3 (กรกฏาคม)'
+                    ],
+                    content: [
+                        {
+                            a: 'บริษัท พงษ์ลาภ จำกัด',
+                            b: '1,574.00',
+                            c: '768.00',
+                            d: '394.00',
+                            e: '394.00'
+                        }
+                    ],
+                    sum: [
+                        {
+                            sumb: '1,574.00',
+                            sumc: '768.00',
+                            sumd: '394.00',
+                            sume: '394.00'
+                        }
+                    ]
+                }
+            },
+            searchType: {
+                type: Object,
+                value: [{
+                    id: 1,
+                    name: 'ทั้งหมด'
+                }, {
+                    id: 2,
+                    name: 'ผู้ส่งออกที่ถูกระงับ'
+                }]
+            },
+
+        },
+        nylonPageActive: function () {
+            this._getYear();
+            this._getTypeRice();
+        },
+        ready: function () {
+            this.dataCheck = true;
+            this.dataStat = false;
+            this.btnName = 'ค้นหา';
+            this.pageSelected = 0;
+            Polymer.RenderStatus.afterNextRender(this, function () {
+                this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e) => {
+                    this.rendered = true;
+                }, (e) => {
+                    console.log('error')
+                });
+            });
+
+            
+        },
+        _onDataSelect: function (e) {
+            this.pageSelected = 0;
+            this.$$('panel-right').open();
+            this.dataSelect = e.detail.data;
+            this.statusSelect = e.detail.status;
+        },
+        _getYear: function () {
+            axios.get('./eu/quota/year')
+                .then((response) => {
+                    console.log("success");
+                    this.getYear = response.data;
+                    //console.log(this.getYear);
+                })
+                .catch((error) => {
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast', {
+                        status: 'connectError', text: error.message,
+                        callback: function () {
+                            //console.log('test');
+                        }
+                    })
+                });
+        },
+        _getTypeRice: function () {
+            axios.get('./eu/type_rice/')
+                .then((response) => {
+                    //console.log("success!!");
+                    console.log(response.data);
+                    this.getTypeRice = response.data;
+                })
+                .catch((error) => {
+                    console.log("error");
+                    console.log(error);
+                });
+        },
+        _getDataCompanny:function(){
+            // this.$$('confirm-list')._setData();
+             this.dataCheck = false;
+                this.dataStat = true;
+        },
+        _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
+            this.selectQuotaOrdinal = "";
+            axios.get('./eu/allocate/quota_ordinal', {
+                params: {
+                    quota_id: yearQuoata,
+                    type_rice_id: typeRice
+                }
+            })
+                .then((response) => {
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getQuotaOrdinal = response.data;
+                })
+                .catch((error) => {
+                    console.log("error");
+                    console.log(error);
+                });
+        },
+        _saveData: function () {
+            this.fire('toast', { status: 'load' });
+            this.fire('toast', {
+                status: 'success',
+                text: 'บันทึกสำเร็จ',
+                callback: () => {
+                    this.$$("panel-right").close();
+                }
+
+
+            })
+        }
+    });
+</script>
+</dom-module>

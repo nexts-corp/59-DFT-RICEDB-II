@@ -1,0 +1,51 @@
+
+<dom-module id="page-403">
+    <template>
+        <style>
+            div{
+                text-align: left;
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                padding-top : 10px;
+            }
+            .header{
+                font-size: 180px;
+                color: orange;
+            }
+            .content{
+                font-size: 80px;
+                margin-top: -60px;
+                color: grey;
+            }
+            .container{
+                padding: 20px;
+            }
+            paper-button{
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                font-size: 22px;
+                background-color: #f7941e;
+                color: white;
+                border-radius: 10px;
+            }
+        </style>
+        <div class="container">
+            <div class="header"> 403 </div>
+           <div class="content"> {{localize('msg')}} </div>
+            <div>
+                <paper-button>{{localize('btnMsg')}}</paper-button>
+            </div>
+            
+        </div>
+        
+    </template>
+    <script>
+        Polymer({
+            is: 'page-403',
+            behaviors:[nylonLocalizeBehavior],
+            created:function(){
+                this.nylonLocalizeImport('/403.json');
+            }
+        });
+    </script>
+</dom-module>

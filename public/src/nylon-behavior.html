@@ -1,0 +1,29 @@
+<script>
+    nylonBehavior = {
+        observers:['_checkPageActive(path,currentPath)'],
+        _checkPageActive:function(route,currentRoute){
+            if(route==currentRoute){
+                if(typeof this.nylonPageActive != "undefined"){
+                    this.nylonPageActive();
+                }
+            }
+        }
+    };
+
+    nylonLocalize = {
+        attached:function(){
+            nylonLocalize.subscribe((x)=>{ 
+                this.language = x;
+            });
+        },
+        nylonLocalizeImport:function(path){
+            this.loadResources(this.resolveUrl('/src/localize'+path));
+        },
+        nylonLocalizeChange:function(lang){
+            nylonLocalize.onNext(lang);
+        }
+    }
+    nylonLocalizeBehavior = [ Polymer.AppLocalizeBehavior, nylonLocalize ]
+
+
+</script>

@@ -1,0 +1,91 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-localize-behavior/app-localize-behavior.html">
+
+<script src="../bower_components/rxjs/dist/rx.lite.js"></script>
+
+<link rel="import" href="nylon-behavior.html">
+<link rel="import" href="nylon-init.html">
+
+<dom-module id="nylon-app">
+    <template>
+        <app-location route="{{route}}"></app-location>
+        <app-route
+            route="{{route}}"
+            pattern="/:page"
+            data="{{routeData}}"
+            tail="{{subroute}}"></app-route>
+
+        <nylon-init selected="[[page]]" on-send-element-layout-main-drawer="_onSendElementLayoutMainDrawer" on-nylon-change-page="_changePage"></nylon-init>
+        <a id="changePath" href="#" style="display:none">link change path</a>
+    </template>
+    <script>
+        Polymer({
+            is:'nylon-app',
+            properties:{
+                page: {
+                    type: String,
+                    reflectToAttribute: true,
+                    observer: '_pageChanged'
+                },
+                route: {
+                    observer:'_routeChange'
+                },
+                triggleLoaded:{
+                    type: Boolean,
+                    value: false
+                }
+            },
+            created:function(){
+
+                if(localStorage.getItem("nylonLocalize")==null){
+                    localStorage.setItem("nylonLocalize", "th");
+                }
+
+                nylonLocalize = new Rx.BehaviorSubject(localStorage.getItem("nylonLocalize"));
+                nylonLocalize.subscribe(function(x){ 
+                    if(localStorage.getItem("nylonLocalize")!=x){
+                        localStorage.setItem("nylonLocalize", x);
+                    }
+                });
+
+            },
+            observers: [
+                '_routePageChanged(routeData.page)'
+            ],
+            _routePageChanged: function(page) {
+                this.page = page || 'quota';
+            },
+            _pageChanged: function(page, oldPage) {
+                console.log(page);
+                if (page != null) {
+                    this.importHref(
+                        this.resolveUrl('/src/pages/page-' + page + '/page-' + page + '.html'),
+                        ()=>{
+                            if(this.elementLayoutMainDrawer){
+                                this.elementLayoutMainDrawer._loaded();
+                            }
+                        },
+                        ()=>{
+                            console.log('ok');
+                            this._routePageChanged('404');
+                        }
+                        , true
+                    );
+                }
+            },
+            _changePage:function(e){
+                this.$.changePath.setAttribute("href", e.detail.path);
+                this.$.changePath.click();
+            },
+            _routeChange:function(val){
+                //console.log(val);
+            },
+            _onSendElementLayoutMainDrawer:function(e){
+                this.elementLayoutMainDrawer = e.detail;
+            }
+            
+        });
+    </script>
+</dom-module>

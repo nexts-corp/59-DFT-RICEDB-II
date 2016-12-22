@@ -1,0 +1,44 @@
+<script>
+    FormatNumberBehavior = {
+        properties:{
+            _defaultFormat:{
+                type: String,
+                value: '0,0.00'
+            }
+        },
+        formatNumber:function(number){
+        //    console.log(number);
+            if(number == null){
+                return "";
+            }
+            else {
+                if(Number.isInteger(number)== true){
+                    this._defaultFormat = '0,0'
+                    var num = numeral(number).format(this._defaultFormat);
+                    return num
+                }
+                else if(Number.isInteger(number)==false){
+                    this._defaultFormat = '0,0.00'
+                    var num = numeral(number).format(this._defaultFormat);
+                    return num
+                }
+            }
+           
+        },
+        setFormat:function(format){
+            if(format == "" || format == "undefined"){
+                format = '0,0';
+                this._defaultFormat = format;
+            }
+            else{
+                this._defaultFormat = format;
+            } 
+            return this._defaultFormat;
+        },
+        unFormat:function(number){
+            var num = numeral().unformat(number);
+            return num;
+        }   
+    }
+  
+</script>

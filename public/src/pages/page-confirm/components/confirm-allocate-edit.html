@@ -1,0 +1,173 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
+
+<dom-module id="confirm-allocate-edit">
+  <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+    *{
+      text-align: left;
+    }
+    .title{
+      padding: 10px;
+      font-size: 18px;
+      color: white;
+      background-color: orange;
+      /*width: 25%;*/
+    }
+    .content,paper-button{
+      font-size:18px;
+      margin-top: 26px;
+      font-family: 'CSChatThaiUI', sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+    }
+    table.default {
+      border-collapse: collapse;
+      width: 100%
+    }
+
+    table.default,
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 15px;
+    }
+
+    th {
+      text-align: center;
+      background-color: #F1F1F1;
+      white-space: nowrap;
+    }
+
+    td {
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background-color: #F1F1F1;
+    }
+    .number{
+      text-align: right;
+    }
+    .textHeader{
+      padding:20px;
+      text-align: center;
+      font-size: 22px;  
+    }
+  </style>
+  <template>
+    <!--<div class="textHeader">ยืนยันรับส่วนจัดสรร</div>-->
+    <gl-form-panel set-padding = "0px 0px 20px 0px">
+      <div class="title">ข้อมูลบริษัท</div>
+     
+      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+         <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+            <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี" value="0105507002443"></gl-form-label-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+            <!--<gl-form-label-input label="ชื่อบริษัท(ไทย)" value="{{data.a}}"></gl-form-label-input>-->
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+             <gl-form-label-input label="ชื่อบริษัท(ไทย)" value="{{data.a}}"></gl-form-label-input>
+            <!--<gl-form-label-input label="ชื่อบริษัท(อังกฤษ)" value="Kamolkich., Ltd"></gl-form-label-input>-->
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+           </gl-grid-col>
+        </gl-grid-row>
+      </gl-form-panel-body>
+    </gl-form-panel>
+
+    <gl-form-panel set-padding = "0px 0px 20px 0px">
+      <div class="title">รายละเอียดปริมาณจัดสรร</div>
+      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+         <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+               <!--<div>ยอดปรับปรุง</div>-->
+           </gl-grid-col>
+        </gl-grid-row>
+
+         <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <div class="content">ปริมาณ งวดที่ 1 (มกราคม) :</div>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+               <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.c}}"></gl-form-input>
+           </gl-grid-col>
+        </gl-grid-row>
+
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+             
+              <div class="content">ปริมาณ งวดที่ 2 (เมษายน) :</div>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+               <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.d}}"></gl-form-input>
+           </gl-grid-col>
+        </gl-grid-row>
+
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <div class="content">ปริมาณ งวดที่ 3 (กรกฏาคม) :</div>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+               <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.e}}"></gl-form-input>
+           </gl-grid-col>
+        </gl-grid-row>
+
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <div class="content">ปริมาณโควตารวม :</div>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+               <gl-form-input class="number" format-number="on" value="[[sumData(data.c,data.d,data.e)]]" disabled></gl-form-input>
+           </gl-grid-col>
+        </gl-grid-row>
+      </gl-form-panel-body>
+    </gl-form-panel>
+
+    <div class="horizontal end-justified layout">
+        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_saveData" raised>{{status}}</paper-button>
+    </div>
+   
+  </template>
+  <script>
+    Polymer({
+      is: "confirm-allocate-edit",
+      behaviors:[FormatNumberBehavior],
+      properties:{
+        status:{
+          type: String,
+          value: '??'
+        },
+        data:{
+            type: Object,
+            observer: '_getData'
+        }
+      },
+      _getData:function(){
+        console.log(this.data);
+      },
+      sumData:function(data1,data2,data3){
+        
+        return this.unFormat(data1) + this.unFormat(data2) + this.unFormat(data3);
+      },
+      _saveData:function(){
+        this.fire('save-data');
+      }
+    });
+  </script>
+</dom-module>

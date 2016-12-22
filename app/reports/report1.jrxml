@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ba2f04cc-89e9-4546-a1cc-5b788cc22adc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="default" isDefault="true" backcolor="#FFFFFF" fontName="TH SarabunPSK" fontSize="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<parameter name="department" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\somchit\\Documents\\Projects\\nylon\\app\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="name" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="subject" class="java.util.Collection"/>
+	<field name="exports" class="java.util.Collection">
+		<property name="index" value=""/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement style="default" x="246" y="0" width="120" height="30" uuid="a0aa523d-466c-4493-866e-8233909af2cb"/>
+				<text><![CDATA[ทดสอบ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="29" width="114" height="39" uuid="a5cfcb98-a02f-4eac-9283-ec0b6d33e83a"/>
+				<textFieldExpression><![CDATA[$P{department}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="29" width="100" height="39" uuid="1855d241-3333-450c-a0af-917b3a74b2bf"/>
+				<text><![CDATA[Department]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="24" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="77" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="38" uuid="7ef8cc1b-7d55-48d6-a84a-0bf1f541f3bf"/>
+				<text><![CDATA[name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="38" uuid="859b5093-ff12-4156-bdbc-3de77c633cfe"/>
+				<text><![CDATA[surname]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="355" height="38" uuid="65cb3175-5c20-430b-869b-28f214c793aa"/>
+				<text><![CDATA[address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="2" width="100" height="20" uuid="af3bff1a-4752-4e6e-80e9-736fb4013c6f"/>
+				<text><![CDATA[exports]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="2" width="100" height="20" uuid="78aa74d9-e0bd-4cf4-affe-1af289c26f32"/>
+				<text><![CDATA[exports]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="2" width="100" height="20" uuid="7382fd4b-a4c1-4c37-b128-c5075f5fffb8"/>
+				<text><![CDATA[exports]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="280" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="42" uuid="5fcb6aa5-5a91-40bc-99ca-6f991565e06d"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="42" uuid="da572094-af5b-4ad4-8bb3-3e08fc1defb0"/>
+				<textFieldExpression><![CDATA[$F{surname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="355" height="42" uuid="e0930c15-c199-4311-812d-c199bafe81b9"/>
+				<textFieldExpression><![CDATA[$F{address}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="46" y="60" width="451" height="118" uuid="090ed041-95b8-4fd7-88cb-d2f3612fbaf5"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{subject})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="46" y="180" width="450" height="100" uuid="3624832c-abd3-48b4-b44e-e6d9238fdb9d"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{exports})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1_subreport2.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

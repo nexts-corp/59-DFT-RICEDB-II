@@ -1,0 +1,339 @@
+<link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./components/allocate-list.html">
+<!--<script src="./../../../bower_components/Numeral-js-npm/min/numeral.min.js"></script>-->
+<dom-module id="page-amount">
+  <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    * {
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .header {
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h4);
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .registor {
+      margin: 20px;
+    }
+    
+    .title {
+      text-align: center;
+      font-size: var(--font-size-h3);
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .searchBox {
+      padding: 10px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    
+    .elevation {
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+    }
+    
+    .searchBorder {
+      border: 1px solid var(--gl-gray-lighter-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+    
+    paper-material {
+      background-color: var(--gl-white-color);
+    }
+    
+    gl-search-input {
+      margin: 30px 0px 0px 0px;
+    }
+    
+    table.gl-table-default {
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    
+    table.gl-table-default,
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th,
+    td {
+      padding: 15px;
+    }
+    
+    th {
+      text-align: left;
+      background-color: #F1F1F1;
+    }
+    
+    td {
+      text-align: left;
+    }
+    
+    tr:hover {
+      background-color: #F1F1F1;
+    }
+    
+    .contentHeader {
+      font-size: 22px;
+      text-align: center;
+    }
+    gl-combo-box{
+      width: 80%;
+    }
+    .font,paper-button,paper-button>span{
+      font-family: 'CSChatThaiUI', sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+  <template>
+
+    <content-panel>
+      <grid>
+        <!-- <paper-material elevation="1" class="elevation"> -->
+
+
+        <div class="layout vertical registor">
+          <div class="flex">
+            <div class="layout horizontal end-justified">
+              <!--<paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"><iron-icon icon="add"></iron-icon> เพิ่มทะเบียนผู้ส่งออกข้าว</paper-button>-->
+            </div>
+          </div>
+          <div class="flex title">
+            ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท
+          </div>
+          <div class="flex searchBox searchBorder">
+            <div class="layout horizontal">
+              <div class="flex"></div>
+              <div class="flex-2 layout horizontal">
+                 <gl-combo-box label="แสดงข้อมูลรายปี" error-message="กรุณาเลือกปีโควตา" class="searchAllocate" required items="{{getQuotaYear}}" value="{{selectQuotaYear}}"></gl-combo-box>
+                <!--<gl-form-dropdown-menu label="ปีโควตา">
+                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
+                    <template is="dom-repeat" items="{{getQuotaYear}}">
+                      <paper-item class="font" year="{{item}}">{{item}}</paper-item>
+                    </template>
+                  </paper-listbox>
+                </gl-form-dropdown-menu>-->
+              </div>
+              <div class="flex-2 layout horizontal">
+                 <gl-combo-box class="searchAllocate"  error-message="กรุณาเลือกประเภทข้าว" required id="typeRiceName" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}"
+                                item-label-path="type_rice_name_th" item-value-path="id"></gl-combo-box>
+                <!--<gl-form-dropdown-menu label="ประเภทข้าว">
+									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
+										<template is="dom-repeat" items="{{getTypeRice}}">
+											<paper-item class="font" on-tap="_typeRiceName_th" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
+										</template>
+									</paper-listbox>
+								</gl-form-dropdown-menu>-->
+              </div>
+              <div class="flex-2 layout horizontal">
+                 <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
+                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaOrdinal}}">
+                    <template is="dom-repeat" items="{{getQuotaOrdinal}}">
+                      <paper-item class="font" year="{{item}}">{{item}}</paper-item>
+                    </template>
+                  </paper-listbox>
+                </gl-form-dropdown-menu>-->
+              </div>
+              <div class="flex-2">
+                <paper-button class="gl-btn-primary" raised on-tap="_getAllocate" disabled$="[[_disableSearch(selectQuotaYear,selectTypeRice,selectQuotaOrdinal)]]">ค้นหา</paper-button>
+              </div>
+            </div>
+            <div class="flex"></div>
+          </div>
+        </div>
+        <div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>
+        <div class="flex" style="border:1px solid #ddd; margin:30px;">
+          <allocate-list on-toggle-drawer="_toggleDrawer" on-data-select="_onDataSelect" data-allocate="[[dataAllocate]]"></allocate-list>
+        </div>
+        <div class="layout horizontal end-justified" style="margin:0px 20px 0px 0px;">
+          <paper-button raised class="gl-btn-primary" on-tap="downloadFile" hidden$="{{active}}">
+            <iron-icon icon="print"></iron-icon>
+            <span style="margin:0px 5px 0px 10px">ออกประกาศ</span>
+          </paper-button>
+        </div>
+        </div>
+        <!-- </paper-material> -->
+
+      </grid>
+
+    </content-panel>
+    <panel-right title="รายละเอียดการจัดสรรโควตา">
+      <template is="dom-if" if="[[rendered]]">
+        <amount-allocation-edit data-select="{{dataSelected}}" on-post-data="_putData" data-quota="{{dataQuota}}"></amount-allocation-edit>
+      </template>
+    </panel-right>
+  </template>
+  <script>
+        Polymer({
+            is: "page-amount",
+            behaviors:[
+              nylonBehavior
+            ],
+            observers:[
+              '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
+            ],  
+            nylonPageActive:function(){
+              this._getQuotaYear();
+              this._getTypeRice();
+            },
+            ready:function(){
+              //var number = numeral('1000.32').format('0,0.00');
+              //console.log(number);
+              this.active = true;
+               Polymer.RenderStatus.afterNextRender(this,function(){
+                this.importHref(this.resolveUrl('./components/amount-allocation-edit.html'), (e)=>{
+                    this.rendered = true;
+                }, (e)=> {
+                    console.log('error')
+                });
+              }); 
+            },
+            _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
+              this.selectQuotaOrdinal = "";
+              axios.get('./eu/allocate/quota_ordinal',{
+                params:{
+                  quota_id:yearQuoata,
+                  type_rice_id:typeRice
+                }
+              })
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getQuotaOrdinal = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            _typeRiceName_th:function(e){
+             //console.log(e.target.textContent);
+             this.getTypeRiceName = e.target.textContent;
+              //console.log(this.getTypeRice);
+            },
+            _toggleDrawer: function(e) {
+               this.$$("panel-right").open();
+            },
+            _getQuotaYear: function(){
+              axios.get('./eu/quota/year')
+              .then((response)=>{
+                console.log("success");
+                this.getQuotaYear = response.data;
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error.message);
+                this.fire('toast',{status:'connectError',text:error.message,
+                  callback:function(){
+                  }})
+              });
+            },
+            _getTypeRice:function(){
+                axios.get('./eu/type_rice/')
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getTypeRice = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            _onDataSelect:function(e){
+              console.log(e.detail);
+              this.fire('toast',{status:'load'});
+              this.dataSelected = e.detail;
+              this.dataQuota = {
+                allocate_id : '',
+                quota_id : this.selectQuotaYear,
+                type_rice_id : this.$$('#typeRiceName').selectedItem.type_rice_name_th,
+                ordinal_number : this.selectQuotaOrdinal
+              }
+              // console.log('dataQuota',this.$$('#typeRiceName').selectedItem.type_rice_name_th);
+              this.fire('toast',{
+                status:'success',
+                callback:()=>{
+                  this.$$("panel-right").open();
+                }
+              });
+            },
+            _getAllocate:function(){
+              var stat = Polymer.dom(this.root).querySelectorAll('.searchAllocate').map((item)=>{
+                return item.validate();
+              });
+              const chkStat = function(stat){
+                return stat == true;
+              }
+              if(stat.every(chkStat) == true){
+                 this.fire('toast',{status:'load'});
+                axios.get('./eu/allocate/allocate',{
+                  params:{
+                    quota_id:this.selectQuotaYear,
+                    type_rice_id:this.selectTypeRice,
+                    ordinal_number:this.selectQuotaOrdinal
+                  }
+                })
+                .then((response)=>{
+                    this.dataAllocate = response.data;
+                    console.log('..',this.dataAllocate);
+                    this.fire('toast',{status:'success',
+                    callback:()=>{
+                      this.active = false;
+                    }});
+                    
+                })
+                .catch((error)=>{
+                    console.log(error);
+                });
+              }
+               
+             },
+             _disableSearch:function(quota_id,type_rice_id,ordinal_number){
+               console.log(quota_id,type_rice_id,ordinal_number);
+             },
+             _putData:function(e){
+               var data = {
+                 allocate_id : this.dataAllocate.id,
+                 exporter : e.detail
+               }
+                this.fire('toast',{status:'load'});
+                axios.put('/eu/allocate/allocate',data)
+                .then((response)=>{
+                  console.log("success");
+                  // this.textToast = 'แก้ไขข้อมูลสำเร็จ';
+                  console.log(response);
+                  this.fire('toast',{status:'success',
+                  text:'แก้ไขข้อมูลสำเร็จ',
+                  callback:function(){
+                    
+                  }
+                  });
+                   this.$$("panel-right").close();
+                  //this._getYear();
+                  this._getAllocate();
+                  // this._getDatalist(this.selectYear);
+                })
+                .catch((error)=>{
+                  console.log("error");
+                  console.log(error);
+                });
+             },
+             downloadFile:function(){
+               window.open('/report/announce.pdf','_blank');
+             }
+        });
+    </script>
+</dom-module>
