@@ -147,8 +147,7 @@
              <td></td>
              <td>
                <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
-               <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" ><iron-icon icon="add"></iron-icon>
-เพิ่ม</paper-button>
+               <paper-button hidden="[[isInputDisabled]]" raised id="[[index]]" on-tap="addTypeRice" class="btnInTable gl-btn-primary" ><iron-icon icon="add"></iron-icon>เพิ่ม</paper-button>
                 <!-- </template> -->
               </td>
            </tr>
@@ -162,8 +161,11 @@
                </td>
                <td>
                  <div class="upGlComboBox">
-                   <gl-combo-box id="riceSelected" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name"
+                   <!-- <gl-combo-box id="riceSelected" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name"
                  item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{dataForSelect.typeRice}}" >
+                   </gl-combo-box > -->
+                   <gl-combo-box id="rice-[[index]]" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกประเภท" name="type_rice_name"
+                 item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}"  on-value-changed="_typeRiceContract">
                    </gl-combo-box >
                  </div>
                </td>
@@ -226,6 +228,9 @@
         '_changeDataContract(data.contract_date)',
         '_getBuyer(dataForSelect.buyer)',
       ],
+      attached: function() {
+        this._typeRiceContract();
+      },
       _getBuyer:function (buyers) {
         let elements = this.$$('#buyer_id');
         let buyer = new Array();
@@ -349,6 +354,28 @@
                });
            });
          }
+      },
+      _typeRiceContract:function () {
+        this.async(()=>{
+           let  comboboxs,arrForItem,itemif;
+           for (var i = 0; i < this.data.contract_type_rice.length; i++) {
+             arrForItem = JSON.parse(JSON.stringify(this.dataForSelect.typeRice));
+            //  console.log('arrForItem',arrForItem);
+             this.data.contract_type_rice.map((item,index)=>{
+              //  console.log(item);
+               if (i != index) {
+                 //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
+                 if (arrForItem.filter((blDetail)=> blDetail.type_rice_id == item.type_rice_id )[0] != undefined) {
+                   itemif = arrForItem.indexOf(arrForItem.filter((blDetail)=> blDetail.type_rice_id == item.type_rice_id )[0]);
+                  //  console.log(itemif);
+                   arrForItem.splice(itemif, 1);
+                 }
+               }
+             });
+             comboboxs = Polymer.dom(this.root).querySelector('#rice-'+i);
+             comboboxs.items = arrForItem;
+           }
+        },1);
       },
       _clearnData:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
