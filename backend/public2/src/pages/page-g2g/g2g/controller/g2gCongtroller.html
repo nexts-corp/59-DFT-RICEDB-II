@@ -29,6 +29,15 @@
     //
     //   this._setResponse(oldData);
     // }
+    changeDateCC:function (date) {
+      // let date = '2016-12-20';
+      let day,mouth,year;
+      day=date.split("-")[2];
+      mouth=date.split("-")[1];
+      year=Number(date.split("-")[0])+543;
+      // console.log(day+'-'+mouth+'-'+String(year));
+      return day+'/'+mouth+'/'+String(year);
+    },
     _cloneData:function (data) {
 
       let old = this.g2gClone(data);
@@ -83,8 +92,8 @@
       }
     },
     _isHaveForUse:function(arr1,arr2){
-      console.log(arr1,arr2.length);
-      if (arr1 < arr2.length) {
+      // console.log(arr1,arr2.length);
+      if ((arr1+1) < arr2.length) {
         this.btnCheckDis=true;
       }else {
         this.btnCheckDis=false;
