@@ -97,10 +97,11 @@
               <!-- <gl-combo-box id="riceType" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
             item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{dataForSelect.contract_type_rice}}" >
               </gl-combo-box > -->
-              [[_isHaveForUse(index,dataForSelect.contract_type_rice)]]
+              <!-- [[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice)]] -->
               <gl-combo-box id="riceType-[[index]]" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
             item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" on-value-changed="_typeRiceConfirm">
               </gl-combo-box >
+              
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 
@@ -256,7 +257,8 @@
       },
       observers:[
         '_changeDataConfirm(data.cl_date)',
-        '_typeRiceConfirm(data.*)'
+        '_typeRiceConfirm(data.*)',
+        '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)'
       ],
       attached: function() {
         this._typeRiceConfirm();
