@@ -1,13 +1,13 @@
 class index{
 
-    getQuota(req,res){
+    readQuota(req,res){
         var r = req._r;
         r.db('eu2').table('quota').coerceTo('array').run().then(function(result) {
             res.json(result);
         });
     }
 
-    postQuota(req,res){
+    saveQuota(req,res){
         var r = req._r;
         var params = req.body;
 
