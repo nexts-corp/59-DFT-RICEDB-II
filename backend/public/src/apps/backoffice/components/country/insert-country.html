@@ -1,6 +1,11 @@
 <link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="insert-country">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: var(--font-size-h5);
+    }
     .text-center {
       text-align: center;
       font-size: var(--font-size-h3);
@@ -12,6 +17,7 @@
     }
     .button{
       margin-top: 20px;
+      margin-bottom: 20px;
     }
   </style>
   <template>
@@ -19,32 +25,40 @@
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+        <gl-combo-box class="checkData" items="{{continents}}" item-label-path="continent_name_en" label="Continent (ทวีป)" item-value-path="continent_id"
+        value="{{data.continents_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกรหัสประเทศ" required label="Country Code (รหัสประเทศ) :" placeholder="ใส่รหัสประเทศ" value="{{data.country_id}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row width="{{getWidth}}">
+    <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อประเทศ" required label="Country name (ชื่อประเทศภาษาไทย) :" placeholder="กรอกชื่อประเทศ" value="{{data.country_name_th}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row width="{{getWidth}}">
+    <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อเต็มประเทศ" required label="Country fullname (ชื่อเต็มประเทศภาษาไทย) :" placeholder="กรอกชื่อประเทศ" value="{{data.country_fullname_th}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row width="{{getWidth}}">
+    <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อประเทศ" required label="Country name (ชื่อประเทศภาษาอังกฤษ) :" placeholder="กรอกชื่อประเทศ" value="{{data.country_name_en}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
-    <gl-grid-row width="{{getWidth}}">
+    <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อเต็มประเทศ" required label="Country fullname (ชื่อเต็มประเทศภาษาอังกฤษ) :" placeholder="กรอกชื่อประเทศ" value="{{data.country_fullname_en}}"></gl-form-input>
@@ -74,6 +88,7 @@
       ],
       _save:function functionName() {
         var datas = {
+          continents_id : this.data.continents_id,
           id : this.data.country_id,
           country_name_th : this.data.country_name_th,
           country_name_en : this.data.country_name_en,

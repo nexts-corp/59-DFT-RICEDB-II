@@ -115,8 +115,8 @@
         <panel>
           <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <div name="addRedRegCountry"><insert-country></insert-country></div>
-              <div name="editRegCountry"><edit-country data="{{dataSelect}}"></edit-country></div>
+              <div name="addRedRegCountry"><insert-country continents="{{continent}}"></insert-country></div>
+              <div name="editRegCountry"><edit-country continents="{{continent}}" data="{{dataSelect}}"></edit-country></div>
 
             </iron-pages>
           </div>
@@ -189,6 +189,10 @@
               this.read('./common/country', (data)=>{
                 this.dataCountry = data;
                 this.initDatabl(this.dataCountry);
+              });
+
+              this.read('./common/continent', (data)=>{
+                this.continent = data;
               });
             },
             _back:function() {
