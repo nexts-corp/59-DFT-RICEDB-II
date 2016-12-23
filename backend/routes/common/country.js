@@ -51,6 +51,9 @@ router.get(['/', '/list'], function (req, res, next) {
                     date_updated: row('date_updated').split('T')(0)
                 }
             })
+            .merge(function (m) {
+                return r.db('common').table('continent').get(m('continent_id')).without('id', 'creater', 'updater', 'date_created', 'date_updated')
+            })
             .without('id')
             .run(conn, function (err, cursor) {
                 if (!err) {
