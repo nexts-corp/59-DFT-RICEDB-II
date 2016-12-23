@@ -78,7 +78,8 @@
 			</div>
 
 			<div class="flex title">
-				รายการจัดสรรปีโควตา
+				รายการจัดสรรปีโควตา 
+       
 			</div>
 
 			<div class="layout horizontal">
@@ -135,7 +136,7 @@
       },
       attached: function(){
         this.layerContent = "addRedRegExporter";
-        
+        this.testAxios();
         //this.textToast = 'โหลดข้อมูลสำเร็จ';
 
 
@@ -297,7 +298,22 @@
            data.year = this.selectYear;
            this.dataSelect = data;
            console.log('dataSelect',this.dataSelect);
-        } 
+        },
+        testAxios:function(){
+          axios.delete('http://192.168.10.124:3000/api/quota/quota')
+          .then((response)=>{
+            console.log("success : ",response);
+            // this.getYear = response.data;
+            //console.log(this.getYear);
+          })
+          .catch((error)=>{
+            console.log("error");
+            console.log(error.message);
+            this.fire('toast',{status:'connectError',text:error.message,
+              callback:function(){
+              }})
+          });
+        }
     });
   </script>
 </dom-module>
