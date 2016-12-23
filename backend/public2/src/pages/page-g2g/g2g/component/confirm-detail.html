@@ -101,7 +101,7 @@
               <gl-combo-box id="riceType-[[index]]" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
             item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" on-value-changed="_typeRiceConfirm">
               </gl-combo-box >
-              
+
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
 
@@ -157,12 +157,18 @@
             </tr>
           </thead>
           <tbody class="table-body">
-            <template is="dom-repeat" as="packageitem" items="[[item.package]]">
-              <tr >
+            <template is="dom-repeat" as="packageitem" items="[[item.package]]" index-as=indexpackeage>
+              <tr>
                 <td>
-                  <gl-combo-box id="riceType" class="required InTable" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" name="package_name"
+
+                  <!-- <gl-combo-box id="riceType" class="required InTable" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" name="package_name"
                 item-label-path="package_name_th"   item-value-path="package_id" value="{{packageitem.package_id}}" items="{{dataForSelect.package}}" >
+                  </gl-combo-box > -->
+                  <!-- items="{{dataForSelect.package}}"  -->
+                  <gl-combo-box id="package-[[index]]-[[indexpackeage]]" class="required InTable" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดขนาดบรรจุภัณฑ์" placeholder="เลือกประเภท" name="package_name"
+                item-label-path="package_name_th"   item-value-path="package_id" value="{{packageitem.package_id}}" on-value-changed="_typePackageConfirm">
                   </gl-combo-box >
+
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
                   <gl-form-input class="required numberBack" allowed-pattern="[0-9||,||.]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่ราคา"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
@@ -171,7 +177,7 @@
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                 </td>
                 <td style="text-align:center;">
-                      <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
+                      <paper-button id="[[indexpackeage]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
                 </td>
               </tr>
             </template>
@@ -258,10 +264,12 @@
       observers:[
         '_changeDataConfirm(data.cl_date)',
         '_typeRiceConfirm(data.*)',
+        '_typePackageConfirm(data.*)',
         '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)'
       ],
       attached: function() {
         this._typeRiceConfirm();
+        this._typePackageConfirm();
       },
       _changeDataConfirm:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
@@ -366,7 +374,7 @@
           }
       },
       saveConfirm:function () {
-        console.log(this.cl_total_quantity,'=',this.limitTotalRice);
+        // console.log(this.cl_total_quantity,'=',this.limitTotalRice);
         if (this.cl_total_quantity <= this.limitTotalRice) {
           this._clearnDataConfirm(this.data,(data)=>{
               data.contract_id=this.dataForSelect.contract_id;
@@ -454,6 +462,33 @@
            });
            comboboxs = Polymer.dom(this.root).querySelector('#riceType-'+i);
            comboboxs.items = arrForItem;
+         }
+      },1);
+    },
+    _typePackageConfirm:function () {
+      this.async(()=>{
+         let  comboboxs,arrForItem,itemif;
+         for (var i = 0; i < this.data.cl_type_rice.length; i++) {
+           for (var j = 0; j< this.data.cl_type_rice[i].package.length; j++) {
+             arrForItem = JSON.parse(JSON.stringify(this.dataForSelect.package));
+             //  console.log('this.data.cl_type_rice',arrForItem);
+             //  console.log('arrForItem',arrForItem);
+              this.data.cl_type_rice[i].package.map((item,index)=>{
+                // console.log(item);
+                if (j != index) {
+                  //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
+                  if (arrForItem.filter((blDetail)=> blDetail.package_id == item.package_id )[0] != undefined) {
+                    itemif = arrForItem.indexOf(arrForItem.filter((blDetail)=> blDetail.package_id == item.package_id )[0]);
+                    arrForItem.splice(itemif, 1);
+                  }
+                }
+              });
+              // console.log(arrForItem);
+             // package-[[index]]-[[indexpackeage]]
+              comboboxs = Polymer.dom(this.root).querySelector('#package-'+i+'-'+j);
+              // console.log(comboboxs);
+              comboboxs.items = arrForItem;
+           }
          }
       },1);
     },
