@@ -194,7 +194,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
         r.db('g2g').table('book')
             .getAll(req.params.shm_id, { index: 'shm_id' })
             .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-            .filter({ book_status: false })
+            //.filter({ book_status: false })
             .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice"] }).zip()
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
