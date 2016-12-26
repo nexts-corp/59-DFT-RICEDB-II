@@ -310,6 +310,9 @@
         if (result == true) {
           this.editInput();
           this.update('./g2g/book/update', detail.data,() => {
+            // this.fire('refresh-contract',{detail:'refresh-contract'});
+            // this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
+            this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
             //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
             this.fire('get-list-bl',{shm_id:detail.data.shm_id});
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
@@ -318,7 +321,7 @@
                 }
             });
           });
-          let data = detail.data;
+          // let data = detail.data;
           // console.log('this.dataBlDetail.shipment_detail=>',this.dataBlDetail.shipment_detail.length);
           // console.log(this.dataBlDetail.shipment_detail);
           // let listShipmentdetails = this.dataBlDetail.shipment_detail;
