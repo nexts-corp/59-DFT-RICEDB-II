@@ -9,7 +9,7 @@
       text-align: center;
       font-size: var(--font-size-h4);
     }
-    
+
   </style>
   <template>
 
@@ -115,10 +115,10 @@
       </gl-grid-col>
 
 
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+      <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
           <gl-form-input disabled required allowed-pattern="[0-9||,||.]" format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
-      </gl-grid-col>
+      </gl-grid-col> -->
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
         <gl-form-input disabled required allowed-pattern="[0-9||,||.]" format-number="on" class="required"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"   value="{{data.weight_per_container}}" ></gl-form-input>
@@ -154,13 +154,17 @@
         <gl-combo-box id="type_rice_id" label="ชนิดข้าว" item-label-path="type_rice_name_en" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="type_rice_id" items="[[dataForSelect.cl_type_rice]]" value="{{data.type_rice_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
         <gl-combo-box id="package_id" label="Package (kg/PP Bag)" item-label-path="package_name_en" disabled="[[!isInputDisabled]]"
          class="required" required  item-value-path="package_id" items="[[_getRiceTypeForPackage(data.type_rice_id,dataForSelect)]]" value="{{data.package_id}}" always-float-label></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'shm_det_quantity')]]
         <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" label="ปริมาณ (ตัน)" error-message="กรุณาใส่รายละเอียด"  value="{{data.shm_det_quantity}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        [[changeString2Num(data.*,'num_of_container')]]
+          <gl-form-input disabled="[[!isInputDisabled]]" required allowed-pattern="[0-9||,||.]" format-number="on" class="required"label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  value="{{data.num_of_container}}"></gl-form-input>
       </gl-grid-col>
       [[_getPackageForPrice(data.package_id,dataForSelect)]]
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -190,7 +194,7 @@
         <gl-form-input disabled label="TRAE WEIGHT (M/T)"  value="[[price.tw]]" always-float-label></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
-    <gl-grid-row>
+    <!-- <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
         [[changeString2Num(data.*,'origin_page')]]
@@ -201,7 +205,7 @@
         [[changeString2Num(data.*,'nn_page')]]
         <gl-form-input id="testtttt" class="required" required  format-number="on" label="N/N"  class="w" value="{{data.nn_page}}" always-float-label disabled="[[!isInputDisabled]]"></gl-form-input>
       </gl-grid-col>
-    </gl-grid-row>
+    </gl-grid-row> -->
     <!-- <paper-button  class="gl-btn-success" raised on-tap="checkData" index="[[index]]">
       <iron-icon class="gl-icon-size" icon="save"></iron-icon>checkData</paper-button> -->
   </gl-form-panel-body>
@@ -293,7 +297,7 @@
           // console.log(dataContract[0]);
 
           this.data = blNo;
-
+          this.notifyPath('data.book_id');
           this.notifyPath('data.ship');
           this.data.ship.map((ships,index)=>{
             // console.log(ships);
@@ -308,7 +312,7 @@
           this.notifyPath('data.eta_date');
           this.notifyPath('data.etd_date');
           this.notifyPath('data.load_port_id');
-          this.notifyPath('data.num_of_container');
+          // this.notifyPath('data.num_of_container');
           this.notifyPath('data.packing_date');
           this.notifyPath('data.cut_of_date');
           this.notifyPath('data.cut_of_time');
@@ -371,9 +375,9 @@
       },
       addExporter:function () {
         // console.log(this.data);
+        this.data.shm_id=this.dataForSelect.shm_id;
         this._cleanShipmentData(this.data,(data)=>{
-          data.shm_id=this.dataForSelect.shm_id;
-            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+          this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
           this.insert('./g2g/shipment/detail/insert',data, () => {
             this.fire('refresh-contract',{detail:'refresh-contract'});
             this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
@@ -480,24 +484,17 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-            let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                  load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,
-                  type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
-                  exporter_id} = data;
-            let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                            load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,
-                            type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
-            newData.ship = new Array();
-            newData.eta_date = new Date (newData.eta_date).toISOString();
-            newData.etd_date = new Date (newData.etd_date).toISOString();
-            newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
-            newData.packing_date = new Date (newData.packing_date).toISOString();
-            newData.product_date = new Date (newData.product_date).toISOString();
-            data.ship.map((ships)=>{
-              newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
-            });
+            let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id} = data;
+            let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id};
+            // newData.ship = new Array();
+            // newData.eta_date = new Date (newData.eta_date).toISOString();
+            // newData.etd_date = new Date (newData.etd_date).toISOString();
+            // newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
+            // newData.packing_date = new Date (newData.packing_date).toISOString();
+            // newData.product_date = new Date (newData.product_date).toISOString();
+            // data.ship.map((ships)=>{
+            //   newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+            // });
             el.map((el)=> {el.reset();});
             // console.log(newData);
             callback(newData)
