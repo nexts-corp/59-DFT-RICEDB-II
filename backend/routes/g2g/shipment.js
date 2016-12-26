@@ -44,8 +44,9 @@ router.get('/id/:shm_id', function (req, res, next) {
                 return {
                     shm_id: row('id'),
                     shipment_detail: r.db('g2g').table("shipment_detail")
-                        .filter({ "shm_id": row('id') })
+                        .getAll(row('id'), { index: "shm_id" })
                         .orderBy(r.desc('shm_det_quantity'))
+                        .eqJoin("books_id", r.db('g2g').table("books")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -53,7 +54,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     load_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("dest_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -61,7 +62,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     dest_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("deli_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -69,11 +70,11 @@ router.get('/id/:shm_id', function (req, res, next) {
                                     deli_port_code: port("right")("port_code")
                                 }
                             })
-                        }).without({ right: ["id", "date_created", "date_updated", "port_name", "port_code", "country_id"] }).zip()
+                        }).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "port_name", "port_code", "country_id"] }).zip()
                         .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "creater", "updater"] }).zip()
+                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "country_id"] }).zip()
                         //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
                         .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
