@@ -402,5 +402,58 @@ router.get('/id/:book_id', function (req, res, next) {
             });
     })
 });
-
+router.post('/insert', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        if (req.body.id == null) {
+            datacontext.insert("g2g", "book", req.body, res);
+        } else {
+            result.message = 'field "id" must do not have data';
+            res.json(result);
+        }
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.put('/update', function (req, res, next) {
+    //console.log(req.body);
+    var valid = validate(req.body);
+    var result = { result: false, message: null, id: null };
+    if (valid) {
+        datacontext.update("g2g", "book", req.body, res);
+    } else {
+        result.message = ajv.errorsText(validate.errors);
+        res.json(result);
+    }
+});
+router.delete('/delete/id/:id', function (req, res, next) {
+    var result = { result: false, message: null, id: null };
+    result.id = req.params.id;
+    db.query(function (conn) {
+        var q = r.db('g2g').table("book").get(req.params.id).do(function (result) {
+            return r.branch(
+                result('book_status').eq(false)
+                , r.expr('delete')
+                , r.expr("Can't delete because this status = true.")
+            )
+        })
+        q.run(conn)
+            .then(function (response) {
+                if (response == "delete") {
+                    datacontext.delete("g2g", "book", req.params.id, res);
+                } else {
+                    result.message = response;
+                    res.json(result);
+                }
+            })
+            .error(function (err) {
+                result.message = err;
+                res.json(result);
+                console.log(result);
+            })
+    })
+});
 module.exports = router;

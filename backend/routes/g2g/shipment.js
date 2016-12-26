@@ -46,7 +46,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                     shipment_detail: r.db('g2g').table("shipment_detail")
                         .getAll(row('id'), { index: "shm_id" })
                         .orderBy(r.desc('shm_det_quantity'))
-                        .eqJoin("books_id", r.db('g2g').table("books")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("book_id", r.db('g2g').table("book")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -71,16 +71,14 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 }
                             })
                         }).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "port_name", "port_code", "country_id"] }).zip()
-                        .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "creater", "updater"] }).zip()
-                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "country_id"] }).zip()
-                        //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        // .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
+                            .eqJoin("carrier_id", r.db('common').table("carrier")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                            .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "creater", "updater"] }).zip()
+                            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "country_id"] }).zip()
+                           .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                            .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                            .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                            .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
 
                         .merge(function (me) {
                             return {
