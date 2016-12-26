@@ -26,6 +26,8 @@
       <div class="horizontal end-justified layout">
         <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
         <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
+        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteBooking" hidden="[[data.shm_status]]"></paper-icon-button>
+        <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
        </div>
     </template>
       </template>
@@ -33,6 +35,7 @@
         <div class="title">Booking</div>
       </gl-form-panel-body>
     <gl-form-panel-body>
+    <!-- {{dataForSelect.shm_id}}//shm_id -->
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input  required class="required"label="Booking No."always-float-labelerror-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด"  value="{{data.book_no}}" disabled="[[isInputDisabled]]"></gl-form-input>
@@ -121,10 +124,11 @@
       </gl-grid-col>
 
 
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+      <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'num_of_container')]]
           <gl-form-input required class="required" allowed-pattern="[0-9||,||.]" format-number="on" label="จำนวนตู้คอนเทนเนอร์"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" value="{{data.num_of_container}}" disabled="[[isInputDisabled]]"></gl-form-input>
-      </gl-grid-col>
+      </gl-grid-col> -->
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         [[changeString2Num(data.*,'weight_per_container')]]
         <gl-form-input required class="required" allowed-pattern="[0-9||,||.]" format-number="on"label="ตู้ละ (ตัน)"always-float-label error-message="กรุณาใส่รายละเอียด"  placeholder="ใส่รายละเอียด" disabled="[[isInputDisabled]]"
@@ -219,14 +223,50 @@
         });
       },
       addBl:function () {
-        // console.log(this.data);
+        this.data.book_status = false;
+        this.data.shm_id = this.dataForSelect.shm_id;
         this._cleanDataBl(this.data,(data)=>{
-          this.fire('send-Bl-no',{detail:data});
-          this.fire('editing-bl-detail',{shm_id:data.shm_id});
-          let el = Polymer.dom(this.root).querySelectorAll('.required');
-          el.map((el)=> {el.value='';});
-          this.cancelInsertShipment();
+          // console.log(data);
+          this.insert('./g2g/book/insert',data, () => {
+            this.fire('get-list-bl',{shm_id:data.shm_id});
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:()=>{
+                  this.cancelInsertShipment();
+                  let el = Polymer.dom(this.root).querySelectorAll('.required');
+                  el.map((el)=> {el.value='';});
+                }
+            });
+          });
+
+          // this.cancelInsertShipment();
         })
+      },
+      deleteBooking:function () {
+        let book_id = this.data.book_id;
+        this._cleanDataBl(this.data,(data)=>{
+          data.id = book_id;
+          this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+              status:'dialog',
+              text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+              confirmed:this._deleteBooking.bind(this), //function ที่ใช้รับค่า ปุ่ม
+              el: this, // compontents
+              data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+          });
+        });
+      },
+      _deleteBooking:function (result,detail) {
+        if (result == true) {
+          this.delete('./g2g/book/delete/id/',detail.data.id, () => {
+            this.fire('get-list-bl',{shm_id:detail.data.shm_id});
+            this.fire('toast',{status:'success',text:'ลบข้อมูลสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:()=>{
+                  this.cancelInsertShipment();
+                  // let el = Polymer.dom(this.root).querySelectorAll('.required');
+                  // el.map((el)=> {el.value='';});
+                }
+            });
+          });
+        }
       },
       addShip:function () {
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
@@ -254,7 +294,9 @@
       },
       editBl:function () {
         // let blNo = this.data.bl_no;
+        let book_id = this.data.book_id;
         this._cleanDataBl(this.data,(data)=>{
+          data.id = book_id;
           this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
               status:'dialog',
               text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
@@ -267,29 +309,38 @@
       _editBlExporter:function (result,detail) {
         if (result == true) {
           this.editInput();
+          this.update('./g2g/book/update', detail.data,() => {
+            //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
+            this.fire('get-list-bl',{shm_id:detail.data.shm_id});
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:function(){
+                  //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
+                }
+            });
+          });
           let data = detail.data;
           // console.log('this.dataBlDetail.shipment_detail=>',this.dataBlDetail.shipment_detail.length);
           // console.log(this.dataBlDetail.shipment_detail);
-          let listShipmentdetails = this.dataBlDetail.shipment_detail;
-          let blNo = this.oldData.bl_no;
-          let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
+          // let listShipmentdetails = this.dataBlDetail.shipment_detail;
+          // let blNo = this.oldData.bl_no;
+          // let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
           // console.log('shipmentDetail=>',shipmentDetail.length);
-          let newShipment=[];
+          // let newShipment=[];
 
           // console.log('this.blNoOld',this.blNoOld.bl_no);
-          if (shipmentDetail.length > 0) {
-            shipmentDetail.map((shipDetail,index)=>{
-              shipDetail[index]= Object.assign(shipDetail,data)
-              this._cleanShipmentData(shipDetail[index],(data)=>{
-                  data.id = shipDetail[index].shm_det_id;
-                  data.shm_id = shipDetail[index].shm_id;
-                  newShipment.push(data);
-              });
-            });
-            this._changeShipment(newShipment);
-          }else {
-            this.fire('editing-bl-detail',{shm_id:this.blNoOld.shm_id});
-          }
+          // if (shipmentDetail.length > 0) {
+          //   shipmentDetail.map((shipDetail,index)=>{
+          //     shipDetail[index]= Object.assign(shipDetail,data)
+          //     this._cleanShipmentData(shipDetail[index],(data)=>{
+          //         data.id = shipDetail[index].shm_det_id;
+          //         data.shm_id = shipDetail[index].shm_id;
+          //         newShipment.push(data);
+          //     });
+          //   });
+          //   this._changeShipment(newShipment);
+          // }else {
+          //   this.fire('editing-bl-detail',{shm_id:this.blNoOld.shm_id});
+          // }
         }
       },
       _changeShipment:function (shipmentDetail) {
@@ -353,11 +404,11 @@
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
             let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                  load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-                  ship_lot_no,shipline_id,surveyor_id,weight_per_container} = data;
+                  load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
+                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id} = data;
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                            load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-                            ship_lot_no,shipline_id,surveyor_id,weight_per_container};
+                            load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
+                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id};
             newData.ship = new Array();
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});

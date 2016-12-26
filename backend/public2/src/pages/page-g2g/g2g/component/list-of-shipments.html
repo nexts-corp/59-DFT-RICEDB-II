@@ -154,7 +154,8 @@ Polymer({
     this.notifyPath('dataForSelect.cl_type_rice');
 
     this.async(()=>{
-         this.read('./g2g/bl/shipment/id/'+this.dataSelected.shm_id,(data)=>{
+      console.log(this.dataSelected.shm_id);
+         this.read('./g2g/book/shipment/id/'+this.dataSelected.shm_id,(data)=>{
            this.dataForSelect.blNos=data;
            this.notifyPath('dataForSelect.blNos');
            this._getShipment(this.dataSelected.shm_id,(data)=>{
@@ -170,11 +171,12 @@ Polymer({
     },1000);
   },
   _getListBL:function (e) {
-    this.read('./g2g/bl/shipment/id/'+e.detail.shm_id,(data)=>{
+    // console.log(e.detail.shm_id);
+    this.read('./g2g/book/shipment/id/'+e.detail.shm_id,(data)=>{
       // Object.assign(this.dataForSelect.blNos,data);
       // this.dataForSelect.blNos=data;
       // Object.assign(this.dataForSelect.blNos,e.detail.detail)
-      this.dataForSelect.blNos=e.detail.detail;
+      this.dataForSelect.blNos=data;
       // console.log(this.dataForSelect.blNos);
       this.notifyPath('dataForSelect.blNos');
     });
