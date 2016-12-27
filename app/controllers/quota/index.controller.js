@@ -45,7 +45,7 @@ class index{
 
     deleteQuota(req,res){
         var r = req._r;
-        var params = req.query;
+        var params = req.params;
 
         if(params.id != undefined && params.id.trim() != ""){
             r.db('eu2').table('quota').get(params.id).delete().run().then(function(result) {
@@ -54,6 +54,15 @@ class index{
         }else{
             res.status(500).send('No Args : id');
         }
+    }
+
+    selectQuota(req,res){
+        var r = req._r;
+        var params = req.params;
+
+        r.db('eu2').table('quota').get(params.id).run().then(function(result) {
+            res.json(result);
+        });
     }
 
 }
