@@ -45,6 +45,48 @@ class index{
         res.json({ok:'ok'});
     }
 
+    insertReport(req,res){
+        var r = req._r;
+        var params = req.body;
+
+        var insertData = function(year,save){
+            if(params['year_'+year]!=0){
+                save(
+                    {
+                        year:year,
+                        quota:true,
+                        month:1,
+                        type_doc:'c',
+                        weigth:params['year_'+year],
+                        exporter_id:params.exporter_id
+                    }
+                )
+            }
+        }
+
+
+        var rethinkSave = function(data){
+            r.db('eu2').table('report').insert(data).run().then(function(result) {
+                console.log(result);
+            });
+        }
+
+        insertData(2557,function(data){
+            rethinkSave(data)
+        });
+
+        insertData(2558,function(data){
+            rethinkSave(data)
+        });
+
+        insertData(2559,function(data){
+            rethinkSave(data)
+        });
+
+        res.json({ok:'ok'});
+    }
+
+
 }
 
 module.exports = new index();
