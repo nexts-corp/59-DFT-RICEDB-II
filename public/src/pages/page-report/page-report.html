@@ -2,6 +2,7 @@
 <link rel="import" href="./components/report-list.html">
 <link rel="import" href="./components/report-list2.html">
 <link rel="import" href="./components/report-panel.html">
+<link rel="import" href="./components/report-panel2.html">
 
 <dom-module id="page-report">
     <template>
@@ -142,21 +143,66 @@ input:checked + label {
                 <report-panel data="{{dataSelect}}"></report-panel>
         </panel-right>-->
         <panel-right title="นำเข้ารายงานการส่งออกข้าวไปสหภาพยุโรป">
-            <report-panel on-save-data="_getData"></report-panel>
+            <report-panel2 year="{{getYear}}" company="{{getCom}}" rice="{{getRice}}" on-save-data="_getData" datas="{{data}}"></report-panel2>
         </panel-right>
     </template>
     <script>
         Polymer({
             is: 'page-report',
+            behaviors:[nylonBehavior],
+            observers:['getValue(getYear,getCom,getRice)'],
             properties:{
                 selected:{
                     value:'0'
                 }
             },
+            nylonPageActive:function(){
+                this.fnyear();
+                this.fncompany();
+                this.fntype_rice();
+            },
+            fnyear: function(){
+                axios.get('./fee/common/year')
+                .then((response)=>{
+                    this.getYear = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                });
+            },
+            fncompany: function(){
+                axios.get('./fee/common/exporter')
+                .then((response)=>{
+                    this.getCom = response.data;
+                    console.log(this.getCom);
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                });
+            },
+            fntype_rice: function(){
+                axios.get('./fee/common/type_rice')
+                .then((response)=>{
+                    this.getRice = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                });
+            },
             _onDataSelect: function(e){
-                //console.log(e.detail);
                 this.dataSelect=e.detail;
-                //Polymer.dom(this.root).querySelector('panel-right').toggle();
                 this.$$('panel-right').toggle();
             },
             _toggleDrawer: function(e) {
@@ -165,6 +211,14 @@ input:checked + label {
             _getData:function(e){
                 this.getData = e.detail;
                 this.$$('panel-right').close();
+            },
+            getValue:function(year,com,rice){
+                this.data = {
+                    year : year,
+                    type_rice: rice,
+                    company : com
+                }
+                console.log(this.data);
             }
         });
     </script>
