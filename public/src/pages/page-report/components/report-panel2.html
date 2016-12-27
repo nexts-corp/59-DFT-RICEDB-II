@@ -12,7 +12,7 @@
                 -webkit-font-smoothing: antialiased;
             }
             .box {
-                martin:auto;
+                margin:auto;
                 text-align:center;
             }
             .tableM {
@@ -40,63 +40,58 @@
                 padding: 20px 10px 0px 10px;
                 font-size: 18px;
             }
+            gl-grid-row{
+                padding: 10px;
+            }
+        
         </style>
         <div class="container">
-            <div class="flex-equal-justified">
-                <div class="content">
-                    <gl-form-dropdown-menu label="รายงานการส่งออกข้าวไป EU" always-float-label>
-                        <paper-listbox class="dropdown-content"  attr-for-selected="data" selected="{{item.data}}">
-                            <paper-item data="inQuota">ในโควตา</paper-item>
-                            <paper-item data="outQuota">นอกโควตา</paper-item>
-                        </paper-listbox>
-                    </gl-form-dropdown-menu>
-                </div> 
-                <div class="content">
-                     <!--<gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{item.month}}"
-                     item-label-path="name" item-value-path="id" error-message="กรุณาเลือกเดือน" always-float-label required></gl-combo-box>-->
+           <gl-grid-row width="{{getWidth}}">
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                      <gl-combo-box class="saveData" label="รายงานการส่งออกข้าวไป EU" items="{{listEu}}" value="{{listEuValue}}"
+                      error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
+                 </gl-grid-col>
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                       <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{data.month}}"
                       error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
-                </div>
-                <div class="content">
-                    <!--<gl-form-dropdown-menu label="ปี" always-float-label>
-                        <paper-listbox class="dropdown-content">
-                            <paper-item>2559</paper-item>
-                        </paper-listbox>
-                    </gl-form-dropdown-menu>-->
+                 </gl-grid-col>
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                     <gl-combo-box class="saveData" label="ปี" items="{{year}}" value="{{year}}"
                       error-message="กรุณาเลือกปี" required></gl-combo-box>
-                </div>
- </div>
- <div class="flex-equal-justified">
-                <div class="content">
+                 </gl-grid-col>
+                </gl-grid-row>
+                <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                     <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{company}}" value="{{xcompany}}"
                       error-message="กรุณาเลือกบริษัท" item-label-path="name" item-value-path="id" required></gl-combo-box>
-                </div>
-                <div class="content">
-                    <gl-form-dropdown-menu label="ความถูกต้องของเอกสาร" always-float-label>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                     <gl-combo-box class="saveData" label="ความถูกต้องของเอกสาร" items="{{checkDoc}}" value="{{checkDocValue}}"
+                      error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" required></gl-combo-box>
+                    <!--<gl-form-dropdown-menu label="ความถูกต้องของเอกสาร" always-float-label>
                         <paper-listbox class="dropdown-content">
                             <paper-item>ถูกต้องตามประกาศ</paper-item>
                             <paper-item>ไม่ถููกต้องตามประกาศ</paper-item>
                             <paper-item>เอกสารเกินกำหนด</paper-item>
                         </paper-listbox>
-                    </gl-form-dropdown-menu>
-                </div>
-                <div class="content">
-                    <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{rice}}" value="{{r}}"
-                      error-message="กรุณาเลือกประเภทข้าว" item-label-path="type_rice_name_th" item-value-path="id" required></gl-combo-box>
-                </div>
- </div>
-<div class="flex-equal-justified">
-                <div class="content">
-                    <paper-input label="ปริมาณส่งออก"></paper-input>
-                </div>
-</div>
+                    </gl-form-dropdown-menu>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{rice}}" value="{{r}}"
+                        error-message="กรุณาเลือกประเภทข้าว" item-label-path="type_rice_name_th" item-value-path="id" required></gl-combo-box>
+                </gl-grid-col>
+                </gl-grid-row>
+                <gl-grid-row width="{{getWidth}}">
+                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <gl-form-input label="ปริมาณการส่งออก" format-number="on"></gl-form-input>
+                   </gl-grid-col>
+                </gl-grid-row>
      
-            <div class="flex-end-justified" style="margin-top: 15px;">
-                <paper-button raised class="gl-btn-danger btn">ยกเลิก</paper-button>
-                <paper-button on-tap="getData" raised class="gl-btn-success btn">บันทึก</paper-button>
-            </div>
-
+                <div class="flex-end-justified" style="margin-top: 15px;">
+                    <paper-button raised class="gl-btn-danger btn">ยกเลิก</paper-button>
+                    <paper-button on-tap="getData" raised class="gl-btn-success btn">บันทึก</paper-button>
+                </div>
+        </div>
 
     </template>
     <script>
@@ -106,6 +101,36 @@
                 MonthBehavior
             ],
             properties:{
+                listEu:{
+                    type: Array,
+                    value:[
+                        {
+                            id: true,
+                            name: 'ในโควตา'
+                        },
+                        {
+                            id: false,
+                            name: 'นอกโควตา'
+                        }
+                    ]
+                },
+                checkDoc:{
+                    type: Array,
+                    value:[
+                        {
+                            id: 'c',
+                            name: 'ถูกต้องตามประกาศ'
+                        },
+                        {
+                            id: 'cc',
+                            name: 'ไม่ถููกต้องตามประกาศ'
+                        },
+                        {
+                            id: 'oc',
+                            name: 'เอกสารเกินกำหนด'
+                        }
+                    ]
+                },
                 data:{
                     type: Array,
                     value:

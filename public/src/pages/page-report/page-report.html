@@ -3,6 +3,7 @@
 <link rel="import" href="./components/report-list2.html">
 <link rel="import" href="./components/report-panel.html">
 <link rel="import" href="./components/report-panel2.html">
+<link rel="import" href="./../components/format-number-behavior.html">
 
 <dom-module id="page-report">
     <template>
@@ -81,7 +82,8 @@ input:checked + label {
 }
 
 #tab1:checked ~ #content1,
-#tab2:checked ~ #content2 {
+#tab2:checked ~ #content2,
+#tab3:checked ~ #content3 {
   display: block;
 }
 /*---------------------------------*/
@@ -112,6 +114,8 @@ input:checked + label {
     
   <input id="tab2" type="radio" name="tabs">
   <label for="tab2">นอกโควตา</label>
+  <input id="tab3" type="radio" name="tabs">
+  <label for="tab3">test</label>
     
   <section id="content1">
     <report-list data="{{getData}}"></report-list>
@@ -120,7 +124,20 @@ input:checked + label {
   <section id="content2">
     <report-list2></report-list2>
   </section>
+   <section id="content3">
+    <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{getCom}}" value="{{company}}"
+    error-message="กรุณาเลือกบริษัท" item-label-path="name" item-value-path="id" required></gl-combo-box>
+
+    <gl-form-input label="2557" value="{{year57}}" format-number="on"></gl-form-input>
+    <gl-form-input label="2558" value="{{year58}}" format-number="on"></gl-form-input>
+    <gl-form-input label="2559" value="{{year59}}" format-number="on"></gl-form-input>
+    <gl-form-input label="exporter_id" value="{{exporter_id}}"></gl-form-input>   
+    
+    <paper-button on-tap="saveConfirm" raised>SAVE</paper-button>
+    
+  </section>
 </main>
+    
 <!--  -->
 
         <!--<div class="gl-panel-default">
@@ -149,7 +166,7 @@ input:checked + label {
     <script>
         Polymer({
             is: 'page-report',
-            behaviors:[nylonBehavior],
+            behaviors:[nylonBehavior,FormatNumberBehavior],
             observers:['getValue(getYear,getCom,getRice)'],
             properties:{
                 selected:{
@@ -219,7 +236,37 @@ input:checked + label {
                     company : com
                 }
                 console.log(this.data);
-            }
+            },
+            saveConfirm:function(){
+                if(this.year57 == "-"){
+                    this.year57 = 0;
+                }
+                if(this.year58 == "-"){
+                    this.year58 = 0;
+                }
+                if(this.year59 == "-"){
+                    this.year59 = 0;
+                }
+                else {
+                    this.dataConfirm = {
+                        exporter_id : this.exporter_id,
+                        year_2557 : this.unFormat(this.year57),
+                        year_2558 : this.unFormat(this.year58),
+                        year_2559 : this.unFormat(this.year59),
+                    }
+                    console.log(this.dataConfirm);
+                    // this.fire('toast',{status:'load'});
+                    axios.post('/dump/report',this.dataConfirm)
+                    .then((response)=>{
+                        console.log("success");
+                        console.log(response);
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error);
+                    });
+                }                
+        }
         });
     </script>
 </dom-module>
