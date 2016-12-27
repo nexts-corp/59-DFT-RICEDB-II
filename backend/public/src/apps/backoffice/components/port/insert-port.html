@@ -1,6 +1,11 @@
 <link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="insert-port">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: var(--font-size-h5);
+    }
     .text-center {
       text-align: center;
       font-size: var(--font-size-h3);
@@ -12,6 +17,7 @@
     }
     .button{
       margin-top: 20px;
+      margin-bottom: 20px;
     }
   </style>
   <template>
@@ -74,13 +80,37 @@
         };
         if(stat.every(chkStat) == true){
           this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.insert('./common/port/insert', datas, () => {
-          this.data = {};
-          this.glQuery('refreshPort').getPort();
-          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-            console.log('success');
-          }});
-         });
+          axios.post('./common/port/insert', datas)
+          .then((response)=> {
+            console.log("success");
+            console.log(response);
+            if (response.data.result == true) {
+              this.data = {};
+              this.glQuery('refreshPort').getPort();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'ท่าเรือนี้มีอยู่แล้ว', //response.data.message //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+            }
+          })
+          .catch((error)=> {
+            console.log("error");
+            console.log(error);
+            this.fire('toast',{status:'connectError',text:error, //คำสั่งสำหรับเปิด toast error
+            callback:function(){
+            }})
+          })
+        //   this.insert('./common/port/insert', datas, () => {
+        //   this.data = {};
+        //   this.glQuery('refreshPort').getPort();
+        //   this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+        //     console.log('success');
+        //   }});
+        //  });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',

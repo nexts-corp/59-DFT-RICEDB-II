@@ -1,6 +1,11 @@
 <link rel="import" href="../../functionBehavior/dataBehavior.html">
 <dom-module id="insert-notifyparty">
   <style include="iron-flex iron-flex-alignment gl-color gl-size">
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: var(--font-size-h5);
+    }
     .text-center {
       text-align: center;
       font-size: var(--font-size-h3);
@@ -12,6 +17,7 @@
     }
     .button{
       margin-top: 20px;
+      margin-bottom: 20px;
     }
   </style>
   <template>
@@ -91,6 +97,8 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
+          this.read('./common/check/duplicate?table=notify_party&field=notify_name&value='+datas.notify_name, (response) => {
+            if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.insert('./common/notify/insert', datas, () => {
               this.data = {};
@@ -99,6 +107,13 @@
                 console.log('success');
               }});
              });
+           }
+           else {
+             this.fire('toast',{status:'connectError',text:'ที่อยู่ผู้รับสินค้านี้มีอยู่แล้ว',
+               callback:function(){
+               }})
+           }
+           });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
