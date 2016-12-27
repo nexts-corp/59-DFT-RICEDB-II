@@ -28,7 +28,7 @@
         -webkit-font-smoothing: antialiased;*/
     }
     .table-head > tr > th:nth-child(1) {
-      width: 10%;
+      width: 15%;
     }
     .table-head > tr > th:nth-child(2) {
       width: 15%;
@@ -64,7 +64,7 @@
 
           <div class="horizontal justified layout">
             <div class="horizontal layout" style="margin-top:25px;">
-              <div class="labelSearch">ชื่อประเทศ (ภาษาไทย)</div>{{_searchInArray(searchInput)}}
+              <div class="labelSearch">รหัสประเทศ</div>{{_searchInArray(searchInput)}}
               <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
               <iron-icon icon="search" style="margin-top:10px;"></iron-icon>
             </div>
@@ -76,11 +76,12 @@
           <table class="gl-table-default">
             <thead class="table-head">
               <tr>
+                <th><div class="text-center">Continent Name<p>(ชื่อทวีป)</div></th>
                 <th><div class="text-center">Country Code<p>(รหัสประเทศ)</div></th>
-                <th><div class="text-center">Country Name<p>(ชื่อประเทศภาษาไทย)</div></th>
-                <th><div class="text-center">Country Fullname<p>(ชื่อเต็มประเทศภาษาไทย)</div></th>
-                <th><div class="text-center">Country Name<p>(ชื่อประเทศภาษาอังกฤษ)</div></th>
-                <th><div class="text-center">Country Fullname<p>(ชื่อเต็มประเทศภาษาอังกฤษ)</div></th>
+                <th><div class="text-center">Country Name<p>(ชื่อประเทศ ภาษาไทย)</div></th>
+                <!-- <th><div class="text-center">Country Fullname<p>(ชื่อเต็มประเทศภาษาไทย)</div></th> -->
+                <th><div class="text-center">Country Name<p>(ชื่อประเทศ ภาษาอังกฤษ)</div></th>
+                <!-- <th><div class="text-center">Country Fullname<p>(ชื่อเต็มประเทศภาษาอังกฤษ)</div></th> -->
                 <th><div class="text-center">Date Update<p>(วันที่อัพเดทล่าสุด)</div></th>
                 <th style="text-align:right;">
                   <!-- <paper-button class="gl-btn-primary button-top" title="เพิ่มประเทศ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มประเทศ</paper-button> -->
@@ -92,11 +93,12 @@
             <template is="dom-repeat" items="[[newData]]">
               <tbody>
                 <tr>
+                  <td><div class="text-center">{{item.continent_name_en}}</div></td>
                   <td><div class="text-center">{{item.country_id}}</div></td>
                   <td><div class="text-center">{{item.country_name_th}}</div></td>
-                  <td><div>{{item.country_fullname_th}}</div></td>
+                  <!-- <td><div>{{item.country_fullname_th}}</div></td> -->
                   <td><div class="text-center">{{item.country_name_en}}</div></td>
-                  <td><div>{{item.country_fullname_en}}</div></td>
+                  <!-- <td><div>{{item.country_fullname_en}}</div></td> -->
                   <td><div class="text-center">{{item.date_updated}}</div></td>
                   <td style="text-align:right;">
                     <paper-icon-button data="{{item}}" on-tap="_edit" icon="icons:create"></paper-icon-button>
@@ -209,7 +211,7 @@
                 if (searchInput != '') {
                   let arr=[];
                   this.dataCountry.map((el)=>{
-                    if (el.country_name_th.search(searchInput) > -1) {
+                    if (el.country_id.search(searchInput) > -1) {
                         //  console.log('search==> ',el);
                           arr.push(el);
                     }

@@ -99,13 +99,37 @@
         };
         if(stat.every(chkStat) == true){
           this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.insert('./common/package/insert', datas, () => {
-          this.data = {};
-          this.glQuery('refreshPackage').getPackage();
-          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-            console.log('success');
-          }});
-         });
+          axios.post('./common/package/insert', datas)
+          .then((response)=> {
+            console.log("success");
+            console.log(response);
+            if (response.data.result == true) {
+              this.data = {};
+              this.glQuery('refreshPackage').getPackage();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'แพ็คเกจนี้มีอยู่แล้ว', //response.data.message //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+            }
+          })
+          .catch((error)=> {
+            console.log("error");
+            console.log(error);
+            this.fire('toast',{status:'connectError',text:error, //คำสั่งสำหรับเปิด toast error
+            callback:function(){
+            }})
+          })
+        //   this.insert('./common/package/insert', datas, () => {
+        //   this.data = {};
+        //   this.glQuery('refreshPackage').getPackage();
+        //   this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+        //     console.log('success');
+        //   }});
+        //  });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',

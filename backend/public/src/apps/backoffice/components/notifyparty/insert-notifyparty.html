@@ -97,6 +97,8 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
+          this.read('./common/check/duplicate?table=notify_party&field=notify_name&value='+datas.notify_name, (response) => {
+            if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.insert('./common/notify/insert', datas, () => {
               this.data = {};
@@ -105,6 +107,13 @@
                 console.log('success');
               }});
              });
+           }
+           else {
+             this.fire('toast',{status:'connectError',text:'ที่อยู่ผู้รับสินค้านี้มีอยู่แล้ว',
+               callback:function(){
+               }})
+           }
+           });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
