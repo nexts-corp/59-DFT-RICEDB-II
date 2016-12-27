@@ -324,14 +324,20 @@
         window.open('http://localhost:8080/api/report/report4?invoice_id='+this.data.invoice_id,'1');
       },
       createInvoice:function () {
+        let  book_id = this.data.book_id;
+        this._cleanDataBl(this.data,(data)=>{
+          data.book_status=true;
+          data.id=book_id;
+          this.update('./g2g/book/update',data,() => {
+            this.fire('get-bl-list',{detail:contract_id});
+          });
+        });
+        let contract_id = this._getUrl();
         this.data.invoice_status=false;
         this._cleanDataInvoice(this.data,(data)=>{
-          let shmId = this._getUrl();
           this.insert('./g2g/invoice/insert',data, () => {
             this.fire('close-drawer',{detail:'close-drawer'})
-            this.fire('get-bl-list',{detail:shmId});
-            this.fire('get-invoice-list',{detail:shmId});
-
+            this.fire('get-invoice-list',{detail:contract_id});
          });
         });
       },
@@ -373,6 +379,14 @@
       },
       _deleteInvoice:function (result,detail) {
         if (result == true) {
+          let  book_id = detail.data.book_id;
+          this._cleanDataBl(detail.data,(data)=>{
+            data.book_status=false;
+            data.id=book_id;
+            this.update('./g2g/book/update',data,() => {
+              this.fire('get-bl-list',{detail:detail.data.contract_id});
+            });
+          });
           this.delete('./g2g/invoice/delete/id/',detail.data.invoice_id, () => {
             this.fire('get-bl-list',{detail:detail.data.contract_id});
             this.fire('get-invoice-list',{detail:detail.data.contract_id});
@@ -463,12 +477,34 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
         if (stat.every(elem => elem == true)) {
-            let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to}=data;
-            let newDate = {invoice_no,invoice_date,bl_no,invoice_status,made_out_to};
+            let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to,book_id,book_status}=data;
+            let newDate = {invoice_no,invoice_date,bl_no,invoice_status,made_out_to,book_id,book_status};
             newDate.invoice_date = new Date(newDate.invoice_date);
             el.map((el)=> {el.reset();});
             callback(newDate);
         }
+      },
+      _cleanDataBl:function (data,callback) {
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        let stat = el.map((el)=> el.validate());
+          if (stat.every(elem => elem == true)) {
+            let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+                  load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
+                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id} = data;
+            let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+                            load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
+                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id};
+            newData.ship = new Array();
+            data.ship.map((ships)=>{
+              newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+            });
+            el.map((el)=> {el.reset();});
+            callback(newData)
+          } else {
+            this.fire('toast',{status:'connectError',text:'กรุณากรอกให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error
+            callback:function(){
+            }})
+          }
       },
     });
   </script>
