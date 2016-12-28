@@ -178,33 +178,16 @@ router.get('/id/:id', function (req, res, next) {
                                 .get(fee_merge1('invoice_id'))
                                 .merge(function (m) {
                                     return {
-                                        group_ship: r.db('g2g').table('shipment_detail')
-                                            .filter({ bl_no: m('bl_no') })
-                                            .coerceTo('array')
-                                            .group(function (g) {
-                                                return g.pluck(
-                                                    "ship", "shipline_id", "ship_lot_no"//, "ship_voy_no"
-                                                )
-                                            })
-                                            .ungroup()
-                                            .merge(function (me) {
-                                                return {
-                                                    ship: me('group')('ship'),
-                                                    shipline_id: me('group')('shipline_id'),
-                                                    ship_lot_no: me('group')('ship_lot_no'),
-                                                    //ship_voy_no: me('group')('ship_voy_no')
-                                                }
-                                            }),
                                         shipment_detail: r.db('g2g').table('shipment_detail')
-                                            .filter({ bl_no: m('bl_no') })
+                                            .getAll(m('book_id'), { index: 'book_id' })
                                             .coerceTo('array')
                                             .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
                                             .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_date", "cl_name", "cl_quality"] }).zip()
+                                            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "cl_date", "cl_name", "cl_quality"] }).zip()
                                             .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                             .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                             .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
+                                            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
                                             .merge(function (m1) {
                                                 return {
                                                     shm_det_id: m1('id'),
@@ -238,11 +221,14 @@ router.get('/id/:id', function (req, res, next) {
                                     }
                                 })
                                 .merge(function (m) {
+                                    return r.db('g2g').table('book').get(m('book_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                                })
+                                .merge(function (m) {
                                     return {
                                         invoice_id: m('id'),
-                                        ship: m('group_ship')('ship')(0),
-                                        shipline_id: m('group_ship')('shipline_id')(0),
-                                        ship_lot_no: m('group_ship')('ship_lot_no')(0),
+                                        // ship: m('group_ship')('ship')(0),
+                                        // shipline_id: m('group_ship')('shipline_id')(0),
+                                        // ship_lot_no: m('group_ship')('ship_lot_no')(0),
                                         //  ship_voy_no: m('group_ship')('ship_voy_no')(0),
                                         weight_gross: m('shipment_detail').sum('weight_gross'),
                                         weight_net: m('shipment_detail').sum('weight_net'),
@@ -262,16 +248,16 @@ router.get('/id/:id', function (req, res, next) {
                                         })
                                     }
                                 })
-                                .without("id", "group_ship", "shipment_detail")
+                                .without("id", "shipment_detail")
                                 .merge(function (m) {
-                                    return r.db('common').table("shipline").get(m('shipline_id')).without('id')
+                                    return r.db('common').table("shipline").get(m('shipline_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                                     // r.db('common').table("ship").get(m('ship_id')).without('id'),
                                 })
                                 .merge(function (m) {
                                     return {
                                         ship: m('ship').map(function (arr_ship) {
                                             return arr_ship.merge(function (row_ship) {
-                                                return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated')
+                                                return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                                             })
                                         })
                                     }
