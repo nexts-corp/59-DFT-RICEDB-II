@@ -41,19 +41,18 @@ class index{
                 year:params.year,
                 month:params.month,
                 quota:params.quota //ในโควต้า
-            }).without('id')
+            })
             .merge(function(x){
                 return {
-                    type_doc_th: r.branch( x('type_doc').eq('c'), 'ถูกต้อง', x('type_doc').eq('ic'), 'ไม่ถูกต้อง', 'เกินกำหนด'),
-                    sid : x('id')
+                    type_doc_th: r.branch( x('type_doc').eq('c'), 'ถูกต้อง', x('type_doc').eq('ic'), 'ไม่ถูกต้อง', 'เกินกำหนด')
                 }
             })
             .innerJoin(r.db('eu2').table('exporter'), function(x,xx) {
                 return x('exporter_id') .eq(xx('id'))
-            }).zip()
+            }).without({ right: ["id"] }).zip()
             .innerJoin(r.db('eu2').table('type_rice'), function(x,xx){
                 return x('type_rice_id') . eq(xx('id')) 
-            }).without('id').zip()
+            }).without({ right: ["id"] }).zip()
             .run()
             .then(function(result){
                 res.json(result);
