@@ -28,9 +28,20 @@ class index{
         var r = req._r;
         var params = req.body;
 
-        r.db('eu2').table('quota').insert(params).run().then(function(result) {
+        r.db('eu2').table('quota').filter({year:params.year}).count().do(
+            function(result){
+                return r.branch(result.eq(0),
+                    r.db('eu2').table('quota').insert(params)
+                ,
+                    {error:'year was already'}
+                ) 
+            }
+        ).run().then(function(result) {
             res.json(result);
         });
+
+        
+        
     }
 
 
