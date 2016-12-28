@@ -149,7 +149,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             //     }
             // })
             // .without("group", "reduction")
-            .orderBy('cl_no','shm_no','fee_no')
+            .orderBy('cl_no', 'shm_no', 'fee_no')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -199,11 +199,11 @@ router.get('/id/:id', function (req, res, next) {
                                             .filter({ bl_no: m('bl_no') })
                                             .coerceTo('array')
                                             .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
-                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                             .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_date", "cl_name", "cl_quality"] }).zip()
-                                            .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                                            .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                                            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+                                            .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                                            .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                                            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                                             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
                                             .merge(function (m1) {
                                                 return {
@@ -300,63 +300,7 @@ router.get('/id/:id', function (req, res, next) {
             });
     })
 });
-router.get('/shipment/id/:shm_id', function (req, res, next) {
-    db.query(function (conn) {
-        r.db('g2g').table('shipment_detail')
-            .filter({ shm_id: req.params.shm_id })
-            .group(function (g) {
-                return g.pluck(
-                    "ship", "load_port_id", "dest_port_id", "deli_port_id", "bl_no","book_no", "shm_id", "shipline_id"//, "ship_voy_no"
-                )
-            })
-            .ungroup()
-            .merge(function (me) {
-                return {
-                    shm_id: me('group')('shm_id'),
-                    bl_no: me('group')('bl_no'),
-                    ship: me('group')('ship'),
-                    book_no:me('group')('book_no'),
-                    //ship_voy_no: me('group')('ship_voy_no'),
-                    shipline_id: me('group')('shipline_id'),
-                    load_port_id: me('group')('load_port_id'),
-                    dest_port_id: me('group')('dest_port_id'),
-                    deli_port_id: me('group')('deli_port_id'),
-                    //quantity: me('reduction')
-                }
-            })
-            .without("group", "reduction")
-            .outerJoin(r.db('g2g').table("invoice"),
-            function (detail, invoice) {
-                return invoice("bl_no").eq(detail("bl_no"))
-            })
-            .zip()
-            .filter(r.row.hasFields('invoice_no'))
-            .merge(function (m) {
-                return {
-                    invoice_id: m('id'),
-                    ship: m('ship').map(function (arr_ship) {
-                        return arr_ship.merge(function (row_ship) {
-                            return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated')
-                        })
-                    })
-                }
-            }).without('id')
-            .run(conn, function (err, cursor) {
-                if (!err) {
-                    cursor.toArray(function (err, result) {
-                        if (!err) {
-                            //console.log(JSON.stringify(result, null, 2));
-                            res.json(result);
-                        } else {
-                            res.json(null);
-                        }
-                    });
-                } else {
-                    res.json(null);
-                }
-            });
-    })
-});
+
 router.get('/invoice/id/:invoice_id', function (req, res, next) {
     var d = {};
     db.query(function (conn) {
@@ -367,33 +311,16 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
             })
             .merge(function (m) {
                 return {
-                    group_ship: r.db('g2g').table('shipment_detail')
-                        .filter({ bl_no: m('bl_no') })
-                        .coerceTo('array')
-                        .group(function (g) {
-                            return g.pluck(
-                                "ship", "shipline_id", "ship_lot_no"//, "ship_voy_no"
-                            )
-                        })
-                        .ungroup()
-                        .merge(function (me) {
-                            return {
-                                ship: me('group')('ship'),
-                                shipline_id: me('group')('shipline_id'),
-                                ship_lot_no: me('group')('ship_lot_no'),
-                                //ship_voy_no: me('group')('ship_voy_no')
-                            }
-                        }),
                     invoice_detail: r.db('g2g').table('shipment_detail')
-                        .filter({ bl_no: m('bl_no') })
+                        .getAll(m('book_id'), { index: 'book_id' })
                         .coerceTo('array')
                         .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
-                        .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_date", "cl_name", "cl_quality"] }).zip()
-                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
-                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "country_id"] }).zip()
+                        .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "cl_date", "cl_name", "cl_quality"] }).zip()
+                        .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "country_id"] }).zip()
                         .merge(function (m1) {
                             return {
                                 shm_det_id: m1('id'),
@@ -428,13 +355,14 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                         .without('id', 'cl_type_rice', 'shm_det_quantity')
                 }
             })
+            .eqJoin('book_id', r.db('g2g').table('book')).without({ right: ['id'] }).zip()
             .merge(function (m) {
                 return {
                     invoice_id: m('id'),
                     invoice_date: m('invoice_date').split('T')(0),
-                    ship: m('group_ship')('ship')(0),
-                    shipline_id: m('group_ship')('shipline_id')(0),
-                    ship_lot_no: m('group_ship')('ship_lot_no')(0),
+                    // ship: m('group_ship')('ship')(0),
+                    // shipline_id: m('group_ship')('shipline_id')(0),
+                    // ship_lot_no: m('group_ship')('ship_lot_no')(0),
                     //ship_voy_no: m('group_ship')('ship_voy_no')(0),
                     weight_gross: m('invoice_detail').sum('weight_gross'),
                     weight_net: m('invoice_detail').sum('weight_net'),
@@ -442,8 +370,8 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                     amount_usd: m('invoice_detail').sum('amount_usd'),
                 }
             })
-            .without("id", "group_ship")
-            //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+            .without("id")
+            // //.eqJoin("ship_id", r.db('common').table("ship")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
             .merge(function (m) {
                 return {
                     ship: m('ship').map(function (arr_ship) {
@@ -453,7 +381,7 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                     })
                 }
             })
-            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated","creater","updater"] }).zip()
+            .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
