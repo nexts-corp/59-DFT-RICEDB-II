@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="79e1c2fd-7eea-4f8c-982c-ac434208f12e">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="year" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\GITHUB\\59-DFT-RICEDB-II\\app\\reports\\report1\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="id" class="java.lang.String"/>
+	<field name="name_th" class="java.lang.String"/>
+	<field name="name_en" class="java.lang.String"/>
+	<field name="age" class="java.lang.Integer"/>
+	<field name="gender" class="java.lang.String"/>
+	<field name="gender_name_th" class="java.lang.String"/>
+	<field name="grade" class="java.util.Collection"/>
+	<group name="g" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="24" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="76" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="33" width="123" height="20" uuid="872592d6-6b85-4d75-a22a-f6d0bc15e215"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[gender]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="33" width="123" height="20" uuid="9e3aa502-81e6-4256-9119-443f3080dc87"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gender_name_th}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="13" width="123" height="20" uuid="031154e3-7594-41f9-9b55-323ee5cff38d"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="13" width="123" height="20" uuid="c2366d83-ad8e-47d4-b221-0b1247b311c4"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name_en}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="53" width="123" height="20" uuid="342ecbb3-f80c-4f00-a255-06da69c92cfe"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Age:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="53" width="123" height="20" uuid="cb696933-3995-4bc6-bb69-e55cf6800e94"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun Bold.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<subreport>
+				<reportElement x="0" y="0" width="246" height="50" uuid="e6851df6-7a4d-4ff0-a5e3-bc664a456080"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{grade})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report4_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="41" splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>

@@ -4,5 +4,4 @@ module.exports=function(app){
     app.get('/exporter',commonIndexCtrl.getExporter);
     app.get('/year',commonIndexCtrl.getYear);
     app.get('/type_rice',commonIndexCtrl.getTypeRice);
-
 }
