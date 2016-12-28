@@ -172,7 +172,7 @@
         },
         data:{
           type:Object,
-          value:{bank_id:'KTB'}
+          value:{bank_id:'KTB',bank_branch:'กระทรวงพาณิชย์'}
         },
         dataCheck:{
           type:Object,
@@ -230,7 +230,7 @@
         }
       },
       getExporter:function (exporter_id) {
-        // console.log(exporter_id);
+        console.log(exporter_id);
         this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
           this.dataForSelected.exporterDetail = data;
           console.log(this.dataForSelected.exporterDetail);
@@ -267,13 +267,14 @@
             // console.log(detail.data);
             this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
             // console.log(this.dataForSelected.exporter_id);
-
+            // console.log(this.dataForSelected);
             this.insert('./g2g/payment/insert', detail.data, () => {
               // this.glQuery('refreshBank')._searchExporter();
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
               // this.getExporter(this.dataForSelected.exporter_id);
               }});
-              this.getExporter(this.dataForSelected.exporter_id);
+              // console.log(this.dataForSelected.exporter_id);
+              this.getExporter(this.dataForSelected.exporterSelected);
               this.$.dialog.toggle();
              });
           }

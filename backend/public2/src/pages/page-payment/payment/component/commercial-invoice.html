@@ -477,8 +477,8 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
         if (stat.every(elem => elem == true)) {
-            let {invoice_no,invoice_date,bl_no,invoice_status,made_out_to,book_id,book_status}=data;
-            let newDate = {invoice_no,invoice_date,bl_no,invoice_status,made_out_to,book_id,book_status};
+            let {invoice_no,invoice_date,invoice_status,made_out_to,book_id}=data;
+            let newDate = {invoice_no,invoice_date,invoice_status,made_out_to,book_id};
             newDate.invoice_date = new Date(newDate.invoice_date);
             el.map((el)=> {el.reset();});
             callback(newDate);

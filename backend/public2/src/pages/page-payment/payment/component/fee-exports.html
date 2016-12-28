@@ -182,7 +182,9 @@
       addPayment:function () {
         this._clearDatafee(this.data,'insert',(data)=>{
             data.fee_status = false;
+            // data.invoice_status = true;
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+            console.log(11);
             this.insert('./g2g/fee/insert',data, () => {
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
@@ -264,7 +266,7 @@
      _deleteDataFee:function(result,detail){
        if (result == true) {
          this.data.invoice.map((el,indexShmid)=>{
-          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
+          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
         });
          this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
            let contract_id= this._getUrl();
@@ -282,9 +284,9 @@
           newData.invoice=[];
           this.data.invoice.map((el,indexShmid)=>{
             if (action == 'insert') {
-              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
+              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
             } else if (action == 'delete') {
-              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to);
+              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
             }
             newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
             el.invoice_detail.map((shmDet,indexshmdet)=>{
@@ -301,7 +303,7 @@
           callback(newData);
         }
       },
-      _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,contract_id) {
+      _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,book_id) {
         let data = {
           id:invoice_id,
           bl_no:bl_no,
@@ -309,8 +311,9 @@
           invoice_no:invoice_no,
           invoice_status:this.approve(invoice_status),
           made_out_to:made_out_to,
+          book_id:book_id
         };
-        console.log(data);
+        // console.log(data);
         // bl_no:"gggg"
         // id:"2f2c9090-9056-4294-9c09-8d6f9d7e0d4b"
         // invoice_date:Tue Nov 15 2016 07:00:00 GMT+0700 (Altai Standard Time)
