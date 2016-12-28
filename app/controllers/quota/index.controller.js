@@ -2,16 +2,16 @@ class index{
 
     getQuota(req,res){
         var r = req._r;
-        var params = req.query;
-
+        var params = req.params;
+        console.log(params.year);
         // r.db('eu2').table('quota').filter({year:2559}).without('year')
         // .eqJoin(r.row('type_rice_id'),r.db('eu2').table('type_rice')).coerceTo('array')
 
 
-        r.expr({year:2556}).merge(function(row){
+        r.expr({year:parseInt(params.year)}).merge(function(row){
             return {
                 type_rice:
-                r.db('eu2').table('quota').filter({year:2559}).without('year')
+                r.db('eu2').table('quota').filter({year:parseInt(params.year)}).without('year')
                 .merge(function(row){
                     return {quota_id:row('id')}
                 })
@@ -28,9 +28,20 @@ class index{
         var r = req._r;
         var params = req.body;
 
-        r.db('eu2').table('quota').insert(params).run().then(function(result) {
+        r.db('eu2').table('quota').filter({year:params.year}).count().do(
+            function(result){
+                return r.branch(result.eq(0),
+                    r.db('eu2').table('quota').insert(params)
+                ,
+                    {error:'year was already'}
+                ) 
+            }
+        ).run().then(function(result) {
             res.json(result);
         });
+
+        
+        
     }
 
 
