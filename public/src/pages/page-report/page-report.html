@@ -4,6 +4,8 @@
 <link rel="import" href="./components/report-panel.html">
 <link rel="import" href="./components/report-panel2.html">
 <link rel="import" href="./../components/format-number-behavior.html">
+<link rel="import" href="./../components/month-behavior.html">
+
 
 <dom-module id="page-report">
     <template>
@@ -64,7 +66,10 @@ label:before {
   font-weight: normal;
   margin-right: 10px;
 }
-
+.flex-equal-justified {
+    @apply(--layout-horizontal);
+    @apply(--layout-justified);
+  }
 /*label[for*='1']:before { content: '\f1cb'; }
 label[for*='2']:before { content: '\f17d'; }*/
 
@@ -105,24 +110,33 @@ input:checked + label {
                 </paper-button>
             </div>
           </div>
+          
+        <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{monthValue}}"
+        error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
+    
+        <gl-combo-box class="saveData" label="ปี" items="{{getYear}}" value="{{yearValue}}"
+            error-message="กรุณาเลือกปี" required></gl-combo-box>
+               
+            
+        
 
 <!--   -->
 <main>
   
-  <input id="tab1" type="radio" name="tabs" checked>
+  <input class="radio" id="tab1" type="radio" on-tap="checkQuota" name="tabs" value="true" checked>
   <label for="tab1">ในโควตา</label>
     
-  <input id="tab2" type="radio" name="tabs">
+  <input class="radio" id="tab2" type="radio" on-tap="checkQuota" name="tabs" value="false">
   <label for="tab2">นอกโควตา</label>
   <input id="tab3" type="radio" name="tabs">
   <label for="tab3">test</label>
     
   <section id="content1">
-    <report-list data="{{getData}}"></report-list>
+        <report-list2 data="{{dataListInQuota}}" on-data-select="getDataSelect"></report-list2>
   </section>
     
   <section id="content2">
-    <report-list2></report-list2>
+        <report-list2></report-list2>
   </section>
    <section id="content3">
     <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{getCom}}" value="{{company}}"
@@ -160,18 +174,24 @@ input:checked + label {
                 <report-panel data="{{dataSelect}}"></report-panel>
         </panel-right>-->
         <panel-right title="นำเข้ารายงานการส่งออกข้าวไปสหภาพยุโรป">
-            <report-panel2 year="{{getYear}}" company="{{getCom}}" rice="{{getRice}}" on-save-data="saveData" datas="{{data}}"></report-panel2>
+            <report-panel2 year="{{getYear}}" company="{{getCom}}" data="{{dataSelect}}" rice="{{getRice}}" status="{{status}}" on-save-data="saveData" on-update-data="updateData" on-delete-data="deleteData" datas="{{data}}"></report-panel2>
         </panel-right>
     </template>
     <script>
         Polymer({
             is: 'page-report',
-            behaviors:[nylonBehavior,FormatNumberBehavior],
-            observers:['getValue(getYear,getCom,getRice)'],
+            behaviors:[nylonBehavior,FormatNumberBehavior,MonthBehavior],
+            observers:['getValue(getYear,getCom,getRice)','getValueForDataList(monthValue,yearValue,quota)'],
             properties:{
                 selected:{
                     value:'0'
+                },
+                stat:{
+                    type: Boolean
                 }
+            },
+            ready:function(){
+                this.quota = 'true';
             },
             nylonPageActive:function(){
                 this.fnyear();
@@ -226,6 +246,7 @@ input:checked + label {
             },
             _toggleDrawer: function(e) {
                 this.$$('panel-right').open();
+                this.status = 'post';
             },
             saveData:function(e){
                 console.log(e.detail);
@@ -247,6 +268,47 @@ input:checked + label {
                 console.log(error);
                 });
             },
+             updateData:function(e){
+                // console.log('put-data: ',e.detail);
+                this.fire('toast',{status:'load'});
+                axios.put('/report/report',e.detail)
+                .then((response)=>{
+                console.log("success");
+                 this.fire('toast',{
+                        status:'success',
+                        text:'แก้ไขข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                console.log(response.data);
+                this.getDatalist(this.onthValue,this.yearValue,this.quota);
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });
+            },
+            deleteData:function(e){
+                console.log(e.detail);
+                axios.delete('/report/report/'+e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    console.log(response);
+                    this.fire('toast',{
+                        status:'success',
+                        text:'ลบข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    //el.$$('panel-right').close();
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
             getValue:function(year,com,rice){
                 this.data = {
                     year : year,
@@ -254,6 +316,62 @@ input:checked + label {
                     company : com
                 }
                 console.log(this.data);
+            },
+            getValueForDataList:function(month,year,quota){
+                // console.log(month,year,quota);
+                this.getDatalist(month,year,quota);
+            },
+            getDatalist:function(month,year,quota){
+                console.log(month,year,quota);
+                if(month != '' && year != ''){
+                     this.fire('toast',{status:'load'});
+                    axios.get('./report/report',{
+                        params:{
+                            month : month,
+                            year : year,
+                            quota : quota
+                        }
+                    })
+                    .then((response)=>{
+                        console.log("success!!");
+                        //this.fire('toast',{status:'loadSuccess'});
+                        this.fire('toast',{
+                        status:'success',
+                        text:'โหลดข้อมูลสำเร็จ',
+                        callback:function(){
+                        }
+                        });
+                        this.dataList = response.data;
+                        console.log('res',response.data);
+                        response.data.map((item)=>{
+                            this.stat = item.quota;
+                        })
+                        if(this.stat == true){
+                            console.log('1234');
+                           this.dataListInQuota = response.data
+                        }
+                        
+                        // this.dataList = response.data;
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error);
+                        this.fire('toast',{status:'connectError',text:error.message,
+                        callback:function(){
+                        }})
+                    });
+                }
+            },
+            getDataSelect:function(e){
+                this.dataSelect = e.detail;
+                this.status = 'update';
+                this.$$('panel-right').open();
+                // console.log(e.detail);
+                
+            },
+            checkQuota:function(e){
+                // console.log(e.target.value);
+                this.quota = e.target.value;
             },
             saveConfirm:function(){
                 if(this.year57 == "-"){

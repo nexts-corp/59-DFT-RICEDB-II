@@ -23,58 +23,21 @@
     <table class="gl-table-default">
         <thead class="table-head">
             <tr>
-                <th rowspan="3">ลำดับ</th>
-                <th rowspan="3">เดือน</th>
-                <th rowspan="3">บริษัท</th>
-                <th colspan="4">เอกสารภายในกำหนด</th>
-                <th colspan="2" rowspan="2">แสดงเอกสารเกินกำหนด</th>
-                <th colspan="2" rowspan="2">รวมเอกสารทั้งหมด</th>
-            </tr>
-            <tr>
-                <th colspan="2">เอกสารถูกต้องตามประกาศฯ</th>
-                <th colspan="2">เอกสารไม่ถูกต้องตามประกาศฯ</th>
-            </tr>
-            <tr>
-                <th>ข้าวขาว</th>
-                <th>ข้าวหัก</th>
-                <th>ข้าวขาว</th>
-                <th>ข้าวหัก</th>
-                <th>ข้าวขาว</th>
-                <th>ข้าวหัก</th>
-                <th>ข้าวขาว</th>
-                <th>ข้าวหัก</th>
+                <th>ลำดับ</th>
+                <th>บริษัท</th>
+                <th>ปริมาณ</th>
+                <th>สถานะเอกสาร</th>
             </tr>
         </thead>
         <tbody class="table-body">
             <template is="dom-repeat" items="{{data}}">
-                <tr on-tap="_selectData" data2="{{item}}">
-                    <td>1</td>
-                    <td>{{item.month}}</td>
-                    <td>{{item.company}}</td>
-                    <td>{{item.type_rice11}}</td>
-                    <td>{{item.type_rice12}}</td>
-                    <td>{{item.type_rice21}}</td>
-                    <td>{{item.type_rice22}}</td>
-                    <td>{{item.type_rice31}}</td>
-                    <td>{{item.type_rice32}}</td>
-                    <td>{{item.type_rice41}}</td>
-                    <td>{{item.type_rice42}}</td>
+                <tr on-tap="_selectData" data="{{item}}">
+                    <td>{{getIndex(index)}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.weigth}}</td>
+                    <td>{{item.type_doc}}</td>
                 </tr>
-            </template>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>รวมทั้งสิ้น</td>
-                <td>105.00</td>
-                <td>150.00</td>
-                <td>105.00</td>
-                <td>120.00</td>
-                <td>105.00</td>
-                <td>110.00</td>
-                <td>200.00</td>
-                <td>200.00</td>
-            </tr>
-            
+            </template>    
         </tbody>
     </table>
 
@@ -82,28 +45,11 @@
     <script>
         Polymer({
             is: 'report-list2',
-            properties:{
-                data:{
-                    type:Array,
-                    value:[
-                        {
-                            "month":"กุมภาพันธ์",
-                            "company":"สหมิตรการค้า",
-                            "type_rice11":"105.00",
-                            "type_rice12":"150.00",
-                            "type_rice21":"105.00",
-                            "type_rice22":"120.00",
-                            "type_rice31":"105.00",
-                            "type_rice32":"110.00",
-                            "type_rice41":"200.00",
-                            "type_rice42":"200.00"
-                        }
-                    ]
-                }
+            getIndex:function(index){
+                return index+1;
             },
-            _selectData: function(e) {
-                console.log("pageReport:: "+e.currentTarget.data2);
-                this.fire("data-select",e.currentTarget.data2);
+            _selectData:function(e){
+                this.fire('data-select',e.currentTarget.data)
             }
         });
     </script>

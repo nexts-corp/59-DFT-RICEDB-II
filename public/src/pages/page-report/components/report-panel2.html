@@ -47,7 +47,7 @@
         </style>
         <div class="container">
            <gl-grid-row width="{{getWidth}}">
-                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">  
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                       <gl-combo-box class="saveData" label="รายงานการส่งออกข้าวไป EU" items="{{listEu}}" value="{{listEuValue}}"
                       error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
                  </gl-grid-col>
@@ -81,6 +81,7 @@
                 </gl-grid-row>
      
                 <div class="flex-end-justified" style="margin-top: 15px;">
+                    <paper-button raised on-tap="deleteData">Delete</paper-button>
                     <paper-button raised class="gl-btn-danger btn">ยกเลิก</paper-button>
                     <paper-button on-tap="getData" raised class="gl-btn-success btn">บันทึก</paper-button>
                 </div>
@@ -98,18 +99,44 @@
                     type: Array,
                     value:[
                         {
-                            id: true,
+                            id: 'true',
                             name: 'ในโควตา'
                         },
                         {
-                            id: false,
+                            id: 'false',
                             name: 'นอกโควตา'
                         }
                     ]
-                }
+                },
+                 checkDoc:{		
+                    type: Array,		
+                   value:[		
+                       {		
+                          id: 'c',		
+                          name: 'ถูกต้องตามประกาศ'		
+                        },		
+                         {		
+                             id: 'ic',		
+                             name: 'ไม่ถููกต้องตามประกาศ'		
+                         },		
+                         {		
+                             id: 'od',		
+                             name: 'เอกสารเกินกำหนด'		
+                         }		
+                     ]		
+                 },
+                 status:{
+                     observer: 'checkStatus'
+                 }
             },
             getData:function(){
-                this.data = {
+                if(this.listEuValue == 'true'){
+                    this.listEuValue = true;
+                }
+                else if (this.listEuValue == 'false'){
+                    this.listEuValue = false;
+                }
+                this.datas = {
                     quota : this.listEuValue,
                     month : parseInt(this.month),
                     year : parseInt(this.getyear),
@@ -119,7 +146,41 @@
                     weigth : parseInt(this.getWeigth)
                 }
                 // console.log(this.data);
-                this.fire('save-data',this.data)
+                if(this.status == 'post'){
+                    this.fire('save-data',this.datas);
+                }
+                else if(this.status == 'update'){
+                    this.datas.id = this.data.id;
+                    console.log(this.datas);
+                    this.fire('update-data',this.datas);
+                }   
+                
+            },
+            checkStatus:function(){
+                if(this.status == 'post'){
+                    this.listEuValue = '';
+                    this.month = '';
+                    this.getyear = '';
+                    this.getCompany = '';
+                    this.checkDocValue = '';
+                    this.getTypeRice = '';
+                    this.getWeigth = '';
+                }
+                else if (this.status == 'update'){
+                    console.log(this.data);
+                    this.listEuValue = this.data.quota.toString();
+                    this.month = this.data.month.toString();
+                    this.getyear = this.data.year.toString();
+                    this.getCompany = this.data.exporter_id;
+                    this.checkDocValue = this.data.type_doc;
+                    this.getTypeRice = this.data.type_rice_id;
+                    this.getWeigth = this.data.weigth.toString();
+                }
+            },
+            deleteData:function(){
+                console.log(this.data);
+                console.log(this.data.id);
+                this.fire('delete-data',this.data.id);
             }
         });
     </script>
