@@ -47,7 +47,7 @@
         </style>
         <div class="container">
            <gl-grid-row width="{{getWidth}}">
-                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">  
                       <gl-combo-box class="saveData" label="รายงานการส่งออกข้าวไป EU" items="{{listEu}}" value="{{listEuValue}}"
                       error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
                  </gl-grid-col>
@@ -68,13 +68,6 @@
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                      <gl-combo-box class="saveData" label="ความถูกต้องของเอกสาร" items="{{checkDoc}}" value="{{checkDocValue}}"
                       error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" required></gl-combo-box>
-                    <!--<gl-form-dropdown-menu label="ความถูกต้องของเอกสาร" always-float-label>
-                        <paper-listbox class="dropdown-content">
-                            <paper-item>ถูกต้องตามประกาศ</paper-item>
-                            <paper-item>ไม่ถููกต้องตามประกาศ</paper-item>
-                            <paper-item>เอกสารเกินกำหนด</paper-item>
-                        </paper-listbox>
-                    </gl-form-dropdown-menu>-->
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                         <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{rice}}" value="{{r}}"
@@ -113,67 +106,14 @@
                             name: 'นอกโควตา'
                         }
                     ]
-                },
-                checkDoc:{
-                    type: Array,
-                    value:[
-                        {
-                            id: 'c',
-                            name: 'ถูกต้องตามประกาศ'
-                        },
-                        {
-                            id: 'cc',
-                            name: 'ไม่ถููกต้องตามประกาศ'
-                        },
-                        {
-                            id: 'oc',
-                            name: 'เอกสารเกินกำหนด'
-                        }
-                    ]
-                },
-                data:{
-                    type: Array,
-                    value:
-                        {
-                            month : '',
-                            company: 'กรุงเทพสตาชอินดาสเทรี่ยล',
-                            type_rice11 :'1',
-                            type_rice12 : '2',
-                            type_rice21 : '3',
-                            type_rice22 : '4',
-                            type_rice31 : '5',
-                            type_rice32 : '6'
-                        }
                 }
             },
             getData:function(){
-                this.data = [
-                    {
-                        "month":"มกราคม",
-                        "company":"กรุงเทพสตาชอินดาสเทรี่ยล",
-                        "type_rice11":"100.12",
-                        "type_rice12":"100.12",
-                        "type_rice21":"100.12",
-                        "type_rice22":"100.12",
-                        "type_rice31":"100.12",
-                        "type_rice32":"100.12",
-                        "type_rice41":"300.37",
-                        "type_rice42":"300.37"
-                    },
-                    {
-                        month : this.data.month,
-                        company: 'บริษัท พงษ์ลาภ จำกัด',
-                        type_rice11 : this.data.type_rice11,
-                        type_rice12 : this.data.type_rice12,
-                        type_rice21 : this.data.type_rice21,
-                        type_rice22 : this.data.type_rice22,
-                        type_rice31 : this.data.type_rice31,
-                        type_rice32 : this.data.type_rice32,
-                        type_rice41 : "300.37",
-                        type_rice42 : "300.37"
-                    }
-                ];
-                this.fire('save-data',this.data)
+                console.log('xx:: '+listEu);
+                // this.data = [
+
+                // ]
+                //this.fire('save-data',this.data);
             }
         });
     </script>
