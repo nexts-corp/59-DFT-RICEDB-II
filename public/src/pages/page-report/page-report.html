@@ -160,7 +160,7 @@ input:checked + label {
                 <report-panel data="{{dataSelect}}"></report-panel>
         </panel-right>-->
         <panel-right title="นำเข้ารายงานการส่งออกข้าวไปสหภาพยุโรป">
-            <report-panel2 year="{{getYear}}" company="{{getCom}}" rice="{{getRice}}" on-save-data="_getData" datas="{{data}}"></report-panel2>
+            <report-panel2 year="{{getYear}}" company="{{getCom}}" rice="{{getRice}}" on-save-data="saveData" datas="{{data}}"></report-panel2>
         </panel-right>
     </template>
     <script>
@@ -181,7 +181,9 @@ input:checked + label {
             fnyear: function(){
                 axios.get('./common/year')
                 .then((response)=>{
-                    this.getYear = response.data;
+                    this.getYear = response.data.map((item)=>{
+                        return item.toString();
+                    });
                 })
                 .catch((error)=>{
                     console.log("error");
@@ -225,9 +227,25 @@ input:checked + label {
             _toggleDrawer: function(e) {
                 this.$$('panel-right').open();
             },
-            _getData:function(e){
-                this.getData = e.detail;
-                this.$$('panel-right').close();
+            saveData:function(e){
+                console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                axios.post('/report/report',e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    console.log(response);
+                    this.fire('toast',{
+                        status:'success',
+                        text:'บันทึกสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });
             },
             getValue:function(year,com,rice){
                 this.data = {

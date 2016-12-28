@@ -106,7 +106,7 @@
 								</tr>
                                 </thead>
                                 <tbody>
-								<template is="dom-repeat" items="{{Period}}">
+								<template is="dom-repeat" items="{{quantity}}">
 									<tr>
 										<td>งวดที่ : {{getIndex(index)}}</td>
                                         <td>
@@ -188,15 +188,15 @@
             behaviors: [
                 FormatNumberBehavior,
                 MonthBehavior
-                ],
-               properties: {
-                Period: {
-                type: Array,
-                value: []
+            ],
+            properties: {
+                quantity: {
+                    type: Array,
+                    value: []
                 },
                 year:{
-                type: String,
-                value: '2559'
+                    type: String,
+                    value: '2559'
                 },
                 data:{
                     type: Object,
@@ -204,6 +204,8 @@
                 }
             },
             ready:function(){
+                document.xxx = this;
+                console.log(this.quantity,'c')
                 this._getTypeRice();
                 this.period = 1;
             },
@@ -212,7 +214,8 @@
                 return parseInt(index)+1;
             },
             _addPeriod:function(){
-                this.push('Period',{period:this.period,percent:'',weigth:''});
+                console.log(this.quantity);
+                this.push('quantity',{period:this.period,percent:'',weigth:''});
             },
             _confirmDelPeriod:function(e){
                 this.fire('toast',{
@@ -226,7 +229,7 @@
             _delPeriod:function(resalut,detail){
                 console.log(resalut,detail.data);
                 if(resalut==true){
-                    detail.el.splice('Period', detail.el.Period.indexOf(detail.data),1);
+                    detail.el.splice('quantity', detail.el.quantity.indexOf(detail.data),1);
                 }
             },
             _mathProportion:function(percent,item){
@@ -265,8 +268,8 @@
                 };
                 if(stat.every(chkStat) == true){
                     var sum =  this.$$('#sum').value;            
-                    this.Period.map((data,i)=>{
-                    this.set('Period.'+ i +'.weigth',(parseFloat(this.unFormat(sum))*parseFloat(data.percent))/100);
+                    this.quantity.map((data,i)=>{
+                    this.set('quantity.'+ i +'.weigth',(parseFloat(this.unFormat(sum))*parseFloat(data.percent))/100);
                 })
                 }
               
@@ -278,7 +281,7 @@
                 var chkStat = function(stat){
                     return stat == true
                 };
-                if(this.Period == ""){
+                if(this.quantity == ""){
                     this.fire('toast',
                         {
                             status:'connectError',
@@ -292,21 +295,22 @@
                     var datas = {
                         year:parseInt(this.year),
                         amount:parseInt(this.unFormat(amount)),
-                        quantity:this.Period,
-                        type_rice_id:this.typeRice,
-                        
+                        quantity:this.quantity,
+                        type_rice_id:this.typeRice,   
                     }
                    
                     var num = 0;
-                    this.Period.map((item)=>{
+                    this.quantity.map((item)=>{
                         num += item.percent;
                     });
                     if(num == 100){
-                         console.log(datas);
                         if(this.status == 'post')
                             this.fire('post-data',datas); 
-                        else if (this.status == 'update')
+                        else if (this.status == 'update'){
+                            datas.id = this.data.quota_id;
                             this.fire('put-data',datas); 
+                        }
+                            
                     }
                     else {
                         this.fire('toast',
@@ -337,7 +341,8 @@
                 Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
                     item.reset();
                 });
-                this.Period = data.period;
+                console.log(data);
+                this.quantity = data.quantity;
                 this.year = data.year;
                 this.sum = data.amount;
                 this.typeRice = data.type_rice_id;
@@ -357,10 +362,7 @@
             _deleteData:function(){
                 // console.log(this.$$('gl-combo-box').value);
                 if(this.$$('gl-combo-box').value != ''){
-                    data = {
-                        year : this.year,
-                        type_rice_id : this.typeRice
-                    }
+                    data = this.data.quota_id;
                     this.fire('delete-data',data);
                 }
                 else {

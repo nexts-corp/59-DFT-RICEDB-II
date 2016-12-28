@@ -84,7 +84,7 @@
 
 			<div class="layout horizontal">
         <div class="container flex-equal-justified">
-          <div> <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box></div>
+          <div> <gl-combo-box label="แสดงข้อมูลรายปี" items="{{quotaYear}}" value="{{selectYear}}"></gl-combo-box></div>
           <div>	<paper-button raised class="font gl-btn-primary" on-tap="_insertData" id="addRedRegExporter">
           <iron-icon icon="add"></iron-icon> เพิ่มโควตา</paper-button></div>
         </div>
@@ -119,9 +119,6 @@
           sendYear:{
             type: Object
           },
-          getYear:{
-            type: Object
-          },
           result: {
               type: Object,
               observer: '_result'
@@ -136,7 +133,6 @@
       },
       attached: function(){
         this.layerContent = "addRedRegExporter";
-        this.testAxios();
         //this.textToast = 'โหลดข้อมูลสำเร็จ';
 
 
@@ -151,7 +147,7 @@
       _insertData:function(){
           this.dataSelect = {
             amount:'',
-            period:[],
+            quantity:[],
             type_rice_id:'',
             year:''
           }
@@ -169,11 +165,13 @@
           //console.log(this.sendData);
         },
         _getYear:function(){
-          axios.get('./eu/quota/year')
+          axios.get('./common/year')
           .then((response)=>{
             //console.log("success");
-            this.getYear = response.data;
-            //console.log(this.getYear);
+              this.quotaYear = response.data.map(item=>{
+              return item.toString();
+            });
+            console.log(this.quotaYear);
           })
           .catch((error)=>{
             console.log("error");
@@ -185,7 +183,7 @@
         },
         _getDatalist:function(year){
           this.fire('toast',{status:'load'});
-          axios.get('./eu/quota?id='+year)
+          axios.get('./quota/quota/'+year)
           .then((response)=>{
             console.log("success!!");
             //this.fire('toast',{status:'loadSuccess'});
@@ -210,7 +208,7 @@
         _yearChanged:function(val){
           if(val != ''){
             this._getDatalist(val);
-            this.sendYear = val;
+            // this.sendYear = val;
           }
         },
         _postData:function(e){
@@ -221,8 +219,8 @@
             console.log("success");
             this.textToast = 'บันทึกข้อมูลสำเร็จ';
             console.log(response);
-            // this._getYear();
-            // this._getDatalist(this.selectYear);
+            this._getYear();
+            this._getDatalist(this.selectYear);
           })
           .catch((error)=>{
           console.log("error");
@@ -230,9 +228,9 @@
           });
         },
         _putData:function(e){
-         //console.log('put-data: ',e.detail);
+         console.log('put-data: ',e.detail);
          this.fire('toast',{status:'load'});
-          axios.put('/eu/quota',e.detail)
+          axios.put('/quota/quota',e.detail)
           .then((response)=>{
             console.log("success");
             this.textToast = 'แก้ไขข้อมูลสำเร็จ';
@@ -264,12 +262,7 @@
           var data = detail.data;
           if(result == true){
               //this.fire('toast',{status:'load'});
-              axios.delete('/eu/quota',{
-              params:{
-                id : data.year,
-                type_rice_id : data.type_rice_id
-              }
-              })
+              axios.delete('/quota/quota/'+data)
               .then((response)=>{
                 console.log("success");
                 this.textToast = 'ลบข้อมูลสำเร็จ';
@@ -298,22 +291,22 @@
            data.year = this.selectYear;
            this.dataSelect = data;
            console.log('dataSelect',this.dataSelect);
-        },
-        testAxios:function(){
-          axios.delete('http://192.168.10.124:3000/api/quota/quota')
-          .then((response)=>{
-            console.log("success : ",response);
-            // this.getYear = response.data;
-            //console.log(this.getYear);
-          })
-          .catch((error)=>{
-            console.log("error");
-            console.log(error.message);
-            this.fire('toast',{status:'connectError',text:error.message,
-              callback:function(){
-              }})
-          });
         }
+        // testAxios:function(){
+        //   axios.delete('http://192.168.10.124:3000/api/quota/quota')
+        //   .then((response)=>{
+        //     console.log("success : ",response);
+        //     // this.getYear = response.data;
+        //     //console.log(this.getYear);
+        //   })
+        //   .catch((error)=>{
+        //     console.log("error");
+        //     console.log(error.message);
+        //     this.fire('toast',{status:'connectError',text:error.message,
+        //       callback:function(){
+        //       }})
+        //   });
+        // }
     });
   </script>
 </dom-module>

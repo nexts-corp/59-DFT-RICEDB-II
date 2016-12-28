@@ -52,17 +52,17 @@
                       error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
                  </gl-grid-col>
                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                      <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{data.month}}"
+                      <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{month}}"
                       error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
                  </gl-grid-col>
                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-combo-box class="saveData" label="ปี" items="{{year}}" value="{{year}}"
+                    <gl-combo-box class="saveData" label="ปี" items="{{year}}" value="{{getyear}}"
                       error-message="กรุณาเลือกปี" required></gl-combo-box>
                  </gl-grid-col>
                 </gl-grid-row>
                 <gl-grid-row width="{{getWidth}}">
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{company}}" value="{{xcompany}}"
+                    <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{company}}" value="{{getCompany}}"
                       error-message="กรุณาเลือกบริษัท" item-label-path="name" item-value-path="id" required></gl-combo-box>
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -77,13 +77,13 @@
                     </gl-form-dropdown-menu>-->
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{rice}}" value="{{r}}"
+                        <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{rice}}" value="{{getTypeRice}}"
                         error-message="กรุณาเลือกประเภทข้าว" item-label-path="type_rice_name_th" item-value-path="id" required></gl-combo-box>
                 </gl-grid-col>
                 </gl-grid-row>
                 <gl-grid-row width="{{getWidth}}">
                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-form-input label="ปริมาณการส่งออก" format-number="on"></gl-form-input>
+                        <gl-form-input label="ปริมาณการส่งออก" format-number="on" value="{{getWeigth}}"></gl-form-input>
                    </gl-grid-col>
                 </gl-grid-row>
      
@@ -147,32 +147,16 @@
                 }
             },
             getData:function(){
-                this.data = [
-                    {
-                        "month":"มกราคม",
-                        "company":"กรุงเทพสตาชอินดาสเทรี่ยล",
-                        "type_rice11":"100.12",
-                        "type_rice12":"100.12",
-                        "type_rice21":"100.12",
-                        "type_rice22":"100.12",
-                        "type_rice31":"100.12",
-                        "type_rice32":"100.12",
-                        "type_rice41":"300.37",
-                        "type_rice42":"300.37"
-                    },
-                    {
-                        month : this.data.month,
-                        company: 'บริษัท พงษ์ลาภ จำกัด',
-                        type_rice11 : this.data.type_rice11,
-                        type_rice12 : this.data.type_rice12,
-                        type_rice21 : this.data.type_rice21,
-                        type_rice22 : this.data.type_rice22,
-                        type_rice31 : this.data.type_rice31,
-                        type_rice32 : this.data.type_rice32,
-                        type_rice41 : "300.37",
-                        type_rice42 : "300.37"
-                    }
-                ];
+                this.data = {
+                    quota : this.listEuValue,
+                    month : parseInt(this.month),
+                    year : parseInt(this.getyear),
+                    exporter_id : this.getCompany,
+                    type_doc : this.checkDocValue,
+                    type_rice_id: this.getTypeRice,
+                    weigth : parseInt(this.getWeigth)
+                }
+                // console.log(this.data);
                 this.fire('save-data',this.data)
             }
         });
