@@ -44,7 +44,8 @@ class index{
             }).without('id')
             .merge(function(x){
                 return {
-                    type_doc_th: r.branch( x('type_doc').eq('c'), 'ถูกต้อง', x('type_doc').eq('ic'), 'ไม่ถูกต้อง', 'เกินกำหนด')
+                    type_doc_th: r.branch( x('type_doc').eq('c'), 'ถูกต้อง', x('type_doc').eq('ic'), 'ไม่ถูกต้อง', 'เกินกำหนด'),
+                    sid : x('id')
                 }
             })
             .innerJoin(r.db('eu2').table('exporter'), function(x,xx) {
