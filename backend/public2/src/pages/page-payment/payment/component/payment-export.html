@@ -90,7 +90,7 @@
           <th><div class="text-right">จำนวนเงิน(บาท)</div></th>
           <th></th>
           <th><div class="text-center">วันที่จ่ายเงิน</div></th>
-          <th></th>
+          <th><div class="text-center">เลขที่เช็ค</div></th>
           <th><div class="text-center">สถานะ</div></th>
         </tr>
       </thead>
@@ -103,7 +103,7 @@
               <td><div class="text-right">[[formatNumber(datapay.amount_thb_balance)]]</div></td>
               <td></td>
               <td><div class="text-center">[[datapay.pay_date]]</div></td>
-              <td></td>
+              <td><div class="text-center">[[datapay.pay_no]]</div></td>
               <td hidden="{{!datapay.pay_status}}"><div class="text-center">จ่ายเช็คแล้ว</div></td>
               <td hidden="{{datapay.pay_status}}">
                   <paper-button data={{datapay}} class="gl-btn-success button-size" raised on-tap="_pay" icon="favorite">จ่ายเช็ค</paper-button>
@@ -230,10 +230,10 @@
         }
       },
       getExporter:function (exporter_id) {
-        console.log(exporter_id);
+        // console.log(exporter_id);
         this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
           this.dataForSelected.exporterDetail = data;
-          console.log(this.dataForSelected.exporterDetail);
+          // console.log(this.dataForSelected.exporterDetail);
           // console.log(this.dataForSelected);
           this.notifyPath('dataForSelected.exporterDetail');
           if (this.dataForSelected.exporterDetail != null) {
