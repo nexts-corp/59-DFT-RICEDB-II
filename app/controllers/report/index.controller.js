@@ -25,14 +25,13 @@ class index{
         var r = req._r;
         var params = req.query;
 
-        console.log(params.quota);
+        console.log(params.type_rice_id);
         if(typeof params.quota !== "undefined"){
             if(params.quota=='true'){
                 params.quota=true;
             }else{
                 params.quota=false;
             }
-            //params.quota = Boolean(params.quota);
             params.year = parseInt(params.year);
             params.month = parseInt(params.month);
         }
@@ -40,7 +39,8 @@ class index{
           r.db('eu2').table('report').filter({
                 year:params.year,
                 month:params.month,
-                quota:params.quota //ในโควต้า
+                quota:params.quota,
+                type_rice_id:params.type_rice_id
             })
             .merge(function(x){
                 return {
