@@ -17,7 +17,8 @@ class index{
                         year:year,
                         exporter_id:params.exporter_id,
                         amount:params['year_'+year],
-                        quantity:[{period:1,weigth:params['year_'+year]}]
+                        quantity:[{period:1,weigth:params['year_'+year]}],
+                        type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5'
                     }
                 )
             }
@@ -58,7 +59,8 @@ class index{
                         month:1,
                         type_doc:'c',
                         weigth:params['year_'+year],
-                        exporter_id:params.exporter_id
+                        exporter_id:params.exporter_id,
+                        type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5'
                     }
                 )
             }
