@@ -1,5 +1,7 @@
 
 <link rel="import" href="./../../components/month-behavior.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
+
 <dom-module id="report-panel2">
     <template>
         <style is="custom-style" include="gl-table gl-panel gl-color">
@@ -81,7 +83,7 @@
                 </gl-grid-row>
      
                 <div class="flex-end-justified" style="margin-top: 15px;">
-                    <paper-button raised on-tap="deleteData">Delete</paper-button>
+                    <paper-button raised on-tap="confirmData">Delete</paper-button>
                     <paper-button raised class="gl-btn-danger btn">ยกเลิก</paper-button>
                     <paper-button on-tap="getData" raised class="gl-btn-success btn">บันทึก</paper-button>
                 </div>
@@ -92,7 +94,8 @@
         Polymer({
             is: 'report-panel2',
             behaviors:[
-                MonthBehavior
+                MonthBehavior,
+                FormatNumberBehavior
             ],
             properties:{
                 listEu:{
@@ -143,7 +146,7 @@
                     exporter_id : this.getCompany,
                     type_doc : this.checkDocValue,
                     type_rice_id: this.getTypeRice,
-                    weigth : parseInt(this.getWeigth)
+                    weigth : this.unFormat(this.getWeigth)
                 }
                 // console.log(this.data);
                 if(this.status == 'post'){
@@ -177,10 +180,21 @@
                     this.getWeigth = this.data.weigth.toString();
                 }
             },
-            deleteData:function(){
-                console.log(this.data);
-                console.log(this.data.id);
-                this.fire('delete-data',this.data.id);
+            confirmData:function(){
+                this.fire('toast',{
+                    status:'openDialog',
+                    text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+                    confirmed:this.deleteData.bind(this),
+                    data:this.data.id
+                }) 
+               
+            },
+            deleteData:function(result,detail){
+                var data = detail.data;
+                // console.log(data);
+                if(result == true){
+                     this.fire('delete-data',data);
+                }
             }
         });
     </script>

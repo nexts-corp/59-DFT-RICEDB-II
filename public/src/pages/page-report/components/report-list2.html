@@ -1,4 +1,6 @@
 
+<link rel="import" href="./../../components/format-number-behavior.html">
+
 <dom-module id="report-list2">
     <template>
     <style is="custom-style" include="gl-table">
@@ -34,8 +36,8 @@
                 <tr on-tap="_selectData" data="{{item}}">
                     <td>{{getIndex(index)}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.weigth}}</td>
-                    <td>{{item.type_doc}}</td>
+                    <td>[[formatNumber(item.weigth)]]</td>
+                    <td>{{item.type_doc_th}}</td>
                 </tr>
             </template>    
         </tbody>
@@ -45,6 +47,7 @@
     <script>
         Polymer({
             is: 'report-list2',
+            behaviors:[FormatNumberBehavior],
             getIndex:function(index){
                 return index+1;
             },
