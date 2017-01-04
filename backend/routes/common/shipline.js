@@ -20,7 +20,7 @@ var schema = {
         },
         "shipline_tel": {
             "type": "string"
-        },
+        }
     },
     "required": ["shipline_name", "shipline_tel"]
 };
