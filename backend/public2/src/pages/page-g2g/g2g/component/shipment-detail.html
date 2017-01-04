@@ -92,8 +92,8 @@
              </gl-grid-col>
            </gl-grid-row>
             <div class="buttons">
-              <paper-button class="gl-btn-defalse" on-tap="backPageShipmentDetail" raised>ปิด</paper-button>
-               <paper-button  class="gl-btn-primary" on-tap="addShimpent" dialog-confirm autofocus raised>ออกรายงาน</paper-button>
+              <paper-button class="gl-btn-defalse" dialog-confirm raised>ปิด</paper-button>
+               <paper-button  class="gl-btn-primary" on-tap="printShipmentReports" dialog-confirm autofocus raised>ออกรายงาน</paper-button>
               <!-- <paper-button dialog-confirm autofocus>ออกรายงาน</paper-button> -->
 
             </div>
@@ -385,9 +385,9 @@
         // window.open('http://localhost:8080/api/report/report2?shm_id='+this.data.shm_id,'2');
         // window.open('http://localhost:8080/api/report/report3?shm_id='+this.data.shm_id,'3');
       },
-      printShipment:function () {
-        
-        this.$.printShipmentReport.toggle();
+      printShipmentReports:function () {
+        window.open('http://localhost:8080/api/report/report1?shm_id='+this.data.shm_id+'&ori='+this.printReport.ori+'&nn='+this.printReport.nn,'1');
+        window.open('http://localhost:8080/api/report/report2?shm_id='+this.data.shm_id+'&ori='+this.printReport.ori+'&nn='+this.printReport.nn,'2');
       },
       calcelShipmentIn:function () {
 
