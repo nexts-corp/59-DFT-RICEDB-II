@@ -57,9 +57,9 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
-            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","date_created","date_updated"] }).zip()
-            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id","date_created","date_updated"] }).zip()
-            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -105,7 +105,7 @@ router.get('/id/:trader_id', function (req, res, next) {
 router.get('/seller', function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("trader")
-            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id","date_created","date_updated"] }).zip()
+            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             //.eqJoin("exporter_id", r.db('external_f3').table("exporter")).not()
             // ,function(t,e){
             //     return t("exporter_id").eq(e("id"));
@@ -163,7 +163,7 @@ router.put('/update', function (req, res, next) {
     }
 });
 router.delete('/delete/id/:id', function (req, res, next) {
-   datacontext.delete("external_f3", "exporter", req.params.id, res);
+    datacontext.delete("external_f3", "trader", req.params.id, res);
 });
 module.exports = router;
 
