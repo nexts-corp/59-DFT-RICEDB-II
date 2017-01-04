@@ -216,7 +216,7 @@
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                     <div class="layout horizontal">
                         <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}"
-                            value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                         item-label-path="ordinal" item-value-path="ordinal" value="{{selectQuotaOrdinal}}"></gl-combo-box>
                     </div>
                     <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                             <paper-listbox class="dropdown-content">
@@ -232,17 +232,11 @@
             <gl-grid-row>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-combo-box class="saveData" label="ชื่อบริษัท" items="[[companyName]]" value="" item-label-path="type_rice_name_th" item-value-path="id"
+                    <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{getQuotaOrdinal}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
                         error-message="กรุณาเลือกบริษัท" required></gl-combo-box>
-                    <!--<gl-form-dropdown-menu label="ชื่อบริษัท">
-                            <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{selectName}}">
-                                <paper-item name="1">กมลกิจ บจก.</paper-item>
-                                <paper-item name="2">กรุงเทพค้าข้าว บจก.</paper-item>
-                            </paper-listbox>
-                        </gl-form-dropdown-menu>-->
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                    <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>{{btnName}}</paper-button>
+                    <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>ค้นหา</paper-button>
 </gl-grid-col>
 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
 </gl-grid-row>
@@ -272,7 +266,8 @@
                     </tr>
                 </thead>
                  <tbody>
-                     <td class="left" colspan="5">ไม่พบข้อมูล</td>
+                     <td class="left" colspan="5">ไม่พบข้อมูล 
+                     </td>
                  </tbody>
              </table>
              </div>
@@ -287,32 +282,7 @@
         </section>
         </template>
     </main>
-    <!--  -->
-
-
-    <!--<div class="panelHead">
-                <div>สรุปผลการยืนยันปริมาณจัดสรร</div>
-                <paper-tabs selected="{{pageSelected}}">
-                    <paper-tab>ยืนยันแล้ว</paper-tab>
-                    <paper-tab>ยังไม่ยืนยัน</paper-tab>
-                </paper-tabs>
-            </div>
-            <div class="panelBody">
-            <div class="flex searchBorder">
-                <div style="overflow-x:auto;">
-                    
-                    <iron-pages selected="{{pageSelected}}">
-                        <section>
-                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
-                        </section>
-                        <section>
-                             <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="nonConfirm"></confirm-list>
-                        </section>
-                    </iron-pages>
-                   
-                </div>
-                </div>
-            </div>-->
+   
 </div>
 
 <panel-right title="ยืนยันรับส่วนจัดสรร">
@@ -326,7 +296,6 @@
         is: "page-confirm",
         behaviors: [nylonBehavior],
         observers: [
-            '_chageCompanyName(selectName)',
             '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
         ],
         properties: {
@@ -459,7 +428,7 @@
             this.statusSelect = e.detail.status;
         },
         _getYear: function () {
-            axios.get('./eu/quota/year')
+            axios.get('./common/year')
                 .then((response) => {
                     console.log("success");
                     this.getYear = response.data;
@@ -477,7 +446,7 @@
                 });
         },
         _getTypeRice: function () {
-            axios.get('./eu/type_rice/')
+            axios.get('./common/type_rice')
                 .then((response) => {
                     //console.log("success!!");
                     console.log(response.data);
@@ -490,14 +459,32 @@
         },
         _getDataCompanny:function(){
             // this.$$('confirm-list')._setData();
-             this.dataCheck = false;
-                this.dataStat = true;
+            console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
+             axios.get('./confirm/confirmall', {
+                params: {
+                    year: this.selectYear,
+                    type_rice_id: this.typeRice,
+                    ordinal:this.selectQuotaOrdinal,
+                    exporter_id:this.selectExporter
+                }
+            })
+            .then((response) => {
+                console.log("success!!");
+                console.log(response.data);
+                // this.getQuotaOrdinal = response.data;
+            })
+            .catch((error) => {
+                console.log("error");
+                console.log(error);
+            });
+
         },
         _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
+            // console.log(yearQuoata,typeRice);
             this.selectQuotaOrdinal = "";
-            axios.get('./eu/allocate/quota_ordinal', {
+            axios.get('./confirm/confirm', {
                 params: {
-                    quota_id: yearQuoata,
+                    year: yearQuoata,
                     type_rice_id: typeRice
                 }
             })
