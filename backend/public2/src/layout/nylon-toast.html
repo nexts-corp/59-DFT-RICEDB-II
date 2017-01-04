@@ -17,8 +17,8 @@
             color: white;
         }
 	    .toastLoading>span{
-			padding-left:10px; 
-			position:relative; 
+			padding-left:10px;
+			position:relative;
 			bottom: 6px;
 		}
 		.toastSuccess{
@@ -69,10 +69,10 @@
         <paper-toast class="toastLoading" id="toastLoading" positionTarget duration="0" text="">
                 <paper-spinner active></paper-spinner>
                 <span>
-                    กำลังโหลด... 
+                    กำลังโหลด...
                 </span>
         </paper-toast>
-		
+
 		<paper-toast class="toastDialog" id="toastDialog" duration="0">
 			<span>{{status.content}}</span>
 			<div style="padding: 10px 20px 10px 20px;">
@@ -114,7 +114,7 @@
 				}
 				if(e.detail.status == 'success'){
 					this.closeToastLoading(e.detail.callback);
-					console.log(e.detail.text);
+					// console.log(e.detail.text);
 					//Polymer.dom(this.root).setAttribute('class', 'toastSuccess')
 					this.status = {
 						class : 'toastSuccess',
@@ -123,7 +123,7 @@
 					}
 				}
 				if(e.detail.status == 'connectError'){
-					console.log(e.detail.text);
+					// console.log(e.detail.text);
 					this.status = {
 						content : e.detail.text
 					}
@@ -144,7 +144,7 @@
             },
             closeToastLoading:function(callback){
                 this.async(function(){
-					console.log('async');
+					// console.log('async');
                     this.$.toastLoading.hide();
 					this.openToastStatus();
 					callback();
@@ -153,10 +153,10 @@
 			openToastDialog:function(detail){
 				this.$.toastDialog.open();
 				this.detailToastDialog = detail;
-				
+
 			},
 			resultToastDialog:function(e){
-				
+
 				var result = true;
 				if(e.currentTarget.getAttribute('confirm')==null){
 					result = false;

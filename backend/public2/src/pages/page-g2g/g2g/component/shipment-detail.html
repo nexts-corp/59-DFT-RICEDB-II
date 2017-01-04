@@ -80,6 +80,24 @@
             <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
             <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
           </template>
+          <paper-dialog id="printShipmentReport">
+            <gl-grid-row width="{{getWidth}}">
+             <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,3]]">
+               [[changeString2Num(printReport.*,'ori')]]
+               <gl-form-input allowed-pattern="[0-9||,||.]" label="ORIGINALS" autofocus maxlength="3" format-number="on"  always-float-label placeholder="ORIGINALS" value="{{printReport.ori}}"></gl-form-input>
+             </gl-grid-col>
+             <gl-grid-col width="[[getWidth]]" grid="[[500,6],[700,8]]">
+               [[changeString2Num(printReport.*,'nn')]]
+               <gl-form-input allowed-pattern="[0-9||,||.]" label="N/N"  maxlength="3" format-number="on" always-float-label placeholder="N/N" value="{{printReport.nn}}"></gl-form-input>
+             </gl-grid-col>
+           </gl-grid-row>
+            <div class="buttons">
+              <paper-button class="gl-btn-defalse" on-tap="backPageShipmentDetail" raised>ปิด</paper-button>
+               <paper-button  class="gl-btn-primary" on-tap="addShimpent" dialog-confirm autofocus raised>ออกรายงาน</paper-button>
+              <!-- <paper-button dialog-confirm autofocus>ออกรายงาน</paper-button> -->
+
+            </div>
+          </paper-dialog>
       <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
         <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
 
@@ -114,7 +132,7 @@
          <div class="horizontal end-justified layout">
            <paper-button class="gl-btn-defalse" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
            <!-- <paper-button class="gl-btn-danger" on-tap="calcelContract" raised >ยกเลิก</paper-button> -->
-           <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>เพิ่ม</paper-button>
+           <paper-button  class="gl-btn-primary" on-tap="ยพรื" raised>เพิ่ม</paper-button>
          </div>
        </template>
      </template>
@@ -295,6 +313,10 @@
         dataSelected:{
           type:Object,
         },
+        printReport:{
+          type:Object,
+          value:{ori:1,nn:1}
+        }
 
       },
       check:function (data) {
@@ -357,9 +379,15 @@
       printShipment:function () {
         // console.log('shm_id=>',this.data.shm_id);
         // this.fire('nylon-change-page',{path:'/report6?'})
-        window.open('http://localhost:8080/api/report/report1?shm_id='+this.data.shm_id,'1');
-        window.open('http://localhost:8080/api/report/report2?shm_id='+this.data.shm_id,'2');
+
+        this.$.printShipmentReport.toggle();
+        // window.open('http://localhost:8080/api/report/report1?shm_id='+this.data.shm_id,'1');
+        // window.open('http://localhost:8080/api/report/report2?shm_id='+this.data.shm_id,'2');
         // window.open('http://localhost:8080/api/report/report3?shm_id='+this.data.shm_id,'3');
+      },
+      printShipment:function () {
+        
+        this.$.printShipmentReport.toggle();
       },
       calcelShipmentIn:function () {
 

@@ -74,6 +74,10 @@
                             name: 'การนำจ่ายเงิน',
                             path: '/payment'
                         },
+                        {
+                            name:'สถิติ',
+                            path:'/stats'
+                        }
                     ]
                 },
                 sendElement:{
@@ -83,26 +87,26 @@
             },
 
             selectPage:function(e){
-              console.log(1111);
+              // console.log(1111);
                 if((('/'+this.path) != e.currentTarget.getAttribute('path')) && (e.currentTarget.getAttribute('path')!='')){
                     this.set('listMenu.'+e.currentTarget.index+'.loading',true);
                     if(!this.sendElement){
-                      console.log('send-element-layout-main-drawer');
+                      // console.log('send-element-layout-main-drawer');
                         this.fire('send-element-layout-main-drawer',this);
                         this.sendElement = true;
                     }
-                    console.log('path');
+                    // console.log('path');
                     this.fire('nylon-change-page',{
                         path:e.currentTarget.getAttribute('path')
                     });
                 }else{
-                  console.log('start');
+                  // console.log('start');
                     this.fire('toggle-drawer');
                 }
 
             },
             _loaded:function(){
-              console.log('fin');
+              // console.log('fin');
                 this.async(()=>{
                     this.listMenu.map((item,i)=>{
                         this.set('listMenu.'+i+'.loading',false);
