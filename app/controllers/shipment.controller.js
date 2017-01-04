@@ -2,11 +2,10 @@ exports.report1 = function (req, res, next) {
     var r = req._r;
     //res.json(__dirname.replace('controller','report'));
     var parameters = {
-        department: "2559",
-        SUBREPORT_DIR: __dirname.replace('controller','report')+'\\'
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\'
     };
 
-     r.db('g2g').table('shipment')
+    r.db('g2g').table('shipment')
         .get(req.query.shm_id)
         .merge(function (row) {
             return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'inct_id')
@@ -221,7 +220,7 @@ exports.report2 = function (req, res, next) {
     var parameters = {
         origin_page: req.query.ori,
         nn_page: req.query.nn,
-        SUBREPORT_DIR: __dirname.replace('controller','report')+'\\'
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\'
     };
 
     r.db('g2g').table('shipment')
@@ -410,4 +409,75 @@ exports.report2 = function (req, res, next) {
             //res.json(result);
             res._ireport("report2.jasper", "pdf", result, parameters);
         });
+}
+
+exports.report3 = function (req, res, next) {
+    var r = req._r;
+    //res.json(__dirname.replace('controller','report'));
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\'
+    };
+
+    r.db('g2g').table('shipment_detail')
+        .getAll(req.query.shm_id, { index: 'shm_id' })
+        .coerceTo('array')
+        .without('id', 'date_created', 'date_updated', 'creater', 'updater')
+        .eqJoin('shm_id', r.db('g2g').table('shipment')).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater'] }).zip()
+        .group(function (g) {
+            return g.pluck('book_id', 'exporter_id', 'shm_id', 'shm_no', 'contract_id')
+        })
+        .sum('shm_det_quantity')
+        .ungroup()
+        .merge(function (m) {
+            return {
+                book_id: m('group')('book_id'),
+                exporter_id: m('group')('exporter_id'),
+                shm_id: m('group')('shm_id'),
+                shm_no: m('group')('shm_no'),
+                contract_id: m('group')('contract_id'),
+                weight_me: m('reduction'),
+                weight_all: r.db('g2g').table('shipment_detail')
+                    .getAll(m('group')('book_id'), { index: 'book_id' })
+                    .sum('shm_det_quantity')
+            }
+        })
+        .without('group', 'reduction')
+        .eqJoin('contract_id', r.db('g2g').table('contract')).pluck({ "right": ['buyer_id'] }, "left").zip()
+        .eqJoin('buyer_id', r.db('common').table('buyer')).pluck({ "right": ['country_id'] }, "left").zip()
+        .eqJoin('country_id', r.db('common').table('country')).pluck({ "right": ['country_fullname_th'] }, "left").zip()
+        .eqJoin('book_id', r.db('g2g').table('book')).pluck({ "right": ['dest_port_id', 'ship', 'ship_lot_no'] }, "left").zip()
+        .eqJoin('dest_port_id', r.db('common').table('port')).pluck({ "right": ['port_name'] }, "left").zip()
+        .merge(function (m) {
+            return {
+                ship_count: m('ship').count(),
+                ship: m('ship')
+                    .merge(function (m1) {
+                        return r.db('common').table('ship').get(m1('ship_id')).pluck('ship_name')
+                    }).without('ship_id')
+                    .map(function (m1) {
+                        return m1('ship_name').add(" V.").add(m1('ship_voy_no'))
+                    })
+                    .reduce(function (l, r) {
+                        return r.add("/ ").add(l)
+                    }),
+                exporter: r.db('external_f3').table('exporter').get(m('exporter_id')).getField('trader_id')
+                    .do(function (d1) {
+                        return r.db('external_f3').table('trader').get(d1).getField('seller_id')
+                            .do(function (d2) {
+                                return r.db('external_f3').table('seller').get(d2).getField('seller_name_th')
+                            })
+                    })
+            }
+        })
+        .orderBy([r.row('exporter'), r.row('ship_lot_no').coerceTo('number')])
+        .run()
+        .then(function (result) {
+            //res.json(result)
+            res._ireport("report3.jasper", "pdf", result, parameters);
+        })
+        .error(function (err) {
+            res.json(err)
+        })
+
 }

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report3" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="03566586-1cd4-40da-a543-9ba8be19ecfd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CURRENT_DATE" class="java.lang.String"/>
+	<field name="country_fullname_th" class="java.lang.String"/>
+	<field name="shm_no" class="java.lang.Integer"/>
+	<field name="exporter" class="java.lang.String"/>
+	<field name="ship_lot_no" class="java.lang.String"/>
+	<field name="ship_count" class="java.lang.Integer"/>
+	<field name="weight_all" class="java.lang.Float"/>
+	<field name="ship" class="java.lang.String"/>
+	<field name="weight_me" class="java.lang.Float"/>
+	<field name="port_name" class="java.lang.String"/>
+	<group name="GROUP" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{ship_lot_no}+$F{exporter}+$F{ship}]]></groupExpression>
+	</group>
+	<pageHeader>
+		<band height="149">
+			<staticText>
+				<reportElement x="440" y="27" width="115" height="77" uuid="662cf6d7-8324-486c-994e-b7336d69d8c5"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[กองบริหารการค้าข้าว
+กรมการค้าต่างประเทศ
+๕๖๓ ถ.นนทบุรี
+อ.เมือง จ.นนทบุรี ๑๑๐๐๐]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="27" width="115" height="20" uuid="e1aec8df-d36e-43a8-86de-f2238341f19a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ที่ พณ ๐๓๐๕/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="124" width="40" height="25" uuid="dd666955-abee-46af-80d1-209362158008"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[เรื่อง]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="124" width="515" height="25" uuid="151a6491-b22d-4ef2-ac2f-c55ec23eda13"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["การส่งมอบข้าวรัฐบาล"+$F{country_fullname_th}+" งวดที่ "+
+new nylon.utility.NumberFormat().toThaiNumber($F{shm_no})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="104" width="263" height="20" uuid="89a90afd-4375-423a-bcd8-974d43c4ead5"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(
+    new nylon.utility.NumberFormat().toDateThai($P{CURRENT_DATE})
+).split(" ")[1]
++" "+
+new nylon.utility.NumberFormat().toThaiNumber(
+    new nylon.utility.NumberFormat().toDateThai($P{CURRENT_DATE})
+).split(" ")[2]]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="200" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="25" uuid="37824e64-7027-4eb4-9093-196f8cf6d78d"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[เรียน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="25" width="40" height="25" uuid="2017ce72-5e40-4b52-aac8-41ef46528b58"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[อ้างถึง]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="50" width="70" height="25" uuid="37b334ad-c340-45ed-b268-ac600e576c93"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[สิ่งที่ส่งมาด้วย]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="0" width="515" height="25" uuid="eba9590a-28d0-49fa-a073-a7c48f782bed"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["กรรมการผู้จัดการ"+$F{exporter}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="25" width="515" height="25" uuid="0ffc2a67-1078-4baf-9460-a96c1f9f2f34"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["หนังสือกรมการค้าต่างประเทศ ด่วนที่สุด ที่ ๐๓๐๕/ ลงวันที่ "+
+new nylon.utility.NumberFormat().toThaiNumber(
+    new nylon.utility.NumberFormat().toDateThai($P{CURRENT_DATE})
+)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="50" width="485" height="25" uuid="c97555ae-5fdb-46f2-b36d-55a7bc2417e9"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$F{country_fullname_th}+
+" ("+new nylon.utility.NumberFormat().toThaiNumber($F{ship_lot_no})
++") จำนวน "+
+new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
++" ลำ"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="75" width="555" height="95" uuid="79fb06b6-1fdf-4a0c-8557-1406e040e29d"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\t\tตามหนังสือที่อ้างถึง กรมการค้าต่างประเทศได้แจ้งให้บริษัทฯ ส่งมอบข้าวรัฐบาล"+
+$F{country_fullname_th}+
+" โดยเรือ "+
+new nylon.utility.NumberFormat().toThaiNumber($F{ship_count})
++" ลำ ปริมาณ "+"ปริมาณ "+
+new nylon.utility.NumberFormat().toThaiNumber(
+    new nylon.utility.NumberFormat().toFormat($F{weight_all},"#,###.##")
+)
++" ตัน ความละเอียดแจ้งแล้ว นั้น"+
+"\n\t\tกองบริหารการค้าข้าว กรมการค้าต่างประเทศ ขอเรียนว่ารัฐบาล"+
+"ได้แจ้งชื่อเรือ "+
+new nylon.utility.NumberFormat().toThaiNumber($F{ship})
++" เข้ามารับมอบข้าว ปริมาณ "+
+new nylon.utility.NumberFormat().toThaiNumber(
+    new nylon.utility.NumberFormat().toFormat($F{weight_me},"#,###.##")
+)
++" ตัน ส่งไปเมืองท่า "+$F{port_name}+
+"\n\t\tโดยมีรายละเอียดตามสิ่งที่ส่งมาด้วย"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="292" y="170" width="115" height="30" uuid="2ea53d44-ba6b-4a71-9d1b-83dc5724cce0"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ขอแสดงความนับถือ]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="55" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="162" height="55" uuid="59122773-622c-4185-a659-7fb6800ea112"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[กลุ่มบริหารการค้าข้าวตามนโยบาย ๒
+โทร. ๐ ๒๕๔๗ ๕๑๓๖
+โทรสาร. ๐ ๒๕๔๗ ๔๘๒๑]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

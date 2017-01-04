@@ -10,5 +10,6 @@ module.exports = function (app) {
         .get(shipment.report1);
     app.route('/report2')
         .get(shipment.report2);
-
+    app.route('/report3')
+        .get(shipment.report3);
 }
