@@ -46,12 +46,17 @@ class index{
                 return {
                   quantity:right('quantity').merge(function(row){
                   return {
-                  percent:join('left')('quantity').filter({period:row('period')})(0)('percent')
+                  percent:join('left')('quantity').filter({period:row('period')})(0)('percent'),
+                  month:join('left')('quantity').filter({period:row('period')})(0)('month')
                   }
                 })
               }
             })
-          }).filter({
+          })
+         .innerJoin(r.db('eu2').table('exporter'), function(i,ii) {
+              return i('exporter_id') .eq(ii('id'))
+            }).zip()  
+          .filter({
             exporter_id:params.exporter_id,
             ordinal:params.ordinal,
             status:'nc'
@@ -61,22 +66,25 @@ class index{
         });
     }
 
-    selectconfirm(req,res){ // select confirm 
-        var r = req._r;
-        var params = req.query;
+    // selectconfirm(req,res){ // select confirm 
+    //     var r = req._r;
+    //     var params = req.query;
 
-        if(typeof params.year !== "undefined"){
-            params.year = parseInt(params.year);
-        }
-        r.db('eu2').table('confirm').filter({
-            year:params.year,
-            type_rice_id: params.type_rice_id,
-            exporter_id: exporter_id
-        })
-        .run().then(function(result){
-            res.json(result);
-        });
-    }
+    //     if(typeof params.year !== "undefined"){
+    //         params.year = parseInt(params.year);
+    //     }
+    //     r.db('eu2').table('confirm').filter({
+    //         year:params.year,
+    //         type_rice_id: params.type_rice_id,
+    //         exporter_id: exporter_id
+    //     })
+    //     .innerJoin(r.db('eu2').table('exporter'), function(x,xx){
+    //         return x('exporter_id') .eq(xx('id'))
+    //     })
+    //     .run().then(function(result){
+    //         res.json(result);
+    //     });
+    // }
 
 }
 
