@@ -459,8 +459,26 @@
         },
         _getDataCompanny:function(){
             // this.$$('confirm-list')._setData();
-            console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
+            // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
              axios.get('./confirm/confirmall', {
+                params: {
+                    year: this.selectYear,
+                    type_rice_id: this.typeRice,
+                    ordinal:this.selectQuotaOrdinal,
+                    exporter_id:this.selectExporter
+                }
+            })
+            .then((response) => {
+                console.log("success!!");
+                console.log(response.data);
+                // this.getQuotaOrdinal = response.data;
+            })
+            .catch((error) => {
+                console.log("error");
+                console.log(error);
+            });
+
+            axios.get('./confirm/confirmall', {
                 params: {
                     year: this.selectYear,
                     type_rice_id: this.typeRice,
