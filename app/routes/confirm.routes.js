@@ -1,5 +1,6 @@
 module.exports = function(app){
 var confirmIndexCtrl = require('../controllers/confirm/index.controller')
-    app.get('/confirm',confirmIndexCtrl.selectnotconfirm);  //get is select
-    app.get('/confirmall',confirmIndexCtrl.selectnotconfirm2);
+    app.get('/notconfirm',confirmIndexCtrl.selectnotconfirm);  //get is select
+    app.get('/notconfirmall',confirmIndexCtrl.selectnotconfirm2);
+    app.get('/confirm',confirmIndexCtrl.selectconfirm);
 }

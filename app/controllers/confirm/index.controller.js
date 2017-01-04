@@ -53,13 +53,31 @@ class index{
             })
           }).filter({
             exporter_id:params.exporter_id,
-            ordinal:params.ordinal
+            ordinal:params.ordinal,
+            status:'nc'
           })
         .run().then(function(result){
             res.json(result);
         });
     }
-    
+
+    selectconfirm(req,res){ // select confirm 
+        var r = req._r;
+        var params = req.query;
+
+        if(typeof params.year !== "undefined"){
+            params.year = parseInt(params.year);
+        }
+        r.db('eu2').table('confirm').filter({
+            year:params.year,
+            type_rice_id: params.type_rice_id,
+            exporter_id: exporter_id
+        })
+        .run().then(function(result){
+            res.json(result);
+        });
+    }
+
 }
 
 module.exports = new index();
