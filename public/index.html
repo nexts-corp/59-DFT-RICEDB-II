@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <title>Test APP</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="import" href="/src/test-app/test-app.html" async>
+  
+  <style>
+
+  </style>
+
+</head>
+<body>
+  
+
+
+ 
+  <script>
+    window.performance && performance.mark && performance.mark('index.html');
+    Polymer = {lazyRegister: true, dom: 'shadow'};
+    (function() {
+      if ('registerElement' in document
+          && 'import' in document.createElement('link')
+          && 'content' in document.createElement('template')) {
+        // platform is good!
+      } else {
+        // polyfill the platform!
+        var e = document.createElement('script');
+        e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+        document.body.appendChild(e);
+      }
+    })();
+
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }).catch(function(err) {
+          // registration failed :(
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      }
+  </script>
+
+  
+
+</body>
+</html>

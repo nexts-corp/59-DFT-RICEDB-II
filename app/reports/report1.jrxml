@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4832cfc8-4c63-4219-927a-9e6bcdb30af6">
+	<property name="ireport.zoom" value="0.9313819845887326"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<template><![CDATA["C:\\report\\StyleTemplate1.jrtx"]]></template>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\report\\app\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="country_fullname_th" class="java.lang.String"/>
+	<field name="shm_no" class="java.lang.String"/>
+	<field name="contract_year" class="java.lang.Number"/>
+	<field name="ship_lot_no" class="java.lang.String"/>
+	<field name="ship" class="java.lang.String"/>
+	<field name="cut_of_date" class="java.lang.String"/>
+	<field name="cut_of_time" class="java.lang.String"/>
+	<field name="load_port_name" class="java.lang.String"/>
+	<field name="shipline_name" class="java.lang.String"/>
+	<field name="shipline_tel" class="java.lang.String"/>
+	<field name="surveyor_name" class="java.lang.String"/>
+	<field name="book_no" class="java.lang.String"/>
+	<field name="type_rice" class="java.util.Collection"/>
+	<field name="buyer_masks" class="java.lang.String"/>
+	<field name="buyer_name" class="java.lang.String"/>
+	<field name="buyer_address" class="java.lang.String"/>
+	<field name="buyer_tel" class="java.lang.String"/>
+	<field name="buyer_fax" class="java.lang.String"/>
+	<field name="notify_name" class="java.lang.String"/>
+	<field name="notify_address" class="java.lang.String"/>
+	<field name="notify_tel" class="java.lang.String"/>
+	<field name="notify_fax" class="java.lang.String"/>
+	<field name="country_fullname_en" class="java.lang.String"/>
+	<field name="deli_port_name" class="java.lang.String"/>
+	<field name="dest_port_name" class="java.lang.String"/>
+	<field name="product_date" class="java.lang.String"/>
+	<field name="exporter" class="java.lang.String"/>
+	<field name="book_id" class="java.lang.String"/>
+	<group name="Group" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{book_id}]]></groupExpression>
+		<groupHeader>
+			<band height="46">
+				<textField>
+					<reportElement x="0" y="11" width="555" height="22" uuid="7e3d2763-668e-4d19-8213-204b16cbad84"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["รายละเอียดการส่งมอบข้าวให้รัฐบาล"+$F{country_fullname_th}+
+" งวดที่ "+$F{shm_no}+" ปี "+$F{contract_year}+
+" ("+$F{ship_lot_no}+")"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<detail>
+		<band height="142">
+			<textField>
+				<reportElement x="240" y="0" width="264" height="20" uuid="a87067cf-3c65-42d6-941f-1c419d480628"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="0" width="147" height="20" uuid="fad9d5ae-d472-4541-8395-38864866eb82"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[1. ชื่อเรือ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="24" width="147" height="20" uuid="774dd5d1-6c97-4a82-ada4-4d76102e522c"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   Laycan]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="24" width="265" height="20" uuid="cf98a728-1f14-4573-b44f-6098a8aeb8da"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["cut of Date: "+$F{cut_of_date}+" เวลา "+$F{cut_of_time}+" น."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="48" width="147" height="20" uuid="6742f2b5-6042-4efd-99d4-f489815921c7"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   ท่าเรือส่งมอบ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="48" width="265" height="20" uuid="c5dccd33-fab6-4427-83b7-15f9c8ca9e45"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{load_port_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="72" width="147" height="20" uuid="9e6cd57d-e338-44d1-8f0f-0d676f98f21d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   เอเย่นต์เรือ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="72" width="265" height="20" uuid="28b700d6-4a54-4c36-8f35-2630d478f98b"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{shipline_name}+" โทร. "+$F{shipline_tel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="96" width="147" height="20" uuid="1726977e-a1cc-4b46-990a-eb45329c744d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   Surveyor]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="96" width="265" height="20" uuid="3492c162-c117-4c7d-a669-d2c2fff14876"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{surveyor_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="120" width="147" height="20" uuid="6ab0d69a-29af-4a39-bbf1-7fbaabcf2783"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   Booking No.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="120" width="265" height="20" uuid="5f769476-f4f3-4d2f-962e-a6475ae9ca8a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{book_no}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="104">
+			<subreport>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="2" width="555" height="102" uuid="586b3b6e-ac05-4563-b235-b86780d5b038"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{type_rice})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="476">
+			<staticText>
+				<reportElement x="60" y="336" width="147" height="20" uuid="b8bc3f8c-3f5f-4551-a250-408c2cb3a5aa"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[4. TT against copy original B/L        ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="398" width="147" height="20" uuid="29d4fc3c-b576-4a73-ae44-3025bc031235"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[5. Lot No]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="398" width="263" height="20" uuid="3a255f6b-1b20-4f9a-8c89-4af5e71b4fdb"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ship_lot_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="422" width="147" height="20" uuid="53e82ee7-f7de-455a-b696-bd8e44d4111e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[6. Production date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="422" width="263" height="20" uuid="4c707193-f7ae-4c6d-8936-b6b296768184"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="446" width="147" height="20" uuid="16cfdabb-8725-4845-a8f2-b92900db2e36"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[7. ผู้ส่งมอบข้าว]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="446" width="263" height="20" uuid="053dcbc8-468f-4ce2-8acf-6393e0b15daa"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{exporter}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="73" y="353" width="133" height="20" uuid="28c8303f-7e16-4bbd-9e1f-62b398e7611e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Payment Through]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="336" width="263" height="62" uuid="4336c94b-9a39-4a4c-be2d-76c48ac68a5a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DEPARTMENT OF FOREIGN TRADE, MINISTRY OF
+COMMERCE OF THAILAND
+Krungthai Bank Co.,Ltd Account No.385-0-12421-5]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="0" width="147" height="20" uuid="77772172-c6d3-4630-9976-4db0490d2f1c"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   รายละเอียดสินค้า]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="0" width="263" height="20" uuid="99393f7f-1c7c-4132-9919-1d08b7c8598d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ข้าวรัฐบาลต่อรัฐบาล"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="24" width="147" height="20" uuid="b84bd6df-0304-4cca-8d24-68739379981c"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   Marking]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="24" width="263" height="20" uuid="258e7bf8-5372-4537-8ef1-a9ee9d1a5785"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{buyer_masks}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="48" width="147" height="20" uuid="987659b8-b6f6-4754-870c-97544a092247"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[3. ชื่อผู้ซื้อสินค้า, ที่อยุ่]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="240" y="48" width="263" height="75" uuid="4cbbd42b-ace7-48f5-85ea-d9a428995502"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{buyer_name}+"\n"+
+$F{buyer_address}+"\n"+
+($F{buyer_tel}!=""?"TEL: "+$F{buyer_tel}:"")+
+($F{buyer_fax}!=""?"FAX: "+$F{buyer_fax}:"")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="140" width="147" height="45" uuid="c6c1e3b6-d970-4496-bb90-092a5b904538"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   ชื่อผู้รับสินค้า, ที่อยู่ /
+   NOTIFY PARTY]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="240" y="140" width="263" height="75" uuid="a3527ff6-dbc5-4b4b-964d-5af416635134"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notify_name}+"\n"+
+$F{notify_address}+"\n"+
+($F{notify_tel}!=""?"TEL: "+$F{notify_tel}:"")+
+($F{notify_fax}!=""?"FAX: "+$F{notify_fax}:"")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="230" width="147" height="20" uuid="da45eb82-8dbe-4de6-9ef0-ccc4c9d3d17e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   ประเทศผู้ซื้อ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="230" width="263" height="20" uuid="4077d557-e6eb-4974-9b99-1c72c59ddbff"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{country_fullname_en}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="255" width="147" height="20" uuid="11c2ef0b-d15b-4d49-b605-485330d82abd"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   ประเทศผู้รับสินค้า]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="255" width="263" height="20" uuid="efe86b92-ccc7-4cfd-a644-46889da69a58"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DO"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="279" width="147" height="20" uuid="22a4aa67-e597-4e3a-8354-84a0637d1e9a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   PORT OF DISCHARGE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="279" width="263" height="20" uuid="4fe55437-35ee-4515-9dea-1bb76a51e224"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DO ("+$F{dest_port_name} +")"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="303" width="147" height="20" uuid="e1e64bf6-ea55-44cb-81ed-b0aa0103074d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[   PLACE OF DELIVERY]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="240" y="303" width="263" height="20" uuid="587d68a4-e6d3-43b5-b4d7-82e7869dff9d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DO ("+$F{deli_port_name} +")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

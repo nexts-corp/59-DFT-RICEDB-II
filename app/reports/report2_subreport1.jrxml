@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b056fca3-6c8a-49de-a24d-b7b48922c2a4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="buyer_masks" class="java.lang.String"/>
+	<field name="quantity_bags" class="java.lang.Integer"/>
+	<field name="type_rice_name_en" class="java.lang.String"/>
+	<field name="project_en" class="java.lang.String"/>
+	<field name="season_en" class="java.lang.String"/>
+	<field name="description_en" class="java.lang.String"/>
+	<field name="weight_gross" class="java.lang.Double"/>
+	<field name="weight_net" class="java.lang.Double"/>
+	<field name="package_name_en" class="java.lang.String"/>
+	<field name="package_weight_bag" class="java.lang.Integer"/>
+	<field name="buyer_masks" class="java.lang.String"/>
+	<detail>
+		<band height="180" splitType="Stretch">
+			<textField pattern="">
+				<reportElement x="57" y="6" width="74" height="20" uuid="b7a6661c-9c4e-4d5d-a89a-6f59d93a5c27"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isUnderline="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{quantity_bags},"#,###")
++" BAGS"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="151" y="6" width="267" height="38" uuid="0d9c4f2a-6d8c-49c9-8d6e-b7e185df2e96"/>
+				<textElement textAlignment="Justified">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type_rice_name_en}.toUpperCase()+", "+$F{project_en}.toUpperCase()+" "+
+"\n"+$F{description_en}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="447" y="6" width="121" height="38" uuid="68a162cd-bb48-44f8-af59-785250996117"/>
+				<textElement textAlignment="Justified">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["G.W. "+new nylon.utility.NumberFormat().toFormat($F{weight_gross},"#,###.000")+" M/T\n"+
+"N.W. "+new nylon.utility.NumberFormat().toFormat($F{weight_net},"#,###.000")+" M/T"]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="22" y="51" width="90" height="26" uuid="bf8d0641-36a0-4f36-8aab-7766173a78c7"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{buyer_masks}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="151" y="51" width="267" height="105" uuid="9e679039-af80-4f57-b68e-a53b1af57fef"/>
+				<textElement textAlignment="Justified">
+					<font fontName="TH SarabunPSK" size="15" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["PACKING : IN STRONG EXPORT SEA WORTHY "+$F{package_name_en}.toUpperCase()
++" NET, MINIMUM TARE WEIGHT TO BE AT "+$F{package_weight_bag}
++" GRAM/BAG.\n"+
+"TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE "+
+"OF CHARGE BY THE SELLER ALONG WITH THER SHIPMENT."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="160" width="555" height="20" uuid="6dba3fc8-9099-41fd-8eb6-d1d05024f547"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["("+new nylon.utility.NumberFormat().toEngString($F{quantity_bags}).toUpperCase()
++" BAGS ONLY)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

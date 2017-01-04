@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1ac6af7c-b9bf-4be5-8638-03701d4f5b5f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="type_rice_name_th" class="java.lang.String"/>
+	<field name="project_th" class="java.lang.String"/>
+	<field name="description_th" class="java.lang.String"/>
+	<field name="weight_net" class="java.lang.Double"/>
+	<field name="num_of_container" class="java.lang.Integer"/>
+	<field name="weight_per_container" class="java.lang.Integer"/>
+	<field name="inct_id" class="java.lang.String"/>
+	<field name="price_per_ton" class="java.lang.Double"/>
+	<field name="package_name_th" class="java.lang.String"/>
+	<field name="package_weight_bag" class="java.lang.String"/>
+	<variable name="COUNT_ROW" class="java.lang.Integer" incrementType="Group" incrementGroup="Group_rice" calculation="Count">
+		<variableExpression><![CDATA[new java.lang.Integer(1)]]></variableExpression>
+		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
+	</variable>
+	<group name="Group_rice">
+		<groupExpression><![CDATA[$F{type_rice_name_th}]]></groupExpression>
+	</group>
+	<detail>
+		<band height="129" splitType="Stretch">
+			<staticText>
+				<reportElement x="60" y="38" width="147" height="20" uuid="bed21311-cd48-4fed-8a31-79cb86a59176"/>
+				<box leftPadding="12"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวน]]></text>
+			</staticText>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="240" y="0" width="264" height="38" uuid="2cb67dfd-4237-4b1d-8a7c-a9f3588ff51d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type_rice_name_th}+" ปีการผลิต "+$F{project_th}+" "+
+"\n"+$F{description_th}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="61" width="147" height="20" uuid="f7fcbe58-3305-4f4c-94b8-90a2f71e1bc1"/>
+				<box leftPadding="12"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ราคา]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="240" y="38" width="264" height="20" uuid="2bd4cfde-ccab-4f92-a433-0a02dd5d658c"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{weight_net},"#,###.##")+" ตัน ("+$F{num_of_container}+" ตู้คอนเทนเนอร์ ตู้ละ "+
+$F{weight_per_container}+" ตัน)"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="240" y="61" width="264" height="20" uuid="b6468e93-360a-4902-ab1f-b3b889a3999e"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inct_id}+" ตันละ "+$F{price_per_ton}+" USD"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="84" width="147" height="20" uuid="6e161d71-60fa-4fc1-9086-40e1031e12aa"/>
+				<box leftPadding="12"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[บรรจุ]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="240" y="84" width="264" height="43" uuid="885000d8-1449-461e-9ece-5de79c4e3093"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{package_name_th}+" น้ำหนักไม่น้อยกว่า "+$F{package_weight_bag}+" กรัม\n"
++"สำรองกระสอบเปล่า 2% ในตู้คอนเทนเนอร์"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="60" y="0" width="147" height="27" uuid="b79fee82-e860-485c-8567-8acc8f18d91a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{COUNT_ROW}==1?"2.ชนิดข้าว":"  ชนิดข้าว")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

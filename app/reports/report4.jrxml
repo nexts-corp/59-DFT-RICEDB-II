@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a6055865-79ca-461a-a9ee-ece023b013e5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="220"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\report\\app\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="invoice_no" class="java.lang.String"/>
+	<field name="invoice_date" class="java.lang.String"/>
+	<field name="quantity_bags" class="java.lang.String"/>
+	<field name="invoice_of" class="java.lang.String"/>
+	<field name="ship" class="java.lang.String"/>
+	<field name="load_port_name" class="java.lang.String"/>
+	<field name="load_country_name_en" class="java.lang.String"/>
+	<field name="dest_port_name" class="java.lang.String"/>
+	<field name="dest_country_fullname_en" class="java.lang.String"/>
+	<field name="deli_port_name" class="java.lang.String"/>
+	<field name="deli_country_fullname_en" class="java.lang.String"/>
+	<field name="buyer_name" class="java.lang.String"/>
+	<field name="buyer_address" class="java.lang.String"/>
+	<field name="made_out_to" class="java.lang.String"/>
+	<field name="bl_no" class="java.lang.String"/>
+	<field name="bl_detail" class="java.util.Collection"/>
+	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="Page">
+		<variableExpression><![CDATA[1]]></variableExpression>
+		<initialValueExpression><![CDATA[$V{PAGE_NUMBER}]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="335" splitType="Stretch">
+			<textField>
+				<reportElement x="53" y="144" width="58" height="20" uuid="8ec84afd-7169-4c0a-8d0e-126d3ec80df2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{invoice_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="59" width="555" height="61" uuid="643336fa-a09c-4267-8afa-d08abcaf4c05"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DEPARTMENT OF FOREIGN TRADE,
+MINISTRY OF COMMERCE, THAILAND
+44/100 NONTHABURI 1 ROAD NONTHABURI 11000, THAILAND]]></text>
+			</staticText>
+			<line>
+				<reportElement x="184" y="120" width="189" height="1" uuid="bde85bcb-cf49-4057-9b2f-d34a23bbeeb4"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="120" width="555" height="24" uuid="7dc69249-f5b2-4de9-8a42-0a9b5a322ff6"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[COMMERCIAL INVOICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="144" width="23" height="20" uuid="07458804-5fb6-4ff4-89e7-f9c694229a14"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[NO.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="164" width="56" height="20" uuid="395f6a05-d7a9-457e-8ff1-ff3ee06f360b"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Invoice of :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="86" y="164" width="435" height="40" uuid="77e036fa-99cc-44a6-9317-a7c47dcbfbac"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{invoice_of}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="414" y="144" width="23" height="20" uuid="fbf0c43a-0ec4-4f10-af0f-bb460024c59b"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="437" y="144" width="58" height="20" uuid="e959f1c7-f1ae-473c-bac7-772236d8cbf8"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toDateEngShort($F{invoice_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="209" width="62" height="18" uuid="66810749-d7e3-4685-801e-d948bc8de6c5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Shipped per :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="92" y="209" width="182" height="18" uuid="eedbf40e-b476-4e46-8eb0-97f680b9095f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ship}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="209" width="77" height="18" uuid="60d035d5-bc94-403d-8c25-53c123085417"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Port of loading :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="351" y="209" width="170" height="18" uuid="4dd2e3aa-207d-488c-a3a7-2edad20d0216"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{load_port_name}+" PORT, "+$F{load_country_name_en}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="227" width="85" height="18" uuid="af25c3a9-fabf-447c-9f31-4ecf7663188a"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Port of Discharge :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="115" y="227" width="159" height="18" uuid="0871d942-f34d-4a86-b168-7c3551ba5ce5"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dest_port_name}+", "+$F{dest_country_fullname_en}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="227" width="77" height="18" uuid="1505cb67-4e4f-426c-83a1-299159d40106"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Port of Delivery :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="351" y="227" width="170" height="18" uuid="3ff32f85-70e2-44fa-b903-7c9ad156c910"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{deli_port_name}+", "+$F{deli_country_fullname_en}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="245" width="123" height="18" uuid="b343bd8d-c7e0-4b8f-b8b4-486d10714167"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[By order and Account of :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="153" y="245" width="368" height="36" uuid="3b803b39-17b6-4fbd-935f-78faec7fb781"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{buyer_name}.toUpperCase()+", "+$F{buyer_address}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="281" width="75" height="18" uuid="5fb4e906-9fb7-4c4e-9083-f1ca691c7a82"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[MADE OUT TO :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="105" y="281" width="416" height="36" uuid="263e8098-399e-4482-b323-d1d98af9f88e"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{made_out_to}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="30" y="317" width="109" height="18" uuid="a8aba5ef-661f-4f56-9eb8-5c12dc9b1ab6"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Bill of Lading Number :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="139" y="317" width="135" height="18" uuid="2a5b2160-1c2a-4211-b8ab-5e494968dd8e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bl_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="274" y="317" width="31" height="18" uuid="c98fc41b-dd9b-47a7-a4d7-f3afe35579cb"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Dated]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="305" y="315" width="78" height="20" uuid="34329ba4-7a2d-49fb-afbe-86c656765e3c"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toDateEngShort($F{invoice_date})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="28" uuid="f95a5e59-d6e5-4871-95c4-e0ef775252c9"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Marks & Nos.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="0" width="80" height="28" uuid="7522ae41-006a-4c5b-b091-d0fd164eb149"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="0" width="120" height="28" uuid="6fdf64c1-a5b6-4775-b2c1-0e6b251bb823"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="160" y="0" width="275" height="28" uuid="fb6c4b3a-5145-4510-83d5-597483c4fc35"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Descriptions]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="100" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="100" uuid="28f94043-e20a-457e-92b4-980ca0614ed6"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{bl_detail})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report4_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="225" y="26" width="80" height="28" uuid="c74593b2-4f31-4fef-b1be-5db79d2bb203"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[E.&O.E.]]></text>
+			</staticText>
+			<textField evaluationTime="Auto">
+				<reportElement x="335" y="34" width="100" height="20" uuid="3143ebe9-19c3-4253-8d78-6688fd87a60c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[msg("Page {0} of {1}", ++$V{CURRENT_PAGE}, $V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50"/>
+	</summary>
+</jasperReport>
