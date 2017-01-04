@@ -1,11 +1,12 @@
 exports.report1 = function (req, res, next) {
     var r = req._r;
-
+    //res.json(__dirname.replace('controller','report'));
     var parameters = {
-        department: "2559"
+        department: "2559",
+        SUBREPORT_DIR: __dirname.replace('controller','report')+'\\'
     };
 
-    r.db('g2g').table('shipment')
+     r.db('g2g').table('shipment')
         .get(req.query.shm_id)
         .merge(function (row) {
             return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'inct_id')
@@ -209,7 +210,7 @@ exports.report1 = function (req, res, next) {
         }).getField('Lists')
         .run()
         .then(function (result) {
-            //res.json(result);
+            // res.json(result);
             res._ireport("report1.jasper", "pdf", result, parameters);
         });
 }
@@ -219,7 +220,8 @@ exports.report2 = function (req, res, next) {
 
     var parameters = {
         origin_page: req.query.ori,
-        nn_page: req.query.nn
+        nn_page: req.query.nn,
+        SUBREPORT_DIR: __dirname.replace('controller','report')+'\\'
     };
 
     r.db('g2g').table('shipment')
