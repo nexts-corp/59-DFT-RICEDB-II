@@ -86,20 +86,24 @@ class index{
         });
     }
 
-    updateconfirm(req,res){ // update confirm 
-        var r = req._r;
-        var params = req.body;
-        console.log(params.id);
-        r.db('eu2').table('notify').get(params.id).update(params).run().then(function(result){
-            res.json(result);
-        });
-    }
+    // updateconfirm(req,res){ // update confirm 
+    //     var r = req._r;
+    //     var params = req.body;
+    //     console.log(params.id);
+    //     r.db('eu2').table('notify').get(params.id).update(params).run().then(function(result){
+    //         res.json(result);
+    //     });
+    // }
 
     insertconfirm(req,res){ // insert confirm 
         var r = req._r;
         var params = req.body;
 
         r.db('eu2').table('confirm').insert(params).run().then(function(result){
+            res.json(result);
+        });
+
+        r.db('eu2').table('notify').get(params.id).update({status:"c"}).run().then(function(result){
             res.json(result);
         });
     }

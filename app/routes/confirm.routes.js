@@ -4,5 +4,5 @@ var confirmIndexCtrl = require('../controllers/confirm/index.controller')
     app.get('/notconfirmall',confirmIndexCtrl.selectnotconfirm2);
     app.get('/confirm',confirmIndexCtrl.selectconfirm);
     app.post('/confirm',confirmIndexCtrl.insertconfirm);
-    app.put('/confirm',confirmIndexCtrl.updateconfirm);
+    //app.put('/confirm',confirmIndexCtrl.updateconfirm);
 }
