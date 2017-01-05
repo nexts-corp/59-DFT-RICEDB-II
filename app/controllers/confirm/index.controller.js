@@ -90,7 +90,7 @@ class index{
         var r = req._r;
         var params = req.body;
 
-        r.db('eu2').table('confirm').get(params.id).update(params).run().then(function(result){
+        r.db('eu2').table('notify').get(params.id).update(params).run().then(function(result){
             res.json(result);
         });
     }
