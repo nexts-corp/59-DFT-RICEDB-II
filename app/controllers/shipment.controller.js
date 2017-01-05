@@ -161,7 +161,7 @@ exports.report1 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result);
-            res._ireport("shipment/report1.jasper", "pdf", result, parameters);
+            res._ireport("shipment/report1.jasper", req.query.export || "pdf", result, parameters);
         });
 }
 
@@ -359,13 +359,12 @@ exports.report2 = function (req, res, next) {
         .run()
         .then(function (result) {
             //res.json(result);
-            res._ireport("shipment/report2.jasper", "pdf", result, parameters);
+            res._ireport("shipment/report2.jasper", req.query.export || "pdf", result, parameters);
         });
 }
 
 exports.report3 = function (req, res, next) {
     var r = req._r;
-    //res.json(__dirname.replace('controller','report'));
     var parameters = {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
@@ -425,8 +424,7 @@ exports.report3 = function (req, res, next) {
         .orderBy([r.row('exporter'), r.row('ship_lot_no').coerceTo('number')])
         .run()
         .then(function (result) {
-            //res.json(result)
-            res._ireport("shipment/report3.jasper", "pdf", result, parameters);
+            res._ireport("shipment/report3.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
