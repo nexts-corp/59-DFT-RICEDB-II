@@ -66,25 +66,43 @@ class index{
         });
     }
 
-    // selectconfirm(req,res){ // select confirm 
-    //     var r = req._r;
-    //     var params = req.query;
+    selectconfirm(req,res){ // select confirm 
+        var r = req._r;
+        var params = req.query;
 
-    //     if(typeof params.year !== "undefined"){
-    //         params.year = parseInt(params.year);
-    //     }
-    //     r.db('eu2').table('confirm').filter({
-    //         year:params.year,
-    //         type_rice_id: params.type_rice_id,
-    //         exporter_id: exporter_id
-    //     })
-    //     .innerJoin(r.db('eu2').table('exporter'), function(x,xx){
-    //         return x('exporter_id') .eq(xx('id'))
-    //     })
-    //     .run().then(function(result){
-    //         res.json(result);
-    //     });
-    // }
+        if(typeof params.year !== "undefined"){
+            params.year = parseInt(params.year);
+        }
+        r.db('eu2').table('confirm').filter({
+            year:params.year,
+            type_rice_id: params.type_rice_id,
+            exporter_id: exporter_id
+        })
+        .innerJoin(r.db('eu2').table('exporter'), function(x,xx){
+            return x('exporter_id') .eq(xx('id'))
+        })
+        .run().then(function(result){
+            res.json(result);
+        });
+    }
+
+    updateconfirm(req,res){ // select confirm 
+        var r = req._r;
+        var params = req.body;
+
+        r.db('eu2').table('confirm').get(params.id).update(params).run().then(function(result){
+            res.json(result);
+        });
+    }
+
+    insertconfirm(req,res){ // insert confirm 
+        var r = req._r;
+        var params = req.body;
+
+        r.db('eu2').table('confirm').insert(params).run().then(function(result){
+            res.json(result);
+        });
+    }
 
 }
 
