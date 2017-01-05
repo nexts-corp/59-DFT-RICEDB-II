@@ -1,6 +1,7 @@
 
 <link rel="import" href="./../../components/data-manage-behavior.html">
 <link rel="import" href="./../../components/month-behavior.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
 
 
 <dom-module id="confirm-list">
@@ -33,43 +34,25 @@
                 </template>
                 </tr>
             </template>
-            <!--<tr>
-                <th class="left">ผู้ส่งออก</th>
-                <th>ปริมาณโควตารวม</th>
-                <th>งวดที่ 1 มกราคม</th>
-                <th>งวดที่ 2 เมษายน</th>
-                <th>งวดที่ 3 กรกฏาคม</th>
-            </tr>-->
             </thead>
             <tbody>
            
             <template is="dom-repeat" items="{{data}}">
                 <tr on-tap="_selectData" data="{{item}}">
                     <td class="left">{{item.name}}</td>
-                    <td>{{item.amount}}</td>
+                    <td>{{formatNumber(item.amount)}}</td>
                     <template is="dom-repeat" items="{{item.quantity}}">
-                        <td>{{item.weigth}}</td>
+                        <td>{{formatNumber(item.weigth)}}</td>
                     </template>
                 </tr>
             </template>
              </tbody> 
-             <!--<thead>
-            <tr>
-                <th class="left"></th>
-                 <template is="dom-repeat" items="{{data.sum}}">
-                    <th>{{item.sumb}}</th>
-                    <th>{{item.sumc}}</th>
-                    <th>{{item.sumd}}</th>
-                    <th>{{item.sume}}</th>
-                 </template>
-            </tr>
-             </thead>-->
         </table>
     </template>
     <script>
         Polymer({
             is: 'confirm-list',
-            behaviors:[MonthBehavior],
+            behaviors:[MonthBehavior,FormatNumberBehavior],
             properties:{
                 status: {
                     type: String

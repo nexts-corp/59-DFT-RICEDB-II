@@ -102,7 +102,8 @@
               <div class="content">ปริมาณโควตารวม :</div>
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input class="number" format-number="on" value="{{defaultAmount}}" disabled></gl-form-input>
+                <div class="content">{{formatNumber(defaultAmount)}}</div>
+               <!--<gl-form-input class="number" format-number="on" value="{{defaultAmount}}" disabled></gl-form-input>-->
            </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
               <div class="content">ปริมาณโควตารวม :</div>
@@ -114,19 +115,22 @@
         
      
                <template is="dom-repeat" items="[[data.quantity]]">
+                 <!--[[getQuantity(item)]]-->
                 <gl-grid-row width="{{getWidth}}">
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                       <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] :</div>
                   </gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                      <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[item.weigth]]" disabled></gl-form-input>
+                      <div class="content">[[formatNumber(item.weigth)]]</div>
+                      <!--<gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[item.weigth]]" disabled></gl-form-input>-->
                   </gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                       <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] :</div>
                   </gl-grid-col>
-                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                      <gl-form-input class="number" id="percent" allowed-pattern="[0-9||,||.]" format-number="on" value="[[mathPercent(item.weigth,item.percent,amount)]]"></gl-form-input>
+                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"> 
+                    <!--[[mathPercent(item.weigth,item.percent,amount,item.period,index)]]-->
+                      <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[mathPercent(item,amount,index)]]"></gl-form-input>
                   </gl-grid-col>
                   </gl-grid-row>
                 </template>
@@ -166,17 +170,15 @@
         this.defaultAmount = this.data.amount;
         this.amount = this.data.amount;
       },
-      mathPercent:function(weigth,percent,amount){
+      mathPercent:function(item,amount,index){
         if(this.data.amount != amount){
-           this.push('quantityUpdate',{period:1,weigth:this.unFormat(amount)*percent/100});
-          return this.unFormat(amount)*percent/100;
+          this.data.quantity[index].weigth = this.unFormat(amount)*item.percent/100;
+          return this.unFormat(amount)*item.percent/100;
         }
-        else if(this.data.amount == amount){
-           this.push('quantityUpdate',{period:1,weigth:weigth});
-          // this.push('itemQulity',{period:period,weigth:weigth});
-          return weigth;
-        }
-       
+        if(this.data.amount == amount){
+          // console.log(this.quantityUpdate);
+          return item.weigth;
+        }       
       },
       sumData:function(data){
         data.map((item)=>{
@@ -185,15 +187,24 @@
         return this.answer;
       },
       _saveData:function(){
+        var quantityUpdate = this.data.quantity.map((item)=>{
+          var {period,weigth} = item;
+          var newitem = {period,weigth};
+          return newitem;
+        });
         this.datas = {
-          amount : this.amount,
-          exporter_id : this.data.exporter_id,
-          quantity : this.quantityUpdate,
-          type_rice_id : this.data.type_rice_id,
-          year : this.data.year
+          confirm:{
+            amount : this.unFormat(this.amount),
+            exporter_id : this.data.exporter_id,
+            quantity : quantityUpdate,
+            type_rice_id : this.data.type_rice_id,
+            year : this.data.year
+          },
+          notify:{
+             id_notify : this.data.id_notify
+          }
         }
-        console.log(this.datas);
-        // this.fire('save-data');
+        this.fire('save-data',this.datas);
       }
     });
   </script>

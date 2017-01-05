@@ -233,7 +233,7 @@
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                     <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{getQuotaOrdinal}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
-                        error-message="กรุณาเลือกบริษัท" required></gl-combo-box>
+                        error-message="กรุณาเลือกบริษัท"></gl-combo-box>
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                     <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>ค้นหา</paper-button>
@@ -402,8 +402,10 @@
             axios.get('./common/year')
                 .then((response) => {
                     console.log("success");
-                    this.getYear = response.data;
-                    //console.log(this.getYear);
+                    this.getYear = response.data.map((item)=>{
+                        return item.toString();
+                    });
+                  
                 })
                 .catch((error) => {
                     console.log("error");
@@ -420,7 +422,7 @@
             axios.get('./common/type_rice')
                 .then((response) => {
                     //console.log("success!!");
-                    console.log(response.data);
+                 
                     this.getTypeRice = response.data;
                 })
                 .catch((error) => {
@@ -452,23 +454,24 @@
                 console.log(error);
             });
 
-            // axios.get('./confirm/confirmall', {
-            //     params: {
-            //         year: this.selectYear,
-            //         type_rice_id: this.typeRice,
-            //         ordinal:this.selectQuotaOrdinal,
-            //         exporter_id:this.selectExporter
-            //     }
-            // })
-            // .then((response) => {
-            //     console.log("success!!");
-            //     console.log(response.data);
-            //     // this.getQuotaOrdinal = response.data;
-            // })
-            // .catch((error) => {
-            //     console.log("error");
-            //     console.log(error);
-            // });
+            axios.get('./confirm/confirm', {
+                params: {
+                    year: this.selectYear,
+                    type_rice_id: this.typeRice,
+                    ordinal:this.selectQuotaOrdinal,
+                    exporter_id:this.selectExporter
+                }
+            })
+            .then((response) => {
+                console.log("success!!");
+                console.log('confirm',response.data);
+                this.dataConfirm = response.data;
+                // this.getQuotaOrdinal = response.data;
+            })
+            .catch((error) => {
+                console.log("error");
+                console.log(error);
+            });
 
         },
         _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
@@ -482,7 +485,7 @@
             })
                 .then((response) => {
                     console.log("success!!");
-                    console.log(response.data);
+                  
                     this.getQuotaOrdinal = response.data;
                 })
                 .catch((error) => {
@@ -490,17 +493,27 @@
                     console.log(error);
                 });
         },
-        _saveData: function () {
-            this.fire('toast', { status: 'load' });
-            this.fire('toast', {
-                status: 'success',
-                text: 'บันทึกสำเร็จ',
-                callback: () => {
-                    this.$$("panel-right").close();
-                }
-
-
+        _saveData: function(e){
+            console.log('save!!',e.detail);
+            this.fire('toast',{status:'load'});
+            axios.post('/confirm/confirm',e.detail)
+            .then((response)=>{
+                console.log("success");
+                this.textToast = 'บันทึกข้อมูลสำเร็จ';
+                console.log(response);
+                this.fire('toast', {
+                    status: 'success',
+                    text: 'บันทึกสำเร็จ',
+                    callback:()=>{
+                        this.$$("panel-right").close();
+                    }
+                })
             })
+            .catch((error)=>{
+                console.log("error");
+                console.log(error);
+            });
+    
         }
     });
 </script>
