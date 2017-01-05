@@ -76,11 +76,11 @@ class index{
         r.db('eu2').table('confirm').filter({
             year:params.year,
             type_rice_id: params.type_rice_id,
-            exporter_id: exporter_id
+            exporter_id: params.exporter_id
         })
         .innerJoin(r.db('eu2').table('exporter'), function(x,xx){
             return x('exporter_id') .eq(xx('id'))
-        })
+        }).zip()
         .run().then(function(result){
             res.json(result);
         });
@@ -89,7 +89,7 @@ class index{
     updateconfirm(req,res){ // update confirm 
         var r = req._r;
         var params = req.body;
-
+        console.log(params.id);
         r.db('eu2').table('notify').get(params.id).update(params).run().then(function(result){
             res.json(result);
         });
