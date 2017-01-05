@@ -105,11 +105,11 @@ class index{
         var r = req._r;
         var params = req.body;
 
-        r.db('eu2').table('confirm').insert(params).run().then(function(result){
+        r.db('eu2').table('confirm').insert(params.confirm).run().then(function(result){
             res.json(result);
         });
 
-        r.db('eu2').table('notify').get(params.id_notify).update({status:"c"}).run().then(function(result){
+        r.db('eu2').table('notify').get(params.notify.id_notify).update({status:"c"}).run().then(function(result){
             res.json(result);
         });
     }
