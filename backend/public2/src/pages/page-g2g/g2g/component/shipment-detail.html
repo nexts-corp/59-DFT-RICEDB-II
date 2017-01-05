@@ -77,8 +77,20 @@
       <gl-form-panel-head label="" set-padding="10px" set-border="1px">
         <div class="horizontal end-justified layout">
           <template is="dom-if" if="[[_checkUndefined(data.shm_status)]]">
-            <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
-            <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
+            <!-- <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button> -->
+            <!-- <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip> -->
+            <!-- <gl-grid-row width="{{getWidth}}"> -->
+             <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]"> -->
+               <gl-combo-box class="required" required always-float-label label="รายงาน" placeholder="รายงาน" value="{{printReport.typeReport}}"  item-label-path="report_name"
+                  item-value-path="report_name_id" items="{{report.report_name}}"></gl-combo-box>
+             <!-- </gl-grid-col> -->&nbsp;
+             <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]"> -->
+               <gl-combo-box class="required" required always-float-label label="รูปแบบ" placeholder="รูปแบบ" value="{{printReport.typeFile}}"  item-label-path="report_type"
+                  item-value-path="report_type_id" items="{{report.report_type}}"></gl-combo-box>
+              <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
+              <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
+             <!-- </gl-grid-col>2122121 -->
+             <!-- </gl-grid-row> -->
           </template>
           <paper-dialog id="printShipmentReport">
             <gl-grid-row width="{{getWidth}}">
@@ -315,7 +327,25 @@
         },
         printReport:{
           type:Object,
-          value:{ori:1,nn:1}
+          value:{ori:3,nn:12,typeReport:'0',typeFile:'pdf'}
+        },
+        report:{
+          type:Object,
+          value:
+          {
+            report_name:
+              [
+                {report_name:'รายงานการซื้อขายข้าว',report_name_id:'0'},
+                {report_name:'รายงานการซื้อขายข้าว2',report_name_id:'1'},
+                {report_name:'รายงานการซื้อขายข้าว3',report_name_id:'2'}
+              ],
+            report_type:
+              [
+                {report_type:'PDF',report_type_id:'pdf'},
+                {report_type:'WORD',report_type_id:'word'},
+                {report_type:'EXCEL',report_type_id:'excel'}
+              ]
+          }
         }
 
       },
@@ -377,17 +407,23 @@
         this.$$('#'+targetAttribute).toggle();
       },
       printShipment:function () {
-        // console.log('shm_id=>',this.data.shm_id);
-        // this.fire('nylon-change-page',{path:'/report6?'})
+        if (this.printReport.typeReport == '0') {
+          console.log('&export='+this.printReport.report_type_id);
+           window.open('http://localhost:8080/api/shipment/report1?shm_id='+this.data.shm_id+'&export='+this.printReport.typeFile,'1');
+        }else if (this.printReport.typeReport == '1') {
+          this.$.printShipmentReport.toggle();
+        }else if (this.printReport.typeReport == '2') {
+           window.open('http://localhost:8080/api/shipment/report3?shm_id='+this.data.shm_id+'&export='+this.printReport.typeFile,'1');
+        }
+        // this.$.printShipmentReport.toggle();
 
-        this.$.printShipmentReport.toggle();
         // window.open('http://localhost:8080/api/report/report1?shm_id='+this.data.shm_id,'1');
         // window.open('http://localhost:8080/api/report/report2?shm_id='+this.data.shm_id,'2');
         // window.open('http://localhost:8080/api/report/report3?shm_id='+this.data.shm_id,'3');
       },
       printShipmentReports:function () {
-        window.open('http://localhost:8080/api/shipment/report1?shm_id='+this.data.shm_id+'&ori='+this.printReport.ori+'&nn='+this.printReport.nn,'1');
-        window.open('http://localhost:8080/api/shipment/report2?shm_id='+this.data.shm_id+'&ori='+this.printReport.ori+'&nn='+this.printReport.nn,'2');
+        // window.open('http://localhost:8080/api/shipment/report1?shm_id='+this.data.shm_id+'&ori='+this.printReport.ori+'&nn='+this.printReport.nn,'1');
+        window.open('http://localhost:8080/api/shipment/report2?shm_id='+this.data.shm_id+'&ori='+this.printReport.ori+'&nn='+this.printReport.nn+'&export='+this.printReport.typeFile,'1');
       },
       calcelShipmentIn:function () {
 
