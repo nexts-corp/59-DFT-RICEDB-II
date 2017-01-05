@@ -1,5 +1,7 @@
 
 <link rel="import" href="./../../components/data-manage-behavior.html">
+<link rel="import" href="./../../components/month-behavior.html">
+
 
 <dom-module id="confirm-list">
     <template>
@@ -22,27 +24,36 @@
         
        <table class="gl-table-default">
            <thead>
-            <tr>
+            <template is="dom-repeat" items="{{data}}">
+                <tr>
+                    <th class="left">ผู้ส่งออก</th>
+                    <th>ปริมาณโควตารวม</th>
+                <template is="dom-repeat" items="{{item.quantity}}">
+                    <th>งวดที่ {{item.period}} [[getMonthName(item.month)]]</th>
+                </template>
+                </tr>
+            </template>
+            <!--<tr>
                 <th class="left">ผู้ส่งออก</th>
                 <th>ปริมาณโควตารวม</th>
                 <th>งวดที่ 1 มกราคม</th>
                 <th>งวดที่ 2 เมษายน</th>
                 <th>งวดที่ 3 กรกฏาคม</th>
-            </tr>
+            </tr>-->
             </thead>
             <tbody>
            
-            <template is="dom-repeat" items="{{data.content}}">
+            <template is="dom-repeat" items="{{data}}">
                 <tr on-tap="_selectData" data="{{item}}">
-                    <td class="left">{{item.a}}</td>
-                    <td>{{item.b}}</td>
-                    <td>{{item.c}}</td>
-                    <td>{{item.d}}</td>
-                    <td>{{item.e}}</td>
+                    <td class="left">{{item.name}}</td>
+                    <td>{{item.amount}}</td>
+                    <template is="dom-repeat" items="{{item.quantity}}">
+                        <td>{{item.weigth}}</td>
+                    </template>
                 </tr>
             </template>
              </tbody> 
-             <thead>
+             <!--<thead>
             <tr>
                 <th class="left"></th>
                  <template is="dom-repeat" items="{{data.sum}}">
@@ -52,12 +63,13 @@
                     <th>{{item.sume}}</th>
                  </template>
             </tr>
-             </thead>
+             </thead>-->
         </table>
     </template>
     <script>
         Polymer({
             is: 'confirm-list',
+            behaviors:[MonthBehavior],
             properties:{
                 status: {
                     type: String

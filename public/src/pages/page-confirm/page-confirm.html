@@ -274,7 +274,7 @@
         </template>
         <template is="dom-if" if="{{dataStat}}">
         <section id="content1">
-            <confirm-list data="[[dataAmount]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
+            <confirm-list data="[[dataNonConfirm]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
         </section>
 
         <section id="content2">
@@ -361,35 +361,6 @@
                     'บริษัท พงษ์ลาภ จำกัด'
                 ]
             },
-            dataConfirm:{
-                type: Object,
-                value: {
-                    header: [
-                        'ผู้ส่งออก',
-                        'ปริมาณโควตารวม',
-                        'งวดที่ 1 (มกราคม)',
-                        'งวดที่ 2 (เมษายน)',
-                        'งวดที่ 3 (กรกฏาคม)'
-                    ],
-                    content: [
-                        {
-                            a: 'บริษัท พงษ์ลาภ จำกัด',
-                            b: '1,574.00',
-                            c: '768.00',
-                            d: '394.00',
-                            e: '394.00'
-                        }
-                    ],
-                    sum: [
-                        {
-                            sumb: '1,574.00',
-                            sumc: '768.00',
-                            sumd: '394.00',
-                            sume: '394.00'
-                        }
-                    ]
-                }
-            },
             searchType: {
                 type: Object,
                 value: [{
@@ -460,7 +431,7 @@
         _getDataCompanny:function(){
             // this.$$('confirm-list')._setData();
             // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
-             axios.get('./confirm/confirmall', {
+             axios.get('./confirm/notconfirmall', {
                 params: {
                     year: this.selectYear,
                     type_rice_id: this.typeRice,
@@ -471,6 +442,9 @@
             .then((response) => {
                 console.log("success!!");
                 console.log(response.data);
+                this.dataCheck = false;
+                this.dataStat = true;
+                this.dataNonConfirm = response.data;
                 // this.getQuotaOrdinal = response.data;
             })
             .catch((error) => {
@@ -478,29 +452,29 @@
                 console.log(error);
             });
 
-            axios.get('./confirm/confirmall', {
-                params: {
-                    year: this.selectYear,
-                    type_rice_id: this.typeRice,
-                    ordinal:this.selectQuotaOrdinal,
-                    exporter_id:this.selectExporter
-                }
-            })
-            .then((response) => {
-                console.log("success!!");
-                console.log(response.data);
-                // this.getQuotaOrdinal = response.data;
-            })
-            .catch((error) => {
-                console.log("error");
-                console.log(error);
-            });
+            // axios.get('./confirm/confirmall', {
+            //     params: {
+            //         year: this.selectYear,
+            //         type_rice_id: this.typeRice,
+            //         ordinal:this.selectQuotaOrdinal,
+            //         exporter_id:this.selectExporter
+            //     }
+            // })
+            // .then((response) => {
+            //     console.log("success!!");
+            //     console.log(response.data);
+            //     // this.getQuotaOrdinal = response.data;
+            // })
+            // .catch((error) => {
+            //     console.log("error");
+            //     console.log(error);
+            // });
 
         },
         _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
             // console.log(yearQuoata,typeRice);
             this.selectQuotaOrdinal = "";
-            axios.get('./confirm/confirm', {
+            axios.get('./confirm/notconfirm', {
                 params: {
                     year: yearQuoata,
                     type_rice_id: typeRice

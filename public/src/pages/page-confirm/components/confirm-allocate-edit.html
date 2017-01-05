@@ -1,5 +1,6 @@
 <link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
 <link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/month-behavior.html">
 
 <dom-module id="confirm-allocate-edit">
   <style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
@@ -14,7 +15,7 @@
       /*width: 25%;*/
     }
     .content,paper-button{
-      font-size:18px;
+      font-size:16px;
       margin-top: 26px;
       font-family: 'CSChatThaiUI', sans-serif !important;
       -webkit-font-smoothing: antialiased;
@@ -74,7 +75,7 @@
             <!--<gl-form-label-input label="ชื่อบริษัท(ไทย)" value="{{data.a}}"></gl-form-label-input>-->
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-             <gl-form-label-input label="ชื่อบริษัท(ไทย)" value="{{data.a}}"></gl-form-label-input>
+             <gl-form-label-input label="ชื่อบริษัท(ไทย)" value="{{data.name}}"></gl-form-label-input>
             <!--<gl-form-label-input label="ชื่อบริษัท(อังกฤษ)" value="Kamolkich., Ltd"></gl-form-label-input>-->
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -96,46 +97,39 @@
         </gl-grid-row>
 
           <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
               <div class="content">ปริมาณโควตารวม :</div>
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input class="number" format-number="on" value="[[sumData(data.c,data.d,data.e)]]"></gl-form-input>
+               <gl-form-input class="number" format-number="on" value="{{defaultAmount}}" disabled></gl-form-input>
+           </gl-grid-col>
+             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+              <div class="content">ปริมาณโควตารวม :</div>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+               <gl-form-input class="number" format-number="on" value="{{amount}}"></gl-form-input>
            </gl-grid-col>
           </gl-grid-row>
         
-         <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <div class="content">ปริมาณ งวดที่ 1 (มกราคม) :</div>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.c}}"></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-             
-              <div class="content">ปริมาณ งวดที่ 2 (เมษายน) :</div>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.d}}"></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-
-        <gl-grid-row width="{{getWidth}}">
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <div class="content">ปริมาณ งวดที่ 3 (กรกฏาคม) :</div>
-          </gl-grid-col>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.e}}"></gl-form-input>
-           </gl-grid-col>
-        </gl-grid-row>
-
+     
+               <template is="dom-repeat" items="[[data.quantity]]">
+                <gl-grid-row width="{{getWidth}}">
+                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                      <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] :</div>
+                  </gl-grid-col>
+                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                      <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[item.weigth]]" disabled></gl-form-input>
+                  </gl-grid-col>
+                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                      <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] :</div>
+                  </gl-grid-col>
+                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                      <gl-form-input class="number" id="percent" allowed-pattern="[0-9||,||.]" format-number="on" value="[[mathPercent(item.weigth,item.percent,amount)]]"></gl-form-input>
+                  </gl-grid-col>
+                  </gl-grid-row>
+                </template>
   
       </gl-form-panel-body>
     </gl-form-panel>
@@ -149,7 +143,7 @@
   <script>
     Polymer({
       is: "confirm-allocate-edit",
-      behaviors:[FormatNumberBehavior],
+      behaviors:[FormatNumberBehavior,MonthBehavior],
       properties:{
         status:{
           type: String,
@@ -158,17 +152,48 @@
         data:{
             type: Object,
             observer: '_getData'
+        },
+        quantityUpdate:{
+          type: Array,
+          value: []
         }
+      
+      },
+      ready:function(){
+        this.answer = 0;
       },
       _getData:function(){
-        console.log(this.data);
+        this.defaultAmount = this.data.amount;
+        this.amount = this.data.amount;
       },
-      sumData:function(data1,data2,data3){
-        
-        return this.unFormat(data1) + this.unFormat(data2) + this.unFormat(data3);
+      mathPercent:function(weigth,percent,amount){
+        if(this.data.amount != amount){
+           this.push('quantityUpdate',{period:1,weigth:this.unFormat(amount)*percent/100});
+          return this.unFormat(amount)*percent/100;
+        }
+        else if(this.data.amount == amount){
+           this.push('quantityUpdate',{period:1,weigth:weigth});
+          // this.push('itemQulity',{period:period,weigth:weigth});
+          return weigth;
+        }
+       
+      },
+      sumData:function(data){
+        data.map((item)=>{
+          this.answer += item.weigth;
+        });
+        return this.answer;
       },
       _saveData:function(){
-        this.fire('save-data');
+        this.datas = {
+          amount : this.amount,
+          exporter_id : this.data.exporter_id,
+          quantity : this.quantityUpdate,
+          type_rice_id : this.data.type_rice_id,
+          year : this.data.year
+        }
+        console.log(this.datas);
+        // this.fire('save-data');
       }
     });
   </script>
