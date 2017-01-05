@@ -86,7 +86,7 @@ class index{
         });
     }
 
-    updateconfirm(req,res){ // select confirm 
+    updateconfirm(req,res){ // update confirm 
         var r = req._r;
         var params = req.body;
 
