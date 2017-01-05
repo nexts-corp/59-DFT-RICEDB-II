@@ -40,19 +40,25 @@ class index{
         })
         .innerJoin(r.db('eu2').table('notify'), function(x,xx) {
             return x('type_rice_id') .eq(xx('type_rice_id')).and( x('year') .eq(xx('year')))
-        }).map(function(join){
-            return join('right')
-            .merge(function(right){
-                return {
+        })
+        .map(function(join){
+          return join('right')
+          .merge(function(nid){
+               return {id_notify:nid('id')}
+          })
+         
+          .merge(function(right){
+              return {
                   quantity:right('quantity').merge(function(row){
                   return {
-                  percent:join('left')('quantity').filter({period:row('period')})(0)('percent'),
-                  month:join('left')('quantity').filter({period:row('period')})(0)('month')
+                    percent:join('left')('quantity').filter({period:row('period')})(0)('percent'),
+                    month:join('left')('quantity').filter({period:row('period')})(0)('month')
                   }
                 })
               }
             })
           })
+
          .innerJoin(r.db('eu2').table('exporter'), function(i,ii) {
               return i('exporter_id') .eq(ii('id'))
             }).zip()  
@@ -103,7 +109,7 @@ class index{
             res.json(result);
         });
 
-        r.db('eu2').table('notify').get(params.id).update({status:"c"}).run().then(function(result){
+        r.db('eu2').table('notify').get(params.id_notify).update({status:"c"}).run().then(function(result){
             res.json(result);
         });
     }
