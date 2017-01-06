@@ -137,7 +137,7 @@
 								</gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2 layout horizontal">
-                 <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                 <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" item-label-path="group" item-value-path="group" value="{{selectQuotaOrdinal}}"></gl-combo-box>
                 <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                   <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaOrdinal}}">
                     <template is="dom-repeat" items="{{getQuotaOrdinal}}">
@@ -147,7 +147,7 @@
                 </gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2">
-                <paper-button class="gl-btn-primary" raised on-tap="_toggleDrawer" disabled$="[[_disableSearch(selectQuotaYear,selectTypeRice,selectQuotaOrdinal)]]">ค้นหา</paper-button>
+                <paper-button class="gl-btn-primary" raised on-tap="_getAllocate" disabled$="[[_disableSearch(selectQuotaYear,selectTypeRice,selectQuotaOrdinal)]]">ค้นหา</paper-button>
               </div>
             </div>
             <div class="flex"></div>
@@ -181,12 +181,13 @@
             behaviors:[
               nylonBehavior
             ],
-            observers:[
-              '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
-            ],  
+            // observers:[
+            //   '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
+            // ],  
             nylonPageActive:function(){
               this._getQuotaYear();
               this._getTypeRice();
+              this._getOrdinalNumber();
             },
             ready:function(){
               //var number = numeral('1000.32').format('0,0.00');
@@ -230,7 +231,9 @@
               axios.get('./common/year')
               .then((response)=>{
                 console.log("success");
-                this.getQuotaYear = response.data;
+                this.getQuotaYear = response.data.map((item)=>{
+                  return item.toString();
+                });
               })
               .catch((error)=>{
                 console.log("error");
@@ -252,8 +255,20 @@
                     console.log(error);
                 });
             },
+             _getOrdinalNumber:function(){
+                axios.get('./amount/amountorinal')
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.getQuotaOrdinal = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
             _onDataSelect:function(e){
-              console.log(e.detail);
+              // console.log(e.detail);
               this.fire('toast',{status:'load'});
               this.dataSelected = e.detail;
               this.dataQuota = {
@@ -262,15 +277,17 @@
                 type_rice_id : this.$$('#typeRiceName').selectedItem.type_rice_name_th,
                 ordinal_number : this.selectQuotaOrdinal
               }
-              // console.log('dataQuota',this.$$('#typeRiceName').selectedItem.type_rice_name_th);
+             
+              console.log('dataQuota',this.$$('#typeRiceName').selectedItem.type_rice_name_th);
               this.fire('toast',{
                 status:'success',
                 callback:()=>{
-                  this.$$("panel-right").open();
+                   this.$$("panel-right").open();
                 }
               });
             },
             _getAllocate:function(){
+              // console.log(this.selectQuotaYear,this.selectTypeRice,this.selectQuotaOrdinal)
               var stat = Polymer.dom(this.root).querySelectorAll('.searchAllocate').map((item)=>{
                 return item.validate();
               });
@@ -279,7 +296,7 @@
               }
               if(stat.every(chkStat) == true){
                  this.fire('toast',{status:'load'});
-                axios.get('./eu/allocate/allocate',{
+                axios.get('./amount/amount',{
                   params:{
                     quota_id:this.selectQuotaYear,
                     type_rice_id:this.selectTypeRice,
@@ -288,7 +305,7 @@
                 })
                 .then((response)=>{
                     this.dataAllocate = response.data;
-                    console.log('..',this.dataAllocate);
+                    // console.log('..',this.dataAllocate);
                     this.fire('toast',{status:'success',
                     callback:()=>{
                       this.active = false;

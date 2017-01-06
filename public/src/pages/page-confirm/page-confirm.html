@@ -7,7 +7,7 @@
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
-        paper-item{
+        paper-item,th,td{
             font-family: 'CSChatThaiUI', sans-serif !important;
             -webkit-font-smoothing: antialiased;
       }
@@ -135,7 +135,7 @@
                 border-radius: 6px;
                 background-color: white !important;
             }*/
-/*--------------------------------------*/
+        /*--------------------------------------*/
             main {
                 min-width: 320px;
                 max-width: 1000px;
@@ -192,7 +192,7 @@
             }
 
     </style>
-<template>
+    <template>
     <div class="layout vertical registor">
         <div class="flex">
             <div class="layout horizontal end-justified">
@@ -237,284 +237,284 @@
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                     <paper-button class="gl-btn-primary" on-tap="_getDataCompanny" style="margin-top:20px;" raised>ค้นหา</paper-button>
-</gl-grid-col>
-<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-</gl-grid-row>
-</div>
-<!--<div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>-->
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+                </gl-grid-row>
+                </div>
+                <!--<div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>-->
 
-<div>
-    <!--   -->
-    <main>
+                <div>
+                    <!--   -->
+                <main>
 
-        <input id="tab1" type="radio" name="tabs" checked>
-        <label for="tab1">ยังไม่ยืนยัน</label>
+                    <input id="tab1" type="radio" name="tabs" checked>
+                    <label for="tab1">ยังไม่ยืนยัน</label>
 
-        <input id="tab2" type="radio" name="tabs">
-        <label for="tab2">ยืนยัน</label>
+                    <input id="tab2" type="radio" name="tabs">
+                    <label for="tab2">ยืนยัน</label>
 
-        <template is="dom-if" if="{{dataCheck}}">
-            <div style="padding: 20px 0 0; border-top: 1px solid #ddd;">
-             <table class="gl-table-default">
-                 <thead>
-                    <tr>
-                        <th class="left">ผู้ส่งออก</th>
-                        <th>ปริมาณโควตารวม</th>
-                        <th>งวดที่ 1 มกราคม</th>
-                        <th>งวดที่ 2 เมษายน</th>
-                        <th>งวดที่ 3 กรกฏาคม</th>
-                    </tr>
-                </thead>
-                 <tbody>
-                     <td class="left" colspan="5">ไม่พบข้อมูล 
-                     </td>
-                 </tbody>
-             </table>
-             </div>
-        </template>
-        <template is="dom-if" if="{{dataStat}}">
-        <section id="content1">
-            <confirm-list data="[[dataNonConfirm]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
-        </section>
+                    <template is="dom-if" if="{{dataCheck}}">
+                        <div style="padding: 20px 0 0; border-top: 1px solid #ddd;">
+                        <table class="gl-table-default">
+                            <thead>
+                                <tr>
+                                    <th class="left">ผู้ส่งออก</th>
+                                    <th>ปริมาณโควตารวม</th>
+                                    <th>งวดที่ 1 มกราคม</th>
+                                    <th>งวดที่ 2 เมษายน</th>
+                                    <th>งวดที่ 3 กรกฏาคม</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <td class="left" colspan="5">ไม่พบข้อมูล 
+                                </td>
+                            </tbody>
+                        </table>
+                        </div>
+                    </template>
+                    <template is="dom-if" if="{{dataStat}}">
+                    <section id="content1">
+                        <confirm-list data="[[dataNonConfirm]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
+                    </section>
 
-        <section id="content2">
-            <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect" status="บันทึก"></confirm-list>
-        </section>
-        </template>
-    </main>
-   
-</div>
-
-<panel-right title="ยืนยันรับส่วนจัดสรร">
-    <template is="dom-if" if="[[rendered]]">
-        <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
-    </template>
-</panel-right>
-</template>
-<script>
-    Polymer({
-        is: "page-confirm",
-        behaviors: [nylonBehavior],
-        observers: [
-            '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
-        ],
-        properties: {
-            layerContent: {
-                type: String,
-                value: "detailRegExporter"
-            },
-            data: {
-                type: Object,
-                value: {
-                    header: [
-                        'ผู้ส่งออก',
-                        'ปริมาณโควตารวม',
-                        'งวดที่ 1 (มกราคม)',
-                        'งวดที่ 2 (เมษายน)',
-                        'งวดที่ 3 (กรกฏาคม)'
-                    ]
-                }
-
-            },
-            dataAmount: {
-                type: Object,
-                value:
-                {
-                    header: [
-                        'ผู้ส่งออก',
-                        'ปริมาณโควตารวม',
-                        'งวดที่ 1 (มกราคม)',
-                        'งวดที่ 2 (เมษายน)',
-                        'งวดที่ 3 (กรกฏาคม)'
-                    ],
-                    content: [
-                        {
-                            a: 'บริษัท ปองค้าข้าว จำกัด',
-                            b: '426.00',
-                            c: '214.00',
-                            d: '106.00',
-                            e: '106.00'
-                        },
-                        {
-                            a: 'บริษัท พงษ์ลาภ จำกัด',
-                            b: '1,574.00',
-                            c: '768.00',
-                            d: '394.00',
-                            e: '394.00'
-                        }
-                    ],
-                    sum: [
-                        {
-                            sumb: '2,000.00',
-                            sumc: '1,000.00',
-                            sumd: '500.00',
-                            sume: '500.00'
-                        }
-                    ]
-
-                }
-            },
-            companyName: {
-                type: Array,
-                value: [
-                    'บริษัท ปองค้าข้าว จำกัด',
-                    'บริษัท พงษ์ลาภ จำกัด'
-                ]
-            },
-            searchType: {
-                type: Object,
-                value: [{
-                    id: 1,
-                    name: 'ทั้งหมด'
-                }, {
-                    id: 2,
-                    name: 'ผู้ส่งออกที่ถูกระงับ'
-                }]
-            },
-
-        },
-        nylonPageActive: function () {
-            this._getYear();
-            this._getTypeRice();
-        },
-        ready: function () {
-            this.dataCheck = true;
-            this.dataStat = false;
-            this.btnName = 'ค้นหา';
-            this.pageSelected = 0;
-            Polymer.RenderStatus.afterNextRender(this, function () {
-                this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e) => {
-                    this.rendered = true;
-                }, (e) => {
-                    console.log('error')
-                });
-            });
-
+                    <section id="content2">
+                        <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect" status="บันทึก"></confirm-list>
+                    </section>
+                    </template>
+                </main>
             
-        },
-        _onDataSelect: function (e) {
-            this.pageSelected = 0;
-            this.$$('panel-right').open();
-            this.dataSelect = e.detail.data;
-            this.statusSelect = e.detail.status;
-        },
-        _getYear: function () {
-            axios.get('./common/year')
-                .then((response) => {
-                    console.log("success");
-                    this.getYear = response.data.map((item)=>{
-                        return item.toString();
+            </div>
+
+            <panel-right title="ยืนยันรับส่วนจัดสรร">
+                <template is="dom-if" if="[[rendered]]">
+                    <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
+                </template>
+            </panel-right>
+            </template>
+        <script>
+            Polymer({
+                is: "page-confirm",
+                behaviors: [nylonBehavior],
+                observers: [
+                    '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
+                ],
+                properties: {
+                    layerContent: {
+                        type: String,
+                        value: "detailRegExporter"
+                    },
+                    data: {
+                        type: Object,
+                        value: {
+                            header: [
+                                'ผู้ส่งออก',
+                                'ปริมาณโควตารวม',
+                                'งวดที่ 1 (มกราคม)',
+                                'งวดที่ 2 (เมษายน)',
+                                'งวดที่ 3 (กรกฏาคม)'
+                            ]
+                        }
+
+                    },
+                    dataAmount: {
+                        type: Object,
+                        value:
+                        {
+                            header: [
+                                'ผู้ส่งออก',
+                                'ปริมาณโควตารวม',
+                                'งวดที่ 1 (มกราคม)',
+                                'งวดที่ 2 (เมษายน)',
+                                'งวดที่ 3 (กรกฏาคม)'
+                            ],
+                            content: [
+                                {
+                                    a: 'บริษัท ปองค้าข้าว จำกัด',
+                                    b: '426.00',
+                                    c: '214.00',
+                                    d: '106.00',
+                                    e: '106.00'
+                                },
+                                {
+                                    a: 'บริษัท พงษ์ลาภ จำกัด',
+                                    b: '1,574.00',
+                                    c: '768.00',
+                                    d: '394.00',
+                                    e: '394.00'
+                                }
+                            ],
+                            sum: [
+                                {
+                                    sumb: '2,000.00',
+                                    sumc: '1,000.00',
+                                    sumd: '500.00',
+                                    sume: '500.00'
+                                }
+                            ]
+
+                        }
+                    },
+                    companyName: {
+                        type: Array,
+                        value: [
+                            'บริษัท ปองค้าข้าว จำกัด',
+                            'บริษัท พงษ์ลาภ จำกัด'
+                        ]
+                    },
+                    searchType: {
+                        type: Object,
+                        value: [{
+                            id: 1,
+                            name: 'ทั้งหมด'
+                        }, {
+                            id: 2,
+                            name: 'ผู้ส่งออกที่ถูกระงับ'
+                        }]
+                    },
+
+                },
+                nylonPageActive: function () {
+                    this._getYear();
+                    this._getTypeRice();
+                },
+                ready: function () {
+                    this.dataCheck = true;
+                    this.dataStat = false;
+                    this.btnName = 'ค้นหา';
+                    this.pageSelected = 0;
+                    Polymer.RenderStatus.afterNextRender(this, function () {
+                        this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e) => {
+                            this.rendered = true;
+                        }, (e) => {
+                            console.log('error')
+                        });
                     });
-                  
-                })
-                .catch((error) => {
-                    console.log("error");
-                    console.log(error.message);
-                    this.fire('toast', {
-                        status: 'connectError', text: error.message,
-                        callback: function () {
-                            //console.log('test');
+
+                    
+                },
+                _onDataSelect: function (e) {
+                    this.pageSelected = 0;
+                    this.$$('panel-right').open();
+                    this.dataSelect = e.detail.data;
+                    this.statusSelect = e.detail.status;
+                },
+                _getYear: function () {
+                    axios.get('./common/year')
+                        .then((response) => {
+                            console.log("success");
+                            this.getYear = response.data.map((item)=>{
+                                return item.toString();
+                            });
+                        
+                        })
+                        .catch((error) => {
+                            console.log("error");
+                            console.log(error.message);
+                            this.fire('toast', {
+                                status: 'connectError', text: error.message,
+                                callback: function () {
+                                    //console.log('test');
+                                }
+                            })
+                        });
+                },
+                _getTypeRice: function () {
+                    axios.get('./common/type_rice')
+                        .then((response) => {
+                            //console.log("success!!");
+                        
+                            this.getTypeRice = response.data;
+                        })
+                        .catch((error) => {
+                            console.log("error");
+                            console.log(error);
+                        });
+                },
+                _getDataCompanny:function(){
+                    // this.$$('confirm-list')._setData();
+                    // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
+                    axios.get('./confirm/notconfirmall', {
+                        params: {
+                            year: this.selectYear,
+                            type_rice_id: this.typeRice,
+                            ordinal:this.selectQuotaOrdinal,
+                            exporter_id:this.selectExporter
                         }
                     })
-                });
-        },
-        _getTypeRice: function () {
-            axios.get('./common/type_rice')
-                .then((response) => {
-                    //console.log("success!!");
-                 
-                    this.getTypeRice = response.data;
-                })
-                .catch((error) => {
-                    console.log("error");
-                    console.log(error);
-                });
-        },
-        _getDataCompanny:function(){
-            // this.$$('confirm-list')._setData();
-            // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
-             axios.get('./confirm/notconfirmall', {
-                params: {
-                    year: this.selectYear,
-                    type_rice_id: this.typeRice,
-                    ordinal:this.selectQuotaOrdinal,
-                    exporter_id:this.selectExporter
-                }
-            })
-            .then((response) => {
-                console.log("success!!");
-                console.log(response.data);
-                this.dataCheck = false;
-                this.dataStat = true;
-                this.dataNonConfirm = response.data;
-                // this.getQuotaOrdinal = response.data;
-            })
-            .catch((error) => {
-                console.log("error");
-                console.log(error);
-            });
+                    .then((response) => {
+                        console.log("success!!");
+                        console.log(response.data);
+                        this.dataCheck = false;
+                        this.dataStat = true;
+                        this.dataNonConfirm = response.data;
+                        // this.getQuotaOrdinal = response.data;
+                    })
+                    .catch((error) => {
+                        console.log("error");
+                        console.log(error);
+                    });
 
-            axios.get('./confirm/confirm', {
-                params: {
-                    year: this.selectYear,
-                    type_rice_id: this.typeRice,
-                    ordinal:this.selectQuotaOrdinal,
-                    exporter_id:this.selectExporter
-                }
-            })
-            .then((response) => {
-                console.log("success!!");
-                console.log('confirm',response.data);
-                this.dataConfirm = response.data;
-                // this.getQuotaOrdinal = response.data;
-            })
-            .catch((error) => {
-                console.log("error");
-                console.log(error);
-            });
+                    axios.get('./confirm/confirm', {
+                        params: {
+                            year: this.selectYear,
+                            type_rice_id: this.typeRice,
+                            ordinal:this.selectQuotaOrdinal,
+                            exporter_id:this.selectExporter
+                        }
+                    })
+                    .then((response) => {
+                        console.log("success!!");
+                        console.log('confirm',response.data);
+                        this.dataConfirm = response.data;
+                        // this.getQuotaOrdinal = response.data;
+                    })
+                    .catch((error) => {
+                        console.log("error");
+                        console.log(error);
+                    });
 
-        },
-        _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
-            // console.log(yearQuoata,typeRice);
-            this.selectQuotaOrdinal = "";
-            axios.get('./confirm/notconfirm', {
-                params: {
-                    year: yearQuoata,
-                    type_rice_id: typeRice
+                },
+                _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
+                    // console.log(yearQuoata,typeRice);
+                    this.selectQuotaOrdinal = "";
+                    axios.get('./confirm/notconfirm', {
+                        params: {
+                            year: yearQuoata,
+                            type_rice_id: typeRice
+                        }
+                    })
+                        .then((response) => {
+                            console.log("success!!");
+                        
+                            this.getQuotaOrdinal = response.data;
+                        })
+                        .catch((error) => {
+                            console.log("error");
+                            console.log(error);
+                        });
+                },
+                _saveData: function(e){
+                    console.log('save!!',e.detail);
+                    this.fire('toast',{status:'load'});
+                    axios.post('/confirm/confirm',e.detail)
+                    .then((response)=>{
+                        console.log("success");
+                        this.textToast = 'บันทึกข้อมูลสำเร็จ';
+                        console.log(response);
+                        this.fire('toast', {
+                            status: 'success',
+                            text: 'บันทึกสำเร็จ',
+                            callback:()=>{
+                                this.$$("panel-right").close();
+                            }
+                        })
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error);
+                    });
+            
                 }
-            })
-                .then((response) => {
-                    console.log("success!!");
-                  
-                    this.getQuotaOrdinal = response.data;
-                })
-                .catch((error) => {
-                    console.log("error");
-                    console.log(error);
-                });
-        },
-        _saveData: function(e){
-            console.log('save!!',e.detail);
-            this.fire('toast',{status:'load'});
-            axios.post('/confirm/confirm',e.detail)
-            .then((response)=>{
-                console.log("success");
-                this.textToast = 'บันทึกข้อมูลสำเร็จ';
-                console.log(response);
-                this.fire('toast', {
-                    status: 'success',
-                    text: 'บันทึกสำเร็จ',
-                    callback:()=>{
-                        this.$$("panel-right").close();
-                    }
-                })
-            })
-            .catch((error)=>{
-                console.log("error");
-                console.log(error);
             });
-    
-        }
-    });
-</script>
-</dom-module>
+        </script>
+        </dom-module>

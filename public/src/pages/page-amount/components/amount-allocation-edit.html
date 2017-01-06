@@ -88,7 +88,7 @@
 						<gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="{{dataSelect.seller_tax_id}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-						<gl-form-input label="บริษัท" value="{{dataSelect.seller_name_th}}" id="" disabled name=""></gl-form-input>
+						<gl-form-input label="บริษัท" value="{{dataSelect.name}}" id="" disabled name=""></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 
@@ -107,16 +107,16 @@
 			<gl-form-panel set-padding="0px 0px 20px 0px">
 					<div class="title">ดำเนินการจัดสรรโควตา</div>
 					<gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
-					<template is="dom-repeat" items="{{dataSelect.period}}">
+					<template is="dom-repeat" items="{{dataSelect.quantity}}">
          
 					<gl-grid-row width="{{getWidth}}">
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-							<gl-form-input class="right" label="งวดที่ [[_num(index)]] [[getMonthName(item.month)]]" value="{{formatNumber(item.quantity)}}" disabled></gl-form-input>
+							<gl-form-input class="right" label="งวดที่ [[item.period]] [[getMonthName(item.month)]]" value="{{formatNumber(item.weigth)}}" disabled></gl-form-input>
 						</gl-grid-col>
 							<!--<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>-->
 						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-							<gl-form-input class="saveData right" required label="ยอดปรับปรุง" allowed-pattern="[0-9||,||.]" format-number="on" error-message="กรุณาระบุยอดปรับปรุง" always-float-label value="{{item.quantity_update}}"></gl-form-input>
+							<gl-form-input class="saveData right" required label="ยอดปรับปรุง" allowed-pattern="[0-9||,||.]" format-number="on" error-message="กรุณาระบุยอดปรับปรุง" always-float-label value="{{item.weigth_update}}"></gl-form-input>
 						</gl-grid-col>
 						
 					</gl-grid-row>
@@ -128,11 +128,11 @@
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 						<!--<gl-form-input label="ปริมาณโควตารวม" id="" disabled name="" value="{{dataSelect.quantity}}"></gl-form-input>-->
-						<gl-form-input class="right" label="ปริมาณโควตารวม" always-float-label id="" disabled name="" value="[[_sumAllocation(dataSelect.period.*,'quantity')]]"></gl-form-input>
+						<gl-form-input class="right" label="ปริมาณโควตารวม" always-float-label id="" disabled name="" value="[[_sumAllocation(dataSelect.quantity.*,'weigth')]]"></gl-form-input>
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควตารวม</div>-->
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-						<gl-form-input class="saveData right" label="ยอดปรับปรุงรวม" format-number="on" always-float-label value="[[_sumAllocationUpdate(dataSelect.period.*,'quantity_update')]]" disabled></gl-form-input>
+						<gl-form-input class="saveData right" label="ยอดปรับปรุงรวม" format-number="on" always-float-label value="[[_sumAllocationUpdate(dataSelect.quantity.*,'weigth_update')]]" disabled></gl-form-input>
 					</gl-grid-col>
 				</gl-grid-row>
 					</gl-form-panel-body>
