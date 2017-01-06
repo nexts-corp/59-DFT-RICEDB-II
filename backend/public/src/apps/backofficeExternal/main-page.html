@@ -1,0 +1,66 @@
+<dom-module id="backofficeExternal-main-page">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size">
+      *{
+        font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+    <template>
+
+      <paper-material elevation="1" style="padding:5px; margin-left:15%; width:70%;">
+
+        <template is="dom-repeat" items="[[menuTable]]">
+          <div style="padding:5px">
+            <paper-listbox>
+              <paper-item on-tap="_getUrl" url$="[[item.url]]" style="cursor:pointer;">
+                <iron-image style="margin-right:5px;" src="{{item.img}}"></iron-image>
+                {{item.nameMenu}}
+              </paper-item>
+            </paper-listbox>
+          </div>
+        </template>
+
+      </paper-material>
+
+    </template>
+    <script>
+        Polymer({
+            is: "backofficeExternal-main-page",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            properties: {
+              menuTable: {
+                type: Object,
+                value:
+                [
+                  {
+                    id:0,
+                    nameMenu:'ผู้ประกอบการ',
+                    url:'/backofficeExternal/page-trader',
+                    img:'../../../images/backoffice/01/72.png'
+                  },
+                  {
+                    id:1,
+                    nameMenu:'ผู้ขาย',
+                    url:'/backofficeExternal/page-seller',
+                    img:'../../../images/backoffice/02/72.png'
+                  }
+                ]
+              }
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales
+            ],
+            created: function() {
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backofficeExternal');
+            },
+            _getUrl:function(e){
+              var url = e.target.getAttribute('url')
+              this.glChangePath(url);
+            }
+        });
+    </script>
+</dom-module>

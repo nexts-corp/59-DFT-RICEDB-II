@@ -1,0 +1,237 @@
+<link rel="import" href="components/panel-right.html">
+<link rel="import" href="../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
+<link rel="import" href="components/trader/insert-trader.html">
+<link rel="import" href="components/trader/edit-trader.html">
+<link rel="import" href="functionBehavior/dataBehavior.html">
+<link rel="import" href="functionBehavior/searchBehavior.html">
+<dom-module id="backofficeExternal-page-trader">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-color gl-size gl-table">
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: var(--font-size-h5);
+    }
+    .button-top{
+      margin: 20px;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-head {
+      text-align: center;
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h3);
+      /*font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;*/
+    }
+    .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 15%;
+    }
+    .table-head > tr > th:nth-child(3) {
+      width: 15%;
+    }
+    .table-head > tr > th:nth-child(4) {
+      width: 15%;
+    }
+    .elevation{
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+      background-color: white;
+    }
+    .labelSearch{
+      font-size: var(--font-size-h5);
+      margin: 10px 10px 10px 10px;
+    }
+    </style>
+    <template>
+      <panel-right>
+        <grid>
+          <paper-material elevation="1" class="elevation">
+
+          <paper-button class="gl-btn-primary" style="margin:10px" raised on-tap="_back"><iron-icon icon="icons:chevron-left"></iron-icon>back</paper-button>
+
+          <div class="text-head">ระบบจัดการผู้ประกอบการ</div>
+
+           <div class="horizontal justified layout">
+             <div class="horizontal layout" style="margin-top:25px;">
+               <div class="labelSearch">รหัสผู้ประกอบการ</div>{{_searchInArray(searchInput)}}
+               <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+               <iron-icon icon="search" style="margin-top:10px;"></iron-icon>
+             </div>
+             <div>
+               <paper-button class="gl-btn-primary button-top" title="เพิ่มผู้ประกอบการ" raised on-tap="_toggleDrawer"><iron-icon icon="add"></iron-icon>เพิ่มผู้ประกอบการ</paper-button>
+             </div>
+           </div>
+
+          <table class="gl-table-default">
+            <thead class="table-head">
+              <tr>
+                <th><div class="text-center">No<p>(ลำดับ)</div></th>
+                <th><div class="text-center">Trader No<p>(รหัสประจำตัวผู้เสียภาษี)</div></th>
+                <th><div class="text-center">Trader Name<p>(ชื่อผู้ประกอบการ)</div></th>
+                <th><div class="text-center">Province<p>(จังหวัด)</div></th>
+                <th><div class="text-center">Type<p>(ประเภท)</div></th>
+                <th><div class="text-center">Date Update<p>(วันที่อัพเดทล่าสุด)</div></th>
+                <th style="text-align:right;"></th>
+              </tr>
+            </thead>
+
+            <template is="dom-repeat" items="[[newData]]">
+              <tbody>
+                <tr>
+                  <td><div class="text-center">{{item.no}}</div></td>
+                  <td><div class="text-center">{{item.trader_no}}</div></td>
+                  <td><div class="text-center">{{item.trader_name}}</div></td>
+                  <td><div class="text-center">{{item.province_name_th}}</div></td>
+                  <td><div class="text-center">{{item.type_lic_name}}</div></td>
+                  <td><div class="text-center">{{item.date_updated}}</div></td>
+                  <td style="text-align:right;">
+                    <paper-icon-button data="{{item}}" on-tap="_edit" icon="icons:create"></paper-icon-button>
+                    <paper-icon-button data="{{item}}" icon="delete" on-tap="_delete"></paper-icon-button>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+
+          </table>
+          </paper-material>
+
+        </grid>
+
+        <panel>
+          <div class="left">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="addTrader"><insert-trader sellers="{{seller}}" typelics="{{typelics}}" provinces="{{provinces}}"></insert-trader></div>
+              <div name="editTrader"><edit-trader sellers="{{seller}}" typelics="{{typelics}}" provinces="{{provinces}}" data="{{dataSelect}}" data-lic="{{dataLic}}"></edit-trader></div>
+            </iron-pages>
+          </div>
+        </panel>
+      </panel-right>
+    </template>
+    <script>
+        Polymer({
+            is: "backofficeExternal-page-trader",
+            listeners: {
+                'nx-grid-tap': 'nxGridTap'
+            },
+            behaviors: [
+                gl.behavior.core,
+                gl.behavior.locales,
+                dataBehavior,
+                searchBehavior
+            ],
+            observers:[
+              'initDatabl(data)'
+            ],
+            properties: {
+              newData:{
+                type:Object
+              }
+            },
+            attached: function() {
+              this.getTrader();
+            },
+            created: function() {
+                this.glSetTitle('ระบบเพิ่ม ลบ แก้ไขข้อมูล');
+                this.glSetLayout('layout-backofficeExternal');
+                this.glQuery('refreshTrader',this)
+            },
+            _toggleDrawer: function(e) {
+              this.glQuery('panelRight').changDrawer();
+              this.layerContent ="addTrader";
+            },
+            _edit: function(e) {
+              // console.log(e.target.data);
+              this.dataSelect = e.target.data;
+              this.glQuery('panelRight').changDrawer();
+              this.layerContent ="editTrader";
+              var seller_id = e.target.data.seller_id;
+              var dataFilter = this.dataTrader.filter((x)=> x.seller_id==seller_id);
+              var dataLic = [];
+              dataFilter.map((val)=>{
+                if (val.trader_id != e.target.data.trader_id) {
+                  // console.log(val.trader_id);
+                  dataLic.push({type_lic_id:val.type_lic_id});
+                }
+              })
+              // console.log(dataLic);
+              this.dataLic = dataLic;
+              // this.seller_id = e.target.data.seller_id;
+            },
+            _delete: function(e){
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการลบใช่หรือไม่ ?',
+              confirmed : this._confirmToast.bind(this),
+              // el: this,
+              datas: {
+                 id : e.target.data.trader_id
+              }
+            });
+            },
+            _confirmToast:function(result,detail){
+              if(result == true){
+                this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                this.delete('./external/trader/delete/id/',detail.datas.id, () => {
+                  this.glQuery('refreshTrader').getTrader();
+                  this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
+              }
+            },
+            getTrader: function() {
+              this.read('./external/trader', (data)=>{
+
+                this.dataTrader = data;
+                for (var i = 0; i < this.dataTrader.length; i++) {
+                  this.dataTrader[i]['no'] = i+1;
+                }
+                this.initDatabl(this.dataTrader);
+              });
+
+              this.read('./external/seller', (data) => {
+                this.seller = data;
+              });
+
+              this.read('./external/typeLicense', (data) => {
+                this.typelics = data;
+              });
+
+              this.read('./common/province', (data) => {
+                this.provinces = data;
+              });
+            },
+            _back:function() {
+              window.history.back();
+            },
+            initDatabl:function (data) {
+              // console.log(data);
+              this.newData = this.Clone(data);
+              // console.log('clone new==>',this.newData);
+              // console.log('org==>',this.data);
+            },
+            _searchInArray:function (searchInput) {
+                // console.log(searchInput == '');
+                if (searchInput != '') {
+                  let arr=[];
+                  this.dataTrader.map((el)=>{
+                    if (el.trader_no.search(searchInput) > -1) {
+                        //  console.log('search==> ',el);
+                          arr.push(el);
+                    }
+                  });
+                  this.newData=arr;
+                }else{
+                  this.initDatabl(this.dataTrader);
+                }
+            },
+        });
+    </script>
+</dom-module>

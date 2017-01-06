@@ -34,7 +34,7 @@ var schema = {
         "trader_office": {
             "type": "string"
         },
-        "trader_province": {
+        "province_id": {
             "type": "string"
         },
         "type_lic_id": {
@@ -46,11 +46,25 @@ var schema = {
 var validate = ajv.compile(schema);
 
 router.get(['/', '/list'], function (req, res, next) {
+    var q = {};
+    for (key in req.query) {
+
+        if (req.query[key] == "true") {
+            req.query[key] = true;
+        } else if (req.query[key] == "false") {
+            req.query[key] = false;
+        } else if (req.query[key] == "null") {
+            req.query[key] = null;
+        }
+        q[key] = req.query[key];
+        console.log(q);
+    }
     db.query(function (conn) {
         r.db('external_f3').table("trader")
             .merge(function (row) {
                 return {
                     trader_id: row('id'),
+                    date_updated: row('date_updated').split('T')(0),
                     trader_date_approve: row('trader_date_approve').split('T')(0),
                     trader_date_expire: row('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
                     trader_active: r.now().toISO8601().lt(row('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
@@ -60,6 +74,9 @@ router.get(['/', '/list'], function (req, res, next) {
             .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .eqJoin("type_lic_id", r.db('external_f3').table("type_license")).without({ right: ["id", "date_created", "date_updated"] }).zip()
             .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .eqJoin("province_id", r.db('common').table("province")).without({ right: ["id", "date_created", "date_updated"] }).zip()
+            .orderBy('trader_no')
+            .filter(q)
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

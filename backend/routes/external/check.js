@@ -8,8 +8,9 @@ router.get('/duplicate', function (req, res, next) {
     var q = {};
     var tb = req.query['table'];
     q[req.query['field']] = req.query['value'];
+
     db.query(function (conn) {
-        r.db('common').table(tb)
+        r.db('external_f3').table(tb)
             .filter(q)
             .count()
             .run(conn, function (err, cursor) {
@@ -29,7 +30,7 @@ router.get('/myowner', function (req, res, next) {
     q[req.query['field']] = req.query['value'];
     
     db.query(function (conn) {
-        r.db('common').table(tb)
+        r.db('external_f3').table(tb)
             .filter(q)
             .count()
             .run(conn, function (err, cursor) {

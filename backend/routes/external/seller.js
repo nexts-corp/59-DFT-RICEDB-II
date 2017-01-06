@@ -61,7 +61,8 @@ router.get(['/', '/list'], function (req, res, next) {
     db.query(function (conn) {
         r.db('external_f3').table("seller")
             .merge(function (row) {
-                return { seller_id: row('id') }
+                return { seller_id: row('id'),
+            date_updated: row('date_updated').split('T')(0) }
             })
             .without('id')
             .eqJoin("country_id", r.db('common').table("country")).without({ right: ["id", "date_created", "date_updated"] }).zip()

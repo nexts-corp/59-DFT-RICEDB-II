@@ -1,0 +1,81 @@
+<dom-module id="list-menubo" inclue="iron-flex iron-flex-factors iron-flex-alignment">
+  <style>
+    /*.subMenu{
+      padding-left: 15%;
+    }*/
+    .bd{
+      border: 1px solid #000;
+    }
+    .getUrl{
+      background-color: red;
+    }
+    paper-icon-item ,paper-item{
+      cursor: pointer;
+
+      --paper-item-focused: {
+        background-color: var(--gl-info-color);
+        /*opacity: 0;*/
+    }
+  </style>
+  <template>
+    <paper-menu>
+      <template is="dom-repeat" items="[[menuData]]">
+        <!-- <paper-submenu> -->
+        <paper-icon-item class="menu-trigger" style="padding:0px;">
+          <iron-image style="margin-right:5px;" src="{{item.img}}"></iron-image>
+          <div on-tap="getUrl" url$="[[item.url]]">
+                [[item.nameMenu]]
+          </div>
+        </paper-icon-item>
+      </template>
+
+    </paper-menu>
+  </template>
+  <script>
+    Polymer({
+      is: "list-menubo",
+      behaviors: [
+        gl.behavior.core
+      ],
+      properties: {
+        menuData: {
+          type: Object,
+          value:
+          [
+            {
+              id:0,
+              nameMenu:'หน้าแรก',
+              url:'/backofficeExternal/main-table',
+              img:'../../../../images/backoffice/home/32.png'
+            },
+            {
+              id:1,
+              nameMenu:'ผู้ประกอบการ',
+              url:'/backofficeExternal/page-trader',
+              img:'../../../../images/backoffice/01/32.png'
+            },
+            {
+              id:2,
+              nameMenu:'ผู้ขาย',
+              url:'/backofficeExternal/page-seller',
+              img:'../../../../images/backoffice/02/32.png'
+            }
+          ]
+        }
+      },
+      getUrl:function (e) {
+        // console.log(e.target.getAttribute("url"));
+        var url = e.target.getAttribute('url')
+        this.glChangePath(url);
+      },
+      _getSub:function (e) {
+        var targetAttribute = e.currentTarget.getAttribute('aria-controls');
+        if (e.target.icon == 'expand-more') {
+          e.target.icon = 'chevron-right';
+        }else {
+          e.target.icon = 'expand-more'
+        }
+      }
+    });
+  </script>
+</dom-module>

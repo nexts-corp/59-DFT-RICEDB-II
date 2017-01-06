@@ -1,4 +1,4 @@
-<link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
+<!-- <link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html"> -->
 <link rel="import" href="../../data/dataBehavior.html">
 <link rel="import" href="renew-memberShow.html">
 <link rel="import" href="renew-memberEdit.html">
@@ -41,14 +41,14 @@
 
       <gl-form-panel-head set-padding="0px 0px 0px 0px">
         <div id="removePen" hidden>
-          <!-- <paper-icon-button icon="create" on-tap="editChange" title="แก้ไขข้อมูล"></paper-icon-button> -->
+          <paper-icon-button icon="create" on-tap="editChange" title="แก้ไขข้อมูล"></paper-icon-button>
         </div>
       </gl-form-panel-head>
               <div class="bd">
                   <gl-form-panel>
                       <iron-pages selected="{{pages}}">
                           <renew-memberShow data="{{data}}"></renew-memberShow>
-                          <!-- <renew-memberEdit data="{{data}}"></renew-memberEdit> -->
+                          <renew-memberEdit data="{{data}}"></renew-memberEdit>
                       </iron-pages>
                   </gl-form-panel>
               </div>
@@ -193,8 +193,7 @@
       _active: function(){
         this.fire('toast',{status:'dialog',
         text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
-        confirmed : this._confirmToast,
-        el: this,
+        confirmed : this._confirmToast.bind(this),
         datas: {
            exporter_date_update: new Date,
            exporter_date_approve:new Date,
@@ -206,45 +205,37 @@
       },
       _confirmToast:function(result,detail){
         if(result == true){
-          detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          axios.put('./external/exporter/update', detail.datas)
-                    .then(function (response) {
-                      console.log("success");
-                      console.log(response);
-                      detail.el.glQuery('contentPanel').changDrawer();
-                      detail.el.glQuery('reExporter').getExporters();
-                      detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                        console.log('success');
-                      }});
-                    }.bind(this))
-                    .catch(function (error) {
-                      console.log("error");
-                      console.log(error);
-                    })
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.update('./external/exporter/update', detail.datas, () => {
+            this.glQuery('contentPanel').changDrawer();
+            this.glQuery('reExporter').getExporters();
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+          });
         }
       },
       _retrader:function(){
-        var datas= {
-          id: this.data.trader_id,
-          trader_date_approve: new Date
+        this.fire('toast',{status:'dialog',
+          text:'คุณต้องการจะต่ออายุ คน. ใช่หรือไม่ ?',
+          confirmed : this._confirmToasts.bind(this),
+          datas: {
+            id: this.data.trader_id,
+            trader_date_approve: new Date
+          }
+        });
+      },
+      _confirmToasts:function(result,detail){
+        if(result == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.update('./external/trader/update', detail.datas, () => {
+            this.glQuery('contentPanel').changDrawer();
+            this.glQuery('reExporter').getExporters();
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+          });
         }
-        // console.log(datas);
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        this.glQuery('layoutRegistion').openToastSaveing();
-        axios.put('./external/trader/update', datas)
-                  .then(function (response) {
-                    console.log("success");
-                    console.log(response);
-                    this.glQuery('contentPanel').changDrawer();
-                    this.glQuery('reExporter').getExporters();
-                    detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                      console.log('success');
-                    }});
-                  }.bind(this))
-                  .catch(function (error) {
-                    console.log("error");
-                    console.log(error);
-                  })
       },
       toggleDrawer:function(){
           this.glQuery('contentPanel').changDrawer();
