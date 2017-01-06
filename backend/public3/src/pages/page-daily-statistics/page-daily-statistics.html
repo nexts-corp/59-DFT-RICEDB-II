@@ -1,37 +1,132 @@
 <link rel="import" href="../components/box-menu.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-styles.html">
+
+<link rel="import" href="components/stat-send.html">
+<link rel="import" href="components/stat-fob-bangkok.html">
 <dom-module id="page-daily-statistics">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
       display: block;
     }
   </style>
-  <template>
-    <div class="layout horizontal center-justified wrap">
-      <template is="dom-repeat" items="[[mainMenu]]">
-        <box-menu data="{{item}}"></box-menu>
-      </template>
-    </div>
+  <template>{{pages}}//
+
+      <div class="layout horizontal center-justified wrap">
+        <template is="dom-repeat" items="[[mainMenu]]">
+          <box-menu data="{{item}}" on-tap="urlToReport" id={{index}}></box-menu>
+        </template>
+      </div>
+      <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
+        <iron-pages selected="{{pages}}">
+          <stat-send data="{{statSend}}"></stat-send>
+          <stat-fob-bangkok data="{{fobBnagkok}}"></stat-fob-bangkok>
+        </iron-pages>
+      </nylon-panel-right>
   </template>
   <script>
     Polymer({
       is: "page-daily-statistics",
       properties: {
+        pages:{
+          type:Number,
+          value:0
+        },
         mainMenu:{
           type:Array,
           value:
             [
               {path:'daily-statistics',nameMenu:'ข้อมูลสถานการณ์ตลาดข้าวประจำวันอังคารที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'/weekly-statistics',nameMenu:'สรุปสถานการณ์การส่งออกข้าวประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'/monthly-statistics',nameMenu:'ข้อมูลส่งออกข้าว ต้นทุนและราคาข้าวชนิดต่างๆ ประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'ราคาข้าวสาร เอฟโอบี กรุงเทพฯ',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'เปรียบเทียบราคาเสนอขาย ข้าวไทยกับประเทศคู่แข่ง',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'ราคาข้าวสารส่งออก F.O.B. กรุงทพฯ ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'ราคาเฉลี่ยข้าวเปลือก',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'รับแจ้งขายข้าวประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'ประเทศผู้นำเข้าข้าวรายใหญ่ของประเทศไทย ตามแจ้งขายข้าว ประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'/yearly-statistics',nameMenu:'ราคาข้าวตามใบอนุญาตประจำวันจันทร์ที่ 20 ธันวาคม 2559ิ',img:'/im.jpg'}
+              {path:'weekly-statistics',nameMenu:'สรุปสถานการณ์การส่งออกข้าวประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'monthly-statistics',nameMenu:'ข้อมูลส่งออกข้าว ต้นทุนและราคาข้าวชนิดต่างๆ ประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ราคาข้าวสาร เอฟโอบี กรุงเทพฯ',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'เปรียบเทียบราคาเสนอขาย ข้าวไทยกับประเทศคู่แข่ง',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ราคาข้าวสารส่งออก F.O.B. กรุงทพฯ ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ราคาเฉลี่ยข้าวเปลือก',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'รับแจ้งขายข้าวประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ประเทศผู้นำเข้าข้าวรายใหญ่ของประเทศไทย ตามแจ้งขายข้าว ประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ราคาข้าวตามใบอนุญาตประจำวันจันทร์ที่ 20 ธันวาคม 2559ิ',img:'/im.jpg'}
             ]
         },
+        statSend: {
+          type: Array,
+          value:
+            [
+              {date:'1-31 ก.ค.59',sumTon:'443736',usd:'225',thaiBath:'7881',a:'508',b:'473',c:'+7.48',form:'กรมศุลกากร'},
+              {date:'1-31 ส.ค.59',sumTon:'622630',usd:'300',thaiBath:'10414',a:'481',b:'467',c:'+2.98',form:'กรมศุลกากร'},
+              {date:'1-30 ก.ย.59',sumTon:'792162',usd:'352',thaiBath:'12297',a:'452',b:'467',c:'-3.20',form:'กรมศุลกากร'},
+              {date:'1-31 ต.ค.59',sumTon:'849738',usd:'370',thaiBath:'12780',a:'435',b:'407',c:'+7.03',form:'กรมศุลกากร'},
+              {date:'1-30 พ.ย.59',sumTon:'1082422',usd:'494',thaiBath:'17016',a:'457',b:'470',c:'-2.79',form:'ใบอนุญาติส่งออกข้าว'},
+              {date:'1-19 ธ.ค.59',sumTon:'643858',usd:'280',thaiBath:'9854',a:'434',b:'440',c:'-1.30',form:'ใบอนุญาติส่งออกข้าว'}
+            ]
+        },
+        fobBnagkok:{
+          type:Array,
+          value:
+            [
+              {
+                year:2558,
+                month:
+                  [
+                    {month_th:'มกราคม',a:941,b:831,pt:631},
+                    {month_th:'กุมภาพันธ์',a:951,b:936,pt:604},
+                    {month_th:'มีนาคม',a:936,b:897,pt:642},
+                    {month_th:'เมษายน',a:925,b:878,pt:650},
+                    {month_th:'พฤษภาคม',a:871,b:847,pt:648},
+                    {month_th:'มิถุนายน',a:837,b:819,pt:676},
+                    {month_th:'กรกฎาคม',a:865,b:840,pt:696},
+                    {month_th:'สิงหาคม',a:850,b:821,pt:684},
+                    {month_th:'กันยายน',a:814,b:788,pt:634},
+                    {month_th:'ตุลาคม',a:819,b:791,pt:627},
+                    {month_th:'พฤศจิกายน',a:774,b:746,pt:559},
+                    {month_th:'ธันวาคม',a:721,b:693,pt:502},
+                  ],
+                sum:{a:858,b:831,pt:631}
+              },
+              {
+                year:2559,
+                month:
+                  [
+                    {month_th:'มกราคม',a:714,b:686,pt:513},
+                    {month_th:'กุมภาพันธ์',a:724,b:687,pt:543},
+                    {month_th:'มีนาคม',a:717,b:675,pt:543},
+                    {month_th:'เมษายน',a:705,b:659,pt:542},
+                    {month_th:'พฤษภาคม',a:717,b:675,pt:556},
+                    {month_th:'มิถุนายน',a:746,b:694,pt:575},
+                    {month_th:'กรกฎาคม',a:748,b:688,pt:577},
+                    {month_th:'สิงหาคม',a:753,b:685,pt:573},
+                    {month_th:'กันยายน',a:738,b:674,pt:546},
+                    {month_th:'ตุลาคม',a:713,b:650,pt:518},
+                    {month_th:'พฤศจิกายน',a:689,b:629,pt:470},
+                    {month_th:'ธันวาคม',a:'',b:'',pt:''},
+                    {month_th:'1',a:681,b:622,pt:456},
+                    {month_th:'2',a:682,b:623,pt:456},
+                    {month_th:'6',a:683,b:624,pt:457},
+                    {month_th:'7',a:682,b:623,pt:456},
+                    {month_th:'8',a:683,b:624,pt:457},
+                    {month_th:'9',a:683,b:624,pt:462},
+                    {month_th:'13',a:683,b:624,pt:462},
+                    {month_th:'14',a:684,b:625,pt:463},
+                    {month_th:'15',a:681,b:622,pt:4661},
+                    {month_th:'16',a:680,b:620,pt:463},
+                    {month_th:'19',a:679,b:620,pt:0},
+                  ],
+                  sum_month:{a:682,b:623,pt:460},
+                  sum:{a:722,b:670,pt:537}
+              }
+            ]
+        }
+      },
+      urlToReport:function (e) {
+        console.log(e.target.id);
+        this.pages=e.target.id;
+        this._flipDrawerOpen();
+      },
+      _flipDrawerOpen:function () {
+        // this.$.drawerRight.actionDrawer();
+        Polymer.dom(this.root).querySelector('#drawerRight').open();
+      },
+      _flipDrawerClose:function () {
+        Polymer.dom(this.root).querySelector('#drawerRight').close();
       },
     });
   </script>
