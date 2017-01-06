@@ -1,16 +1,38 @@
+<link rel="import" href="../components/box-menu.html">
 <dom-module id="page-daily-statistics">
-  <style>
+  <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
       display: block;
     }
   </style>
   <template>
-page-daily-statistics
+    <div class="layout horizontal center-justified wrap">
+      <template is="dom-repeat" items="[[mainMenu]]">
+        <box-menu data="{{item}}"></box-menu>
+      </template>
+    </div>
   </template>
   <script>
     Polymer({
       is: "page-daily-statistics",
-
+      properties: {
+        mainMenu:{
+          type:Array,
+          value:
+            [
+              {path:'daily-statistics',nameMenu:'ข้อมูลสถานการณ์ตลาดข้าวประจำวันอังคารที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'/weekly-statistics',nameMenu:'สรุปสถานการณ์การส่งออกข้าวประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'/monthly-statistics',nameMenu:'ข้อมูลส่งออกข้าว ต้นทุนและราคาข้าวชนิดต่างๆ ประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ราคาข้าวสาร เอฟโอบี กรุงเทพฯ',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'เปรียบเทียบราคาเสนอขาย ข้าวไทยกับประเทศคู่แข่ง',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ราคาข้าวสารส่งออก F.O.B. กรุงทพฯ ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ราคาเฉลี่ยข้าวเปลือก',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'รับแจ้งขายข้าวประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ประเทศผู้นำเข้าข้าวรายใหญ่ของประเทศไทย ตามแจ้งขายข้าว ประจำวันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ราคาข้าวตามใบอนุญาตประจำวันจันทร์ที่ 20 ธันวาคม 2559ิ',img:'/im.jpg'}
+            ]
+        },
+      },
     });
   </script>
 </dom-module>

@@ -1,16 +1,40 @@
+<link rel="import" href="../components/box-menu.html">
 <dom-module id="page-yearly-statistics">
-  <style>
+  <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
       display: block;
     }
   </style>
   <template>
-page-yearly-statistics
+    <div class="layout horizontal center-justified wrap">
+      <template is="dom-repeat" items="[[mainMenu]]">
+        <box-menu data="{{item}}"></box-menu>
+      </template>
+    </div>
   </template>
   <script>
     Polymer({
       is: "page-yearly-statistics",
-
+      properties: {
+        mainMenu:{
+          type:Array,
+          value:
+            [
+              {path:'daily-statistics',nameMenu:'ปริมาณส่งออกข้าวของไทยปี 2554 - 2559 (มกราคม - กุมภาพันธ์)',img:'/im.jpg'},
+              {path:'/weekly-statistics',nameMenu:'สถานการณ์ข้าวหอมมะลิไทย',img:'/im.jpg'},
+              {path:'/monthly-statistics',nameMenu:'สถานการณ์ข้าวหอมมะลิไทย (ต้นข้าว)',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'สถานการณ์ข้าวหนียวไทย',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'สถานการณ์ข้าวนึ่ง',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'สถานการณ์ข้าวขาว',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'สถานการณ์ข้าวอินทรีย์',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ข้อมูลสถานการณ์ข้าวอินโดนีเซีย',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ข้อมูลสถานการณ์ข้าวสหรัฐอเมริกา',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ข้อมูลสถานการณ์ข้าวสาธาณรัฐประชาชนจีน',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ข้อมูลสถานการณ์ข้าวฮ่องกง',img:'/im.jpg'},
+              {path:'/yearly-statistics',nameMenu:'ข้อมูลสถานการณ์ข้าวสิงค์โปร',img:'/im.jpg'},
+            ]
+        },
+      },
     });
   </script>
 </dom-module>

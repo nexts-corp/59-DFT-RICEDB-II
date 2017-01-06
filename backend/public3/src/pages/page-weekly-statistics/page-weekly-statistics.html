@@ -1,15 +1,32 @@
+<link rel="import" href="../components/box-menu.html">
 <dom-module id="page-weekly-statistics">
-  <style>
+  <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
       display: block;
     }
   </style>
   <template>
-page-weekly-statistics
+    <div class="layout horizontal center-justified wrap">
+      <template is="dom-repeat" items="[[mainMenu]]">
+        <box-menu data="{{item}}"></box-menu>
+      </template>
+    </div>
   </template>
   <script>
     Polymer({
       is: "page-weekly-statistics",
+      properties: {
+        mainMenu:{
+          type:Array,
+          value:
+            [
+              {path:'daily-statistics',nameMenu:'ข้อมูลสถานการณ์การตลาดข้าวรายสัปดาห์ ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'weekly-statistics',nameMenu:'รายความเคลื่อนไหวราคาข้าวสาร ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
+              {path:'monthly-statistics',nameMenu:'สถานการณ์การส่งออกข้าวหอมมะลิ 100% ชั้น 1 และชั้น 2 ประจำสัปดาห์ที่ 1 เดือน ธันวาความ 6-9 ธันวาความ 2559 ',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ภาวะการค้าข้าว ประจำสัปดาห์ที่ 1 เดือน ธันวาความ 6-9 ธันวาความ 2559',img:'/im.jpg'},
+          ]
+        },
+      },
 
     });
   </script>
