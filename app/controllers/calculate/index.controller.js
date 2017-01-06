@@ -333,7 +333,7 @@ const FORMULA_FOR_CAL = (req) => {
                 }),
                 spreadsheets: rowResult('spreadsheets').merge(function (spreadsheetsRow) {
                     return r.db('eu2').table('quota')
-                        .filter({ year: LastYearFilter, type_rice_id: params.type_rice_id })(0)
+                        .filter({ year: params.year, type_rice_id: params.type_rice_id })(0)
                         .do(function (quotaRow) {
                             return spreadsheetsRow('div_round').mul(quotaRow('amount')).div(sumForCal)
                                 .do(function (resultCalQuota) {
@@ -352,7 +352,7 @@ const FORMULA_FOR_CAL = (req) => {
         return {
             amount_cal: row('spreadsheets').sum('amount_cal'),
             quota_id:r.db('eu2').table('quota')
-            .filter({ year: LastYearFilter, type_rice_id: params.type_rice_id })(0)('id'),
+            .filter({ year: params.year, type_rice_id: params.type_rice_id })(0)('id'),
             amount: row('spreadsheets').sum('amount'),
             amount_update: row('spreadsheets').sum('amount')
         }
