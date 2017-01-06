@@ -21,7 +21,7 @@ class index{
             params.year = parseInt(params.year);
             params.ordinal = parseInt(params.ordinal);
         }
-
+        console.log(params.year+" "+params.ordinal+" "+params.type_rice_id)
         r.db('eu2').table('allocate').merge(function(doc){
             return {quantity : doc('quantity').orderBy('period') }
         })
@@ -51,6 +51,10 @@ class index{
                 })
                 }
         })
+         
+        .run().then(function(result){
+            res.json(result);
+        });
     }
 }
 
