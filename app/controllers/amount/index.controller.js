@@ -44,20 +44,23 @@ class index{
         }).coerceTo('array')
             
         .do(function(result){
-                    return {
-                            result:result,
-                            asumall:r.db('eu2').table('quota').filter({type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',year:2560})
-                    (0)('quantity')('period')
+                return {
+                        result:result,
+                        asumall:r.db('eu2').table('quota').filter({type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',year:2560})
+                (0)('quantity')('period')
+            
+            .map(function(row){
+                return{
+                    period:row,
+                    amount: result('quantity').map(function(a){ return a.filter({period:row})(0)('weigth')}).sum(),
+                    amount_update: result('quantity').map(function(aw){ return aw.filter({period:row})(0)('weigth_update') }).sum(),
+                    sumweigth_all:result('sumweigth').sum(),
+                    sumweigth_update_all:result('sumweigth_update').sum()
                 
-                .map(function(row){
-                    return{
-                        period:row,
-                        amount: result('quantity').map(function(a){ return a.filter({period:row})(0)('weigth')}).sum(),
-                        amount_update: result('quantity').map(function(aw){ return aw.filter({period:row})(0)('weigth_update') }).sum(),
-                        month:'x'
-                    }
-                })
+                    //month:'x'
                 }
+            })
+            }
         })
          
         .run().then(function(result){
