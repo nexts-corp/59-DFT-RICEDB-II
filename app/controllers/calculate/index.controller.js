@@ -43,7 +43,7 @@ class index {
     getCal(req, res) {
         var statement = FORMULA_FOR_CAL(req);
         statement
-        //.pluck('calculate','report','quota','confirm')
+        //.pluck('calculate','report','amount','confirm')
         .run().then(function (result) {
             res.json(result);
         });
@@ -59,14 +59,9 @@ class index {
         statement
         .do(function (result) {
             //for save to calculate_detail
-            return r.db('eu2').table('calculate').insert({
-                calculate: result('calculate'),
-                confirm: result('confirm'),
-                quota: result('quota'),
-                report: result('report'),
-                ordinal: params.ordinal,
-                quota_id:result('quota_id'),
-            }).do(function (calSave) {
+            return r.db('eu2').table('calculate').insert(
+                result.without('spreadsheets').merge({ordinal:params.ordinal})
+            ).do(function (calSave) {
                 return result('spreadsheets').merge(function (row) {
                     return { calculate_id: calSave('generated_keys')(0) }
                 }).do(function (preSave) {
@@ -123,10 +118,15 @@ class index {
         var r = req._r;
         var params = req.body;
 
-        r.expr(params.quota_update).forEach(function(quotaUpdateRow){
+        r.expr(params.amount_update).forEach(function(quotaUpdateRow){
             return r.db('eu2').table('calculate_detail').update(quotaUpdateRow)
-        }).do(function(result){
-            return {status:'updated'}
+        })
+        .do(function(result){
+            return r.db('eu2').table('calculate_detail').get(params.amount_update[0].id)('calculate_id').do(function(calculateId){
+                return r.db('eu2').table('calculate_detail').filter({calculate_id:calculateId}).sum('amount_update').do(function(amountUpdate){
+                    return r.db('eu2').table('calculate').get(calculateId).update({amount_update:amountUpdate})
+                })
+            })
         })
         .run().then(function (result) {
             res.json(result);
@@ -144,22 +144,20 @@ class index {
         STM_PREADSHEET(r,params).do(function(result){
             return r.db('eu2').table('quota').get(result('quota_id')).do(function(quotaResult){
                 return result('spreadsheet').filter(function(row){
-                    return row('quota').ne(0)
+                    return row('amount').ne(0)
                 })
                 .map(function(row){
                     
                         return {
                             exporter_id:row('exporter_id'),
-                            amount:row('quota_update'),
-                            amount_update:row('quota_update'),
+                            amount:row('amount_update'),
+                            amount_update:row('amount_update'),
                             calculate_id:result('id'),
                             quota_id:result('quota_id'),
                             quantity:quotaResult('quantity').map(function(quotaQuantity){
                                 return {
                                     period:quotaQuantity('period'),
-                                    weigth_cal:row('quota_update').mul(quotaQuantity('weigth').div(quotaResult('amount'))),
-                                    
-                                    
+                                    weigth_cal:row('amount_update').mul(quotaQuantity('weigth').div(quotaResult('amount')))
                                 }
                             }).merge(function(quantityRow){
                                 return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
@@ -338,9 +336,9 @@ const FORMULA_FOR_CAL = (req) => {
                             return spreadsheetsRow('div_round').mul(quotaRow('amount')).div(sumForCal)
                                 .do(function (resultCalQuota) {
                                     return {
-                                        quota_cal: resultCalQuota,
-                                        quota: r.round(resultCalQuota),
-                                        quota_update: r.round(resultCalQuota)
+                                        amount_cal: resultCalQuota,
+                                        amount: r.round(resultCalQuota),
+                                        amount_update: r.round(resultCalQuota)
                                     }
                                 })
 
@@ -350,11 +348,11 @@ const FORMULA_FOR_CAL = (req) => {
         })
     }).merge(function (row) {
         return {
-            quota_cal: row('spreadsheets').sum('quota_cal'),
+            amount_cal: row('spreadsheets').sum('amount_cal'),
             quota_id:r.db('eu2').table('quota')
             .filter({ year: LastYearFilter, type_rice_id: params.type_rice_id })(0)('id'),
-            quota: row('spreadsheets').sum('quota'),
-            quota_update: row('spreadsheets').sum('quota')
+            amount: row('spreadsheets').sum('amount'),
+            amount_update: row('spreadsheets').sum('amount')
         }
     })
 };
