@@ -46,6 +46,8 @@ class index {
         //.pluck('calculate','report','amount','confirm')
         .run().then(function (result) {
             res.json(result);
+        }).catch(function(err){
+            res.json(err);
         });
 
     }
