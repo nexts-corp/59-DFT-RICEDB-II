@@ -40,6 +40,8 @@ class index {
 
 
     insertCalculate(req, res) {
+        var r = req._r;
+        var params = req.body;
         //save calculate
         var statement = FORMULA_FOR_CAL(req);
         statement
@@ -50,7 +52,7 @@ class index {
                 confirm: result('confirm'),
                 quota: result('quota'),
                 report: result('report'),
-                ordinal: req.ordinal,
+                ordinal: params.ordinal,
                 quota_id:result('quota_id'),
             }).do(function (calSave) {
                 return result('spreadsheets').merge(function (row) {
@@ -128,29 +130,38 @@ class index {
         var params = req.params;
 
         STM_PREADSHEET(r,params).do(function(result){
-            return result('spreadsheet').filter(function(row){
-                return row('quota').ne(0)
-            })
-            .map(function(row){
-                return r.db('eu2').table('quota').get(result('quota_id')).do(function(quotaResult){
-                    return {
-                        amount:row('quota_update'),
-                        calculate_id:result('id'),
-                        quota_id:result('quota_id'),
-                        quantity:quotaResult('quantity').map(function(quotaQuantity){
-                            return {
-                                period:quotaQuantity('period'),
-                                weigth_cal:row('quota_update').mul(quotaQuantity('weigth').div(quotaResult('amount')))
-                            }
-                        }).merge(function(quantityRow){
-                            return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
-                                return {weigth:weigthRound,weigth_update:weigthRound};
+            return r.db('eu2').table('quota').get(result('quota_id')).do(function(quotaResult){
+                return result('spreadsheet').filter(function(row){
+                    return row('quota').ne(0)
+                })
+                .map(function(row){
+                    
+                        return {
+                            amount:row('quota_update'),
+                            calculate_id:result('id'),
+                            quota_id:result('quota_id'),
+                            quantity:quotaResult('quantity').map(function(quotaQuantity){
+                                return {
+                                    period:quotaQuantity('period'),
+                                    weigth_cal:row('quota_update').mul(quotaQuantity('weigth').div(quotaResult('amount'))),
+                                    
+                                    
+                                }
+                            }).merge(function(quantityRow){
+                                return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
+                                    return {weigth:weigthRound,weigth_update:weigthRound};
+                                })
                             })
-                            
-                        })
+
+                        }
+                        
+                }).merge(function(row){
+                    return {
+                        ordinal:result('ordinal'),
+                        year:quotaResult('year'),
+                        type_rice_id:quotaResult('type_rice_id'),
                     }
                 })
-                    
             })
         })
         .run().then(function (result) {
