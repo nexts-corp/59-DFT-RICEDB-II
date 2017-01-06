@@ -65,7 +65,7 @@
         <section class="container">
             <div class="gl-panel-default">
                 <div class="gl-panel-default-header">
-                    ปีการจัดสรรโควตา {{data.quota_id}} ประเภท : {{data.type_rice_name_th}} ปริมาณ {{formatNumber(data.quota_amount)}} ตัน
+                    ปีการจัดสรรโควตา  ประเภท : {{data.type_rice_name_th}} ปริมาณ {{formatNumber(data.quota_amount)}} ตัน
                 </div>
                 <div class="gl-panel-default-content">
                     <div class="right" style="padding-bottom:5px;">
@@ -102,42 +102,47 @@
                                  <th rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ยอดปรับปรุง</th>
                             </tr>
                             <tr>
-                                <template is="dom-repeat" items="{{quotaYear}}">
+                                <template is="dom-repeat" items="{{data.report_year}}">
                                     <th class="center">{{item.year}}</th>
                                 </template>
-                                 <template is="dom-repeat" items="{{quotaYear}}">
+                                 <template is="dom-repeat" items="{{data.confirm_year}}">
                                     <th class="center">{{item.year}}</th>
                                 </template>
                             </tr>
                         </thead>
                         <tbody>
-                            <template is="dom-repeat" items="{{data.spreadsheets}}">
+                            <template is="dom-repeat" items="{{data.spreadsheet}}">
                                 <tr>
-                                   <td class="left">{{item.seller_name_th}}</td>
-                                   <template is="dom-repeat" items={{item.exported}}>
-                                       <td class="right">[[formatNumber(item.quantity)]]</td>
+                                   <td class="left">{{item.exproter_name}}</td>
+                                   <template is="dom-repeat" items={{item.report.quantity}}>
+                                       <td class="right">[[formatNumber(item.weigth)]]</td>
                                    </template>
-                                   <td  class="right">[[formatNumber(item.exported_amount)]]</td>
-                                   <template is="dom-repeat" items={{item.confirmed}}>
-                                       <td class="right">[[formatNumber(item.quantity)]]</td>
+                                   <td  class="right">[[formatNumber(item.report.amount)]]</td>
+                                   <template is="dom-repeat" items={{item.confirm.quantity}}>
+                                       <td class="right">[[formatNumber(item.weigth)]]</td>
                                    </template>
-                                   <td class="right">[[formatNumber(item.confirmed_amount)]]</td>
-                                   <td class="right">[[formatNumber(item.sum_export)]]</td>
-                                   <td class="right">[[formatNumber(item.sum_export_convert)]]</td>
-                                   <td class="right">[[formatNumber(item.quantity)]]</td>
-                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" allowed-pattern="[0-9||,||.]" value="{{item.editQuantity}}"></gl-form-input></td>
+                                   <td class="right">[[formatNumber(item.confirm.amount)]]</td>
+                                   <td class="right">[[formatNumber(item.div)]]</td>
+                                   <td class="right">[[formatNumber(item.div_round)]]</td>
+                                   <td class="right">[[formatNumber(item.amount)]]</td>
+                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" allowed-pattern="[0-9||,||.]" value="{{item.amount_update}}"></gl-form-input></td>
                                 </tr>
                             </template>
                             <tr>
                                 <td></td>
-                                <td colspan$="[[countYear]]"></td>
-                                <td class="right">[[formatNumber(data.sum_export)]]</td>
-                                <td colspan$="[[countYear]]"></td>
-                                <td class="right">[[formatNumber(data.sum_quota)]]</td>
-                                <td></td>
-                                <td class="right">[[formatNumber(data.sum_for_cal)]]</td>
-                                <td class="right">[[formatNumber(data.quota_amount)]]</td>
-                                <td class="right">[[_sumQuantity(data.spreadsheets.*)]]</td>
+                                <!--<td colspan$="[[countYear]]"></td>-->
+                                <template is="dom-repeat" items="[[data.report_year]]">
+                                    <td class="right">[[formatNumber(item.weigth)]]</td>
+                                </template>
+                                <td class="right">[[formatNumber(data.report)]]</td>
+                                <template is="dom-repeat" items="[[data.confirm_year]]">
+                                    <td class="right">[[formatNumber(item.weigth)]]</td>
+                                </template>
+                                 <td class="right">[[formatNumber(data.confirm)]]</td>
+                                 <td class="right"></td>
+                                 <td class="right"></td>
+                                 <td class="right">[[formatNumber(data.amount)]]</td>
+                                 <td class="right">[[formatNumber(data.amount_update)]]</td>
                             </tr>
                         </tbody>
                     </table>
@@ -165,41 +170,28 @@
                 }
             },
             _sumQuantity:function(item){
-                var answer = 0;
+                // var answer = 0;
                 
-                item.base.map((data)=>{
-                    if(typeof data.editQuantity == 'undefined'){
-                        // console.log(data.editQuantity);
-                        answer = this.data.quota_amount;
-                    }
-                    else {
-                        answer += this.unFormat(data.editQuantity);
-                    }
+                // item.base.map((data)=>{
+                //     if(typeof data.editQuantity == 'undefined'){
+                //         // console.log(data.editQuantity);
+                //         answer = this.data.quota_amount;
+                //     }
+                //     else {
+                //         answer += this.unFormat(data.editQuantity);
+                //     }
                    
-                });
-                if(isNaN(answer)==true){
-                    return ''
-                }
-                else {  
-                    return this.formatNumber(answer);
-                }
+                // });
+                // if(isNaN(answer)==true){
+                //     return ''
+                // }
+                // else {  
+                //     return this.formatNumber(answer);
+                // }
                
             },
             _getYear:function(){
-               this.data.spreadsheets.map((item)=>{
-                   this.quotaYear = item.confirmed;
-                   if(item.quantity == 0){
-                       item.editQuantity = 0;
-                   }
-                   else {
-                        item.editQuantity = item.quantity.toFixed(5);
-                   }
-                  
-                //    console.log('datalist',item.quantity);
-               });
-               this.countYear = this.quotaYear.length;
-            //    console.log(this.quotaYear.length);
-               
+               this.countYear = this.data.confirm_year.length;
             },
             _saveData:function(){
                 this.fire('save-data',this.data.id);

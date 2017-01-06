@@ -189,7 +189,7 @@
             if(quota != ''){
               this.sendQuotaYear = quota;
               this.hide = false;
-              // this._getDatalist();
+              this._getDatalist();
             }
           },
           _postSumData:function(e){
@@ -224,18 +224,13 @@
             });
           },
           _postData:function(e){
-            // console.log(e.detail);
-            // http://localhost:3000/api/eu/calculate/allocate_quota
+              // console.log(e.detail);
               this.fire('toast',{status:'load'});
-              console.log(this.sumData);
-              var sumData = Object.assign(this.sumData);
-              sumData.quota_id = e.detail.quota_id;
-              sumData.type_rice_id = e.detail.type_rice_id;
-              sumData.ordinal_number = e.detail.ordinal_number;
               
-              axios.post('/eu/calculate/allocate_quota',sumData)
+              axios.post('/calculate/calculate',e.detail)
               .then((response)=>{
               console.log("success");
+              console.log(response);
               //this.textToast = 'บันทึกข้อมูลสำเร็จ';
               this.textToast = 'บันทึกข้อมูลสำเร็จ';
               this.fire('toast',{
@@ -256,9 +251,11 @@
           },
           _getDatalist:function(){
               this.fire('toast',{status:'load'});
-              axios.get('./eu/calculate/allocate_quota?quota_id='+this.sendQuotaYear )
+              axios.get('./calculate/list?year='+this.sendQuotaYear )
               .then((response)=>{
                 console.log("success!!");
+                console.log('dataList',response.data);
+                this.dataList = response.data;
                 //this.fire('toast',{status:'loadSuccess'});
                 this.fire('toast',{
                   status:'success',
@@ -267,13 +264,13 @@
                     //console.log('test');
                   }
                 });
-                this.dataList = response.data;
-                if(this.dataList == ''){
-                   this.pageSelect = 0;
-                   this.$$('panel-right')._setWidth('95%');
-                   this.$$("panel-right").open();
-                }
-                console.log('dataList',response.data);
+                // this.dataList = response.data;
+                // if(this.dataList == ''){
+                //    this.pageSelect = 0;
+                //    this.$$('panel-right')._setWidth('95%');
+                //    this.$$("panel-right").open();
+                // }
+               
               })
               .catch((error)=>{
                 console.log("error");
@@ -285,23 +282,24 @@
               });
           },
           _onDataSelect:function(e){
-            this.getDatalistQuota(e.detail.key);
-            this.getKey = e.detail.key;
+            this.getDatalistQuota(e.detail);
+            // this.getKey = e.detail.key;
           },
           getDatalistQuota:function(key){
             this.fire('toast',{status:'load'});
-            axios.get('./eu/calculate/spreadsheets?id='+key)
+            axios.get('./calculate/spreadsheet/'+key)
             .then((response)=>{
-               this.fire('toast',{
+              console.log(response.data);
+              // this.dataListQuota = response.data;
+              this.fire('toast',{
                   status:'success',
                   callback:()=>{
                     this.pageSelect = 1;
                     this.$$('panel-right')._setWidth('95%');
                     this.$$('panel-right').open();
+                    this.dataListQuota = response.data;
                   }
                 });
-                this.dataListQuota = response.data;
-               
             })   
             .catch((error)=>{
 

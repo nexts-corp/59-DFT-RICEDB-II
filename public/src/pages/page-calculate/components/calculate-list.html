@@ -47,7 +47,7 @@
                 -webkit-font-smoothing: antialiased;
             }
         </style>
-        <template is="dom-if" if="{{dataStat}}">
+        <!--<template is="dom-if" if="{{dataStat}}">
             <div class="container">
                 <div class="flex-equal-justified">
                     <div>ประเภท : </div>
@@ -60,7 +60,6 @@
                         <th class="right">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
                         <th class="right">ยอดรวมโควตาที่เคยได้รับ</th>
                         <th class="right">ปริมาณโควตา 100%</th>
-                        <!--<th class="right">สถานะ</th>-->
                     </tr>
                 </thead>
             
@@ -71,15 +70,13 @@
                 </tbody>
             </table>
             </div>
-        </template>
+        </template>-->
         <template is="dom-repeat" items="{{listData}}">
         <div class="container">
             
             <div class="flex-equal-justified">
                 <div>ประเภท : {{item.type_rice_name_th}}</div>
-                <!--<paper-icon-button icon="create" id="settingData" disabled="{{active}}" on-tap="_settingData"></paper-icon-button>
-                <paper-tooltip for="settingData" offset="0">ตั้งค่าการคำนวณโควตา</paper-tooltip>-->
-                 <!--<paper-button hidden="{{active}}" raised class="gl-btn-primary"on-tap="_settingData">ตั้งค่าการคำนวณโควตา</paper-button>-->
+               
             </div>
             
             <table class="gl-table-default" style="border: 1px solid #ddd;">
@@ -90,19 +87,19 @@
                         <th class="right">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</th>
                         <th class="right">ยอดรวมโควตาที่เคยได้รับ</th>
                         <th class="right">ปริมาณโควตา 100%</th>
-                        <!--<th class="right">สถานะ</th>-->
+
                     </tr>
                 </thead>
                
                     <tbody>
-                        <template is="dom-repeat" items="{{item.detail}}">
+                        <template is="dom-repeat" items="{{item.list}}">
                             <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
-                                <td>[[item.ordinal_number]]</td>
-                                <td class="right">[[formatNumber(item.sum_export)]]</td>
-                                <td class="right">[[formatNumber(item.sum_for_cal)]]</td>
-                                <td class="right">[[formatNumber(item.sum_quota)]]</td>
-                                <td class="right">[[formatNumber(item.quota_amount)]]</td>
-                                <!--<td class="right">[[item.status]]</td>-->
+                                <td>[[item.ordinal]]</td>
+                                <td class="right">[[formatNumber(item.report)]]</td>
+                                <td class="right">[[formatNumber(item.calculate)]]</td>
+                                <td class="right">[[formatNumber(item.confirm)]]</td>
+                                <td class="right">[[formatNumber(item.amount)]]</td>
+                                
                             </tr>
                         </template>
                     </tbody>
@@ -128,22 +125,20 @@
                 }
             },
             _selectData:function(e){
-                // console.log(e.currentTarget.key);
+                console.log(e.currentTarget.key);
                 
-                this.fire('data-select',{
-                    key:e.currentTarget.key,
-                    status:e.currentTarget.status});
+                this.fire('data-select',e.currentTarget.key);
             },
             _getDatalist:function(){
-                console.log('list',this.listData);
-                this.active = false;
-                this.listData.map((item)=>{
-                    item.detail.map((item)=>{
-                        item.status = '?';
-                    });
-                    this.typeRiceName = item.type_rice_name_th;
-                   // listData = item.detail;
-                });
+                // console.log('list',this.listData);
+                // this.active = false;
+                // this.listData.map((item)=>{
+                //     item.detail.map((item)=>{
+                //         item.status = '?';
+                //     });
+                //     this.typeRiceName = item.type_rice_name_th;
+                //    // listData = item.detail;
+                // });
             },
             _settingData:function(){
                 this.fire('setting-data');
