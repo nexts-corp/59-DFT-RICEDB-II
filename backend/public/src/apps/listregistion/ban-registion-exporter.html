@@ -1,12 +1,12 @@
 <link rel="import" href="components/content-panel.html">
-<link rel="import" href="components/list-edit/list-registration.html">
 <link rel="import" href="components/renew/renew-memberShow.html">
 <link rel="import" href="data/dataBehavior.html">
 <link rel="import" href="components/list-edit/list-registration-ban.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-table.html">
 
 
 <dom-module id="listregistion-ban-registion-exporter">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table">
         * {
             font-family: 'rsuregular', sans-serif;
             -webkit-font-smoothing: antialiased;
@@ -49,15 +49,27 @@
         gl-search-input{
           margin: 30px 0px 0px 0px;
         }
-        .button{
-          margin: 10px;
-        }
         gl-combo-box{
           width: 70%;
         }
         .iconSearch{
           margin-top: 25px;
           margin-left: 40px;
+        }
+        .text-table{
+          text-align: center;
+           font-size: var(--font-size-h4);
+        }
+        .gl-table-default{
+             border-collapse: collapse;
+             width: 100%;
+             white-space: nowrap;
+         }
+        .table-head > tr > th:nth-child(1) {
+          width: 5%;
+        }
+        .table-head > tr > th:nth-child(2) {
+          width: 15%;
         }
     </style>
     <template>
@@ -87,7 +99,38 @@
             </gl-grid-row>
           </div>
 
-          <div class="flex searchBorder">
+          <div class="searchBorder">
+            <div style="margin: 10px;">
+              <paper-checkbox checked={{selectDataAll}}>เลือกทั้งหมด</paper-checkbox>
+              <paper-button raised class="gl-btn-success" on-tap="_activeAll">ยกเลิกการระงับ</paper-button>
+            </div>
+            <table class="gl-table-default">
+              <thead class="table-head">
+                <tr>
+                  <th></th>
+                  <th><div class="text-table">เลขทะเบียนผู้ส่งออก</div></th>
+                  <th><div class="text-table">ชื่อบริษัท</div></th>
+                  <th><div class="text-table">ประเภทใบอนุญาติ</div></th>
+                  <th><div class="text-table">วันที่อนุมัติ</div></th>
+                  <th><div class="text-table">สถานะ คน.</div></th>
+                </tr>
+              </thead>
+
+              <template is="dom-repeat" items="{{exporters}}">
+                <tbody>
+                  <tr on-tap="_selectData" data="[[item]]" style="cursor:pointer;">
+                    <td><paper-checkbox checked="{{item.check}}" class="checkbox"></paper-checkbox></td>
+                    <td><div class="text-table">{{item.exporter_no_name}}</div></td>
+                    <td><div class="text-table">{{item.seller_name_th}}</div></td>
+                    <td><div class="text-table">{{item.type_lic_name}}</div></td>
+                    <td><div class="text-table">{{item.exporter_date_approve}}</div></td>
+                    <td><div class="text-table">{{item.trader_active_name}}</div></td>
+                  </tr>
+                </tbody>
+              </template>
+            </table>
+          </div>
+          <!-- <div class="flex searchBorder">
             <list-registration-ban data="{{exporters}}">
               <items type="primary">
                 <list item="exporter_no_name" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
@@ -97,8 +140,8 @@
                 <list item="trader_active_name" label="สถานะ คน." width="flex"></list>
               </items>
             </list-registration-ban>
+          </div> -->
 
-          </div>
         </div>
         </paper-material>
 
@@ -138,12 +181,27 @@
                 exporterId:{
                   type: String,
                   observer: '_exporterIdChanged'
+                },
+                data:{
+                  type: Array,
+                  value: []
+                },
+                selectDataAll: {
+                  type: Boolean,
+                  value: false,
+                  observer: '_changeselectDataAll'
                 }
             },
             _exporterIdChanged:function(val){
               if(val!=""){
                 this.layerContent = "detailRegExporter";
               }
+            },
+            _changeselectDataAll:function (val) {
+              // console.log(val);
+              this.data.map((item,index)=>{
+                this.set('data.'+index+'.check',val);
+              });
             },
             created: function() {
                 this.glSetTitle('ระบบขึ้นทะเบียนผู้ส่งออกข้าว');
@@ -214,6 +272,44 @@
                   }});
                  });
                 }
+            },
+            _activeAll: function(){
+              const check = (item)=>{
+                  return item.check == true;
+              }
+              // console.log(this.exporters.filter(check));
+              this.data.filter(check).map((datas)=>{
+                let {exporter_id,exporter_date_update,exporter_date_approve,trader_id,exporter_no} = datas;
+                let newData = {exporter_id,exporter_date_update,exporter_date_approve,trader_id,exporter_no};
+                this.dataExporters.push(newData);
+                // this._clearData(newData);
+              });
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+              confirmed : this._confirm.bind(this)
+              });
+            },
+            _confirm:function(result,detail){
+              // console.log(this.dataExporters);
+              this.dataExporters.map((datas)=>{
+                datas={
+                  id : datas.exporter_id,
+                  trader_id : datas.trader_id,
+                  exporter_no : datas.exporter_no,
+                  exporter_date_approve : new Date,
+                  exporter_date_update : new Date
+                }
+              if(result == true){
+                // console.log(datas);
+                this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                this.update('./external/exporter/update', datas, () => {
+                  this.fire('getExporters');
+                  this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
+                }
+              });
             }
         });
     </script>

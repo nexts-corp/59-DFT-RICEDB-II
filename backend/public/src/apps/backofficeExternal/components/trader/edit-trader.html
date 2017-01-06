@@ -1,0 +1,171 @@
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
+<dom-module id="edit-trader">
+<style include="iron-flex iron-flex-alignment gl-color gl-size">
+  *{
+    font-family: 'CSChatThaiUI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: var(--font-size-h5);
+  }
+  .text-center {
+    text-align: center;
+    font-size: var(--font-size-h3);
+    background-color: var(--paper-grey-100);
+    margin-top: 20px;
+  }
+  .margin-top{
+    margin-top: 15px;
+  }
+  .button{
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+</style>
+  <template>
+    <div class="text-center">แก้ไขข้อมูลผู้ประกอบการ</div>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+        <gl-combo-box class="margin-top checkData" items="{{sellers}}" item-label-path="seller_name_en" label="Seller Name (ชื่อผู้ขาย)" item-value-path="seller_id"
+        value="{{data.seller_id}}" error-message="กรุณาเลือกผู้ขาย" required disabled></gl-combo-box>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top" label="Trader No (รหัสประจำตัวผู้เสียภาษี) :" value="{{data.trader_no}}" disabled></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อ" required label="Trader Name (ชื่อผู้ประกอบการ) :" placeholder="กรอกชื่อผู้ประกอบการ" value="{{data.trader_name}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกอำเภอ" required label="Trader Distric (ชื่ออำเภอ) :" placeholder="กรอกชื่ออำเภอ" value="{{data.trader_distric}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-combo-box class="margin-top checkData" items="{{provinces}}" item-label-path="province_name_th" label="Province (จังหวัด)" item-value-path="province_id"
+        value="{{data.province_id}}" error-message="กรุณาเลือกจังหวัด" required always-float-label placeholder="เลือกจังหวัด"></gl-combo-box>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อออฟฟิศ" required label="Office Name (ชื่อออฟฟิศ) :" placeholder="กรอกชื่อออฟฟิศ" value="{{data.trader_office}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <vaadin-date-picker class="margin-top checkData" label="วันที่อนุมัติ" value="{{data.trader_date_approve}}"></vaadin-date-picker>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-combo-box class="margin-top checkData" id="typeID" item-label-path="type_lic_name" label="Type (ประเภท)" item-value-path="type_lic_id"
+        value="{{data.type_lic_id}}" error-message="กรุณาเลือกประเทศ" required></gl-combo-box>
+      </gl-grid-col>
+    </gl-grid-row>
+<!-- Lic ของมัน{{dataLic}} -->
+    {{_checkSeller(dataLic)}}
+
+    <div class="horizontal end-justified layout">
+      <div class="button">
+        <paper-button class="gl-btn-danger" on-tap="_cancel" raised>ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" on-tap="_edit" raised>บันทึก</paper-button>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: "edit-trader",
+      properties: {
+        data: {
+          type: Object,
+          value: {}
+        },
+        trader_id:{
+          type:Object,
+          value: {}
+        }
+      },
+      // observers:[
+      //   '_checkSeller(data.seller_id)'
+      // ],
+      behaviors: [
+          gl.behavior.core,
+          gl.behavior.locales,
+          dataBehavior
+      ],
+      _edit:function(){
+        console.log(this.data);
+        var datas = {
+          id : this.data.trader_id,
+          seller_id : this.data.seller_id,
+          trader_date_approve : new Date,
+          trader_no : this.data.trader_no,
+          trader_name : this.data.trader_name,
+          trader_distric : this.data.trader_distric,
+          trader_office : this.data.trader_office,
+          province_id : this.data.province_id,
+          type_lic_id : this.data.type_lic_id
+        }
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.read('./external/check/myowner?table=trader&id='+datas.id+'&field=trader_no&value='+datas.trader_no, (response) => {
+            if (response == 1) {
+              this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+              this.update('./external/trader/update', datas, () => {
+                this.glQuery('refreshTrader').getTrader();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'รหัสผู้ประกอบการนี้มีอยู่แล้ว',
+                callback:function(){
+                }})
+            }
+            });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
+      },
+      _cancel:function() {
+        this.glQuery('panelRight').changDrawer();
+      },
+      _checkSeller:function(val){
+        // console.log('a');
+        // console.log(this.dataLic);
+        // console.log(this.typelics);
+        var temp =[];
+        let comboboxs = Polymer.dom(this.root).querySelector('#typeID');
+        if (this.dataLic.length==0) {
+          comboboxs.items = this.typelics;
+        }else{
+          this.typelics.map((typelics)=>{
+              this.dataLic.map((dataLic)=>{
+                if (typelics.type_lic_id != dataLic.type_lic_id) {
+                  temp.push(typelics);
+                }
+              })
+          })
+          comboboxs.items = temp;
+        }
+      }
+    });
+  </script>
+</dom-module>

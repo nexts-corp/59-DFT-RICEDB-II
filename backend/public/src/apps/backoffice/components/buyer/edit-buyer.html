@@ -106,22 +106,35 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          // this.read('./common/check/duplicate?table=buyer&field=buyer_name&value='+datas.buyer_name, (response) => {
-          //   if (response == 0) {
+          this.read('./common/check/duplicate?table=buyer&field=buyer_name&value='+datas.buyer_name, (response) => {
+            if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.update('./common/buyer/update', datas, () => {
-                this.glQuery('refreshBuyer').getBuyer();
-                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                  console.log('success');
-                }});
-               });
-            // }
-            // else {
-            //   this.fire('toast',{status:'connectError',text:'ชื่อผู้ส่งออกนี้มีอยู่แล้ว',
-            //     callback:function(){
-            //     }})
-            // }
-            // });
+              this.glQuery('refreshBuyer').getBuyer();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+             });
+            }
+            else{
+              this.read('./common/check/myowner?table=buyer&id='+datas.id+'&field=buyer_name&value='+datas.buyer_name, (response) => {
+                if (response == 1) {
+                  this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                  this.update('./common/buyer/update', datas, () => {
+                    this.glQuery('refreshBuyer').getBuyer();
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      console.log('success');
+                    }});
+                   });
+                }
+                else {
+                  this.fire('toast',{status:'connectError',text:'ชื่อผู้ส่งออกนี้มีอยู่แล้ว',
+                    callback:function(){
+                    }})
+                }
+                });
+            }
+          });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',

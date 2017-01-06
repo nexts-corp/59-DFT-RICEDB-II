@@ -1,0 +1,191 @@
+<link rel="import" href="../../functionBehavior/dataBehavior.html">
+<dom-module id="insert-seller">
+  <style include="iron-flex iron-flex-alignment gl-color gl-size">
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: var(--font-size-h5);
+    }
+    .text-center {
+      text-align: center;
+      font-size: var(--font-size-h3);
+      background-color: var(--paper-grey-100);
+      margin-top: 20px;
+    }
+    .margin-top{
+      margin-top: 15px;
+    }
+    .button{
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+  <template>
+    <div class="text-center">เพิ่มข้อมูลผู้ขาย</div>
+
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+        <gl-combo-box class="margin-top checkData" items="{{countrys}}" item-label-path="country_name_en" label="Country Name (ชื่อประเทศ)" item-value-path="country_id"
+        value="{{data.country_id}}" error-message="กรุณาเลือกผู้ขาย" required always-float-label placeholder="เลือกประเทศ"></gl-combo-box>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกรหัสประจำตัว" required label="Tax ID (รหัสประจำตัว) :" placeholder="กรอกรหัสประจำตัว" maxlength="13" value="{{data.seller_tax_id}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกเบอร์โทรศัพท์" required label="Tel (เบอร์โทรศัพท์) :" placeholder="กรอกเบอร์โทรศัพท์" value="{{data.seller_phone}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อผู้ขาย (ภาษาอังกฤษ)" required label="Seller Name (ชื่อผู้ขาย ภาษาอังกฤษ) :" placeholder="กรอกชื่อผู้ขาย (ภาษาอังกฤษ)" value="{{data.seller_name_en}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อผู้ขาย (ภาษาไทย)" required label="Seller Name (ชื่อผู้ขาย ภาษาไทย) :" placeholder="กรอกชื่อผู้ขาย (ภาษาไทย)" value="{{data.seller_name_th}}"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกเบอร์แฟกซ์" required label="Fax (เบอร์แฟกซ์) :" placeholder="กรอกเบอร์แฟกซ์" value="{{data.seller_fax}}"></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input class="margin-top checkData" label="E-mail :" placeholder="ตัวอย่าง test@gmail.com" value="{{data.seller_email}}"
+          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" error-message="กรุณาใส่รูปแบบให้ถูกต้อง" required></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+        <gl-form-textarea class="margin-top checkData" error-message="กรุณากรอกที่อยู่ (ภาษาอังกฤษ)" required label="Address (ที่อยู่ ภาษาอังกฤษ) :" placeholder="กรอกที่อยู่ (ภาษาอังกฤษ)" value="{{data.seller_address_en}}"></gl-form-textarea>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+        <gl-form-textarea class="margin-top checkData" error-message="กรุณากรอกที่อยู่ (ภาษาไทย)" required label="Address (ที่อยู่ ภาษาไทย) :" placeholder="กรอกที่อยู่ (ภาษาไทย)" value="{{data.seller_address_th}}"></gl-form-textarea>
+      </gl-grid-col>
+    </gl-grid-row>
+    <gl-grid-row>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <template is="dom-repeat" items="{{data.seller_agent}}">
+          <div class="horizontal layout">
+            <gl-form-input style="width:100%" class="margin-top checkData" error-message="กรุณากรอกชื่อคณะกรรมการ" required label="Agent Name (ชื่อคณะกรรมการ) :" placeholder="กรอกชื่อคณะกรรมการ" value="{{item.agent_name}}"></gl-form-input>
+            <paper-icon-button id="[[index]]" style="margin-top:25px" icon="icons:delete" on-tap="_delAgent" title="ลบคณะกรรมการ"></paper-icon-button>
+          </div>
+        </template>
+        <div class="horizontal center-justified layout">
+          <div class="margin-top">เพิ่มคณะกรรมการ</div>
+          <paper-icon-button icon="icons:add-circle" on-tap="_addAgent" title="เพิ่มคณะกรรมการ"></paper-icon-button>
+        </div>
+      </gl-grid-col>
+    </gl-grid-row>
+
+    <div class="horizontal end-justified layout">
+      <div class="button">
+        <paper-button class="gl-btn-danger" raised on-tap="_cancel">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-success" raised on-tap="_save">บันทึก</paper-button>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "insert-seller",
+      properties: {
+        data: {
+          type: Object,
+          value:{
+            seller_agent:[{
+              agent_name: ''
+            }]
+          }
+        }
+      },
+      behaviors: [
+          gl.behavior.core,
+          gl.behavior.locales,
+          dataBehavior
+      ],
+      _save:function functionName() {
+        var datas = {
+          id : this.data.seller_id,
+          country_id : this.data.country_id,
+          seller_address_en : this.data.seller_address_en,
+          seller_address_th : this.data.seller_address_th,
+          seller_email : this.data.seller_email,
+          seller_fax : this.data.seller_fax,
+          seller_name_en : this.data.seller_name_en,
+          seller_name_th : this.data.seller_name_th,
+          seller_phone : this.data.seller_phone,
+          seller_tax_id : this.data.seller_tax_id,
+          seller_agent : this.data.seller_agent
+        }
+        // console.log(datas);
+        var stat = Polymer.dom(this.root).querySelectorAll('.checkData').map((data)=>{
+            return  data.validate();
+        });
+        var chkStat = function(stat){
+            return stat == true
+        };
+        if(stat.every(chkStat) == true){
+          this.read('./external/check/duplicate?table=seller&field=seller_tax_id&value='+datas.seller_tax_id, (response) => {
+            if (response == 0) {
+              this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+              this.insert('./external/seller/insert', datas, () => {
+              this.data = {
+                seller_agent:[{
+                  agent_name: ''
+                }]
+              };
+              this.glQuery('refreshSeller').getSeller();
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                console.log('success');
+              }});
+             });
+            }
+            else {
+              this.fire('toast',{status:'connectError',text:'รหัสผู้ขายนี้มีอยู่แล้ว',
+                callback:function(){
+                }})
+            }
+            });
+        }
+        else {
+          this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
+            callback:function(){
+            }})
+        }
+      },
+      _cancel:function() {
+        this.glQuery('panelRight').changDrawer();
+        this.data = {
+          seller_agent:[{
+            agent_name: ''
+          }]
+        };
+      },
+      _addAgent:function(){
+        this.push('data.seller_agent', {
+          agent_name:''
+        })
+      },
+      _delAgent:function(e){
+        this.splice('data.seller_agent', e.currentTarget.id, 1);
+      }
+    });
+  </script>
+</dom-module>
