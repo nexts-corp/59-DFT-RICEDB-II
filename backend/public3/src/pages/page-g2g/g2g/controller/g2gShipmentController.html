@@ -1,0 +1,56 @@
+<script>
+  g2gShipmentController={
+    // _getShip:function (shipline_id,dataForSelect) {
+    //   // let shipline_id = e.detail.value;
+    //   if(shipline_id){
+    //     let ships = this.dataForSelect.shipInShipline.filter((shipline)=>shipline.shipline_id == shipline_id );
+    //     this.dataForSelect.ships = ships[0].ship;
+    //     // console.log(this.dataForSelect.ships );
+    //     this.notifyPath('dataForSelect.ships');
+    //     return ships[0].ship;
+    //   }
+    // },
+    _getResetShip:function (e) {
+      this._getShip(this.data.shipline_id,this.dataForSelect);
+    },
+    _getShip:function (shipline_id,dataForSelect) {
+      // console.log(shipline_id, dataForSelect);
+      // let shipline_id = e.detail.value;
+      if(shipline_id){
+        let ships = this.dataForSelect.shipInShipline.filter((shipline)=>shipline.shipline_id == shipline_id )[0].ship;
+        // console.log(ships);
+         this.dataForSelect.ships =ships;
+         this.notifyPath('dataForSelect.ships');
+        this.async(()=>{
+           let  comboboxs,arrForItem,itemif;
+           for (var i = 0; i < this.data.ship.length; i++) {
+             arrForItem = JSON.parse(JSON.stringify(ships));
+            //  console.log('arrForItem',arrForItem);
+             this.data.ship.map((item,index)=>{
+              //  console.log(item);
+               if (i != index) {
+                 //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
+                 if (arrForItem.filter((blDetail)=> blDetail.ship_id == item.ship_id )[0] != undefined) {
+                   itemif = arrForItem.indexOf(arrForItem.filter((blDetail)=> blDetail.ship_id == item.ship_id )[0]);
+                  //  console.log(itemif);
+                   arrForItem.splice(itemif, 1);
+                 }
+               }
+             });
+             comboboxs = Polymer.dom(this.root).querySelector('#ship-'+i);
+             comboboxs.items = arrForItem;
+           }
+        },1);
+        // this.dataForSelect.ships = ships[0].ship;
+        // console.log(this.dataForSelect.ships );
+        // this.notifyPath('dataForSelect.ships');
+        // return ships[0].ship;
+      }
+    },
+    cancelInsertShipment:function () {
+      //shipment-detail.html
+      this.fire('cancel-insert-shipment',{detail:'cancel Show'})
+    },
+
+  }
+</script>

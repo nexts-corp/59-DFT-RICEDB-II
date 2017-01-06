@@ -1,0 +1,121 @@
+
+<link rel="import" href="./../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="./../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="./../../bower_components/iron-icon/iron-icon.html">
+
+
+
+<dom-module id="layout-main-drawer">
+    <template>
+    <style>
+        *{
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        app-toolbar{
+            color: white;
+            background-color: orange;
+            font-size: 22px;
+            user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+        iron-image,iron-icon{
+            padding-right: 10px;
+        }
+        paper-icon-item:hover{
+            background-color: #F1F1F1;
+            cursor:pointer;
+            font-weight:bold;
+        }
+        paper-icon-item>div{
+            position: absolute;
+            top: 4px;
+            right: 10px;
+        }
+    </style>
+        <div class="menu">
+				<app-toolbar>
+                     <iron-image src="./../../images/manifest/icon-32.png">
+                     </iron-image>
+                     <!--<iron-icon icon="home" item-icon></iron-icon>-->
+                        Menu
+                     </app-toolbar>
+				<div role="listbox">
+
+                    <template is="dom-repeat" items="{{listMenu}}">
+                        <paper-icon-item on-tap="selectPage" path$="{{item.path}}" focused  index="{{index}}">
+                            <iron-icon icon="chevron-right" item-icon></iron-icon>
+                            {{item.name}}
+                            <div hidden$="{{!item.loading}}">
+                                <paper-spinner active></paper-spinner>
+                            </div>
+					    </paper-icon-item>
+                    </template>
+
+				</div>
+			</div>
+    </template>
+    <script>
+        Polymer({
+            is: 'layout-main-drawer',
+            properties:{
+                listMenu:{
+                    type:Array,
+                    value:[
+                        {
+                            name: 'รายการจัดสรรปีโควตา',
+                            path: '/g2g'
+                        },
+                        {
+                            name: 'การนำจ่ายเงิน',
+                            path: '/payment'
+                        },
+                        {
+                            name:'สถิติ',
+                            path:'/stats'
+                        }
+                    ]
+                },
+                sendElement:{
+                    type:'Boolean',
+                    value: false
+                }
+            },
+
+            selectPage:function(e){
+              // console.log(1111);
+                if((('/'+this.path) != e.currentTarget.getAttribute('path')) && (e.currentTarget.getAttribute('path')!='')){
+                    this.set('listMenu.'+e.currentTarget.index+'.loading',true);
+                    if(!this.sendElement){
+                      // console.log('send-element-layout-main-drawer');
+                        this.fire('send-element-layout-main-drawer',this);
+                        this.sendElement = true;
+                    }
+                    // console.log('path');
+                    this.fire('nylon-change-page',{
+                        path:e.currentTarget.getAttribute('path')
+                    });
+                }else{
+                  // console.log('start');
+                    this.fire('toggle-drawer');
+                }
+
+            },
+            _loaded:function(){
+              // console.log('fin');
+                this.async(()=>{
+                    this.listMenu.map((item,i)=>{
+                        this.set('listMenu.'+i+'.loading',false);
+                    });
+
+                    this.fire('toggle-drawer');
+                },1000)
+
+            }
+        });
+    </script>
+</dom-module>

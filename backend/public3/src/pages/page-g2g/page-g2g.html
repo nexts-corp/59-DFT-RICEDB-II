@@ -1,0 +1,367 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="g2g/controller/g2gModelbehavior.html">
+<link rel="import" href="g2g/controller/g2gCongtroller.html">
+<link rel="import" href="../components/format-number-behavior.html">
+<link rel="import" href="g2g/component/chart-bar-g2g.html">
+<link rel="import" href="g2g/component/chart-pie-g2g.html">
+<link rel="import" href="g2g/component/taps-g2g.html">
+
+<!-- <link rel="import" href="g2g/component/contract-detail.html">
+<link rel="import" href="g2g/component/print-files.html">
+<link rel="import" href="g2g/component/upload-files.html">
+
+<link rel="import" href="g2g/component/list-of-confirm.html">
+<link rel="import" href="g2g/component/list-of-shipments.html">
+
+<link rel="import" href="g2g/component/confirm-detail.html">
+<link rel="import" href="g2g/component/shipment-detail.html"> -->
+<dom-module id="page-g2g">
+    <style media="screen" include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+      :host{
+        --paper-fab-background:var(--paper-light-blue-500);
+        --paper-fab-keyboard-focus-background: var(--paper-light-blue-900);
+      }
+      *{
+        font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      paper-fab {
+           position: fixed;
+           right: 16px;
+           bottom: 16px;
+           color: #fff;
+         }
+      .addContract{
+        margin: 16px;
+        margin-bottom: 80px;
+        padding: 7.5px;
+        /*border: 1px solid var(--gl-gray-light-color);*/
+      }
+    </style>
+    <template>
+
+          <div class="layout vertical">
+            <div class="xx horizontal center-justified layout wrap" style="width: 1300px">
+              <chart-bar-g2g chart-name="ทำสัญญา"></chart-bar-g2g>
+              <chart-bar-g2g chart-name="ส่งแล้ว"></chart-bar-g2g>
+            </div>
+            <div class="xx horizontal center-justified layout wrap" style="width: 1300px">
+              <template is="dom-repeat" items="[[contractList]]">
+                <chart-pie-g2g on-okload="okload" chart-name="[[item.contract_name]]" data="[[item]]"></chart-pie-g2g>
+              </template>
+            </div>
+          </div>
+
+          <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
+
+            <div class="rightdata" align="left" >
+        <iron-pages selected="{{g2gPageSeleted}}" attr-for-selected="name">
+          <div class="addContract" name="addContract">
+            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[!isViewSeleted]]" is-edit="[[!isEdit]]" is-input-disabled="[[!isInputDisabled]]"></contract-detail>
+          </div>
+          <div class="addContract" name="contractDetail">
+            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[isViewSeleted]]" is-edit="[[isEdit]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></contract-detail>
+          </div>
+          <div class="addContract" name="listOfConfirm">
+            <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm>
+          </div>
+          <div class="addContract" name="listOfShipment">
+            <list-of-shipments  data-for-select="[[dataForShipment]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></list-of-shipments>
+          </div>
+        </iron-pages>
+      </div>
+
+      </nylon-panel-right>
+
+      <div class="btnFab">
+        <paper-fab icon="add" title="เพิ่มสัญญา" id="addContract" on-tap="addContract"></paper-fab>
+        <paper-tooltip for="addContract" offset="0">เพิ่มสัญญา</paper-tooltip>
+      </div>
+    </template>
+    <script>
+        Polymer({
+            is:'page-g2g',
+            behaviors: [
+                g2gModelBehavior,
+                g2gCongtroller
+            ],
+            listeners: {
+              'refresh-contract':'_getContractList',
+              'get-contract-detail':'_getContractDetail',
+              'get-list-confirm':'_getListConfirm',
+              'get-list-shipment':'_getListShipment',
+              'flipDrawer':'_flipDrawer',
+              'close-drawer':'_flipDrawerClose',
+              'name-panel-right':'_namePanelRight'
+            },
+            properties: {
+              contractList: {
+                type: Object
+              },
+              dataSelected: {
+                type: Object
+              },
+              dataForContract:{
+                type: Object,
+                value:{}
+              },
+              dataForConfirm:{
+                type: Object,
+                value:{}
+              },
+              dataForShipment:{
+                type: Object,
+                value:{}
+              },
+              g2gPageSeleted:{
+                type:String,
+                value:'addContract'
+              },
+              checkRenderPage:{
+                type: Object,
+                value:
+                {
+                  contractDetail:false,
+                  listOfConfirm:false,
+                  listOfShipments:false,
+                  listOfShipment:false
+                }
+              },
+              titlePanelRight:{
+                type:String,
+                value:'การซื้อขายข้าวระหว่างประเทศ'
+              },
+
+              pageInConponents:{
+                type: Object,
+                value:{listOfConfirm:'listOfConfirm',listOfShipment:'listOfShipment'}
+              }
+            },
+            ready: function() {
+              Polymer.RenderStatus.afterNextRender(this, () => {
+                this._getContractList();
+                this._getDataForContract();
+                this._getDataForConfirm();
+                this._getDataForShipment();
+              });
+            },
+            // _getContractList
+            _getContractList:function () {
+              console.log('re');
+              this.read('./g2g/contract/list',(data)=>{
+                this.contractList=data;
+              });
+            },
+            // attached: function() {
+            //   let date = '2016-12-20';
+            //   // console.log(Number(date.split("-")[0])+543);
+            //   let day,mouth,year;
+            //   day=date.split("-")[2];
+            //   mouth=date.split("-")[1];
+            //   year=Number(date.split("-")[0])+543;
+            //   console.log(day+'-'+mouth+'-'+String(year));
+            // },
+            _getDataForContract:function () {
+              //use data for contract
+              this.read('./common/buyer',(data)=>{
+                this.dataForContract.buyer=data;
+                this.notifyPath('dataForContract.buyer');
+              });
+              this.read('./common/typeRice',(data)=>{
+                this.dataForContract.typeRice=data;
+                this.notifyPath('dataForContract.typeRice');
+              });
+              this.read('./common/incoterms',(data)=>{
+                this.dataForContract.incoterms=data;
+                this.notifyPath('dataForContract.incoterms');
+              });
+              //end use data for contract
+            },
+            _getDataForShipment:function () {
+              // call data
+              this.read('./external/exporter?exporter_active=true&trader_active=true&type_lic_id=KK6',(data)=>{
+                this.dataForShipment.seller= data;
+                this.notifyPath('dataForShipment.seller');
+                // console.log(this.common.seller);
+              });
+              this.read('./common/carrier',(data)=>{
+                this.dataForShipment.carrier= data;
+                this.notifyPath('dataForShipment.carrier');
+              });
+              //shipline_id
+              this.read('./common/shipline/',(data)=>{
+                this.dataForShipment.shipline = data;
+                this.notifyPath('dataForShipment.shipline');
+              });
+              //ship in shipline
+              this.read('./common/shipline/ship',(data)=>{
+                this.dataForShipment.shipInShipline = data;
+                this.notifyPath('dataForShipment.shipInShipline');
+              });
+              //get surveyor_id
+              this.read('./common/surveyor',(data)=>{
+                this.dataForShipment.surveyor = data;
+                this.notifyPath('dataForShipment.surveyor');
+              });
+              // list port
+              this.read('./common/port/',(data)=>{
+                this.dataForShipment.countryPort =  data;
+                this.notifyPath('dataForShipment.countryport');
+              });
+              // console.log(this.dataForShipment);
+            },
+            // end_getContractList
+            _getDataForConfirm:function () {
+              //ชนิดข้าวเอามาจากสัญญา
+              this.read('./common/package',(data)=>{
+                this.dataForConfirm.package=data;
+                this.notifyPath('dataForConfirm.package');
+              });
+              this.read('./common/incoterms',(data)=>{
+                this.dataForConfirm.incoterms=data;
+                this.notifyPath('dataForConfirm.incoterms');
+              });
+            },
+            //addContract
+            addContract:function () {
+              this.g2gPageSeleted = 'addContract';
+              this.titlePanelRight = 'เพิ่มสัญญาการซื้อขาย'
+              this.fire('toast',{status:'load'});
+              if (this.checkRenderPage.contractDetail != true) {
+                this.async(()=>{
+                  this.importHref(
+                      this.resolveUrl('./g2g/component/contract-detail.html'),
+                      ()=>{
+                        this.async(()=>{
+                          this.fire('toast',{status:'load'});
+                          // console.log(this.dataForContract);
+                          this._flipDrawer();
+                          this.checkRenderPage.contractDetail=true;
+                        },500)
+                      }, null, true
+                  );
+                },1000);
+              } else {
+                this.fire('toast',{status:'load'});
+                this._flipDrawer();
+              }
+            },
+            _getContractDetail:function (e) {
+              this.g2gPageSeleted = 'contractDetail';
+              this.titlePanelRight = 'รายละเอียดสัญญาการซื้อขาย'
+              if(typeof e.detail.contractId == "undefined") {
+                this.fire('toast',{status:'load'});
+                if (this.checkRenderPage.contractDetail != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/contract-detail.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.contractDetail=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+                this.dataSelected = e.detail.data;
+              } else {
+                let contractId = e.detail.contractId;
+                let dataContract = this.contractList.filter((contractList)=> contractList.contract_id == contractId );
+                    this.dataSelected = dataContract[0];
+              }
+            },
+            _getListConfirm:function (e) {
+              // listOfConfirm
+              console.log('1212=>',e.detail);
+              this.titlePanelRight = 'การยืนยันทำสัญญา'
+              this.g2gPageSeleted = 'listOfConfirm';
+              if(typeof e.detail.contractId == "undefined") {
+                this.fire('toast',{status:'load'});
+                if (this.checkRenderPage.listOfConfirm != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/list-of-confirm.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.listOfConfirm=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+                this.dataSelected = e.detail.data;
+                // console.log(  this.dataSelected);
+              } else {
+                this._getContractList();
+                this.read('./g2g/contract/list',(data)=>{
+                  let contractId = e.detail.contractId;
+                  let dataContract = data.filter((contractList)=> contractList.contract_id == contractId );
+                      this.dataSelected = dataContract[0];
+                });
+              }
+            },
+            _getListShipment:function (e) {
+              // console.log(e.detail.detail);
+              this.g2gPageSeleted = 'listOfShipment';
+              this.titlePanelRight = 'การส่งมอบสินค้า';
+              if(typeof e.detail.contractId == "undefined") {
+                this.fire('toast',{status:'load'});
+                if (this.checkRenderPage.listOfShipment != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/list-of-shipments.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.listOfShipment=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
+                this.dataSelected = e.detail.data;
+                this.dataForShipment.country_id = e.detail.data.country_id;
+                this.notifyPath('dataForShipment.country_id');
+                console.log(this.dataSelected);
+              } else {
+                let contractId = e.detail.contractId;
+                this.read('./g2g/contract/list',(data)=>{
+                  let dataContract = data.filter((contractList)=> contractList.contract_id == contractId );
+                      this.dataSelected = dataContract[0];
+                });
+              }
+            },
+            okload:function(){
+              this.checkLoad = true;
+            },
+            // end_addContract
+            _flipDrawer:function () {
+              // this.$.drawerRight.actionDrawer();
+              Polymer.dom(this.root).querySelector('#drawerRight').open();
+            },
+            _flipDrawerClose:function () {
+              Polymer.dom(this.root).querySelector('#drawerRight').close();
+            },
+            _namePanelRight:function (name) {
+              this.titlePanelRight = name;
+            }
+        });
+    </script>
+</dom-module>

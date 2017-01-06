@@ -1,0 +1,53 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="layout/layout-main.html">
+
+<dom-module id="nylon-init">
+	<template>
+		<style is="custom-style">
+			app-toolbar {
+				/* Toolbar is the main header, so give it some color */
+				background-color: #FBFBFB;
+				/*font-family: 'Roboto', Helvetica, sans-serif;*/
+				/*color: white;*/
+
+				--app-toolbar-font-size: 24px;
+				box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+			}
+		</style>
+
+
+		<layout-main>
+			<iron-pages role="main" selected="[[selected]]" attr-for-selected="path" selected-attribute="visible">
+
+                <!-- <page-page1 name="page1"></page-page1>
+                <page-page2 name="page2"></page-page2> -->
+								<page-g2g path="g2g"></page-g2g>
+								<page-payment path="payment"></page-payment>
+								<page-stats path="stats"></page-stats>
+                <page-401 name="401"></page-401>
+                <page-403 name="403"></page-403>
+                <page-404 name="404"></page-404>
+
+            </iron-pages>
+		</layout-main>
+
+	</template>
+
+
+	<script>
+        Polymer({
+            is:'nylon-init',
+						// ready:function(){
+						// 	Polymer.RenderStatus.afterNextRender(this,function(){
+						// 		this.importHref(this.resolveUrl('/import.html'), (e)=>{
+						// 			this.rendered = true;
+						// 		}, (e)=> {
+						// 			console.log('error')
+						// 		});
+			      //   		});
+						// }
+        });
+    </script>
+</dom-module>
