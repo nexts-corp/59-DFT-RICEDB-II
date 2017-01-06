@@ -123,7 +123,7 @@ class index {
     }
 
 
-    insertNotify(req,res){
+    insertAllocate(req,res){
         var r = req._r;
         var params = req.params;
 
@@ -132,22 +132,25 @@ class index {
                 return row('quota').ne(0)
             })
             .map(function(row){
+                return r.db('eu2').table('quota').get(result('quota_id')).do(function(quotaResult){
                     return {
-                        amount_real:row('quota_update'),
+                        amount:row('quota_update'),
                         calculate_id:result('id'),
                         quota_id:result('quota_id'),
-                        quantity:r.db('eu2').table('quota').get(result('quota_id'))('quantity').map(function(periodRow){
-                            return row('quota_update').mul(periodRow('percent')).div(100).do(function(calResult){
-                                return {
-                                    period:periodRow('period'),
-                                    weigth_source:calResult,
-                                    weigth:r.round(calResult),
-                                    weigth_update:r.round(calResult),
-                                }
+                        quantity:quotaResult('quantity').map(function(quotaQuantity){
+                            return {
+                                period:quotaQuantity('period'),
+                                weigth_cal:row('quota_update').mul(quotaQuantity('weigth').div(quotaResult('amount')))
+                            }
+                        }).merge(function(quantityRow){
+                            return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
+                                return {weigth:weigthRound,weigth_update:weigthRound};
                             })
                             
                         })
                     }
+                })
+                    
             })
         })
         .run().then(function (result) {
