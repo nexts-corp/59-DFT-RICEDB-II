@@ -30,6 +30,11 @@ class index{
             type_rice_id:params.type_rice_id,
             ordinal:params.ordinal
         })
+
+        .innerJoin(r.db('eu2').table('exporter'), function(al,ex){
+            return al('exporter_id').eq(ex('id'))
+        }).without({ right: ["id"] }).zip()
+
         .merge(function(sumrow){
             return{
             sumperiod: sumrow('quantity')('weigth').add(sumrow('quantity')('weigth_update')).sum() 
