@@ -164,6 +164,9 @@ class index {
                 })
             })
         })
+        .do(function(result){
+            return r.db('eu2').table('allocate').insert(result)
+        })
         .run().then(function (result) {
             res.json(result);
         }).catch(function(err){
@@ -321,8 +324,8 @@ const FORMULA_FOR_CAL = (req) => {
                             return spreadsheetsRow('div_round').mul(quotaRow('amount')).div(sumForCal)
                                 .do(function (resultCalQuota) {
                                     return {
-                                        quota: resultCalQuota,
-                                        quota_round: r.round(resultCalQuota),
+                                        quota_cal: resultCalQuota,
+                                        quota: r.round(resultCalQuota),
                                         quota_update: r.round(resultCalQuota)
                                     }
                                 })
@@ -333,11 +336,11 @@ const FORMULA_FOR_CAL = (req) => {
         })
     }).merge(function (row) {
         return {
-            quota: row('spreadsheets').sum('quota'),
+            quota_cal: row('spreadsheets').sum('quota_cal'),
             quota_id:r.db('eu2').table('quota')
             .filter({ year: LastYearFilter, type_rice_id: params.type_rice_id })(0)('id'),
-            quota_round: row('spreadsheets').sum('quota_round'),
-            quota_update: row('spreadsheets').sum('quota_round')
+            quota: row('spreadsheets').sum('quota'),
+            quota_update: row('spreadsheets').sum('quota')
         }
     })
 };
