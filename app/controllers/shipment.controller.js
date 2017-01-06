@@ -440,6 +440,7 @@ exports.report4 = function (req, res, next) {
     };
 
     r.db('g2g').table('book').getAll(req.query.shm_id, { index: 'shm_id' })
+        .filter({ book_status: true })
         .eqJoin('shm_id', r.db('g2g').table('shipment')).pluck({ right: ["contract_id", "cl_id", "shm_no"] }, "left").zip()
         .eqJoin('cl_id', r.db('g2g').table('confirm_letter')).pluck({ right: "cl_type_rice" }, "left").zip()
         .merge(function (m) {
@@ -505,8 +506,8 @@ exports.report4 = function (req, res, next) {
         .orderBy([r.row('ship_lot_no').coerceTo('number'), r.row('invoice_no')])
         .run()
         .then(function (result) {
-           // res.json(result)
-           res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+            // res.json(result)
+            res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
