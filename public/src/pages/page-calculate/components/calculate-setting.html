@@ -49,8 +49,7 @@
   </style>
   <template>
       <header>
-        <!--<div class="title container">การคำนวณส่วนจัดสรร</div>-->
-       
+      
         <div class="font">
           <gl-grid-row width="{{getWidth}}">
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
@@ -62,13 +61,7 @@
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"> 
                <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
                 item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
-            		<!--<gl-form-dropdown-menu class="saveData" label="ประเภทข้าว" required>
-									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
-										<template is="dom-repeat" items="{{getTypeRice}}">
-											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
-										</template>
-									</paper-listbox>
-								</gl-form-dropdown-menu>-->
+            	
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <gl-form-input class="saveData" label="การคำนวณครั้งที่" allowed-pattern="[0-9||,||.]" format-number="on" value="{{ordinum}}" required ></gl-form-input>  
@@ -87,25 +80,13 @@
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                  <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYearFirst}}"></gl-combo-box>
-               		<!--<gl-form-dropdown-menu class="saveData" label="แสดงข้อมูลรายปี" required>
-                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearFirst}}">
-                      <template is="dom-repeat" items="{{getYear}}">
-                        <paper-item class="font" year="{{item}}">{{item}}</paper-item>
-                      </template>
-                    </paper-listbox>
-                  </gl-form-dropdown-menu>-->
+               	
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
               </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYearLast}}"></gl-combo-box> 
-                 <!--<gl-form-dropdown-menu class="saveData" label="แสดงข้อมูลรายปี" required>
-                    <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectYearLast}}">
-                      <template is="dom-repeat" items="{{getYear}}">
-                        <paper-item class="font" year="{{item}}">{{item}}</paper-item>
-                      </template>
-                    </paper-listbox>
-                  </gl-form-dropdown-menu>-->
+                
               </gl-grid-col>
              
            </gl-grid-row>
@@ -122,7 +103,7 @@
               <template is="dom-repeat" items="{{companyName}}">
                 
                 <paper-item>
-                  <paper-checkbox id="CheckData" style="padding:5px" checked="{{item.check}}" on-input="changeCheck">{{item.seller_name_th}}</paper-checkbox>
+                  <paper-checkbox id="CheckData" style="padding:5px" checked="{{item.check}}" on-input="changeCheck">{{item.name}}</paper-checkbox>
                 </paper-item>
               </template> 
             </div>
@@ -215,7 +196,7 @@
       ready:function(){
         this._getTypeRice();
         this._getYear();
-        this._getQuotaYear();
+        // this._getQuotaYear();
       },
       mathOrdinalNumber:function(){
         // var num = number + 1;
@@ -246,13 +227,13 @@
          })
 
          this.sendCompanyData = {
-           year_quota : this.quotaYear,
+          //  year_quota : this.quotaYear,
            frist_year : this.firstYear,
            last_year : this.lastYear,
            exporter_id : exporter,
            type_rice_id : this.typeRice
          }
-          this.fire('toast',{status:'load'});
+          // this.fire('toast',{status:'load'});
          this.fire('post-sum',this.sendCompanyData);
         //  this._postDb();
         //  console.log(this.sendCompanyData);
@@ -263,7 +244,7 @@
         });
       },
       _getTypeRice:function(){
-          axios.get('./eu/type_rice/')
+          axios.get('./common/type_rice')
           .then((response)=>{
               console.log("success!!");
               console.log(response.data);
@@ -275,10 +256,12 @@
           });
       },
       _getYear:function(){
-        axios.get('./eu/calculate/year')
+        axios.get('./calculate/year/report')
         .then((response)=>{
           console.log("success");
-          this.getYear = response.data;
+          this.getYear = response.data.map((item)=>{
+            return item.toString();
+          });
           //console.log(this.getYear);
         })
         .catch((error)=>{
@@ -316,7 +299,7 @@
         this.lastYear = lastYear; 
         this.typeRice = typeRice;
         this.fire('toast',{status:'load'});
-        axios.get('./eu/calculate/exporter',{
+        axios.get('./calculate/exporter',{
           params:{
             frist_year : fistYear,
             last_year : lastYear,
@@ -370,7 +353,7 @@
             sum_quota : this.sumAnswer.sum_quota,
             quota_amount : this.sumAnswer.quota_amount,
           }
-          this.fire('post-data',sendData);
+          // this.fire('post-data',sendData);
           console.log(sendData);
         }
         else {

@@ -171,7 +171,9 @@
               axios.get('./common/year')
               .then((response)=>{
                 console.log("success");
-                this.getYear = response.data;
+                this.getYear = response.data.map((item)=>{
+                  return item.toString();
+                });
                 //console.log(this.getYear);
               })
               .catch((error)=>{
@@ -187,23 +189,23 @@
             if(quota != ''){
               this.sendQuotaYear = quota;
               this.hide = false;
-              this._getDatalist();
+              // this._getDatalist();
             }
           },
           _postSumData:function(e){
-              // console.log(e.detail);
-              axios.post('/eu/calculate/calculate',e.detail)
+              console.log(e.detail);
+              axios.post('/calculate/cal',e.detail)
               .then((response)=>{
               console.log("success");
               //this.textToast = 'บันทึกข้อมูลสำเร็จ';
               console.log(response.data);
-              this.sumData = response.data;
+              // this.sumData = response.data;
 
               this.answerSum = {
-                sum_export : response.data.sum_export,
-                sum_for_cal : response.data.sum_for_cal,
-                sum_quota : response.data.sum_quota,
-                quota_amount : response.data.quota_amount
+                sum_export : response.data.report,
+                sum_for_cal : response.data.calculate,
+                sum_quota : response.data.confirm,
+                quota_amount : response.data.amount
               }
               this.textToast = 'คำนวณสำเร็จ';
               this.fire('toast',{
@@ -214,7 +216,7 @@
                   
                 }
               });
-              console.log(this.answerSum);
+              // console.log(this.answerSum);
               })
               .catch((error)=>{
                 console.log("error");
@@ -245,7 +247,7 @@
                 }
               });
               this.$$("panel-right").close();
-              this._getDatalist();
+              // this._getDatalist();
               })
               .catch((error)=>{
                 console.log("error");
