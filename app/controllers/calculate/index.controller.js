@@ -88,13 +88,15 @@ class index {
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'),function(calRow,quotaRow){
             return calRow('quota_id').eq(quotaRow('id'))
         }).map(function(row){
-            return row('left').merge({
-                type_rice_id:row('right')('type_rice_id'),
-                year:row('right')('year')
-            })
+            return row('left').merge(row('right').pluck('year','type_rice_id'))
         }).filter({
             year:parseInt(params.year),
-            type_rice_id:params.type_rice_id
+        }).group('type_rice_id').ungroup().map(function(row){
+            return {
+                 type_rice_id: row('group'),
+                 type_rice_name_th:r.db('eu2').table('type_rice').get(row('group'))('type_rice_name_th'),
+                 list:row('reduction')
+            }
         })
         .run().then(function (result) {
             res.json(result);
