@@ -16,8 +16,20 @@ class index {
     getExporter(req, res) {
         var r = req._r;
         var params = req.query;
-        r.db('eu2').table('report').filter({ type_doc: 'c', type_rice_id: params.type_rice_id }).pluck('exporter_id')
-            .union(r.db('eu2').table('confirm').filter({ type_rice_id: params.type_rice_id }).pluck('exporter_id')).distinct().innerJoin(
+
+
+        var fristYearFilter = parseInt(params.frist_year) - 1;
+        var LastYearFilter = parseInt(params.last_year) + 1;
+
+
+        r.db('eu2').table('report').filter(function(row){
+            return row('type_doc').eq('c').and(row('type_rice_id').eq(params.type_rice_id))
+            .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
+        }).pluck('exporter_id')
+            .union(r.db('eu2').table('confirm').filter(function(row){
+            return row('type_rice_id').eq(params.type_rice_id)
+            .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
+        }).pluck('exporter_id')).distinct().innerJoin(
             r.db('eu2').table('exporter'), function (reportRow, exporterRow) {
                 return reportRow('exporter_id').eq(exporterRow('id'))
             }
@@ -137,7 +149,9 @@ class index {
                 .map(function(row){
                     
                         return {
+                            exporter_id:row('exporter_id'),
                             amount:row('quota_update'),
+                            amount_update:row('quota_update'),
                             calculate_id:result('id'),
                             quota_id:result('quota_id'),
                             quantity:quotaResult('quantity').map(function(quotaQuantity){
