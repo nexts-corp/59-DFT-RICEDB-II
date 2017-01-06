@@ -33,7 +33,7 @@ class index{
 
         .innerJoin(r.db('eu2').table('exporter'), function(al,ex){
         return al('exporter_id').eq(ex('id'))
-        }).without({ right: ["id"] }).zip()
+        }).without({ right: ["id"] }).zip().orderBy('name')
     
         .merge(function(sumrow){
             return{
