@@ -229,7 +229,7 @@ new nylon.utility.NumberFormat().toEngString(
 		</band>
 	</detail>
 	<summary>
-		<band height="222" splitType="Stretch">
+		<band height="140" splitType="Stretch">
 			<textField>
 				<reportElement x="80" y="56" width="80" height="18" uuid="212a15bf-70bc-46f0-8c1d-e9cfcaa7b9e2"/>
 				<box>
@@ -342,8 +342,8 @@ new nylon.utility.NumberFormat().toEngString(
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="160" y="74" width="275" height="47" isPrintWhenDetailOverflows="true" uuid="8bfa31ad-f530-4348-a15d-1dc0b8ffe08b"/>
-				<box leftPadding="5"/>
+				<reportElement stretchType="RelativeToBandHeight" x="160" y="74" width="275" height="66" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="8bfa31ad-f530-4348-a15d-1dc0b8ffe08b"/>
+				<box leftPadding="5" rightPadding="5"/>
 				<textElement textAlignment="Justified" verticalAlignment="Top">
 					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -351,23 +351,8 @@ new nylon.utility.NumberFormat().toEngString(
 new nylon.utility.NumberFormat().toEngString(
    $V{sum_amount}.intValue()
 )
-+" ONLY)"]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="160" y="0" width="39" height="20" uuid="b27e1ad5-e2dd-48aa-86dc-633c351e4192"/>
-				<box topPadding="5" leftPadding="5"/>
-				<textElement verticalAlignment="Top">
-					<font fontName="TH SarabunPSK" size="12" isBold="false" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL]]></text>
-			</staticText>
-			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="160" y="121" width="275" height="101" isPrintWhenDetailOverflows="true" uuid="f759fd63-7d90-421c-a895-85c425c8f7e9"/>
-				<box leftPadding="5" rightPadding="5"/>
-				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["UNDER THE SALE AND PURCHASE CONTRACT NO."+$F{contract_name}+
++" ONLY)"+
+"\n\nUNDER THE SALE AND PURCHASE CONTRACT NO."+$F{contract_name}+
 " BETWEEN "+$F{buyer_name}+" AND DEPARTMENT OF FOREIGN TRADE,"+
 " MINISTRY OF COMMERCE OF THAILAND DATED "+
 new nylon.utility.NumberFormat().toDateEngShort($F{contract_date})+
@@ -378,6 +363,14 @@ new nylon.utility.NumberFormat().toDateEngShort($F{contract_date})+
 "BANK ACCOUNT NUMBER 385-0-12421-5\n"+
 "ADDRESS: 44/100 NONTHABURI 1 ROAD, NONTHABURI 11000, THAILAND"]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="160" y="0" width="39" height="20" uuid="b27e1ad5-e2dd-48aa-86dc-633c351e4192"/>
+				<box topPadding="5" leftPadding="5"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="12" isBold="false" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
