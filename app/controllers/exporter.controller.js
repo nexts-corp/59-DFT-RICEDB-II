@@ -310,4 +310,14 @@ exports.report3 = function (req, res, next) {
             res._ireport("report7.jasper", "pdf", result, parameters);
         });
 }
-
+exports.report4 = function (req, res){
+    var r = req._r;
+    r.db('external_f3').table('exporter')
+    .run()
+    .then(function(result){
+        res.json(result)
+    })
+    .error(function(err){
+        res.json(err)
+    })
+}
