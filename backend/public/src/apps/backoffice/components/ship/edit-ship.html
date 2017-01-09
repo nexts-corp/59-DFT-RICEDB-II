@@ -55,8 +55,15 @@
         },
         dataShipline:{
           type:Array
+        },
+        dataOld :{
+          type: Object,
+          value: {}
         }
       },
+      observers:[
+        '_cloneData(data)'
+      ],
       behaviors: [
           gl.behavior.core,
           gl.behavior.locales,
@@ -76,22 +83,35 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          // this.read('./common/check/duplicate?table=ship&field=ship_name&value='+datas.ship_name, (response) => {
-          //   if (response == 0) {
+          this.read('./common/check/duplicate?table=ship&field=ship_name&value='+datas.ship_name, (response) => {
+            if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.update('./common/ship/update', datas, () => {
-              this.glQuery('refreshShip').getShip();
-              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                console.log('success');
-              }});
-             });
-            // }
-            // else {
-            //   this.fire('toast',{status:'connectError',text:'ชื่อเรือนี้มีอยู่แล้ว',
-            //     callback:function(){
-            //     }})
-            // }
-            // });
+                this.glQuery('refreshShip').getShip();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
+               });
+            }
+            else {
+              this.read('./common/check/myowner?table=ship&id='+datas.id+'&field=ship_name&value='+datas.ship_name, (response) => {
+                if (response == 1) {
+                  this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                  this.update('./common/ship/update', datas, () => {
+                    this.glQuery('refreshShip').getShip();
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      console.log('success');
+                    }});
+                 });
+                  }
+                  else {
+                    this.fire('toast',{status:'connectError',text:'ชื่อเรือนี้มีอยู่แล้ว',
+                      callback:function(){
+                      }})
+                  }
+                });
+              }
+            });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -99,8 +119,12 @@
             }})
         }
       },
+      _cloneData:function(){
+        this.dataOld = JSON.parse(JSON.stringify(this.data));
+      },
       _cancel:function() {
         this.glQuery('panelRight').changDrawer();
+        this.data = this.dataOld;
       }
     });
   </script>

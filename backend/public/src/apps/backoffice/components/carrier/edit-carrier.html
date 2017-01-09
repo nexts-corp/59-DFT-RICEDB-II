@@ -46,8 +46,15 @@
         data: {
           type: Object,
           value: {}
+        },
+        dataOld:{
+          type: Object,
+          value: {}
         }
       },
+      observers: [
+        '_cloneData(data)'
+      ],
       behaviors: [
           gl.behavior.core,
           gl.behavior.locales,
@@ -66,22 +73,35 @@
             return stat == true
         };
         if(stat.every(chkStat) == true){
-          // this.read('./common/check/duplicate?table=carrier&field=carrier_name&value='+datas.carrier_name, (response) => {
-          //   if (response == 0) {
+          this.read('./common/check/duplicate?table=carrier&field=carrier_name&value='+datas.carrier_name, (response) => {
+            if (response == 0) {
               this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
               this.update('./common/carrier/update', datas, () => {
-              this.glQuery('refreshCarrier').getCarrier();
-              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-                console.log('success');
-              }});
+                this.glQuery('refreshCarrier').getCarrier();
+                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                  console.log('success');
+                }});
              });
-            // }
-            // else {
-            //   this.fire('toast',{status:'connectError',text:'ชื่อผู้ให้บริการเรือนี้มีอยู่แล้ว',
-            //     callback:function(){
-            //     }})
-            // }
-            // });
+            }
+            else {
+              this.read('./common/check/myowner?table=carrier&id='+datas.id+'&field=carrier_name&value='+datas.carrier_name, (response) => {
+                if (response == 1) {
+                  this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                  this.update('./common/carrier/update', datas, () => {
+                    this.glQuery('refreshCarrier').getCarrier();
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      console.log('success');
+                    }});
+                 });
+                }
+                else {
+                  this.fire('toast',{status:'connectError',text:'ชื่อผู้ให้บริการเรือนี้มีอยู่แล้ว',
+                    callback:function(){
+                    }})
+                }
+              });
+            }
+          });
         }
         else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบถ้วน',
@@ -89,8 +109,12 @@
             }})
         }
       },
+      _cloneData:function(){
+        this.dataOld = JSON.parse(JSON.stringify(this.data));
+      },
       _cancel:function() {
         this.glQuery('panelRight').changDrawer();
+        this.data = this.dataOld;
       }
     });
   </script>

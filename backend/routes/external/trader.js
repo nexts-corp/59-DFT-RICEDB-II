@@ -105,7 +105,8 @@ router.get('/id/:trader_id', function (req, res, next) {
             },
             r.db('external_f3').table("seller").get(r.row("seller_id")),
             r.db('external_f3').table("type_license").get(r.row("type_lic_id")),
-            r.db('common').table("country").get(r.row("country_id"))
+            r.db('common').table("country").get(r.row("country_id")),
+            r.db('common').table("province").get(r.row("province_id"))
             )
             //  .merge(r.db('common').table("country").get(r.row("country_id")))
             .without('id')

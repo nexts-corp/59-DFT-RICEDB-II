@@ -21,13 +21,13 @@
   }
 </style>
   <template>
-    <div class="text-center">แก้ไขข้อมูลผู้ขาย</div>
+    <div class="text-center">แก้ไขข้อมูลผู้ประกอบการ</div>
 
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
         <gl-combo-box class="margin-top checkData" items="{{countrys}}" item-label-path="country_name_en" label="Country Name (ชื่อประเทศ)" item-value-path="country_id"
-        value="{{data.country_id}}" error-message="กรุณาเลือกผู้ขาย" required always-float-label placeholder="เลือกประเทศ"></gl-combo-box>
+        value="{{data.country_id}}" error-message="กรุณาเลือกผู้ประกอบการ" required always-float-label placeholder="เลือกประเทศ"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -44,14 +44,14 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อผู้ขาย (ภาษาอังกฤษ)" required label="Seller Name (ชื่อผู้ขาย ภาษาอังกฤษ) :" placeholder="กรอกชื่อผู้ขาย (ภาษาอังกฤษ)" value="{{data.seller_name_en}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อผู้ประกอบการ (ภาษาอังกฤษ)" required label="Seller Name (ชื่อผู้ประกอบการ ภาษาอังกฤษ) :" placeholder="กรอกชื่อผู้ประกอบการ (ภาษาอังกฤษ)" value="{{data.seller_name_en}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อผู้ขาย (ภาษาไทย)" required label="Seller Name (ชื่อผู้ขาย ภาษาไทย) :" placeholder="กรอกชื่อผู้ขาย (ภาษาไทย)" value="{{data.seller_name_th}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อผู้ประกอบการ (ภาษาไทย)" required label="Seller Name (ชื่อผู้ประกอบการ ภาษาไทย) :" placeholder="กรอกชื่อผู้ประกอบการ (ภาษาไทย)" value="{{data.seller_name_th}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -118,7 +118,7 @@
         }
       },
       observers:[
-        '_dataInput(data)'
+        '_cloneData(data)'
       ],
       behaviors: [
           gl.behavior.core,
@@ -169,7 +169,7 @@
                   });
                 }
                 else {
-                  this.fire('toast',{status:'connectError',text:'รหัสผู้ขายนี้มีอยู่แล้ว',
+                  this.fire('toast',{status:'connectError',text:'รหัสผู้ประกอบการนี้มีอยู่แล้ว',
                     callback:function(){
                     }})
                 }
@@ -191,7 +191,7 @@
       _delAgent:function(e){
         this.splice('data.seller_agent', e.currentTarget.id, 1);
       },
-      _dataInput:function(){
+      _cloneData:function(){
         this.dataOld = JSON.parse(JSON.stringify(this.data));
       },
       _cancel:function(dataOld) {

@@ -21,7 +21,7 @@
   }
 </style>
   <template>
-    <div class="text-center">แก้ไขข้อมูลผู้ประกอบการ</div>
+    <div class="text-center">แก้ไขข้อมูลผู้ค้าข้าว</div>
 
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
@@ -37,7 +37,7 @@
         <gl-form-input class="margin-top" label="Trader No (รหัสประจำตัวผู้เสียภาษี) :" value="{{data.trader_no}}" disabled></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อ" required label="Trader Name (ชื่อผู้ประกอบการ) :" placeholder="กรอกชื่อผู้ประกอบการ" value="{{data.trader_name}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อ" required label="Trader Name (ชื่อผู้ค้าข้าว) :" placeholder="กรอกชื่อผู้ค้าข้าว" value="{{data.trader_name}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -91,11 +91,15 @@
         trader_id:{
           type:Object,
           value: {}
+        },
+        dataOld:{
+          type: Object,
+          value: {}
         }
       },
-      // observers:[
-      //   '_checkSeller(data.seller_id)'
-      // ],
+      observers:[
+        '_cloneData(data)'
+      ],
       behaviors: [
           gl.behavior.core,
           gl.behavior.locales,
@@ -132,7 +136,7 @@
                });
             }
             else {
-              this.fire('toast',{status:'connectError',text:'รหัสผู้ประกอบการนี้มีอยู่แล้ว',
+              this.fire('toast',{status:'connectError',text:'รหัสผู้ค้าข้าวนี้มีอยู่แล้ว',
                 callback:function(){
                 }})
             }
@@ -144,8 +148,12 @@
             }})
         }
       },
+      _cloneData:function() {
+        this.dataOld = JSON.parse(JSON.stringify(this.data));
+      },
       _cancel:function() {
         this.glQuery('panelRight').changDrawer();
+        this.data = this.dataOld;
       },
       _checkSeller:function(val){
         // console.log('a');
