@@ -65,7 +65,7 @@ router.get(['/', '/list'], function (req, res, next) {
                         })
                     }),
                     confirm_letter: r.db('g2g').table('confirm_letter')
-                        .filter({ 'contract_id': row('id') })
+                        .getAll(row('id'), { index: 'contract_id' })
                         .merge(function (cl) {
                             return {
                                 cl_id: cl('id'),
@@ -80,12 +80,12 @@ router.get(['/', '/list'], function (req, res, next) {
                         .without('id')
                         .coerceTo('array'),
                     shipment: r.db('g2g').table('shipment')
-                        .filter({ contract_id: row('id') })
+                        .getAll(row('id'), { index: 'contract_id' })
                         .merge(function (shm) {
                             return {
                                 shm_id: shm('id'),
                                 shm_quantity: r.db('g2g').table("shipment_detail")
-                                    .filter({ "shm_id": shm('id') })
+                                    .getAll(shm('id'), { index: "shm_id" })
                                     .sum("shm_det_quantity"),
                                 shm_status_name: r.branch(shm('shm_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
                             }

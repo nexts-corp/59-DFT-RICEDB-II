@@ -120,7 +120,7 @@ var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('book')
-            .filter({ book_status: false })
+            .getAll(false, { index: 'book_status' })
             .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "creater", "updater"] }).zip()
             .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "date_created", "date_updated", "contract_type_rice", "creater", "updater"] }).zip()
@@ -166,7 +166,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                     packing_date: m('packing_date').split('T')(0),
                     product_date: m('product_date').split('T')(0),
                     cl_date: m('cl_date').split('T')(0),
-                    contract_date:m('contract_date').split('T')(0),
+                    contract_date: m('contract_date').split('T')(0),
                     cut_of_date: m('cut_of_date').split('T')(0),
                     date_created: m('date_created').split('T')(0),
                     date_updated: m('date_updated').split('T')(0)

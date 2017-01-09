@@ -38,7 +38,7 @@ var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('invoice')
-            .filter({ invoice_status: false })
+            .getAll(false, { index: 'invoice_status' })
             .merge(function (m) {
                 return {
                     invoice_id: m('id')
