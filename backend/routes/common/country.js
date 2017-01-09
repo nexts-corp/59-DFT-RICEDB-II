@@ -100,7 +100,7 @@ router.get('/port', function (req, res, next) {
                 return m.merge(function (me) {
                     return {
                         port: r.db('common').table('port')
-                            .filter({ country_id: me('country_id') })
+                            .getAll(me('country_id'), { index: 'country_id' })
                             .merge(function (p) {
                                 return {
                                     port_id: p('id')

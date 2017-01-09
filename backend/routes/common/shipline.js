@@ -89,7 +89,7 @@ router.get('/ship', function (req, res, next) {
                 return m.merge(function (me) {
                     return {
                         ship: r.db('common').table('ship')
-                            .filter({ shipline_id: me('shipline_id') })
+                            .getAll(me('shipline_id'), { index: 'shipline_id' })
                             .merge(function (p) {
                                 return {
                                     ship_id: p('id')
