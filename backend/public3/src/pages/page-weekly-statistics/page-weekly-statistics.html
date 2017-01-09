@@ -1,6 +1,7 @@
 <link rel="import" href="../components/box-menu.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-styles.html">
 <link rel="import" href="components/weekly-rice-situation.html">
+<link rel="import" href="components/report-price-movements-in-rice.html">
 <dom-module id="page-weekly-statistics">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
@@ -8,16 +9,17 @@
     }
   </style>
   <template>
+
     <div class="layout horizontal center-justified wrap">
       <template is="dom-repeat" items="[[mainMenu]]">
         <box-menu data="{{item}}"  on-tap="urlToReport" id={{index}}></box-menu>
       </template>
     </div>
-<!-- <weekly-rice-situation></weekly-rice-situation> -->
     <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
       <div class="rightdata" align="left" >
         <iron-pages selected="{{pages}}">
           <weekly-rice-situation></weekly-rice-situation>
+          <report-price-movements-in-rice></report-price-movements-in-rice>
         </iron-pages>
       </div>
     </nylon-panel-right>

@@ -85,7 +85,7 @@ if (cluster.isMaster) {
    public3.use(function (req, res, next) {
     res.sendfile("./"+publicStatic3+"/index.html");
   });
-  
+
   public.listen(3000);
   public1.listen(4000);
   public3.listen(5000);
