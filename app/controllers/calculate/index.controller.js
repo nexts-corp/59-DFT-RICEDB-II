@@ -62,7 +62,7 @@ class index {
         .do(function (result) {
             //for save to calculate_detail
             return r.db('eu2').table('calculate').insert(
-                result.without('spreadsheets').merge({ordinal:params.ordinal})
+                result.without('spreadsheets').merge({ordinal:params.ordinal,status:'a'})
             ).do(function (calSave) {
                 return result('spreadsheets').merge(function (row) {
                     return { calculate_id: calSave('generated_keys')(0) }
@@ -171,12 +171,6 @@ class index {
 
                         }
                         
-                }).merge(function(row){
-                    return {
-                        ordinal:result('ordinal'),
-                        year:quotaResult('year'),
-                        type_rice_id:quotaResult('type_rice_id'),
-                    }
                 })
             })
         })
@@ -224,7 +218,15 @@ const FORMULA_FOR_CAL = (req) => {
 
     return r.do(
         //get history got quota
-        r.db('eu2').table('confirm').filter(function (row) {
+        r.db('eu2').table('confirm')
+        .innerJoin(r.db('eu2').table('quota'),function(l,r){
+            return l('quota_id').eq(r('id'))
+        }).map(function(result){
+            return result('left').merge(function(row){
+                return result('right').pluck('type_rice_id','year')
+            })
+        })
+        .filter(function (row) {
             return row('type_rice_id').eq(params.type_rice_id)
                 .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
                 .and(r.expr(params.exporter_id).contains(row('exporter_id')))
@@ -248,7 +250,15 @@ const FORMULA_FOR_CAL = (req) => {
 
         ,
         //get history report
-        r.db('eu2').table('report').filter(function (row) {
+        r.db('eu2').table('report')
+        .innerJoin(r.db('eu2').table('quota'),function(l,r){
+            return l('quota_id').eq(r('id'))
+        }).map(function(result){
+            return result('left').merge(function(row){
+                return result('right').pluck('type_rice_id','year')
+            })
+        })
+        .filter(function (row) {
             return row('type_rice_id').eq(params.type_rice_id)
                 .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter)).and(row('type_doc').eq('c'))
                 .and(r.expr(params.exporter_id).contains(row('exporter_id')))
