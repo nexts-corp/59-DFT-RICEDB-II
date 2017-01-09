@@ -1,4 +1,6 @@
 <link rel="import" href="../components/box-menu.html">
+<link rel="import" href="../../../bower_components/gl-styles/gl-styles.html">
+<link rel="import" href="components/weekly-rice-situation.html">
 <dom-module id="page-weekly-statistics">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
@@ -8,26 +10,49 @@
   <template>
     <div class="layout horizontal center-justified wrap">
       <template is="dom-repeat" items="[[mainMenu]]">
-        <box-menu data="{{item}}"></box-menu>
+        <box-menu data="{{item}}"  on-tap="urlToReport" id={{index}}></box-menu>
       </template>
     </div>
+<!-- <weekly-rice-situation></weekly-rice-situation> -->
+    <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
+      <div class="rightdata" align="left" >
+        <iron-pages selected="{{pages}}">
+          <weekly-rice-situation></weekly-rice-situation>
+        </iron-pages>
+      </div>
+    </nylon-panel-right>
   </template>
   <script>
     Polymer({
       is: "page-weekly-statistics",
       properties: {
+        pages:{
+          type:Number,
+          value:0
+        },
         mainMenu:{
           type:Array,
           value:
             [
-              {path:'daily-statistics',nameMenu:'ข้อมูลสถานการณ์การตลาดข้าวรายสัปดาห์ ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'weekly-statistics',nameMenu:'รายความเคลื่อนไหวราคาข้าวสาร ณ วันจันทร์ที่ 20 ธันวาคม 2559',img:'/im.jpg'},
-              {path:'monthly-statistics',nameMenu:'สถานการณ์การส่งออกข้าวหอมมะลิ 100% ชั้น 1 และชั้น 2 ประจำสัปดาห์ที่ 1 เดือน ธันวาความ 6-9 ธันวาความ 2559 ',img:'/im.jpg'},
-              {path:'yearly-statistics',nameMenu:'ภาวะการค้าข้าว ประจำสัปดาห์ที่ 1 เดือน ธันวาความ 6-9 ธันวาความ 2559',img:'/im.jpg'},
+              {path:'weekly-rice-situation',nameMenu:'ข้อมูลสถานการณ์การตลาดข้าวรายสัปดาห์',img:'/im.jpg'},
+              {path:'weekly-statistics',nameMenu:'รายความเคลื่อนไหวราคาข้าวสาร',img:'/im.jpg'},
+              {path:'monthly-statistics',nameMenu:'สถานการณ์การส่งออกข้าวหอมมะลิ 100% ชั้น 1 และชั้น 2 ประจำสัปดาห์ท',img:'/im.jpg'},
+              {path:'yearly-statistics',nameMenu:'ภาวะการค้าข้าว ประจำสัปดาห์ท',img:'/im.jpg'},
           ]
         },
       },
-
+      urlToReport:function (e) {
+        console.log(e.target.id);
+        this.pages=e.target.id;
+        this._flipDrawerOpen();
+      },
+      _flipDrawerOpen:function () {
+        // this.$.drawerRight.actionDrawer();
+        Polymer.dom(this.root).querySelector('#drawerRight').open();
+      },
+      _flipDrawerClose:function () {
+        Polymer.dom(this.root).querySelector('#drawerRight').close();
+      },
     });
   </script>
 </dom-module>
