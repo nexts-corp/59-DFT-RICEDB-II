@@ -112,7 +112,7 @@
           <template is="dom-if" if="[[rendered]]">
             <iron-pages selected="{{pageSelect}}">
               <div><calculate-setting quota-year="{{sendQuotaYear}}" ordinal-number="{{dataList}}" on-post-sum="_postSumData" on-post-data="_postData" sum-answer="{{answerSum}}"></calculate-setting></div>
-              <div><calculate-listQuota data="{{dataListQuota}}" on-save-data="_saveData" on-delete-data="_confirmData"></calculate-listQuota></div>
+              <div><calculate-listQuota data="{{dataListQuota}}" on-update-data-list="_updateDataList" on-save-data="_saveData" on-delete-data="_confirmData"></calculate-listQuota></div>
             </iron-pages>
           </template>
       </panel-right>
@@ -249,6 +249,23 @@
                 console.log(error);
             });
           },
+          _updateDataList:function(e){
+              axios.post('./calculate/allocate/'+e.detail)
+              .then((response)=>{
+                console.log("success!!");
+                console.log('dataListupdate',response);
+                // this.dataList = response.data;
+                this._getDatalist();
+              })
+              .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                this.fire('toast',{status:'connectError',text:error.message,
+                  callback:function(){
+                    //console.log('test');
+                  }})
+              });
+          },
           _getDatalist:function(){
               this.fire('toast',{status:'load'});
               axios.get('./calculate/list?year='+this.sendQuotaYear )
@@ -263,14 +280,7 @@
                   callback:function(){
                     //console.log('test');
                   }
-                });
-                // this.dataList = response.data;
-                // if(this.dataList == ''){
-                //    this.pageSelect = 0;
-                //    this.$$('panel-right')._setWidth('95%');
-                //    this.$$("panel-right").open();
-                // }
-               
+                });      
               })
               .catch((error)=>{
                 console.log("error");
@@ -315,7 +325,7 @@
           _saveData:function(e){
             console.log(e.detail);
             this.fire('toast',{status:'load'});
-            axios.put('/eu/calculate/state/allocate',{allocate_id:e.detail})
+            axios.put('/calculate/spreadsheet',e.detail)
             .then((response)=>{
               console.log("success");
               console.log('save::',response.data);
@@ -329,7 +339,7 @@
                 }
               });
               this.$$("panel-right").close();
-              this._getDatalist();
+              // this._getDatalist();
               // this._getYear();
               // this._getDatalist(this.selectYear);
             })

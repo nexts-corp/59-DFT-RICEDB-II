@@ -194,7 +194,18 @@
                this.countYear = this.data.confirm_year.length;
             },
             _saveData:function(){
-                this.fire('save-data',this.data.id);
+                var datas = this.data.spreadsheet.map((item)=>{
+                    return amount_update = {
+                        id : item.id,
+                        amount_update : this.unFormat(item.amount_update)
+                    }
+                });
+                var saveData = {
+                    amount_update:datas
+                }
+                // console.log(this.data.id);
+                this.fire('save-data',saveData);
+                this.fire('update-data-list',this.data.id);
             },
             _deleteData:function(){
                 this.fire('delete-data');
