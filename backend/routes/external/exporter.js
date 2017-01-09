@@ -26,6 +26,9 @@ var schema = {
             "type": "string",
             "format": "date-time"
         },
+        "exporter_remark":{
+            "type":"string"
+        },
         "trader_id": {
             "type": "string"
         }

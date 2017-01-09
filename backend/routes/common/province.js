@@ -40,6 +40,7 @@ router.get(['/', '/list'], function (req, res, next) {
                 }
             })
             .without('id')
+            .orderBy('province_name_th')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {

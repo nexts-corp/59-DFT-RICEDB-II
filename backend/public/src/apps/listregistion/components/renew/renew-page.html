@@ -1,4 +1,5 @@
 <!-- <link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html"> -->
+<link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../data/dataBehavior.html">
 <link rel="import" href="renew-memberShow.html">
 <link rel="import" href="renew-memberEdit.html">
@@ -34,9 +35,9 @@
         <div id="titleSeller" class="title"><iron-icon icon="icons:info"></iron-icon>  ยังไม่ลงทะเบียนเป็นผู้ส่งออก</div>
       </div>
       <div class="horizontal end-justified layout">
-        <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_active" title="ยกเลิกการระงับ" hidden>ยกเลิกการระงับ</paper-button>
+        <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_dialogRemark" title="ยกเลิกการระงับ" hidden>ยกเลิกการระงับ</paper-button>
         <!-- <paper-button id="buttomRegister" raised class="gl-btn-primary button" on-tap="_register" hidden>ลงทะเบียนผู้ส่งออก</paper-button> -->
-        <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_retrader" title="ต่ออายุ คน." hidden>ต่ออายุ คน.</paper-button>
+        <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_dialogRemark" title="ต่ออายุ คน." hidden>ต่ออายุ คน.</paper-button>
       </div>
 
       <gl-form-panel-head set-padding="0px 0px 0px 0px">
@@ -59,6 +60,19 @@
           <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised title="บันทึกข้อมูล">บันทึก</paper-button>
         </gl-form-panel-footer>
     </gl-form-panel>
+
+    <paper-dialog id="dialog" style="width:60%;">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,12]]">
+          <gl-form-textarea label="หมายเหตุ : " always-float-label value="{{exporter_remark}}"></gl-form-textarea>
+        </gl-grid-col>
+      </gl-grid-row>
+      <div>
+        <paper-button class="gl-btn-danger button-size" raised on-tap="_dialogcancle">ยกเลิก</paper-button>
+        <paper-button class="gl-btn-primary button-size" raised on-tap="_active" hidden="{{data.exporter_active}}">บันทึก</paper-button>
+        <paper-button class="gl-btn-primary button-size" raised on-tap="_retrader" hidden="{{data.trader_active}}">บันทึก</paper-button>
+      </div>
+    </paper-dialog>
 
 
   </template>
@@ -190,18 +204,22 @@
           this.$$('#titleBg').removeAttribute("hidden");
         }
       },
+      _dialogRemark: function(){
+        this.$.dialog.toggle();
+      },
       _active: function(){
         this.fire('toast',{status:'dialog',
-        text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
-        confirmed : this._confirmToast.bind(this),
-        datas: {
-           exporter_date_update: new Date,
-           exporter_date_approve:new Date,
-           exporter_no:this.data.exporter_no,
-           trader_id:this.data.trader_id,
-           id : this.data.exporter_id
-        }
-      });
+          text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+          confirmed : this._confirmToast.bind(this),
+          datas: {
+             exporter_date_update: new Date,
+             exporter_date_approve:new Date,
+             exporter_no:this.data.exporter_no,
+             trader_id:this.data.trader_id,
+             id : this.data.exporter_id,
+             exporter_remark: this.exporter_remark
+          }
+        });
       },
       _confirmToast:function(result,detail){
         if(result == true){
@@ -221,7 +239,8 @@
           confirmed : this._confirmToasts.bind(this),
           datas: {
             id: this.data.trader_id,
-            trader_date_approve: new Date
+            trader_date_approve: new Date,
+            exporter_remark: this.exporter_remark
           }
         });
       },
@@ -239,6 +258,10 @@
       },
       toggleDrawer:function(){
           this.glQuery('contentPanel').changDrawer();
+      },
+      _dialogcancle:function() {
+        this.$.dialog.toggle();
+        this.exporter_remark = "";
       }
     });
   </script>

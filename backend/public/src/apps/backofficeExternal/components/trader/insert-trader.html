@@ -21,13 +21,13 @@
     }
   </style>
   <template>
-    <div class="text-center">เพิ่มข้อมูลผู้ประกอบการ</div>
+    <div class="text-center">เพิ่มข้อมูลผู้ค้าข้าว</div>
 
     <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-        <gl-combo-box class="margin-top checkData" items="{{sellers}}" item-label-path="seller_name_th" label="Seller Name (ชื่อผู้ขาย)" item-value-path="seller_id"
-        value="{{data.seller_id}}" error-message="กรุณาเลือกผู้ขาย" required always-float-label placeholder="เลือกชื่อผู้ขาย"></gl-combo-box>
+        <gl-combo-box class="margin-top checkData" items="{{sellers}}" item-label-path="seller_name_th" label="Seller Name (ชื่อผู้ประกอบการ)" item-value-path="seller_id"
+        value="{{data.seller_id}}" error-message="กรุณาเลือกผู้ประกอบการ" required always-float-label placeholder="เลือกชื่อผู้ประกอบการ"></gl-combo-box>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -37,7 +37,7 @@
         <gl-form-input class="margin-top checkData" error-message="กรุณากรอกรหัส" required label="Trader No (รหัสประจำตัวผู้เสียภาษี) :" placeholder="กรอกชื่อรหัสประจำตัวผู้เสียภาษี" value="{{data.trader_no}}"></gl-form-input>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อ" required label="Trader Name (ชื่อผู้ประกอบการ) :" placeholder="กรอกชื่อผู้ประกอบการ" value="{{data.trader_name}}"></gl-form-input>
+        <gl-form-input class="margin-top checkData" error-message="กรุณากรอกชื่อ" required label="Trader Name (ชื่อผู้ค้าข้าว) :" placeholder="กรอกชื่อผู้ค้าข้าว" value="{{data.trader_name}}"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
 
@@ -126,7 +126,7 @@
              });
             }
             else {
-              this.fire('toast',{status:'connectError',text:'รหัสผู้ประกอบการนี้มีอยู่แล้ว',
+              this.fire('toast',{status:'connectError',text:'รหัสผู้ค้าข้าวนี้มีอยู่แล้ว',
                 callback:function(){
                 }})
             }

@@ -53,8 +53,15 @@
         data: {
           type: Object,
           value: {}
+        },
+        dataOld: {
+          type: Object,
+          value: {}
         }
       },
+      observers: [
+        '_cloneData(data)'
+      ],
       behaviors: [
           gl.behavior.core,
           gl.behavior.locales,
@@ -87,8 +94,12 @@
             }})
         }
       },
+      _cloneData:function(){
+        this.dataOld = JSON.parse(JSON.stringify(this.data));
+      },
       _cancel:function() {
         this.glQuery('panelRight').changDrawer();
+        this.data = this.dataOld;
       }
     });
   </script>
