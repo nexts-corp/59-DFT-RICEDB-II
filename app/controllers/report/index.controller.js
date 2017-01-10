@@ -49,44 +49,44 @@ class index{
         console.log(params.quota);
         console.log(params.exporter_id);
 
-        // if(typeof params.year !== "undefined"){
-        //     if(params.quota=='true'){
-        //         params.quota=true;
-        //     }else{
-        //         params.quota=false;
-        //     } 
-        //    params.year = parseInt(params.year);
+        if(typeof params.year !== "undefined"){
+            if(params.quota=='true'){
+                params.quota=true;
+            }else{
+                params.quota=false;
+            } 
+           params.year = parseInt(params.year);
 
-        // }
+        }
 
-        // r.db('eu2').table('quota').filter({
-        //     year:params.year,
-        //     type_rice_id:params.type_rice_id
-        // }).merge(function(x){
-        //     return {quota_id:x('id')} 
-        // }).pluck('quota_id').coerceTo('array')(0)
+        r.db('eu2').table('quota').filter({
+            year:params.year,
+            type_rice_id:params.type_rice_id
+        }).merge(function(x){
+            return {quota_id:x('id')} 
+        }).pluck('quota_id').coerceTo('array')(0)
 
-        // .do(function(ins){
-        //    return r.db('eu2').table('report').insert({
-        //         exporter_id:params.exporter_id,
-        //         month:params.month,
-        //         quota:params.quota,
-        //         type_doc:params.type_doc,
-        //         weigth:params.weigth,
-        //         quota_id:ins('quota_id')
+        .do(function(ins){
+           return r.db('eu2').table('report').insert({
+                exporter_id:params.exporter_id,
+                month:params.month,
+                quota:params.quota,
+                type_doc:params.type_doc,
+                weigth:params.weigth,
+                quota_id:ins('quota_id')
 
-        //         // exporter_id:'xx1',
-        //         // month:1,
-        //         // quota:true,
-        //         // type_doc:'c',
-        //         // weigth:111,
-        //         // quota_id:ins('quota_id')
-        //    })
-        // })
+                // exporter_id:'xx1',
+                // month:1,
+                // quota:true,
+                // type_doc:'c',
+                // weigth:111,
+                // quota_id:ins('quota_id')
+           })
+        })
 
-        // .run().then(function(result){
-        //     res.json(result);
-        // });
+        .run().then(function(result){
+            res.json(result);
+        });
     }
     
     deleteReport(req,res){
