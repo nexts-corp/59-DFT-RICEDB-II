@@ -4,10 +4,6 @@ class index{
     insertReport(req,res){
         var r = req._r;
         var params = req.body;
-        console.log(params.year);
-        console.log(params.type_rice_id);
-        console.log(params.quota);
-        console.log(params.exporter_id);
 
         if(typeof params.year !== "undefined"){
             if(params.quota=='true'){
@@ -101,17 +97,17 @@ class index{
     updateReport(req,res){
         var r = req._r;
         var params = req.body;
+        console.log(params.quota+""+params.weigth)
+        // if(typeof params.year !== "undefined"){
+        //     if(params.quota=='true'){
+        //         params.quota=true;
+        //     }else{
+        //         params.quota=false;
+        //     }
+        //     params.year = parseInt(params.year);
+        //     params.month = parseInt(params.month);
+        // }
 
-        if(typeof params.quota !== "undefined"){
-            if(params.quota=='true'){
-                params.quota=true;
-            }else{
-                params.quota=false;
-            }
-            params.year = parseInt(params.year);
-            params.month = parseInt(params.month);
-        }
-        
         r.db('eu2').table('quota').filter({
             year:params.year,
             type_rice_id:params.type_rice_id
