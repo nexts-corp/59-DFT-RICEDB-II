@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notify" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="34c3bdbe-731b-4fbd-8543-d0697cbd64aa">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\namkhaeng\\59-DFT-RICEDB-II\\app\\reports\\notify\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="type_rice_name_th" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="150" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="f220c7b2-dd23-461a-8589-f3a4e0fa51cc"/>
+				<text><![CDATA[type_rice_name_th]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="367" height="20" uuid="2089bf1d-450f-4fce-8570-86fec8b7d6a6"/>
+				<textFieldExpression><![CDATA[$F{type_rice_name_th}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="0" y="35" width="555" height="100" uuid="a28813ad-f7da-423e-994f-3bf090858804"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{result})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "notify_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
