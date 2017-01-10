@@ -42,6 +42,12 @@ class index{
             res.json(result);
         });
     }
+    selectOrinal(req,res){
+         r.db('eu2').table('calculate').pluck('ordinal')(0)
+         .run().then(function(result){
+            res.json(result);
+         });
+    }
     // selectOrdinal(req,res){
     //     var r = req._r;
     //     var params = req.query;
