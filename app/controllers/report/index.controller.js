@@ -1,46 +1,6 @@
 
 class index{
 
-    getQuotaIdAndInsert(req,res){
-        var r = req._r;
-        var params = req.body;
-
-        // if(typeof params.year !== "undefined"){
-        //     if(params.quota=='true'){
-        //         params.quota=true;
-        //     }else{
-        //         params.quota=false;
-        //     } 
-        //    params.year = parseInt(params.year);
-        // }
-
-        console.log(params);
-
-        // r.db('eu2').table('quota').filter({
-        //     year:params.year,
-        //     type_rice_id:params.type_rice_id
-        // }).merge(function(x){
-        //     return {quota_id:x('id')} 
-        // }).pluck('quota_id').coerceTo('array')
-        
-
-        // .do(function(ins){
-        //    return r.db('eu2').table('report').insert({
-        //         exports_id:params.exports_id,
-        //         month:params.month,
-        //         quota:params.quota,
-        //         type_doc:params.type_doc,
-        //         weigth:params.weigth,
-        //         quota_id:ins('quota_id')(0)
-        //     })
-        // })
-
-
-        // .run().then(function(result){
-        //     res.json(result);
-        // });
-    }
-
     insertReport(req,res){
         var r = req._r;
         var params = req.body;
@@ -74,13 +34,6 @@ class index{
                 type_doc:params.type_doc,
                 weigth:params.weigth,
                 quota_id:ins('quota_id')
-
-                // exporter_id:'xx1',
-                // month:1,
-                // quota:true,
-                // type_doc:'c',
-                // weigth:111,
-                // quota_id:ins('quota_id')
            })
         })
 
@@ -148,9 +101,17 @@ class index{
     updateReport(req,res){
         var r = req._r;
         var params = req.body;
-        r.db('eu2').table('report').get(params.id).update(params).run().then(function(result){
-            res.json(result);
-        });
+
+        r.db('eu2').table('quota').filter({
+            year:params.year,
+            type_rice_id:params.type_rice_id
+        }).merge(function(x){
+            return {quota_id:x('id')} 
+        }).pluck('quota_id').coerceTo('array')(0)
+        .do(function(ud){
+            return r.db('eu2').table('report').get(params.id).update({quota_id:ud('quota_id')})
+        })
+        
     }
 }
 
