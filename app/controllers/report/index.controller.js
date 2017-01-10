@@ -1,6 +1,25 @@
 
 class index{
 
+    getQuotaId(req,res){
+        var r = req._r;
+        var params = req.query;
+
+        if(typeof params.year !== "undefined"){
+           params.year = parseInt(params.year);
+        }
+
+        r.db('eu2').table('quota').filter({
+            year:params.year,
+            type_rice_id:params.type_rice_id
+        }).merge(function(x){
+            return {quota_id:x('id')} 
+        }).pluck('quota_id')
+        .run().then(function(result){
+            res.json(result);
+        });
+    }
+
     insertReport(req,res){
         var r = req._r;
         var params = req.body;
@@ -13,9 +32,6 @@ class index{
     deleteReport(req,res){
         var r = req._r;
         console.log(req.params.id);
-        // if(typeof req.params.id !== "undefined"){
-        //     req.params.id = parseInt(req.params.id);
-        // }
         r.db('eu2').table('report').get(req.params.id).delete().run().then(function(result){
             res.json(result);
         });
