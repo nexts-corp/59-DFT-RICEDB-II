@@ -109,7 +109,14 @@ class index{
             return {quota_id:x('id')} 
         }).pluck('quota_id').coerceTo('array')(0)
         .do(function(ud){
-            return r.db('eu2').table('report').get(params.id).update({quota_id:ud('quota_id')})
+            return r.db('eu2').table('report').get(params.id).update({
+                exporter_id:params.exporter_id,
+                month:params.month,
+                quota:params.quota,
+                type_doc:params.type_doc,
+                weigth:params.weigth,
+                quota_id:ud('quota_id')
+            })
         })
         .run()
         .then(function(result){
