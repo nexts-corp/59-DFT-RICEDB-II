@@ -1,5 +1,6 @@
 <link rel="import" href="../components/box-menu.html">
 <link rel="import" href="../components/box-menu-search.html">
+<link rel="import" href="components/export-volume-of-thai-rice.html">
 <dom-module id="page-monthly-statistics">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
@@ -7,6 +8,7 @@
     }
   </style>
   <template>
+
     <div class="layout horizontal center-justified wrap">
       <box-menu-search>
         <div class="title-head">
@@ -27,9 +29,17 @@
     </div>
     <div class="layout horizontal center-justified wrap">
       <template is="dom-repeat" items="[[mainMenu]]">
-        <box-menu data="{{item}}"></box-menu>
+        <box-menu data="{{item}}" on-tap="urlToReport" id={{index}}></box-menu>
       </template>
-    </div>
+    </div>{{pages}}//
+    <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
+      <div class="rightdata" align="left" >
+        <iron-pages selected="{{pages}}">
+          <export-volume-of-thai-rice></export-volume-of-thai-rice>
+        </iron-pages>
+      </div>
+    </nylon-panel-right>
+
   </template>
   <script>
     Polymer({
@@ -45,7 +55,11 @@
         date:{
           type:Object,
           value:{start:'',end:''}
-        }
+        },
+        pages:{
+          type:Number,
+          value:0
+        },
       },
       attached: function() {
         let date = new Date;
@@ -54,6 +68,18 @@
         this.date.end = dateNow[0];
         this.notifyPath('date.start');
         this.notifyPath('date.end');
+      },
+      urlToReport:function (e) {
+        // console.log(e.target.id);
+        this.pages=e.target.id;
+        this._flipDrawerOpen();
+      },
+      _flipDrawerOpen:function () {
+        // this.$.drawerRight.actionDrawer();
+        Polymer.dom(this.root).querySelector('#drawerRight').open();
+      },
+      _flipDrawerClose:function () {
+        Polymer.dom(this.root).querySelector('#drawerRight').close();
       },
     });
   </script>
