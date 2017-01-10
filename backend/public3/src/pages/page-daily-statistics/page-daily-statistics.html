@@ -1,9 +1,12 @@
 <link rel="import" href="../components/box-menu.html">
+<link rel="import" href="../components/box-menu-search.html">
 <link rel="import" href="../../../bower_components/gl-styles/gl-styles.html">
 
 <link rel="import" href="components/stat-send.html">
 <link rel="import" href="components/stat-fob-bangkok.html">
 <link rel="import" href="components/daily-rice-situation.html">
+<link rel="import" href="components/rice-sell-notify.html">
+<link rel="import" href="components/daily-largest-rice-importers-of-thailand.html">
 <dom-module id="page-daily-statistics">
   <style include="iron-flex iron-flex-factors iron-flex-alignment">
     :host {
@@ -13,6 +16,18 @@
   <template>
 
       <div class="layout horizontal center-justified wrap">
+        <box-menu-search>
+          <div class="title-head">
+            เลือกวันที่ต้องการดูรายงาน
+          </div>
+          <div class="layout horizontal center-justified">
+            <vaadin-date-picker always-float-label style="width:210px;" label="" value="{{date}}" ></vaadin-date-picker>
+          </div>
+
+        </box-menu-search>
+      </div>
+      <div class="layout horizontal center-justified wrap">
+
         <template is="dom-repeat" items="[[mainMenu]]">
           <box-menu data="{{item}}" on-tap="urlToReport" id={{index}}></box-menu>
         </template>
@@ -20,10 +35,15 @@
       <nylon-panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
         <div class="rightdata" align="left" >
           <iron-pages selected="{{pages}}">
-              <daily-rice-situation></daily-rice-situation>
+            <daily-rice-situation></daily-rice-situation>
             <stat-send data="{{statSend}}"></stat-send>
+            <div></div>
             <stat-fob-bangkok data="{{fobBnagkok}}"></stat-fob-bangkok>
-
+            <div></div>
+            <div></div>
+            <div></div>
+            <rice-sell-notify></rice-sell-notify>
+            <daily-largest-rice-importers-of-thailand></daily-largest-rice-importers-of-thailand>
           </iron-pages>
         </div>
       </nylon-panel-right>
@@ -119,10 +139,19 @@
                   sum:{a:722,b:670,pt:537}
               }
             ]
+        },
+        date:{
+          type:String,
         }
       },
+      attached: function() {
+        let date = new Date;
+        let dateNow = date.toISOString().split("T");
+        this.date=dateNow[0];
+        console.log(this.date);
+      },
       urlToReport:function (e) {
-        console.log(e.target.id);
+        // console.log(e.target.id);
         this.pages=e.target.id;
         this._flipDrawerOpen();
       },
