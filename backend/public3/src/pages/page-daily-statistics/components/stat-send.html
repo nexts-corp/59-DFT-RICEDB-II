@@ -26,6 +26,9 @@
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
         <gl-form-panel-head label="สรุปสถานการณ์การส่งออกข้าว" set-padding="10px" set-border="1px">
             <!--content-->
+            <paper-button raised on-tap="">EXCEL</paper-button>
+            <paper-button raised on-tap="word">WORD</paper-button>
+            <paper-button raised on-tap="pdf">PDF</paper-button>
         </gl-form-panel-head>
         <!-- <gl-form-panel-body label="" set-padding="10px" set-border="1px"> -->
         <div class="title">
@@ -76,7 +79,12 @@
   <script>
     Polymer({
       is: "stat-send",
-
+      word:function () {
+        window.open('http://localhost:5000/report/1.docx','1');
+      },
+      pdf:function () {
+        window.open('http://localhost:5000/report/1.pdf','1');
+      }
     });
   </script>
 </dom-module>
