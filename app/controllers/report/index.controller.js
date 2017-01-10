@@ -1,6 +1,25 @@
 
 class index{
 
+    getQuotaId(req,res){
+        var r = req._r;
+        var params = req.query;
+
+        if(typeof params.year !== "undefined"){
+           params.year = parseInt(params.year);
+        }
+
+        r.db('eu2').table('quota').filter({
+            year:params.year,
+            type_rice_id:params.type_rice_id
+        }).merge(function(x){
+            return {quota_id:x('id')} 
+        }).pluck('quota_id')
+        .run().then(function(result){
+            res.json(result);
+        });
+    }
+
     insertReport(req,res){
         var r = req._r;
         var params = req.body;
@@ -13,9 +32,6 @@ class index{
     deleteReport(req,res){
         var r = req._r;
         console.log(req.params.id);
-        // if(typeof req.params.id !== "undefined"){
-        //     req.params.id = parseInt(req.params.id);
-        // }
         r.db('eu2').table('report').get(req.params.id).delete().run().then(function(result){
             res.json(result);
         });
@@ -36,23 +52,33 @@ class index{
             params.month = parseInt(params.month);
         }
         
-          r.db('eu2').table('report').filter({
-                year:params.year,
-                month:params.month,
-                quota:params.quota,
-                type_rice_id:params.type_rice_id
-            })
-            .merge(function(x){
-                return {
+            r.db('eu2').table('report').innerJoin(r.db('eu2').table('quota'), function(left,right){
+                return left('quota_id').eq(right('id'))
+            }).map(function(r){
+                return r('left').merge(function(mr){
+                    return {
+                        year:r('right')('year'),
+                        type_rice_id:r('right')('type_rice_id')
+                    }
+                })
+            }).innerJoin(r.db('eu2').table('exporter'), function(a,e){
+                return a('exporter_id').eq(e('id'))
+            }).map(function(mra){
+                return mra('left').merge(function(en){
+                    return {
+                        name:mra('right')('name')
+                    }
+                })
+            }) .merge(function(x){
+                    return {
                     type_doc_th: r.branch( x('type_doc').eq('c'), 'ถูกต้อง', x('type_doc').eq('ic'), 'ไม่ถูกต้อง', 'เกินกำหนด')
-                }
+                    }
+            }).filter({
+                year:params.year,
+                type_rice_id:params.type_rice_id,
+                month:params.month,
+                quota:params.quota
             })
-            .innerJoin(r.db('eu2').table('exporter'), function(x,xx) {
-                return x('exporter_id') .eq(xx('id'))
-            }).without({ right: ["id"] }).zip()
-            .innerJoin(r.db('eu2').table('type_rice'), function(x,xx){
-                return x('type_rice_id') . eq(xx('id')) 
-            }).without({ right: ["id"] }).zip()
             .run()
             .then(function(result){
                 res.json(result);

@@ -165,7 +165,7 @@ input:checked + label {
   </section>
     
   <section id="content2">
-        <report-list2></report-list2>
+        <report-list2 data="{{dataListOutQuota}}" on-data-select="getDataSelect"></report-list2>
   </section>
    <section id="content3">
     <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{getCom}}" value="{{company}}"
@@ -383,6 +383,9 @@ input:checked + label {
                         if(this.stat == true){
                             console.log('1234');
                            this.dataListInQuota = response.data
+                        }
+                        else if(this.stat == false){
+                            this.dataListOutQuota = response.data
                         }
                         
                         // this.dataList = response.data;

@@ -93,6 +93,7 @@
     <script>
         Polymer({
             is: 'report-panel2',
+            observers:['getQuotaID(getyear,getTypeRice)'],
             behaviors:[
                 MonthBehavior,
                 FormatNumberBehavior
@@ -142,13 +143,14 @@
                 this.datas = {
                     quota : this.listEuValue,
                     month : parseInt(this.month),
-                    year : parseInt(this.getyear),
+                    // year : parseInt(this.getyear),
                     exporter_id : this.getCompany,
                     type_doc : this.checkDocValue,
-                    type_rice_id: this.getTypeRice,
+                    quota_id : this.quota_id,
+                    // type_rice_id: this.getTypeRice,
                     weigth : this.unFormat(this.getWeigth)
                 }
-                // console.log(this.data);
+                console.log(this.datas);
                 if(this.status == 'post'){
                     this.fire('save-data',this.datas);
                 }
@@ -158,6 +160,28 @@
                     this.fire('update-data',this.datas);
                 }   
                 
+            },
+            getQuotaID:function(year,typeRice){
+                if(year != '' && typeRice != '' && this.status == 'post'){
+                    console.log(year,typeRice);
+                     axios.get('./report/report_quotaid',{
+                          params:{
+                            year : year,
+                            type_rice_id : typeRice
+                        }
+                     })
+                    .then((response)=>{
+                    //   console.log(response.data[0].quota_id)
+                      this.quota_id = response.data[0].quota_id;
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error.message);
+                        this.fire('toast',{status:'connectError',text:error.message,
+                        callback:function(){
+                        }})
+                    });
+                    }
             },
             checkStatus:function(){
                 if(this.status == 'post'){
