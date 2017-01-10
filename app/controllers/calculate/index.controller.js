@@ -6,7 +6,15 @@ class index {
         var r = req._r;
         var params = req.params;
 
-        r.db('eu2').table('report').orderBy(r.desc('year'))('year').distinct()
+        r.db('eu2').table('report')
+        .innerJoin(r.db('eu2').table('quota'),function(l,r){
+            return l('quota_id').eq(r('id'))
+        }).map(function(result){
+            return result('left').merge(function(row){
+                return result('right').pluck('type_rice_id','year')
+            })
+        })
+        .orderBy(r.desc('year'))('year').distinct()
             .run().then(function (result) {
                 res.json(result);
             });
