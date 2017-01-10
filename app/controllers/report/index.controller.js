@@ -111,7 +111,10 @@ class index{
         .do(function(ud){
             return r.db('eu2').table('report').get(params.id).update({quota_id:ud('quota_id')})
         })
-        
+        .run()
+        .then(function(result){
+            res.json(result);
+        });        
     }
 }
 
