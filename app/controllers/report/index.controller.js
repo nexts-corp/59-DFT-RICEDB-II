@@ -97,16 +97,6 @@ class index{
     updateReport(req,res){
         var r = req._r;
         var params = req.body;
-        console.log(params.quota+""+params.weigth)
-        // if(typeof params.year !== "undefined"){
-        //     if(params.quota=='true'){
-        //         params.quota=true;
-        //     }else{
-        //         params.quota=false;
-        //     }
-        //     params.year = parseInt(params.year);
-        //     params.month = parseInt(params.month);
-        // }
 
         r.db('eu2').table('quota').filter({
             year:params.year,
