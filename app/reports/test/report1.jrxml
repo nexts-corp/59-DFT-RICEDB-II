@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="35513b5b-8301-4cba-ae38-10363f4efe5c">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\namkhaeng\\59-DFT-RICEDB-II\\app\\reports\\test\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="id" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="row" class="java.util.Collection"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="179" y="36" width="100" height="20" uuid="9be00fee-5a39-46d5-b204-f5922e46448f"/>
+				<text><![CDATA[id]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="299" y="36" width="100" height="20" uuid="25f905fe-4f1f-4919-a07a-4479c989d2ab"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="179" y="70" width="100" height="20" uuid="9817fbec-e943-4ea1-aeca-8ea1ba47963a"/>
+				<text><![CDATA[name]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="299" y="70" width="100" height="20" uuid="860d2afd-f951-4602-8a9e-076828fe3333"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="172">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="172" uuid="2390a1b7-098d-4749-a5f3-bc2bd47378a9"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{row})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1_subreport1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
