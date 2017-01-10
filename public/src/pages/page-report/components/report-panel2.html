@@ -93,7 +93,7 @@
     <script>
         Polymer({
             is: 'report-panel2',
-            observers:['getQuotaID(getyear,getTypeRice)'],
+            // observers:['getQuotaID(getyear,getTypeRice)'],
             behaviors:[
                 MonthBehavior,
                 FormatNumberBehavior
@@ -135,34 +135,33 @@
             },
             getData:function(){
                 if(this.listEuValue == 'true'){
-                    this.listEuValue = true;
+                    this.saveEuValue = true;
                 }
                 else if (this.listEuValue == 'false'){
-                    this.listEuValue = false;
+                    this.saveEuValue = false;
                 }
                 this.datas = {
-                    quota : this.listEuValue,
+                    quota : this.saveEuValue,
                     month : parseInt(this.month),
-                    // year : parseInt(this.getyear),
+                    year : parseInt(this.getyear),
                     exporter_id : this.getCompany,
                     type_doc : this.checkDocValue,
-                    quota_id : this.quota_id,
-                    // type_rice_id: this.getTypeRice,
+                    // quota_id : this.idQuota,
+                    type_rice_id: this.getTypeRice,
                     weigth : this.unFormat(this.getWeigth)
                 }
-                console.log(this.datas);
+                // console.log(this.datas);
                 if(this.status == 'post'){
                     this.fire('save-data',this.datas);
                 }
                 else if(this.status == 'update'){
                     this.datas.id = this.data.id;
-                    console.log(this.datas);
                     this.fire('update-data',this.datas);
                 }   
                 
             },
             getQuotaID:function(year,typeRice){
-                if(year != '' && typeRice != '' && this.status == 'post'){
+                if(year != '' && typeRice != ''){
                     console.log(year,typeRice);
                      axios.get('./report/report_quotaid',{
                           params:{
@@ -172,7 +171,7 @@
                      })
                     .then((response)=>{
                     //   console.log(response.data[0].quota_id)
-                      this.quota_id = response.data[0].quota_id;
+                      this.idQuota = response.data[0].quota_id;
                     })
                     .catch((error)=>{
                         console.log("error");

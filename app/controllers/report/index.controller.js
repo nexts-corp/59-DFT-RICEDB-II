@@ -1,12 +1,18 @@
 
 class index{
 
-    getQuotaId(req,res){
+    insertReport(req,res){
         var r = req._r;
-        var params = req.query;
+        var params = req.body;
 
         if(typeof params.year !== "undefined"){
+            if(params.quota=='true'){
+                params.quota=true;
+            }else{
+                params.quota=false;
+            } 
            params.year = parseInt(params.year);
+
         }
 
         r.db('eu2').table('quota').filter({
@@ -14,17 +20,20 @@ class index{
             type_rice_id:params.type_rice_id
         }).merge(function(x){
             return {quota_id:x('id')} 
-        }).pluck('quota_id')
-        .run().then(function(result){
-            res.json(result);
-        });
-    }
+        }).pluck('quota_id').coerceTo('array')(0)
 
-    insertReport(req,res){
-        var r = req._r;
-        var params = req.body;
-        
-        r.db('eu2').table('report').insert(params).run().then(function(result){
+        .do(function(ins){
+           return r.db('eu2').table('report').insert({
+                exporter_id:params.exporter_id,
+                month:params.month,
+                quota:params.quota,
+                type_doc:params.type_doc,
+                weigth:params.weigth,
+                quota_id:ins('quota_id')
+           })
+        })
+
+        .run().then(function(result){
             res.json(result);
         });
     }
@@ -88,9 +97,27 @@ class index{
     updateReport(req,res){
         var r = req._r;
         var params = req.body;
-        r.db('eu2').table('report').get(params.id).update(params).run().then(function(result){
+
+        r.db('eu2').table('quota').filter({
+            year:params.year,
+            type_rice_id:params.type_rice_id
+        }).merge(function(x){
+            return {quota_id:x('id')} 
+        }).pluck('quota_id').coerceTo('array')(0)
+        .do(function(ud){
+            return r.db('eu2').table('report').get(params.id).update({
+                exporter_id:params.exporter_id,
+                month:params.month,
+                quota:params.quota,
+                type_doc:params.type_doc,
+                weigth:params.weigth,
+                quota_id:ud('quota_id')
+            })
+        })
+        .run()
+        .then(function(result){
             res.json(result);
-        });
+        });        
     }
 }
 
