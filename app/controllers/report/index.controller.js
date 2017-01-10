@@ -102,6 +102,16 @@ class index{
         var r = req._r;
         var params = req.body;
 
+        if(typeof params.quota !== "undefined"){
+            if(params.quota=='true'){
+                params.quota=true;
+            }else{
+                params.quota=false;
+            }
+            params.year = parseInt(params.year);
+            params.month = parseInt(params.month);
+        }
+        
         r.db('eu2').table('quota').filter({
             year:params.year,
             type_rice_id:params.type_rice_id
