@@ -1,0 +1,93 @@
+<dom-module id="rice-price-according-to-license">
+  <style include="gl-styles iron-flex iron-flex-factors iron-flex-alignment">
+    :host {
+      display: block;
+    }
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    paper-card{
+      margin: 5px;
+      width: 99%;
+    }
+    .title{
+      font-weight: bold;
+      margin: 20px 0px 10px 0px;
+    }
+    table.gl-table-default > thead.table-head > tr > th{
+      text-align: center;
+    }
+    table.gl-table-default > tbody.table-body > tr > td{
+      text-align: center;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(2){
+      text-align:left;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(3),
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(4),
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(5){
+      text-align:right;
+    }
+  </style>
+  <template>
+    <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+        <gl-form-panel-head label="ราคาข้าวตามใบอนุญาติ" set-padding="10px" set-border="1px">
+            <!--content-->
+            <paper-button raised on-tap="">EXCEL</paper-button>
+            <paper-button raised on-tap="word">WORD</paper-button>
+            <paper-button raised on-tap="pdf">PDF</paper-button>
+        </gl-form-panel-head>
+        <!-- <gl-form-panel-body label="" set-padding="10px" set-border="1px"> -->
+
+          <table class="gl-table-default">
+              <thead class="table-head">
+                <tr>
+                  <th>พิกัดข้าว</th>
+                  <th>ชนิดข้าว</th>
+                  <th>ราคาเฉลี่ย</th>
+                  <th>Mode</th>
+                  <th>Median</th>
+                </tr>
+              </thead>
+              <tbody class="table-body">
+                  <tr>
+                   <td>10063030090002</td>
+                   <td>ข้าวเหนียวดำ (ตามตัวอย่าง)</td>
+                   <td>1458.63</td>
+                   <td>1800.00</td>
+                   <td>1407.50</td>
+                  </tr>
+                  <tr>
+                   <td>10062010002002</td>
+                   <td>ข้อกล้องหอมมะลิไทย 100% ชั้น 2 (ข้าวอินทรีย์)</td>
+                   <td>1295.00</td>
+                   <td>1295.00</td>
+                   <td>1295.50</td>
+                  </tr>
+                  <tr>
+                   <td>10063040002002</td>
+                   <td>ข้อเจ้าหอมมะลิไทย 100% ชั้น 2 (ข้าวอินทรีย์)</td>
+                   <td>1295.00</td>
+                   <td>1295.00</td>
+                   <td>1295.50</td>
+                  </tr>
+                  <tr>
+                   <td>10062090090001</td>
+                   <td>ข้าวกล้องดำ (ตามตัวอีกอย่าง)</td>
+                   <td>1134.24</td>
+                   <td>1438.20</td>
+                   <td>1400.00</td>
+                  </tr>
+             </tbody>
+          </table>
+          
+        </gl-form-panel-body>
+    <!-- </gl-form-panel> -->
+  </template>
+  <script>
+    Polymer({
+      is: "rice-price-according-to-license",
+    });
+  </script>
+</dom-module>
