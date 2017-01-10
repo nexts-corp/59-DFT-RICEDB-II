@@ -44,7 +44,7 @@ class index{
     }
 
     selectOrinal(req,res){
-         r.db('eu2').table('calculate').pluck('ordinal')
+         r.db('eu2').table('calculate').pluck('ordinal')('ordinal')
          .run().then(function(result){
             res.json(result);
          });
