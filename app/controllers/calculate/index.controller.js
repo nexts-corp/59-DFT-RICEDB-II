@@ -22,11 +22,27 @@ class index {
         var LastYearFilter = parseInt(params.last_year) + 1;
 
 
-        r.db('eu2').table('report').filter(function(row){
+        r.db('eu2').table('report')
+        .innerJoin(r.db('eu2').table('quota'),function(l,r){
+            return l('quota_id').eq(r('id'))
+        }).map(function(result){
+            return result('left').merge(function(row){
+                return result('right').pluck('type_rice_id','year')
+            })
+        })
+        .filter(function(row){
             return row('type_doc').eq('c').and(row('type_rice_id').eq(params.type_rice_id))
             .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
         }).pluck('exporter_id')
-            .union(r.db('eu2').table('confirm').filter(function(row){
+            .union(r.db('eu2').table('confirm')
+            .innerJoin(r.db('eu2').table('quota'),function(l,r){
+                return l('quota_id').eq(r('id'))
+            }).map(function(result){
+                return result('left').merge(function(row){
+                    return result('right').pluck('type_rice_id','year')
+                })
+            })
+            .filter(function(row){
             return row('type_rice_id').eq(params.type_rice_id)
             .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
         }).pluck('exporter_id')).distinct().innerJoin(
@@ -167,7 +183,8 @@ class index {
                                 return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
                                     return {weigth:weigthRound,weigth_update:weigthRound};
                                 })
-                            })
+                            }),
+                            status:'nc'
 
                         }
                         
