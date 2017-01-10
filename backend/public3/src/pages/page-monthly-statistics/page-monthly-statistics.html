@@ -1,11 +1,30 @@
 <link rel="import" href="../components/box-menu.html">
+<link rel="import" href="../components/box-menu-search.html">
 <dom-module id="page-monthly-statistics">
-  <style include="iron-flex iron-flex-factors iron-flex-alignment">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
       display: block;
     }
   </style>
   <template>
+    <div class="layout horizontal center-justified wrap">
+      <box-menu-search>
+        <div class="title-head">
+          เลือกช่วงเดือนที่ต้องการดูรายงาน
+        </div>
+        <div class="layout horizontal center-justified">
+          <div class="menu">
+            เริ่ม
+          </div>
+          <vaadin-date-picker always-float-label style="width:210px;" label="" value="{{date.start}}" ></vaadin-date-picker>
+          <div class="menu">
+            ถึง
+          </div>
+          <vaadin-date-picker always-float-label style="width:210px;" label="" value="{{date.end}}" ></vaadin-date-picker>
+          <paper-button raised class="gl-btn-primary">เลือก</paper-button>
+        </div>
+      </box-menu-search>
+    </div>
     <div class="layout horizontal center-justified wrap">
       <template is="dom-repeat" items="[[mainMenu]]">
         <box-menu data="{{item}}"></box-menu>
@@ -23,6 +42,18 @@
               {path:'yearly-statistics',nameMenu:'ปริมาณและมูลค่าการส่งออกข้าวไทย',img:'/images/monthly/19/192.png'},
           ]
         },
+        date:{
+          type:Object,
+          value:{start:'',end:''}
+        }
+      },
+      attached: function() {
+        let date = new Date;
+        let dateNow = date.toISOString().split("T");
+        this.date.start = dateNow[0];
+        this.date.end = dateNow[0];
+        this.notifyPath('date.start');
+        this.notifyPath('date.end');
       },
     });
   </script>
