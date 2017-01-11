@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notify_detail" language="groovy" pageWidth="415" pageHeight="802" columnWidth="415" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="da8dca7a-c128-43cb-a22b-d99243461eb9">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Default" fontName="TH SarabunPSK" fontSize="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
+	<parameter name="period_1_month" class="java.lang.String" isForPrompting="false"/>
+	<field name="exporter_name" class="java.lang.String"/>
+	<field name="amount" class="java.lang.Number"/>
+	<field name="period_1_weigth" class="java.lang.Number"/>
+	<field name="period_2_weigth" class="java.lang.Number"/>
+	<field name="period_3_weigth" class="java.lang.Number"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="50">
+			<staticText>
+				<reportElement style="Default" x="18" y="22" width="100" height="20" uuid="d77eebec-39ca-44e0-acf8-f27ab5c256ad"/>
+				<text><![CDATA[มิกิ]]></text>
+			</staticText>
+			<textField>
+				<reportElement style="Default" x="139" y="22" width="100" height="20" uuid="b61305ed-f628-4ddd-8129-57bcf1634e7d"/>
+				<textFieldExpression><![CDATA[$P{period_1_month}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement style="Default" x="0" y="10" width="131" height="20" uuid="e744d3c8-fd00-4fb5-9a85-d2421d97d8bf"/>
+				<textFieldExpression><![CDATA[$F{exporter_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="131" y="10" width="73" height="20" uuid="96bc55d3-f740-43bb-8bc5-16fc40f0fcdb"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="204" y="10" width="68" height="20" uuid="df51d228-4dd8-485a-8e7c-64073a057a24"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{period_1_weigth}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="272" y="10" width="62" height="20" uuid="c7682f66-7cab-4f1f-83c4-3fc70c4e8760"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{period_2_weigth}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="334" y="10" width="81" height="20" uuid="dde6da2d-2ff4-406b-b5ac-4fce20242708"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{period_3_weigth}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
