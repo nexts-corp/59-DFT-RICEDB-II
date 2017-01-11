@@ -158,12 +158,13 @@ class index{
         var params = req.query;
 
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('allocate'), function(c,a){	
-        return c('id').eq(a('calculate_id'))
+            return c('id').eq(a('calculate_id'))
         }).map(function(mr){
             return mr('right').merge(function(qu){
             return {
-                ordinal:mr('left')('ordinal')
-                //status_allocate:mr('left')('status')
+                ordinal:mr('left')('ordinal'),
+                status_allocate: r.branch( mr('left')('status').eq('n'), 'ประกาศ', 'จัดสรร'),
+                status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม')
             }
             })
         })
@@ -183,16 +184,19 @@ class index{
             return {
                 year:ma('right')('year'), 
                 type_rice_id:ma('right')('type_rice_id'),
-                quantity:ma('left')('quantity').merge(function(rowp){
-                return { month:ma('right')('quantity').filter({period:rowp('period')}) (0) ('month') }
+                quantity:ma('left')('quantity').map(function(rowp){
+                return { 
+                    period:rowp('period'),
+                    month:ma('right')('quantity').filter({period:rowp('period')}) (0) ('month'),
+                    weigth_update: ma('left')('quantity').filter({period:rowp('period')}) (0) ('weigth_update')
+                }
                 })
             }
             })
         }) .orderBy('name') 
-            
-        
-            .filter({ calculate_id:params.id })
-        
+                    
+        .filter({ calculate_id:params.id })
+        .without('amount','type_rice_id','exporter_id','quota_id','status')
 
         .do(function(all){
             return {
@@ -205,15 +209,15 @@ class index{
                             sw_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
                             }
                         }),
-                sum_amount :r.db('eu2').table('allocate').sum('amount'),
                 sum_amount_update :r.db('eu2').table('allocate').sum('amount_update')
             }
             }
         })
+		
         .run().then(function(result){
             res.json(result);
         });
-        
+
         }
 
 }
