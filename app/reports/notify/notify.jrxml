@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notify" language="groovy" pageWidth="595" pageHeight="842" columnWidth="451" leftMargin="72" rightMargin="72" topMargin="28" bottomMargin="36" uuid="bbbb5077-9269-4f27-9216-d47e523e8ecf">
 	<property name="ireport.zoom" value="1.610510000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="427"/>
+	<property name="ireport.y" value="240"/>
 	<style name="Default" fontName="TH SarabunPSK" fontSize="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\namkhaeng\\59-DFT-RICEDB-II\\app\\reports\\notify\\"]]></defaultValueExpression>
@@ -106,6 +106,26 @@
 		<band height="50">
 			<subreport>
 				<reportElement x="0" y="0" width="451" height="50" uuid="75426fd7-59bb-4a90-b26c-c03256ab5ea0"/>
+				<subreportParameter name="period_3_month">
+					<subreportParameterExpression><![CDATA[$F{period_3_month}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="quota_year">
+					<subreportParameterExpression><![CDATA[$P{quota_year}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="period_2_month">
+					<subreportParameterExpression><![CDATA[$F{period_2_month}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="period_1_month">
+					<subreportParameterExpression><![CDATA[$F{period_1_month}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{detail})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "notify_detail.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[(false)]]></printWhenExpression>
+			<subreport>
+				<reportElement x="0" y="0" width="451" height="50" uuid="9dd2a3b4-6c54-4423-bca5-47f95c72dd75"/>
 				<subreportParameter name="period_3_month">
 					<subreportParameterExpression><![CDATA[$F{period_3_month}]]></subreportParameterExpression>
 				</subreportParameter>

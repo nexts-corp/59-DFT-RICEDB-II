@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Default" fontName="TH SarabunPSK" fontSize="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
-	<style name="Header" style="Default" fontSize="14"/>
+	<style name="Header" style="Default" fontSize="16" isBold="true" isItalic="false" pdfFontName="THSarabun Bold.ttf"/>
 	<parameter name="quota_year" class="java.lang.Number"/>
 	<parameter name="period_1_month" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="period_2_month" class="java.lang.String" isForPrompting="false"/>
@@ -14,13 +14,29 @@
 	<field name="period_1_weigth" class="java.lang.Number"/>
 	<field name="period_2_weigth" class="java.lang.Number"/>
 	<field name="period_3_weigth" class="java.lang.Number"/>
+	<variable name="row_count" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{exporter_name}]]></variableExpression>
+	</variable>
+	<variable name="sum_amount" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="sum_period_1" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{period_1_weigth}]]></variableExpression>
+	</variable>
+	<variable name="sum_period_2" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{period_1_weigth}]]></variableExpression>
+	</variable>
+	<variable name="sum_period_3" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{period_3_weigth}]]></variableExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="36">
+		<band height="40">
 			<textField>
-				<reportElement style="Header" x="0" y="0" width="31" height="36" uuid="ae7d7d29-3294-46ab-a969-bada06076bf5"/>
+				<reportElement style="Header" x="0" y="0" width="31" height="40" uuid="ae7d7d29-3294-46ab-a969-bada06076bf5"/>
 				<box topPadding="2" leftPadding="0">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -29,12 +45,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
-				<textFieldExpression><![CDATA["ลำดับที่"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["ลำดับที่\n"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="31" y="0" width="220" height="36" uuid="404b64e9-1e92-4c74-92b5-3cba873131e3"/>
+				<reportElement style="Header" x="31" y="0" width="209" height="40" uuid="404b64e9-1e92-4c74-92b5-3cba873131e3"/>
 				<box topPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -43,12 +59,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA["ผู้ส่งออกข้าว"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="251" y="0" width="65" height="36" uuid="32b7cc4c-434c-4f56-ba40-5e4e89634cd7"/>
+				<reportElement style="Header" x="240" y="0" width="76" height="40" uuid="32b7cc4c-434c-4f56-ba40-5e4e89634cd7"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -57,12 +73,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA["ปริมาณส่วน\nจัดสรรปี "+new nylon.utility.NumberFormat().toThaiNumber($P{quota_year})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="316" y="0" width="45" height="36" uuid="495bb938-fa9d-4ee4-956a-d47220c7f8ea"/>
+				<reportElement style="Header" x="316" y="0" width="45" height="40" uuid="495bb938-fa9d-4ee4-956a-d47220c7f8ea"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -71,12 +87,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA["งวดที่ ๑\n"+$P{period_1_month}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="361" y="0" width="45" height="36" uuid="41308aed-dbc2-4a88-bdb4-cbd99880ae08"/>
+				<reportElement style="Header" x="361" y="0" width="45" height="40" uuid="41308aed-dbc2-4a88-bdb4-cbd99880ae08"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -85,12 +101,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA["งวดที่ ๒\n"+$P{period_2_month}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="406" y="0" width="45" height="36" uuid="f5f5c649-4cb0-4301-b629-6aae319b2a50"/>
+				<reportElement style="Header" x="406" y="0" width="45" height="40" uuid="f5f5c649-4cb0-4301-b629-6aae319b2a50"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -99,7 +115,7 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center">
-					<font size="14"/>
+					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA["งวดที่ ๓\n"+$P{period_3_month}]]></textFieldExpression>
 			</textField>
@@ -108,7 +124,7 @@
 	<detail>
 		<band height="25" splitType="Stretch">
 			<textField>
-				<reportElement style="Default" x="31" y="0" width="220" height="25" uuid="e744d3c8-fd00-4fb5-9a85-d2421d97d8bf"/>
+				<reportElement style="Default" x="31" y="0" width="209" height="25" uuid="e744d3c8-fd00-4fb5-9a85-d2421d97d8bf"/>
 				<box leftPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -119,7 +135,7 @@
 				<textFieldExpression><![CDATA[$F{exporter_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement style="Default" x="251" y="0" width="65" height="25" uuid="96bc55d3-f740-43bb-8bc5-16fc40f0fcdb"/>
+				<reportElement style="Default" x="240" y="0" width="76" height="25" uuid="96bc55d3-f740-43bb-8bc5-16fc40f0fcdb"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -176,8 +192,84 @@
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber($V{COLUMN_COUNT})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber($V{row_count})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
+	<summary>
+		<band height="26">
+			<textField>
+				<reportElement style="Default" x="240" y="0" width="76" height="25" uuid="804e4f84-3c9c-4184-b371-e5769ede2efb"/>
+				<box rightPadding="4">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_amount}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="316" y="0" width="45" height="25" uuid="72c10853-f7c3-400f-a060-61c39c15f40e"/>
+				<box rightPadding="4">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_period_1}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="361" y="0" width="45" height="25" uuid="f1380728-5627-40e0-89cf-9e4c33d12470"/>
+				<box rightPadding="4">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_period_2}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="406" y="0" width="45" height="25" uuid="4fb2cd87-79b0-4735-9698-3a8c68573476"/>
+				<box rightPadding="4">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_period_3}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="0" y="0" width="31" height="25" uuid="c7e65342-ca78-49eb-9f46-a4385488c763"/>
+				<box>
+					<pen lineWidth="0.5" lineStyle="Solid"/>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Default" x="31" y="0" width="209" height="25" uuid="cf2e98f2-0b75-4ae8-92fa-34cef19a077a"/>
+				<box leftPadding="4">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["รวม"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>
