@@ -177,7 +177,7 @@
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                 </td>
                 <td style="text-align:center;">
-                      <paper-button id="[[indexpackeage]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
+                      <paper-button id-packeage="[[indexpackeage]]" id-table="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
                 </td>
               </tr>
             </template>
@@ -285,8 +285,10 @@
         this.splice('data.cl_type_rice', e.currentTarget.id, 1);
       },
       delePackage: function(e) {
-        let table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
-          this.splice('data.cl_type_rice.'+[table.node.id]+'.package', e.target.id, 1);
+        // let table = Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(Polymer.dom(e.currentTarget).parentNode).parentNode).parentNode).parentNode);
+          // console.log(table);
+          // console.log(e.currentTarget.idPackeage,'e',e.currentTarget.idTable);
+          this.splice('data.cl_type_rice.'+[e.currentTarget.idTable]+'.package', e.currentTarget.idPackeage, 1);
       },
       _obCalcWeight:function (data,type_rice_quantity) {
         let total = 0;
