@@ -210,7 +210,10 @@ class index{
             }
             }
         })
-
+        .run().then(function(result){
+            res.json(result);
+        });
+        
         }
 
 }
