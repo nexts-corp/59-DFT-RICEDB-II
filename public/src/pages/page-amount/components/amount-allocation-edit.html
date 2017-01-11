@@ -128,7 +128,7 @@
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
 						<!--<gl-form-input label="ปริมาณโควตารวม" id="" disabled name="" value="{{dataSelect.quantity}}"></gl-form-input>-->
-						<gl-form-input class="right" label="ปริมาณโควตารวม" always-float-label id="" disabled name="" value="[[_sumAllocation(dataSelect.quantity.*,'weigth')]]"></gl-form-input>
+						<gl-form-input class="right" label="ปริมาณโควตารวม" always-float-label id="" disabled name="" value="{{formatNumber(dataSelect.amount)}}"></gl-form-input>
 						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควตารวม</div>-->
 					</gl-grid-col>
 					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -184,7 +184,7 @@
         return this.formatNumber(answer);
       },
 			_sumAllocationUpdate:function(item,key){
-				
+		
         var answer = 0;
         // console.log(item.base);
         

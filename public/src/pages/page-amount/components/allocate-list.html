@@ -68,7 +68,7 @@
               <tr>
                 <th>ลำดับที่</th>
                 <th>ผู้ส่งออก</th>
-                <template is="dom-repeat" items="[[dataAllocate.all.asumall]]">
+                <template is="dom-repeat" items="[[dataAllocate.data.0.quantity]]">
                     <th>งวดที่ [[item.period]] [[getMonthName(item.month)]]</th>
                     <th>ยอดปรับปรุงงวดที่ [[item.period]]</th>
                 </template>
@@ -77,7 +77,7 @@
                 <th>รวมยอดปรับปรุง</th>
               </tr>
               
-                <template is="dom-repeat" items="[[dataAllocate.result]]">
+                <template is="dom-repeat" items="[[dataAllocate.data]]">
                     <tr on-tap="_selectData" data="{{item}}" style="cursor:pointer;" id="addRedRegExporter">
                         <td>[[_num(index)]]</td>
                         <td>[[item.name]]</td>
@@ -85,19 +85,20 @@
                             <td>[[formatNumber(period.weigth)]]</td>
                             <td>[[formatNumber(period.weigth_update)]]</td>
                         </template>
-                        <td>[[formatNumber(item.sumweigth)]]</td>
-                        <td>[[formatNumber(item.sumweigth_update)]]</td>
+                        <td>[[formatNumber(item.amount)]]</td>
+                        <td>[[formatNumber(item.amount_update)]]</td>
                     </tr>
+                    [[sumAll(item.amount)]]
                 </template>
                 
                 <tr>
                     <th colspan="2">รวมปริมาณโควตา</th>
-                    <template is="dom-repeat" items="[[dataAllocate.all.asumall]]">
+                    <template is="dom-repeat" items="[[dataAllocate.data.0.quantity]]">
                         <th>[[item.amount]]</th>
                         <th>[[item.amount_update]]</th>
                     </template>
-                    <th>[[dataAllocate.all.total.sumweigth_all]]</th>
-                    <th>[[dataAllocate.all.total.sumweigth_update_all]]</th>
+                    <th>[[formatNumber(dataAllocate.sum.amount_all)]]</th>
+                    <th>[[formatNumber(dataAllocate.sum.amount_update_all)]]</th>
                 </tr>
             </table>
             </template>
@@ -111,9 +112,12 @@
                 MonthBehavior,
                 DataManageBehavior
             ],
-            observers:['checkData(dataAllocate.all.asumall)'],
+            observers:['checkData(dataAllocate)'],
             _num:function(index){
                 return index+1;
+            },
+            ready:function(){
+                this.answer = 0;
             },
             _sumPeriod:function(index,key){
                 
@@ -138,6 +142,10 @@
             },
             _selectData:function(e){
                 this.fire('data-select',e.currentTarget.data);
+            },
+            sumAll:function(num){
+                this.answer += num;
+                // return this.answer += num;
             },
             test:function(data){
                 console.log(data);
