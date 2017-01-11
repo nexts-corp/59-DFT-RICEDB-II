@@ -105,7 +105,6 @@ var schema = {
             'shm_id',
             'book_no',
             'bl_no',
-            'carrier_id',
             'surveyor',
             'load_port_id',
             'deli_port_id',
