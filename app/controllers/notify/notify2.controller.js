@@ -26,7 +26,7 @@ class index{
         
         .filter({
             year:params.year,
-            type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',   //ข้าวขาว
+            type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5',   //ข้าวหัก
         })
         
         .do(function (rwhite){
