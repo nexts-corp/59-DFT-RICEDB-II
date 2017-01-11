@@ -76,7 +76,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                         .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "creater", "updater"] }).zip()
                         .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "country_id"] }).zip()
                         .eqJoin("shipline_id", r.db('common').table("shipline")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        // .eqJoin("surveyor_id", r.db('common').table("surveyor")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("type_rice_id", r.db('common').table("type_rice")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
 
@@ -90,7 +90,12 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 product_date: me('product_date').split('T')(0),
                                 ship: me('ship').map(function (arr_ship) {
                                     return arr_ship.merge(function (row_ship) {
-                                        return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated')
+                                        return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                                    })
+                                }),
+                                surveyor: me('surveyor').map(function (arr_surveyor) {
+                                    return arr_surveyor.merge(function (row_surveyor) {
+                                        return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                                     })
                                 })
                             }

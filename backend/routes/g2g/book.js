@@ -30,9 +30,17 @@ var schema = {
                 "type": "string",
                 "minLength": 36
             },
-            "surveyor_id": {
-                "type": "string",
-                "minLength": 36
+            "surveyor": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "surveyor_id": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["surveyor_id"]
+                }
             },
             "load_port_id": {
                 "type": "string"
@@ -98,7 +106,7 @@ var schema = {
             'book_no',
             'bl_no',
             'carrier_id',
-            'surveyor_id',
+            'surveyor',
             'load_port_id',
             'deli_port_id',
             'dest_port_id',
@@ -128,7 +136,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('shipline_id', r.db('common').table('shipline')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-            .eqJoin('surveyor_id', r.db('common').table('surveyor')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            // .eqJoin('surveyor_id', r.db('common').table('surveyor')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -159,6 +167,11 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                     ship: m('ship').map(function (arr_ship) {
                         return arr_ship.merge(function (row_ship) {
                             return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        })
+                    }),
+                    surveyor: m('surveyor').map(function (arr_surveyor) {
+                        return arr_surveyor.merge(function (row_surveyor) {
+                            return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                         })
                     }),
                     etd_date: m('etd_date').split('T')(0),
@@ -201,7 +214,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('shipline_id', r.db('common').table('shipline')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-            .eqJoin('surveyor_id', r.db('common').table('surveyor')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            // .eqJoin('surveyor_id', r.db('common').table('surveyor')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                 return port.merge({
                     right: {
@@ -232,6 +245,11 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     ship: m('ship').map(function (arr_ship) {
                         return arr_ship.merge(function (row_ship) {
                             return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        })
+                    }),
+                    surveyor: m('surveyor').map(function (arr_surveyor) {
+                        return arr_surveyor.merge(function (row_surveyor) {
+                            return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                         })
                     }),
                     etd_date: m('etd_date').split('T')(0),
@@ -346,6 +364,11 @@ router.get('/id/:book_id', function (req, res, next) {
                         return arr_ship.merge(function (row_ship) {
                             return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', "creater", "updater")
                         })
+                    }),
+                    surveyor: me('surveyor').map(function (arr_surveyor) {
+                        return arr_surveyor.merge(function (row_surveyor) {
+                            return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        })
                     })
                 }
             })
@@ -385,9 +408,9 @@ router.get('/id/:book_id', function (req, res, next) {
             .merge(function (m) {
                 return r.db('common').table("shipline").get(m('shipline_id')).pluck('shipline_name', 'shipline_tel')
             })
-            .merge(function (m) {
-                return r.db('common').table("surveyor").get(m('surveyor_id')).pluck('surveyor_name')
-            })
+            // .merge(function (m) {
+            //     return r.db('common').table("surveyor").get(m('surveyor_id')).pluck('surveyor_name')
+            // })
             .merge(function (m) {
                 return r.db('common').table("carrier").get(m('carrier_id')).pluck('carrier_name')
             })

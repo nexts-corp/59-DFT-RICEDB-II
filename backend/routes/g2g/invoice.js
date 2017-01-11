@@ -275,6 +275,11 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 return arr_ship.merge(function (row_ship) {
                                     return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', "creater", "updater")
                                 })
+                            }),
+                            surveyor: me('surveyor').map(function (arr_surveyor) {
+                                return arr_surveyor.merge(function (row_surveyor) {
+                                    return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                                })
                             })
                         }
                     })
@@ -314,9 +319,9 @@ router.get('/id/:invoice_id', function (req, res, next) {
                     .merge(function (m) {
                         return r.db('common').table("shipline").get(m('shipline_id')).pluck('shipline_name', 'shipline_tel')
                     })
-                    .merge(function (m) {
-                        return r.db('common').table("surveyor").get(m('surveyor_id')).pluck('surveyor_name')
-                    })
+                    // .merge(function (m) {
+                    //     return r.db('common').table("surveyor").get(m('surveyor_id')).pluck('surveyor_name')
+                    // })
                     .merge(function (m) {
                         return r.db('common').table("carrier").get(m('carrier_id')).pluck('carrier_name')
                     })
