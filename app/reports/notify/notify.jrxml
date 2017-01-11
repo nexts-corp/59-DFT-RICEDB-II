@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notify" language="groovy" pageWidth="595" pageHeight="842" columnWidth="395" leftMargin="100" rightMargin="100" topMargin="36" bottomMargin="36" uuid="bbbb5077-9269-4f27-9216-d47e523e8ecf">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notify" language="groovy" pageWidth="595" pageHeight="842" columnWidth="451" leftMargin="72" rightMargin="72" topMargin="36" bottomMargin="36" uuid="bbbb5077-9269-4f27-9216-d47e523e8ecf">
 	<property name="ireport.zoom" value="1.610510000000001"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -16,24 +16,27 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
+	<title>
+		<band height="50"/>
+	</title>
 	<detail>
-		<band height="40" splitType="Stretch">
+		<band height="63" splitType="Stretch">
 			<textField>
-				<reportElement style="Default" x="0" y="0" width="100" height="20" uuid="c2e585d9-6fe9-4e1f-9436-9b6ccedf5cc8"/>
-				<textFieldExpression><![CDATA[$F{type_rice_name}]]></textFieldExpression>
+				<reportElement style="Default" x="72" y="2" width="140" height="20" uuid="9680f4b6-5922-4a30-bc9a-7ac7790aff51"/>
+				<textFieldExpression><![CDATA["("+new nylon.utility.NumberFormat().toThaiNumber($V{COLUMN_COUNT})+") "+$F{type_rice_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Default" x="115" y="0" width="100" height="20" uuid="cc2f5cb5-6d45-4b02-8386-41f16c3cb5ff"/>
-				<textFieldExpression><![CDATA[$F{count}]]></textFieldExpression>
+				<reportElement style="Default" x="89" y="19" width="362" height="20" uuid="a7c55d19-6e68-4475-a09c-2c3f1309b45b"/>
+				<textFieldExpression><![CDATA["มีผู้ส่งออกข้าวที่ได้รับส่วนจัดสรรปริมาณข้าวเพื่อขอหนังสือรับรองการส่งออกไป"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Default" x="235" y="0" width="100" height="20" uuid="5127d6e0-dc8a-4da2-b93f-f5f309aa18a9"/>
-				<textFieldExpression><![CDATA[$F{period_1_month}]]></textFieldExpression>
+				<reportElement style="Default" x="0" y="37" width="362" height="20" uuid="f323ec3c-9b91-4441-83f1-20a5a13e7c73"/>
+				<textFieldExpression><![CDATA["สหภาพยุโรป จำนวน "+new nylon.utility.NumberFormat().toThaiNumber($F{count})+" ราย ดังนี้"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="50">
 			<subreport>
-				<reportElement x="0" y="0" width="395" height="50" uuid="75426fd7-59bb-4a90-b26c-c03256ab5ea0"/>
+				<reportElement x="0" y="0" width="451" height="50" uuid="75426fd7-59bb-4a90-b26c-c03256ab5ea0"/>
 				<subreportParameter name="period_3_month">
 					<subreportParameterExpression><![CDATA[$F{period_3_month}]]></subreportParameterExpression>
 				</subreportParameter>

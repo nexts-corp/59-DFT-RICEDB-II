@@ -1,0 +1,115 @@
+<link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/data-manage-behavior.html">
+<dom-module id="notice-list">
+    <template>
+        <style is="custom-style" include="gl-table gl-size gl-color">
+            *{
+                font-family: 'CSChatThaiUI', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+            }
+            .container {
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            paper-tooltip{
+                --paper-tooltip:{
+                    font-size: 20px;
+                    font-family: 'rsuregular', sans-serif;
+                    -webkit-font-smoothing: antialiased;
+                }
+            }
+          
+
+            .container>div {
+                font-size: 24px;
+                padding: 0px 10px 10px 10px;
+            }
+            
+            .right {
+                text-align: right !important;
+            }
+            
+            .center {
+                text-align: center;
+            }
+            
+            .left {
+                text-align: left;
+            }
+            .flex-equal-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-justified);
+            }
+            paper-button{
+                font-size : 16px;
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+        </style>
+        <template is="dom-if" if="{{dataStat}}">
+            <div class="container">
+                <div class="flex-equal-justified">
+                    <div>ประเภท : </div>
+                </div>
+                 <table class="gl-table-default" style="border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th>คำนวณครั้งที่</th>
+                        <th class="right">คำนวณครั้งที่</th>
+                        <th class="right">ปริมาณ</th>
+                        <th class="right">สถานะ</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    <tr>
+                        <td colspan="6">ไม่พบข้อมูล</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </template>
+        <template is="dom-repeat" items="{{listData}}">
+        <div class="container">
+            
+            <div class="flex-equal-justified">
+                <div>ประเภท : {{item.type_rice_name_th}}</div>
+               
+            </div>
+            
+            <table class="gl-table-default" style="border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th>คำนวณครั้งที่</th>
+                        <th class="right">คำนวณครั้งที่</th>
+                        <th class="right">ปริมาณ</th>
+                        <th class="right">สถานะ</th>
+                    </tr>
+                </thead>
+               
+                    <tbody>
+                        <template is="dom-repeat" items="{{item.list}}">
+                            <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
+                                <td>[[item.ordinal]]</td>
+                                <td class="right">[[formatNumber(item.report)]]</td>
+                                <td class="right">[[formatNumber(item.calculate)]]</td>
+                                <td class="right">[[formatNumber(item.confirm)]]</td>
+                                <td class="right">[[formatNumber(item.amount)]]</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                
+            </table>
+           
+        </div>
+         </template>
+    </template>
+    <script>
+        Polymer({
+            is: 'notice-list',
+            behaviors:[FormatNumberBehavior,DataManageBehavior],
+           
+        });
+    </script>
+</dom-module>

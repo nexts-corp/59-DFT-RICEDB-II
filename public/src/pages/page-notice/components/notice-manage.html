@@ -1,0 +1,70 @@
+
+<dom-module id="notice-manage">
+    <template>
+        <style is="custom-style" include="iron-flex iron-flex-alignment gl-color gl-size gl-table">
+            * {
+				text-align: left;
+                font-family: 'rsuregular', sans-serif;
+				-webkit-font-smoothing: antialiased;
+			}
+            paper-button{
+                font-family: 'CSChatThaiUI', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+            }
+            .title {
+                background-color: orange;
+                color: white;
+                padding: 10px;
+		    }
+            .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
+            .container{
+                margin: 30px 50px 0px 0px;
+            }
+        </style>
+        <gl-form-panel set-padding = "0px 0px 20px 0px">
+            <div class="title">ข้อมูลบริษัท</div>
+            <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+                <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <gl-combo-box label="แสดงข้อมูลรายปี" items="{{quotaYear}}" value="{{selectYear}}"></gl-combo-box>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <gl-form-input label="ชื่อ"></gl-form-input>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                </gl-grid-row>
+                <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <vaadin-date-picker label="วันที่ประกาศ"></vaadin-date-picker>
+                    </gl-grid-col>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                </gl-grid-row>
+                <div class="container flex-end-justified">
+                    <paper-button raised>บันทึก</paper-button>
+                    <paper-button raised>ออกประกาศ</paper-button>
+                </div>
+
+            </gl-form-panel-body>
+        </gl-form-panel>
+
+        <gl-form-panel set-padding = "0px 0px 20px 0px">
+            <div class="title">ข้อมูลบริษัท</div>
+            <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
+               
+            </gl-form-panel-body>
+        </gl-form-panel>
+    </template>
+    <script>
+        Polymer({
+            is: 'notice-manage'
+        });
+    </script>
+</dom-module>

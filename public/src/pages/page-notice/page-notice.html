@@ -1,0 +1,175 @@
+
+<link rel="import" href="./../components/panel-right/panel-right.html">
+<!--<link rel="import" href="./components/calculate-listQuota.html">-->
+
+<dom-module id="page-notice">
+    <style is="custom-style" include="gl-size gl-color">
+        * {
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+          padding: 10px 0px 10px 10px;
+          background-color: var(--paper-grey-100);
+          color: var(--paper-grey-600);
+          font-size: var(--font-size-h4);
+          font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .registor{
+          margin: 20px;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+        .searchBox{
+          padding: 5px;
+          background-color: var(--gl-gray-lighter-color);
+        }
+        .elevation{
+          border-radius: 5px;
+          margin: 10px;
+          padding: 5px;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px;
+        }
+        paper-material {
+          background-color: var(--gl-white-color);
+        }
+        gl-search-input{
+          margin: 30px 0px 0px 0px;
+        }
+
+
+        .container{
+          margin-left: 30px;
+        }
+
+        
+        .fontContent{
+          font-size: 20px;
+          /*text-decoration: blink;*/
+          padding: 15px;
+          margin-top: 10px;
+          text-align: center;
+          margin-bottom: 10px;
+          /*background-color: var(--gl-gray-lighter-color);*/
+        }
+        paper-button{
+          font-family: 'CSChatThaiUI', sans-serif !important;
+          -webkit-font-smoothing: antialiased;
+        }
+        .flex-equal-justified {
+          @apply(--layout-horizontal);
+          @apply(--layout-justified);
+        }
+    </style>
+    <template>
+        <div class="layout vertical registor">
+          <div class="flex">
+           
+          </div>
+          <div class="flex title">
+          
+            <br>ออกประกาศ
+          </div>
+          <div class="layout horizontal">
+            <div class="container flex-equal-justified">
+              <div><gl-combo-box label="แสดงข้อมูลรายปี" items="{{quotaYear}}" value="{{selectYear}}"></gl-combo-box></div>
+            </div>
+          </div>
+          <paper-button on-tap="activeList" raised>Click</paper-button>
+          <div style="overflow-x:auto; padding:20px;">
+            <notice-list></notice-list>
+          </div>
+        </div>
+
+      <panel-right title="การคำนวณส่วนจัดสรร">
+          <template is="dom-if" if="[[rendered]]">
+            <iron-pages selected="{{pageSelect}}">
+              <div><notice-manage></notice-manage></div>
+              <div></div>
+            </iron-pages>
+          </template>
+      </panel-right>
+  
+    </template>
+    <script>
+        Polymer({
+            is: "page-notice",
+            behaviors:[nylonBehavior],
+            observers:['_getDatalist(selectYear)'],
+            nylonPageActive:function(){
+              this._getListQuotaYear();
+            },
+            attached: function(){
+               Polymer.RenderStatus.afterNextRender(this,function(){
+                this.importHref(this.resolveUrl('./components/notice-list.html'), (e)=>{
+                    this.rendered = true;
+                }, (e)=> {
+                    console.log('error')
+                });
+              }); 
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                this.importHref(this.resolveUrl('./components/notice-manage.html'), (e)=>{
+                    this.rendered = true;
+                }, (e)=> {
+                    console.log('error')
+                });
+              }); 
+            },
+            _getListQuotaYear:function(){
+                axios.get('./common/year')
+                .then((response)=>{
+                    //console.log("success");
+                    this.quotaYear = response.data.map(item=>{
+                        return item.toString();
+                    });
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                });
+            },
+            _getDatalist:function(year){
+                // console.log('year',year);
+                if(year != ''){
+                    this.fire('toast',{status:'load'});
+                    axios.get('./notify/noti'+year)
+                    .then((response)=>{
+                        console.log("success!!");
+                        this.fire('toast',{
+                            status:'success',
+                            callback:function(){
+                            }
+                        });
+                        this.$$('panel-right').close();
+                        console.log(response.data);
+                        // this.dataList = response.data;
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error);
+                        this.fire('toast',{status:'connectError',text:error.message,
+                        callback:function(){
+                        }})
+                    })
+                }  
+            },
+            activeList:function(){
+                this.pageSelect = 0;
+                this.$$('panel-right').open();
+            }
+        });
+    </script>
+</dom-module>
