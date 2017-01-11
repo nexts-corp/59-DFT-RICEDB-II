@@ -88,6 +88,8 @@ class index{
         var params = req.body;
 
         r.db('eu2').table('allocate').get(params.id).update({
+          amount:params.amount,
+          amount_update:params.amount_update,
           quantity:params.quantity
         })
         .run().then(function(result){
