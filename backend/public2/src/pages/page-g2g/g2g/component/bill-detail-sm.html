@@ -45,7 +45,7 @@
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name" disabled="[[isInputDisabled]]"
+        <gl-combo-box  label="Shipping Agent"always-float-label item-label-path="carrier_name" disabled="[[isInputDisabled]]"
            item-value-path="carrier_id" items="{{dataForSelect.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
       </gl-grid-col>
 
@@ -86,18 +86,32 @@
 
       <!-- </template> -->
 
-
-
-
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Surveyor"always-float-label item-label-path="surveyor_name" disabled="[[isInputDisabled]]"
-          item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
-      </gl-grid-col>
+      <template is="dom-repeat" items="[[data.surveyor]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-combo-box required class="required" label="Surveyor [[_ObcountIndex(index)]]" always-float-label item-label-path="surveyor_name" disabled="[[isInputDisabled]]"
+            item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"></gl-combo-box>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      </template>
 
+      <template is="dom-if" if="[[!isInputDisabled]]">
+        <div class="horizontal end-justified layout">
+            <!-- <template is="dom-if" if="[[checkBtnView(btnCheckDis)]]"> -->
+        <paper-button raised class="gl-btn-primary btnVessel" on-tap="addSurveyor">
+          <iron-icon icon="add"></iron-icon>เพิ่ม Surveyor</paper-button>
+          <!-- </template> -->
+          <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteSurveyor">
+            <iron-icon icon="remove"></iron-icon>ลบ Surveyor</paper-button>
+        </div>
+      </template>
+    </gl-grid-row>
+
+    <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-form-input required class="required"label="Lot No."always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}" disabled="[[isInputDisabled]]"
+        <gl-form-input required class="required"label="Lot No. (ลำที่)"always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.ship_lot_no}}" disabled="[[isInputDisabled]]"
         name="lotNo"></gl-form-input>
       </gl-grid-col>
 
@@ -115,7 +129,7 @@
       </gl-grid-col>
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box required class="required"label="Port of Destination"always-float-label  item-label-path="port_name" disabled="[[isInputDisabled]]"
+        <gl-combo-box required class="required"label="Port of Discharge"always-float-label  item-label-path="port_name" disabled="[[isInputDisabled]]"
         item-value-path="port_id" items="{{dataForSelect.pod}}"  value="{{data.dest_port_id}}"></gl-combo-box>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -149,6 +163,10 @@
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <vaadin-date-picker label="Production Date"always-float-label required class="required" value="{{data.product_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+        <gl-form-input label="หมายเหตุ (แก้ไข)" always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.book_remark}}" disabled="[[isInputDisabled]]"
+        name="lotNo"></gl-form-input>
+      </gl-grid-col>
     </gl-grid-row>
       </gl-form-panel-body>
 
@@ -178,7 +196,7 @@
       properties: {
         data: {
           type: Object,
-          value:{bl_no:'',ship:[{ship_id:'',ship_voy_no:''}]},
+          value:{bl_no:'',ship:[{ship_id:'',ship_voy_no:''}],surveyor:[{surveyor_id:''}]},
           notify: true
         },
         dataForSelect:{
@@ -270,6 +288,15 @@
       },
       addShip:function () {
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
+      },
+      addSurveyor:function () {
+
+        this.push('data.surveyor',{surveyor_id:''});
+      },
+      deleteSurveyor:function () {
+        if (this.data.surveyor.length > 1) {
+          this.pop('data.surveyor');
+        }
       },
       calcelBl:function () {
         // let el = Polymer.dom(this.root).querySelectorAll('.required');
@@ -375,14 +402,6 @@
         this.data.deli_port_id = dest_port_id;
         this.notifyPath('data.deli_port_id');
       },
-      // _getShip:function (e) {
-      //   let shipline_id = e.detail.value;
-      //   if(shipline_id){
-      //     let ships = this.dataForSelect.shipInShipline.filter((shipline)=>{ return shipline.shipline_id == shipline_id });
-      //     this.dataForSelect.ships = ships[0].ship;
-      //     this.notifyPath('dataForSelect.ships');
-      //   }
-      // },
       _getPod:function (Pod) {
         let pol = Pod.countryPort.filter((countryport)=>  countryport.country_id == 'THA' );
         this.dataForSelect.pol = pol;
@@ -408,11 +427,12 @@
           if (stat.every(elem => elem == true)) {
             let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
                   load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
-                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id} = data;
+                  ship_lot_no,shipline_id,weight_per_container,book_status,shm_id,book_remark} = data;
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
                             load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
-                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id};
+                            ship_lot_no,shipline_id,weight_per_container,book_status,shm_id,book_remark};
             newData.ship = new Array();
+            newData.surveyor = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();
             newData.etd_date = new Date (newData.etd_date).toISOString();
             newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
@@ -420,6 +440,9 @@
             newData.product_date = new Date (newData.product_date).toISOString();
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+            });
+            data.surveyor.map((surveyors)=>{
+              newData.surveyor.push({surveyor_id:surveyors.surveyor_id});
             });
             el.map((el)=> {el.reset();});
             callback(newData)
@@ -429,32 +452,32 @@
             }})
           }
       },
-      _cleanShipmentData:function (data,callback) {
-        let el = Polymer.dom(this.root).querySelectorAll('.required');
-        let stat = el.map((el)=> el.validate());
-          if (stat.every(elem => elem == true)) {
-            let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                  load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,
-                  type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
-                  exporter_id} = data;
-            let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-                            load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,
-                            type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
-            newData.ship = new Array();
-            newData.eta_date = new Date (newData.eta_date).toISOString();
-            newData.etd_date = new Date (newData.etd_date).toISOString();
-            newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
-            newData.packing_date = new Date (newData.packing_date).toISOString();
-            newData.product_date = new Date (newData.product_date).toISOString();
-            // console.log(newData.cut_of_date);
-            data.ship.map((ships)=>{
-              newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
-            });
-            callback(newData)
-          }
-      },
+      // _cleanShipmentData:function (data,callback) {
+      //   let el = Polymer.dom(this.root).querySelectorAll('.required');
+      //   let stat = el.map((el)=> el.validate());
+      //     if (stat.every(elem => elem == true)) {
+      //       let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+      //             load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
+      //             ship_lot_no,shipline_id,surveyor_id,weight_per_container,
+      //             type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
+      //             exporter_id} = data;
+      //       let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+      //                       load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
+      //                       ship_lot_no,shipline_id,surveyor_id,weight_per_container,
+      //                       type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
+      //       newData.ship = new Array();
+      //       newData.eta_date = new Date (newData.eta_date).toISOString();
+      //       newData.etd_date = new Date (newData.etd_date).toISOString();
+      //       newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
+      //       newData.packing_date = new Date (newData.packing_date).toISOString();
+      //       newData.product_date = new Date (newData.product_date).toISOString();
+      //       // console.log(newData.cut_of_date);
+      //       data.ship.map((ships)=>{
+      //         newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+      //       });
+      //       callback(newData)
+      //     }
+      // },
     });
   </script>
 </dom-module>
