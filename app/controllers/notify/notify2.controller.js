@@ -14,11 +14,19 @@ class index{
         return ml('left').merge(function(ty){
             return { year:ml('right')('year'), type_rice_id:ml('right')('type_rice_id') }
         })
-        }).pluck('id','ordinal', 'amount_update','status','year','type_rice_id','').coerceTo('array')
+        })
+        .innerJoin(r.db('eu2').table('type_rice'), function(a,t){
+            return a('type_rice_id').eq(t('id'))
+        }).map(function(m){ return m('left').merge(function(n){
+            return {type_rice_name: m('right')('type_rice_name_th')}
+        })
+        })
+        
+        .pluck('id','ordinal', 'amount_update','status','year','type_rice_id','type_rice_name_th').coerceTo('array')
         
         .filter({
             year:params.year,
-            type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',   //ข้าวขาว
+            type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5',   //ข้าวหัก
         })
         
         .do(function (rwhite){
@@ -30,12 +38,21 @@ class index{
                         return ml('left').merge(function(ty){
                             return { year:ml('right')('year'), type_rice_id:ml('right')('type_rice_id') }
                         })
-                        }).pluck('id','ordinal', 'amount_update','status','year','type_rice_id','').coerceTo('array')
+                        })
+                        .innerJoin(r.db('eu2').table('type_rice'), function(a,t){
+                        return a('type_rice_id').eq(t('id'))
+                        }).map(function(m){ return m('left').merge(function(n){
+                        return {type_rice_name: m('right')('type_rice_name_th')}
+                        })
+                        })
+                        
+                        .pluck('id','ordinal', 'amount_update','status','year','type_rice_id','type_rice_name_th').coerceTo('array')
                         
                         .filter({
                         year:params.year,
-                        type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5' //ข้าวหัก
+                        type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',   //ข้าวขาว
                         })
+        
             }
         })
         .run().then(function(result){
