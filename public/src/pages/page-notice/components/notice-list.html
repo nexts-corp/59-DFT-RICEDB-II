@@ -55,7 +55,6 @@
                  <table class="gl-table-default" style="border: 1px solid #ddd;">
                 <thead>
                     <tr>
-                        <th>คำนวณครั้งที่</th>
                         <th class="right">คำนวณครั้งที่</th>
                         <th class="right">ปริมาณ</th>
                         <th class="right">สถานะ</th>
@@ -70,11 +69,12 @@
             </table>
             </div>
         </template>
-        <template is="dom-repeat" items="{{listData}}">
+        <template is="dom-if" if="{{!dataStat}}">
+        <template is="dom-repeat" items="{{dataList.rice_h}}">
         <div class="container">
             
             <div class="flex-equal-justified">
-                <div>ประเภท : {{item.type_rice_name_th}}</div>
+                <div>ประเภท : {{item.type_rice_name}}</div>
                
             </div>
             
@@ -82,20 +82,17 @@
                 <thead>
                     <tr>
                         <th>คำนวณครั้งที่</th>
-                        <th class="right">คำนวณครั้งที่</th>
                         <th class="right">ปริมาณ</th>
                         <th class="right">สถานะ</th>
                     </tr>
                 </thead>
                
                     <tbody>
-                        <template is="dom-repeat" items="{{item.list}}">
-                            <tr on-tap="_selectData" key="[[item.id]]" style="cursor:pointer;">
+                        <template is="dom-repeat" items="{{item.row}}">
+                            <tr on-tap="_selectData" key="[[item]]" style="cursor:pointer;">
                                 <td>[[item.ordinal]]</td>
-                                <td class="right">[[formatNumber(item.report)]]</td>
-                                <td class="right">[[formatNumber(item.calculate)]]</td>
-                                <td class="right">[[formatNumber(item.confirm)]]</td>
-                                <td class="right">[[formatNumber(item.amount)]]</td>
+                                <td class="right">[[formatNumber(item.amount_update)]]</td>
+                                <td class="right">[[item.status_calculate]]</td>
                             </tr>
                         </template>
                     </tbody>
@@ -103,13 +100,35 @@
             </table>
            
         </div>
-         </template>
+        </template>
+        </template>
     </template>
     <script>
         Polymer({
             is: 'notice-list',
             behaviors:[FormatNumberBehavior,DataManageBehavior],
-           
+            // observers:[
+            //     'checkData(dataList.rice_w,dataList.rice_h)'
+            // ],
+            properties:{
+                dataList:{
+                    type: Object,
+                    observer: 'getList'
+                }
+            },
+            getList:function(){
+                if(this.dataList.rice_h != ''){
+                    this.checkData(this.dataList.rice_h);
+                }
+                else if(this.dataList.rice_w != ''){
+                     this.checkData(this.dataList.rice_w);
+                }
+                console.log(this.dataList);
+            },
+            _selectData:function(e){
+                // console.log(e.currentTarget.key.id)
+                this.fire('data-select',e.currentTarget.key.id)
+            }
         });
     </script>
 </dom-module>

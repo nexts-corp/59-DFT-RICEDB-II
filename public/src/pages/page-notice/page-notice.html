@@ -85,16 +85,15 @@
               <div><gl-combo-box label="แสดงข้อมูลรายปี" items="{{quotaYear}}" value="{{selectYear}}"></gl-combo-box></div>
             </div>
           </div>
-          <paper-button on-tap="activeList" raised>Click</paper-button>
           <div style="overflow-x:auto; padding:20px;">
-            <notice-list></notice-list>
+            <notice-list data-list="{{listNotice}}" on-data-select="_getDataSelect"></notice-list>
           </div>
         </div>
 
       <panel-right title="การคำนวณส่วนจัดสรร">
           <template is="dom-if" if="[[rendered]]">
             <iron-pages selected="{{pageSelect}}">
-              <div><notice-manage></notice-manage></div>
+              <div><notice-manage data-list="{{listNoticeManage}}"></notice-manage></div>
               <div></div>
             </iron-pages>
           </template>
@@ -145,7 +144,7 @@
                 // console.log('year',year);
                 if(year != ''){
                     this.fire('toast',{status:'load'});
-                    axios.get('./notify/noti?='+year)
+                    axios.get('./notify/noti?year='+year)
                     .then((response)=>{
                         console.log("success!!");
                         this.fire('toast',{
@@ -154,7 +153,8 @@
                             }
                         });
                         this.$$('panel-right').close();
-                        console.log(response.data);
+                        // console.log(response.data);
+                        this.listNotice = response.data;
                         // this.dataList = response.data;
                     })
                     .catch((error)=>{
@@ -166,9 +166,31 @@
                     })
                 }  
             },
-            activeList:function(){
-                this.pageSelect = 0;
-                this.$$('panel-right').open();
+            _getDataSelect:function(e){
+                console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                axios.get('./notify/notiall?id='+e.detail)
+                .then((response)=>{
+                    console.log("success!!");
+                    this.fire('toast',{
+                        status:'success',
+                        callback:function(){
+                        }
+                    });
+                    this.pageSelect = 0;
+                    this.$$('panel-right').open();
+                    console.log(response.data);
+                    this.listNoticeManage = response.data;
+                    // this.listNotice = response.data;
+                    // this.dataList = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                })
             }
         });
     </script>
