@@ -8,12 +8,10 @@
 	<parameter name="quota_year" class="java.lang.Number"/>
 	<parameter name="period_1_month" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="period_2_month" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="period_3_month" class="java.lang.String" isForPrompting="false"/>
 	<field name="exporter_name" class="java.lang.String"/>
 	<field name="amount" class="java.lang.Number"/>
 	<field name="period_1_weigth" class="java.lang.Number"/>
 	<field name="period_2_weigth" class="java.lang.Number"/>
-	<field name="period_3_weigth" class="java.lang.Number"/>
 	<variable name="row_count" class="java.lang.Integer" calculation="Count">
 		<variableExpression><![CDATA[$F{exporter_name}]]></variableExpression>
 	</variable>
@@ -26,9 +24,6 @@
 	</variable>
 	<variable name="sum_period_2" class="java.lang.Number" calculation="Sum">
 		<variableExpression><![CDATA[$F{period_1_weigth}]]></variableExpression>
-	</variable>
-	<variable name="sum_period_3" class="java.lang.Number" calculation="Sum">
-		<variableExpression><![CDATA[$F{period_3_weigth}]]></variableExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -64,7 +59,7 @@
 				<textFieldExpression><![CDATA["ผู้ส่งออกข้าว"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="240" y="0" width="76" height="40" uuid="32b7cc4c-434c-4f56-ba40-5e4e89634cd7"/>
+				<reportElement style="Header" x="240" y="0" width="92" height="40" uuid="32b7cc4c-434c-4f56-ba40-5e4e89634cd7"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -78,7 +73,7 @@
 				<textFieldExpression><![CDATA["ปริมาณส่วน\nจัดสรรปี "+new nylon.utility.NumberFormat().toThaiNumber($P{quota_year})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="316" y="0" width="45" height="40" uuid="495bb938-fa9d-4ee4-956a-d47220c7f8ea"/>
+				<reportElement style="Header" x="332" y="0" width="60" height="40" uuid="495bb938-fa9d-4ee4-956a-d47220c7f8ea"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -92,7 +87,7 @@
 				<textFieldExpression><![CDATA["งวดที่ ๑\n"+$P{period_1_month}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Header" x="361" y="0" width="45" height="40" uuid="41308aed-dbc2-4a88-bdb4-cbd99880ae08"/>
+				<reportElement style="Header" x="392" y="0" width="59" height="40" uuid="41308aed-dbc2-4a88-bdb4-cbd99880ae08"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -104,20 +99,6 @@
 					<font size="16"/>
 				</textElement>
 				<textFieldExpression><![CDATA["งวดที่ ๒\n"+$P{period_2_month}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="Header" x="406" y="0" width="45" height="40" uuid="f5f5c649-4cb0-4301-b629-6aae319b2a50"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="16"/>
-				</textElement>
-				<textFieldExpression><![CDATA["งวดที่ ๓\n"+$P{period_3_month}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -135,7 +116,7 @@
 				<textFieldExpression><![CDATA[$F{exporter_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement style="Default" x="240" y="0" width="76" height="25" uuid="96bc55d3-f740-43bb-8bc5-16fc40f0fcdb"/>
+				<reportElement style="Default" x="240" y="0" width="92" height="25" uuid="96bc55d3-f740-43bb-8bc5-16fc40f0fcdb"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -147,7 +128,7 @@
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($F{amount}))]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement style="Default" x="316" y="0" width="45" height="25" uuid="df51d228-4dd8-485a-8e7c-64073a057a24"/>
+				<reportElement style="Default" x="332" y="0" width="60" height="25" uuid="df51d228-4dd8-485a-8e7c-64073a057a24"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -159,7 +140,7 @@
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($F{period_1_weigth}))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Default" x="361" y="0" width="45" height="25" uuid="c7682f66-7cab-4f1f-83c4-3fc70c4e8760"/>
+				<reportElement style="Default" x="392" y="0" width="59" height="25" uuid="c7682f66-7cab-4f1f-83c4-3fc70c4e8760"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -169,18 +150,6 @@
 				</box>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($F{period_2_weigth}))]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="Default" x="406" y="0" width="45" height="25" uuid="dde6da2d-2ff4-406b-b5ac-4fce20242708"/>
-				<box rightPadding="4">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($F{period_3_weigth}))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Default" x="0" y="0" width="31" height="25" uuid="41ea4281-80fa-4fa4-8b8c-d460a3949cde"/>
@@ -199,7 +168,7 @@
 	<summary>
 		<band height="26">
 			<textField>
-				<reportElement style="Default" x="240" y="0" width="76" height="25" uuid="804e4f84-3c9c-4184-b371-e5769ede2efb"/>
+				<reportElement style="Default" x="240" y="0" width="92" height="25" uuid="804e4f84-3c9c-4184-b371-e5769ede2efb"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -211,7 +180,7 @@
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_amount}))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Default" x="316" y="0" width="45" height="25" uuid="72c10853-f7c3-400f-a060-61c39c15f40e"/>
+				<reportElement style="Default" x="332" y="0" width="60" height="25" uuid="72c10853-f7c3-400f-a060-61c39c15f40e"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -223,7 +192,7 @@
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_period_1}))]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement style="Default" x="361" y="0" width="45" height="25" uuid="f1380728-5627-40e0-89cf-9e4c33d12470"/>
+				<reportElement style="Default" x="392" y="0" width="59" height="25" uuid="f1380728-5627-40e0-89cf-9e4c33d12470"/>
 				<box rightPadding="4">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -233,18 +202,6 @@
 				</box>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_period_2}))]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement style="Default" x="406" y="0" width="45" height="25" uuid="4fb2cd87-79b0-4735-9698-3a8c68573476"/>
-				<box rightPadding="4">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiNumber(new java.text.DecimalFormat("#,##0").format($V{sum_period_3}))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Default" x="0" y="0" width="31" height="25" uuid="c7e65342-ca78-49eb-9f46-a4385488c763"/>
