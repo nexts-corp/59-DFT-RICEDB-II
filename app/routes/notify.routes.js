@@ -4,4 +4,5 @@ module.exports=function(app){
 
     var notify2IndexCtrl = require('../controllers/notify/notify2.controller');
     app.get('/noti',notify2IndexCtrl.selectnotify);
+    app.get('/notiall',notify2IndexCtrl.selectnotifyAll);
 } 
