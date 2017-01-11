@@ -324,12 +324,8 @@
                console.log(quota_id,type_rice_id,ordinal_number);
              },
              _putData:function(e){
-               var data = {
-                 allocate_id : this.dataAllocate.id,
-                 exporter : e.detail
-               }
                 this.fire('toast',{status:'load'});
-                axios.put('/eu/allocate/allocate',data)
+                axios.put('/amount/amount',e.detail)
                 .then((response)=>{
                   console.log("success");
                   // this.textToast = 'แก้ไขข้อมูลสำเร็จ';
