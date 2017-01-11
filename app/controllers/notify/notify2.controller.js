@@ -12,7 +12,11 @@ class index{
         return c('quota_id').eq(q('id'))
         }).map(function(ml){
         return ml('left').merge(function(ty){
-            return { year:ml('right')('year'), type_rice_id:ml('right')('type_rice_id') }
+            return { 
+            year:ml('right')('year'), 
+            type_rice_id:ml('right')('type_rice_id'),
+            status_calculate: r.branch( ml('left')('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')
+            }
         })
         })
         .innerJoin(r.db('eu2').table('type_rice'), function(a,t){
@@ -22,12 +26,12 @@ class index{
         })
         })
         
-        .pluck('id','ordinal', 'amount_update','status','year','type_rice_id','type_rice_name_th').coerceTo('array')
+        .pluck('id','ordinal', 'amount_update','status','year','type_rice_id','type_rice_name_th','status_calculate') 
         
         .filter({
             year:params.year,
             type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5',   //ข้าวหัก
-        })
+        }).coerceTo('array')
         
         .do(function (rwhite){
             return {
@@ -36,7 +40,11 @@ class index{
                         return c('quota_id').eq(q('id'))
                         }).map(function(ml){
                         return ml('left').merge(function(ty){
-                            return { year:ml('right')('year'), type_rice_id:ml('right')('type_rice_id') }
+                            return { 
+                            year:ml('right')('year'), 
+                            type_rice_id:ml('right')('type_rice_id'),
+                            status_calculate: r.branch( ml('left')('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')
+                            }
                         })
                         })
                         .innerJoin(r.db('eu2').table('type_rice'), function(a,t){
@@ -46,15 +54,16 @@ class index{
                         })
                         })
                         
-                        .pluck('id','ordinal', 'amount_update','status','year','type_rice_id','type_rice_name_th').coerceTo('array')
+                        .pluck('id','ordinal', 'amount_update','status','year','type_rice_id','type_rice_name_th','status_calculate') 
                         
                         .filter({
                         year:params.year,
                         type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',   //ข้าวขาว
-                        })
+                        }).coerceTo('array')
         
             }
         })
+        
         .run().then(function(result){
             res.json(result);
         });
