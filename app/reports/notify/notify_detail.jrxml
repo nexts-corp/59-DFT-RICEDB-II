@@ -5,7 +5,10 @@
 	<property name="ireport.y" value="0"/>
 	<style name="Default" fontName="TH SarabunPSK" fontSize="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H"/>
 	<style name="Header" style="Default" fontSize="14"/>
+	<parameter name="quota_year" class="java.lang.Number"/>
 	<parameter name="period_1_month" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="period_2_month" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="period_3_month" class="java.lang.String" isForPrompting="false"/>
 	<field name="exporter_name" class="java.lang.String"/>
 	<field name="amount" class="java.lang.Number"/>
 	<field name="period_1_weigth" class="java.lang.Number"/>
@@ -56,7 +59,7 @@
 				<textElement textAlignment="Center">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["ปริมาณส่วน\nจัดสรรปี"+" xxxx"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["ปริมาณส่วน\nจัดสรรปี "+new nylon.utility.NumberFormat().toThaiNumber($P{quota_year})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Header" x="316" y="0" width="45" height="36" uuid="495bb938-fa9d-4ee4-956a-d47220c7f8ea"/>
@@ -84,7 +87,7 @@
 				<textElement textAlignment="Center">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["งวดที่ ๑\n"+$P{period_1_month}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["งวดที่ ๒\n"+$P{period_2_month}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Header" x="406" y="0" width="45" height="36" uuid="f5f5c649-4cb0-4301-b629-6aae319b2a50"/>
@@ -98,7 +101,7 @@
 				<textElement textAlignment="Center">
 					<font size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA["งวดที่ ๑\n"+$P{period_1_month}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["งวดที่ ๓\n"+$P{period_3_month}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
