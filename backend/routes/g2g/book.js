@@ -99,11 +99,15 @@ var schema = {
             },
             "weight_per_container": {
                 "type": "number"
+            },
+            "book_remark": {
+                "type": "string"
             }
         },
         "required": [
             'shm_id',
             'book_no',
+            'book_remark',
             'bl_no',
             'surveyor',
             'load_port_id',
