@@ -355,7 +355,7 @@ input:checked + label {
                 this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
             },
             getDatalist:function(month,year,quota,riceId){
-                console.log(month,year,quota);
+                console.log(month,year,quota,riceId);
                 if(month != '' && year != ''){
                      this.fire('toast',{status:'load'});
                     axios.get('./report/report',{
@@ -409,6 +409,7 @@ input:checked + label {
             checkQuota:function(e){
                 // console.log(e.target.value);
                 this.quota = e.target.value;
+                this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
             },
             saveConfirm:function(){
                 if(this.year57 == "-"){

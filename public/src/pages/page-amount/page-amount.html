@@ -137,7 +137,7 @@
 								</gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2 layout horizontal">
-                 <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" item-label-path="group" item-value-path="group" value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                 <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
                 <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                   <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaOrdinal}}">
                     <template is="dom-repeat" items="{{getQuotaOrdinal}}">
@@ -260,7 +260,9 @@
                 .then((response)=>{
                     console.log("success!!");
                     console.log('1234',response.data);
-                    this.getQuotaOrdinal = response.data;
+                    this.getQuotaOrdinal = response.data.map((item)=>{
+                      return item.toString();
+                    })
                 })
                 .catch((error)=>{
                     console.log("error");
@@ -305,7 +307,7 @@
                 })
                 .then((response)=>{
                     this.dataAllocate = response.data;
-                    // console.log('..',this.dataAllocate);
+                    console.log('..',this.dataAllocate);
                     this.fire('toast',{status:'success',
                     callback:()=>{
                       this.active = false;
