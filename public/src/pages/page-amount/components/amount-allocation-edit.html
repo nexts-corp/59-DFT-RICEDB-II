@@ -162,7 +162,8 @@
           type: String
         },
 				dataSelect:{
-					type: Array
+					type: Array,
+					// observer: 'getDataSelect'
 				},
 				dataQuota:{
 					type: Object
@@ -171,6 +172,12 @@
 			 _num:function(index){
         return index+1;
       },
+			// getDataSelect:function(data){
+			// 	this.oldQuantity = data.quantity.map((item)=>{
+			// 		return item.weigth_update;
+			// 	});
+			// 		console.log('dataSelect',this.oldQuantity);
+			// },
       _sumAllocation:function(item,key){
         var answer = 0;
         // console.log(item.base);
@@ -184,22 +191,34 @@
         return this.formatNumber(answer);
       },
 			_sumAllocationUpdate:function(item,key){
-		
-        var answer = 0;
-        // console.log(item.base);
-        
-        item.base.map((data)=>{
-         
-          answer += parseFloat(this.unFormat(data[key]));
-        })
-        // console.log(answer);
-				this.dataSelect.quantity_update = answer;
-				console.log(isNaN(answer));
-				if(isNaN(answer) == true){
-					return '';
+				// console.log(this.dataSelect);
+				var newQuantity = item.base.map((item)=>{
+					return this.unFormat(item.weigth_update) == this.unFormat(item.weigth);
+				});
+				var chkArray = function(newQuantity){
+					return newQuantity == true;
+				}
+				if(newQuantity.every(chkArray)==true){
+					this.amountUpdate = this.dataSelect.amount;
+					return this.dataSelect.amount;
 				}
 				else {
-					return answer;
+			
+					var answer = 0;
+					item.base.map((data)=>{
+					
+						answer += parseFloat(this.unFormat(data[key]));
+					})
+					// console.log(answer);
+					this.dataSelect.quantity_update = answer;
+					// console.log(isNaN(answer));
+					if(isNaN(answer) == true){
+						return '';
+					}
+					else {
+						this.amountUpdate = answer;
+						return answer;
+					}
 				}
       },
 			_saveData:function(){
@@ -211,15 +230,28 @@
 						return stat == true
 				};
 				if(stat.every(chkStat) == true){
-						var perData = {};
-						for(key in this.dataSelect){
-							if(key!="seller_name_th" && key!="seller_tax_id"){
-								perData[key] = this.dataSelect[key]
-							}
+						// var perData = {};
+						// for(key in this.dataSelect){
+						// 	if(key!="seller_name_th" && key!="seller_tax_id"){
+						// 		perData[key] = this.dataSelect[key]
+						// 	}
+						// }
+						var saveQuantity = this.dataSelect.quantity.map((item)=>{
+							var {period,weigth,weigth_cal,weigth_update} = item;
+							var newData = {period,weigth,weigth_cal,weigth_update};
+							newData.weigth_update = this.unFormat(item.weigth_update);
+							return newData;
+						}) 
+						
+						var datas = {
+							quantity : saveQuantity,
+							id : this.dataSelect.id,
+							amount : this.dataSelect.amount,
+							amount_update : this.amountUpdate
 						}
-						console.log('perData',perData);
-						this.fire('post-data',perData);
-						console.log(this.dataSelect);
+						// console.log('perData',datas);
+						this.fire('post-data',datas);
+						// console.log(this.dataSelect);
 				}
 			
 			}
