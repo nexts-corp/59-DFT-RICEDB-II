@@ -7,7 +7,7 @@ class index{
         if(typeof params.year !== "undefined"){
             params.year = parseInt(params.year);
         }
-
+        console.log(params.year)
         // r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
         // return c('quota_id').eq(q('id'))
         // }).map(function(ml){
@@ -99,7 +99,7 @@ class index{
         })
         
         .filter({
-            year:2560,
+            year:params.year,
             type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5'   //ข้าวหัก
         }).orderBy('ordinal')
         
@@ -142,7 +142,7 @@ class index{
                         })
             
                         .filter({
-                            year:2560,
+                            year:params.year,
                             type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7'   //ข้าวขาว
                         }).orderBy('ordinal')
         
