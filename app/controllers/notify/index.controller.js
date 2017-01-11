@@ -11,6 +11,11 @@ class index{
         })
         .map(function(row){
             return row('left').merge(row('right').pluck('type_rice_id','year'))
+            .merge(function(row2){
+                return r.object(r.args(row2('quantity').concatMap(function(quantity){
+                    return [r.expr('period_').add(quantity('period').coerceTo('string').add('_weigth')),quantity('weigth_update')]
+                })))
+            }).without('quantity')
         })
         .innerJoin(r.db('eu2').table('exporter'),function(left,right){
             return left('exporter_id').eq(right('id'))
@@ -27,14 +32,29 @@ class index{
         })
         .map(function(row){
             return {
-                detail:row('reduction'),
+                detail:row('reduction').orderBy(r.desc('amount')),
                 type_rice_name:row('type_rice_name_th'),
-                count:row('reduction').count()
+                count:row('reduction').count(),
+                quota_id:row('reduction')(0)('quota_id')
             }
         })
+        .innerJoin(r.db('eu2').table('quota'),function(left,right){
+            return left('quota_id').eq(right('id'))
+        }).map(function(row){
+            return row('left').merge(function(row2){
+            return r.object(r.args(row('right')('quantity').concatMap(function(quantity){
+                    return [
+                        r.expr('period_').add(quantity('period').coerceTo('string').add('_month')),
+                        r.expr(['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'])
+                        .nth(quantity('month').sub(1))
+                    ]
+            })))
+            
+            })
+        })
         .run().then(function(result) {
-            res.json(result);
-            //res._ireport("test/report1.jasper","pdf", [{id:'ssssss',name:'กกก',row:[{id:'ssssss',name:'ddd'}]}], {x:'x'});
+            //res.json(result);
+            res._ireport("notify/notify.jasper","pdf", result, {x:'x'});
         }).catch(function(err){
             res.json(err);
         });
