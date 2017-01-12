@@ -215,7 +215,10 @@
                 })
             },
             noticeReport:function(){
+              
                var data = this.$$('notice-list').getIDtypeRice();
+                // location.href = data;
+               
                this.fire('toast',{status:'load'});
                axios.get('./notify/report',{
                    params:{
@@ -227,7 +230,7 @@
                    console.log('success');
                    console.log(response.data);
                    this.fire('toast',{status:'success',callback:()=>{
-                       
+                        window.open('/api/notify/report?calculate_id=3d39afad-ae61-4c82-91ac-fecf7395888e,828ae34b-4b6b-4fa6-b445-4d855fc34532');
                    }});
                })
                .catch((error)=>{
@@ -235,6 +238,7 @@
                     console.log(error);
                     this.fire('toast',{status:'connectError',text:error.message,
                     callback:function(){
+                        window.open('/api/notify/report?calculate_id=',data);
                     }})
                 })
             }
