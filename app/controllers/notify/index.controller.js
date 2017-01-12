@@ -2,10 +2,12 @@ class index{
 
     getNotify(req,res){
         var r = req._r;
-        var params = req.params;
-        //res.json({ec:'01252'});
+        var params = req.query;
 
-        r.db('eu2').table('allocate').filter({calculate_id:params.calculate_id})
+        var calculate_id = params.calculate_id.split(',')
+        //res.json({ec:calculate_id});
+
+        r.db('eu2').table('allocate').filter({calculate_id:calculate_id[0]})
         .innerJoin(r.db('eu2').table('quota'),function(left,right){
             return left('quota_id').eq(right('id'))
         })
