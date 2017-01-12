@@ -55,7 +55,7 @@ class index{
         
         .do(function (rwhite){
             return {
-            rice_w: rwhite,
+            rice_w: rwhite, 
             rice_h: r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
                         return c('quota_id').eq(q('id'))
                         }).map(function(ml){
@@ -104,7 +104,7 @@ class index{
         .run().then(function(result){
             res.json(result);
         });
-    }
+    } //end function
 
     selectnotifyAll(req,res){ 
         var r = req._r;
@@ -166,7 +166,8 @@ class index{
                             sw_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
                             }
                         }),
-                sum_amount_update :r.db('eu2').table('allocate').sum('amount_update')
+                //sum_amount_update :r.db('eu2').table('allocate').sum('amount_update')
+                sum_amount_update :all('amount_update').sum()
             }
             }
         })
@@ -174,8 +175,7 @@ class index{
         .run().then(function(result){
             res.json(result);
         });
-
-    }
+    }//end function 
 
 
 

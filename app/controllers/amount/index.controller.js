@@ -64,8 +64,8 @@ class index{
                                   sum_weigth_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
                                 }
                             }),
-                      sum_amount :r.db('eu2').table('allocate').sum('amount'),
-                      sum_amount_update :r.db('eu2').table('allocate').sum('amount_update')
+                    sum_amount :all('amount').sum(),
+                    sum_amount_update :all('amount_update').sum()
                   }
                 }
               })
