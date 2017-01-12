@@ -56,7 +56,7 @@ class index{
                   return {
                     data:all,
                     sum:  {
-                      sum_period: r.db('eu2').table('quota').filter({type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',year:2560})('quantity')(0)('period')
+                      sum_period: r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:params.year})('quantity')(0)('period')
                             .map(function(p){
                                 return {
                                   period: p,
