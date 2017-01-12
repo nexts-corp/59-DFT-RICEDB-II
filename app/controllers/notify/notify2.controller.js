@@ -166,12 +166,7 @@ class index{
 
     }
 
-    selectnotifyAll(req,res){ // select for ordinal 
-        var r = req._r;
-        var params = req.query;
-        
-        
-    }
+
 
 }
 module.exports = new index();
