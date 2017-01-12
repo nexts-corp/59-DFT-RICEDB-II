@@ -38,7 +38,8 @@
   <template>
 
     <gl-form-panel set-padding="10px 20px 10px 20px">
-      <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
+      <template is="dom-if" if="[[!isViewSeleted]]">
+      <gl-form-panel-head set-border="1px" set-padding="0px 20px 10px 20px">
         <div class="horizontal end-justified layout report">
           <template is="dom-if" if="[[_checkUndefined(data.invoice_id)]]">
             <gl-combo-box class="required" required always-float-label label="รูปแบบ" placeholder="รูปแบบ" value="{{printReport.typeFile}}"  item-label-path="report_type"
@@ -47,18 +48,19 @@
               <paper-icon-button id="printInvoice" class="crud" icon="print" raised on-tap="printInvoice"  hidden="[[!data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="printInvoice" offset="0">Print Invoice</paper-tooltip>
             </div>
-
           </template>
           <div class="icon_print">
-          <template is="dom-if" if="[[!isViewSeleted]]">
+          <!-- <template is="dom-if" if="[[!isViewSeleted]]"> -->
             <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
             <paper-tooltip for="editExporter" offset="0">Edit Invoice</paper-tooltip>
             <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
             <paper-tooltip for="delExporter" offset="0">Delete Invoice</paper-tooltip>
-          </template>
+          <!-- </template> -->
           </div>
       </div>
       </gl-form-panel-head>
+
+      </template>
     <gl-form-panel-body>
 
     <div class="text">COMMERCIAL INVOICE</div>
