@@ -10,7 +10,10 @@
                 font-family: 'rsuregular', sans-serif;
 				-webkit-font-smoothing: antialiased;
 			}
-            paper-button{
+            table{
+                border: 1px solid #ddd;
+            }
+            paper-button,th,td{
                 font-family: 'CSChatThaiUI', sans-serif !important;
                 -webkit-font-smoothing: antialiased;
             }
@@ -28,6 +31,7 @@
             }
             .responsiveTable{
                 padding:10px;
+                overflow-x: auto;
             }
         </style>
         <gl-form-panel set-padding = "0px 0px 20px 0px">
@@ -36,26 +40,26 @@
                 <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-combo-box label="แสดงข้อมูลรายปี" items="{{quotaYear}}" value="{{selectYear}}"></gl-combo-box>
+                        <gl-form-input label="ชื่อ" value="{{name.firstName}}"></gl-form-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-form-input label="ชื่อ"></gl-form-input>
+                        <gl-form-input label="สกุล" value="{{name.lastName}}"></gl-form-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                 </gl-grid-row>
                 <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <vaadin-date-picker label="วันที่"></vaadin-date-picker>
+                        <vaadin-date-picker label="วันที่" value="{{data.date_moc}}"></vaadin-date-picker>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <vaadin-date-picker label="วันที่ประกาศ"></vaadin-date-picker>
+                        <vaadin-date-picker label="วันที่ประกาศ" value="{{data.date_notify}}"></vaadin-date-picker>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                 </gl-grid-row>
                 <div class="container flex-end-justified">
-                    <paper-button class="gl-btn-success" raised>บันทึก</paper-button>
-                    <paper-button class="gl-btn-primary" raised>ออกประกาศ</paper-button>
+                    <!--<paper-button class="gl-btn-success"  raised>บันทึก</paper-button>-->
+                    <paper-button class="gl-btn-primary" on-tap="saveData" raised>อนุมัติประกาศ</paper-button>
                 </div>
 
             </gl-form-panel-body>
@@ -106,6 +110,22 @@
         Polymer({
             is: 'notice-manage',
             behaviors:[FormatNumberBehavior,MonthBehavior,DataManageBehavior],
+            properties:{
+                data:{
+                    type: Object,
+                    value: {
+                        date_moc:'',
+                        date_notify:''
+                    }
+                },
+                name:{
+                    type:Object,
+                    value: {
+                        firstName: '',
+                        lastName: ''
+                    }
+                }
+            },
             _num:function(index){
                 return index+1;
             },
@@ -114,6 +134,11 @@
             },
             getYearForTableHead:function(item){
                 return item[0].year;
+            },
+            saveData:function(){
+                this.data.calculate_id = this.dataList.data[0].calculate_id;
+                this.data.name = this.name.firstName+' '+this.name.lastName; 
+                this.fire('post-data',this.data);
             }
         });
     </script>

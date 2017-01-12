@@ -81,6 +81,7 @@
             <table class="gl-table-default" style="border: 1px solid #ddd;">
                 <thead>
                     <tr>
+                        <th>เลือก</th>
                         <th>คำนวณครั้งที่</th>
                         <th class="right">ปริมาณ</th>
                         <th class="right">สถานะ</th>
@@ -89,10 +90,45 @@
                
                     <tbody>
                         <template is="dom-repeat" items="{{item.row}}">
-                            <tr on-tap="_selectData" key="[[item]]" style="cursor:pointer;">
-                                <td>[[item.ordinal]]</td>
-                                <td class="right">[[formatNumber(item.amount_update)]]</td>
-                                <td class="right">[[item.status_calculate]]</td>
+                            <tr style="cursor:pointer;">
+                                <td><input type="radio" name="rice_w" on-tap="getIDtypeRice_W" value="[[item.id]]"></td>
+                                <td on-tap="_selectData" key="[[item]]">[[item.ordinal]]</td>
+                                <td class="right"  on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
+                                <td class="right"  on-tap="_selectData" key="[[item]]">[[item.status_calculate]]</td>
+                            </tr>
+                            
+                        </template>
+                    </tbody>
+                
+            </table>
+           
+        </div>
+        </template>
+         <template is="dom-repeat" items="{{dataList.rice_w}}">
+        <div class="container">
+            
+            <div class="flex-equal-justified">
+                <div>ประเภท : {{item.type_rice_name}}</div>
+               
+            </div>
+            
+            <table class="gl-table-default" style="border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th>เลือก</th>
+                        <th>คำนวณครั้งที่</th>
+                        <th class="right">ปริมาณ</th>
+                        <th class="right">สถานะ</th>
+                    </tr>
+                </thead>
+               
+                    <tbody>
+                        <template is="dom-repeat" items="{{item.row}}">
+                            <tr style="cursor:pointer;">
+                                <td><input type="radio" name="rice_h" on-tap="getIDtypeRice_H" value="[[item.id]]"></td>
+                                <td on-tap="_selectData" key="[[item]]">[[item.ordinal]]</td>
+                                <td class="right" on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
+                                <td class="right" on-tap="_selectData" key="[[item]]">[[item.status_calculate]]</td>
                             </tr>
                         </template>
                     </tbody>
@@ -127,7 +163,16 @@
             },
             _selectData:function(e){
                 // console.log(e.currentTarget.key.id)
-                this.fire('data-select',e.currentTarget.key.id)
+                this.fire('data-select',e.currentTarget.key)
+            },
+            getIDtypeRice_W:function(e){
+               this.getRice_w = e.target.value;
+            },
+            getIDtypeRice_H:function(e){
+               this.getRice_h = e.target.value;
+            },
+            getIDtypeRice:function(){
+                return data = this.getRice_w+','+this.getRice_h;
             }
         });
     </script>

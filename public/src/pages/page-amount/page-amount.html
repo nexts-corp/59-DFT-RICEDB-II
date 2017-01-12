@@ -117,34 +117,13 @@
               <div class="flex"></div>
               <div class="flex-2 layout horizontal">
                  <gl-combo-box label="แสดงข้อมูลรายปี" error-message="กรุณาเลือกปีโควตา" class="searchAllocate" required items="{{getQuotaYear}}" value="{{selectQuotaYear}}"></gl-combo-box>
-                <!--<gl-form-dropdown-menu label="ปีโควตา">
-                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaYear}}">
-                    <template is="dom-repeat" items="{{getQuotaYear}}">
-                      <paper-item class="font" year="{{item}}">{{item}}</paper-item>
-                    </template>
-                  </paper-listbox>
-                </gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2 layout horizontal">
                  <gl-combo-box class="searchAllocate"  error-message="กรุณาเลือกประเภทข้าว" required id="typeRiceName" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}"
                                 item-label-path="type_rice_name_th" item-value-path="id"></gl-combo-box>
-                <!--<gl-form-dropdown-menu label="ประเภทข้าว">
-									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{selectTypeRice}}">
-										<template is="dom-repeat" items="{{getTypeRice}}">
-											<paper-item class="font" on-tap="_typeRiceName_th" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
-										</template>
-									</paper-listbox>
-								</gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2 layout horizontal">
                  <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}" value="{{selectQuotaOrdinal}}"></gl-combo-box>
-                <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
-                  <paper-listbox class="dropdown-content" attr-for-selected="year" selected="{{selectQuotaOrdinal}}">
-                    <template is="dom-repeat" items="{{getQuotaOrdinal}}">
-                      <paper-item class="font" year="{{item}}">{{item}}</paper-item>
-                    </template>
-                  </paper-listbox>
-                </gl-form-dropdown-menu>-->
               </div>
               <div class="flex-2">
                 <paper-button class="gl-btn-primary" raised on-tap="_getAllocate" disabled$="[[_disableSearch(selectQuotaYear,selectTypeRice,selectQuotaOrdinal)]]">ค้นหา</paper-button>
@@ -181,13 +160,13 @@
             behaviors:[
               nylonBehavior
             ],
-            // observers:[
-            //   '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
-            // ],  
+            observers:[
+              '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
+            ],  
             nylonPageActive:function(){
               this._getQuotaYear();
               this._getTypeRice();
-              this._getOrdinalNumber();
+              
             },
             ready:function(){
               //var number = numeral('1000.32').format('0,0.00');
@@ -203,16 +182,18 @@
             },
             _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
               this.selectQuotaOrdinal = "";
-              axios.get('./eu/allocate/quota_ordinal',{
+              axios.get('./amount/amountorinal',{
                 params:{
-                  quota_id:yearQuoata,
+                  year:yearQuoata,
                   type_rice_id:typeRice
                 }
               })
                 .then((response)=>{
                     console.log("success!!");
                     console.log(response.data);
-                    this.getQuotaOrdinal = response.data;
+                    this.getQuotaOrdinal = response.data.map((item)=>{
+                      return item.toString();
+                    });
                 })
                 .catch((error)=>{
                     console.log("error");
@@ -249,20 +230,6 @@
                     console.log("success!!");
                     console.log(response.data);
                     this.getTypeRice = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            },
-             _getOrdinalNumber:function(){
-                axios.get('./amount/amountorinal')
-                .then((response)=>{
-                    console.log("success!!");
-                    console.log('1234',response.data);
-                    this.getQuotaOrdinal = response.data.map((item)=>{
-                      return item.toString();
-                    })
                 })
                 .catch((error)=>{
                     console.log("error");

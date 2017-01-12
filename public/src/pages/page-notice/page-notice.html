@@ -88,13 +88,13 @@
           <div style="overflow-x:auto; padding:20px;">
             <notice-list data-list="{{listNotice}}" on-data-select="_getDataSelect"></notice-list>
           </div>
+          <paper-button class="gl-btn-primary" on-tap="noticeReport" raised>ออกประกาศ</paper-button>    
         </div>
 
       <panel-right title="การคำนวณส่วนจัดสรร">
           <template is="dom-if" if="[[rendered]]">
             <iron-pages selected="{{pageSelect}}">
-              <div><notice-manage data-list="{{listNoticeManage}}"></notice-manage></div>
-              <div></div>
+              <div><notice-manage data-list="{{listNoticeManage}}" on-post-data="saveData"></notice-manage></div>
             </iron-pages>
           </template>
       </panel-right>
@@ -167,9 +167,15 @@
                 }  
             },
             _getDataSelect:function(e){
-                console.log(e.detail);
+                console.log(e.detail.id,e.detail.year,e.detail.type_rice_id);
                 this.fire('toast',{status:'load'});
-                axios.get('./notify/notiall?id='+e.detail)
+                axios.get('./notify/notiall',{
+                    params:{
+                        id:e.detail.id,
+                        year:e.detail.year,
+                        type_rice_id:e.detail.type_rice_id
+                    }
+                })
                 .then((response)=>{
                     console.log("success!!");
                     this.fire('toast',{
@@ -185,6 +191,46 @@
                     // this.dataList = response.data;
                 })
                 .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                })
+            },
+            saveData:function(e){
+                console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                axios.put('/notify/noti',e.detail)
+                .then((response)=>{
+                    console.log('sucess!!')
+                    console.log(response.data);
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',
+                    callback:()=>{
+                        // this.$$('panel-right').close();
+                    }})
+                })
+                .catch((error)=>{
+                    console.log(error);
+                })
+            },
+            noticeReport:function(){
+               var data = this.$$('notice-list').getIDtypeRice();
+               this.fire('toast',{status:'load'});
+               axios.get('./notify/report',{
+                   params:{
+                       calculate_id : data,
+                    //    calculate_id : data.rice_h
+                   }
+               })
+               .then((response)=>{
+                   console.log('success');
+                   console.log(response.data);
+                   this.fire('toast',{status:'success',callback:()=>{
+                       
+                   }});
+               })
+               .catch((error)=>{
                     console.log("error");
                     console.log(error);
                     this.fire('toast',{status:'connectError',text:error.message,
