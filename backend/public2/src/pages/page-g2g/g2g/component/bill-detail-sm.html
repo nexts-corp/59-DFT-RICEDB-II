@@ -163,6 +163,10 @@
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <vaadin-date-picker label="Production Date"always-float-label required class="required" value="{{data.product_date}}" disabled="[[isInputDisabled]]"></vaadin-date-picker>
       </gl-grid-col>
+      </gl-grid-row>
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input label="หมายเหตุ (แก้ไข)" always-float-label  error-message="กรุณาใส่รายละเอียด" placeholder="ใส่รายละเอียด" value="{{data.book_remark}}" disabled="[[isInputDisabled]]"
         name="lotNo"></gl-form-input>
@@ -218,7 +222,8 @@
         '_oBCheckVessel(data.ship.*)',
         '_changeDataBl(data.etd_date)',
         '_getShip(data.shipline_id,dataForSelect)',
-        '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)'
+        '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)',
+        // '_oBcheckCarrier(dataForSelect.carrier)'
         // '_foredit(data)'
       ],
       // _foredit:function (data) {
@@ -239,11 +244,19 @@
           this.set('data.product_date', date);
           this.notifyPath('data.product_date');
         });
+        // console.log(this.dataForSelect.carrier);
+      },
+      _oBcheckCarrier:function (carrier) {
+        console.log('carrier',carrier);
       },
       addBl:function () {
         this.data.book_status = false;
         this.data.shm_id = this.dataForSelect.shm_id;
         this._cleanDataBl(this.data,(data)=>{
+          // console.log(data);
+          if (data.carrier_id == '' || data.carrier_id == undefined) {
+            data.carrier_id = this._checkCarrierIsBlank();
+          }
           // console.log(data);
           this.insert('./g2g/book/insert',data, () => {
             this.fire('get-list-bl',{shm_id:data.shm_id});
@@ -290,7 +303,6 @@
         this.push('data.ship',{ship_id:'',ship_voy_no:''});
       },
       addSurveyor:function () {
-
         this.push('data.surveyor',{surveyor_id:''});
       },
       deleteSurveyor:function () {
@@ -323,6 +335,10 @@
         // let blNo = this.data.bl_no;
         let book_id = this.data.book_id;
         this._cleanDataBl(this.data,(data)=>{
+          // console.log(this.dataForSelect.carrier);
+          if (data.carrier_id == '' || data.carrier_id == undefined) {
+            data.carrier_id = this._checkCarrierIsBlank();
+          }
           data.id = book_id;
           this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
               status:'dialog',
@@ -337,6 +353,7 @@
         if (result == true) {
           this.editInput();
           this.update('./g2g/book/update', detail.data,() => {
+            // console.log(detail.data);
             // this.fire('refresh-contract',{detail:'refresh-contract'});
             // this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
             this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
@@ -420,6 +437,16 @@
         }else {
           this.hiddenInsertVessel = false;
         }
+      },
+      _checkCarrierIsBlank:function () {
+        var carrierSelete;
+        this.dataForSelect.carrier.map((carrier)=>{
+          if (carrier.carrier_name == '') {
+            // console.log('carrier',carrier.carrier_name,":",carrier.carrier_id);
+            carrierSelete= carrier.carrier_id;
+          }
+        });
+      return carrierSelete;
       },
       _cleanDataBl:function (data,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');

@@ -54,7 +54,7 @@
 
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box disabled  required class="required"label="Shipping Agent"always-float-label item-label-path="carrier_name"
+        <gl-combo-box disabled  label="Shipping Agent"always-float-label item-label-path="carrier_name"
            item-value-path="carrier_id" items="{{dataForSelect.carrier}}" value="{{data.carrier_id}}"></gl-combo-box>
       </gl-grid-col>
 
@@ -81,10 +81,18 @@
 
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+      <template is="dom-repeat" items="[[data.surveyor]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-combo-box required class="required" label="Surveyor [[_ObcountIndex(index)]]" always-float-label item-label-path="surveyor_name" disabled
+            item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"></gl-combo-box>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+      </template>
+      <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box required disabled class="required"label="Surveyor"always-float-label item-label-path="surveyor_name"
           item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{data.surveyor_id}}"></gl-combo-box>
-      </gl-grid-col>
+      </gl-grid-col> -->
 
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-form-input disabled required class="required"label="Lot No."always-float-label  error-message="กรุณาใส่รายละเอียด"  value="{{data.ship_lot_no}}"
@@ -304,6 +312,11 @@
             this.notifyPath('data.'+index+'.ship_id');
             this.notifyPath('data.'+index+'.ship_voy_no');
           });
+          this.notifyPath('data.surveyor');
+          this.data.surveyor.map((surveyors,index)=>{
+            // console.log(surveyors,index);
+            this.notifyPath('data.'+index+'.surveyor_id');
+          });
           this.notifyPath('data.bl_no');
           this.notifyPath('data.book_no');
           this.notifyPath('data.carrier_id');
@@ -319,9 +332,10 @@
           this.notifyPath('data.product_date');
           this.notifyPath('data.ship_lot_no');
           this.notifyPath('data.shipline_id');
-          this.notifyPath('data.surveyor_id');
+          // this.notifyPath('data.surveyor_id');
           this.notifyPath('data.weight_per_container');
           // console.log('after notify',this.data );
+          // console.log(this.data);
         }
       },
       _getSellerPhone:function (exporter_id,dataForSelect) {
@@ -463,8 +477,19 @@
         this.notifyPath('data.cut_of_date');
         this.notifyPath('data.product_date');
         this.notifyPath('data.ship_lot_no');
-        this.notifyPath('data.shipline_id');
-        this.notifyPath('data.surveyor_id');
+        // this.notifyPath('data.shipline_id');
+        // this.notifyPath('data.surveyor_id');
+        this.notifyPath('data.ship');
+        this.data.ship.map((ships,index)=>{
+          // console.log(ships);
+          this.notifyPath('data.'+index+'.ship_id');
+          this.notifyPath('data.'+index+'.ship_voy_no');
+        });
+        this.notifyPath('data.surveyor');
+        this.data.surveyor.map((surveyors,index)=>{
+          // console.log(surveyors,index);
+          this.notifyPath('data.'+index+'.surveyor_id');
+        });
         this.notifyPath('data.weight_per_container');
         this.notifyPath('data.type_rice_id');
         this.notifyPath('data.package_id');
