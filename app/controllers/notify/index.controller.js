@@ -7,7 +7,9 @@ class index{
         var calculate_id = params.calculate_id.split(',')
         //res.json({ec:calculate_id});
 
-        r.db('eu2').table('allocate').filter({calculate_id:calculate_id[0]})
+        r.db('eu2').table('allocate').filter(function(row){
+            return r.expr(calculate_id).contains(row('calculate_id'))
+        })
         .innerJoin(r.db('eu2').table('quota'),function(left,right){
             return left('quota_id').eq(right('id'))
         })
