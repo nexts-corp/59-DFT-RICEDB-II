@@ -77,7 +77,20 @@ class index{
     }
 
     selectOrinal(req,res){
-         r.db('eu2').table('calculate').pluck('ordinal')('ordinal')
+        if(typeof params.ordinal !== "undefined"){
+            params.year = parseInt(params.year);
+        }   
+         //r.db('eu2').table('calculate').pluck('ordinal')('ordinal')
+           r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
+                return c('quota_id').eq(q('id'))
+           }).zip().filter({
+             type_rice_id:params.type_rice_id,
+             year:params.year
+           }).pluck('ordinal')('ordinal')
+             .map(function(nu){
+               return [nu]
+             })
+        
          .run().then(function(result){
             res.json(result);
          });
