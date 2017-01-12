@@ -106,6 +106,7 @@ class index{
         });
     } //end function
 
+
     selectnotifyAll(req,res){ 
         var r = req._r;
         var params = req.query;
@@ -176,7 +177,22 @@ class index{
         });
     }//end function 
 
+    saveOrdinal(req,res){ 
+        var r = req._r;
+        var params = req.query;
 
+        // if(typeof params.year !== "undefined"){
+        //     params.year = parseInt(params.year);
+        // }
+
+        r.db('eu2').table('calculate').get(params.calculate_id)
+        .update({ status:'n', name:'chon', date_moc:r.ISO8601(), date_notify:r.ISO8601() })        
+        
+        .run().then(function(result){
+            res.json(result);
+        });
+
+    }//end function
 
 }
 module.exports = new index();
