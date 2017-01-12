@@ -58,7 +58,17 @@ class index{
         })
         .run().then(function(result) {
             //res.json(result);
-            res._ireport("notify/notify.jasper","pdf", result, {x:'x'});
+
+            var parameters = {
+                quota_year:2017+543,
+                rule_date:'2015-12-16',
+                rule_year:2015+543,
+                notify_date:'2016-12-25',
+                notify_year:2016+543,
+            };
+            //parameters = {x:'x'};
+
+            res._ireport("notify/notify.jasper","pdf", result, parameters);
         }).catch(function(err){
             res.json(err);
         });
