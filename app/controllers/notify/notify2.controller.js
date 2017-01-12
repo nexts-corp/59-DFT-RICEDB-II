@@ -172,7 +172,7 @@ class index{
                         }),
                     sum_amount_update :all('amount_update').sum()
                 },
-                date2:all('name_calculate')(0),
+                name:all('name_calculate')(0),
                 date_moc: all('date_moc')(0),
                 date_notify:all('date_notify')(0)
             }
