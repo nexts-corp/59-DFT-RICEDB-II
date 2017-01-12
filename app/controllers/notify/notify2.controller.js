@@ -183,7 +183,6 @@ class index{
 
         r.db('eu2').table('calculate').get(params.calculate_id)
         .update({ 
-            status:'n', 
             name:params.name, 
             date_moc:r.ISO8601(params.date_moc+'T00:00:00+07:00'), 
             date_notify:r.ISO8601(params.date_notify+'T00:00:00+07:00') 
