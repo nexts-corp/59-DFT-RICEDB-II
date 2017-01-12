@@ -77,6 +77,9 @@ class index{
     }
 
     selectOrinal(req,res){
+        var r = req._r;
+        var params = req.query;
+        
         if(typeof params.ordinal !== "undefined"){
             params.year = parseInt(params.year);
         }   
