@@ -172,7 +172,14 @@
                this.getRice_h = e.target.value;
             },
             getIDtypeRice:function(){
-                return data = this.getRice_w+','+this.getRice_h;
+                if(typeof this.getRice_h == 'undefined')
+                    return this.getRice_w;
+                else if(typeof this.getRice_w == 'undefined')
+                    return this.getRice_h;
+                else {
+                    return data = this.getRice_w+','+this.getRice_h;
+                } 
+                
             }
         });
     </script>
