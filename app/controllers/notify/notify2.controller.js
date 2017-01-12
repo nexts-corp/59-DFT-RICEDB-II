@@ -167,7 +167,10 @@ class index{
                             sw_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
                             }
                         }),
-                sum_amount_update :all('amount_update').sum()
+                sum_amount_update :all('amount_update').sum(),
+                name:all('name'),
+                date_moc:all('date_moc'),
+                date_notify:all('date_notify')
             }
             }
         })
