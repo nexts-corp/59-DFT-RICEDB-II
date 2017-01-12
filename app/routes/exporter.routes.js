@@ -5,4 +5,5 @@ module.exports = function (app) {
     app.route('/report2').get(exporter.report2);
     app.route('/report3').get(exporter.report3);
     app.route('/report4').get(exporter.report4);
+    app.route('/report5').get(exporter.report5);
 }

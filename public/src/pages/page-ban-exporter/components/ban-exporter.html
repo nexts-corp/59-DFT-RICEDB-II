@@ -1,0 +1,201 @@
+<link rel="import" href="../../page-report-exporter/components/renew/renew-memberShow.html">
+<link rel="import" href="../../components/dataBehavior.html">
+<link rel="import" href="../../components/panel-right/panel-right.html">
+<dom-module id="ban-exporter">
+    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table gl-toast">
+        * {
+            font-family: 'rsuregular', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .title {
+          text-align: center;
+           font-size: var(--font-size-h3);
+           font-family: 'rsuregular', sans-serif;
+             -webkit-font-smoothing: antialiased;
+        }
+        .searchBorder{
+          border: 1px solid var(--gl-gray-light-color);
+          margin: 15px;
+          border-radius: 3px
+        }
+        .text-table{
+          text-align: center;
+           font-size: var(--font-size-h4);
+        }
+        .gl-table-default{
+             border-collapse: collapse;
+             width: 100%;
+             white-space: nowrap;
+         }
+        .table-head > tr > th:nth-child(1) {
+          width: 5%;
+        }
+        .table-head > tr > th:nth-child(2) {
+          width: 15%;
+        }
+    </style>
+    <template>
+
+          <div class="searchBorder">
+            <div style="margin: 10px;">
+              <paper-checkbox checked={{selectDataAll}}>เลือกทั้งหมด</paper-checkbox>
+              <paper-button raised class="gl-btn-success" on-tap="_activeAll">ยกเลิกการระงับ</paper-button>
+            </div>
+            <table class="gl-table-default">
+              <thead class="table-head">
+                <tr>
+                  <th></th>
+                  <th><div class="text-table">เลขทะเบียนผู้ส่งออก</div></th>
+                  <th><div class="text-table">ชื่อบริษัท</div></th>
+                  <th><div class="text-table">ประเภทใบอนุญาติ</div></th>
+                  <th><div class="text-table">วันที่อนุมัติ</div></th>
+                  <th><div class="text-table">สถานะ คน.</div></th>
+                </tr>
+              </thead>
+
+              <template is="dom-repeat" items="{{data}}">
+                <tbody>
+                  <tr on-tap="_selectData" data="[[item]]" style="cursor:pointer;">
+                    <td><paper-checkbox checked="{{item.check}}" class="checkbox"></paper-checkbox></td>
+                    <td><div class="text-table">{{item.exporter_no_name}}</div></td>
+                    <td><div class="text-table">{{item.seller_name_th}}</div></td>
+                    <td><div class="text-table">{{item.type_lic_name}}</div></td>
+                    <td><div class="text-table">{{item.exporter_date_approve}}</div></td>
+                    <td><div class="text-table">{{item.trader_active_name}}</div></td>
+                  </tr>
+                </tbody>
+              </template>
+            </table>
+
+          </div>
+
+      <panel-right title="{{titleName}}">
+          <div class="left">
+            <iron-pages selected="{{layerContent}}" attr-for-selected="name">
+              <div name="detailRegExporter">
+                <renew-memberShow exporter-id="[[exporterId]]" data={{dataSelect}}></renew-memberShow>
+                <div class="horizontal center-justified layout">
+                  <paper-button raised class="gl-btn-success button" on-tap="_active">ยกเลิกการระงับ</paper-button>
+                </div>
+              </div>
+            </iron-pages>
+          </div>
+      </panel-right>
+
+
+    </template>
+    <script>
+        Polymer({
+            is: "ban-exporter",
+            behaviors: [dataBehavior],
+            properties: {
+                data:{
+                  type: Array,
+                  value: []
+                },
+                selectDataAll: {
+                  type: Boolean,
+                  value: false,
+                  observer: '_changeselectDataAll'
+                },
+                dataExporters:{
+                  type: Array,
+                  value: []
+                },
+                exporterId:{
+                  type: String,
+                  observer: '_exporterIdChanged'
+                }
+            },
+            _exporterIdChanged:function(val){
+              if(val!=""){
+                this.$$('panel-right').toggle();
+                this.layerContent = "detailRegExporter";
+                this.titleName = 'ข้อมูลผู้ส่งออก';
+
+                this.read('./external/exporter/id/'+val,(data)=>{
+                  this.dataSelect = data;
+                });
+              }
+            },
+            _changeselectDataAll:function (val) {
+              // console.log(val);
+              this.data.map((item,index)=>{
+                this.set('data.'+index+'.check',val);
+              });
+            },
+            _active: function(){
+              // console.log(this.dataSelect);
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+              confirmed : this._confirmToast.bind(this),
+              datas: {
+                exporter_date_update: new Date,
+                exporter_date_approve:new Date,
+                trader_id:this.dataSelect.trader_id,
+                id : this.dataSelect.exporter_id,
+                exporter_no : this.dataSelect.exporter_no
+                }
+              });
+            },
+            _confirmToast:function(result,detail){
+              if(result == true){
+                // console.log(detail.datas);
+                this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                this.update('./external/exporter/update', detail.datas, () => {
+                  this.$$('panel-right').close();
+                  this.fire('getExporters');
+                  this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
+              }
+            },
+            _selectData:function(e){
+              this.layerContent = "detailRegExporter";
+              this.titleName = 'ข้อมูลผู้ส่งออก';
+              this.$$('panel-right').toggle();
+              // this.layerContent = e.currentTarget.id;
+              this.dataSelect = e.currentTarget.data;
+            },
+            _activeAll: function(){
+              const check = (item)=>{
+                  return item.check == true;
+              }
+              // console.log(this.exporters.filter(check));
+              this.data.filter(check).map((datas)=>{
+                let {exporter_id,exporter_date_update,exporter_date_approve,trader_id,exporter_no} = datas;
+                let newData = {exporter_id,exporter_date_update,exporter_date_approve,trader_id,exporter_no};
+                this.dataExporters.push(newData);
+                // this._clearData(newData);
+              });
+              this.fire('toast',{status:'dialog',
+              text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+              confirmed : this._confirm.bind(this)
+              });
+            },
+            _confirm:function(result,detail){
+              // console.log(this.dataExporters);
+              this.dataExporters.map((datas)=>{
+                datas={
+                  id : datas.exporter_id,
+                  trader_id : datas.trader_id,
+                  exporter_no : datas.exporter_no,
+                  exporter_date_approve : new Date,
+                  exporter_date_update : new Date
+                }
+              if(result == true){
+                // console.log(datas);
+                this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                this.update('./external/exporter/update', datas, () => {
+                  this.fire('getExporters');
+                  this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                    console.log('success');
+                  }});
+                 });
+                }
+              });
+            }
+        });
+    </script>
+</dom-module>

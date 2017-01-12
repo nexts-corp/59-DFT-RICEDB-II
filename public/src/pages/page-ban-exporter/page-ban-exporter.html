@@ -1,0 +1,160 @@
+<link rel="import" href="components/ban-exporter.html">
+<link rel="import" href="../components/dataBehavior.html">
+<link rel="import" href="../../nylon-behavior.html">
+<dom-module id="page-ban-exporter">
+<style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table gl-toast">
+    * {
+        font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      padding: 10px 0px 10px 10px;
+      background-color: var(--paper-grey-100);
+      color: var(--paper-grey-600);
+      font-size: var(--font-size-h4);
+      font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    .registor{
+      margin: 20px;
+    }
+    .title {
+      text-align: center;
+       font-size: var(--font-size-h3);
+       font-family: 'rsuregular', sans-serif;
+         -webkit-font-smoothing: antialiased;
+    }
+    .searchBox{
+      padding: 5px;
+      background-color: var(--gl-gray-lighter-color);
+    }
+    .elevation{
+      border-radius: 5px;
+      margin: 10px;
+      padding: 5px;
+      background-color: var(--gl-white-color);
+    }
+    .searchBorder{
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+    gl-combo-box{
+      width: 70%;
+    }
+    .iconSearch{
+      margin-top: 25px;
+      margin-left: 40px;
+    }
+    .text-table{
+      text-align: center;
+       font-size: var(--font-size-h4);
+    }
+    .gl-table-default{
+         border-collapse: collapse;
+         width: 100%;
+         white-space: nowrap;
+     }
+    .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 15%;
+    }
+</style>
+  <template>
+      <paper-material elevation="1" class="elevation">
+
+      <div class="layout vertical registor">
+        <div class="flex title">
+          ทะเบียนผู้ส่งออกข้าวที่ถูกระงับ
+        </div>
+        <div class="flex searchBox searchBorder">
+          <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+            <iron-icon class="iconSearch" icon="icons:search"></iron-icon>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+              <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
+                  item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
+            </gl-grid-col>
+          </gl-grid-row>
+        </div>
+
+        <ban-exporter exporter-id="[[exporterId]]" data="{{exporters}}"></ban-exporter>
+
+      </div>
+      </paper-material>
+
+  </template>
+  <script>
+      Polymer({
+          is: "page-ban-exporter",
+          behaviors: [dataBehavior,nylonBehavior],
+          properties: {
+              layerContent: {
+                  type: String,
+                  value: "detailRegExporter"
+              },
+              // exporterId:{
+              //   type: String,
+              //   observer: '_exporterIdChanged'
+              // },
+              exporters:{
+                type: Array,
+                value: []
+              },
+              selectDataAll: {
+                type: Boolean,
+                value: false,
+                observer: '_changeselectDataAll'
+              },
+              dataExporters:{
+                type: Array,
+                value: []
+              }
+          },
+          listeners:{
+            'getExporters':'_getExporters'
+          },
+          nylonPageActive:function() {
+            // console.log('d ja');
+            this._getExporters();
+          },
+          // getExporters: function(){
+          //   this.read('./external/exporter/?exporter_active=false',(data)=>{
+          //       this.exporters = data;
+          //   });
+          // }
+          _changeselectDataAll:function (val) {
+            // console.log(val);
+            this.exporters.map((item,index)=>{
+              this.set('exporters.'+index+'.check',val);
+            });
+          },
+          // _exporterIdChanged:function(val){
+          //   if(val!=""){
+          //     this.$$('panel-right').toggle();
+          //     this.layerContent = "detailRegExporter";
+          //     this.titleName = 'ข้อมูลผู้ส่งออก';
+          //   }
+          // },
+          attached: function() {
+              this._getExporters();
+          },
+          _getExporters: function(){
+            this.exporter_id = this.exporter_id || this.$.exporter_id;
+            this.read('./external/exporter/?exporter_active=false',(data)=>{
+                this.exporters = data;
+                for (var i = 0; i < this.exporters.length; i++) {
+                  this.exporters[i]['check'] = false;
+                }
+                data.map((type)=>{
+                  type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+                });
+                  this.exporter_id.items = data;
+            });
+          }
+      });
+  </script>
+</dom-module>
