@@ -122,7 +122,10 @@ class index{
             return {
                 ordinal:mr('left')('ordinal'),
                 status_allocate: r.branch( mr('left')('status').eq('n'), 'ประกาศ', 'จัดสรร'),
-                status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม')
+                status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม'),
+                name_calculate:mr('left')('name'),
+                date_moc:mr('left')('date_moc'),
+                date_notify:mr('left')('date_notify')
             }
             })
         })
@@ -159,16 +162,19 @@ class index{
         .do(function(all){
             return {
                 data:all,
-                sum:  {
-                sum_period: r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:params.year})('quantity')(0)('period')
+                sum:{
+                    sum_period: r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:params.year})('quantity')(0)('period')
                         .map(function(p){
                             return {
                             period: p,
                             sw_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
                             }
                         }),
-                sum_amount_update :all('amount_update').sum()
-            }
+                    sum_amount_update :all('amount_update').sum()
+                },
+                date2:all('name_calculate')(0),
+                date_moc: all('date_moc')(0),
+                date_notify:all('date_notify')(0)
             }
         })
 		
@@ -183,6 +189,7 @@ class index{
 
         r.db('eu2').table('calculate').get(params.calculate_id)
         .update({ 
+            status:'n',
             name:params.name, 
             date_moc:r.ISO8601(params.date_moc+'T00:00:00+07:00'), 
             date_notify:r.ISO8601(params.date_notify+'T00:00:00+07:00') 
