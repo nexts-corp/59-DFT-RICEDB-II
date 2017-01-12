@@ -39,7 +39,9 @@ class index{
                 id:x('id'),
                 ordinal:x('ordinal'),
                 status:x('status'),
-                status_calculate:x('status_calculate')
+                status_calculate:x('status_calculate'),
+                year:x('year'),
+                type_rice_id:x('type_rice_id')
             }]
             }
         })
@@ -48,6 +50,8 @@ class index{
             year:params.year,
             type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5'   //ข้าวหัก
         }).orderBy('ordinal')
+          
+          
         
         .do(function (rwhite){
             return {
@@ -73,20 +77,22 @@ class index{
                         .without('amount', 'amount_cal', 'calculate', 'confirm', 'confirm_year', 'quota_id', 'report', 'report_year', 'row') 
                         
                         .map(function(x){
-                        return {
+                            return {
                             year:x('year') ,
                             type_rice_id:x('type_rice_id'),
                             type_rice_name:x('type_rice_name'),
                             row:[{
-                            amount_update: x('amount_update'),
-                            id:x('id'),
-                            ordinal:x('ordinal'),
-                            status:x('status'),
-                            status_calculate:x('status_calculate')
+                                amount_update: x('amount_update'),
+                                id:x('id'),
+                                ordinal:x('ordinal'),
+                                status:x('status'),
+                                status_calculate:x('status_calculate'),
+                                year:x('year'),
+                                type_rice_id:x('type_rice_id')
                             }]
-                        }
+                            }
                         })
-            
+
                         .filter({
                             year:params.year,
                             type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7'   //ข้าวขาว
@@ -94,6 +100,7 @@ class index{
         
             }
         })
+       
         .run().then(function(result){
             res.json(result);
         });
@@ -102,6 +109,10 @@ class index{
     selectnotifyAll(req,res){ 
         var r = req._r;
         var params = req.query;
+
+        if(typeof params.year !== "undefined"){
+            params.year = parseInt(params.year);
+        }
 
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('allocate'), function(c,a){	
             return c('id').eq(a('calculate_id'))
@@ -148,7 +159,7 @@ class index{
             return {
                 data:all,
                 sum:  {
-                sum_period: r.db('eu2').table('quota').filter({type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',year:2560})('quantity')(0)('period')
+                sum_period: r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:params.year})('quantity')(0)('period')
                         .map(function(p){
                             return {
                             period: p,
