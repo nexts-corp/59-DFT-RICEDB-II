@@ -122,7 +122,10 @@ class index{
             return {
                 ordinal:mr('left')('ordinal'),
                 status_allocate: r.branch( mr('left')('status').eq('n'), 'ประกาศ', 'จัดสรร'),
-                status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม')
+                status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม'),
+                name_calculate:mr('left')('name'),
+                date_moc:mr('left')('date_moc'),
+                date_notify:mr('left')('date_notify')
             }
             })
         })
@@ -168,9 +171,9 @@ class index{
                             }
                         }),
                 sum_amount_update :all('amount_update').sum(),
-                name:all('name'),
-                date_moc:all('date_moc'),
-                date_notify:all('date_notify')
+                date2:all('name_calculate')(0),
+                date_moc: all('date_moc')(0),
+                date_notify:all('date_notify')(0)
             }
             }
         })
