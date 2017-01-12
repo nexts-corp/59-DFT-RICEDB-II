@@ -106,6 +106,7 @@ class index{
         });
     } //end function
 
+
     selectnotifyAll(req,res){ 
         var r = req._r;
         var params = req.query;
@@ -176,7 +177,22 @@ class index{
         });
     }//end function 
 
+    saveOrdinal(req,res){ 
+        var r = req._r;
+        var params = req.body;
 
+        r.db('eu2').table('calculate').get(params.calculate_id)
+        .update({ 
+            name:params.name, 
+            date_moc:r.ISO8601(params.date_moc+'T00:00:00+07:00'), 
+            date_notify:r.ISO8601(params.date_notify+'T00:00:00+07:00') 
+        })        
+        
+        .run().then(function(result){
+            res.json(result);
+        });
+
+    }//end function
 
 }
 module.exports = new index();
