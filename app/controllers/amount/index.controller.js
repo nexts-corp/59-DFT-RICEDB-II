@@ -79,8 +79,8 @@ class index{
     selectOrinal(req,res){
         var r = req._r;
         var params = req.query;
-        
-        if(typeof params.ordinal !== "undefined"){
+
+        if(typeof params.year !== "undefined"){
             params.year = parseInt(params.year);
         }   
          //r.db('eu2').table('calculate').pluck('ordinal')('ordinal')
