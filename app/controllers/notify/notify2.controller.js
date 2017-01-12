@@ -179,14 +179,15 @@ class index{
 
     saveOrdinal(req,res){ 
         var r = req._r;
-        var params = req.query;
-
-        // if(typeof params.year !== "undefined"){
-        //     params.year = parseInt(params.year);
-        // }
+        var params = req.body;
 
         r.db('eu2').table('calculate').get(params.calculate_id)
-        .update({ status:'n', name:'chon', date_moc:r.ISO8601(), date_notify:r.ISO8601() })        
+        .update({ 
+            status:'n', 
+            name:params.name, 
+            date_moc:r.ISO8601(params.date_moc+'T00:00:00+07:00'), 
+            date_notify:r.ISO8601(params.date_notify+'T00:00:00+07:00') 
+        })        
         
         .run().then(function(result){
             res.json(result);
