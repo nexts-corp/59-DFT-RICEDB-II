@@ -221,7 +221,7 @@ const STM_PREADSHEET = (r,params) => {
                 spreadsheet:
                 r.db('eu2').table('calculate_detail').filter({calculate_id:row('id')}).merge(function(row){
                     return { exproter_name:r.db('eu2').table('exporter').get(row('exporter_id'))('name') }
-                })
+                }).orderBy('exproter_name')
                 .coerceTo('array')
             }
         })
