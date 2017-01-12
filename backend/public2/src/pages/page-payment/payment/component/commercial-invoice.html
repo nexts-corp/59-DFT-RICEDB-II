@@ -1,5 +1,5 @@
 <dom-module id="commercial-invoice">
-  <style include="gl-styles">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     *{
       font-family: 'CSChatThaiUI', sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -36,16 +36,20 @@
 
     <gl-form-panel set-padding="10px 20px 10px 20px">
       <gl-form-panel-head set-border="1px" set-padding="10px 20px 20px 20px">
-        <template is="dom-if" if="[[_checkUndefined(data.invoice_id)]]">
-          <paper-icon-button id="printInvoice" class="crud" icon="print" raised on-tap="printInvoice"  hidden="[[!data.shm_status]]"></paper-icon-button>
-          <paper-tooltip for="printInvoice" offset="0">Print Invoice</paper-tooltip>
-        </template>
-      <template is="dom-if" if="[[!isViewSeleted]]">
-          <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
-          <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
-          <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
-          <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
-      </template>
+        <div class="horizontal end-justified layout">
+          <template is="dom-if" if="[[_checkUndefined(data.invoice_id)]]">
+            <gl-combo-box class="required" required always-float-label label="รูปแบบ" placeholder="รูปแบบ" value="{{printReport.typeFile}}"  item-label-path="report_type"
+               item-value-path="report_type_id" items="{{report.report_type}}"></gl-combo-box>
+            <paper-icon-button id="printInvoice" class="crud" icon="print" raised on-tap="printInvoice"  hidden="[[!data.shm_status]]"></paper-icon-button>
+            <paper-tooltip for="printInvoice" offset="0">Print Invoice</paper-tooltip>
+          </template>
+          <template is="dom-if" if="[[!isViewSeleted]]">
+              <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
+              <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
+              <paper-icon-button icon="delete" id="delExporter" raised on-tap="deteleInvoice" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
+              <paper-tooltip for="delExporter" offset="0">Delete Exporter</paper-tooltip>
+          </template>
+      </div>
       </gl-form-panel-head>
     <gl-form-panel-body>
 
@@ -289,6 +293,22 @@
           type: String,
           value:''
         },
+        printReport:{
+          type: Object,
+          value:{typeFile:'pdf'}
+        },
+        report:{
+          type:Object,
+          value:
+          {
+            report_type:
+              [
+                {report_type:'PDF',report_type_id:'pdf'},
+                {report_type:'WORD',report_type_id:'word'},
+                {report_type:'EXCEL',report_type_id:'excel'}
+              ]
+          }
+        }
       },
       observers:[
         '_obCheckDataForWrite(data)',
