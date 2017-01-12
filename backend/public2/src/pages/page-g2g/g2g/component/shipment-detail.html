@@ -67,6 +67,9 @@
       color: var(--gl-white-color);
       background-color: #f7941e;
     }
+    .report > .icon_print{
+      padding-top: 24px;
+    }
   </style>
   <template>
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
@@ -75,7 +78,7 @@
         <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
       </div> -->
       <gl-form-panel-head label="" set-padding="10px" set-border="1px">
-        <div class="horizontal end-justified layout">
+        <div class="horizontal end-justified layout report">
           <template is="dom-if" if="[[_checkUndefined(data.shm_status)]]">
             <!-- <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button> -->
             <!-- <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip> -->
@@ -87,8 +90,10 @@
              <!-- <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,4]]"> -->
                <gl-combo-box class="required" required always-float-label label="รูปแบบ" placeholder="รูปแบบ" value="{{printReport.typeFile}}"  item-label-path="report_type"
                   item-value-path="report_type_id" items="{{report.report_type}}"></gl-combo-box>
-              <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
-              <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
+              <div class="icon_print">
+                <paper-icon-button id="printShipment" class="crud" icon="print" raised on-tap="printShipment"  hidden="[[!data.shm_status]]"></paper-icon-button>
+                <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
+              </div>
              <!-- </gl-grid-col>2122121 -->
              <!-- </gl-grid-row> -->
           </template>
