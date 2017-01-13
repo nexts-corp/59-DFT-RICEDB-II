@@ -83,8 +83,7 @@ class index{
         if(typeof params.year !== "undefined"){
             params.year = parseInt(params.year);
         }   
-        
-         //r.db('eu2').table('calculate').pluck('ordinal')('ordinal')
+
            r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
                 return c('quota_id').eq(q('id'))
            }).zip().filter({
