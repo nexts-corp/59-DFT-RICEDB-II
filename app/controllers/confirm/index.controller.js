@@ -245,16 +245,16 @@ class index {
 
         r.db('eu2').table('allocate').get(params.allocate.id).update({
             status:'c'
+        }).do(function(result){
+            return r.db('eu2').table('confirm').insert({
+                amount:params.confirm.amount,
+                exporter_id:params.confirm.exporter_id,
+                quantity:params.confirm.quantity,
+                quota_id:params.confirm.quota_id,
+                allocate_id:params.confirm.allocate_id
+            })
         })
-
-        r.db('eu2').table('confirm').insert({
-            amount:params.confirm.amount,
-            exporter_id:params.confirm.exporter_id,
-            quantity:params.confirm.quantity,
-            quota_id:params.confirm.quota_id,
-            allocate_id:params.confirm.allocate_id
-        })
-
+        
         .run().then(function(result){
             res.json(result);
         });
