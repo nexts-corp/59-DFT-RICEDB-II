@@ -124,7 +124,8 @@ class index {
                     type_rice_id: ml('right')('type_rice_id'),
                     quantity: ml('left')('quantity').merge(function(m){
                     return {
-                        month: ml('right')('quantity').filter({period:m('period')})(0)('month')
+                        month: ml('right')('quantity').filter({period:m('period')})(0)('month'),
+                        percent: ml('right')('quantity').filter({period:m('period')})(0)('percent')
                     }
                     }),
                     year:ml('right')('year')
@@ -169,7 +170,8 @@ class index {
                             type_rice_id: ml('right')('type_rice_id'),
                             quantity: ml('left')('quantity').merge(function(m){
                             return {
-                                month: ml('right')('quantity').filter({period:m('period')})(0)('month')
+                                month: ml('right')('quantity').filter({period:m('period')})(0)('month'),
+                                percent: ml('right')('quantity').filter({period:m('period')})(0)('percent')
                             }
                             }),
                             year:ml('right')('year')
@@ -242,6 +244,7 @@ class index {
         var params = req.body;
 
         r.db('eu2').table('allocate').get(params.id).update({
+            quantity:params.quantity,
             status:'c'
         })
     }
