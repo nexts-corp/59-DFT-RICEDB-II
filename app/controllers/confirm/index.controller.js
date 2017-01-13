@@ -322,6 +322,21 @@ class index {
 
    }
 
+    deleteconfirm(req,res){
+        var r = req._r;
+        var params = req.body;
+        console.log(params.allocate_id);
+        
+        r.db('eu2').table('allocate').get(params.allocate_id ).update({
+            status:'nc'
+        }).do(function(result){
+            return r.db('eu2').table('confirm').filter({allocate_id:params.allocate_id }).delete()
+        })
+        .run().then(function(result){
+            res.json(result);
+        });
+    }
+
 }
 
 module.exports = new index();
