@@ -1,5 +1,4 @@
 <link rel="import" href="./components/confirm-list.html">
-<link rel="import" href="./components/confirm-transfer.html">
 <link rel="import" href="./../components/panel-right/panel-right.html">
 <link rel="import" href="./../components/data-manage-behavior.html">
 
@@ -281,10 +280,6 @@
 
                     <section id="content2">
                         <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
-                        <div style="padding:20px">
-                            <paper-button on-tap="transferData" raised>โอนส่วนจัดสรร</paper-button>
-                        </div>
-                        
                     </section>
                     <!--</template>-->
                 </main>
@@ -297,9 +292,6 @@
                     <div>
                         <confirm-allocate-edit data="{{dataSelect}}" list-company="[[dataCompanny.confirm]]" status="{{statusSelect}}" on-cancel-confirm="_cancelConfirm" on-transfer-data="_transferData" on-save-data="_saveData"></confirm-allocate-edit>
                     </div>
-                   <div>
-                       <confirm-transfer data="[[dataCompanny.confirm]]" on-select-transfer="_getDatalistTransfer"></confirm-transfer>
-                   </div>
                 </iron-pages>
                   </template>
                
@@ -337,10 +329,12 @@
                 },
                 _onDataSelect: function (e) {
                     this.pageSelected = 0;
-                    this.$$('panel-right').open();
-                    this.dataSelect = e.detail.data;
-                    console.log(this.dataSelect);
                     this.statusSelect = e.detail.status;
+                    this.dataSelect = e.detail.data;
+                    this.$$('panel-right').open();
+                   
+                    console.log(this.dataSelect);
+                   
                 },
                 _getYear: function () {
                     axios.get('./common/year')
@@ -486,8 +480,28 @@
                             console.log(error);
                         });
                     }
-                   
-                  
+                },
+                _transferData:function(e){
+                    console.log(e.detail);
+                    this.fire('toast',{status:'load'});
+                    axios.put('/confirm/confirmtranfer',e.detail)
+                    .then((response)=>{
+                        console.log("success");
+                        console.log(response.data);
+                        this.fire('toast', {
+                            status: 'success',
+                            text: 'โอนส่วนจัดสรรสำเร็จ',
+                            callback:()=>{
+                                this.$$("panel-right").close();
+                                this._getDataCompanny();
+                                this.checkData(this.dataCompanny.confirm);
+                            }
+                        })
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error);
+                    });
                 },
                 _saveData: function(e){
                     console.log('save!!',e.detail);
@@ -511,10 +525,6 @@
                         console.log(error);
                     });
             
-                },
-                transferData:function(){
-                    this.pageSelected = 1;
-                    this.$$("panel-right").open();
                 },
                 _getDatalistTransfer:function(e){
                     console.log(e.detail);

@@ -81,9 +81,10 @@
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
            </gl-grid-col>
         </gl-grid-row>
+         
       </gl-form-panel-body>
+        
     </gl-form-panel>
-
     <gl-form-panel set-padding = "0px 0px 20px 0px">
       <div class="title">รายละเอียดปริมาณจัดสรร</div>
       <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
@@ -112,7 +113,6 @@
                <gl-form-input class="number" format-number="on" value="{{amount_update}}"></gl-form-input>
            </gl-grid-col>
           </gl-grid-row>
-        
      
                <template is="dom-repeat" items="[[data.quantity]]">
                  <!--[[getQuantity(item)]]-->
@@ -134,14 +134,42 @@
                   </gl-grid-col>
                   </gl-grid-row>
                 </template>
-
+                </gl-form-panel-body>
                 </gl-form-panel>
                  
+      <div class="horizontal end-justified layout">
+          <paper-button class$="{{setClass}}" on-tap="_saveData" raised>{{btnName}}</paper-button>
+      </div>
+      
+       <gl-form-panel set-padding = "0px 0px 20px 0px">
+      <div class="title">ข้อมูลบริษัท</div>
+     
+      <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
 
+         <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+            <gl-form-label-input label="ชื่อบริษัท(ไทย)" value="{{data.name}}"></gl-form-label-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <div class="content">โอนส่วนจัดสรรให้กับ</div>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+              <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{listCompany}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
+              error-message="กรุณาเลือกบริษัท"></gl-combo-box>
+            <!--<gl-form-label-input label="ชื่อบริษัท(อังกฤษ)" value="Kamolkich., Ltd"></gl-form-label-input>-->
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+           </gl-grid-col>
+        </gl-grid-row>
+         
+      </gl-form-panel-body>
+        
+    </gl-form-panel>
     <div class="horizontal end-justified layout">
-        <paper-button class$="{{setClass}}" on-tap="_saveData" raised>{{btnName}}</paper-button>
+      <paper-button class="gl-btn-primary" on-tap="_transferData" raised>โอนส่วนจัดสรร</paper-button>
     </div>
-   
   </template>
   <script>
     Polymer({
@@ -165,11 +193,19 @@
       },
       ready:function(){
         this.answer = 0;
-        
       },
       _getData:function(){
-        this.defaultAmount = this.data.amount;
-        this.amount_update = this.data.amount_update;
+        console.log(this.status);
+        if(this.status == 'confirm'){
+          this.defaultAmount = this.data.amount;
+          this.amount_update = this.data.amount;
+        }
+        else if(this.status == 'notConfirm'){
+            console.log('notconfirm');
+          this.defaultAmount = this.data.amount;
+          this.amount_update = this.data.amount_update;
+        }
+     
       },
       mathPercent:function(item,amount_update,index){
         // console.log(amount_update);
@@ -193,6 +229,24 @@
           this.setClass = 'gl-btn-success'
         }
       },
+      _transferData:function(){
+        var quantitTransfer = this.data.quantity.map((item)=>{
+            var {period,weigth} = item;
+            var newitem = {period,weigth};
+            newitem.weigth = this.unFormat(item.weigth_update);
+            return newitem;
+        });
+        var transfer = {
+          id : this.data.id,
+          amount : this.unFormat(this.amount_update),
+          exporter_id : this.selectExporter,
+          quantity: quantitTransfer,
+          quota_id: this.data.quota_id,
+          allocate_id: this.data.allocate_id
+        }
+        this.fire('transfer-data',transfer)
+        // console.log(transfer);
+      },
       _saveData:function(){
         if(this.status == 'notConfirm'){
           var quantityUpdate = this.data.quantity.map((item)=>{
@@ -214,7 +268,7 @@
         else if(this.status == 'confirm'){
           console.log(this.data);
           var cancelConfirm = {
-            allocate_id : this.data.id
+            allocate_id : this.data.allocate_id
           }
           // var cancelConfirm = this.data.id;
           this.fire('cancel-confirm',cancelConfirm);
