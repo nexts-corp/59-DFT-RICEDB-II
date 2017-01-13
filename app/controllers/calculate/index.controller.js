@@ -411,19 +411,27 @@ const FORMULA_FOR_CAL = (req) => {
                     }
                 }),
                 spreadsheets: rowResult('spreadsheets').merge(function (spreadsheetsRow) {
-                    return r.db('eu2').table('quota')
-                        .filter({ year: params.year, type_rice_id: params.type_rice_id })(0)
-                        .do(function (quotaRow) {
-                            return spreadsheetsRow('div_round').mul(quotaRow('amount')).div(sumForCal)
-                                .do(function (resultCalQuota) {
-                                    return {
-                                        amount_cal: resultCalQuota,
-                                        amount: r.round(resultCalQuota),
-                                        amount_update: r.round(resultCalQuota)
-                                    }
-                                })
-
+                    //หาโค้วต้าที่เหลือ
+                    return r.db('eu2').table('quota').filter({ year: params.year, type_rice_id: params.type_rice_id })(0).do(function(quotaRow){
+                        return r.db('eu2').table('confirm').filter(function(row){
+                            return row('quota_id').eq(quotaRow('id')).and(row('status').eq('r').or(row('status').eq('c')))
+                        }).sum('amount')
+                        .do(function(amount){
+                            return quotaRow('amount').sub(amount)
+                            //return amount
                         })
+                    })
+                    .do(function (quotaBlance) {
+                        return spreadsheetsRow('div_round').mul(quotaBlance).div(sumForCal)
+                            .do(function (resultCalQuota) {
+                                return {
+                                    amount_cal: resultCalQuota,
+                                    amount: r.round(resultCalQuota),
+                                    amount_update: r.round(resultCalQuota)
+                                }
+                            })
+
+                    })
                 })
             }
         })
