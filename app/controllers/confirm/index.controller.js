@@ -242,7 +242,21 @@ class index {
     updateconfirm(req,res){
         var r = req._r;
         var params = req.body;
-        
+
+        console.log(params.allocate.id);
+        console.log(params.allocate.amount_update);
+        console.log(params.allocate.quantity);
+
+        console.log("xxxxxxxxxxxxxxxxxxx");
+
+        console.log(params.confirm.id);
+        console.log(params.confirm.amount);
+        console.log(params.confirm.quantity);
+        console.log(params.confirm.quota_id);
+        console.log(params.confirm.allocate_id);
+
+        console.log("xxxxxxxxxxxxxxxxxxx");
+        /*
         r.db('eu2').table('allocate').get(params.allocate.id).update({
             amount_update:params.allocate.amount_update,
             quantity:params.allocate.quantity,
@@ -250,15 +264,17 @@ class index {
         })
 
         r.db('eu2').table('confirm').insert({
-            amount:params.confirm.amount_update,
+            amount:params.confirm.amount,
             exporter_id:params.confirm.exporter_id,
             quantity:params.confirm.quantity,
-            quota_id:params.confirm.quota_id
+            quota_id:params.confirm.quota_id,
+            allocate_id:params.confirm.allocate_id
         })
 
         .run().then(function(result){
             res.json(result);
         });
+*/
    }
 
 }
