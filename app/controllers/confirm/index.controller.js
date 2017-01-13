@@ -100,6 +100,97 @@ class index {
             params.ordinal = parseInt(params.ordinal);
         }
 
+       r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate'), function(a,c){
+            return a('calculate_id').eq(c('id'))
+        }).map(function(ml){
+            return ml('left').merge(function(mr){
+                return { ordinal: ml('right')('ordinal'), status_calculte: ml('right')('status')}
+        })
+        })
+        
+        .innerJoin(r.db('eu2').table('exporter'), function(ta,e){
+            return ta('exporter_id').eq(e('id'))
+        }).map(function(ml){
+            return ml('left').merge(function(mr){
+                return {name:ml('right')('name')}
+            })
+        })
+        
+        .innerJoin(r.db('eu2').table('quota'), function(ta,q){
+            return ta('quota_id').eq(q('id'))
+        }).map(function(ml){
+            return ml('left').merge(function(mr){
+                return {
+                    type_rice_id: ml('right')('type_rice_id'),
+                    quantity: ml('left')('quantity').merge(function(m){
+                    return {
+                        month: ml('right')('quantity').filter({period:m('period')})(0)('month')
+                    }
+                    }),
+                    year:ml('right')('year')
+                }
+            })
+        })
+        
+        .filter({
+            year:params.year,
+            type_rice_id:params.type_rice_id,
+            ordinal:params.ordinal,
+            exporter_id:params.exporter_id,
+            status:'c',
+            status_calculte:'n'
+        }).orderBy('name')
+  
+        .do(function(result){
+            return {
+            confirm:result ,
+            notconfirm : 
+            r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate'), function(a,c){
+                    return a('calculate_id').eq(c('id'))
+                }).map(function(ml){
+                    return ml('left').merge(function(mr){
+                        return { ordinal: ml('right')('ordinal'), status_calculte: ml('right')('status')}
+                })
+                })
+                
+                .innerJoin(r.db('eu2').table('exporter'), function(ta,e){
+                    return ta('exporter_id').eq(e('id'))
+                }).map(function(ml){
+                    return ml('left').merge(function(mr){
+                        return {name:ml('right')('name')}
+                    })
+                })
+                
+                .innerJoin(r.db('eu2').table('quota'), function(ta,q){
+                    return ta('quota_id').eq(q('id'))
+                }).map(function(ml){
+                    return ml('left').merge(function(mr){
+                        return {
+                            type_rice_id: ml('right')('type_rice_id'),
+                            quantity: ml('left')('quantity').merge(function(m){
+                            return {
+                                month: ml('right')('quantity').filter({period:m('period')})(0)('month')
+                            }
+                            }),
+                            year:ml('right')('year')
+                        }
+                    })
+                })
+                
+                .filter({
+                    year:params.year,
+                    type_rice_id:params.type_rice_id,
+                    ordinal:params.ordinal,
+                    exporter_id:params.exporter_id,
+                    status:'nc',
+                    status_calculte:'n'
+                }).orderBy('name')
+
+            } //End big return
+        })
+  
+
+/*
         r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate'), function(a,c){
             return a('calculate_id').eq(c('id'))
         }).map(function(ml){
@@ -143,8 +234,8 @@ class index {
         .run().then(function(result){
             res.json(result);
         });
+*/
     }
- 
 }
 
 module.exports = new index();
