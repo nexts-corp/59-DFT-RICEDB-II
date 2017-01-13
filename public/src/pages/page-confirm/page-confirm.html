@@ -1,4 +1,5 @@
 <link rel="import" href="./components/confirm-list.html">
+<link rel="import" href="./components/confirm-transfer.html">
 <link rel="import" href="./../components/panel-right/panel-right.html">
 <link rel="import" href="./../components/data-manage-behavior.html">
 
@@ -280,6 +281,10 @@
 
                     <section id="content2">
                         <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
+                        <div style="padding:20px">
+                            <paper-button on-tap="transferData" raised>โอนส่วนจัดสรร</paper-button>
+                        </div>
+                        
                     </section>
                     <!--</template>-->
                 </main>
@@ -287,9 +292,17 @@
             </div>
 
             <panel-right title="ยืนยันรับส่วนจัดสรร">
-                <template is="dom-if" if="[[rendered]]">
-                    <confirm-allocate-edit data="{{dataSelect}}" list-company="[[dataCompanny.confirm]]" status="{{statusSelect}}" on-cancel-confirm="_cancelConfirm" on-transfer-data="_transferData" on-save-data="_saveData"></confirm-allocate-edit>
-                </template>
+                 <template is="dom-if" if="[[rendered]]">
+                <iron-pages selected="{{pageSelected}}">
+                    <div>
+                        <confirm-allocate-edit data="{{dataSelect}}" list-company="[[dataCompanny.confirm]]" status="{{statusSelect}}" on-cancel-confirm="_cancelConfirm" on-transfer-data="_transferData" on-save-data="_saveData"></confirm-allocate-edit>
+                    </div>
+                   <div>
+                       <confirm-transfer data="[[dataCompanny.confirm]]" on-select-transfer="_getDatalistTransfer"></confirm-transfer>
+                   </div>
+                </iron-pages>
+                  </template>
+               
             </panel-right>
             </template>
         <script>
@@ -314,7 +327,6 @@
                 ready: function () {
                     this.dataStat = true;
                     this.btnName = 'ค้นหา';
-                    this.pageSelected = 0;
                     Polymer.RenderStatus.afterNextRender(this, function () {
                         this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e) => {
                             this.rendered = true;
@@ -322,8 +334,6 @@
                             console.log('error')
                         });
                     });
-
-                    
                 },
                 _onDataSelect: function (e) {
                     this.pageSelected = 0;
@@ -502,9 +512,12 @@
                     });
             
                 },
-                _transferData:function(e){
+                transferData:function(){
+                    this.pageSelected = 1;
+                    this.$$("panel-right").open();
+                },
+                _getDatalistTransfer:function(e){
                     console.log(e.detail);
-                    this.$$("panel-right").close();
                 },  
                 _cancelConfirm:function(e){
                     console.log(e.detail);

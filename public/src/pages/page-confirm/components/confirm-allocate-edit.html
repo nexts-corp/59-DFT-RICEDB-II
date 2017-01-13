@@ -14,7 +14,7 @@
       background-color: orange;
       /*width: 25%;*/
     }
-    .content,paper-button,paper-dialog{
+    .content,paper-button,h2{
       font-size:16px;
       margin-top: 26px;
       font-family: 'CSChatThaiUI', sans-serif !important;
@@ -135,19 +135,10 @@
                   </gl-grid-row>
                 </template>
 
-    </gl-form-panel>
-      <paper-dialog id="dialog">
-          <h2>โอนส่วนจัดสรร</h2>
-          <gl-combo-box class="saveData" label="กรุณาเลือกบริษัทที่ต้องการ" items="{{listCompany}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
-           error-message="กรุณาเลือกบริษัท"></gl-combo-box>
-          <div class="buttons">
-            <paper-button on-tap="_transferData">โอนส่วนจัดสรร</paper-button>
-            <paper-button on-tap="_closeTransferData">ยกเลิก</paper-button>
-          </div>
-    </paper-dialog>
+                </gl-form-panel>
+                 
 
     <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-primary" on-tap="_configTransfer" raised>โอนส่วนจัดสรร</paper-button>
         <paper-button class$="{{setClass}}" on-tap="_saveData" raised>{{btnName}}</paper-button>
     </div>
    
@@ -201,16 +192,6 @@
           this.btnName = 'ยืนยัน'
           this.setClass = 'gl-btn-success'
         }
-      },
-      _configTransfer:function(){
-        this.$$('#dialog').open();
-      },
-      _transferData:function(){
-         this.fire('transfer-data',this.selectExporter);
-         this.$$('#dialog').close();
-      },
-      _closeTransferData:function(){
-        this.$$('#dialog').close();
       },
       _saveData:function(){
         if(this.status == 'notConfirm'){
