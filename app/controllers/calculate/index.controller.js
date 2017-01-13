@@ -125,7 +125,7 @@ class index {
             }).do(function(countOrdinal){
                 // insert calculate
                 return r.db('eu2').table('calculate').insert(
-                    result.without('spreadsheets').merge({ordinal:countOrdinal,status:'a'})
+                    result.without('spreadsheets').merge({ordinal:countOrdinal.add(1),status:'a'})
                 ).do(function (calSave) {
                     return result('spreadsheets').merge(function (row) {
                         return { calculate_id: calSave('generated_keys')(0) }
@@ -163,7 +163,7 @@ class index {
             return {
                  type_rice_id: row('group'),
                  type_rice_name_th:r.db('eu2').table('type_rice').get(row('group'))('type_rice_name_th'),
-                 list:row('reduction')
+                 list:row('reduction').orderBy('ordinal')
             }
         })
         .run().then(function (result) {
