@@ -40,6 +40,7 @@ class index {
 
         if(typeof params.year !== "undefined"){
             params.year = parseInt(params.year);
+            params.ordinal = parseInt(params.ordinal);
         }
 
         r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate'), function(a,c){
