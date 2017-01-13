@@ -155,7 +155,8 @@ class index {
                             type_rice_id:x('right')('type_rice_id'),
                             quantity:x('left')('quantity').merge(function(xx){
                                 return {
-                                month: x('right')('quantity').filter({period:xx('period')})(0)('month')
+                                month: x('right')('quantity').filter({period:xx('period')})(0)('month'),
+                                percent: x('right')('quantity').filter({period:xx('period')})(0)('percent')
                                 }
                             })
                         }
