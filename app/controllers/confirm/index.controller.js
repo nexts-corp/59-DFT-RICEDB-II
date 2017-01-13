@@ -243,23 +243,7 @@ class index {
         var r = req._r;
         var params = req.body;
 
-        console.log(params.allocate.id);
-        console.log(params.allocate.amount_update);
-        console.log(params.allocate.quantity);
-
-        console.log("xxxxxxxxxxxxxxxxxxx");
-
-        console.log(params.confirm.id);
-        console.log(params.confirm.amount);
-        console.log(params.confirm.quantity);
-        console.log(params.confirm.quota_id);
-        console.log(params.confirm.allocate_id);
-
-        console.log("xxxxxxxxxxxxxxxxxxx");
-        /*
         r.db('eu2').table('allocate').get(params.allocate.id).update({
-            amount_update:params.allocate.amount_update,
-            quantity:params.allocate.quantity,
             status:'c'
         })
 
@@ -274,7 +258,7 @@ class index {
         .run().then(function(result){
             res.json(result);
         });
-*/
+
    }
 
 }
