@@ -11,6 +11,9 @@
                 font-family: 'CSChatThaiUI', sans-serif !important;
                 -webkit-font-smoothing: antialiased;
             }
+            table{
+                border: 1px solid #ddd;
+            }
             th,td{
                 text-align: right !important;
             }
@@ -26,6 +29,7 @@
        <table class="gl-table-default">
            <thead>
                 <tr>
+                    <th class="left">ลำดับที่</th>
                     <th class="left">ผู้ส่งออก</th>
                     <th>ปริมาณโควตารวม</th>
                 <template is="dom-repeat" items="{{quantityForThead.quantity}}">
@@ -37,6 +41,7 @@
            
             <template is="dom-repeat" items="{{data}}">
                 <tr on-tap="_selectData" data="{{item}}">
+                    <td class="left">[[_num(index)]]</td>
                     <td class="left">{{item.name}}</td>
                     <td>{{formatNumber(item.amount)}}</td>
                     <template is="dom-repeat" items="{{item.quantity}}">
@@ -58,6 +63,9 @@
                 data:{
                     observer: '_getData'
                 }
+            },
+            _num:function(index){
+                return index+1;
             },
             _getData:function(){
                 // this.quantityForThead = this.data[0].map((item)=>{
