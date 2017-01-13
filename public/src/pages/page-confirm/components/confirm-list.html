@@ -25,15 +25,13 @@
         
        <table class="gl-table-default">
            <thead>
-            <template is="dom-repeat" items="{{data}}">
                 <tr>
                     <th class="left">ผู้ส่งออก</th>
                     <th>ปริมาณโควตารวม</th>
-                <template is="dom-repeat" items="{{item.quantity}}">
+                <template is="dom-repeat" items="{{quantityForThead.quantity}}">
                     <th>งวดที่ {{item.period}} [[getMonthName(item.month)]]</th>
                 </template>
                 </tr>
-            </template>
             </thead>
             <tbody>
            
@@ -57,6 +55,16 @@
                 status: {
                     type: String
                 },
+                data:{
+                    observer: '_getData'
+                }
+            },
+            _getData:function(){
+                // this.quantityForThead = this.data[0].map((item)=>{
+                //     return item.quantity;
+                // });
+                this.quantityForThead = this.data[0];
+                // console.log(this.data[0]);
             },
             _selectData:function(e){
                 this.fire('data-select',

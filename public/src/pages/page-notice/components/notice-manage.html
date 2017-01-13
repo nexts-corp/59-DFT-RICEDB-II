@@ -124,10 +124,23 @@
                         firstName: '',
                         lastName: ''
                     }
+                },
+                dataList:{
+                    observer:'manageData'
                 }
             },
             _num:function(index){
                 return index+1;
+            },
+            manageData:function(){
+                // console.log(this.dataList);
+                var name  = this.dataList.name.split(" ");
+                var myDate = this.dataList.date_moc.split("T");
+                var myDateNotify = this.dataList.date_notify.split("T");
+                this.set('data.date_notify',myDateNotify[0]);
+                this.set('data.date_moc',myDate[0]);
+                this.set('name.firstName',name[0]);
+                this.set('name.lastName',name[1]);
             },
             getQuantityForTableHead:function(item){
                 return item[0].quantity;

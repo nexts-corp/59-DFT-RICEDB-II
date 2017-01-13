@@ -109,7 +109,7 @@
               <div class="content">ปริมาณโควตารวม :</div>
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-               <gl-form-input class="number" format-number="on" value="{{amount}}"></gl-form-input>
+               <gl-form-input class="number" format-number="on" value="{{amount_update}}"></gl-form-input>
            </gl-grid-col>
           </gl-grid-row>
         
@@ -130,7 +130,7 @@
                   </gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"> 
                     <!--[[mathPercent(item.weigth,item.percent,amount,item.period,index)]]-->
-                      <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[mathPercent(item,amount,index)]]"></gl-form-input>
+                      <gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[mathPercent(item,amount_update,index)]]"></gl-form-input>
                   </gl-grid-col>
                   </gl-grid-row>
                 </template>
@@ -168,43 +168,36 @@
       },
       _getData:function(){
         this.defaultAmount = this.data.amount;
-        this.amount = this.data.amount;
+        this.amount_update = this.data.amount_update;
       },
-      mathPercent:function(item,amount,index){
-        if(this.data.amount != amount){
-          this.data.quantity[index].weigth = this.unFormat(amount)*item.percent/100;
-          return this.unFormat(amount)*item.percent/100;
+      mathPercent:function(item,amount_update,index){
+        // console.log(amount_update);
+        if(this.data.amount != amount_update){
+          this.data.quantity[index].weigth_update = this.unFormat(amount_update)*item.percent/100;
+          return this.unFormat(amount_update)*item.percent/100;
         }
-        if(this.data.amount == amount){
-          // console.log(this.quantityUpdate);
-          return item.weigth;
+        if(this.data.amount == amount_update){
+          this.data.quantity[index].weigth_update = item.weigth;
+          // console.log('default',item.weigth);
+          return this.unFormat(item.weigth);
         }       
-      },
-      sumData:function(data){
-        data.map((item)=>{
-          this.answer += item.weigth;
-        });
-        return this.answer;
       },
       _saveData:function(){
         var quantityUpdate = this.data.quantity.map((item)=>{
           var {period,weigth} = item;
           var newitem = {period,weigth};
+          newitem.weigth = this.unFormat(item.weigth_update);
           return newitem;
         });
-        this.datas = {
-          confirm:{
-            amount : this.unFormat(this.amount),
-            exporter_id : this.data.exporter_id,
-            quantity : quantityUpdate,
-            type_rice_id : this.data.type_rice_id,
-            year : this.data.year
-          },
-          notify:{
-             id_notify : this.data.id_notify
-          }
+        var datas = {
+          amount : this.unFormat(this.amount_update),
+          exporter_id: this.data.exporter_id,
+          quantity: quantityUpdate,
+          quota_id: this.data.quota_id,
+          allocate_id: this.data.id
         }
-        this.fire('save-data',this.datas);
+        // console.log(datas);
+        this.fire('save-data',datas);
       }
     });
   </script>

@@ -1,5 +1,6 @@
 <link rel="import" href="./components/confirm-list.html">
 <link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./../components/data-manage-behavior.html">
 
 <dom-module id="page-confirm">
     <style is="custom-style" include="iron-flex iron-flex-factors gl-table iron-flex-alignment gl-size gl-color">
@@ -215,8 +216,8 @@
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                     <div class="layout horizontal">
-                        <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{getQuotaOrdinal}}"
-                         item-label-path="ordinal" item-value-path="ordinal" value="{{selectQuotaOrdinal}}"></gl-combo-box>
+                        <gl-combo-box label="การคำนวณครั้งที่" class="searchAllocate" error-message="กรุณาเลือกครั้งที่คำนวณ" required items="{{ordinalNumber}}"
+                         value="{{selectQuotaOrdinal}}"></gl-combo-box>
                     </div>
                     <!--<gl-form-dropdown-menu label="การคำนวณครั้งที่">
                             <paper-listbox class="dropdown-content">
@@ -232,7 +233,7 @@
             <gl-grid-row>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{getQuotaOrdinal}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
+                    <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{exporterData}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
                         error-message="กรุณาเลือกบริษัท"></gl-combo-box>
                 </gl-grid-col>
                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
@@ -253,7 +254,7 @@
                     <input id="tab2" type="radio" name="tabs">
                     <label for="tab2">ยืนยัน</label>
 
-                    <template is="dom-if" if="{{dataCheck}}">
+                    <!--<template is="dom-if" if="{{dataStat}}">
                         <div style="padding: 20px 0 0; border-top: 1px solid #ddd;">
                         <table class="gl-table-default">
                             <thead>
@@ -271,16 +272,16 @@
                             </tbody>
                         </table>
                         </div>
-                    </template>
-                    <template is="dom-if" if="{{dataStat}}">
+                    </template>-->
+                    <!--<template is="dom-if" if="{{!dataStat}}">-->
                     <section id="content1">
-                        <confirm-list data="[[dataNonConfirm]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
+                        <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
                     </section>
 
                     <section id="content2">
-                        <confirm-list data="[[dataConfirm]]" on-data-select="_onDataSelect" status="บันทึก"></confirm-list>
+                        <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" status="บันทึก"></confirm-list>
                     </section>
-                    </template>
+                    <!--</template>-->
                 </main>
             
             </div>
@@ -294,83 +295,16 @@
         <script>
             Polymer({
                 is: "page-confirm",
-                behaviors: [nylonBehavior],
+                behaviors: [nylonBehavior,DataManageBehavior],
                 observers: [
-                    '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)'
+                    '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)',
+                    '_yearQuoataAndTypeRiceChangedAndOrdinal(selectYear,typeRice,selectQuotaOrdinal)',
                 ],
                 properties: {
                     layerContent: {
                         type: String,
                         value: "detailRegExporter"
-                    },
-                    data: {
-                        type: Object,
-                        value: {
-                            header: [
-                                'ผู้ส่งออก',
-                                'ปริมาณโควตารวม',
-                                'งวดที่ 1 (มกราคม)',
-                                'งวดที่ 2 (เมษายน)',
-                                'งวดที่ 3 (กรกฏาคม)'
-                            ]
-                        }
-
-                    },
-                    dataAmount: {
-                        type: Object,
-                        value:
-                        {
-                            header: [
-                                'ผู้ส่งออก',
-                                'ปริมาณโควตารวม',
-                                'งวดที่ 1 (มกราคม)',
-                                'งวดที่ 2 (เมษายน)',
-                                'งวดที่ 3 (กรกฏาคม)'
-                            ],
-                            content: [
-                                {
-                                    a: 'บริษัท ปองค้าข้าว จำกัด',
-                                    b: '426.00',
-                                    c: '214.00',
-                                    d: '106.00',
-                                    e: '106.00'
-                                },
-                                {
-                                    a: 'บริษัท พงษ์ลาภ จำกัด',
-                                    b: '1,574.00',
-                                    c: '768.00',
-                                    d: '394.00',
-                                    e: '394.00'
-                                }
-                            ],
-                            sum: [
-                                {
-                                    sumb: '2,000.00',
-                                    sumc: '1,000.00',
-                                    sumd: '500.00',
-                                    sume: '500.00'
-                                }
-                            ]
-
-                        }
-                    },
-                    companyName: {
-                        type: Array,
-                        value: [
-                            'บริษัท ปองค้าข้าว จำกัด',
-                            'บริษัท พงษ์ลาภ จำกัด'
-                        ]
-                    },
-                    searchType: {
-                        type: Object,
-                        value: [{
-                            id: 1,
-                            name: 'ทั้งหมด'
-                        }, {
-                            id: 2,
-                            name: 'ผู้ส่งออกที่ถูกระงับ'
-                        }]
-                    },
+                    }
 
                 },
                 nylonPageActive: function () {
@@ -378,8 +312,7 @@
                     this._getTypeRice();
                 },
                 ready: function () {
-                    this.dataCheck = true;
-                    this.dataStat = false;
+                    this.dataStat = true;
                     this.btnName = 'ค้นหา';
                     this.pageSelected = 0;
                     Polymer.RenderStatus.afterNextRender(this, function () {
@@ -396,6 +329,7 @@
                     this.pageSelected = 0;
                     this.$$('panel-right').open();
                     this.dataSelect = e.detail.data;
+                    console.log(this.dataSelect);
                     this.statusSelect = e.detail.status;
                 },
                 _getYear: function () {
@@ -430,54 +364,10 @@
                             console.log(error);
                         });
                 },
-                _getDataCompanny:function(){
-                    // this.$$('confirm-list')._setData();
-                    // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
-                    axios.get('./confirm/notconfirmall', {
-                        params: {
-                            year: this.selectYear,
-                            type_rice_id: this.typeRice,
-                            ordinal:this.selectQuotaOrdinal,
-                            exporter_id:this.selectExporter
-                        }
-                    })
-                    .then((response) => {
-                        console.log("success!!");
-                        console.log(response.data);
-                        this.dataCheck = false;
-                        this.dataStat = true;
-                        this.dataNonConfirm = response.data;
-                        // this.getQuotaOrdinal = response.data;
-                    })
-                    .catch((error) => {
-                        console.log("error");
-                        console.log(error);
-                    });
-
-                    axios.get('./confirm/confirm', {
-                        params: {
-                            year: this.selectYear,
-                            type_rice_id: this.typeRice,
-                            ordinal:this.selectQuotaOrdinal,
-                            exporter_id:this.selectExporter
-                        }
-                    })
-                    .then((response) => {
-                        console.log("success!!");
-                        console.log('confirm',response.data);
-                        this.dataConfirm = response.data;
-                        // this.getQuotaOrdinal = response.data;
-                    })
-                    .catch((error) => {
-                        console.log("error");
-                        console.log(error);
-                    });
-
-                },
-                _yearQuoataAndTypeRiceChanged: function (yearQuoata, typeRice) {
+                _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice) {
                     // console.log(yearQuoata,typeRice);
-                    this.selectQuotaOrdinal = "";
-                    axios.get('./confirm/notconfirm', {
+                    // this.selectQuotaOrdinal = "";
+                    axios.get('./confirm/confirmordinal', {
                         params: {
                             year: yearQuoata,
                             type_rice_id: typeRice
@@ -485,27 +375,124 @@
                     })
                         .then((response) => {
                             console.log("success!!");
-                        
-                            this.getQuotaOrdinal = response.data;
+                            console.log(response.data);
+                            this.ordinalNumber = response.data.map((item)=>{
+                                return item.toString();
+                            })
+                            // this.getQuotaOrdinal = response.data;
                         })
                         .catch((error) => {
                             console.log("error");
                             console.log(error);
                         });
                 },
+                _yearQuoataAndTypeRiceChangedAndOrdinal:function(year,type_rice,ordinal){
+                      axios.get('./confirm/confirmexporter', {
+                        params: {
+                            year: year,
+                            type_rice_id: type_rice,
+                            ordinal : ordinal
+                        }
+                    })
+                        .then((response) => {
+                            console.log("success!!");
+                            console.log(response.data);
+                            this.exporterData = response.data.data;
+                            console.log(this.exporterData);
+                            // this.exporterData = response.data.map((item)=>{
+                            //     return item.toString();
+                            // })
+                            // this.getQuotaOrdinal = response.data;
+                        })
+                        .catch((error) => {
+                            console.log("error");
+                            console.log(error);
+                        });
+                },
+                _getDataCompanny:function(){
+                    // this.$$('confirm-list')._setData();
+                    // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
+                    this.fire('toast',{status:'load'});
+                    if(this.selectExporter == ''){
+                        axios.get('./confirm/confirmnoexport', {
+                            params: {
+                                year: this.selectYear,
+                                type_rice_id: this.typeRice,
+                                ordinal:this.selectQuotaOrdinal
+                            }
+                        })
+                        .then((response) => {
+                            console.log("success!!");
+                            console.log(response.data);
+                            this.fire('toast', {
+                                status: 'success',
+                                text: 'บันทึกสำเร็จ',
+                                callback:()=>{
+                                
+                                }
+                            })
+                            this.dataCompanny = response.data;
+                            console.log(this.dataCompanny.notconfirm);
+                            this.checkData(this.dataCompanny.notconfirm);
+                            // this.dataCheck = false;
+                            // this.dataStat = true;
+                            // this.dataNonConfirm = response.data;
+                            // this.getQuotaOrdinal = response.data;
+                        })
+                        .catch((error) => {
+                            console.log("error");
+                            console.log(error);
+                        });
+                    }
+                    else if(this.selectExporter != ''){
+                        axios.get('./confirm/confirm', {
+                            params: {
+                                year: this.selectYear,
+                                type_rice_id: this.typeRice,
+                                ordinal:this.selectQuotaOrdinal,
+                                exporter_id:this.selectExporter
+                            }
+                        })
+                        .then((response) => {
+                            console.log("success!!");
+                            console.log(response.data);
+                            this.fire('toast', {
+                                status: 'success',
+                                text: 'บันทึกสำเร็จ',
+                                callback:()=>{
+                                
+                                }
+                            })
+                            this.dataCompanny = response.data;
+                            console.log(this.dataCompanny.notconfirm);
+                            this.checkData(this.dataCompanny.notconfirm);
+                            // this.dataCheck = false;
+                            // this.dataStat = true;
+                            // this.dataNonConfirm = response.data;
+                            // this.getQuotaOrdinal = response.data;
+                        })
+                        .catch((error) => {
+                            console.log("error");
+                            console.log(error);
+                        });
+                    }
+                   
+                  
+                },
                 _saveData: function(e){
                     console.log('save!!',e.detail);
                     this.fire('toast',{status:'load'});
-                    axios.post('/confirm/confirm',e.detail)
+                    axios.put('/confirm/confirm',e.detail)
                     .then((response)=>{
                         console.log("success");
-                        this.textToast = 'บันทึกข้อมูลสำเร็จ';
                         console.log(response);
                         this.fire('toast', {
                             status: 'success',
                             text: 'บันทึกสำเร็จ',
                             callback:()=>{
                                 this.$$("panel-right").close();
+                                this._getDataCompanny();
+                                 this.checkData(this.dataCompanny.confirm);
                             }
                         })
                     })

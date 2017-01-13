@@ -86,9 +86,9 @@
             </div>
           </div>
           <div style="overflow-x:auto; padding:20px;">
-            <notice-list data-list="{{listNotice}}" on-data-select="_getDataSelect"></notice-list>
+            <notice-list data-list="{{listNotice}}" on-select-rice="showButton" on-data-select="_getDataSelect"></notice-list>
           </div>
-          <paper-button class="gl-btn-primary" on-tap="noticeReport" raised>ออกประกาศ</paper-button>    
+          <paper-button class="gl-btn-primary" hidden="{{active}}" on-tap="noticeReport" raised>ออกประกาศ</paper-button>    
         </div>
 
       <panel-right title="การคำนวณส่วนจัดสรร">
@@ -109,6 +109,7 @@
               this._getListQuotaYear();
             },
             attached: function(){
+               this.active = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
                 this.importHref(this.resolveUrl('./components/notice-list.html'), (e)=>{
                     this.rendered = true;
@@ -214,34 +215,14 @@
                     console.log(error);
                 })
             },
+            showButton:function(){
+                this.active = false;
+            },
             noticeReport:function(){
               
                var data = this.$$('notice-list').getIDtypeRice();
-               console.log(data);
-                // location.href = data;
                window.open('/api/notify/report?calculate_id='+data,'_blank');
-            //    this.fire('toast',{status:'load'});
-            //    axios.get('./notify/report',{
-            //        params:{
-            //            calculate_id : data,
-            //         //    calculate_id : data.rice_h
-            //        }
-            //    })
-            //    .then((response)=>{
-            //        console.log('success');
-            //        console.log(response.data);
-            //        this.fire('toast',{status:'success',callback:()=>{
-            //             window.open('/api/notify/report?calculate_id=3d39afad-ae61-4c82-91ac-fecf7395888e,828ae34b-4b6b-4fa6-b445-4d855fc34532','_blank');
-            //        }});
-            //    })
-            //    .catch((error)=>{
-            //         console.log("error");
-            //         console.log(error);
-            //         this.fire('toast',{status:'connectError',text:error.message,
-            //         callback:function(){
-            //             window.open('/api/notify/report?calculate_id=3d39afad-ae61-4c82-91ac-fecf7395888e,828ae34b-4b6b-4fa6-b445-4d855fc34532','_blank');
-            //         }})
-            //     })
+         
             }
         });
     </script>
