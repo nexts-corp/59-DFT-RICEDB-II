@@ -33,6 +33,65 @@ class index {
         });
     }
 
+    selectexporter(req,res){ 
+        var r = req._r;
+        var params = req.query;
+
+        if(typeof params.year !== "undefined"){
+            params.year = parseInt(params.year);
+            params.ordinal = parseInt(params.ordinal);
+        }
+            r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
+                    return c('quota_id').eq(q('id'))
+            }).map(function(x){
+            return {
+                year:x('right')('year'),
+                type_rice_id:x('right')('type_rice_id'),
+                ordinal:x('left')('ordinal'),
+                id:x('left')('id')
+            }
+            })
+
+            .innerJoin(r.db('eu2').table('allocate'), function(a,e){
+                return a('id').eq(e('calculate_id'))
+            }).map(function(e){
+            return e('left').merge(function(ex){
+                return { exporter_id :e('right')('exporter_id') }
+            })
+            })
+            
+            .innerJoin(r.db('eu2').table('exporter'), function(all,en){
+                return all('exporter_id').eq(en('id'))
+            }).map(function(x){
+                return x('left').merge(function(n){
+                return {name:x('right')('name')}
+                })
+            }) .orderBy('name')
+            
+            .filter({
+                type_rice_id:params.type_rice_id,
+                year:params.year,
+                ordinal:params.ordinal
+            })
+            
+            .do(function(result){
+                return { 
+                    ordinal: result('ordinal')(0),
+                    type_rice_id:result('type_rice_id')(0),
+                    data : result.map(function(x){
+                        return {
+                        exporter_id:x('exporter_id'),
+                        name:x('name')
+                        }
+                    })
+                }
+            })
+            .run().then(function(result){
+                res.json(result);
+            });
+
+        }
+    }
 
     selectnotconfirm(req,res){ 
         var r = req._r;
