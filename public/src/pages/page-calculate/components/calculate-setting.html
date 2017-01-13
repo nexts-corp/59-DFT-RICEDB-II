@@ -225,9 +225,6 @@
          this.companyName.filter(check).map(function(data){
            exporter.push(data.id);
          })
-
-         
-
          this.sendCompanyData = {
            year_quota : this.quotaYear,
            frist_year : this.firstYear,
@@ -235,9 +232,10 @@
            exporter_id : exporter,
            type_rice_id : this.typeRice
          }
-          // this.fire('toast',{status:'load'});
+         console.log(this.sendCompanyData);
+          this.fire('toast',{status:'load'});
          this.fire('post-sum',this.sendCompanyData);
-        //  this._postDb();
+         
         //  console.log(this.sendCompanyData);
       },
       _selectAllChanged:function(val){ 
@@ -303,6 +301,7 @@
         this.fire('toast',{status:'load'});
         axios.get('./calculate/exporter',{
           params:{
+            year : this.quotaYear,
             frist_year : fistYear,
             last_year : lastYear,
             type_rice_id : typeRice
