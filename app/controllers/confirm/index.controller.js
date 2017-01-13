@@ -248,6 +248,9 @@ class index {
             quantity:params.quantity,
             status:'c'
         })
+        .run().then(function(result){
+            res.json(result);
+        });
     }
 
 }
