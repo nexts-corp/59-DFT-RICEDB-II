@@ -42,9 +42,12 @@ exports.report1 = function (req, res, next) {
                                     return r.add("/ ").add(l)
                                 }),
                             surveyor_name: m('surveyor')
-                                .merge(function (m1) {
+                                .map(function (m1) {
                                     return r.db('common').table('surveyor').get(m1('surveyor_id')).pluck('surveyor_name')
-                                }).without('ship_id')
+                                }).without('surveyor_id')
+                                .map(function (m1) {
+                                    return m1('surveyor_name')
+                                })
                                 .reduce(function (l, r) {
                                     return r.add("/ ").add(l)
                                 })
@@ -167,7 +170,7 @@ exports.report1 = function (req, res, next) {
         }).getField('Lists')
         .run()
         .then(function (result) {
-            // res.json(result);
+            //res.json(result);
             res._ireport("shipment/report1.jasper", req.query.export || "pdf", result, parameters);
         });
 }
@@ -221,6 +224,9 @@ exports.report2 = function (req, res, next) {
                                 .merge(function (m1) {
                                     return r.db('common').table('surveyor').get(m1('surveyor_id')).pluck('surveyor_name')
                                 }).without('ship_id')
+                                .map(function (m1) {
+                                    return m1('surveyor_name')
+                                })
                                 .reduce(function (l, r) {
                                     return r.add("/ ").add(l)
                                 })
