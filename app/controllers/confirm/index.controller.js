@@ -257,6 +257,7 @@ class index {
                 year:params.year,
                 type_rice_id:params.type_rice_id,
                 ordinal:params.ordinal,
+                exporter_id:params.exporter_id,
                 status:'nc',
                 status_calculte:'n'
             }).orderBy('name')
@@ -275,7 +276,8 @@ class index {
                             type_rice_id:x('right')('type_rice_id'),
                             quantity:x('left')('quantity').merge(function(xx){
                                 return {
-                                month: x('right')('quantity').filter({period:xx('period')})(0)('month')
+                                month: x('right')('quantity').filter({period:xx('period')})(0)('month'),
+                                percent: x('right')('quantity').filter({period:xx('period')})(0)('percent')
                                 }
                             })
                         }
