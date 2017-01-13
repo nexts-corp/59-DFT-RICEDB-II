@@ -109,20 +109,33 @@ class index {
     insertCalculate(req, res) {
         var r = req._r;
         var params = req.body;
+        var yearFilter = parseInt(params.year);
+
         //save calculate
         var statement = FORMULA_FOR_CAL(req);
         statement
         .do(function (result) {
-            //for save to calculate_detail
-            return r.db('eu2').table('calculate').insert(
-                result.without('spreadsheets').merge({ordinal:params.ordinal,status:'a'})
-            ).do(function (calSave) {
-                return result('spreadsheets').merge(function (row) {
-                    return { calculate_id: calSave('generated_keys')(0) }
-                }).do(function (preSave) {
-                    return r.db('eu2').table('calculate_detail').insert(preSave)
+            //count ordinal
+            return r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:yearFilter})(0).do(function(quotaRow){
+                return r.db('eu2').table('calculate').filter(
+                    {quota_id:quotaRow('id')}
+                ).coerceTo('array').count()
+            }).do(function(countOrdinal){
+                // insert calculate
+                return r.db('eu2').table('calculate').insert(
+                    result.without('spreadsheets').merge({ordinal:countOrdinal,status:'a'})
+                ).do(function (calSave) {
+                    return result('spreadsheets').merge(function (row) {
+                        return { calculate_id: calSave('generated_keys')(0) }
+                    }).do(function (preSave) {
+                        return r.db('eu2').table('calculate_detail').insert(preSave)
+                    })
                 })
+
             })
+            //for save to calculate_detail
+
+            
             
 
         })
