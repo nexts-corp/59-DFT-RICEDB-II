@@ -168,7 +168,6 @@ class index {
                         type_rice_id:params.type_rice_id
                     })
 
-                    
                     .innerJoin(r.db('eu2').table('exporter'), function(c,e){
                     return c('exporter_id').eq(e('id'))
                     }).map(function(ml){
@@ -198,12 +197,16 @@ class index {
                         }
                         })
                     })
-                    
+                    /*
                     .filter({
                         ordinal:params.ordinal,
                         status:'c'
                     }).orderBy('name')
-                    
+                    */
+                    .filter(function(x){
+                        return x('ordinal').eq(params.ordinal)
+                        .and(x('status').eq('c').or(x('status').eq('r')))
+                    }).orderBy('name')
                 }
             }) // end do
             
@@ -320,13 +323,18 @@ class index {
                         }
                         })
                     })
-                    
+                    /*
                     .filter({
                         ordinal:params.ordinal,
                         exporter_id:params.exporter_id,
                         status:'c'
                     }).orderBy('name')
-                    
+                    */
+                    .filter(function(x){
+                        return x('ordinal').eq(params.ordinal)
+                        .and(x('status').eq('c').or(x('status').eq('r')))
+                        .and(x('exporter_id').eq(params.exporter_id))
+                    }).orderBy('name')
                 }
             }) // end do
             
@@ -358,7 +366,6 @@ class index {
 
         }
 
-
         deleteconfirm(req,res){
             var r = req._r;
             var params = req.body;
@@ -368,6 +375,29 @@ class index {
                 status:'nc'
             }).do(function(result){
                 return r.db('eu2').table('confirm').filter({allocate_id:params.allocate_id }).delete()
+            })
+            .run().then(function(result){
+                res.json(result);
+            });
+        }
+
+        tranfer(req,res){
+            var r = req._r;
+            var params = req.body;
+            console.log(params.id+""+params.exporter_id);
+            
+            r.db('eu2').table('confirm').get(params.id ).update({
+                status:'t'
+            })
+            .do(function(result){
+                return r.db('eu2').table('confirm').insert({
+                    amount:params.amount,
+                    exporter_id:params.exporter_id,
+                    quantity:params.quantity,
+                    quota_id:params.quota_id,
+                    allocate_id:params.allocate_id,
+                    status:'r'
+                })
             })
             .run().then(function(result){
                 res.json(result);
