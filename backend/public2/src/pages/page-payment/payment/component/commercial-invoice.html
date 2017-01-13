@@ -314,8 +314,8 @@
             report_type:
               [
                 {report_type:'PDF',report_type_id:'pdf'},
-                {report_type:'WORD',report_type_id:'word'},
-                {report_type:'EXCEL',report_type_id:'excel'}
+                // {report_type:'WORD',report_type_id:'word'},
+                // {report_type:'EXCEL',report_type_id:'excel'}
               ]
           }
         }
@@ -351,7 +351,8 @@
       },
 
       printInvoice:function () {
-        window.open('http://localhost:8080/api/report/report4?invoice_id='+this.data.invoice_id,'1');
+        // report.report_type
+        window.open('http://localhost:8080/api/payment/report1?invoice_id='+this.data.invoice_id+'&export='+this.printReport.typeFile,'1');
       },
       createInvoice:function () {
         let  book_id = this.data.book_id;
