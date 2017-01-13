@@ -40,6 +40,13 @@ exports.report1 = function (req, res, next) {
                                 })
                                 .reduce(function (l, r) {
                                     return r.add("/ ").add(l)
+                                }),
+                            surveyor_name: m('surveyor')
+                                .merge(function (m1) {
+                                    return r.db('common').table('surveyor').get(m1('surveyor_id')).pluck('surveyor_name')
+                                }).without('ship_id')
+                                .reduce(function (l, r) {
+                                    return r.add("/ ").add(l)
                                 })
                         }
                     })
@@ -142,7 +149,7 @@ exports.report1 = function (req, res, next) {
                             deli_port_name: r.db('common').table('port').get(m('deli_port_id')).getField('port_name'),
                             dest_port_name: r.db('common').table('port').get(m('dest_port_id')).getField('port_name'),
                             load_port_name: r.db('common').table('port').get(m('load_port_id')).getField('port_name'),
-                            surveyor_name: r.db('common').table('surveyor').get(m('surveyor_id')).getField('surveyor_name'),
+                            // surveyor_name: r.db('common').table('surveyor').get(m('surveyor_id')).getField('surveyor_name'),
                             product_date: m('product_date').split('T')(0),
                             cut_of_date: m('cut_of_date').split('T')(0)
                         }
@@ -207,6 +214,13 @@ exports.report2 = function (req, res, next) {
                                 .map(function (m1) {
                                     return m1('ship_name').add(" V.").add(m1('ship_voy_no'))
                                 })
+                                .reduce(function (l, r) {
+                                    return r.add("/ ").add(l)
+                                }),
+                            surveyor_name: m('surveyor')
+                                .merge(function (m1) {
+                                    return r.db('common').table('surveyor').get(m1('surveyor_id')).pluck('surveyor_name')
+                                }).without('ship_id')
                                 .reduce(function (l, r) {
                                     return r.add("/ ").add(l)
                                 })
@@ -330,7 +344,7 @@ exports.report2 = function (req, res, next) {
                             dest_country_id: r.db('common').table('port').get(m('dest_port_id')).getField('country_id'),
                             load_port_name: r.db('common').table('port').get(m('load_port_id')).getField('port_name'),
                             load_country_id: r.db('common').table('port').get(m('load_port_id')).getField('country_id'),
-                            surveyor_name: r.db('common').table('surveyor').get(m('surveyor_id')).getField('surveyor_name'),
+                            // surveyor_name: r.db('common').table('surveyor').get(m('surveyor_id')).getField('surveyor_name'),
                             product_date: m('product_date').split('T')(0),
                             cut_of_date: m('cut_of_date').split('T')(0)
                         }
