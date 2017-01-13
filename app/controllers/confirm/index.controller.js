@@ -235,8 +235,17 @@ class index {
         .run().then(function(result){
             res.json(result);
         });
-
     }
+
+    updateconfirm(req,res){
+        var r = req._r;
+        var params = req.body;
+
+        r.db('eu2').table('allocate').get(params.id).update({
+            status:'c'
+        })
+    }
+
 }
 
 module.exports = new index();
