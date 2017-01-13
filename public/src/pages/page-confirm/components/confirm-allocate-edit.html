@@ -14,7 +14,7 @@
       background-color: orange;
       /*width: 25%;*/
     }
-    .content,paper-button{
+    .content,paper-button,paper-dialog{
       font-size:16px;
       margin-top: 26px;
       font-family: 'CSChatThaiUI', sans-serif !important;
@@ -119,14 +119,14 @@
                 <gl-grid-row width="{{getWidth}}">
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                      <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] :</div>
+                      <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] </div>
                   </gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                       <div class="content">{{formatNumber(item.weigth)}}</div>
                       <!--<gl-form-input class="number" allowed-pattern="[0-9||,||.]" format-number="on" value="[[item.weigth]]" disabled></gl-form-input>-->
                   </gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                      <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] :</div>
+                      <div class="content">ปริมาณ งวดที่ {{item.period}} [[getMonthName(item.month)]] </div>
                   </gl-grid-col>
                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"> 
                     <!--[[mathPercent(item.weigth,item.percent,amount,item.period,index)]]-->
@@ -134,13 +134,21 @@
                   </gl-grid-col>
                   </gl-grid-row>
                 </template>
-  
-      </gl-form-panel-body>
+
     </gl-form-panel>
+      <paper-dialog id="dialog">
+          <h2>โอนส่วนจัดสรร</h2>
+          <gl-combo-box class="saveData" label="กรุณาเลือกบริษัทที่ต้องการ" items="{{listCompany}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
+           error-message="กรุณาเลือกบริษัท"></gl-combo-box>
+          <div class="buttons">
+            <paper-button on-tap="_transferData">โอนส่วนจัดสรร</paper-button>
+            <paper-button on-tap="_closeTransferData">ยกเลิก</paper-button>
+          </div>
+    </paper-dialog>
 
     <div class="horizontal end-justified layout">
-        <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-        <paper-button class="gl-btn-success" on-tap="_saveData" raised>{{status}}</paper-button>
+        <paper-button class="gl-btn-primary" on-tap="_configTransfer" raised>โอนส่วนจัดสรร</paper-button>
+        <paper-button class$="{{setClass}}" on-tap="_saveData" raised>{{btnName}}</paper-button>
     </div>
    
   </template>
@@ -151,7 +159,8 @@
       properties:{
         status:{
           type: String,
-          value: '??'
+          value: '??',
+          observer: 'checkStatus'
         },
         data:{
             type: Object,
@@ -165,6 +174,7 @@
       },
       ready:function(){
         this.answer = 0;
+        
       },
       _getData:function(){
         this.defaultAmount = this.data.amount;
@@ -182,22 +192,52 @@
           return this.unFormat(item.weigth);
         }       
       },
-      _saveData:function(){
-        var quantityUpdate = this.data.quantity.map((item)=>{
-          var {period,weigth} = item;
-          var newitem = {period,weigth};
-          newitem.weigth = this.unFormat(item.weigth_update);
-          return newitem;
-        });
-        var datas = {
-          amount : this.unFormat(this.amount_update),
-          exporter_id: this.data.exporter_id,
-          quantity: quantityUpdate,
-          quota_id: this.data.quota_id,
-          allocate_id: this.data.id
+      checkStatus:function(status){
+        if(status == 'confirm'){
+          this.btnName = 'ยกเลิกยืนยัน';
+          this.setClass = 'gl-btn-danger'
         }
-        // console.log(datas);
-        this.fire('save-data',datas);
+        else if(status == 'notConfirm'){
+          this.btnName = 'ยืนยัน'
+          this.setClass = 'gl-btn-success'
+        }
+      },
+      _configTransfer:function(){
+        this.$$('#dialog').open();
+      },
+      _transferData:function(){
+         this.fire('transfer-data',this.selectExporter);
+         this.$$('#dialog').close();
+      },
+      _closeTransferData:function(){
+        this.$$('#dialog').close();
+      },
+      _saveData:function(){
+        if(this.status == 'notConfirm'){
+          var quantityUpdate = this.data.quantity.map((item)=>{
+            var {period,weigth} = item;
+            var newitem = {period,weigth};
+            newitem.weigth = this.unFormat(item.weigth_update);
+            return newitem;
+          });
+          var datas = {
+            amount : this.unFormat(this.amount_update),
+            exporter_id: this.data.exporter_id,
+            quantity: quantityUpdate,
+            quota_id: this.data.quota_id,
+            allocate_id: this.data.id
+          }
+          // console.log(datas);
+          this.fire('save-data',datas);
+        }
+        else if(this.status == 'confirm'){
+          console.log(this.data);
+          var cancelConfirm = {
+            allocate_id : this.data.id
+          }
+          // var cancelConfirm = this.data.id;
+          this.fire('cancel-confirm',cancelConfirm);
+        }
       }
     });
   </script>

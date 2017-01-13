@@ -275,11 +275,11 @@
                     </template>-->
                     <!--<template is="dom-if" if="{{!dataStat}}">-->
                     <section id="content1">
-                        <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" status="ยืนยัน"></confirm-list>
+                        <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" status="notConfirm"></confirm-list>
                     </section>
 
                     <section id="content2">
-                        <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" status="บันทึก"></confirm-list>
+                        <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" status="confirm"></confirm-list>
                     </section>
                     <!--</template>-->
                 </main>
@@ -288,7 +288,7 @@
 
             <panel-right title="ยืนยันรับส่วนจัดสรร">
                 <template is="dom-if" if="[[rendered]]">
-                    <confirm-allocate-edit data="{{dataSelect}}" status="{{statusSelect}}" on-save-data="_saveData"></confirm-allocate-edit>
+                    <confirm-allocate-edit data="{{dataSelect}}" list-company="[[dataCompanny.confirm]]" status="{{statusSelect}}" on-cancel-confirm="_cancelConfirm" on-transfer-data="_transferData" on-save-data="_saveData"></confirm-allocate-edit>
                 </template>
             </panel-right>
             </template>
@@ -501,6 +501,32 @@
                         console.log(error);
                     });
             
+                },
+                _transferData:function(e){
+                    console.log(e.detail);
+                    this.$$("panel-right").close();
+                },  
+                _cancelConfirm:function(e){
+                    console.log(e.detail);
+                    this.fire('toast',{status:'load'});
+                    axios.put('/confirm/confirmdelete',e.detail)
+                    .then((response)=>{
+                        console.log("success");
+                        console.log(response);
+                        this.fire('toast', {
+                            status: 'success',
+                            text: 'ยกเลิกการยืนยัน',
+                            callback:()=>{
+                                this.$$("panel-right").close();
+                                this._getDataCompanny();
+                                this.checkData(this.dataCompanny.confirm);
+                            }
+                        })
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error);
+                    });
                 }
             });
         </script>
