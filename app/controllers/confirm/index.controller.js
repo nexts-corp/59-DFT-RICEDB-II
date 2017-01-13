@@ -231,10 +231,11 @@ class index {
             status:'nc',
             status_calculte:'n'
         })
+*/
         .run().then(function(result){
             res.json(result);
         });
-*/
+
     }
 }
 
