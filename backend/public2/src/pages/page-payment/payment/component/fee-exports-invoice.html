@@ -85,13 +85,12 @@
             <th>จำนวน(ตัน) <br>(1)</th>
             <th>มูลค่าต่อตัน(USD)<br>(2)</th>
             <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
-            <th>จำนวนเงิน(บาท)<br>(4)=(3)*34.96</th>
+            <th>จำนวนเงิน(บาท)<br>(4)=(3)*[[rateBank]]</th>
             <th>หักค่า FE (บาท)<br>(5)</th>
             <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
             <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
           </tr>
           <template is="dom-repeat" items="[[data.invoice_detail]]" as="invoiceDetail">
-
             <!-- [[_insertInvoiceDetail(invoiceDetail.shm_det_id)]] -->
             <tr>
               <td><gl-form-input disabled style="width:140px;" value="[[invoiceDetail.seller_name_en]]" ></gl-form-input></td>
@@ -109,7 +108,7 @@
               <td><gl-form-input format-number="on" style="width:140px;text-align:center;" value="[[invoiceDetail.price_per_ton]]" disabled ></gl-form-input></td>
                 [[_totalAmountUsd(invoiceDetail.amount_usd,index)]]
               <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.amount_usd]]" disabled ></gl-form-input></td>
-              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" disabled ></gl-form-input></td>
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" disabled></gl-form-input></td>
               <td>
                 [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
                 <!-- [[_averageFees(invoiceDetail.*,invoice_fee)]] -->
@@ -117,7 +116,7 @@
                 [[_totalfee(invoiceDetail.invoice_fee,index)]]
                 <gl-form-input disabled="[[isInputDisabled]]" class="number" format-number="on" value="{{invoiceDetail.invoice_fee}}" ></gl-form-input>
               </td>
-              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled ></gl-form-input></td>
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled></gl-form-input></td>
               <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalMoneyInvoice(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled></gl-form-input></td>
             </tr>
           </template>
