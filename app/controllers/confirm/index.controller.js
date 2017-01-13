@@ -8,16 +8,6 @@ class index {
             params.year = parseInt(params.year);
         }   
 
-        // r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
-        //         return c('quota_id').eq(q('id'))
-        // }).zip().filter({
-        //     type_rice_id:params.type_rice_id,
-        //     year:params.year
-        // }).pluck('ordinal')('ordinal')
-        //     .map(function(nu){
-        //     return [nu]
-        //     })
-
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
                 return c('quota_id').eq(q('id'))
         }).map(function(x){
@@ -30,40 +20,14 @@ class index {
         })
           
         .filter({
-            type_rice_id: params.type_rice_id,
-            year:params.year
-        })
-          
-        .innerJoin(r.db('eu2').table('allocate'), function(a,e){
-            return a('id').eq(e('calculate_id'))
-        }).map(function(e){
-          return e('left').merge(function(ex){
-            return { exporter_id :e('right')('exporter_id') }
-          })
-        })
+            type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',
+            year:2560
+        }) .orderBy('ordinal')
         
-          .innerJoin(r.db('eu2').table('exporter'), function(all,en){
-            return all('exporter_id').eq(en('id'))
-          }).map(function(x){
-            return x('left').merge(function(n){
-              return {name:x('right')('name')}
-            })
-          }) .orderBy('name')
+        .do(function(re){
+            return re ('ordinal')
+        })
           
-          .do(function(result){
-            	return { 
-                    ordinal: [result('ordinal')(0)] ,
-                    type_rice_id:result('type_rice_id')(0),
-                    data : result.map(function(x){
-                      return {
-                        exporter_id:x('exporter_id'),
-                        name:x('name')
-                      }
-                    })
-              }
-
-          })
-
         .run().then(function(result){
             res.json(result);
         });
