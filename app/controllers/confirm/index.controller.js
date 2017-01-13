@@ -89,8 +89,6 @@ class index {
             .run().then(function(result){
                 res.json(result);
             });
-
-        }
     }
 
     selectnotconfirm(req,res){ 
@@ -146,7 +144,7 @@ class index {
             res.json(result);
         });
     }
-   
+ 
 }
 
 module.exports = new index();
