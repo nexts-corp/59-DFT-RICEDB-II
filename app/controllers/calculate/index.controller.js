@@ -28,39 +28,68 @@ class index {
 
         var fristYearFilter = parseInt(params.frist_year) - 1;
         var LastYearFilter = parseInt(params.last_year) + 1;
+        var yearFilter = parseInt(params.year);
 
 
-        r.db('eu2').table('report')
-        .innerJoin(r.db('eu2').table('quota'),function(l,r){
-            return l('quota_id').eq(r('id'))
-        }).map(function(result){
-            return result('left').merge(function(row){
-                return result('right').pluck('type_rice_id','year')
+        r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:yearFilter})(0).do(function(quotaRow){
+
+        
+            return r.db('eu2').table('calculate').filter(
+                {quota_id:quotaRow('id')}
+            ).coerceTo('array')(0)
+            .do(function(calculateRow){
+                return r.branch(calculateRow.count().eq(0),
+                    //คำนวณครั้งแรก
+                    r.db('eu2').table('report')
+                    .innerJoin(r.db('eu2').table('quota'),function(l,r){
+                        return l('quota_id').eq(r('id'))
+                    }).map(function(result){
+                        return result('left').merge(function(row){
+                            return result('right').pluck('type_rice_id','year')
+                        })
+                    })
+                    .filter(function(row){
+                        return row('type_doc').eq('c').and(row('type_rice_id').eq(params.type_rice_id))
+                        .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
+                    }).pluck('exporter_id')
+                        .union(r.db('eu2').table('confirm')
+                        .innerJoin(r.db('eu2').table('quota'),function(l,r){
+                            return l('quota_id').eq(r('id'))
+                        }).map(function(result){
+                            return result('left').merge(function(row){
+                                return result('right').pluck('type_rice_id','year')
+                            })
+                        })
+                        .filter(function(row){
+                        return row('type_rice_id').eq(params.type_rice_id)
+                        .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
+                    }).pluck('exporter_id')).distinct().innerJoin(
+                        r.db('eu2').table('exporter'), function (reportRow, exporterRow) {
+                            return reportRow('exporter_id').eq(exporterRow('id'))
+                        }
+                    )('right').orderBy('name')
+                    ,
+                    //คำนวณครั้งที่สองเป็นต้นไป
+                    //calculateRow('id')
+                    r.db('eu2').table('allocate').filter({calculate_id:calculateRow('id')})
+                    .innerJoin(r.db('eu2').table('confirm').filter({quota_id:quotaRow('id')}),function(left,right){
+                        return left('id').eq(right('allocate_id'))
+                    })
+                    .filter(function(row){
+                        return row('left')('amount').eq(row('right')('amount'))
+                    })
+                    .map(function(row){
+                        return row('left').pluck('exporter_id')
+                    })
+                    .innerJoin(r.db('eu2').table('exporter'),function(left,right){
+                        return left('exporter_id').eq(right('id'))
+                    }).zip().without('exporter_id')
+                )
             })
         })
-        .filter(function(row){
-            return row('type_doc').eq('c').and(row('type_rice_id').eq(params.type_rice_id))
-            .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
-        }).pluck('exporter_id')
-            .union(r.db('eu2').table('confirm')
-            .innerJoin(r.db('eu2').table('quota'),function(l,r){
-                return l('quota_id').eq(r('id'))
-            }).map(function(result){
-                return result('left').merge(function(row){
-                    return result('right').pluck('type_rice_id','year')
-                })
-            })
-            .filter(function(row){
-            return row('type_rice_id').eq(params.type_rice_id)
-            .and(row('year').gt(fristYearFilter)).and(row('year').lt(LastYearFilter))
-        }).pluck('exporter_id')).distinct().innerJoin(
-            r.db('eu2').table('exporter'), function (reportRow, exporterRow) {
-                return reportRow('exporter_id').eq(exporterRow('id'))
-            }
-            )('right').orderBy('name')
-            .run().then(function (result) {
-                res.json(result);
-            });
+        .run().then(function (result) {
+            res.json(result);
+        });
 
     }
 
