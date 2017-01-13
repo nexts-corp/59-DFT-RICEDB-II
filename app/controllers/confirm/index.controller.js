@@ -20,8 +20,8 @@ class index {
         })
           
         .filter({
-            type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',
-            year:2560
+            type_rice_id:params.type_rice_id,
+            year:params.year
         }) .orderBy('ordinal')
         
         .do(function(re){
