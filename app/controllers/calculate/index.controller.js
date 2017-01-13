@@ -71,19 +71,21 @@ class index {
                     ,
                     //คำนวณครั้งที่สองเป็นต้นไป
                     //calculateRow('id')
+
                     r.db('eu2').table('allocate').filter({calculate_id:calculateRow('id')})
                     .innerJoin(r.db('eu2').table('confirm').filter({quota_id:quotaRow('id')}),function(left,right){
                         return left('id').eq(right('allocate_id'))
                     })
                     .filter(function(row){
-                        return row('left')('amount').eq(row('right')('amount'))
+                        return row('left')('amount').eq(row('right')('amount')).and(row('right')('status').eq('c').or(row('right')('status').eq('r')))
                     })
                     .map(function(row){
-                        return row('left').pluck('exporter_id')
+                        return row('right').pluck('exporter_id')
                     })
                     .innerJoin(r.db('eu2').table('exporter'),function(left,right){
                         return left('exporter_id').eq(right('id'))
-                    }).zip().without('exporter_id')
+                    }).zip().distinct().without('exporter_id')
+
                 )
             })
         })
