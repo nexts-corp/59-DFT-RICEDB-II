@@ -52,7 +52,7 @@ class index {
           
           .do(function(result){
             	return { 
-                    ordinal: result('ordinal')(0) ,
+                    ordinal: [result('ordinal')(0)] ,
                     type_rice_id:result('type_rice_id')(0),
                     data : result.map(function(x){
                       return {
