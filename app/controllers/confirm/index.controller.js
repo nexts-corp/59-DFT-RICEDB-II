@@ -91,7 +91,7 @@ class index {
             });
     }
 
-    selectnotconfirm(req,res){ 
+    selectall(req,res){ 
         var r = req._r;
         var params = req.query;
 
