@@ -1,6 +1,5 @@
-<link rel="import" href="../../../g2g/components/list-edit/listEditBehavior.html">
-<!-- <link rel="import" href="register-createMember.html"> -->
 <link rel="import" href="register-member.html">
+<link rel="import" href="register-fileup.html">
 <dom-module id="register-pageRegister">
 <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .title {
@@ -18,6 +17,31 @@
       border: 1px solid var(--gl-gray-light-color);
       margin: 15px;
       border-radius: 3px
+    }
+    paper-tabs{
+      background-color: #f7941e;
+      margin : 0px 15px 0px 15px;
+      color: #F2F2F2;
+      --paper-tabs-selection-bar:{
+        height: 5px;
+        background-color: var(--gl-info-color);
+      }
+    }
+    paper-tab:focus > div.tab-content{
+      background-color: yellow;
+      opacity: 1;
+      font-weight: 0;
+    }
+    paper-tab:not(:last-of-type) {
+      border-right: 3px solid var(--gl-gray-light-color);
+      font-size: var(--font-size-h5);
+      font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    paper-tabs paper-tab.iron-selected {
+      font-size: var(--font-size-h5);
+      color: var(--gl-white-color);
+      background-color: var(--gl-info-color);
     }
 </style>
   <template>
@@ -43,14 +67,18 @@
                 <!-- <paper-button class="gl-btn-info" raised on-tap="_search">ค้นหา</paper-button> -->
               </gl-grid-row>
             </div>
-
       <!-- </gl-form-panel-head> -->
               <div id="formData" class="bd" hidden>
-                  <gl-form-panel>
-                      <iron-pages selected="{{pages}}">
-                          <register-member data={{trader}}></register-member>
-                      </iron-pages>
-                  </gl-form-panel>
+                <paper-tabs selected="{{pages}}" align-bottom no-slide>
+                    <paper-tab>รายละเอียด</paper-tab>
+                    <paper-tab>ไฟล์</paper-tab>
+                </paper-tabs>
+                <gl-form-panel>
+                  <iron-pages selected="{{pages}}">
+                      <register-member data={{trader}}></register-member>
+                      <register-fileup></register-fileup>
+                  </iron-pages>
+                </gl-form-panel>
               </div>
 
               <div class="horizontal end-justified layout">
@@ -65,7 +93,7 @@
   <script>
     Polymer({
       is: "register-pageRegister",
-      behaviors: [listEditBehavior,gl.behavior.core],
+      behaviors: [gl.behavior.core],
       properties: {
         pages:{
             type:Number,
@@ -127,45 +155,14 @@
       _saveData:function(e) {
         // console.log(this.trader);
         this.fire('toast',{status:'dialog',
-        text:'คุณต้องการจะยืนยันลงทะเบียนใช่หรือไม่ ?',
-        confirmed : this._confirmToast,
-        el: this,
-        datas: {
-          exporter_date_update:new Date,
-          trader_id:this.trader.trader_id
-        }
-      });
-        // var datas = {
-        // exporter_date_update:new Date,
-        // trader_id:this.trader.trader_id
-          // exporter_no:this.trader.exporter_no,
-          // exporter_date_approve:new Date (this.trader.exporter_date_approve),
-          // seller_agent:this.trader.seller_agent,
-        // }
-        // console.log(datas);
-        // this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        // axios.post('./external/exporter/insert', datas)
-        //     .then(function(response) {
-        //         console.log("success");
-        //         console.log(response);
-        //         // this.glQuery('addContract').getChange();
-        //         // this.glQuery('contentPanel').changDrawer();
-        //         this.$$('#removeButtom').setAttribute("hidden", "hidden");
-        //         this.$$('#removeButtomC').setAttribute("hidden", "hidden");
-        //         this.$$('#formData').setAttribute("hidden", "hidden");
-        //         this.$$('#changTitle').removeAttribute("hidden");
-        //         this.$$('#changTitle2').setAttribute("hidden", "hidden");
-        //         this.dataTrader = "";
-        //         this.glQuery('reExporter').getExporters();
-        //         this.glQuery('reTrader').getExporterTrader();
-        //         this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-        //           console.log('success');
-        //         }});
-        //     }.bind(this))
-        //     .catch(function(error) {
-        //         console.log("error");
-        //         console.log(error);
-        //     })
+          text:'คุณต้องการจะยืนยันลงทะเบียนใช่หรือไม่ ?',
+          confirmed : this._confirmToast,
+          el: this,
+          datas: {
+            exporter_date_update:new Date,
+            trader_id:this.trader.trader_id
+          }
+        });
       },
       _confirmToast:function(result,detail){
         if(result == true){
