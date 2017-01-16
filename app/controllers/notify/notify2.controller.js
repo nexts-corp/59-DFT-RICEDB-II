@@ -51,12 +51,10 @@ class index{
                     ordinal:mr('left')('ordinal'),
                     status_allocate: r.branch( mr('left')('status').eq('n'), 'ประกาศ', 'จัดสรร'),
                     status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม'),
-    
-                    
+
                     name_calculate: r.branch( mr('left')('status').eq('n'), mr('left')('name'),' ' ),
-                    date_moc: r.branch( mr('left')('status').eq('n'), mr('left')('date_moc'),'00:00:00' ) ,
-                    date_notify: r.branch( mr('left')('status').eq('n'), mr('left')('date_notify'),'00:00:00' )
-                
+                    date_moc: r.branch( mr('left')('status').eq('n'), mr('left')('date_moc'),' ' ) ,
+                    date_notify: r.branch( mr('left')('status').eq('n'), mr('left')('date_notify'),' ' )
                 }
                 })
             })
@@ -90,7 +88,7 @@ class index{
                     data:all,
                     sum:{
                         sum_period: r.db('eu2').table('quota')
-                    .filter({type_rice_id:all('type_rice_id')(0),year:all('year')(0)})('quantity')(0)('period')
+                    .filter({type_rice_id:params.type_rice_id, year:params.year})('quantity')(0)('period')
                             .map(function(p){
                                 return {
                                 period: p,
