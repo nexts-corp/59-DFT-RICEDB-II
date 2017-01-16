@@ -59,13 +59,13 @@
               </div>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"> 
-               <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
-                item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+              
             	
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-form-input class="saveData" label="การคำนวณครั้งที่" allowed-pattern="[0-9||,||.]" format-number="on" value="{{ordinum}}" required ></gl-form-input>  
-
+               <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{selectTypeRice}}" placeholder="เลือกประเภทข้าว"
+                item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
+              <!--<gl-form-input label="การคำนวณครั้งที่" allowed-pattern="[0-9||,||.]" format-number="on" value="{{ordinum}}" disabled></gl-form-input>  -->
             </gl-grid-col> 
           </gl-grid-row>
           </div>
@@ -95,8 +95,7 @@
         <paper-listbox class="panel">
             <div class="bg"> 
               <div class="flex-equal-justified">
-                <paper-checkbox checked="{{selectAll}}" style="padding:10px">เลือกทั้งหมด</paper-checkbox>
-                <paper-button class="default" raised on-tap="cal" disabled$="{{active}}">คำนวณ</paper-button>       
+                <paper-checkbox checked="{{selectAll}}" style="padding:10px">เลือกทั้งหมด</paper-checkbox>       
               </div>
             </div> 
             <div>
@@ -110,9 +109,12 @@
             </paper-listbox>
             </div>
             </gl-form-panel-body>
+            <gl-form-panel-footer>
+                <paper-button class="default" raised on-tap="cal" disabled$="{{active}}">คำนวณ</paper-button>
+            </gl-form-panel-footer>
          </gl-form-panel>
-       
-        <div>
+          
+          <div>
           
           </div>
 
@@ -122,22 +124,22 @@
            <div class="vertical layout flex marginTL">
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_export}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_export}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_for_cal}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_for_cal}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_quota}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_quota}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
            <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา 100%</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.quota_amount}}" required></gl-form-input></div>
+            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.quota_amount}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
           </div>
@@ -149,8 +151,8 @@
       </div>
       <footer>
         <div class="horizontal end-justified layout">
-          <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
-          <paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+          <!--<paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>-->
+          <paper-button class="gl-btn-success" hidden$="{{activeSave}}" on-tap="_saveData" raised>บันทึก</paper-button>
         </div>
       </footer>
   </template>
@@ -172,10 +174,6 @@
         quotaYear:{
           type: String
         },
-        ordinalNumber:{
-          type: String,
-          // observer : 'mathOrdinalNumber'
-        },
         resault:{
           type: String
         },
@@ -186,7 +184,7 @@
         },
         sumAnswer:{
           type : Object,
-          value: {}
+          observer: 'checkDataSumAnswer'
         },
         active:{
           type: Boolean,
@@ -197,22 +195,6 @@
         this._getTypeRice();
         this._getYear();
         // this._getQuotaYear();
-      },
-      mathOrdinalNumber:function(){
-        // var num = number + 1;
-        if(this.ordinalNumber == ""){
-          this.ordinum = 1;
-        }
-        else {
-          this.ordinalNumber.map((item)=>{
-            
-            this.ordinum = item.detail.length+1;
-            this.ordinum.toString();
-          });
-        }
-        // this.ordinalNumber.length + 1;
-        // this.ordinalNumber.toString();
-       
       },
       cal:function(e){
         const check = (item)=>{
@@ -237,6 +219,13 @@
          this.fire('post-sum',this.sendCompanyData);
          
         //  console.log(this.sendCompanyData);
+      },
+      checkDataSumAnswer:function(data){
+        console.log(data);
+        this.activeSave = false;
+        if(data.quota_amount == 0 || data.sum_export == 0 || data.sum_for_cal == 0 || data.sum_quota == 0){
+          this.activeSave = true;
+        }
       },
       _selectAllChanged:function(val){ 
         this.companyName.map((item,index)=>{
@@ -292,40 +281,31 @@
         _yearQuoataChanged:function(quotaYear){
           this.quotaYear = quotaYear;
         },
-      _getlistCompany:function(fistYear,lastYear,typeRice){
+        _getlistCompany:function(fistYear,lastYear,typeRice){
         if(fistYear != ''&& lastYear != ''&& typeRice != ''){
-        this.active = false;
-        this.firstYear = fistYear;
-        this.lastYear = lastYear; 
-        this.typeRice = typeRice;
-        this.fire('toast',{status:'load'});
-        axios.get('./calculate/exporter',{
-          params:{
-            year : this.quotaYear,
-            frist_year : fistYear,
-            last_year : lastYear,
-            type_rice_id : typeRice
-          }
-        })
-        .then((response)=>{
-          console.log("success");
-          this.companyName = response.data;
-          console.log(response.data);
-          
-          this.fire('toast',{
-              status:'success',
-              text:this.textToast,
-              callback:function(){
-                //console.log('test');
-              }
-            });
-          //this.fire('toast',{status:'loadSuccess'});
-          //  this.listCompany.map((item)=>{
-          //  });
-
-          
-          //this.getYear = response.data;
-          //console.log(this.getYear);
+          this.active = false;
+          this.firstYear = fistYear;
+          this.lastYear = lastYear; 
+          this.typeRice = typeRice;
+          this.fire('toast',{status:'load'});
+          axios.get('./calculate/exporter',{
+            params:{
+              year : this.quotaYear,
+              frist_year : fistYear,
+              last_year : lastYear,
+              type_rice_id : typeRice
+            }
+          })
+          .then((response)=>{
+            console.log("success");
+            this.companyName = response.data;
+            console.log(response.data);
+            this.fire('toast',{
+                status:'success',
+                text:this.textToast,
+                callback:function(){
+                }
+              });
         })
         .catch((error)=>{
           console.log("error");
@@ -353,8 +333,6 @@
           newdata.year = parseInt(this.quotaYear)
           // console.log(newdata);
           this.fire('post-data',newdata);
-         
-          
         }
         else {
           console.log('failed');
