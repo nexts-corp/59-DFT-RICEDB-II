@@ -25,7 +25,24 @@
             }
         </style>
       
-        
+          <template is="dom-if" if="{{dataStat}}">
+            <table class="gl-table-default">
+                <thead>
+                    <tr>
+                        <th class="left">ผู้ส่งออก</th>
+                        <th>ปริมาณโควตารวม</th>
+                        <th>งวดที่ 1 มกราคม</th>
+                        <th>งวดที่ 2 เมษายน</th>
+                        <th>งวดที่ 3 กรกฏาคม</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td class="left" colspan="5">ไม่พบข้อมูล 
+                    </td>
+                </tbody>
+            </table>
+        </template>
+         <template is="dom-if" if="{{!dataStat}}">
        <table class="gl-table-default">
            <thead>
                 <tr>
@@ -51,11 +68,13 @@
             </template>
              </tbody> 
         </table>
+         </template>
     </template>
     <script>
         Polymer({
             is: 'confirm-list',
-            behaviors:[MonthBehavior,FormatNumberBehavior],
+            behaviors:[MonthBehavior,FormatNumberBehavior,DataManageBehavior],
+            observers:['checkData(data)'],
             properties:{
                 status: {
                     type: String
