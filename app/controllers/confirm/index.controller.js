@@ -8,6 +8,16 @@ class index {
                 params.year = parseInt(params.year);
             }   
 
+            r.db('eu2').table('quota').filter({year:params.year,type_rice_id:params.type_rice_id})
+              .innerJoin(r.db('eu2').table('calculate').filter({status:'n'}), function(q,c){
+                    return q('id').eq(c('quota_id'))
+             }).zip()
+             .orderBy('ordinal')
+             .pluck('ordinal')
+             .do(function(re){
+                return re ('ordinal')
+            })
+/*
             r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
                     return c('quota_id').eq(q('id'))
             }).map(function(x){
@@ -27,7 +37,7 @@ class index {
             .do(function(re){
                 return re ('ordinal')
             })
-            
+*/            
             .run().then(function(result){
                 res.json(result);
             })

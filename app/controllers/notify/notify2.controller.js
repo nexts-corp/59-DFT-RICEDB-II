@@ -119,19 +119,22 @@ class index{
             name:params.name, 
             date_moc:r.ISO8601(params.date_moc+'T00:00:00+07:00'), 
             date_notify:r.ISO8601(params.date_notify+'T00:00:00+07:00') 
-        }) /* ///edit add /// ต้องเปลี่ยนสถานะครั้งที่ 2 ใน calcualte เป็น nc ด้วย
-        .do(function(result){
-            r.db('eu2').table('allocate').filter({calculate_id:params.calculate_id})
-            .update({
-                status:'nc'
+        }) 
+
+        /* ///edit add /// ต้องเปลี่ยนสถานะครั้งที่ 2 ใน calcualte เป็น nc ด้วย
+            .do(function(result){
+                r.db('eu2').table('allocate').filter({calculate_id:params.calculate_id})
+                .update({
+                    status:'nc'
+                })
+            }) /////end edit //// ต้องเปลี่ยนสถานะครั้งที่ 2 ใน คอนเฟิร์ม เป็น nc ด้วย
+            .do(function(result){
+                r.db('eu2').table('confirm').filter({allocate_id:params.allocate_id})
+                .update({
+                    status:'nc'
+                })
             })
-        }) /////end edit //// ต้องเปลี่ยนสถานะครั้งที่ 2 ใน คอนเฟิร์ม เป็น nc ด้วย
-        .do(function(result){
-            r.db('eu2').table('confirm').filter({allocate_id:params.allocate_id})
-            .update({
-                status:'nc'
-            })
-        })*/
+        */
 
         .run().then(function(result){
             res.json(result);
