@@ -30,7 +30,10 @@ class index {
             
             .run().then(function(result){
                 res.json(result);
-            });
+            })
+            .catch(function(err){
+                res.json(err);
+            })
         }
 
         selectexporter(req,res){ 
@@ -88,7 +91,10 @@ class index {
                 })
                 .run().then(function(result){
                     res.json(result);
-                });
+                })
+                .catch(function(err){
+                    res.json(err);
+                })
         }
 
         selectall_noexporter(req,res){ 
@@ -212,7 +218,10 @@ class index {
             
                 .run().then(function(result){
                     res.json(result);
-                });
+                })
+                .catch(function(err){
+                    res.json(err);
+                })
             }
 
         selectall(req,res){ 
@@ -340,7 +349,10 @@ class index {
             
                 .run().then(function(result){
                     res.json(result);
-                });  
+                })
+                .catch(function(err){
+                    res.json(err);
+                }) 
         }
 
         updateconfirm(req,res){
@@ -362,7 +374,10 @@ class index {
 
             .run().then(function(result){
                 res.json(result);
-            });
+            })
+            .catch(function(err){
+                res.json(err);
+            })
 
         }
 
@@ -378,7 +393,10 @@ class index {
             })
             .run().then(function(result){
                 res.json(result);
-            });
+            })
+            .catch(function(err){
+                res.json(err);
+            })
         }
 
         tranfer(req,res){
@@ -389,6 +407,7 @@ class index {
             r.db('eu2').table('confirm').get(params.id ).update({
                 status:'t'
             })
+
             .do(function(result){
                 return r.db('eu2').table('confirm').insert({
                     amount:params.amount,
@@ -401,7 +420,10 @@ class index {
             })
             .run().then(function(result){
                 res.json(result);
-            });
+            })
+            .catch(function(err){
+                res.json(err);
+            })
         }
 
     }
