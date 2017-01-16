@@ -70,67 +70,31 @@
             </div>
         </template>
         <template is="dom-if" if="{{!dataStat}}">
-        <template is="dom-repeat" items="{{dataList.rice_h}}">
-        <div class="container">
-            
-            <div class="flex-equal-justified">
-                <div>ประเภท : {{item.type_rice_name}}</div>
-               
-            </div>
-            
-            <table class="gl-table-default" style="border: 1px solid #ddd;">
-                <thead>
-                    <tr>
-                        <th>เลือก</th>
-                        <th>คำนวณครั้งที่</th>
-                        <th class="right">ปริมาณ</th>
-                        <th class="right">สถานะ</th>
-                    </tr>
-                </thead>
-               
-                    <tbody>
-                        <template is="dom-repeat" items="{{item.row}}">
-                            <tr style="cursor:pointer;">
-                                <td><input type="radio" name="rice_w" on-tap="getIDtypeRice_W" value="[[item.id]]"></td>
-                                <td on-tap="_selectData" key="[[item]]">[[item.ordinal]]</td>
-                                <td class="right"  on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
-                                <td class="right"  on-tap="_selectData" key="[[item]]">[[item.status_calculate]]</td>
-                            </tr>
-                            
-                        </template>
-                    </tbody>
+            <template is="dom-repeat" as="data" items="{{dataList}}">
+            <div class="container">
                 
-            </table>
-           
-        </div>
-        </template>
-         <template is="dom-repeat" items="{{dataList.rice_w}}">
-        <div class="container">
-            
-            <div class="flex-equal-justified">
-                <div>ประเภท : {{item.type_rice_name}}</div>
-               
-            </div>
-            
-            <table class="gl-table-default" style="border: 1px solid #ddd;">
-                <thead>
-                    <tr>
-                        <th>เลือก</th>
-                        <th>คำนวณครั้งที่</th>
-                        <th class="right">ปริมาณ</th>
-                        <th class="right">สถานะ</th>
-                    </tr>
-                </thead>
-               
-                    <tbody>
-                        <template is="dom-repeat" items="{{item.row}}">
-                            <tr style="cursor:pointer;">
-                                <td><input type="radio" name="rice_h" on-tap="getIDtypeRice_H" value="[[item.id]]"></td>
-                                <td on-tap="_selectData" key="[[item]]">[[item.ordinal]]</td>
-                                <td class="right" on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
-                                <td class="right" on-tap="_selectData" key="[[item]]">[[item.status_calculate]]</td>
-                            </tr>
-                        </template>
+                <div class="flex-equal-justified">
+                    <div>ประเภท : {{data.type_rice_name_th}}</div>
+                </div>
+                <table class="gl-table-default" style="border: 1px solid #ddd;">
+                    <thead>
+                        <tr>
+                            <th>เลือก</th>
+                            <th>คำนวณครั้งที่</th>
+                            <th class="right">ปริมาณ</th>
+                            <th class="right">สถานะ</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            <template is="dom-repeat" items="{{data.row}}">
+                                <tr style="cursor:pointer;">
+                                    <td><input type="radio" id="typeRice" name$="{{item.type_rice_id}}" on-tap="getIDtypeRice" value="[[item.id]]"></td>
+                                    <td on-tap="_selectData" key="[[item]]">[[item.ordinal]]</td>
+                                    <td class="right"  on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
+                                    <td class="right"  on-tap="_selectData" key="[[item]]">[[item.status_th]]</td>
+                                </tr>
+                                
+                            </template>
                     </tbody>
                 
             </table>
@@ -143,46 +107,34 @@
         Polymer({
             is: 'notice-list',
             behaviors:[FormatNumberBehavior,DataManageBehavior],
-            // observers:[
-            //     'checkData(dataList.rice_w,dataList.rice_h)'
-            // ],
-            properties:{
-                dataList:{
-                    type: Object,
-                    observer: 'getList'
-                }
-            },
-            getList:function(){
-                if(this.dataList.rice_h != ''){
-                    this.checkData(this.dataList.rice_h);
-                }
-                else if(this.dataList.rice_w != ''){
-                     this.checkData(this.dataList.rice_w);
-                }
-                console.log(this.dataList);
-            },
+            observers:[
+                'checkData(dataList)'
+            ],
             _selectData:function(e){
-                // console.log(e.currentTarget.key.id)
+                console.log(e.currentTarget.key);
                 this.fire('data-select',e.currentTarget.key)
             },
-            getIDtypeRice_W:function(e){
-               this.getRice_w = e.target.value;
-               this.fire('select-rice');
+            getIDtypeRice:function(e){
+               console.log(e.target.value);
+               this.fire('select-rice',e.target.value);
             },
-            getIDtypeRice_H:function(e){
-               this.getRice_h = e.target.value;
-               this.fire('select-rice');
-            },
-            getIDtypeRice:function(){
-                if(typeof this.getRice_h == 'undefined')
-                    return this.getRice_w;
-                else if(typeof this.getRice_w == 'undefined')
-                    return this.getRice_h;
-                else {
-                    return data = this.getRice_w+','+this.getRice_h;
-                } 
-                
+            getValueForReport:function(e){
+                var checkSelect =  Polymer.dom(this.root).querySelectorAll('#typeRice').map((item)=>{
+                    if(item.checked == true){
+                        return item.value
+                    }  
+                });
+                var queryString = "";
+                checkSelect.map(function(id){
+                    if(id){
+                        var comma = "";
+                        if(queryString!=""){comma=","}
+                        queryString = queryString+comma+id;
+                    }
+                })
+                return queryString;
             }
+
         });
     </script>
 </dom-module>

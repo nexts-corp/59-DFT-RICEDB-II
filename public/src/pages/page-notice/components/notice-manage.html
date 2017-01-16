@@ -133,14 +133,15 @@
                 return index+1;
             },
             manageData:function(){
-                // console.log(this.dataList);
+                console.log(this.dataList);
                 var name  = this.dataList.name.split(" ");
+                this.set('name.firstName',name[0]);
+                this.set('name.lastName',name[1]);
                 var myDate = this.dataList.date_moc.split("T");
                 var myDateNotify = this.dataList.date_notify.split("T");
                 this.set('data.date_notify',myDateNotify[0]);
                 this.set('data.date_moc',myDate[0]);
-                this.set('name.firstName',name[0]);
-                this.set('name.lastName',name[1]);
+               
             },
             getQuantityForTableHead:function(item){
                 return item[0].quantity;
@@ -151,6 +152,7 @@
             saveData:function(){
                 this.data.calculate_id = this.dataList.data[0].calculate_id;
                 this.data.name = this.name.firstName+' '+this.name.lastName; 
+                console.log(this.data);
                 this.fire('post-data',this.data);
             }
         });

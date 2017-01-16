@@ -86,7 +86,7 @@
             </div>
           </div>
           <div style="overflow-x:auto; padding:20px;">
-            <notice-list data-list="{{listNotice}}" on-select-rice="showButton" on-data-select="_getDataSelect"></notice-list>
+            <notice-list data-list="{{listNotice}}" on-select-rice="selectedRice" on-data-select="_getDataSelect"></notice-list>
           </div>
           <paper-button class="gl-btn-primary" hidden="{{active}}" on-tap="noticeReport" raised>ออกประกาศ</paper-button>    
         </div>
@@ -153,8 +153,8 @@
                             callback:function(){
                             }
                         });
-                        this.$$('panel-right').close();
-                        // console.log(response.data);
+                       
+                        console.log(response.data);
                         this.listNotice = response.data;
                         // this.dataList = response.data;
                     })
@@ -215,12 +215,12 @@
                     console.log(error);
                 })
             },
-            showButton:function(){
+            selectedRice:function(){
                 this.active = false;
             },
             noticeReport:function(){
-              
-               var data = this.$$('notice-list').getIDtypeRice();
+               var data = this.$$('notice-list').getValueForReport();
+            //    console.log(data);
                window.open('/api/notify/report?calculate_id='+data,'_blank');
          
             }
