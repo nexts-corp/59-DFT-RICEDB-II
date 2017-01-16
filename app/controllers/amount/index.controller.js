@@ -89,7 +89,7 @@ class index{
            }).zip().filter({
              type_rice_id:params.type_rice_id,
              year:params.year
-           }).pluck('ordinal')('ordinal')
+           }).orderBy('ordinal').pluck('ordinal')('ordinal')
              .map(function(nu){
                return [nu]
              })
