@@ -65,7 +65,7 @@
           </template>
     <!-- disabled="[[checkInput]]" -->
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
-        [[dataForSelect.contract_quantity_confirm_balance]]//fdgfdg
+        <!-- [[dataForSelect.contract_quantity_confirm_balance]] -->
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
             [[changeString2Num(data.*,'cl_no')]]
@@ -86,22 +86,21 @@
         <div class="bg">
           <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
             <gl-form-panel-body label="" set-padding="10px" set-border="1px">
-          <div class="horizontal end-justified layout">
-                       <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:16px" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบชนิดข้าว</paper-button>
-            </div>
-              </gl-form-panel-body>
-
-              <gl-form-panel-body label="" set-padding="10px" set-border="1px">
-          <gl-grid-row>
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+              <div class="horizontal end-justified layout">
+                <paper-button id="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="deleteRiceType" style="margin-top:16px" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบชนิดข้าว</paper-button>
+              </div>
+            </gl-form-panel-body>
+            <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+              <gl-grid-row>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
 
               <!-- <gl-combo-box id="riceType" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
             item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" items="{{dataForSelect.contract_type_rice}}" >
               </gl-combo-box > -->
               <!-- [[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice)]] -->
-              <gl-combo-box id="riceType-[[index]]" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
-            item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" on-value-changed="_typeRiceConfirm">
-              </gl-combo-box >
+                <gl-combo-box id="riceType-[[index]]" class="required" required  disabled="[[isInputDisabled]]" error-message="กรุณาเลือกชนิดข้าว" placeholder="เลือกชนิดข้าว" name="type_rice_name" label="ชนิดข้าว"
+              item-label-path="type_rice_name_th"   item-value-path="type_rice_id" value="{{item.type_rice_id}}" on-value-changed="_typeRiceConfirm">
+                </gl-combo-box >
 
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
@@ -195,9 +194,10 @@
           </div>
       </template>
       <div class="horizontal end-justified layout">
-        <template is="dom-if" if="[[checkBtnView(btnCheckDis)]]">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]"><iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
 
+        <template is="dom-if" if="[[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)]]">
+          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]" >
+            <iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
         </template>
       </div>
     <gl-grid-row>
@@ -263,8 +263,12 @@
         '_changeDataConfirm(data.cl_date)',
         '_typeRiceConfirm(data.*)',
         '_typePackageConfirm(data.*)',
-        '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)'
+        '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)',
+        // '_cccc(data.cl_type_rice.*)'
       ],
+      _cccc:function (data) {
+        // console.log('_cccc=>',data);
+      },
       attached: function() {
         this._typeRiceConfirm();
         this._typePackageConfirm();
