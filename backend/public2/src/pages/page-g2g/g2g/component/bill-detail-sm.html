@@ -90,10 +90,10 @@
     <gl-grid-row width="{{getWidth}}">
       <template is="dom-repeat" items="[[data.surveyor]]">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[_getSurveyor(item.surveyor_id,dataForSelect)]]
+          [[_getSurveyor(item.surveyor_id,dataForSelect,data.surveyor.*)]]
            <!-- items="{{dataForSelect.surveyor}}" -->
           <gl-combo-box required class="required" id="surveyor-[[index]]" label="Surveyor [[_ObcountIndex(index)]]" always-float-label disabled="[[isInputDisabled]]" item-label-path="surveyor_name"
-            item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"></gl-combo-box>
+            item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"  on-value-changed="_getResetSurveyor"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
@@ -209,10 +209,10 @@
           type: Object,
           notify: true
         },
-        hiddenInsertVessel:{
-          type:Boolean,
-          value:false
-        },
+        // hiddenInsertVessel:{
+        //   type:Boolean,
+        //   value:false
+        // },
         blNoOld:{
           type:String,
         }
@@ -221,10 +221,10 @@
         '_oBChangeBooking(data.book_no)',
         '_oBChangePod(data.dest_port_id)',
         '_getPod(dataForSelect)',
-        '_oBCheckVessel(data.ship.*)',
+        // '_oBCheckVessel(data.ship.*)',
         '_changeDataBl(data.etd_date)',
         // '_getShip(data.shipline_id,dataForSelect)',
-        '_getSurveyor(data,dataForSelect)',
+        // '_getSurveyor(data,dataForSelect)',
         // '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)',
         // '_oBcheckCarrier(dataForSelect.carrier)'
         // '_foredit(data)'
@@ -234,8 +234,8 @@
       //     // console.log('this.blNoOld',this.blNoOld);
       // },
       _changeDataBl:function (dateUn) {
-        this.getDateg2g(dateUn,(date)=>{
-          // console.log(date);
+        // this.getDateg2g(dateUn,(date)=>{
+        //   console.log('date',date);
           this.set('data.etd_date', date);
           this.notifyPath('data.etd_date');
           this.set('data.eta_date', date);
@@ -250,7 +250,7 @@
         // console.log(this.dataForSelect.carrier);
       },
       _oBcheckCarrier:function (carrier) {
-        console.log('carrier',carrier);
+        // console.log('carrier',carrier);
       },
       addBl:function () {
         this.data.book_status = false;
@@ -268,6 +268,7 @@
                   this.cancelInsertShipment();
                   let el = Polymer.dom(this.root).querySelectorAll('.required');
                   el.map((el)=> {el.value='';});
+                  this._changeDataBl('undefined');
                 }
             });
           });
@@ -434,15 +435,15 @@
         this.notifyPath('dataForSelect.pod');
         // console.log(pod[0].ship);
       },
-      _oBCheckVessel:function (shipMany) {
-        // set btnvessel
-        // console.log(shipMany.value);
-        if (shipMany.value < 3) {
-          this.hiddenInsertVessel = true;
-        }else {
-          this.hiddenInsertVessel = false;
-        }
-      },
+      // _oBCheckVessel:function (shipMany) {
+      //   // set btnvessel
+      //   // console.log(shipMany.value);
+      //   if (shipMany.value < 3) {
+      //     this.hiddenInsertVessel = true;
+      //   }else {
+      //     this.hiddenInsertVessel = false;
+      //   }
+      // },
       _checkCarrierIsBlank:function () {
         var carrierSelete;
         this.dataForSelect.carrier.map((carrier)=>{

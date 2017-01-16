@@ -15,6 +15,7 @@
     },
     _getShip:function (shipline_id,dataForSelect) {
       // console.log(shipline_id, dataForSelect);
+      // console.log(this.data);
       // let shipline_id = e.detail.value;
       if(shipline_id){
         let ships = this.dataForSelect.shipInShipline.filter((shipline)=>shipline.shipline_id == shipline_id )[0].ship;
@@ -38,6 +39,7 @@
                }
              });
              comboboxs = Polymer.dom(this.root).querySelector('#ship-'+i);
+            //  console.log(comboboxs);
              comboboxs.items = arrForItem;
            }
         },1);
@@ -47,36 +49,31 @@
       //shipment-detail.html
       this.fire('cancel-insert-shipment',{detail:'cancel Show'})
     },
+    _getResetSurveyor:function (e) {
+      this._getSurveyor('this.data.shipline_id',this.dataForSelect);
+    },
     _getSurveyor:function (surveyor_id,dataForSelect) {
       if(surveyor_id){
-        // console.log(surveyor);
-        // let surveyored = this.dataForSelect.surveyor.filter((surveyors)=>surveyors.surveyor_id == surveyor_id )[0].surveyor_id;
-        // console.log(surveyored);
-        // // console.log(ships);
-        // this.dataForSelect.ships =ships;
-        // this.notifyPath('dataForSelect.ships');
         this.async(()=>{
            let  comboboxs,arrForItem,itemif;
            for (var i = 0; i < this.data.surveyor.length; i++) {
              arrForItem = JSON.parse(JSON.stringify(this.dataForSelect.surveyor));
-             console.log('arrForItem',arrForItem);
-            //  this.data.ship.map((item,index)=>{
-            //   //  console.log(item);
-            //    if (i != index) {
-            //      //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
-            //      if (arrForItem.filter((blDetail)=> blDetail.ship_id == item.ship_id )[0] != undefined) {
-            //        itemif = arrForItem.indexOf(arrForItem.filter((blDetail)=> blDetail.ship_id == item.ship_id )[0]);
-            //       //  console.log(itemif);
-            //        arrForItem.splice(itemif, 1);
-            //      }
-            //    }
-            //  });
+            //  console.log('arrForItem',arrForItem);
+             this.data.surveyor.map((item,index)=>{
+              //  console.log(item);
+               if (i != index) {
+                 //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
+                 if (arrForItem.filter((shipment)=> shipment.surveyor_id == item.surveyor_id )[0] != undefined) {
+                   itemif = arrForItem.indexOf(arrForItem.filter((shipment)=> shipment.surveyor_id == item.surveyor_id )[0]);
+                  //  console.log(itemif);
+                   arrForItem.splice(itemif, 1);
+                 }
+               }
+             });
              comboboxs = Polymer.dom(this.root).querySelector('#surveyor-'+i);
              comboboxs.items = arrForItem;
-             console.log(comboboxs);
-             console.log(comboboxs.items);
-
-
+            //  console.log(comboboxs);
+            //  console.log(comboboxs.items);
            }
         },1);
       }

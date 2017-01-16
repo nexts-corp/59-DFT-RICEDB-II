@@ -17,10 +17,10 @@
         type: Object,
         // readOnly: true,
       },
-      btnCheckDis:{
-        type:Boolean,
-        value:false
-      },
+      // btnCheckDis:{
+      //   type:Boolean,
+      //   value:false
+      // },
     },
     observers:[
       '_cloneData(data)'
@@ -94,10 +94,10 @@
     _isHaveForUse:function(arr1,arr2){
       // console.log(arr1.length,arr2.length);
       if ((arr1.length) < arr2.length) {
-        this.btnCheckDis=true;
+        // this.btnCheckDis=true;
         return true;
       }else {
-        this.btnCheckDis=false;
+        // this.btnCheckDis=false;
         return false;
       }
     },
@@ -117,7 +117,12 @@
       return url;
     },
     getDateg2g:function (date,callback) {
-      if (date == undefined) {
+      // ex
+      // this.getDateg2g(dateUn,(date)=>{
+      //   //   console.log('date',date);
+      // });
+      // console.log('gggg=',date);
+      if (date == undefined || date == 'undefined') {
         let date = new Date;
         let dateNow = date.toISOString().split("T");
         callback(dateNow[0]);
