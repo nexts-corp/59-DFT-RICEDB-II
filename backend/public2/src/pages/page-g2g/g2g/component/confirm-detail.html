@@ -65,7 +65,7 @@
           </template>
     <!-- disabled="[[checkInput]]" -->
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
-        <!-- [[dataForSelect.contract_quantity_confirm_balance]] -->
+        [[dataForSelect.contract_quantity_confirm_balance]]//fdgfdg
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
             [[changeString2Num(data.*,'cl_no')]]
@@ -195,9 +195,11 @@
       </template>
       <div class="horizontal end-justified layout">
 
-        <template is="dom-if" if="[[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)]]">
-          <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]" >
-            <iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
+        <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
+          <template is="dom-if" if="[[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)]]">
+            <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]" >
+              <iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
+          </template>
         </template>
       </div>
     <gl-grid-row>
@@ -263,12 +265,8 @@
         '_changeDataConfirm(data.cl_date)',
         '_typeRiceConfirm(data.*)',
         '_typePackageConfirm(data.*)',
-        '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)',
-        // '_cccc(data.cl_type_rice.*)'
+        '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)'
       ],
-      _cccc:function (data) {
-        // console.log('_cccc=>',data);
-      },
       attached: function() {
         this._typeRiceConfirm();
         this._typePackageConfirm();
