@@ -46,7 +46,7 @@ class index{
               .filter({
                 year:params.year,
                 type_rice_id:params.type_rice_id,
-                ordinal:params.ordinal
+                ordinal:params.ordinal_numer
                 //status:'nc',
                 //status_allocate:'n'
               }) 

@@ -7,8 +7,24 @@ class index{
         if(typeof params.year !== "undefined"){
             params.year = parseInt(params.year);
         }
-        console.log(params.year)
-
+        r.db('eu2').table('quota').filter({
+            year:params.year
+        }).innerJoin(r.db('eu2').table('type_rice'), function(q,tr){
+            return q('type_rice_id').eq(tr('id'))
+        }).without({ right: ['id'] }).zip()
+        .without('amount','quantity')
+            
+        .merge(function(data){
+        return {
+            row: r.db('eu2').table('calculate') 
+            .filter({quota_id:data('id')})
+            .orderBy('ordinal')
+            .merge(function(x){return {status_th:r.branch(x('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')} })
+            .pluck('ordinal','amount_update','status_th','status')
+            .coerceTo('array')
+        }
+        })
+/*
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
         return c('quota_id').eq(q('id'))
         }).map(function(ml){
@@ -100,7 +116,7 @@ class index{
         
             }
         })
-       
+       */
         .run().then(function(result){
             res.json(result);
         });
