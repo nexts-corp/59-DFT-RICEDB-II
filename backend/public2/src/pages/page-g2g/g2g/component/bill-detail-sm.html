@@ -75,7 +75,7 @@
 
         <template is="dom-if" if="[[!isInputDisabled]]">
           <div class="horizontal end-justified layout">
-            <template is="dom-if" if="[[checkBtnView(btnCheckDis)]]">
+            <template is="dom-if" if="[[_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)]]">
               <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip">
               <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
             </template>
@@ -90,7 +90,8 @@
     <gl-grid-row width="{{getWidth}}">
       <template is="dom-repeat" items="[[data.surveyor]]">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          <!-- [[_getSurveyor(item.surveyor_id,dataForSelect)]] items="{{dataForSelect.surveyor}}" -->
+          [[_getSurveyor(item.surveyor_id,dataForSelect)]]
+           <!-- items="{{dataForSelect.surveyor}}" -->
           <gl-combo-box required class="required" id="surveyor-[[index]]" label="Surveyor [[_ObcountIndex(index)]]" always-float-label disabled="[[isInputDisabled]]" item-label-path="surveyor_name"
             item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"></gl-combo-box>
         </gl-grid-col>
@@ -100,10 +101,10 @@
 
       <template is="dom-if" if="[[!isInputDisabled]]">
         <div class="horizontal end-justified layout">
-            <!-- <template is="dom-if" if="[[checkBtnView(btnCheckDis)]]"> -->
+            <template is="dom-if" if="[[_isHaveForUse(data.surveyor,dataForSelect.surveyor,data.surveyor.*)]]">
         <paper-button raised class="gl-btn-primary btnVessel" on-tap="addSurveyor">
           <iron-icon icon="add"></iron-icon>เพิ่ม Surveyor</paper-button>
-          <!-- </template> -->
+          </template>
           <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteSurveyor">
             <iron-icon icon="remove"></iron-icon>ลบ Surveyor</paper-button>
         </div>
@@ -224,7 +225,7 @@
         '_changeDataBl(data.etd_date)',
         // '_getShip(data.shipline_id,dataForSelect)',
         '_getSurveyor(data,dataForSelect)',
-        '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)',
+        // '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)',
         // '_oBcheckCarrier(dataForSelect.carrier)'
         // '_foredit(data)'
       ],
