@@ -16,107 +16,18 @@ class index{
             
         .merge(function(data){
         return {
-            row: r.db('eu2').table('calculate') 
-            .filter({quota_id:data('id')})
-            .orderBy('ordinal')
-            .merge(function(x){return {status_th:r.branch(x('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')} })
-            .pluck('ordinal','amount_update','status_th','status')
+            row: r.db('eu2').table('calculate') .filter({quota_id:data('id')}).orderBy('ordinal')
+            .merge(function(x){return {
+               status_th:r.branch(x('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า'),
+               year:data('year'),
+               type_rice_id:data('type_rice_id')
+            }
+            })
+          
+           .pluck('ordinal','amount_update','status_th','status','year','type_rice_id','id')
             .coerceTo('array')
         }
         })
-/*
-        r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
-        return c('quota_id').eq(q('id'))
-        }).map(function(ml){
-        return ml('left').merge(function(ty){
-            return { 
-            year:ml('right')('year'), 
-            type_rice_id:ml('right')('type_rice_id'),
-            status_calculate: r.branch( ml('left')('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')
-            }
-        })
-        })
-        .innerJoin(r.db('eu2').table('type_rice'), function(a,t){
-            return a('type_rice_id').eq(t('id'))
-        }).map(function(m){ return m('left').merge(function(n){
-            return {type_rice_name: m('right')('type_rice_name_th')}
-        })
-        })
-        
-        .without('amount', 'amount_cal', 'calculate', 'confirm', 'confirm_year', 'quota_id', 'report', 'report_year', 'row') 
-        
-        .map(function(x){
-            return {
-            year:x('year') ,
-            type_rice_id:x('type_rice_id'),
-            type_rice_name:x('type_rice_name'),
-            row:[{
-                amount_update: x('amount_update'),
-                id:x('id'),
-                ordinal:x('ordinal'),
-                status:x('status'),
-                status_calculate:x('status_calculate'),
-                year:x('year'),
-                type_rice_id:x('type_rice_id')
-            }]
-            }
-        })
-        
-        .filter({
-            year:params.year,
-            type_rice_id:'513aa18a-e0d9-4408-9ec2-62fa271958e5'   //ข้าวหัก
-        }).orderBy('ordinal')
-          
-          
-        
-        .do(function (rwhite){
-            return {
-            rice_w: rwhite, 
-            rice_h: r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
-                        return c('quota_id').eq(q('id'))
-                        }).map(function(ml){
-                        return ml('left').merge(function(ty){
-                            return { 
-                            year:ml('right')('year'), 
-                            type_rice_id:ml('right')('type_rice_id'),
-                            status_calculate: r.branch( ml('left')('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')
-                            }
-                        })
-                        })
-                        .innerJoin(r.db('eu2').table('type_rice'), function(a,t){
-                            return a('type_rice_id').eq(t('id'))
-                        }).map(function(m){ return m('left').merge(function(n){
-                            return {type_rice_name: m('right')('type_rice_name_th')}
-                        })
-                        })
-                        
-                        .without('amount', 'amount_cal', 'calculate', 'confirm', 'confirm_year', 'quota_id', 'report', 'report_year', 'row') 
-                        
-                        .map(function(x){
-                            return {
-                            year:x('year') ,
-                            type_rice_id:x('type_rice_id'),
-                            type_rice_name:x('type_rice_name'),
-                            row:[{
-                                amount_update: x('amount_update'),
-                                id:x('id'),
-                                ordinal:x('ordinal'),
-                                status:x('status'),
-                                status_calculate:x('status_calculate'),
-                                year:x('year'),
-                                type_rice_id:x('type_rice_id')
-                            }]
-                            }
-                        })
-
-                        .filter({
-                            year:params.year,
-                            type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7'   //ข้าวขาว
-                        }).orderBy('ordinal')
-        
-            }
-        })
-       */
         .run().then(function(result){
             res.json(result);
         });
@@ -131,6 +42,75 @@ class index{
             params.year = parseInt(params.year);
         }
 
+           r.db('eu2').table('quota').filter({
+                year:2560,
+                type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7'
+            }).innerJoin(r.db('eu2').table('type_rice'), function(q,tr){
+                return q('type_rice_id').eq(tr('id'))
+            }).without({ right: ['id'] }).zip()
+            .without('amount')
+                
+            .innerJoin( r.db('eu2').table('calculate').filter({ordinal:1,id:'3d39afad-ae61-4c82-91ac-fecf7395888e'}), function(all, c){
+            return all('id').eq(c('quota_id'))
+            }).map(function(mr){
+            return mr('right').merge(function(x){
+                return {
+                quantity:mr('left')('quantity'), 
+                year:mr('left')('year'), 
+                type_rice_id:mr('left')('type_rice_id'), 
+                type_rice_name_th:mr('left')('type_rice_name_th'),
+                status_th:r.branch(mr('right')('status').eq('n'), 'ออกประกาศ', 'จัดสรรโควต้า')
+                }
+            })
+            }).without('amount', 'amount_cal', 'amount_update', 'calculate', 'confirm', 'confirm_year', 'report', 'report_year')
+            
+            .innerJoin(r.db('eu2').table('allocate'), function(all,a){
+            return all('id').eq(a('calculate_id'))
+            }).map(function(ml){
+            return ml('left').merge(function(x){
+                return{
+                status_allocate:ml('right')('status'),
+                amount_update:ml('right')('amount_update'),
+                exporter_id:ml('right')('exporter_id'),
+                quantity:ml('left')('quantity').map(function(mq){
+                    return {
+                    period:mq('period'),
+                    month:mq('month'),
+                    weigth_update:ml('right')('quantity').filter({period:mq('period')})(0)('weigth_update')
+                    }
+                })
+                }
+            })
+            })
+            
+            .innerJoin(r.db('eu2').table('exporter'), function(a,e){
+            return a('exporter_id').eq(e('id'))
+            }).map(function(x){
+            return x('left').merge(function(ne){
+                return{ name_exporter:x('right')('name')}
+            })
+            }).orderBy('name_exporter')
+
+                .do(function(all){
+                    return {
+                        data:all,
+                        sum:{
+                            sum_period: r.db('eu2').table('quota')
+                        .filter({type_rice_id:'4b23b3af-e292-4ac7-8154-c51363cc5ea7',year:2560})('quantity')(0)('period')
+                                .map(function(p){
+                                    return {
+                                    period: p,
+                                    sw_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
+                                    }
+                                }),
+                            sum_amount_update :all('amount_update').sum()
+                        },
+                        name:all('name')(0),
+                        date_moc: all('date_moc')(0),
+                        date_notify:all('date_notify')(0)
+                    }
+                })
+    /*
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('allocate'), function(c,a){	
             return c('id').eq(a('calculate_id'))
         }).map(function(mr){
@@ -196,7 +176,7 @@ class index{
 		
         .run().then(function(result){
             res.json(result);
-        });
+        });*/
     }//end function 
 
     saveOrdinal(req,res){ 
