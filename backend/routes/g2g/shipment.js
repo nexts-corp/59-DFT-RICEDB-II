@@ -139,7 +139,15 @@ router.get('/id/:shm_id', function (req, res, next) {
                                                 return r.db('common').table('package').get(row_package('package_id')).without('id')
                                             })
                                         }),
-                                        type_rice_quantity_limit: mmm('type_rice_quantity').sub(mmm('type_rice_quantity_confirm'))
+                                        // type_rice_quantity_limit: mmm('type_rice_quantity').sub(mmm('type_rice_quantity_confirm')),
+                                        type_rice_quantity_min: mmm('type_rice_quantity').sub(mmm('type_rice_quantity').mul(mmm('tolerance_rate').div(100)
+                                        )),
+                                        type_rice_quantity_max: mmm('type_rice_quantity').mul(mmm('tolerance_rate').div(100)
+                                        ).add(mmm('type_rice_quantity')),
+                                        type_rice_quantity_limit_min: mmm('type_rice_quantity').sub(mmm('type_rice_quantity').mul(mmm('tolerance_rate').div(100)
+                                        )).sub(mmm('type_rice_quantity_confirm')),
+                                        type_rice_quantity_limit_max: mmm('type_rice_quantity').mul(mmm('tolerance_rate').div(100)
+                                        ).add(mmm('type_rice_quantity')).sub(mmm('type_rice_quantity_confirm'))
                                     }
                                 })
                         }
