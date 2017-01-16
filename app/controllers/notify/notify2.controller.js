@@ -52,9 +52,9 @@ class index{
                     status_allocate: r.branch( mr('left')('status').eq('n'), 'ประกาศ', 'จัดสรร'),
                     status_calculate: r.branch( qu('status').eq('nc'), 'ไม่คอนเฟิร์ม', 'คอนเฟิร์ม'),
 
-                    name_calculate: r.branch( mr('left')('status').eq('n'), mr('left')('name'),' ' ),
-                    date_moc: r.branch( mr('left')('status').eq('n'), mr('left')('date_moc'),' ' ) ,
-                    date_notify: r.branch( mr('left')('status').eq('n'), mr('left')('date_notify'),' ' )
+                    name_calculate: r.branch( mr('left')('status').eq('n'), mr('left')('name'),'' ),
+                    date_moc: r.branch( mr('left')('status').eq('n'), mr('left')('date_moc'),'' ) ,
+                    date_notify: r.branch( mr('left')('status').eq('n'), mr('left')('date_notify'),'' )
                 }
                 })
             })
