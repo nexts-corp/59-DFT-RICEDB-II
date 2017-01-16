@@ -88,7 +88,9 @@
                         <tbody>
                             <template is="dom-repeat" items="{{data.row}}">
                                 <tr style="cursor:pointer;">
-                                    <td><input type="radio" id="typeRice" name$="{{item.type_rice_id}}" on-tap="getIDtypeRice" value="[[item.id]]"></td>
+                                    <td>
+                                        <input type="radio" id="typeRice" name$="{{item.type_rice_id}}" disabled$="{{checkStatus(item.status)}}" on-tap="getIDtypeRice" value="[[item.id]]">
+                                    </td>
                                     <td on-tap="_selectData" key="[[item]]">[[item.ordinal]]</td>
                                     <td class="right"  on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
                                     <td class="right"  on-tap="_selectData" key="[[item]]">[[item.status_th]]</td>
@@ -113,6 +115,11 @@
             _selectData:function(e){
                 console.log(e.currentTarget.key);
                 this.fire('data-select',e.currentTarget.key)
+            },
+            checkStatus:function(item){
+                // console.log('1234',item)
+                // console.log(item == 'a');
+                return item != 'n'
             },
             getIDtypeRice:function(e){
                console.log(e.target.value);

@@ -371,47 +371,51 @@
                 _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice) {
                     // console.log(yearQuoata,typeRice);
                     // this.selectQuotaOrdinal = "";
-                    axios.get('./confirm/confirmordinal', {
-                        params: {
-                            year: yearQuoata,
-                            type_rice_id: typeRice
-                        }
-                    })
-                        .then((response) => {
-                            console.log("success!!");
-                            console.log(response.data);
-                            this.ordinalNumber = response.data.map((item)=>{
-                                return item.toString();
-                            })
-                            // this.getQuotaOrdinal = response.data;
+                    if(yearQuoata != '' && typeRice != ''){
+                        axios.get('./confirm/confirmordinal', {
+                            params: {
+                                year: yearQuoata,
+                                type_rice_id: typeRice
+                            }
                         })
-                        .catch((error) => {
-                            console.log("error");
-                            console.log(error);
-                        });
+                            .then((response) => {
+                                console.log("success!!");
+                                console.log(response.data);
+                                this.ordinalNumber = response.data.map((item)=>{
+                                    return item.toString();
+                                })
+                                // this.getQuotaOrdinal = response.data;
+                            })
+                            .catch((error) => {
+                                console.log("error");
+                                console.log(error);
+                            });
+                    }
                 },
                 _yearQuoataAndTypeRiceChangedAndOrdinal:function(year,type_rice,ordinal){
-                      axios.get('./confirm/confirmexporter', {
-                        params: {
-                            year: year,
-                            type_rice_id: type_rice,
-                            ordinal : ordinal
-                        }
-                    })
-                        .then((response) => {
-                            console.log("success!!");
-                            console.log(response.data);
-                            this.exporterData = response.data.data;
-                            console.log(this.exporterData);
-                            // this.exporterData = response.data.map((item)=>{
-                            //     return item.toString();
-                            // })
-                            // this.getQuotaOrdinal = response.data;
+                    if(year != '' && type_rice != '' && ordinal != ''){
+                        axios.get('./confirm/confirmexporter', {
+                            params: {
+                                year: year,
+                                type_rice_id: type_rice,
+                                ordinal : ordinal
+                            }
                         })
-                        .catch((error) => {
-                            console.log("error");
-                            console.log(error);
-                        });
+                            .then((response) => {
+                                console.log("success!!");
+                                console.log(response.data);
+                                this.exporterData = response.data.data;
+                                console.log(this.exporterData);
+                                // this.exporterData = response.data.map((item)=>{
+                                //     return item.toString();
+                                // })
+                                // this.getQuotaOrdinal = response.data;
+                            })
+                            .catch((error) => {
+                                console.log("error");
+                                console.log(error);
+                            });
+                    }
                 },
                 _getDataCompanny:function(){
                     // this.$$('confirm-list')._setData();

@@ -182,23 +182,25 @@
             },
             _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
               this.selectQuotaOrdinal = "";
-              axios.get('./amount/amountorinal',{
-                params:{
-                  year:yearQuoata,
-                  type_rice_id:typeRice
-                }
-              })
-                .then((response)=>{
-                    console.log("success!!");
-                    console.log(response.data);
-                    this.getQuotaOrdinal = response.data.map((item)=>{
-                      return item.toString();
-                    });
+              if(yearQuoata != '' && typeRice != ''){
+                axios.get('./amount/amountorinal',{
+                  params:{
+                    year:yearQuoata,
+                    type_rice_id:typeRice
+                  }
                 })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
+                  .then((response)=>{
+                      console.log("success!!");
+                      console.log(response.data);
+                      this.getQuotaOrdinal = response.data.map((item)=>{
+                        return item.toString();
+                      });
+                  })
+                  .catch((error)=>{
+                      console.log("error");
+                      console.log(error);
+                  });
+              }
             },
             _typeRiceName_th:function(e){
              //console.log(e.target.textContent);
