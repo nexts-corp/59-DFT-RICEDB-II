@@ -41,19 +41,20 @@
               <th>Port of Destination </th>
               <th style="width:3%">Print</th>
             </tr>
+
           </thead>
           <tbody class="table-body">
             <template is="dom-if" if="[[!_isHave(data)]]">
               <template is="dom-repeat" items="{{data}}" as="payment">
                 <template is="dom-repeat" items="{{payment.invoice_detail}}">
                   <tr >
-                    <td class="item"><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.deli_port_name]]</td>
-                   <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.dest_port_name]]</td>
-                   <td class="item"  >
+                    <td><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[item.deli_port_name]]</td>
+                   <td data="[[item]]" on-tap="getInvoiceDetail">[[item.dest_port_name]]</td>
+                   <td>
                      <paper-icon-button id="printShipment" data="[[item]]" class="crud" icon="print" raised on-tap="getInvoiceid"  hidden="[[!data.shm_status]]"></paper-icon-button>
                      <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
                    </td>
