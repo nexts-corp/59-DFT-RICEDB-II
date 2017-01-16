@@ -86,10 +86,10 @@
     </gl-form-panel>
     </div>
     <div name="addConfirm">
-      <confirm-detail limit-total-rice="[[data.contract_quantity_confirm_balance]]" data-for-select="[[dataForSelect]]" is-view-seleted="[[!isEdit]]" is-input-disabled="[[isInputDisabled]]"></confirm-detail>
+      <confirm-detail data-for-select="[[dataForSelect]]" is-view-seleted="[[!isEdit]]" is-input-disabled="[[isInputDisabled]]"></confirm-detail>
     </div>
     <div name="confirmDetail">
-      <confirm-detail limit-total-rice="[[data.contract_quantity_confirm_balance]]" data="[[dataSelected]]" data-for-select="[[dataForSelect]]" is-view-seleted="[[isEdit]]" is-input-disabled="[[!isInputDisabled]]"></confirm-detail>
+      <confirm-detail data-for-select="[[dataForSelect]]" is-view-seleted="[[isEdit]]" is-input-disabled="[[!isInputDisabled]]" data="[[dataSelected]]"></confirm-detail>
     </div>
     </iron-pages>
 </template>
@@ -137,6 +137,10 @@ Polymer({
     this.pageSelected = 'addConfirm';
   },
   getConfirmDetail:function (e) {
+    this.dataForSelect.contract_quantity_confirm_balance=this.data.contract_quantity_confirm_balance;
+    // console.log(this.data);
+    // this.dataForConfirm.package=data;
+    this.notifyPath('dataForSelect.contract_quantity_confirm_balance');
     this.dataSelected = e.currentTarget.data;
     this.pageSelected = 'confirmDetail';
   },

@@ -49,7 +49,6 @@
   }
   </style>
   <template>
-    <!-- [[limitTotalRice]]//limitTotalRice -->
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
       <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
         <gl-form-panel-head label="" set-padding="10px" set-border="1px">
@@ -61,10 +60,12 @@
             <paper-tooltip for="deleteConfirm" offset="0">Delete Confirmmation Letter</paper-tooltip>
 
     </div>
+
   </gl-form-panel-head>
           </template>
     <!-- disabled="[[checkInput]]" -->
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+        [[dataForSelect.contract_quantity_confirm_balance]]//fdgfdg
     <gl-grid-row width="{{getWidth}}">
           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
             [[changeString2Num(data.*,'cl_no')]]
@@ -257,9 +258,6 @@
           type: Number,
           value:0
         },
-        limitTotalRice:{
-          type:Number
-        }
       },
       observers:[
         '_changeDataConfirm(data.cl_date)',
@@ -352,7 +350,7 @@
       },
       insertConfirm:function () {
         this.data.cl_status=false;
-        if (this.cl_total_quantity <= this.limitTotalRice) {
+        if (this.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
             this._clearnDataConfirm(this.data,(data)=>{
                 data.contract_id=this.dataForSelect.contract_id;
                 this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
@@ -370,14 +368,14 @@
                 // this.editInput();
             });
           }  else {
-            this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
+            this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
             callback:function(){
             }})
           }
       },
       saveConfirm:function () {
-        // console.log(this.cl_total_quantity,'=',this.limitTotalRice);
-        if (this.cl_total_quantity <= this.limitTotalRice) {
+        // console.log(this.cl_total_quantity,'=',this.dataForSelect.contract_quantity_confirm_balance);
+        if (this.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
           this._clearnDataConfirm(this.data,(data)=>{
               data.contract_id=this.dataForSelect.contract_id;
               data.id=this.data.cl_id;
@@ -390,7 +388,7 @@
               })
           });
         }  else {
-          this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินสัญญา', //คำสั่งสำหรับเปิด toast error
+          this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
           callback:function(){
           }})
         }
