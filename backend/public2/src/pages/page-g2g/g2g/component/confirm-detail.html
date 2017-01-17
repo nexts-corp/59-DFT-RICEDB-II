@@ -1,5 +1,5 @@
 <dom-module id="confirm-detail">
-  <style is="custom-style" include="iron-flex iron-flex-alignment gl-styles gl-color">
+  <style is="custom-style" include="iron-flex iron-flex-alignment gl-styles">
   *{
     font-family: 'CSChatThaiUI', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -205,8 +205,8 @@
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
         <template is="dom-repeat" items="[[data.incoterms]]">
-          <gl-combo-box id="package" class="required" required  disabled="[[isInputDisabled]]" label="ราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]" error-message="กรุณาเลือกราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]" placeholder="ราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]"
-        item-label-path="inct_name" item-value-path="inct_id" value="{{item.inct_id}}" items="{{dataForSelect.incoterms}}" >
+          <gl-combo-box id="incoterms-[[index]]" class="required" required  disabled="[[isInputDisabled]]" label="ราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]" error-message="กรุณาเลือกราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]" placeholder="ราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]"
+        item-label-path="inct_name" item-value-path="inct_id" value="{{item.inct_id}}"  on-value-changed="_incotermsConfirm">
           </gl-combo-box >
         </template>
       </gl-grid-col>
@@ -216,9 +216,9 @@
     </gl-grid-row>
     <gl-grid-row>
       <div class="horizontal start-justified layout">
-          <paper-button raised class="gl-btn-primary" on-tap="addincoterms" disabled="[[!_isHaveForUse(data.incoterms,dataForSelect.incoterms,data.incoterms.*)]]">
+          <paper-button raised class="gl-btn-primary" on-tap="addincoterms" hidden="[[_isViewing(isInputDisabled)]]" disabled="[[!_isHaveForUse(data.incoterms,dataForSelect.incoterms,data.incoterms.*)]]">
           <iron-icon icon="add"></iron-icon>เพิ่ม</paper-button>
-          <paper-button raised class="gl-btn-danger" on-tap="deleteIncoterms" disabled="[[_isHaveForDelete(data.incoterms,data.incoterms.*)]]">
+          <paper-button raised class="gl-btn-danger" on-tap="deleteIncoterms" hidden="[[_isViewing(isInputDisabled)]]" disabled="[[_isHaveForDelete(data.incoterms,data.incoterms.*)]]">
           <iron-icon icon="remove"></iron-icon>ลบ</paper-button>
       </div>
     </gl-grid-row>
@@ -232,12 +232,12 @@
 
     <div class="horizontal end-justified layout">
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-          <paper-button  raised on-tap="backPageInsert" class="gl-btn-defalse" hidden="[[isViewSeleted]]">ย้อนกลับ</paper-button>
+          <paper-button  raised on-tap="backPageInsert" class="gl-btn-default" hidden="[[isViewSeleted]]">ย้อนกลับ</paper-button>
           <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
         <paper-button class="gl-btn-primary" on-tap="insertConfirm" raised hidden="[[isViewSeleted]]">เพิ่มสัญญา</paper-button>
         </template>
         <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
-        <paper-button  raised on-tap="backPage" class="gl-btn-defalse">ย้อนกลับ</paper-button>
+        <paper-button  raised on-tap="backPage" class="gl-btn-default">ย้อนกลับ</paper-button>
         <paper-button class="gl-btn-info" raised on-tap="confirmConfirm" hidden="[[data.cl_status]]">ยืนยันสัญญา</paper-button>
         </template>
          <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
@@ -272,6 +272,7 @@
         '_changeDataConfirm(data.cl_date)',
         '_typeRiceConfirm(data.*)',
         '_typePackageConfirm(data.*)',
+        '_incotermsConfirm(data.*)',
         '_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)'
       ],
       attached: function() {
@@ -507,6 +508,28 @@
               // console.log(comboboxs);
               comboboxs.items = arrForItem;
            }
+         }
+      },1);
+    },
+    _incotermsConfirm:function () {
+      this.async(()=>{
+         let  comboboxs,arrForItem,itemif;
+         for (var i = 0; i < this.data.incoterms.length; i++) {
+           arrForItem = JSON.parse(JSON.stringify(this.dataForSelect.incoterms));
+          //  console.log('arrForItem',arrForItem);
+           this.data.incoterms.map((item,index)=>{
+            //  console.log(item);
+             if (i != index) {
+               //ตัดอาเรย์ตอนที่ไม่เท่ากับค่าของตัวเอง
+               if (arrForItem.filter((incoterm)=> incoterm.inct_id == item.inct_id )[0] != undefined) {
+                 itemif = arrForItem.indexOf(arrForItem.filter((incoterm)=> incoterm.inct_id == item.inct_id )[0]);
+                //  console.log(itemif);
+                 arrForItem.splice(itemif, 1);
+               }
+             }
+           });
+           comboboxs = Polymer.dom(this.root).querySelector('#incoterms-'+i);
+           comboboxs.items = arrForItem;
          }
       },1);
     },
