@@ -14,19 +14,16 @@
                 font-family: 'rsuregular', sans-serif;
                 -webkit-font-smoothing: antialiased;
             }
+            paper-button{
+                font-family: 'CSChatThaiUI', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+            }
             .title {
                 text-align: center;
                 font-size: var(--font-size-h3); 
                 margin-top:20px;
                 margin-bottom: 20px;
             }      
-            .content {
-                padding:20px;
-            }
-            paper-tab {
-                color:white;
-                 font-size: 20px;
-            }
             .flex-end-justified {
                 @apply(--layout-horizontal);
                 @apply(--layout-end-justified);
@@ -42,62 +39,57 @@
                 border-radius: 3px
             }
             /*----------------*/
-main {
-  min-width: 320px;
-  max-width: 1000px;
-  padding: 5px;
-  margin: 0 auto;
-  background: #fff;
-}
+            main {
+                min-width: 320px;
+                max-width: 1000px;
+                padding: 5px;
+                margin: 0 auto;
+                background: #fff;
+            }
 
-section {
-  display: none;
-  padding: 20px 0 0;
-  border-top: 1px solid #ddd;
-}
+            section {
+                display: none;
+                padding: 20px 0 0;
+                border-top: 1px solid #ddd;
+            }
 
-input {
-  display: none;
-}
+            input {
+                display: none;
+            }
 
-label {
-  display: inline-block;
-  margin: 0 0 -1px;
-  padding: 15px 25px;
-  font-weight: 600;
-  text-align: center;
-  color: #bbb;
-  border: 1px solid transparent;
-}
+            label {
+                display: inline-block;
+                margin: 0 0 -1px;
+                padding: 15px 25px;
+                font-weight: 600;
+                text-align: center;
+                color: #bbb;
+                border: 1px solid transparent;
+            }
 
-label:before {
-  font-family: fontawesome;
-  font-weight: normal;
-  margin-right: 10px;
-}
+            label:before {
+                font-family: fontawesome;
+                font-weight: normal;
+                margin-right: 10px;
+            }
+            label:hover {
+                color: #888;
+                cursor: pointer;
+            }
 
-/*label[for*='1']:before { content: '\f1cb'; }
-label[for*='2']:before { content: '\f17d'; }*/
+            input:checked + label {
+                color: #555;
+                border: 1px solid #ddd;
+                border-top: 3px solid orange;
+                border-bottom: 1px solid #fff;
+            }
 
-
-label:hover {
-  color: #888;
-  cursor: pointer;
-}
-
-input:checked + label {
-  color: #555;
-  border: 1px solid #ddd;
-  border-top: 3px solid orange;
-  border-bottom: 1px solid #fff;
-}
-
-#tab1:checked ~ #content1,
-#tab2:checked ~ #content2,
-#tab3:checked ~ #content3 {
-  display: block;
-}
-/*---------------------------------*/
+            #tab1:checked ~ #content1,
+            #tab2:checked ~ #content2,
+            #tab3:checked ~ #content3 {
+                display: block;
+            }
+            /*---------------------------------*/
         </style>
 
         <div class="flex title">
@@ -109,12 +101,7 @@ input:checked + label {
             </paper-button>
         </div>-->
          
-            <div class="flex-end-justified">
-                <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer" style="font-family: 'CSChatThaiUI', sans-serif !important;
-                -webkit-font-smoothing: antialiased;">
-                    <iron-icon icon="icons:add"></iron-icon>&nbsp;นำเข้ารายงาน
-                </paper-button>
-            </div>
+          
           
 
           <div class="flex searchBox searchBorder">
@@ -139,70 +126,41 @@ input:checked + label {
             </div>
             <div class="flex"></div>
           </div>
-         
-               
-              
-                
-            
-        
+          <main>
+                <input class="radio" id="tab1" type="radio" on-tap="checkQuota" name="tabs" value="true" checked>
+                <label for="tab1">ในโควตา</label>
                     
-            
-        
+                <input class="radio" id="tab2" type="radio" on-tap="checkQuota" name="tabs" value="false">
+                <label for="tab2">นอกโควตา</label>
+                <input id="tab3" type="radio" name="tabs">
+                <label for="tab3">test</label>
+                    
+                <section id="content1">
+                        <report-list2 data="{{dataListInQuota}}" on-data-select="getDataSelect"></report-list2>
+                </section>
+                    
+                <section id="content2">
+                        <report-list2 data="{{dataListOutQuota}}" on-data-select="getDataSelect"></report-list2>
+                </section>
+                <section id="content3">
+                    <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{getCom}}" value="{{company}}"
+                    error-message="กรุณาเลือกบริษัท" item-label-path="name" item-value-path="id" required></gl-combo-box>
 
-<!--   -->
-<main>
-  
-  <input class="radio" id="tab1" type="radio" on-tap="checkQuota" name="tabs" value="true" checked>
-  <label for="tab1">ในโควตา</label>
-    
-  <input class="radio" id="tab2" type="radio" on-tap="checkQuota" name="tabs" value="false">
-  <label for="tab2">นอกโควตา</label>
-  <input id="tab3" type="radio" name="tabs">
-  <label for="tab3">test</label>
-    
-  <section id="content1">
-        <report-list2 data="{{dataListInQuota}}" on-data-select="getDataSelect"></report-list2>
-  </section>
-    
-  <section id="content2">
-        <report-list2 data="{{dataListOutQuota}}" on-data-select="getDataSelect"></report-list2>
-  </section>
-   <section id="content3">
-    <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{getCom}}" value="{{company}}"
-    error-message="กรุณาเลือกบริษัท" item-label-path="name" item-value-path="id" required></gl-combo-box>
-
-    <gl-form-input label="2557" value="{{year57}}" format-number="on"></gl-form-input>
-    <gl-form-input label="2558" value="{{year58}}" format-number="on"></gl-form-input>
-    <gl-form-input label="2559" value="{{year59}}" format-number="on"></gl-form-input>
-    <!--<gl-form-input label="exporter_id" value="{{exporter_id}}"></gl-form-input>   -->
-    
-    {{count}}
-    <paper-button on-tap="saveConfirm" raised>SAVE</paper-button>
-    
-  </section>
-</main>
-    
-<!--  -->
-
-        <!--<div class="gl-panel-default">
-             <div class="gl-panel-default-header">
-                <paper-tabs selected="{{selected}}">
-                    <paper-tab >ในโควตา</paper-tab>
-                    <paper-tab>นอกโควตา</paper-tab>
-                </paper-tabs>
-             </div>
-             <div class="gl-panel-default-content">
-                <iron-pages selected="{{selected}}">
-                    <div class="content">
-                        <report-list on-data-select="_onDataSelect"></report-list>
-                    </div>
-                    <div>Page 2</div>
-                </iron-pages>
-             </div>
-         </div>
-        <panel-right title="รายงานการส่งออกข้าวไปสหภาพยุโรป">
-                <report-panel data="{{dataSelect}}"></report-panel>
-        </panel-right>-->
+                    <gl-form-input label="2557" value="{{year57}}" format-number="on"></gl-form-input>
+                    <gl-form-input label="2558" value="{{year58}}" format-number="on"></gl-form-input>
+                    <gl-form-input label="2559" value="{{year59}}" format-number="on"></gl-form-input>
+                    <!--<gl-form-input label="exporter_id" value="{{exporter_id}}"></gl-form-input>   -->
+                    
+                    {{count}}
+                    <paper-button on-tap="saveConfirm" raised>SAVE</paper-button>
+                    
+                </section>
+            </main>
+            <div class="flex-end-justified">
+                <paper-button raised class="gl-btn-primary" on-tap="_toggleDrawer">
+                    <iron-icon icon="icons:add"></iron-icon>&nbsp;นำเข้ารายงาน
+                </paper-button>
+            </div>
         <panel-right title="นำเข้ารายงานการส่งออกข้าวไปสหภาพยุโรป">
             <report-panel2 year="{{getYear}}" company="{{getCom}}" data="{{dataSelect}}" rice="{{getRice}}" status="{{status}}" on-save-data="saveData" on-update-data="updateData" on-delete-data="deleteData" datas="{{data}}"></report-panel2>
         </panel-right>
