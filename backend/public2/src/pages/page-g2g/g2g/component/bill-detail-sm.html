@@ -22,15 +22,15 @@
   </style>
   <template>
     <template is="dom-if" if="[[!checkBtnView(shmStatus)]]">
-    <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
-      <div class="horizontal end-justified layout">
-        <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
-        <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
-        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteBooking" hidden="[[data.shm_status]]"></paper-icon-button>
-        <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
-       </div>
-    </template>
+      <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
+        <div class="horizontal end-justified layout">
+          <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
+          <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
+          <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteBooking" hidden="[[data.shm_status]]"></paper-icon-button>
+          <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
+         </div>
       </template>
+    </template>
       <gl-form-panel-body>
         <div class="title">Booking</div>
       </gl-form-panel-body>
@@ -465,6 +465,7 @@
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
                             load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
                             ship_lot_no,shipline_id,weight_per_container,book_status,shm_id,book_remark};
+            // console.log('newData.book_remark',newData.book_remark);
             newData.ship = new Array();
             newData.surveyor = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();

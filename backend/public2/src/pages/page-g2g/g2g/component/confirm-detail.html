@@ -1,5 +1,5 @@
 <dom-module id="confirm-detail">
-  <style is="custom-style" include="iron-flex iron-flex-alignment gl-styles">
+  <style is="custom-style" include="iron-flex iron-flex-alignment gl-styles gl-color">
   *{
     font-family: 'CSChatThaiUI', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -52,17 +52,14 @@
     <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
       <template is="dom-if" if="[[!_isViewing(data.cl_status)]]">
         <gl-form-panel-head label="" set-padding="10px" set-border="1px">
-    <div class="horizontal end-justified layout">
-
+          <div class="horizontal end-justified layout">
             <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput" ></paper-icon-button>
             <paper-tooltip for="editConfirm" offset="0">Edit Confirmmation Letter</paper-tooltip>
             <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteConfirm" ></paper-icon-button>
             <paper-tooltip for="deleteConfirm" offset="0">Delete Confirmmation Letter</paper-tooltip>
-
-    </div>
-
-  </gl-form-panel-head>
-          </template>
+          </div>
+        </gl-form-panel-head>
+      </template>
     <!-- disabled="[[checkInput]]" -->
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
     <gl-grid-row width="{{getWidth}}">
@@ -120,10 +117,10 @@
 
           <gl-grid-row>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ปีฤูดกาลผลิต (พ.ศ.)" placeholder="กรุณาใส่ปีฤูดกาลผลิต" value="{{item.project_th}}"  name="project_th"></gl-form-input>
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ปีฤูดกาลผลิต (ไทย)" placeholder="กรุณาใส่ปีฤูดกาลผลิต" value="{{item.project_th}}"  name="project_th"></gl-form-input>
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ปีฤูดกาลผลิต (ค.ศ.)" placeholder="กรุณาใส่ปีฤูดกาลผลิต" value="{{item.project_en}}"  name="project_en"></gl-form-input>
+              <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ปีฤูดกาลผลิต (อังกฤษ)" placeholder="กรุณาใส่ปีฤูดกาลผลิต" value="{{item.project_en}}"  name="project_en"></gl-form-input>
             </gl-grid-col>
             <!-- <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
               <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ฤูดกาล (ไทย)" placeholder="กรุณาใส่ฤูดกาล" value="{{item.season_th}}"  name="season_th"></gl-form-input>
@@ -176,7 +173,8 @@
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
                 </td>
                 <td style="text-align:center;">
-                      <paper-button id-packeage="[[indexpackeage]]" id-table="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]"><iron-icon icon="remove"></iron-icon>ลบ</paper-button>
+                  <paper-button id-packeage="[[indexpackeage]]" id-table="[[index]]" raised class="btnInTable gl-btn-danger" on-tap="delePackage" hidden="[[_isViewing(isInputDisabled)]]" disabled="[[_isHaveForDelete(item.package,item.package.*)]]">
+                  <iron-icon icon="remove"></iron-icon>ลบ</paper-button>
                 </td>
               </tr>
             </template>
@@ -185,12 +183,12 @@
           </table>
           <!-- [[_isHaveForUse(data.[index].cl_type_rice,dataForSelect.package,data.[index].cl_type_rice.*)]] -->
           <!-- <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]"> -->
-            <template is="dom-if" if="[[_isHaveForUse(item.package,dataForSelect.package,item.package.*)]]">
+            <!-- <template is="dom-if" if="[[_isHaveForUse(item.package,dataForSelect.package,item.package.*)]]"> -->
               <div class="horizontal end-justified layout">
-                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]">
+                  <paper-button  raised id="[[index]]" class="btnInTable gl-btn-primary" on-tap="addPackage" hidden="[[_isViewing(isInputDisabled)]]" disabled="[[!_isHaveForUse(item.package,dataForSelect.package,item.package.*)]]">
                   <iron-icon icon="add"></iron-icon>เพิ่มบรรจุภัณฑ์</paper-button>
               </div>
-            </template>
+            <!-- </template> -->
           <!-- </template> -->
         </gl-form-panel>
           </div>
@@ -198,23 +196,33 @@
       <div class="horizontal end-justified layout">
 
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-          <template is="dom-if" if="[[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)]]">
-            <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]" >
+          <!-- <template is="dom-if" if="[[_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)]]"> -->
+            <paper-button raised on-tap="addNewTypeRice" class="gl-btn-primary" hidden="[[btnCheckDisabled]]" disabled="[[!_isHaveForUse(data.cl_type_rice,dataForSelect.contract_type_rice,data.cl_type_rice.*)]]">
               <iron-icon icon="add"></iron-icon>เพิ่มชนิดข้าว</paper-button>
-          </template>
+          <!-- </template> -->
         </template>
       </div>
     <gl-grid-row>
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-          <gl-combo-box id="package" class="required" required  disabled="[[isInputDisabled]]" label="วิธีการชำระเงิน" error-message="กรุณาเลือกรูปแบบการชำระเงิน" placeholder="เลือกประเภท" name="package_name"
-        item-label-path="inct_name" item-value-path="inct_id" value="{{data.inct_id}}" items="{{dataForSelect.incoterms}}" >
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+        <template is="dom-repeat" items="[[data.incoterms]]">
+          <gl-combo-box id="package" class="required" required  disabled="[[isInputDisabled]]" label="ราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]" error-message="กรุณาเลือกราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]" placeholder="ราคาและการส่งมอบข้าว [[_ObcountIndex(index)]]"
+        item-label-path="inct_name" item-value-path="inct_id" value="{{item.inct_id}}" items="{{dataForSelect.incoterms}}" >
           </gl-combo-box >
-        </gl-grid-col>
-
-        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-            <gl-form-input class="numberBack" disabled always-float-label allowed-pattern="[0-9||,||.]" format-number="on" label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
-        </gl-grid-col>
-
+        </template>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+          <gl-form-input class="numberBack" disabled always-float-label allowed-pattern="[0-9||,||.]" format-number="on" label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+    <gl-grid-row>
+      <div class="horizontal start-justified layout">
+          <paper-button raised class="gl-btn-primary" on-tap="addincoterms" disabled="[[!_isHaveForUse(data.incoterms,dataForSelect.incoterms,data.incoterms.*)]]">
+          <iron-icon icon="add"></iron-icon>เพิ่ม</paper-button>
+          <paper-button raised class="gl-btn-danger" on-tap="deleteIncoterms" disabled="[[_isHaveForDelete(data.incoterms,data.incoterms.*)]]">
+          <iron-icon icon="remove"></iron-icon>ลบ</paper-button>
+      </div>
+    </gl-grid-row>
+    <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
             <gl-form-textarea  disabled="[[isInputDisabled]]" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.cl_quality}}" name="cl_quality"></gl-form-textarea>
         </gl-grid-col>
@@ -223,8 +231,6 @@
   <gl-form-panel-footer label="" set-padding="10px">
 
     <div class="horizontal end-justified layout">
-
-
         <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
           <paper-button  raised on-tap="backPageInsert" class="gl-btn-defalse" hidden="[[isViewSeleted]]">ย้อนกลับ</paper-button>
           <paper-button class="gl-btn-danger" on-tap="canncelConfirm" raised hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
@@ -255,7 +261,7 @@
         },
         data: {
           type: Object,
-          value:{type_rice_quantity:0,cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}]}
+          value:{type_rice_quantity:0,cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}],incoterms:[{inct_id:'d'}]}
         },
         cl_total_quantity: {
           type: Number,
@@ -290,6 +296,15 @@
           // console.log(table);
           // console.log(e.currentTarget.idPackeage,'e',e.currentTarget.idTable);
           this.splice('data.cl_type_rice.'+[e.currentTarget.idTable]+'.package', e.currentTarget.idPackeage, 1);
+      },
+      addincoterms:function () {
+        this.push('data.incoterms',{inct_id:''});
+        this.notifyPath('data.incoterms');
+      },
+      deleteIncoterms:function () {
+        if (this.data.incoterms.length > 1) {
+          this.pop('data.incoterms');
+        }
       },
       _obCalcWeight:function (data,type_rice_quantity) {
         let total = 0;
@@ -353,7 +368,7 @@
       },
       insertConfirm:function () {
         this.data.cl_status=false;
-        if (this.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
+        // if (this.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
             this._clearnDataConfirm(this.data,(data)=>{
                 data.contract_id=this.dataForSelect.contract_id;
                 this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
@@ -370,11 +385,11 @@
                 el.map((el)=> {el.reset();el.value=''});
                 // this.editInput();
             });
-          }  else {
-            this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
-            callback:function(){
-            }})
-          }
+          // }  else {
+          //   this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
+          //   callback:function(){
+          //   }})
+          // }
       },
       saveConfirm:function () {
         // console.log(this.cl_total_quantity,'=',this.dataForSelect.contract_quantity_confirm_balance);
@@ -499,9 +514,10 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-            let {cl_date,cl_name,cl_no,cl_quality,inct_id,cl_status} = data;
-            let news = {cl_date,cl_name,cl_no,cl_quality,inct_id,cl_status};
+            let {cl_date,cl_name,cl_no,cl_quality,cl_status} = data;
+            let news = {cl_date,cl_name,cl_no,cl_quality,cl_status};
             news.cl_type_rice=[];
+            news.incoterms=[];
             news.cl_date= new Date(news.cl_date);
             data.cl_type_rice.map((cl_type_rice,index)=>{
               news.cl_type_rice.push({type_rice_id:cl_type_rice.type_rice_id,
@@ -520,6 +536,9 @@
                                       price_per_ton :packages.price_per_ton}
                             );
               });
+            });
+            data.incoterms.map((incoterm)=>{
+              news.incoterms.push({inct_id:incoterm.inct_id});
             });
           el.map((el)=> {el.reset()});
           callback(news);
