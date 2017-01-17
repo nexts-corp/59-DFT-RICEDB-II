@@ -58,8 +58,42 @@
       text-align: center;
       font-size: 22px;  
     }
+   paper-tabs{
+     --paper-tabs:{
+       
+        border-bottom: 1px solid #ddd;
+     }
+     --paper-tabs-selection-bar-color: orange;
+   }
+   paper-tab{
+      --paper-tab:{
+        font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-size : 16px;
+      }
+    }
+    paper-tab[selected]{
+       --paper-tab:{
+         background-color:orange;
+      }
+    }
+   .disabled{
+      --paper-tab:{
+        background-color: white;
+        color: white;
+        border-bottom: 1px solid #ddd;
+      }
+    }
   </style>
   <template>
+    <paper-tabs selected="0">
+      <paper-tab>ยืนยันส่วนจัดสรร</paper-tab>
+      <paper-tab>โอนส่วนจัดสรร</paper-tab>
+      <paper-tab class="disabled" disabled></paper-tab>
+      <paper-tab class="disabled" disabled></paper-tab>
+      <paper-tab class="disabled" disabled></paper-tab>
+    </paper-tabs>
+    </div>
     <!--<div class="textHeader">ยืนยันรับส่วนจัดสรร</div>-->
     <gl-form-panel set-padding = "0px 0px 20px 0px">
       <div class="title">ข้อมูลบริษัท</div>

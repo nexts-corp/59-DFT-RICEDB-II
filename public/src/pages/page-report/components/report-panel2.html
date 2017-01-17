@@ -85,7 +85,7 @@
                 <div class="flex-end-justified" style="margin-top: 15px;">
                     <paper-button raised on-tap="confirmData">Delete</paper-button>
                     <paper-button raised class="gl-btn-danger btn">ยกเลิก</paper-button>
-                    <paper-button on-tap="getData" raised class="gl-btn-success btn">บันทึก</paper-button>
+                    <paper-button on-tap="saveData" raised class="gl-btn-success btn">บันทึก</paper-button>
                 </div>
         </div>
 
@@ -99,6 +99,10 @@
                 FormatNumberBehavior
             ],
             properties:{
+                data:{
+                    type: Object,
+                    observer: 'getData'
+                },
                 listEu:{
                     type: Array,
                     value:[
@@ -134,6 +138,15 @@
                  }
             },
             getData:function(){
+               this.saveEuValue = this.data.quota;
+               this.month = this.data.month;
+               this.getyear = this.data.year;
+               this.getCompany = this.data.exporter_id;
+               this.checkDocValue = this.data.type_doc;
+               this.getTypeRice = this.data.type_rice_id;
+               this.getWeigth = this.data.weigth;
+            },
+            saveData:function(){
                 if(this.listEuValue == 'true'){
                     this.saveEuValue = true;
                 }
@@ -150,7 +163,7 @@
                     type_rice_id: this.getTypeRice,
                     weigth : this.unFormat(this.getWeigth)
                 }
-                // console.log(this.datas);
+                console.log(this.datas);
                 if(this.status == 'post'){
                     this.fire('save-data',this.datas);
                 }
