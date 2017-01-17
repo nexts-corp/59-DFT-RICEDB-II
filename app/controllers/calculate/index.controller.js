@@ -30,13 +30,11 @@ class index {
         var LastYearFilter = parseInt(params.last_year) + 1;
         var yearFilter = parseInt(params.year);
 
-
-        r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:yearFilter})(0).do(function(quotaRow){
-
-        
+        console.log()
+        r.db('eu2').table('quota').filter({type_rice_id:params.type_rice_id,year:yearFilter})(0).do(function(quotaRow){ 
             return r.db('eu2').table('calculate').filter(
                 {quota_id:quotaRow('id')}
-            ).coerceTo('array')(0)
+            ).coerceTo('array')
             .do(function(calculateRow){
                 return r.branch(calculateRow.count().eq(0),
                     //คำนวณครั้งแรก
@@ -70,10 +68,9 @@ class index {
                     )('right').orderBy('name')
                     ,
                     //คำนวณครั้งที่สองเป็นต้นไป
-                    //calculateRow('id')
 
-                    r.db('eu2').table('allocate').filter({calculate_id:calculateRow('id')})
-                    .innerJoin(r.db('eu2').table('confirm').filter({quota_id:quotaRow('id')}),function(left,right){
+                    r.db('eu2').table('allocate').filter({calculate_id:calculateRow(0)('id')})
+                    .innerJoin(r.db('eu2').table('confirm').filter({quota_id:quotaRow(0)('id')}),function(left,right){
                         return left('id').eq(right('allocate_id'))
                     })
                     .filter(function(row){
@@ -91,6 +88,8 @@ class index {
         })
         .run().then(function (result) {
             res.json(result);
+        }).catch(function(err){
+            res.json(err);
         });
 
     }
