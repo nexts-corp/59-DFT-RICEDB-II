@@ -139,8 +139,8 @@
       </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
-     <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,8]]">
-       <gl-combo-box class="required insetShipment" required id="confirmLetterTrue" disabled="[[!isInputDisabled]]" always-float-label label="กรุณาเลือกชื่อสัญญา" placeholder="ชื่อสัญญา" value="{{data.cl_id}}" >
+     <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,8]]">[[checkShipmentDetail(isInputDisabled,data.shipment_detail)]]//
+       <gl-combo-box class="required insetShipment" required id="confirmLetterTrue" disabled="[[checkShipmentDetail(isInputDisabled,data.shipment_detail)]]" always-float-label label="กรุณาเลือกชื่อสัญญา" placeholder="ชื่อสัญญา" value="{{data.cl_id}}" >
      </gl-grid-col>
      </gl-grid-row>
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
@@ -409,6 +409,19 @@
           this.$$('#'+icon).icon = 'expand-more'
         }
         this.$$('#'+targetAttribute).toggle();
+      },
+      checkShipmentDetail:function (boo,arr) {
+        console.log(boo);
+        console.log(arr.length);
+        if (boo == false) {
+          return true;
+        } else {
+          if (arr.length > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
       },
       printShipment:function () {
         if (this.printReport.typeReport == '0') {
