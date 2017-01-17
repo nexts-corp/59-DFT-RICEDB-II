@@ -280,6 +280,11 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 return arr_surveyor.merge(function (row_surveyor) {
                                     return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                                 })
+                            }),
+                            incoterms: me('incoterms').map(function (arr_inct) {
+                                return arr_inct.merge(function (row_inct) {
+                                    return r.db('common').table('incoterms').get(row_inct('inct_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                                })
                             })
                         }
                     })
@@ -325,9 +330,9 @@ router.get('/id/:invoice_id', function (req, res, next) {
                     .merge(function (m) {
                         return r.db('common').table("carrier").get(m('carrier_id')).pluck('carrier_name')
                     })
-                    .merge(function (m) {
-                        return r.db('common').table("incoterms").get(m('inct_id')).pluck('inct_name')
-                    })
+                    // .merge(function (m) {
+                    //     return r.db('common').table("incoterms").get(m('inct_id')).pluck('inct_name')
+                    // })
                     .without('id')
             })
             .merge(function (m) {
