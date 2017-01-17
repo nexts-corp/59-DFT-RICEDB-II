@@ -1,6 +1,6 @@
 
 <link rel="import" href="./../../components/format-number-behavior.html">
-
+<link rel="import" href="./../../components/data-manage-behavior.html">
 <dom-module id="report-list2">
     <template>
     <style is="custom-style" include="gl-table">
@@ -20,8 +20,28 @@
     table > tbody > tr{
         cursor:pointer;
     }
+    .left{
+        text-align: left !important;
+    }
     </style>
-   
+    <template is="dom-if" if="{{dataStat}}">
+        <table class="gl-table-default">
+        <thead class="table-head">
+            <tr>
+                <th>ลำดับ</th>
+                <th>บริษัท</th>
+                <th>ปริมาณ</th>
+                <th>สถานะเอกสาร</th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+                <tr>
+                   <td class="left" colspan="4">ไม่พบข้อมูล</td>
+                </tr>  
+        </tbody>
+        </table>
+    </template>
+    <template is="dom-if" if="{{!dataStat}}">
     <table class="gl-table-default">
         <thead class="table-head">
             <tr>
@@ -42,12 +62,13 @@
             </template>    
         </tbody>
     </table>
-
+    </template>
     </template>
     <script>
         Polymer({
             is: 'report-list2',
-            behaviors:[FormatNumberBehavior],
+            behaviors:[FormatNumberBehavior,DataManageBehavior],
+            observers:['checkData(data)'],
             getIndex:function(index){
                 return index+1;
             },
