@@ -237,7 +237,7 @@ exports.report1 = function (req, res, next) {
         .run()
         .then(function (result) {
             //res.json([result]);
-            res._ireport("payment/report1.jasper", "pdf", [result], parameters);
+            res._ireport("payment/report1.jasper", req.query.export || "pdf", [result], parameters);
         });
 
 
