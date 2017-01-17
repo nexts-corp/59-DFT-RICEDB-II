@@ -4,4 +4,5 @@ var indexCtrl = require('../controllers/upload/index.controller')
     app.get('/file/:id',indexCtrl.downloadFile); 
     app.delete('/file/:id',indexCtrl.deleteFile); 
     app.get('/list',indexCtrl.listFile); 
+    app.get('/list/:refPath',indexCtrl.listFilePath); 
 }
