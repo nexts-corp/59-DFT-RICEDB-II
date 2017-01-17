@@ -89,12 +89,22 @@ class index{
             // };
 
             //res.json(result);
+            //result.params
+            var path = require('path');
+            result.params['SUBREPORT_DIR'] = path.join(__dirname+"/../../reports/notify")+"\\";
+
             res._ireport("notify/notify.jasper","pdf", result.result, result.params);
         }).catch(function(err){
             res.json(err);
         });
 
         
+    }
+
+
+    getPath(req,res){
+        
+        res.json({a:path.join(__dirname+"/../../report/notify")+"\\"})
     }
 
 }
