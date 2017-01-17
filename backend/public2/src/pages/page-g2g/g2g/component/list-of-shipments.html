@@ -150,9 +150,9 @@ Polymer({
     this.notifyPath('dataForSelect.cl_no');
     this.dataForSelect.buyer_masks=this.data.buyer_masks;
     this.notifyPath('dataForSelect.buyer_masks');
-    this.set('dataForSelect.cl_type_rice',confirm[0].cl_type_rice);
-    console.log('dataForSelect.cl_type_rice=>',this.dataForSelect.cl_type_rice);
-    this.notifyPath('dataForSelect.cl_type_rice');
+    // this.set('dataForSelect.cl_type_rice',confirm[0].cl_type_rice);
+    // console.log('dataForSelect.cl_type_rice=>',this.dataForSelect.cl_type_rice);
+    // this.notifyPath('dataForSelect.cl_type_rice');
     // console.log('dataSelected=>',this.dataSelected);
     this.dataForSelect.contract_quantity_confirm_balance=this.data.contract_quantity_confirm_balance;
     // console.log(this.data);
@@ -164,16 +164,18 @@ Polymer({
          this.read('./g2g/book/shipment/id/'+this.dataSelected.shm_id,(data)=>{
            this.dataForSelect.blNos=data;
            this.notifyPath('dataForSelect.blNos');
-           this._getShipment(this.dataSelected.shm_id,(data)=>{
-              this.dataSelected = data;
-              // console.log('this.dataSelected =>',this.dataSelected);
-              this.dataForSelect.shm_id=this.dataSelected.shm_id;
-              // console.log('this.dataSelected=>',this.dataSelected);
-              this.notifyPath('dataForSelect.shm_id');
-              this.pageSelected = 'shipmentDetail';
-              this.fire('toast',{status:'load'});
-          });
          });
+         this._getShipment(this.dataSelected.shm_id,(data)=>{
+            this.dataSelected = data;
+            this.set('dataForSelect.cl_type_rice',data.cl_type_rice);
+            this.notifyPath('dataForSelect.cl_type_rice');
+            // console.log('this.dataSelected =>',this.dataSelected);
+            this.dataForSelect.shm_id=this.dataSelected.shm_id;
+            // console.log('this.dataSelected=>',this.dataSelected);
+            this.notifyPath('dataForSelect.shm_id');
+            this.pageSelected = 'shipmentDetail';
+            this.fire('toast',{status:'load'});
+        });
     },1000);
   },
   _getListBL:function (e) {
@@ -198,6 +200,8 @@ Polymer({
       this._getShipment(e.detail.sm_id,(data)=>{
          this.dataSelected = data;
          this.notifyPath('dataSelected');
+         this.set('dataForSelect.cl_type_rice',data.cl_type_rice);
+         this.notifyPath('dataForSelect.cl_type_rice');
      });
     });
 
