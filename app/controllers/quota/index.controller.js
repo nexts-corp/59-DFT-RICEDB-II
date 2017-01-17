@@ -28,7 +28,7 @@ class index{
         var r = req._r;
         var params = req.body;
 
-        r.db('eu2').table('quota').filter({year:params.year}).count().do(
+        r.db('eu2').table('quota').filter({year:params.year,type_rice_id:params.type_rice_id}).count().do(
             function(result){
                 return r.branch(result.eq(0),
                     r.db('eu2').table('quota').insert(params)
