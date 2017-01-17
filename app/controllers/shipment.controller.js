@@ -458,6 +458,76 @@ exports.report4 = function (req, res, next) {
         CURRENT_DATE: new Date().toISOString().slice(0, 10),
         SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
     };
+    r.db('g2g').table('shipment').get(req.query.shm_id)
+        .merge(function (shm) {
+            return {
+                exporter: r.db('g2g').table('shipment_detail').getAll(shm('id'), { index: 'shm_id' }).coerceTo('array').pluck('exporter_id').distinct()
+                    .merge(function (book) {
+                        return {
+                            book: r.db('g2g').table('shipment_detail').getAll(shm('id'), { index: 'shm_id' }).filter({ exporter_id: book('exporter_id') }).coerceTo('array')
+                                .pluck('book_id', 'shm_det_quantity')
+                                .eqJoin('book_id', r.db('g2g').table('book')).pluck('left', { right: ['ship_lot_no', 'ship', 'dest_port_id'] }).zip()
+                                .merge(function (ships) {
+                                    return {
+                                        ship: ships('ship')
+                                            .merge(function (ship) {
+                                                return r.db('common').table('ship').get(ship('ship_id')).pluck('ship_name')
+                                            }).without('ship_id')
+                                            .map(function (ship) {
+                                                return ship('ship_name').add(' V.', ship('ship_voy_no'))
+                                            }).reduce(function (left, right) {
+                                                return left.add(' / ', right)
+                                            }),
+                                        dest_port_name: r.db('common').table('port').get(ships('dest_port_id')).getField('port_name')
+                                    }
+                                }),
+                            country_name: r.db('g2g').table('contract').get(shm('contract_id')).getField('buyer_id')
+                                .do(function (buyer) {
+                                    return r.db('common').table('buyer').get(buyer).getField('country_id')
+                                        .do(function (country) {
+                                            return r.db('common').table('country').get(country).getField('country_fullname_th')
+                                        })
+                                }),
+                            cl_no: r.db('g2g').table('confirm_letter').get(shm('cl_id')).getField('cl_no'),
+                            shm_no: shm('shm_no')
+                        }
+                    })
+                    .merge(function (exporter) {
+                        return {
+                            ship_lot_no: exporter('book').getField('ship_lot_no')
+                                .reduce(function (left, right) {
+                                    return left.add(', ', right)
+                                }),
+                            ship_count: exporter('book').getField('ship_lot_no').count(),
+                            exporter_name: r.db('external_f3').table('exporter').get(exporter('exporter_id')).getField('trader_id')
+                                .do(function (trader) {
+                                    return r.db('external_f3').table('trader').get(trader).getField('seller_id')
+                                        .do(function (seller) {
+                                            return r.db('external_f3').table('seller').get(seller).getField('seller_name_th')
+                                        })
+                                }),
+                            total_quantity: exporter('book').sum('shm_det_quantity')
+                        }
+                    })
+            }
+        })
+        .getField('exporter')
+        .run()
+        .then(function (result) {
+            res.json(result);
+            //res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+        })
+        .error(function (err) {
+            res.json(err)
+        })
+}
+
+exports.report5 = function (req, res, next) {
+    var r = req._r;
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
+    };
 
     r.db('g2g').table('book').getAll(req.query.shm_id, { index: 'shm_id' })
         .filter({ book_status: true })
@@ -527,7 +597,7 @@ exports.report4 = function (req, res, next) {
         .run()
         .then(function (result) {
             // res.json(result)
-            res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+            res._ireport("shipment/report5.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
