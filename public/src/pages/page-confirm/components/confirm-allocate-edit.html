@@ -173,6 +173,8 @@
       <div class="horizontal end-justified layout">
           <paper-button class$="{{setClass}}" on-tap="_saveData" raised>{{btnName}}</paper-button>
       </div>
+
+      <!-- โอนส่วนจัดสรร -->
        <gl-form-panel set-padding = "0px 0px 20px 0px">
       <div class="title">ข้อมูลบริษัท</div>
      
@@ -188,7 +190,7 @@
               <div class="content">โอนส่วนจัดสรรให้กับ</div>
           </gl-grid-col>
            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{listCompany}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
+              <gl-combo-box class="saveData" label="ชื่อบริษัท" items="{{getListCompany}}" value="{{selectExporter}}" item-label-path="name" item-value-path="exporter_id"
               error-message="กรุณาเลือกบริษัท"></gl-combo-box>
             <!--<gl-form-label-input label="ชื่อบริษัท(อังกฤษ)" value="Kamolkich., Ltd"></gl-form-label-input>-->
           </gl-grid-col>
@@ -208,6 +210,7 @@
     Polymer({
       is: "confirm-allocate-edit",
       behaviors:[FormatNumberBehavior,MonthBehavior],
+      observers:['_setListCompany(listCompany,data)'],
       properties:{
         status:{
           type: String,
@@ -239,6 +242,22 @@
           this.amount_update = this.data.amount_update;
         }
      
+      },
+      _setListCompany:function(list,data){
+        var getData = data.exporter_id;
+        var data = list.filter(function(getData){
+          return getData.exporter_id != data.exporter_id;  
+        })
+
+        this.getListCompany = data;
+
+        // var get_id 
+        // var get = list.map((item,index)=>{
+        //   if(item.exporter_id == data.exporter_id){
+        //       this.splice('listCompany',index,1);
+        //   }   
+        // })
+        
       },
       mathPercent:function(item,amount_update,index){
         // console.log(amount_update);
