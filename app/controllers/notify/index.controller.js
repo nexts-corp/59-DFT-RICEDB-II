@@ -103,7 +103,7 @@ class index{
 
 
     getPath(req,res){
-        
+        var path = require('path');
         res.json({a:path.join(__dirname+"/../../report/notify")+"\\"})
     }
 
