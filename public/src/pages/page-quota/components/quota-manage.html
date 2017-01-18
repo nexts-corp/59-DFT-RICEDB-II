@@ -196,6 +196,7 @@
             },
             getIndex:function(index){
                 this.period++;
+                this.set('quantity.'+index+'.period', parseInt(index)+1);
                 return parseInt(index)+1;
             },
             updateWeight:function(e){
@@ -203,7 +204,7 @@
             },
             _addPeriod:function(){
                 // console.log(this.quantity);
-                this.push('quantity',{period:this.period,percent:'',weigth:''});
+                this.push('quantity',{percent:'',weigth:''});
             },
             _confirmDelPeriod:function(e){
                 this.fire('toast',{
@@ -238,15 +239,15 @@
             //     this.set('Period.'+e.target.index+'.quantity',parseFloat(e.target.value));
             // },
             _mathData:function(){
-                if(this.Period == ''){
-                     this.fire('toast',
-                        {
-                            status:'connectError',
-                            text:'กรุณาเพิ่มงวด',
-                            callback:function(){
-                            }
-                        });
-                }   
+                // if(this.Period == ''){
+                //      this.fire('toast',
+                //         {
+                //             status:'connectError',
+                //             text:'กรุณาเพิ่มงวด',
+                //             callback:function(){
+                //             }
+                //         });
+                // }   
                 this.$$('.mathData').validate();
                 var stat = Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
                     return  item.validate();
@@ -292,12 +293,12 @@
                         num += item.percent;
                     });
                     if(num == 100){
-                        // if(this.status == 'post')
-                        //     this.fire('post-data',datas); 
-                        // else if (this.status == 'update'){
-                        //     datas.id = this.data.quota_id;
-                        //     this.fire('put-data',datas); 
-                        // }    
+                        if(this.status == 'post')
+                            this.fire('post-data',datas); 
+                        else if (this.status == 'update'){
+                            datas.id = this.data.quota_id;
+                            this.fire('put-data',datas); 
+                        }    
                     }
                     else {
                         this.fire('toast',
