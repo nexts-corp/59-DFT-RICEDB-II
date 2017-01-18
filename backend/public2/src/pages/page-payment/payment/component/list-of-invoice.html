@@ -107,15 +107,20 @@
           value:''
         }
       },
-      // observers:[
-      //   'initDatabl(data)'
-      // ],
-      // initDatabl:function (data) {
-      //   // console.log(data);
-      //   // this.newData = this.g2gClone(data);
-      //   // console.log('clone new==>',this.newData);
-      //   // console.log('org==>',this.data);
-      // },
+      observers:[
+        '_cleanCheckBox(data)'
+      ],
+      _cleanCheckBox:function (data) {
+        console.log(data);
+        let checkDisabled = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-disabled="true"]');
+        checkDisabled.map((el)=>{
+            el.disabled=false;
+        });
+        let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
+        check.map((el)=>{
+            el.ariaChecked=false;
+        });
+      },
       checkData:function (e){
         // console.log(e.currentTarget.shmId);
         this.shipid = e.currentTarget.shmId;
