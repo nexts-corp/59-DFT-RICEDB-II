@@ -55,10 +55,10 @@
                 '_routePageChanged(routeData.page)'
             ],
             _routePageChanged: function(page) {
-                this.page = page || 'quota';
+                this.page = page || window._start_page ;
             },
             _pageChanged: function(page, oldPage) {
-                console.log(page);
+                //console.log(page);
                 if (page != null) {
                     this.importHref(
                         this.resolveUrl('/src/pages/page-' + page + '/page-' + page + '.html'),
@@ -68,7 +68,7 @@
                             }
                         },
                         ()=>{
-                            console.log('ok');
+                            //console.log('ok');
                             this._routePageChanged('404');
                         }
                         , true

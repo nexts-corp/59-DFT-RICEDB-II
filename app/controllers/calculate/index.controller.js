@@ -14,11 +14,14 @@ class index {
                 return result('right').pluck('type_rice_id','year')
             })
         })
-        .orderBy(r.desc('year'))('year').distinct()
-            .run().then(function (result) {
-                res.json(result);
-            });
-
+        .pluck('year').distinct()
+        .orderBy(r.desc('year'))('year')
+        .run()
+        .then(function (result) {
+            res.json(result);
+        }).catch(function(err){
+            res.json(err);
+        });
     }
 
     getExporter(req, res) {
