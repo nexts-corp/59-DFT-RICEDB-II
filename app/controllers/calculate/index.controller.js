@@ -181,6 +181,11 @@ class index {
         var params = req.params;
 
         STM_PREADSHEET(r,params)
+        .merge(function(row){
+            return r.db('eu2').table('quota').get(row('quota_id')).do(function(quota){
+                return r.db('eu2').table('type_rice').get(quota('type_rice_id')).pluck('type_rice_name_th')
+            })
+        })
         .run().then(function (result) {
             res.json(result);
         }).catch(function(err){
