@@ -124,8 +124,18 @@ class index{
         var r = req._r;
         var params = req.query;
 
-        r.db('eu2').table('report').filter({month:8,quota:false})
-        .innerJoin(r.db('eu2').table('quota') ,function(left,right){
+        if(typeof params.year !== "undefined"){
+            if(params.quota=='true'){
+                params.quota=true;
+            }else{
+                params.quota=false;
+            }
+            params.year = parseInt(params.year);
+            params.month = parseInt(params.month);
+        }
+
+        r.db('eu2').table('report').filter({month:params.month,quota:params.quota})
+        .innerJoin(r.db('eu2').table('quota').filter({year:params.year}) ,function(left,right){
             return left('quota_id').eq(right('id'))
         }).map(function(row){
             return row('left').merge(function(row2){
@@ -168,7 +178,7 @@ class index{
 
         .run()
         .then(function (result){
-            var year={year:params.month+" "+params.year};
+            var year={year:params.month_th+" "+params.year};
             res._ireport("report_test/report_month.jasper","pdf", result, year);
         }).error(function(err) {
             res.json(err);
