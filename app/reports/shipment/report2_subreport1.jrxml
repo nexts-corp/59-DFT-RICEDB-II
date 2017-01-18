@@ -15,9 +15,9 @@
 	<field name="package_weight_bag" class="java.lang.Integer"/>
 	<field name="buyer_masks" class="java.lang.String"/>
 	<detail>
-		<band height="180" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<textField pattern="">
-				<reportElement x="57" y="6" width="74" height="20" uuid="b7a6661c-9c4e-4d5d-a89a-6f59d93a5c27"/>
+				<reportElement x="45" y="0" width="74" height="20" uuid="b7a6661c-9c4e-4d5d-a89a-6f59d93a5c27"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" isUnderline="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Double"/>
@@ -25,32 +25,36 @@
 				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toFormat($F{quantity_bags},"#,###")
 +" BAGS"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="151" y="6" width="267" height="38" uuid="0d9c4f2a-6d8c-49c9-8d6e-b7e185df2e96"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="300" height="20" uuid="0d9c4f2a-6d8c-49c9-8d6e-b7e185df2e96"/>
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{type_rice_name_en}.toUpperCase()+", "+$F{project_en}.toUpperCase()+" "+
-"\n"+$F{description_en}.toUpperCase()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{type_rice_name_en}.toUpperCase()+", "
++$F{project_en}.toUpperCase()+" CURRENT NEW CROP,"+
+"\nDOUBLE-POLISHED AND SORTEXED QUALITY."]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="447" y="6" width="121" height="38" uuid="68a162cd-bb48-44f8-af59-785250996117"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="448" y="0" width="121" height="20" uuid="68a162cd-bb48-44f8-af59-785250996117"/>
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["G.W. "+new nylon.utility.NumberFormat().toFormat($F{weight_gross},"#,###.000")+" M/T\n"+
 "N.W. "+new nylon.utility.NumberFormat().toFormat($F{weight_net},"#,###.000")+" M/T"]]></textFieldExpression>
 			</textField>
-			<textField pattern="">
-				<reportElement x="22" y="51" width="90" height="26" uuid="bf8d0641-36a0-4f36-8aab-7766173a78c7"/>
+		</band>
+		<band height="30">
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement x="0" y="0" width="95" height="20" uuid="bf8d0641-36a0-4f36-8aab-7766173a78c7"/>
+				<box leftPadding="3"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" isBold="true" isUnderline="false" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{buyer_masks}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="151" y="51" width="267" height="105" uuid="9e679039-af80-4f57-b68e-a53b1af57fef"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="125" y="0" width="300" height="20" uuid="9e679039-af80-4f57-b68e-a53b1af57fef"/>
 				<textElement textAlignment="Justified">
 					<font fontName="TH SarabunPSK" size="15" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -60,8 +64,10 @@
 "TWO PERCENT (2%) MARKED SPARE EMPTY BAGS TO BE SUPPLIED FREE "+
 "OF CHARGE BY THE SELLER ALONG WITH THER SHIPMENT."]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="160" width="555" height="20" uuid="6dba3fc8-9099-41fd-8eb6-d1d05024f547"/>
+		</band>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="555" height="20" uuid="6dba3fc8-9099-41fd-8eb6-d1d05024f547"/>
 				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>

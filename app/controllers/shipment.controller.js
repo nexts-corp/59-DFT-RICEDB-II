@@ -192,7 +192,7 @@ exports.report2 = function (req, res, next) {
     r.db('g2g').table('shipment')
         .get(req.query.shm_id)
         .merge(function (row) {
-            return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'inct_id')
+            return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'incoterms')
         })
         // .merge(function (row) {
         //     return r.db('common').table('incoterms').get(row('inct_id')).pluck('inct_name')
