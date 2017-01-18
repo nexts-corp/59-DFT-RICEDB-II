@@ -29,12 +29,12 @@
             }
             
             th {
-                text-align: left;
+                text-align: right;
                 background-color: #F1F1F1;
             }
             
             td {
-                text-align: left;
+                text-align: right;
             }
             
             tr:hover {
@@ -45,29 +45,35 @@
                 font-size: 22px;
                 text-align: center;
             }
+            .left{
+                text-align: left;
+            }
+            .center{
+                text-align: center;
+            }
         </style>
         <div style="overflow-x:auto;">
             
         <template is="dom-if" if={{dataStat}}>
             <table class="gl-table-default">
               <tr>
-                <th>ลำดับที่</th>
-                <th>ผู้ส่งออก</th>
+                <th class="left">ลำดับที่</th>
+                <th class="left">ผู้ส่งออก</th>
                 <th>งวดที่</th>
                 <th>ยอดปรับปรุงงวดที่</th>
                 <th>ปริมาณโควตารวม</th>
                 <th>รวมยอดปรับปรุง</th>
               </tr>
               <tr>
-                <td colspan="6">ไม่พบข้อมูล</td>    
+                <td class="left" colspan="6">ไม่พบข้อมูล</td>    
               </tr>
             </table>
         </template>
         <template is="dom-if" if={{!dataStat}}>     
             <table class="gl-table-default">
               <tr>
-                <th>ลำดับที่</th>
-                <th>ผู้ส่งออก</th>
+                <th class="left">ลำดับที่</th>
+                <th class="left">ผู้ส่งออก</th>
                 <template is="dom-repeat" items="[[dataAllocate.data.0.quantity]]">
                     <th>งวดที่ [[item.period]] [[getMonthName(item.month)]]</th>
                     <th>ยอดปรับปรุงงวดที่ [[item.period]]</th>
@@ -79,8 +85,8 @@
               
                 <template is="dom-repeat" items="[[dataAllocate.data]]">
                     <tr on-tap="_selectData" data="{{item}}" style="cursor:pointer;" id="addRedRegExporter">
-                        <td>[[_num(index)]]</td>
-                        <td>[[item.name]]</td>
+                        <td class="left">[[_num(index)]]</td>
+                        <td class="left">[[item.name]]</td>
                         <template is="dom-repeat" as="period" items="[[item.quantity]]">
                             <td>[[formatNumber(period.weigth)]]</td>
                             <td>[[formatNumber(period.weigth_update)]]</td>
@@ -92,7 +98,7 @@
                 </template>
                 
                 <tr>
-                    <th colspan="2">รวมปริมาณโควตา</th>
+                    <th class="center" colspan="2">รวมปริมาณโควตา</th>
                     <template is="dom-repeat" items="[[dataAllocate.sum.sum_period]]">
                         <th>[[formatNumber(item.sum_weigth)]]</th>
                         <th>[[formatNumber(item.sum_weigth_update)]]</th>
