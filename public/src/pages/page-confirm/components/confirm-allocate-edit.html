@@ -175,6 +175,7 @@
       </div>
 
       <!-- โอนส่วนจัดสรร -->
+      <div hidden$="{{active}}">
        <gl-form-panel set-padding = "0px 0px 20px 0px">
       <div class="title">ข้อมูลบริษัท</div>
      
@@ -204,7 +205,7 @@
     <div class="horizontal end-justified layout">
       <paper-button class="gl-btn-primary" on-tap="_transferData" raised>โอนส่วนจัดสรร</paper-button>
     </div>
- 
+    </div>
   </template>
   <script>
     Polymer({
@@ -233,11 +234,13 @@
       _getData:function(){
         console.log(this.status);
         if(this.status == 'confirm'){
+          this.active = false;
           this.defaultAmount = this.data.amount;
           this.amount_update = this.data.amount;
         }
         else if(this.status == 'notConfirm'){
             console.log('notconfirm');
+          this.active = true;
           this.defaultAmount = this.data.amount;
           this.amount_update = this.data.amount_update;
         }
