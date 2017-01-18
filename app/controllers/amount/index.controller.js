@@ -61,11 +61,16 @@ class index{
                                 return {
                                   period: p,
                                   sum_weigth:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth') }).sum(),
-                                  sum_weigth_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum()
+                                  sum_weigth_update:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_update') }).sum(),
+                                  sum_weigth_cal:all('quantity').map(function(a){ return a.filter({period:p})(0)('weigth_cal') }).sum()
                                 }
                             }),
                     sum_amount :all('amount').sum(),
-                    sum_amount_update :all('amount_update').sum()
+                    sum_amount_update :all('amount_update').sum(),
+                    sum_amount_cal :all('quantity').sum('weigth_cal'),
+                    sum_amount_cal :all('quantity').concatMap(function(row){
+                        return row
+                    }).sum('weigth_cal')
                   }
                 }
               })
