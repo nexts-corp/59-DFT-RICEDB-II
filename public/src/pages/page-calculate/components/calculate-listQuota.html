@@ -65,16 +65,19 @@
         <section class="container">
             <div class="gl-panel-default">
                 <div class="gl-panel-default-header">
-                    ปีการจัดสรรโควตา  ประเภท : {{data.type_rice_name_th}} ปริมาณ {{formatNumber(data.quota_amount)}} ตัน
+                    ปีการจัดสรรโควตา  ประเภท : {{data.type_rice_name_th}} ปริมาณ {{formatNumber(data.amount)}} ตัน
                 </div>
                 <div class="gl-panel-default-content">
                     <div class="right" style="padding-bottom:5px;">
-                    ยอดรวมส่งออก {{countYear}} ปี เพื่อการคำนวณ: {{formatNumber(data.sum_for_cal)}} ยอดรวมการส่งออก [[formatNumber(data.sum_export)]]
-                    ยอดรวมโควตา [[formatNumber(data.sum_quota)]]</div>
+                    ยอดรวมส่งออก {{countYear}} ปี เพื่อการคำนวณ: {{formatNumber(data.calculate)}} ยอดรวมการส่งออก [[formatNumber(data.report)]]
+                    ยอดรวมโควตา [[formatNumber(data.confirm)]]</div>
                     <div style="overflow-x:auto;">
                     <table class="gl-table-default" width="100%" style="border: 1px solid #ddd;">
                         <thead>
                             <tr>
+                                <th rowspan="2">
+                                    ลำดับที่
+                                </th>
                                 <th rowspan="2">
                                     ผู้ส่งออก
                                 </th>
@@ -113,6 +116,7 @@
                         <tbody>
                             <template is="dom-repeat" items="{{data.spreadsheet}}">
                                 <tr>
+                                   <td class="left">[[_num(index)]]</td>
                                    <td class="left">{{item.exproter_name}}</td>
                                    <template is="dom-repeat" items={{item.report.quantity}}>
                                        <td class="right">[[formatNumber(item.weigth)]]</td>
@@ -139,7 +143,7 @@
                                     <td class="right">[[formatNumber(item.weigth)]]</td>
                                 </template>
                                  <td class="right">[[formatNumber(data.confirm)]]</td>
-                                 <td class="right"></td>
+                                 <td class="right">[[formatNumber(data.calculate)]]</td>
                                  <td class="right"></td>
                                  <td class="right">[[formatNumber(data.amount)]]</td>
                                  <td class="right">[[formatNumber(resault)]]</td>
@@ -171,6 +175,9 @@
             },
             ready:function(){
                
+            },
+            _num:function(num){
+                return parseInt(num)+1;
             },
             _setAmount:function(e){
                 this.resault = 0;
