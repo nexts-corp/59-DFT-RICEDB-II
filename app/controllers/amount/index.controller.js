@@ -40,7 +40,12 @@ class index{
                     })
                   }
                 })
-              }) .orderBy(r.desc('amount_update')) 
+              }) 
+                
+              .merge(function(w){
+                 return {amount_cal:w('quantity').sum('weigth_cal')}
+              })
+              .orderBy(r.desc('amount_update')) 
                 
             
               .filter({
