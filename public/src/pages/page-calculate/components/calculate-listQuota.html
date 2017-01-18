@@ -124,8 +124,8 @@
                                    <td class="right">[[formatNumber(item.confirm.amount)]]</td>
                                    <td class="right">[[formatNumber(item.div)]]</td>
                                    <td class="right">[[formatNumber(item.div_round)]]</td>
-                                   <td class="right">[[formatNumber(item.amount)]]</td>
-                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" allowed-pattern="[0-9||,||.]" value="{{item.amount_update}}"></gl-form-input></td>
+                                   <td class="right">[[formatNumber(item.amount)]]</td> 
+                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" allowed-pattern="[0-9||,||.]" value="[[item.amount_update]]" key="{{index}}" on-input="_setAmount"></gl-form-input></td>
                                 </tr>
                             </template>
                             <tr>
@@ -142,7 +142,7 @@
                                  <td class="right"></td>
                                  <td class="right"></td>
                                  <td class="right">[[formatNumber(data.amount)]]</td>
-                                 <td class="right">[[formatNumber(data.amount_update)]]</td>
+                                 <td class="right">[[formatNumber(resault)]]</td>
                             </tr>
                         </tbody>
                     </table>
@@ -169,29 +169,19 @@
                     observer: '_getYear'
                 }
             },
-            _sumQuantity:function(item){
-                // var answer = 0;
-                
-                // item.base.map((data)=>{
-                //     if(typeof data.editQuantity == 'undefined'){
-                //         // console.log(data.editQuantity);
-                //         answer = this.data.quota_amount;
-                //     }
-                //     else {
-                //         answer += this.unFormat(data.editQuantity);
-                //     }
-                   
-                // });
-                // if(isNaN(answer)==true){
-                //     return ''
-                // }
-                // else {  
-                //     return this.formatNumber(answer);
-                // }
+            ready:function(){
                
+            },
+            _setAmount:function(e){
+                this.resault = 0;
+                this.set('data.spreadsheet.'+e.target.key+'.amount_update',e.target.value);
+                this.data.spreadsheet.map((item)=>{
+                    this.resault += this.unFormat(item.amount_update);
+                }) 
             },
             _getYear:function(){
                this.countYear = this.data.confirm_year.length;
+               this.resault = this.data.amount_update;
             },
             _saveData:function(){
                 var datas = this.data.spreadsheet.map((item)=>{
@@ -203,6 +193,7 @@
                 var saveData = {
                     amount_update:datas
                 }
+                // console.log(datas);
                 // console.log(this.data.id);
                 this.fire('save-data',saveData);
                 this.fire('update-data-list',this.data.id);
