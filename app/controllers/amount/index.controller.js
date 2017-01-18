@@ -67,7 +67,6 @@ class index{
                             }),
                     sum_amount :all('amount').sum(),
                     sum_amount_update :all('amount_update').sum(),
-                    sum_amount_cal :all('quantity').sum('weigth_cal'),
                     sum_amount_cal :all('quantity').concatMap(function(row){
                         return row
                     }).sum('weigth_cal')
