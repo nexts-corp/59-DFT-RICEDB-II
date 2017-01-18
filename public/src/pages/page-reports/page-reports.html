@@ -1,12 +1,142 @@
+<link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./../components/format-number-behavior.html">
+<link rel="import" href="./../components/month-behavior.html">
+
 
 <dom-module id="page-reports">
-    
     <template>
-        
+        <style include="gl-size gl-panel gl-color iron-flex iron-flex-factors iron-flex-alignment">
+            *{
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+            .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
+            paper-button,.header{
+                font-family: 'CSChatThaiUI', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+            }
+            .title {
+                text-align: center;
+                font-size: var(--font-size-h3); 
+                margin-top:20px;
+                margin-bottom: 20px;
+            } 
+            .header{
+                text-align: right;
+                margin-top: 26px;
+                font-size: 16px;
+            }     
+            section{
+                padding: 20px;
+            }
+        </style>
+
+        <div class="flex title">
+            ออกรายงาน
+        </div>
+
+        <section>
+            <div class="flex gl-panel-default">
+                <div class="gl-panel-default-header">
+                    โปรดระบบุข้อมูล
+                </div>
+                <div class="gl-panel-default-content">
+                     <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <div class="header">สรุปรายงายงานการส่งออกข้าวไปสหภาพยุโรป :</div>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                              <gl-combo-box class="saveData" items="{{listEu}}" value="{{listEuValue}}"
+                            error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id"></gl-combo-box>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                     </gl-grid-row>
+
+                     <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <div class="header">ประจำเดือน :</div>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                               <gl-combo-box class="saveData" items="{{getMonth()}}" value="{{month}}"
+                            error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id"></gl-combo-box>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                     </gl-grid-row>
+
+                       <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <div class="header">ปี :</div>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                               <gl-combo-box class="saveData" items="{{getYear}}" value="{{year}}"></gl-combo-box>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                     </gl-grid-row>
+                </div>
+            </div>
+            <div class="flex-end-justified">
+                <paper-button raised class="gl-btn-primary" on-tap="_activeReports">ออกรายงาน</paper-button>
+           </div>
+        </section>
     </template>
     <script>
         Polymer({
-            is: 'page-reports'
+            is: 'page-reports',
+            behaviors:[nylonBehavior,FormatNumberBehavior,MonthBehavior],
+            properties:{
+                  listEu:{
+                    type: Array,
+                    value:[
+                        {
+                            id: 'true',
+                            name: 'ในโควตา'
+                        },
+                        {
+                            id: 'false',
+                            name: 'นอกโควตา'
+                        }
+                    ]
+                }
+            },
+            nylonPageActive:function(){
+                this.fnyear();
+            },
+            fnyear: function(){
+                axios.get('./common/year')
+                .then((response)=>{
+                    this.getYear = response.data.map((item)=>{
+                        return item.toString();
+                    });
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                });
+            },
+            _activeReports:function(){
+                var datas = {
+                    quota: this.listEuValue,
+                    year: this.year,
+                    month: this.month,
+                    month_th: this.getMonthName(this.month),
+                }
+                window.open('/api/report/report_quota?quota='+datas.quota+'&year='+datas.year+'&month='+datas.month+'&month_th='+datas.month_th,'_blank');
+            }
         });
     </script>
 </dom-module>
