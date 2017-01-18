@@ -51,6 +51,9 @@
             .center{
                 text-align: center;
             }
+            .default{
+                color:#979A9A;
+            }
         </style>
         <div style="overflow-x:auto;">
             
@@ -88,10 +91,10 @@
                         <td class="left">[[_num(index)]]</td>
                         <td class="left">[[item.name]]</td>
                         <template is="dom-repeat" as="period" items="[[item.quantity]]">
-                            <td>[[formatNumber(period.weigth)]]</td>
+                            <td class="default">[[formatNumber(period.weigth_cal)]]</td>
                             <td>[[formatNumber(period.weigth_update)]]</td>
                         </template>
-                        <td>[[formatNumber(item.amount)]]</td>
+                        <td class="default">[[formatNumber(item.amount_cal)]]</td>
                         <td>[[formatNumber(item.amount_update)]]</td>
                     </tr>
                     [[sumAll(item.amount)]]
@@ -100,10 +103,10 @@
                 <tr>
                     <th class="center" colspan="2">รวมปริมาณโควตา</th>
                     <template is="dom-repeat" items="[[dataAllocate.sum.sum_period]]">
-                        <th>[[formatNumber(item.sum_weigth)]]</th>
+                        <th class="default">[[formatNumber(item.sum_weigth_cal)]]</th>
                         <th>[[formatNumber(item.sum_weigth_update)]]</th>
                     </template>
-                    <th>[[formatNumber(dataAllocate.sum.sum_amount)]]</th>
+                    <th class="default">[[formatNumber(dataAllocate.sum.sum_amount_cal)]]</th>
                     <th>[[formatNumber(dataAllocate.sum.sum_amount_update)]]</th>
                 </tr>
             </table>
