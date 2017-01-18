@@ -95,6 +95,12 @@
         </tr>
       </thead>
         <tbody>
+          <template is="dom-if" if="[[_isHave(dataForSelected.exporterDetail)]]">
+            <tr>
+              <td></td>
+                <td colspan="8" style="text-align:center;">ไม่พบข้อมูล</td>
+            </tr>
+          </template>
           <template is="dom-repeat" as="datapay" items="{{dataForSelected.exporterDetail}}">
           <tr>
             <td></td>
@@ -148,11 +154,6 @@
       </div>
     </paper-dialog>
 
-    <div id="notfound" >
-      <div class="horizontal center-justified layout searchBorder">
-        <div class="title" style="margin:20px">ไม่พบข้อมูล</div>
-      </div>
-    </div>
   </template>
   <script>
     Polymer({
@@ -165,7 +166,7 @@
       properties: {
         dataForSelected:{
           type:Object,
-          value:{}
+          value:{exporterDetail:[]}
         },
         dataName:{
           type:Array
@@ -220,27 +221,13 @@
         let exporter_id = e.detail.value;
         if (exporter_id) {
           this.getExporter(exporter_id);
-
-        }else {
-          // if (this.dataForSelected.exporterDetail != null) {
-          //   this.$$('#notfound').setAttribute("hidden", "hidden");
-          // } else {
-          //   this.$$('#notfound').removeAttribute("hidden");
-          // }
         }
       },
       getExporter:function (exporter_id) {
         // console.log(exporter_id);
         this.read('./g2g/payment/exporter/id/'+exporter_id,(data)=>{
           this.dataForSelected.exporterDetail = data;
-          // console.log(this.dataForSelected.exporterDetail);
-          // console.log(this.dataForSelected);
           this.notifyPath('dataForSelected.exporterDetail');
-          if (this.dataForSelected.exporterDetail != null) {
-            this.$$('#notfound').setAttribute("hidden", "hidden");
-          } else {
-            this.$$('#notfound').removeAttribute("hidden");
-          }
         });
       },
       _pay:function(e) {

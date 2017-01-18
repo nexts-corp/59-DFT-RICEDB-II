@@ -122,7 +122,7 @@
         // console.log('กดสิ');
         // console.log(this.shipid);
         let notCheck = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="false"]');
-        console.log(notCheck);
+        // console.log(notCheck);
         notCheck.map((el)=>{
           if (this.shipid != el.shmId){
             el.disabled=true;
@@ -137,19 +137,6 @@
               el.disabled=false;
             })
         }
-      },
-      _checkDisabled:function (shipid,shm_id,item) {
-        // let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="false"]');
-        // check.map((el)=>{
-        //   console.log(el.ariaChecked="true");
-        //   // aria-checked="false"
-        // })
-        console.log(item);
-        if (shipid != shm_id) {
-          console.log(1);
-          return true;
-        }
-        // console.log(shipid,  shm_id);
       },
       getInvoiceDetail:function (e) {
         this.fire('get-invoice-detail',{detail:e.currentTarget.data});
