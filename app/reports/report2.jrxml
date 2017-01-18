@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report6" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ab00411-f197-4f02-9091-e25ab6106afe">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="3"/>
-	<property name="ireport.y" value="78"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ab00411-f197-4f02-9091-e25ab6106afe">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="109"/>
 	<parameter name="date_start" class="java.lang.String"/>
 	<parameter name="date_end" class="java.lang.String"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\tawatchai.w\\My Projects\\dft.go.th\\report\\app\\reports\\"]]></defaultValueExpression>
-	</parameter>
 	<field name="exporter_no_name" class="java.lang.String"/>
 	<field name="seller_name_th" class="java.lang.String"/>
 	<field name="seller_tax_id" class="java.lang.String"/>
@@ -38,9 +35,9 @@
 					<font fontName="TH SarabunPSK" size="20" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["ระหว่างวันที่ "+
-new nylon.utility.NumberFormat().toDateThai($P{date_start})+
+new nylon.utility.NumberFormat().toThaiDate($P{date_start})+
 " ถึง "+
-new nylon.utility.NumberFormat().toDateThai($P{date_end})]]></textFieldExpression>
+new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -231,7 +228,7 @@ new nylon.utility.NumberFormat().toDateThai($P{date_end})]]></textFieldExpressio
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="TH SarabunPSK" size="14" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{trader_date_approve}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new nylon.utility.NumberFormat().toThaiDate($F{trader_date_approve})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="700" y="0" width="102" height="25" uuid="e8364d1b-6e2f-4254-9f85-4df5955c8f62"/>
@@ -249,7 +246,7 @@ new nylon.utility.NumberFormat().toDateThai($P{date_end})]]></textFieldExpressio
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="802" height="25" isPrintWhenDetailOverflows="true" uuid="88c02011-06a8-4cfb-9305-e3788948ce32"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{seller_agent})]]></dataSourceExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report6_subreport1.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["E:\\Polymer\\Project_Rice\\report-exporter\\app\\reports\\report2_subreport1.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
@@ -274,20 +271,10 @@ new nylon.utility.NumberFormat().toDateThai($P{date_end})]]></textFieldExpressio
 					<font fontName="TH SarabunPSK" size="20" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["ระหว่างวันที่ "+
-new nylon.utility.NumberFormat().toDateThai($P{date_start})+
+new nylon.utility.NumberFormat().toThaiDate($P{date_start})+
 " ถึง "+
-new nylon.utility.NumberFormat().toDateThai($P{date_end})]]></textFieldExpression>
+new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="0" y="23" width="802" height="64" uuid="1b9c9d58-1436-4bba-9a1f-b4a0b8f60976"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="TH SarabunPSK" size="20" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[รายชื่อผู้ส่งออกข้าวออกต่างประเทศ และ คณะกรรมการบริษัท
-ประเภทส่งไปจำหน่ายต่างประเทศ (ทั่วไป,ชายแดน และ ไม่เกิน 12 ก.ก)
-]]></text>
-			</staticText>
 			<staticText>
 				<reportElement x="460" y="124" width="120" height="50" uuid="2079145e-46aa-4741-b96f-e07edfe31936"/>
 				<box>

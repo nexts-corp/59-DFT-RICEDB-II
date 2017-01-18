@@ -103,7 +103,7 @@ exports.report1 = function (req, res, next) {
         .run()
         .then(function (result) {
             //res.json(result);
-            res._ireport("report5.jasper", req.query.export || "pdf", result, parameters);
+            res._ireport("report1.jasper", req.query.export || "pdf", result, parameters);
         });
 }
 exports.report2 = function (req, res, next) {
@@ -204,8 +204,8 @@ exports.report2 = function (req, res, next) {
         .orderBy('exporter_no')
         .run()
         .then(function (result) {
-            //res.json(result);
-            res._ireport("report6.jasper", "pdf", result, parameters);
+            // res.json(result);
+            res._ireport("report2.jasper", "pdf", result, parameters);
         });
 }
 exports.report3 = function (req, res, next) {
@@ -307,7 +307,7 @@ exports.report3 = function (req, res, next) {
         .run()
         .then(function (result) {
             //res.json(result);
-            res._ireport("report7.jasper", "pdf", result, parameters);
+            res._ireport("report3.jasper", "pdf", result, parameters);
         });
 }
 exports.report4 = function (req, res) {
@@ -330,7 +330,7 @@ exports.report4 = function (req, res) {
             }).without('id')
             .merge(function (m) {
                 return {
-                    export_date: r.branch(m('book').eq([]), 'หมดอายุ', m('book')(0).split('T')(0)),
+                    export_date: r.branch(m('book').eq([]), null, m('book')(0).split('T')(0)),
                     exporter_date_approve: m('exporter_date_approve').split('T')(0)
                 }
             })
@@ -359,7 +359,7 @@ exports.report4 = function (req, res) {
                             )
                         )
                     ).add(m('exporter_no').coerceTo('string'))
-                    , 'ยังไม่ลงทะเบียน'
+                    , null
                 )
             }
         })
@@ -393,7 +393,7 @@ exports.report5 = function (req, res) {
             return {
                 export_date: r.branch(
                     m('book').eq([]),
-                    'หมดอายุ',
+                    null,
                     m('book')(0).split('T')(0)
                 ),
                 export_date_expire: r.branch(
@@ -452,17 +452,104 @@ exports.report5 = function (req, res) {
             res.json(err)
         })
 }
-exports.report6 = function (req, res){
-    r.db('external_f3').table('exporter')
-    .eqJoin('trader_id',r.db('external_f3').table('trader')).without({right: ['id','date_updated','date_created']}).zip()
-    .eqJoin('type_lic_id',r.db('external_f3').table('type_license')).without({right: ['id','date_updated','date_created']}).zip()
-    .filter(req.query)
-    // .group('type_lic_id')
-    .orderBy('exporter_no')
-    .then(function(result){
-        res.json(result)
-    })
-    .error(function(err){
-        res.json(arr)
-    })
+exports.report6 = function (req, res) {
+    var r = req._r;
+
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\',
+        date_start: y + "-01-01" + tz,
+        date_end: y + "-12-31" + tz
+    };
+    var q = {}, d = {};
+    for (key in req.query) {
+
+        if (req.query[key] == "true") {
+            req.query[key] = true;
+        } else if (req.query[key] == "false") {
+            req.query[key] = false;
+        } else if (req.query[key] == "null") {
+            req.query[key] = null;
+        }
+
+        if (key.indexOf('date') > -1) {
+            d[key] = req.query[key] + tz;
+        } else {
+            q[key] = req.query[key];
+        }
+    }
+    // console.log(parameters, d);
+    if (Object.getOwnPropertyNames(d).length !== 0) {
+        parameters['date_start'] = d['date_start'].split('T')[0];
+        parameters['date_end'] = d['date_end'].split('T')[0];
+        d = r.row('exporter_date_approve').gt(d.date_start).and(r.row('exporter_date_approve').lt(d.date_end));
+    } else {
+        d = r.row('exporter_date_approve').gt(parameters['date_start']).and(r.row('exporter_date_approve').lt(parameters['date_end']));
+        parameters['date_start'] = parameters['date_start'].split('T')[0];
+        parameters['date_end'] = parameters['date_end'].split('T')[0];
+    }
+
+    r.db('external_f3').table('trader')
+        .outerJoin(r.db('external_f3').table('exporter')
+            .merge(function (m) {
+                return {
+                    exporter_id: m('id'),
+                    book: r.db('g2g').table('shipment_detail')
+                        .filter({ exporter_id: m('id') })
+                        .pluck('book_id')
+                        .distinct()
+                        .coerceTo('array')
+                        .eqJoin('book_id', r.db('g2g').table('book')).pluck({ right: 'etd_date' }, "left").zip()
+                        .orderBy(r.desc('etd_date'))
+                        .limit(1)
+                        .getField('etd_date')
+                }
+            }).without('id')
+            .merge(function (m) {
+                return {
+                    export_date: r.branch(m('book').eq([]), null, m('book')(0).split('T')(0)),
+                    exporter_date_approve: m('exporter_date_approve').split('T')(0)
+                }
+            })
+            .without('book'),
+        function (trader, exporter) {
+            return trader('id').eq(exporter('trader_id'))
+        }).zip()
+        .eqJoin('type_lic_id', r.db('external_f3').table('type_license')).pluck({ right: 'type_lic_name' }, 'left').zip()
+        .eqJoin('seller_id', r.db('external_f3').table('seller'))
+        .pluck({ right: ['seller_name_th', 'seller_name_en', 'seller_address_th', 'seller_address_en'] }, 'left').zip()
+        .merge(function (m) {
+            return {
+                exporter_status_name: r.branch(m.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก'),
+                exporter_no_name: r.branch(
+                    m.hasFields('exporter_no'),
+                    r.branch(
+                        m('exporter_no').lt(10)
+                        , r.expr('ข.000')
+                        , r.branch(
+                            m('exporter_no').lt(100)
+                            , r.expr('ข.00')
+                            , r.branch(
+                                m('exporter_no').lt(1000)
+                                , r.expr('ข.0')
+                                , r.expr('ข.')
+                            )
+                        )
+                    ).add(m('exporter_no').coerceTo('string'))
+                    , null
+                )
+            }
+        })
+        .filter(q)
+        .filter(d)
+        .filter({export_date: null})
+        .orderBy('exporter_no')
+        .then(function (result) {
+            res.json(result);
+            // parameters = {}
+            // res._ireport("report6.jasper", req.query.export || "pdf", result, parameters);
+        })
+        .error(function (err) {
+            res.json(err)
+        })
 }
