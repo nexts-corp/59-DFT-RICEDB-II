@@ -77,14 +77,6 @@
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                                 <gl-combo-box class="saveData" label="ประเภทข้าว" items="{{getTypeRice}}" value="{{typeRice}}" placeholder="กรุณาเลือกประเภทข้าว"
                                 item-label-path="type_rice_name_th" item-value-path="id" error-message="กรุณาเลือกประเภทข้าว" required></gl-combo-box>
-								<!--<gl-form-dropdown-menu label="ประเภทข้าว" class="saveData" placeholder="กรุณาเลือกประเภทข้าว" error-message="กรุณาเลือกประเภทข้าว" required always-float-label disabled="{{checkStatus(status)}}">
-									<paper-listbox class="dropdown-content" attr-for-selected="rice-type-id" selected="{{typeRice}}">
-										<template is="dom-repeat" items="{{getTypeRice}}">
-											<paper-item class="font" rice-type-id="{{item.id}}">{{item.type_rice_name_th}}</paper-item>
-										</template>
-									</paper-listbox>
-								</gl-form-dropdown-menu>-->
-
 							</gl-grid-col>
 							<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
 								<gl-form-input class="mathData saveData" id="sum" label="ยอดรวม" allowed-pattern="[0-9||,||.]" format-number="on" value="[[sum]]" always-float-label auto-validate error-message="กรุณาใสจำนวน" required>
@@ -112,25 +104,18 @@
                                         <td>
                                          <gl-combo-box label="" class="saveData" style="margin-top: -21px;" items="{{getMonth()}}" value="{{item.month}}"
                                          item-label-path="name" item-value-path="id" error-message="กรุณาเลือกเดือน" required></gl-combo-box>
-                                            <!--<gl-form-dropdown-menu class="saveData" required no-label-float error-message="กรุณาเลือกเดือน">
-                                                <paper-listbox class="dropdown-content" attr-for-selected="mounth" selected="{{item.month}}">
-                                                    <template is="dom-repeat" items="{{getMonth()}}">
-                                                        <paper-item class="font" mounth="{{item.id}}">{{item.name}}</paper-item>
-                                                    </template>
-                                                </paper-listbox>
-                                            </gl-form-dropdown-menu>-->
                                         </td>
 										<!--{{item.proportion}}-->
 										<td>
 											[[testNum(item.*,'percent')]]
+                                            [[testNum(item.*,'weigth')]]
                                             [[testNum(item.*,'month')]]
-                                            [[disabledMath(item.percent,item.quantity)]]
 											<gl-form-input label="" class="mathData number saveData" maxlength="3"  allowed-pattern="[0-9]" error-message="กรุณาใสจำนวน" value="{{item.percent}}" required no-label-float>
                                                 <div suffix>&nbsp;%</div>
                                             </gl-form-input>
 										</td>
 										<td>
-											<gl-form-input label="" class="saveData" value="[[item.weigth]]" format-number="on"
+											<gl-form-input label="" class="saveData" value="[[item.weigth]]" format-number="on" on-input="updateWeight"
 												index="{{index}}" required id="{{index}}" allowed-pattern="[0-9||,||.]" error-message="กรุณาใสจำนวน" no-label-float></gl-form-input>
 										</td>
 										<td>
@@ -212,6 +197,9 @@
             getIndex:function(index){
                 this.period++;
                 return parseInt(index)+1;
+            },
+            updateWeight:function(e){
+                this.set('quantity.'+e.target.index+'.weigth', this.unFormat(e.target.value));
             },
             _addPeriod:function(){
                 // console.log(this.quantity);
@@ -298,19 +286,18 @@
                         quantity:this.quantity,
                         type_rice_id:this.typeRice,   
                     }
-                   
+                    console.log(datas);
                     var num = 0;
                     this.quantity.map((item)=>{
                         num += item.percent;
                     });
                     if(num == 100){
-                        if(this.status == 'post')
-                            this.fire('post-data',datas); 
-                        else if (this.status == 'update'){
-                            datas.id = this.data.quota_id;
-                            this.fire('put-data',datas); 
-                        }
-                            
+                        // if(this.status == 'post')
+                        //     this.fire('post-data',datas); 
+                        // else if (this.status == 'update'){
+                        //     datas.id = this.data.quota_id;
+                        //     this.fire('put-data',datas); 
+                        // }    
                     }
                     else {
                         this.fire('toast',
@@ -341,7 +328,7 @@
                 Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
                     item.reset();
                 });
-                console.log(data);
+                // console.log(data);
                 this.quantity = data.quantity;
                 this.year = data.year;
                 this.sum = data.amount;
@@ -384,11 +371,6 @@
                 });
                 return status=='update';
             },
-            disabledMath:function(percent,quantity){
-                // console.log('percent',percent);
-                // console.log('quantity',quantity);
-               //this.hide=false;
-            },
             confirmClose:function(){
                 this.fire('cancel-data');
             },
@@ -397,7 +379,7 @@
                     item.value = '';
                     item.reset();
                 });
-                this.Period = [];
+                this.quantity = [];
             }
         });
     </script>
