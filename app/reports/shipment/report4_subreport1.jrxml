@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4_subreport1" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a91bf02e-6d99-4aea-a7db-3c17e9e600e7">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="ship" class="java.lang.String"/>
+	<field name="ship_voy_no" class="java.lang.String"/>
+	<field name="shm_det_quantity" class="java.lang.String"/>
+	<field name="dest_port_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="507" height="19" uuid="93da2b2a-0eb0-4cd1-84ad-a822c8ba1c4f"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\t\t๑."+$F{ship}+
+" ปริมาณ "+new nylon.utility.NumberFormat().toThaiNumber($F{shm_det_quantity})
++" ตัน "+" ส่งไปเมืองท่า "+
+new nylon.utility.NumberFormat().toThaiNumber($F{dest_port_name})
+]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

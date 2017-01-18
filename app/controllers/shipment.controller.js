@@ -514,8 +514,8 @@ exports.report4 = function (req, res, next) {
         .getField('exporter')
         .run()
         .then(function (result) {
-            res.json(result);
-            //res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
+          // res.json(result);
+           res._ireport("shipment/report4.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
@@ -596,8 +596,8 @@ exports.report5 = function (req, res, next) {
         .orderBy([r.row('ship_lot_no').coerceTo('number'), r.row('invoice_no')])
         .run()
         .then(function (result) {
-            // res.json(result)
-            res._ireport("shipment/report5.jasper", req.query.export || "pdf", result, parameters);
+             res.json(result)
+           // res._ireport("shipment/report5.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
