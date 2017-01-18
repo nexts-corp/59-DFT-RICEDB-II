@@ -40,7 +40,7 @@ class index{
                     })
                   }
                 })
-              }) .orderBy('name') 
+              }) .orderBy(r.desc('amount_update')) 
                 
             
               .filter({

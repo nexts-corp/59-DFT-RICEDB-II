@@ -17,27 +17,7 @@ class index {
              .do(function(re){
                 return re ('ordinal')
             })
-/*
-            r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'), function(c,q){
-                    return c('quota_id').eq(q('id'))
-            }).map(function(x){
-            return {
-                year:x('right')('year'),
-                type_rice_id:x('right')('type_rice_id'),
-                ordinal:x('left')('ordinal'),
-                id:x('left')('id')
-            }
-            })
-            
-            .filter({
-                type_rice_id:params.type_rice_id,
-                year:params.year
-            }) .orderBy('ordinal')
-            
-            .do(function(re){
-                return re ('ordinal')
-            })
-*/            
+     
             .run().then(function(result){
                 res.json(result);
             })
