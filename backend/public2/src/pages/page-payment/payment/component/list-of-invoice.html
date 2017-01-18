@@ -20,6 +20,9 @@
       text-align: center;
       font-size: var(--font-size-h4);
     }
+    .worrne{
+      padding: 15px;
+    }
   </style>
   <template>
     <div class="title">ใบกำกับสินค้า</div>
@@ -48,7 +51,8 @@
               <template is="dom-repeat" items="{{data}}" as="payment">
                 <template is="dom-repeat" items="{{payment.invoice_detail}}">
                   <tr >
-                    <td><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
+                    <!-- disabled="[[_checkDisabled(shipid,payment.shm_id,item.invoice_id)]]" -->
+                    <td><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shm-id="{{payment.shm_id}}" on-tap="checkData" ></paper-checkbox></td>
                     <td data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
                     <td data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
                     <td data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
@@ -74,6 +78,8 @@
                 </td>
                 </tr>
           </template>
+
+
         </template>
         <template is="dom-if" if="[[_isHave(data)]]">
             <tr >
@@ -82,6 +88,9 @@
         </template>
          </tbody>
       </table>
+      <div class="worrne">
+        *กรุณาติ้กเครื่องถูกที่งวดเดียวกัน
+      </div>
   </template>
   <script>
     Polymer({
@@ -89,6 +98,15 @@
       behaviors: [
           g2gCongtroller
       ],
+      properties: {
+        data: {
+          type: Object,
+        },
+        shipid:{
+          type: String,
+          value:''
+        }
+      },
       // observers:[
       //   'initDatabl(data)'
       // ],
@@ -98,6 +116,41 @@
       //   // console.log('clone new==>',this.newData);
       //   // console.log('org==>',this.data);
       // },
+      checkData:function (e){
+        // console.log(e.currentTarget.shmId);
+        this.shipid = e.currentTarget.shmId;
+        // console.log('กดสิ');
+        // console.log(this.shipid);
+        let notCheck = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="false"]');
+        console.log(notCheck);
+        notCheck.map((el)=>{
+          if (this.shipid != el.shmId){
+            el.disabled=true;
+          }
+          // console.log(el.disabled);
+        })
+        let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
+        // console.log(check);
+        if (check.length < 1) {
+          let checkDisabled = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-disabled="true"]');
+          checkDisabled.map((el)=>{
+              el.disabled=false;
+            })
+        }
+      },
+      _checkDisabled:function (shipid,shm_id,item) {
+        // let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="false"]');
+        // check.map((el)=>{
+        //   console.log(el.ariaChecked="true");
+        //   // aria-checked="false"
+        // })
+        console.log(item);
+        if (shipid != shm_id) {
+          console.log(1);
+          return true;
+        }
+        // console.log(shipid,  shm_id);
+      },
       getInvoiceDetail:function (e) {
         this.fire('get-invoice-detail',{detail:e.currentTarget.data});
       },
