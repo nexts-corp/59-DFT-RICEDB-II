@@ -9,11 +9,11 @@ exports.report1 = function (req, res, next) {
     r.db('g2g').table('shipment')
         .get(req.query.shm_id)
         .merge(function (row) {
-            return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'inct_id')
+            return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'incoterms')
         })
-        .merge(function (row) {
-            return r.db('common').table('incoterms').get(row('inct_id')).pluck('inct_name')
-        })
+        // .merge(function (row) {
+        //     return r.db('common').table('incoterms').get(row('inct_id')).pluck('inct_name')
+        // })
         .merge(function (row) {
             return r.db('g2g').table('contract').get(row('contract_id')).pluck('buyer_id', 'contract_date')
         })
@@ -31,6 +31,7 @@ exports.report1 = function (req, res, next) {
                     .merge(function (m) {
                         return {
                             book_id: m('id'),
+                            eta_date: m('eta_date').split('T')(0),
                             ship: m('ship')
                                 .merge(function (m1) {
                                     return r.db('common').table('ship').get(m1('ship_id')).pluck('ship_name')
@@ -69,7 +70,10 @@ exports.report1 = function (req, res, next) {
                                     return {
                                         type_rice_id: m1('group')('type_rice_id'),
                                         package_id: m1('group')('package_id'),
-                                        inct_id: row('inct_id'),
+                                        incoterms: row('incoterms').getField('inct_id')
+                                            .reduce(function (left, right) {
+                                                return left.add(', ', right)
+                                            }),
                                         num_of_container: r.db('g2g').table('shipment_detail')
                                             .getAll(m('book_id'), { index: 'book_id' })
                                             .filter({
@@ -82,10 +86,10 @@ exports.report1 = function (req, res, next) {
                                             .filter(function (tb) {
                                                 return tb('type_rice_id').eq(m1('group')('type_rice_id'))
                                             }).getField("project_th")(0),
-                                        description_th: row('cl_type_rice')
-                                            .filter(function (tb) {
-                                                return tb('type_rice_id').eq(m1('group')('type_rice_id'))
-                                            }).getField("description_th")(0),
+                                        // description_th: row('cl_type_rice')
+                                        //     .filter(function (tb) {
+                                        //         return tb('type_rice_id').eq(m1('group')('type_rice_id'))
+                                        //     }).getField("description_th")(0),
                                         weight_net: m1('reduction'),
                                         price_per_ton: row('cl_type_rice')
                                             .filter(function (tb) {
@@ -190,9 +194,9 @@ exports.report2 = function (req, res, next) {
         .merge(function (row) {
             return r.db('g2g').table('confirm_letter').get(row('cl_id')).pluck('cl_type_rice', 'inct_id')
         })
-        .merge(function (row) {
-            return r.db('common').table('incoterms').get(row('inct_id')).pluck('inct_name')
-        })
+        // .merge(function (row) {
+        //     return r.db('common').table('incoterms').get(row('inct_id')).pluck('inct_name')
+        // })
         .merge(function (row) {
             return r.db('g2g').table('contract').get(row('contract_id')).pluck('buyer_id', 'contract_date')
         })
@@ -248,7 +252,10 @@ exports.report2 = function (req, res, next) {
                                     return {
                                         type_rice_id: m1('group')('type_rice_id'),
                                         package_id: m1('group')('package_id'),
-                                        inct_id: row('inct_id'),
+                                        incoterms: row('incoterms').getField('inct_id')
+                                            .reduce(function (left, right) {
+                                                return left.add(', ', right)
+                                            }),
                                         buyer_masks: row('buyer_masks'),
                                         num_of_container: r.db('g2g').table('shipment_detail')
                                             .getAll(m('book_id'), { index: 'book_id' })
@@ -262,10 +269,10 @@ exports.report2 = function (req, res, next) {
                                             .filter(function (tb) {
                                                 return tb('type_rice_id').eq(m1('group')('type_rice_id'))
                                             }).getField("project_en")(0),
-                                        description_en: row('cl_type_rice')
-                                            .filter(function (tb) {
-                                                return tb('type_rice_id').eq(m1('group')('type_rice_id'))
-                                            }).getField("description_en")(0),
+                                        // description_en: row('cl_type_rice')
+                                        //     .filter(function (tb) {
+                                        //         return tb('type_rice_id').eq(m1('group')('type_rice_id'))
+                                        //     }).getField("description_en")(0),
                                         weight_net: m1('reduction'),
                                         price_per_ton: row('cl_type_rice')
                                             .filter(function (tb) {
