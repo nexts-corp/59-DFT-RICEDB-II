@@ -76,7 +76,7 @@
       </gl-grid-row>
 
     <div class="top ">รายละเอียด</div>
-
+[[dataForSelect.contract_quantity_confirm_balance]]//
 
     <template is="dom-repeat" items="[[data.cl_type_rice]]">
         <div class="bg">
@@ -108,7 +108,7 @@
 
             </gl-grid-col>
             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">[[changeString2Num(item.*,'tolerance_rate')]]
-                <gl-form-input class="required number"maxlength="3" allowed-pattern="[0-9||,||.]" required error-message="กรุณาใส่จำนวน" disabled="[[isInputDisabled]]" label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{item.tolerance_rate}}" placeholder="ใส่รายละเอียด" id="tolerance_rate">
+                <gl-form-input class="required number" required maxlength="3" allowed-pattern="[0-9||,||.]" error-message="กรุณาใส่จำนวน" disabled="[[isInputDisabled]]" label="ค่าคลาดเคลื่อนที่ยอมรับได้" value="{{item.tolerance_rate}}" placeholder="ใส่รายละเอียด" id="tolerance_rate">
                    <div suffix>%</div>
                 </gl-form-input>
             </gl-grid-col>
@@ -167,7 +167,7 @@
 
                 </td>
                 <td > [[changeString2Num(packageitem.*,'price_per_ton')]]
-                  <gl-form-input class="required numberBack" allowed-pattern="[0-9||,||.]" format-number="on" required disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่ราคา"  error-message="กรุณาใส่ราคา" required value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
+                  <gl-form-input class="required numberBack" required allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]"  placeholder="กรุณาใส่ราคา"  error-message="กรุณาใส่ราคา" value="{{packageitem.price_per_ton}}" name="price_per_ton" no-label-float></gl-form-input>
                 </td>
                 <td >
                   <gl-form-input class="numberBack" disabled  value="[[_obChangePrice(packageitem.package_id,dataForSelect.package)]]" name="package_weight_bag"  no-label-float></gl-form-input>
@@ -211,7 +211,7 @@
         </template>
       </gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-          <gl-form-input class="numberBack" disabled always-float-label allowed-pattern="[0-9||,||.]" format-number="on" label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
+          <gl-form-input class="numberBack" disabled allowed-pattern="[0-9||,||.]" format-number="on" always-float-label label="น้ำหนักรวมทั้งหมด (ตัน)" value="{{dataForSelect.cl_total_quantity}}" name="cl_total_quantity"></gl-form-input>
       </gl-grid-col>
     </gl-grid-row>
     <gl-grid-row>
@@ -224,7 +224,7 @@
     </gl-grid-row>
     <gl-grid-row>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,7]]">
-            <gl-form-textarea  disabled="[[isInputDisabled]]" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.cl_quality}}" name="cl_quality"></gl-form-textarea>
+            <gl-form-textarea  disabled="[[isInputDisabled]]" label="รายละเอียดเพิ่มเติม" placeholder="รายละเอียดเพิ่มเติม" error-message="กรุณาใส่รายละเอียด" required value="{{data.cl_quality}}" name="cl_quality"></gl-form-textarea>
         </gl-grid-col>
     </gl-grid-row>
   </gl-form-panel-body>
@@ -262,10 +262,6 @@
         data: {
           type: Object,
           value:{type_rice_quantity:0,cl_type_rice:[{package:[{package_id: '', price_per_ton: 0,}]}],incoterms:[{inct_id:'d'}]}
-        },
-        cl_total_quantity: {
-          type: Number,
-          value:0
         },
       },
       observers:[
@@ -314,14 +310,13 @@
           for(index in datas){
                 total += parseFloat(datas[index].type_rice_quantity);
           }
-          this.cl_total_quantity=total;
+          // console.log('total',total);
+
+          // this.cl_total_quantity=this._isNan(total);
+          this.dataForSelect.cl_total_quantity=this._isNan(total);
+          this.notifyPath('dataForSelect.cl_total_quantity');
         // this.cl_total_quantity = numeral(total).format('0,0');
-        // this.data.cl_quality = this.cl_total_quantity  ;
-        // console.log(typeof this.cl_total_quantity);
-        // console.log(this.cl_total_quantity);
-        if (this.cl_total_quantity == 'NaN') {
-          this.cl_total_quantity=0;
-        }
+
       },
       addNewTypeRice:function () {
         this.push('data.cl_type_rice', {
@@ -369,8 +364,9 @@
       },
       insertConfirm:function () {
         this.data.cl_status=false;
-        // if (this.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
+
             this._clearnDataConfirm(this.data,(data)=>{
+              if (this.dataForSelect.cl_total_quantity<= this.dataForSelect.contract_quantity_confirm_balance) {
                 data.contract_id=this.dataForSelect.contract_id;
                 this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
                 // console.log(data);
@@ -384,18 +380,19 @@
                 });
                 let el = Polymer.dom(this.root).querySelectorAll('.required');
                 el.map((el)=> {el.reset();el.value=''});
+              }  else {
+                this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
+                callback:function(){
+                }})
+              }
                 // this.editInput();
             });
-          // }  else {
-          //   this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
-          //   callback:function(){
-          //   }})
-          // }
+
       },
       saveConfirm:function () {
         // console.log(this.cl_total_quantity,'=',this.dataForSelect.contract_quantity_confirm_balance);
-        if (this.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
-          this._clearnDataConfirm(this.data,(data)=>{
+        this._clearnDataConfirm(this.data,(data)=>{
+            if (this.dataForSelect.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
               data.contract_id=this.dataForSelect.contract_id;
               data.id=this.data.cl_id;
               this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
@@ -405,12 +402,12 @@
                   el: this, // compontents
                   data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
               })
+            }  else {
+              this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+            }
           });
-        }  else {
-          this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
-          callback:function(){
-          }})
-        }
       },
       _saveData:function(result,detail){
          if (result == true) {
@@ -431,6 +428,7 @@
      confirmConfirm:function () {
        this.editInput()
        this._clearnDataConfirm(this.data,(data)=>{
+         if (this.dataForSelect.cl_total_quantity <= this.dataForSelect.contract_quantity_confirm_balance) {
            data.contract_id=this.dataForSelect.contract_id;
            data.id = this.data.cl_id;
            data.cl_status=this.approve(data.cl_status);
@@ -441,6 +439,11 @@
                el: this, // compontents
                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
            })
+         }  else {
+           this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินจำนวนที่คงเหลือในสัญญา', //คำสั่งสำหรับเปิด toast error
+           callback:function(){
+           }})
+         }
        });
      },
      deleteConfirm:function () {
