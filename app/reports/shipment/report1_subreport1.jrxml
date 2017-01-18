@@ -5,11 +5,10 @@
 	<property name="ireport.y" value="0"/>
 	<field name="type_rice_name_th" class="java.lang.String"/>
 	<field name="project_th" class="java.lang.String"/>
-	<field name="description_th" class="java.lang.String"/>
 	<field name="weight_net" class="java.lang.Double"/>
 	<field name="num_of_container" class="java.lang.Integer"/>
 	<field name="weight_per_container" class="java.lang.Integer"/>
-	<field name="inct_id" class="java.lang.String"/>
+	<field name="incoterms" class="java.lang.String"/>
 	<field name="price_per_ton" class="java.lang.Double"/>
 	<field name="package_name_th" class="java.lang.String"/>
 	<field name="package_weight_bag" class="java.lang.String"/>
@@ -21,33 +20,49 @@
 		<groupExpression><![CDATA[$F{type_rice_name_th}]]></groupExpression>
 	</group>
 	<detail>
-		<band height="129" splitType="Stretch">
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="225" y="0" width="330" height="20" uuid="2cb67dfd-4237-4b1d-8a7c-a9f3588ff51d"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type_rice_name_th}+" ปีการผลิต "+$F{project_th}+" ฤดูใหม่"+
+"\n(ขัดสี 2 ครั้ง และคัดแยกเมล็ดข้าว)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="60" y="0" width="130" height="20" uuid="b79fee82-e860-485c-8567-8acc8f18d91a"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{COUNT_ROW}==1?"2. ชนิดข้าว":"  ชนิดข้าว")]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="60" y="38" width="147" height="20" uuid="bed21311-cd48-4fed-8a31-79cb86a59176"/>
-				<box leftPadding="12"/>
+				<reportElement x="190" y="0" width="35" height="20" uuid="cbbc8174-3930-4360-b886-968b6b5c7393"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+		<band height="60">
+			<staticText>
+				<reportElement x="60" y="0" width="130" height="20" uuid="bed21311-cd48-4fed-8a31-79cb86a59176"/>
+				<box leftPadding="14"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[จำนวน]]></text>
 			</staticText>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="240" y="0" width="264" height="38" uuid="2cb67dfd-4237-4b1d-8a7c-a9f3588ff51d"/>
-				<textElement>
-					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{type_rice_name_th}+" ปีการผลิต "+$F{project_th}+" "+
-"\n"+$F{description_th}]]></textFieldExpression>
-			</textField>
 			<staticText>
-				<reportElement x="60" y="61" width="147" height="20" uuid="f7fcbe58-3305-4f4c-94b8-90a2f71e1bc1"/>
-				<box leftPadding="12"/>
+				<reportElement x="60" y="20" width="130" height="20" uuid="f7fcbe58-3305-4f4c-94b8-90a2f71e1bc1"/>
+				<box leftPadding="14"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[ราคา]]></text>
 			</staticText>
 			<textField pattern="#,##0">
-				<reportElement x="240" y="38" width="264" height="20" uuid="2bd4cfde-ccab-4f92-a433-0a02dd5d658c"/>
+				<reportElement x="225" y="0" width="330" height="20" uuid="2bd4cfde-ccab-4f92-a433-0a02dd5d658c"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
@@ -55,35 +70,49 @@
 $F{weight_per_container}+" ตัน)"]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
-				<reportElement x="240" y="61" width="264" height="20" uuid="b6468e93-360a-4902-ab1f-b3b889a3999e"/>
+				<reportElement x="225" y="20" width="330" height="20" uuid="b6468e93-360a-4902-ab1f-b3b889a3999e"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{inct_id}+" ตันละ "+$F{price_per_ton}+" USD"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{incoterms}+" ตันละ "+$F{price_per_ton}+" USD"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="60" y="84" width="147" height="20" uuid="6e161d71-60fa-4fc1-9086-40e1031e12aa"/>
-				<box leftPadding="12"/>
+				<reportElement x="60" y="40" width="130" height="20" uuid="6e161d71-60fa-4fc1-9086-40e1031e12aa"/>
+				<box leftPadding="14"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[บรรจุ]]></text>
 			</staticText>
-			<textField pattern="#,##0">
-				<reportElement stretchType="RelativeToBandHeight" x="240" y="84" width="264" height="43" uuid="885000d8-1449-461e-9ece-5de79c4e3093"/>
+			<textField isStretchWithOverflow="true" pattern="#,##0">
+				<reportElement stretchType="RelativeToBandHeight" x="225" y="40" width="330" height="20" uuid="885000d8-1449-461e-9ece-5de79c4e3093"/>
 				<textElement>
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{package_name_th}+" น้ำหนักไม่น้อยกว่า "+$F{package_weight_bag}+" กรัม\n"
 +"สำรองกระสอบเปล่า 2% ในตู้คอนเทนเนอร์"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToBandHeight" x="60" y="0" width="147" height="27" uuid="b79fee82-e860-485c-8567-8acc8f18d91a"/>
-				<textElement>
+			<staticText>
+				<reportElement x="190" y="0" width="35" height="20" uuid="94dc2b88-6a04-446f-9d82-c2999b1ba504"/>
+				<textElement textAlignment="Center">
 					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($V{COUNT_ROW}==1?"2.ชนิดข้าว":"  ชนิดข้าว")]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="20" width="35" height="20" uuid="041f0714-65a9-487c-9d70-8d6e281ffc1d"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="40" width="35" height="20" uuid="266de93a-c114-4884-b937-0ca4500b7d6a"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
