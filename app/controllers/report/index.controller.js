@@ -87,7 +87,7 @@ class index{
                 type_rice_id:params.type_rice_id,
                 month:params.month,
                 quota:params.quota
-            })
+            }).orderBy('name')
             .run()
             .then(function(result){
                 res.json(result);
@@ -119,6 +119,62 @@ class index{
             res.json(result);
         });        
     }
+
+    report(req,res){
+        var r = req._r;
+        var params = req.query;
+
+        r.db('eu2').table('report').filter({month:8,quota:false})
+        .innerJoin(r.db('eu2').table('quota') ,function(left,right){
+            return left('quota_id').eq(right('id'))
+        }).map(function(row){
+            return row('left').merge(function(row2){
+            return {type_rice_id:row('right')('type_rice_id')}
+            })
+        }).group('exporter_id','type_doc','type_rice_id').sum('weigth').ungroup()
+        .merge(function(row){
+            return {
+            exporter_id:row('group')(0) ,
+            type_doc:row('group')(1),
+            type_rice_id:row('group')(2)
+            }
+        }).without('group')
+        .innerJoin(r.db('eu2').table('type_rice'),function(left,right){
+            return left('type_rice_id').eq(right('id'))
+        }).map(function(row){
+            return row('left').merge({query_name:row('right')('query_name')})
+        })
+        .group('exporter_id').ungroup()
+        .merge(function(row){
+            return {
+            reduction:r.object(r.args(
+                
+            row('reduction').concatMap(function(rowConcat){
+                return [
+                rowConcat('type_doc').add('_').add(rowConcat('query_name'))
+                ,rowConcat('reduction')
+                ]
+            })
+                
+            ))
+            }
+        })
+        
+        .innerJoin(r.db('eu2').table('exporter'), function(a,e){
+            return a('group').eq(e('id'))
+        }).without({right:['id']}).zip()
+        .merge(function(x){return x('reduction')}).orderBy('name')
+        .without('group','reduction')
+
+        .run()
+        .then(function (result){
+            var year={year:params.month+" "+params.year};
+            res._ireport("report_test/report_month.jasper","pdf", result, year);
+        }).error(function(err) {
+            res.json(err);
+        })
+    }
+
 }
 
 module.exports = new index();

@@ -4,4 +4,7 @@ var reportIndexCtrl = require('../controllers/report/index.controller')
     app.delete('/report/:id',reportIndexCtrl.deleteReport); // is delete
     app.get('/report',reportIndexCtrl.selectReport);  //get is select
     app.put('/report',reportIndexCtrl.updateReport); // put is update
+
+    app.get('/report_test',reportIndexCtrl.report); // test report 
+    
 }
