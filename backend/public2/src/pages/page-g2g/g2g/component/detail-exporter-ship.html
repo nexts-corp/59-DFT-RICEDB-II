@@ -527,20 +527,27 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-            let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id} = data;
-            let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id};
-            // newData.ship = new Array();
-            // newData.eta_date = new Date (newData.eta_date).toISOString();
-            // newData.etd_date = new Date (newData.etd_date).toISOString();
-            // newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
-            // newData.packing_date = new Date (newData.packing_date).toISOString();
-            // newData.product_date = new Date (newData.product_date).toISOString();
-            // data.ship.map((ships)=>{
-            //   newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
-            // });
-            el.map((el)=> {el.reset();});
-            // console.log(newData);
-            callback(newData)
+            if (data.shm_det_quantity > 0) {
+              let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id} = data;
+              let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id};
+              // newData.ship = new Array();
+              // newData.eta_date = new Date (newData.eta_date).toISOString();
+              // newData.etd_date = new Date (newData.etd_date).toISOString();
+              // newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
+              // newData.packing_date = new Date (newData.packing_date).toISOString();
+              // newData.product_date = new Date (newData.product_date).toISOString();
+              // data.ship.map((ships)=>{
+              //   newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+              // });
+              el.map((el)=> {el.reset();});
+              // console.log(newData);
+              callback(newData)
+            } else {
+              this.fire('toast',{status:'connectError',text:'กรุณาใส่ปริมาณข้าวมากกว่า 0 ', //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+            }
+
           } else {
             this.fire('toast',{status:'connectError',text:'กรุณากรอกให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error
             callback:function(){
