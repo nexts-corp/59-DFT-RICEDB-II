@@ -194,8 +194,9 @@
               }
             });
             this.$$('panel-right').close();
-            console.log(response.data);
+            console.log('res',response.data);
             this.dataList = response.data;
+            
           })
           .catch((error)=>{
             console.log("error");
@@ -220,7 +221,7 @@
             this.textToast = 'บันทึกข้อมูลสำเร็จ';
             console.log(response);
             this._getYear();
-            this._getDatalist(this.selectYear);
+            this._getDatalist(e.detail.year);
           })
           .catch((error)=>{
           console.log("error");
@@ -288,7 +289,7 @@
           this.status = 'update';
            this.$$('panel-right').open();
            var data = e.detail;
-           data.year = this.selectYear;
+           data.year = this.dataList.year;
            this.dataSelect = data;
            console.log('dataSelect',this.dataSelect);
         }
