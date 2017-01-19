@@ -109,6 +109,16 @@
                     <th class="default">[[formatNumber(dataAllocate.sum.sum_amount_cal)]]</th>
                     <th>[[formatNumber(dataAllocate.sum.sum_amount_update)]]</th>
                 </tr>
+
+                <tr>
+                    <th class="center" colspan="2"></th>
+                    <template is="dom-repeat" items="[[dataAllocate.quantity_balance]]">
+                        <th class="default"></th>
+                        <th>[[formatNumber(item.quantity)]]</th>
+                    </template>
+                    <th class="default"></th>
+                    <th>[[_sumQuantity_balance(dataAllocate.quantity_balance)]]</th>
+                </tr>
             </table>
             </template>
           </div>
@@ -140,6 +150,13 @@
                     sum += this.unFormat(item.period[index][key]);
                 });
                  return this.formatNumber(sum);
+            },
+            _sumQuantity_balance:function(item){
+                var sum = 0;
+                item.map((item)=>{
+                    sum += item.quantity;
+                })
+                return this.formatNumber(sum);
             },
             _sumQuantity:function(index,key){
                 var sum = 0;

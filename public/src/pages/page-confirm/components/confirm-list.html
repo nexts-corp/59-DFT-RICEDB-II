@@ -58,7 +58,7 @@
        <table class="gl-table-default">
            <thead>
                 <tr>
-                    <th class="left"><paper-checkbox>เลือกทั้งหมด</paper-checkbox></th>
+                    <th class="left"><paper-checkbox on-tap="_selectAllData">เลือกทั้งหมด</paper-checkbox></th>
                     <th class="left">ลำดับที่</th>
                     <th class="left">ผู้ส่งออก</th>
                     <th>ปริมาณโควตารวม</th>
@@ -72,7 +72,7 @@
             <template is="dom-repeat" items="{{data.data}}">
                 <tr data="{{item}}">
                     <td class="center">
-                        <paper-checkbox value="{{item}}" checked="{{item.check}}"></paper-checkbox>
+                        <paper-checkbox value="{{item}}" checked="{{item.check}}">{{item.check}}</paper-checkbox>
                     </td>
                     <td on-tap="_selectData" data="{{item}}" class="left">[[_num(index)]]</td>
                     <td on-tap="_selectData" data="{{item}}" class="left">{{item.name}}</td>
@@ -104,8 +104,17 @@
             },
             _getData:function(){
                 this.quantityForThead = this.data.data[0];
-                console.log('data',this.data);
+                this.data.data.map((item)=>{
+                    item.check = false;
+                })
+                // console.log('data',this.data);
             },
+            _selectAllData:function(){
+                this.data.data.map((item,index)=>{
+                    this.set('data.data.'+index+'.check',true);
+                })
+                console.log('select',this.data);
+            },  
             _selectData:function(e){
                 // console.log(this.status);
                 this.fire('data-select',
