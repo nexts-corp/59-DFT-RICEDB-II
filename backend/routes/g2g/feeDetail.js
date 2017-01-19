@@ -185,7 +185,7 @@ router.get('/id/:fee_det_id', function (req, res, next) {
             })
             .merge(function (fee_merge) {
                 return {
-                    fee_id: fee_merge('id'),
+                    fee_det_id: fee_merge('id'),
                     fee_date_receipt: fee_merge('fee_date_receipt').split('T')(0),
                     amount_usd: fee_merge('invoice').sum('amount_usd'),
                     weight_gross: fee_merge('invoice').sum('weight_gross'),

@@ -38,6 +38,11 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             .eqJoin('shm_id', r.db('g2g').table('shipment')).pluck("left", { right: ['shm_no', 'shm_name', 'cl_id'] }).zip()
             .eqJoin('cl_id', r.db('g2g').table('confirm_letter')).pluck("left", { right: ['cl_name', 'cl_no', 'contract_id'] }).zip()
             .filter({ 'contract_id': req.params.contract_id })
+            .merge(function(m){
+                return {
+                    fee_id:m('id')
+                }
+            }).without('id')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
