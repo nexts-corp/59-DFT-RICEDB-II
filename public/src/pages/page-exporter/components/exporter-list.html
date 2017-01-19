@@ -1,0 +1,47 @@
+<link rel="import" href="./../../components/data-manage-behavior.html">
+
+<dom-module id="exporter-list">    
+    <template>
+        <style include="gl-table">
+            table{
+                border:1px solid #ddd;
+            }
+            th,td{
+                font-family: 'CSChatThaiUI', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                text-align: center !important;
+            }
+            td{
+                cursor: pointer;
+            }
+        </style>
+        <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>ลำดับที่</th>
+              <th>บริษัท</th>
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <template is="dom-repeat" on-tap="_dataSelect" items="{{data}}">
+            <tr on-tap="_dataSelect" data="{{item}}">
+             <td>[[_num(index)]]</td>
+             <td>[[item.name]]</td>
+           </tr>
+           </template>
+         </tbody>
+      </table>
+    </template>
+    <script>
+        Polymer({
+            is: 'exporter-list',
+            behaviors:[DataManageBehavior],
+            _num:function(index){
+                return parseInt(index)+1;
+            },
+            _dataSelect:function(e){
+                this.fire('data-select',e.currentTarget.data);
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,147 @@
+
+<link rel="import" href="../components/panel-right/panel-right.html">
+
+<dom-module id="page-exporter">
+    <template>
+        <style include="gl-color gl-size">
+            .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
+            .title{
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                text-align: center;
+				font-size: var(--font-size-h3);
+                padding: 20px;
+            }
+            paper-button{
+                font-family: 'CSChatThaiUI', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+        </style>
+        <div class="title">จัดการรายชื่อบริษัท</div>
+        <div class="article flex-end-justified">
+            <paper-button class="gl-btn-primary" on-tap="_addExporter" raised>เพิ่มบริษัท</paper-button>
+        </div>
+        <div class="section">
+            <exporter-list data="{{exporterList}}" on-data-select="_dataSelect"></rice-list>
+        </div>
+        <panel-right title="จัดการรายชื่อบริษัท" set-width="80%">
+             <template is="dom-if" if="[[rendered]]">
+                 <exporter-manage data="{{exporterForm}}" on-post-data="_saveData" on-update-data="_updateData" on-delete-data="_deleteData" status="{{status}}"></rice-manage>
+             </template>
+        </panel-right>
+    </template>
+    <script>
+        Polymer({
+            is: 'page-exporter',
+            behaviors:[nylonBehavior],
+            nylonPageActive:function(){
+                this.getExporter();
+            },
+            attached:function(){
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                    this.importHref(this.resolveUrl('components/exporter-list.html'), (e)=>{
+                        this.rendered = true;
+                    }, (e)=> {
+                        console.log('error')
+                    });
+                });
+
+                 Polymer.RenderStatus.afterNextRender(this,function(){
+                    this.importHref(this.resolveUrl('components/exporter-manage.html'), (e)=>{
+                        this.rendered = true;
+                    }, (e)=> {
+                        console.log('error')
+                    });
+                });
+            },
+            getExporter:function(){
+                axios.get('./common/exporter')
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.exporterList = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            _dataSelect:function(e){
+                this.exporterForm = e.detail;
+                this.status = 'update';
+                this.$$('panel-right').open();
+            },
+            _addExporter:function(){
+                this.status = 'add';
+                this.$$('panel-right').open();
+            },
+            _saveData:function(e){
+                console.log(e.detail)
+                this.fire('toast',{status:'load'});
+                axios.post('/mnexporter/mnexporter',e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    this.fire('toast',{
+                        status:'success',
+                        text:'บันทึกข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    console.log(response);
+                    this.getExporter();
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });
+            },
+            _updateData:function(e){
+                console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                axios.put('/mnexporter/mnexporter',e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    this.fire('toast',{
+                        status:'success',
+                        text:'แก้ไขข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    console.log(response);
+                    this.getExporter();
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });
+            },
+            _deleteData:function(e){
+                console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                 axios.delete('/mnexporter/mnexporter?id='+e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    this.fire('toast',{
+                        status:'success',
+                        text:'ลบข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    console.log(response);
+                    this.getExporter();
+                    //el.$$('panel-right').close();
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            }
+        });
+    </script>
+</dom-module>
