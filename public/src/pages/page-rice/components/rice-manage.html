@@ -1,0 +1,102 @@
+
+<dom-module id="rice-manage">
+    <template>
+        <style include="gl-size gl-panel gl-color">
+             .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
+            paper-button,.header{
+                font-family: 'CSChatThaiUI', sans-serif !important;
+                -webkit-font-smoothing: antialiased;
+            }
+            .header{
+                text-align: right;
+                margin-top: 26px;
+                font-size: 16px;
+            }
+            section{
+                padding:20px;
+            }   
+        </style>
+         <section>
+            <div class="flex gl-panel-default">
+                <div class="gl-panel-default-header">
+                    โปรดระบบุข้อมูล
+                </div>
+                <div class="gl-panel-default-content">
+                     <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <div class="header">ประเภทข้าว(ไทย) :</div>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <gl-form-input value="{{rice_th}}" required></gl-form-input>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                     </gl-grid-row>
+
+                     <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <div class="header">ประเภทข้าว(อังกฤษ) :</div>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                              <gl-form-input value="{{rice_eng}}" required></gl-form-input>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                        </gl-grid-col>
+                     </gl-grid-row>
+
+                </div>
+            </div>
+            <div class="flex-end-justified">
+                <paper-button raised class="gl-btn-success" on-tap="_getForSave">บันทึก</paper-button>
+           </div>
+        </section>
+    </template>
+    <script>
+        Polymer({
+            is: 'rice-manage',
+            properties:{
+                status: {
+                    observer: 'checkStatus'
+                },
+                data:{
+                    observer: 'checkData'
+                }
+            },
+            checkStatus:function(status){
+                if(status == 'add'){
+                  this.rice_eng = "";
+                  this.rice_th = "";
+                }
+            },
+            checkData:function(data){
+                this.rice_eng = data.query_name;
+                this.rice_th = data.type_rice_name_th;
+            },
+            _getForSave:function(){
+               var get 
+               if(this.status == 'add'){
+                   get = {
+                       query_name: this.rice_eng,
+                       type_rice_name_th: this.rice_th
+                   }
+                   this.fire('post-data',get);
+               }
+               else if(this.status == 'update'){
+                    get = {
+                       id: this.data.id,
+                       query_name: this.rice_eng,
+                       type_rice_name_th: this.rice_th
+                   }
+                   this.update('update-data',get);
+               }
+            }
+        });
+    </script>
+</dom-module>

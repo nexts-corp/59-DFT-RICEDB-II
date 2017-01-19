@@ -1,13 +1,89 @@
-<link rel="import" href="components/rice-list.html">
-<link rel="import" href="components/rice-manage.html">
+
+<link rel="import" href="../components/panel-right/panel-right.html">
 
 <dom-module id="page-rice">
     <template>
-        <div>page-rice</div>
+        <style include="gl-color gl-size">
+            .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
+            .title{
+                font-family: 'rsuregular', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                text-align: center;
+				font-size: var(--font-size-h3);
+                padding: 20px;
+            }
+            paper-button{
+                font-family: 'CSChatThaiUI', sans-serif;
+                -webkit-font-smoothing: antialiased;
+            }
+        </style>
+        <div class="title">จัดการประเภทข้าว</div>
+        <div class="article flex-end-justified">
+            <paper-button class="gl-btn-primary" on-tap="_addTypeRice" raised>เพิ่มประเภทข้าว</paper-button>
+        </div>
+        <div class="section">
+            <rice-list data="{{riceList}}" on-data-select="_dataSelect"></rice-list>
+        </div>
+        <panel-right title="จัดการประเภทข้าว" set-width="80%">
+             <template is="dom-if" if="[[rendered]]">
+                 <rice-manage data="{{riceForm}}" on-post-data="_saveData" on-update-data="_updateData" status="{{status}}"></rice-manage>
+             </template>
+        </panel-right>
     </template>
     <script>
         Polymer({
-            is: 'page-rice'
+            is: 'page-rice',
+            behaviors:[nylonBehavior],
+            nylonPageActive:function(){
+                this.getTypeRice();
+            },
+            attached:function(){
+                Polymer.RenderStatus.afterNextRender(this,function(){
+                    this.importHref(this.resolveUrl('components/rice-list.html'), (e)=>{
+                        this.rendered = true;
+                    }, (e)=> {
+                        console.log('error')
+                    });
+                });
+
+                 Polymer.RenderStatus.afterNextRender(this,function(){
+                    this.importHref(this.resolveUrl('components/rice-manage.html'), (e)=>{
+                        this.rendered = true;
+                    }, (e)=> {
+                        console.log('error')
+                    });
+                });
+            },
+            getTypeRice:function(){
+                axios.get('./common/type_rice')
+                .then((response)=>{
+                    console.log("success!!");
+                    console.log(response.data);
+                    this.riceList = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            _dataSelect:function(e){
+                this.riceForm = e.detail;
+                this.status = 'update';
+                this.$$('panel-right').open();
+            },
+            _addTypeRice:function(){
+                this.status = 'add';
+                this.$$('panel-right').open();
+            },
+            _saveData:function(e){
+                console.log(e.detail)
+            },
+            _updateData:function(e){
+                console.log(e.detail)
+            }
         });
     </script>
 </dom-module>
