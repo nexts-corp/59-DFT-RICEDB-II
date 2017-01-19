@@ -114,7 +114,7 @@
                     <th class="center" colspan="2"></th>
                     <template is="dom-repeat" items="[[dataAllocate.quantity_balance]]">
                         <th class="default"></th>
-                        <th>[[formatNumber(item.quantity)]]</th>
+                        <th>[[formatNumber(item.weigth)]]</th>
                     </template>
                     <th class="default"></th>
                     <th>[[_sumQuantity_balance(dataAllocate.quantity_balance)]]</th>
@@ -154,7 +154,7 @@
             _sumQuantity_balance:function(item){
                 var sum = 0;
                 item.map((item)=>{
-                    sum += item.quantity;
+                    sum += item.weigth;
                 })
                 return this.formatNumber(sum);
             },
