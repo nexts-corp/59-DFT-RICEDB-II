@@ -248,6 +248,7 @@
       },
       _setListCompany:function(list,data){
         var getData = data.exporter_id;
+        console.log('list',list);
         var data = list.filter(function(getData){
           return getData.exporter_id != data.exporter_id;  
         })
@@ -310,21 +311,26 @@
             newitem.weigth = this.unFormat(item.weigth_update);
             return newitem;
           });
-          var datas = {
-            amount : this.unFormat(this.amount_update),
-            exporter_id: this.data.exporter_id,
-            quantity: quantityUpdate,
-            quota_id: this.data.quota_id,
-            allocate_id: this.data.id
-          }
-          // console.log(datas);
+          var datas = [
+              {
+              amount : this.unFormat(this.amount_update),
+              exporter_id: this.data.exporter_id,
+              quantity: quantityUpdate,
+              quota_id: this.data.quota_id,
+              allocate_id: this.data.id
+            }
+          ]
+          console.log(datas);
           this.fire('save-data',datas);
         }
         else if(this.status == 'confirm'){
-          console.log(this.data);
-          var cancelConfirm = {
-            allocate_id : this.data.allocate_id
-          }
+          // console.log(this.data);
+          var cancelConfirm = [
+            {
+              allocate_id : this.data.allocate_id
+            }
+          ]
+          console.log(cancelConfirm);
           // var cancelConfirm = this.data.id;
           this.fire('cancel-confirm',cancelConfirm);
         }

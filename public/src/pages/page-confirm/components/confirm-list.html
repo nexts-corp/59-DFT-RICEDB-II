@@ -53,12 +53,12 @@
         </template>
         <template is="dom-if" if="{{!dataStat}}">
         <div class="content flex-end-justified">
-            <paper-button class="gl-btn-primary" raised>ยืนยันส่วนจัดสรร</paper-button>
+            <paper-button class="gl-btn-primary" on-tap="_checkStatus" raised>{{btnName}}</paper-button>
         </div>
        <table class="gl-table-default">
            <thead>
                 <tr>
-                    <th class="left"><paper-checkbox on-tap="_selectAllData">เลือกทั้งหมด</paper-checkbox></th>
+                    <th class="left"><paper-checkbox checked="{{selected}}" on-tap="_selectAllData">เลือกทั้งหมด</paper-checkbox></th>
                     <th class="left">ลำดับที่</th>
                     <th class="left">ผู้ส่งออก</th>
                     <th>ปริมาณโควตารวม</th>
@@ -70,15 +70,15 @@
             <tbody>
            
             <template is="dom-repeat" items="{{data.data}}">
-                <tr data="{{item}}">
+                <tr on-tap="_selectData" data="{{item}}">
                     <td class="center">
                         <paper-checkbox value="{{item}}" checked="{{item.check}}">{{item.check}}</paper-checkbox>
                     </td>
-                    <td on-tap="_selectData" data="{{item}}" class="left">[[_num(index)]]</td>
-                    <td on-tap="_selectData" data="{{item}}" class="left">{{item.name}}</td>
+                    <td class="left">[[_num(index)]]</td>
+                    <td class="left">{{item.name}}</td>
                     <td>{{formatNumber(item.amount)}}</td>
                     <template is="dom-repeat" items="{{item.quantity}}">
-                        <td on-tap="_selectData" data="{{item}}">{{formatNumber(item.weigth)}}</td>
+                        <td>{{formatNumber(item.weigth)}}</td>
                     </template>
                 </tr>
             </template>
@@ -93,10 +93,15 @@
             observers:['checkData(data)'],
             properties:{
                 status: {
-                    type: String
+                    type: String,
+                    observer: 'setBtnName'
                 },
                 data:{
                     observer: '_getData'
+                },
+                selected:{
+                    type: Boolean,
+                    value: false
                 }
             },
             _num:function(index){
@@ -109,19 +114,72 @@
                 })
                 // console.log('data',this.data);
             },
-            _selectAllData:function(){
-                this.data.data.map((item,index)=>{
-                    this.set('data.data.'+index+'.check',true);
+            _selectAllData:function(e){
+                console.log('1234');
+                var val = e.target.checked;
+                // console.log(e.target.checked)
+                if(typeof this.data.data != 'undefined'){
+                    this.data.data.map((item,index)=>{
+                        this.set('data.data.'+index+'.check',val);
+                    })
+                    // console.log('select',this.data);
+                }
+            },
+            setBtnName:function(){
+                if(this.status == 'notConfirm'){
+                    this.btnName = 'ยืนยันส่วนจัดสรร';
+                }
+                else if(this.status == 'confirm'){
+                     this.btnName = 'ยกเลิกส่วนจัดสรร';
+                }
+            },
+            _checkStatus:function(){
+                if(this.status == 'notConfirm'){
+                    this._confirmExporter();
+                }
+                else if(this.status == 'confirm'){
+                    this._cancelConfirm();
+                }
+            },
+            _confirmExporter:function(){
+                var get = this.data.data.filter(function(item){
+                    return item.check == true;
+                });
+                var datas = get.map((item)=>{
+                    var {allocate_id,amount,exporter_id,quantity,quota_id} = item;
+                    var newItem = {allocate_id,amount,exporter_id,quantity,quota_id};
+                    newItem.allocate_id = item.id;
+                    newItem.quantity = newItem.quantity.map((get)=>{
+                        var {period,weigth} = get;
+                        var newGet = {period,weigth};
+                        newGet.weigth = get.weigth_update;
+                        return newGet;
+                    })
+                    return newItem;
+                });
+                console.log(datas);
+                this.fire('confirm-exporter',datas);
+            },
+            _cancelConfirm:function(){
+                var get = this.data.data.filter(function(item){
+                    return item.check == true;
+                });
+                var datas = get.map((item)=>{
+                    return obj = {
+                       allocate_id: item.allocate_id
+                    }
                 })
-                console.log('select',this.data);
-            },  
+                console.log(datas);
+                this.fire('cancel-exporter',datas);
+            },
             _selectData:function(e){
-                // console.log(this.status);
-                this.fire('data-select',
-                {
-                    data:e.currentTarget.data,
-                    status: this.status
-                })
+                if(e.target.is != 'paper-checkbox'){
+                    this.fire('data-select',
+                    {
+                        data:e.currentTarget.data,
+                        status: this.status
+                    })
+                }
             }
 
         });
