@@ -36,16 +36,16 @@
         <paper-material elevation="1">
           <taps-payment>
             <section-content name="bl">
-              <list-of-bl-pm data="[[dataListPay.blShipment]]"></list-of-bl-pm>
+              <list-of-bl-pm data="[[dataListPay.blShipment]]" name-contract="[[nameContract]]"></list-of-bl-pm>
             </section-content>
             <section-content name="invoice">
-              <list-of-invoice data="[[dataListPay.invoiceList]]"></list-of-invoice>
+              <list-of-invoice data="[[dataListPay.invoiceList]]" name-contract="[[nameContract]]"></list-of-invoice>
             </section-content>
             <section-content name="fee">
-              <list-of-fee data="[[dataListPay.feeList]]"></list-of-fee>
+              <list-of-fee data="[[dataListPay.feeList]]" name-contract="[[nameContract]]"></list-of-fee>
             </section-content>
             <section-content name="payment">
-              <payment-export></payment-export>
+              <payment-export name-contract="[[nameContract]]"></payment-export>
             </section-content>
           </taps-payment>
         </paper-material>
@@ -81,6 +81,9 @@
                 nylonBehavior
             ],
             properties: {
+              nameContract:{
+                type: String,
+              },
               dataListPay: {
                 type: Object,
                 value:{}
@@ -137,12 +140,17 @@
             _getUrl:function () {
               // get cookie
               let cookie = document.cookie.split(';');
+              // console.log(cookie);
               let url;
               cookie.map((ee)=>{
-                ee = ee.replace(' ', '');
-                if (ee.indexOf("url") == 0 ) {
-                  url=ee.substring(4, 40);
-                }
+                ee.charAt(0) == ' ' ? this.nameContract = ee.split('=')[1] : url = ee.split('=')[1];
+                // if (ee.charAt(0) == ' ') {
+                //   this.nameContract = ee.split('=')[1];
+                // }
+                // if (ee.indexOf("url") == 0 ) {
+                //   ee = ee.split('=')[1];
+                //   url=ee;
+                // }
               });
               return url;
             },
