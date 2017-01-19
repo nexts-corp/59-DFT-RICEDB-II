@@ -40,7 +40,7 @@ class index {
             ).coerceTo('array')
             .do(function(calculateRow){
                 return r.branch(calculateRow.count().eq(0),
-                    //คำนวณครั้งแรก
+                    //หาผู้ประกอบการ ในการคำนวณครั้งแรก
                     r.db('eu2').table('report')
                     .innerJoin(r.db('eu2').table('quota'),function(l,r){
                         return l('quota_id').eq(r('id'))
@@ -70,7 +70,7 @@ class index {
                         }
                     )('right').orderBy('name')
                     ,
-                    //คำนวณครั้งที่สองเป็นต้นไป
+                    //หาผู้ประกอบการ ในการคำนวณครั้งที่สองเป็นต้นไป
 
                     r.db('eu2').table('allocate').filter({calculate_id:calculateRow(0)('id')})
                     .innerJoin(r.db('eu2').table('confirm').filter({quota_id:quotaRow('id')}),function(left,right){
@@ -220,34 +220,36 @@ class index {
         var r = req._r;
         var params = req.params;
 
-        STM_PREADSHEET(r,params).do(function(result){
-            return r.db('eu2').table('quota').get(result('quota_id')).do(function(quotaResult){
-                return result('spreadsheet').filter(function(row){
-                    return row('amount').ne(0)
-                })
-                .map(function(row){
-                    
-                        return {
-                            exporter_id:row('exporter_id'),
-                            amount:row('amount_update'),
-                            amount_update:row('amount_update'),
-                            calculate_id:result('id'),
-                            quota_id:result('quota_id'),
-                            quantity:quotaResult('quantity').map(function(quotaQuantity){
-                                return {
-                                    period:quotaQuantity('period'),
-                                    weigth_cal:row('amount_update').mul(quotaQuantity('weigth').div(quotaResult('amount')))
-                                }
-                            }).merge(function(quantityRow){
-                                return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
-                                    return {weigth:weigthRound,weigth_update:weigthRound};
-                                })
-                            }),
-                            status:'nc'
+        STM_PREADSHEET(r,params)
+        .do(function(result){
+            return result('spreadsheet').filter(function(row){
+                return row('amount').ne(0)
+            })
+            .map(function(row){
+                
+                    return {
+                        exporter_id:row('exporter_id'),
+                        amount:row('amount_update'),
+                        amount_update:row('amount_update'),
+                        calculate_id:result('id'),
+                        quota_id:result('quota_id'),
+                        quantity:result('quantity')
+                        .map(function(quantityBalance){
+                            return {
+                                period:quantityBalance('period'),
+                                weigth_cal:row('amount_update').mul(quantityBalance('weigth').div(result('quantity').sum('weigth')))
+                            }
+                        })
+                        .merge(function(quantityRow){
+                            return r.round(quantityRow('weigth_cal')).do(function(weigthRound){
+                                return {weigth:weigthRound,weigth_update:weigthRound};
+                            })
+                        })
+                        ,
+                        status:'nc'
 
-                        }
-                        
-                })
+                    }
+                    
             })
         })
         .do(function(result){
@@ -421,7 +423,7 @@ const FORMULA_FOR_CAL = (req) => {
                         quantity:quotaRow('quantity').map(function(quantityQuota){
                             return {
                                  period:quantityQuota('period'),
-                                 quantity:quantityQuota('weigth').sub(
+                                 weigth:quantityQuota('weigth').sub(
                                      quantityConfirm.filter({period:quantityQuota('period')}).do(function(row){
                                          return r.branch(row.count().ne(0) ,row(0)('weigth'),0)
                                      })
