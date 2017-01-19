@@ -398,57 +398,82 @@ const FORMULA_FOR_CAL = (req) => {
             }
         }
     ).merge(function (rowResult) {
-        return rowResult('spreadsheets')('div_round').sum().do(function (sumForCal) {
-            return {
-                calculate: sumForCal,
-                confirm: rowResult('spreadsheets')('confirm')('amount').sum(),
-                report: rowResult('spreadsheets')('report')('amount').sum(),
-                confirm_year: r.expr(duringYear).map(function (yearRow) {
-                    return {
-                        year: yearRow,
-                        weigth: rowResult('spreadsheets')('confirm')('quantity').map(function (row) {
-                            return row.filter({ year: yearRow })(0)
-                        }).sum('weigth')
-                    }
-                }),
-                report_year: r.expr(duringYear).map(function (yearRow) {
-                    return {
-                        year: yearRow,
-                        weigth: rowResult('spreadsheets')('report')('quantity').map(function (row) {
-                            return row.filter({ year: yearRow })(0)
-                        }).sum('weigth')
-                    }
-                }),
-                spreadsheets: rowResult('spreadsheets').merge(function (spreadsheetsRow) {
-                    //หาโค้วต้าที่เหลือ
-                    return r.db('eu2').table('quota').filter({ year: params.year, type_rice_id: params.type_rice_id })(0).do(function(quotaRow){
-                        return r.db('eu2').table('confirm').filter(function(row){
-                            return row('quota_id').eq(quotaRow('id')).and(row('status').eq('r').or(row('status').eq('c')))
-                        }).sum('amount')
-                        .do(function(amount){
-                            return quotaRow('amount').sub(amount)
-                            //return amount
-                        })
-                    })
-                    .do(function (quotaBlance) {
-                        return spreadsheetsRow('div_round').mul(quotaBlance).div(sumForCal)
-                            .do(function (resultCalQuota) {
-                                return {
-                                    amount_cal: resultCalQuota,
-                                    amount: r.round(resultCalQuota),
-                                    amount_update: r.round(resultCalQuota)
-                                }
-                            })
+        return r.do(
+                rowResult('spreadsheets')('div_round').sum()
+            ,
+                //ปีโค้วต้าปัจจุบัน
+                r.db('eu2').table('quota').filter({ year: params.year, type_rice_id: params.type_rice_id })(0)
+            ,
+            function (sumForCal,quotaRow) {
 
-                    })
-                })
-            }
-        })
+                return r.do(
+                    //หายอดการยื่นยันโควตาครั้งก่อนหน้า
+                    r.db('eu2').table('confirm').filter(function(row){
+                        return row('quota_id').eq(quotaRow('id')).and(row('status').eq('r').or(row('status').eq('c')))
+                    })('quantity').concatMap(function(row){return row}).group('period').sum('weigth').ungroup()
+                    .merge(function(groupRow){
+                        return {period:groupRow('group'),weigth:groupRow('reduction')}
+                    }).pluck('period','weigth')
+                ,
+                function(quantityConfirm){
+                    return {
+                        //ปริมาณโควตาคงเหลือ
+                        quantity:quotaRow('quantity').map(function(quantityQuota){
+                            return {
+                                 period:quantityQuota('period'),
+                                 quantity:quantityQuota('weigth').sub(
+                                     quantityConfirm.filter({period:quantityQuota('period')}).do(function(row){
+                                         return r.branch(row.count().ne(0) ,row(0)('weigth'),0)
+                                     })
+                                )
+                            }
+                        }),
+
+                        quota_id:quotaRow('id'),
+                        calculate: sumForCal,
+                        confirm: rowResult('spreadsheets')('confirm')('amount').sum(),
+                        report: rowResult('spreadsheets')('report')('amount').sum(),
+                        confirm_year: r.expr(duringYear).map(function (yearRow) {
+                            return {
+                                year: yearRow,
+                                weigth: rowResult('spreadsheets')('confirm')('quantity').map(function (row) {
+                                    return row.filter({ year: yearRow })(0)
+                                }).sum('weigth')
+                            }
+                        }),
+                        report_year: r.expr(duringYear).map(function (yearRow) {
+                            return {
+                                year: yearRow,
+                                weigth: rowResult('spreadsheets')('report')('quantity').map(function (row) {
+                                    return row.filter({ year: yearRow })(0)
+                                }).sum('weigth')
+                            }
+                        }),
+                        spreadsheets: rowResult('spreadsheets').merge(function (spreadsheetsRow) {
+                            //หาโค้วต้าที่เหลือ
+                            return quotaRow('amount').sub(quantityConfirm.sum('weigth')) 
+
+                            .do(function (quotaBlance) {
+                                return spreadsheetsRow('div_round').mul(quotaBlance).div(sumForCal)
+                                    .do(function (resultCalQuota) {
+                                        return {
+                                            amount_cal: resultCalQuota,
+                                            amount: r.round(resultCalQuota),
+                                            amount_update: r.round(resultCalQuota)
+                                        }
+                                    })
+
+                            })
+                        })
+                    }
+                }
+
+
+                )
+            })
     }).merge(function (row) {
         return {
             amount_cal: row('spreadsheets').sum('amount_cal'),
-            quota_id:r.db('eu2').table('quota')
-            .filter({ year: params.year, type_rice_id: params.type_rice_id })(0)('id'),
             amount: row('spreadsheets').sum('amount'),
             amount_update: row('spreadsheets').sum('amount')
         }
