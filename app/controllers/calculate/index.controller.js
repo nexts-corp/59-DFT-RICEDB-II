@@ -40,7 +40,7 @@ class index {
             ).coerceTo('array')
             .do(function(calculateRow){
                 return r.branch(calculateRow.count().eq(0),
-                    //คำนวณครั้งแรก
+                    //หาผู้ประกอบการ ในการคำนวณครั้งแรก
                     r.db('eu2').table('report')
                     .innerJoin(r.db('eu2').table('quota'),function(l,r){
                         return l('quota_id').eq(r('id'))
@@ -70,7 +70,7 @@ class index {
                         }
                     )('right').orderBy('name')
                     ,
-                    //คำนวณครั้งที่สองเป็นต้นไป
+                    //หาผู้ประกอบการ ในการคำนวณครั้งที่สองเป็นต้นไป
 
                     r.db('eu2').table('allocate').filter({calculate_id:calculateRow(0)('id')})
                     .innerJoin(r.db('eu2').table('confirm').filter({quota_id:quotaRow('id')}),function(left,right){
