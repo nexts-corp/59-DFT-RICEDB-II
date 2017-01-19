@@ -118,33 +118,20 @@
             'getExporters':'_getExporters'
           },
           nylonPageActive:function() {
-            // console.log('d ja');
             this._getExporters();
           },
-          // getExporters: function(){
-          //   this.read('./external/exporter/?exporter_active=false',(data)=>{
-          //       this.exporters = data;
-          //   });
-          // }
           _changeselectDataAll:function (val) {
             // console.log(val);
             this.exporters.map((item,index)=>{
               this.set('exporters.'+index+'.check',val);
             });
           },
-          // _exporterIdChanged:function(val){
-          //   if(val!=""){
-          //     this.$$('panel-right').toggle();
-          //     this.layerContent = "detailRegExporter";
-          //     this.titleName = 'ข้อมูลผู้ส่งออก';
-          //   }
-          // },
           attached: function() {
               this._getExporters();
           },
           _getExporters: function(){
             this.exporter_id = this.exporter_id || this.$.exporter_id;
-            this.read('./external/exporter/?exporter_active=false',(data)=>{
+            this.read('./exporter/?exporter_active=false',(data)=>{
                 this.exporters = data;
                 for (var i = 0; i < this.exporters.length; i++) {
                   this.exporters[i]['check'] = false;

@@ -2,92 +2,49 @@
 <link rel="import" href="../../components/dataBehavior.html">
 <link rel="import" href="../../components/panel-right/panel-right.html">
 <dom-module id="dit-exporter">
-    <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
-        * {
-            font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .header {
-          padding: 10px 0px 10px 10px;
-          background-color: var(--paper-grey-100);
-          color: var(--paper-grey-600);
-          font-size: var(--font-size-h4);
-          font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        .registor{
-          margin: 20px;
-        }
-        .title {
-          text-align: center;
-           font-size: var(--font-size-h3);
-           font-family: 'rsuregular', sans-serif;
-             -webkit-font-smoothing: antialiased;
-        }
-        .searchBox{
-          padding: 5px;
-          background-color: var(--gl-gray-lighter-color);
-        }
-        .elevation{
-          border-radius: 5px;
-          margin: 10px;
-          padding: 5px;
-        }
-        .searchBorder{
-          border: 1px solid var(--gl-gray-light-color);
-          margin: 15px;
-          border-radius: 3px
-        }
-        paper-material {
-          background-color: var(--gl-white-color);
-        }
-        gl-search-input{
-          margin: 30px 0px 0px 0px;
-        }
-        .button{
-          margin: 10px;
-        }
-        gl-combo-box{
-          width: 70%;
-        }
-        .iconSearch{
-          margin-top: 25px;
-          margin-left: 40px;
-        }
-        .text-table{
-          text-align: center;
-           font-size: var(--font-size-h4);
-        }
-        .gl-table-default{
-             border-collapse: collapse;
-             width: 100%;
-             white-space: nowrap;
-         }
-    </style>
+<style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-table gl-toast">
+    * {
+        font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    .title {
+      text-align: center;
+       font-size: var(--font-size-h3);
+       font-family: 'rsuregular', sans-serif;
+         -webkit-font-smoothing: antialiased;
+    }
+    .searchBorder{
+      border: 1px solid var(--gl-gray-light-color);
+      margin: 15px;
+      border-radius: 3px
+    }
+    .text-table{
+      text-align: center;
+       font-size: var(--font-size-h4);
+    }
+    .gl-table-default{
+         border-collapse: collapse;
+         width: 100%;
+         white-space: nowrap;
+     }
+    .table-head > tr > th:nth-child(1) {
+      width: 5%;
+    }
+    .table-head > tr > th:nth-child(2) {
+      width: 15%;
+    }
+</style>
     <template>
 
-        <paper-material elevation="1" class="elevation">
-
-        <div class="layout vertical registor">
-          <div class="flex title">
-            ทะเบียนผู้ส่งออกเลขคน. หมดอายุ
-          </div>
-          <div class="flex searchBox searchBorder">
-            <gl-grid-row width="{{getWidth}}">
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-              <iron-icon class="iconSearch" icon="icons:search"></iron-icon>
-              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                <gl-combo-box id="exporter_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
-                    item-value-path="exporter_id" value="{{exporterId}}"></gl-combo-box>
-              </gl-grid-col>
-            </gl-grid-row>
-          </div>
-
           <div class="searchBorder">
+            <div style="margin: 10px;">
+              <paper-checkbox checked={{selectDataAll}}>เลือกทั้งหมด</paper-checkbox>
+              <paper-button raised class="gl-btn-success" on-tap="_retraderAll">ยกเลิกการระงับ</paper-button>
+            </div>
             <table class="gl-table-default">
               <thead class="table-head">
                 <tr>
+                  <th></th>
                   <th><div class="text-table">เลขทะเบียนผู้ส่งออก</div></th>
                   <th><div class="text-table">ชื่อบริษัท</div></th>
                   <th><div class="text-table">ประเภทใบอนุญาติ</div></th>
@@ -96,9 +53,10 @@
               </thead>
 
 
-              <template is="dom-repeat" items="{{exporters}}">
+              <template is="dom-repeat" items="{{data}}">
                 <tbody>
                   <tr on-tap="_selectData" data="[[item]]" style="cursor:pointer;">
+                    <td><paper-checkbox checked="{{item.check}}" class="checkbox"></paper-checkbox></td>
                     <td><div class="text-table">{{item.exporter_no_name}}</div></td>
                     <td><div class="text-table">{{item.seller_name_th}}</div></td>
                     <td><div class="text-table">{{item.type_lic_name}}</div></td>
@@ -109,20 +67,6 @@
             </table>
 
           </div>
-
-          <!-- <div class="flex searchBorder">
-            <list-dit data="{{exporters}}">
-              <items type="primary">
-                <list item="exporter_no" label="เลขทะเบียนผู้ส่งออก" width="flex"></list>
-                <list item="seller_name_th" label="ชื่อบริษัท" width="flex"></list>
-                <list item="type_lic_name" label="ประเภทใบอนุญาติ" width="flex"></list>
-                <list item="trader_date_approve" label="วันที่อนุมัติ" width="flex"></list>
-              </items>
-            </list-dit>
-          </div> -->
-
-        </div>
-        </paper-material>
 
     <panel-right title="{{titleName}}">
         <div class="left">
@@ -142,14 +86,23 @@
             is: "dit-exporter",
             behaviors: [dataBehavior],
             properties: {
-                layerContent: {
-                    type: String,
-                    value: "detailRegExporter"
-                },
-                exporterId:{
-                  type: String,
-                  observer: '_exporterIdChanged'
-                }
+              data:{
+                type: Array,
+                value: []
+              },
+              selectDataAll: {
+                type: Boolean,
+                value: false,
+                observer: '_changeselectDataAll'
+              },
+              dataExporters:{
+                type: Array,
+                value: []
+              },
+              exporterId:{
+                type: String,
+                observer: '_exporterIdChanged'
+              }
             },
             _exporterIdChanged:function(val){
               if(val!=""){
@@ -158,62 +111,76 @@
                 this.titleName = 'ข้อมูลผู้ส่งออก';
               }
             },
-            attached: function() {
-                this.getExporters();
-            },
-            getExporters: function(){
-              this.exporter_id = this.exporter_id || this.$.exporter_id;
-              this.read('./external/exporter/?trader_active=false',(data)=>{
-                  this.exporters = data;
-                  for (var i = 0; i < this.exporters.length; i++) {
-                    this.exporters[i]['check'] = false;
-                  }
-                  data.map((type)=>{
-                    type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
-                  });
-                    this.exporter_id.items = data;
+            _changeselectDataAll:function (val) {
+              // console.log(val);
+              this.data.map((item,index)=>{
+                this.set('data.'+index+'.check',val);
               });
+            },
+            _selectData:function(e){
+              this.layerContent = "detailRegExporter";
+              this.titleName = 'ข้อมูลผู้ส่งออก';
+              this.$$('panel-right').toggle();
+              // this.layerContent = e.currentTarget.id;
+              this.dataSelect = e.currentTarget.data;
             },
             _retrader: function(){
               this.fire('toast',{status:'dialog',
               text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
-              confirmed : this._confirm.bind(this),
+              confirmed : this._confirmToast.bind(this),
               datas : {
                 id: this.dataSelect.trader_id,
                 trader_date_approve: new Date
               }
               });
-              // var datas= {
-              //   id: this.dataSelect.trader_id,
-              //   trader_date_approve: new Date
-              // }
-              // // console.log(datas);
-              // this._updateTrader(datas);
             },
-            _confirm:function(result,detail){
+            _confirmToast:function(result,detail){
               if(result == true){
                 this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                this.update('./external/trader/update', detail.datas, () => {
-                  this.getExporters();
+                this.update('./trader/update', detail.datas, () => {
+                  this.$$('panel-right').close();
+                  this.fire('getExporters');
                   this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                     console.log('success');
                   }});
                  });
                 }
+              },
+              _retraderAll: function(){
+                const check = (item)=>{
+                    return item.check == true;
+                }
+                // console.log(this.exporters.filter(check));
+                this.data.filter(check).map((datas)=>{
+                  let {trader_id,trader_date_approve} = datas;
+                  let newData = {trader_id,trader_date_approve};
+                  this.dataExporters.push(newData);
+                  // this._clearData(newData);
+                });
+                this.fire('toast',{status:'dialog',
+                text:'คุณต้องการจะยกเลิกการระงับใช่หรือไม่ ?',
+                confirmed : this._confirm.bind(this)
+                });
+              },
+              _confirm:function(result,detail){
+                // console.log(this.dataExporters);
+                this.dataExporters.map((datas)=>{
+                  datas={
+                    id : datas.trader_id,
+                    trader_date_approve : new Date
+                  }
+                if(result == true){
+                  this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+                  this.update('./trader/update', datas, () => {
+                    this.fire('getExporters');
+                    this.selectDataAll = false;
+                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      console.log('success');
+                    }});
+                   });
+                  }
+                });
               }
-            // _updateTrader:function(datas){
-            //   axios.put('./external/trader/update', datas)
-            //             .then(function (response) {
-            //               console.log("success");
-            //               console.log(response);
-            //               // this.glQuery('contentPanel').changDrawer();
-            //               // this.glQuery('pauseExporter').getExporters();
-            //             }.bind(this))
-            //             .catch(function (error) {
-            //               console.log("error");
-            //               console.log(error);
-            //             })
-            // }
         });
     </script>
 </dom-module>

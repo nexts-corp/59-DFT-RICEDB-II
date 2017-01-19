@@ -113,7 +113,7 @@
                 this.layerContent = "detailRegExporter";
                 this.titleName = 'ข้อมูลผู้ส่งออก';
 
-                this.read('./external/exporter/id/'+val,(data)=>{
+                this.read('./exporter/id/'+val,(data)=>{
                   this.dataSelect = data;
                 });
               }
@@ -142,7 +142,7 @@
               if(result == true){
                 // console.log(detail.datas);
                 this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                this.update('./external/exporter/update', detail.datas, () => {
+                this.update('./exporter/update', detail.datas, () => {
                   this.$$('panel-right').close();
                   this.fire('getExporters');
                   this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
@@ -185,10 +185,10 @@
                   exporter_date_update : new Date
                 }
               if(result == true){
-                // console.log(datas);
                 this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-                this.update('./external/exporter/update', datas, () => {
+                this.update('./exporter/update', datas, () => {
                   this.fire('getExporters');
+                  this.selectDataAll = false;
                   this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                     console.log('success');
                   }});
