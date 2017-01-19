@@ -18,7 +18,8 @@ class index{
               }).map(function(mr){
                 return mr('right').merge(function(qu){
                   return {
-                    ordinal:mr('left')('ordinal')
+                    ordinal:mr('left')('ordinal'),
+                    quantity_balance:mr('left')('quantity_cal')
                     //status_allocate:mr('left')('status')
                   }
                 })
@@ -79,8 +80,8 @@ class index{
                     sum_amount_cal :all('quantity').concatMap(function(row){
                         return row
                     }).sum('weigth_cal')
-                  },
-                  quantity_balance:all('quantity_balance')(0)
+                    },
+                    quantity_balance:all('quantity_balance')(0)
                 }
               })
 
