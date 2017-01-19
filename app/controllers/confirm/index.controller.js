@@ -298,7 +298,6 @@ class index {
 
             for (let value of params) {
                 console.log(value.id);
-            
 
                 r.db('eu2').table('allocate').get(value.allocate_id).update({
                     status:'c'
@@ -325,24 +324,25 @@ class index {
 
 
         deleteconfirm(req,res){
-            var i
             var r = req._r;
             var params = req.body;
-    
-    
-            r.db('eu2').table('allocate').get(params.allocate_id ).update({
-                status:'nc'
-            }).do(function(result){
-                return r.db('eu2').table('confirm').filter({allocate_id:params.allocate_id }).delete()
-            })
-            .run().then(function(result){
-                res.json(result);
-            })
-            .catch(function(err){
-                res.json(err);
-            })
 
+            for (let value of params) {
+                console.log(value.id);
 
+                r.db('eu2').table('allocate').get(value.allocate_id ).update({
+                    status:'nc'  // เช็คค่า 0 ตรงนี้ก่อนอัพเดท ถ้าเป็นศูนย์ ก็ให้สถานะ เป็น n เหมือนเดิม 
+                    //ถ้าไม่เวิคก็ให้เพิ่มสถานะอีกว่าเป็น z ไว้ เวลาคำนวณก็เอา z มาคำนวณด้วย แต่แสดงแค่ nc
+                }).do(function(result){
+                    return r.db('eu2').table('confirm').filter({allocate_id:value.allocate_id }).delete()
+                })
+                .run().then(function(result){
+                    res.json(result);
+                })
+                .catch(function(err){
+                    res.json(err);
+                })
+            }//end for
         }
 
 
