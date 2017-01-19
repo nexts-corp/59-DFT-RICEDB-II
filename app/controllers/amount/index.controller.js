@@ -9,7 +9,11 @@ class index{
             params.year = parseInt(params.year);
         }   
 
-        r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('allocate'), function(c,a){	
+        r.db('eu2').table('calculate').merge(function(x){
+          return { quantity_cal:x('quantity') }
+        })
+        
+        .innerJoin(r.db('eu2').table('allocate'), function(c,a){	
                 return c('id').eq(a('calculate_id'))
               }).map(function(mr){
                 return mr('right').merge(function(qu){
@@ -75,7 +79,8 @@ class index{
                     sum_amount_cal :all('quantity').concatMap(function(row){
                         return row
                     }).sum('weigth_cal')
-                  }
+                  },
+                  quantity_balance:all('quantity_balance')(0)
                 }
               })
 
