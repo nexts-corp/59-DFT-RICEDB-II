@@ -9,9 +9,24 @@ class index{
             params.year = parseInt(params.year);
         }   
 
-        r.db('eu2').table('calculate').merge(function(x){
+       r.db('eu2').table('calculate').filter({ordinal:params.ordinal}).merge(function(x){
           return { quantity_cal:x('quantity') }
-        })
+        }) 
+          
+          .innerJoin(r.db('eu2').table('quota').filter({year:params.year,type_rice_id:params.type_rice_id}), function(ta,tq){
+                        return ta('quota_id').eq(tq('id'))
+                      }).map(function(ma){
+                        return ma('left').merge(function(x){
+                          return {
+                            year:ma('right')('year'), 
+                            type_rice_id:ma('right')('type_rice_id'),
+                            quantity:ma('left')('quantity').merge(function(rowp){
+                              return { month:ma('right')('quantity').filter({period:rowp('period')}) (0) ('month') }
+                            })
+                          }
+                        })
+          }) .without({right:['id']})
+  
         
         .innerJoin(r.db('eu2').table('allocate'), function(c,a){	
                 return c('id').eq(a('calculate_id'))
@@ -33,34 +48,11 @@ class index{
                 })
               })
                 
-              .innerJoin(r.db('eu2').table('quota'), function(ta,tq){
-                return ta('quota_id').eq(tq('id'))
-              }).map(function(ma){
-                return ma('left').merge(function(x){
-                  return {
-                    year:ma('right')('year'), 
-                    type_rice_id:ma('right')('type_rice_id'),
-                    quantity:ma('left')('quantity').merge(function(rowp){
-                      return { month:ma('right')('quantity').filter({period:rowp('period')}) (0) ('month') }
-                    })
-                  }
-                })
-              }) 
-                
               .merge(function(w){
                  return {amount_cal:w('quantity').sum('weigth_cal')}
               })
               .orderBy(r.desc('amount_update')) 
                 
-            
-              .filter({
-                year:params.year,
-                type_rice_id:params.type_rice_id,
-                ordinal:params.ordinal
-                //status:'nc',
-                //status_allocate:'n'
-              }) 
-              
                 
             .do(function(all){
                   return {
