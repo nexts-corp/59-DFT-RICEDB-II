@@ -110,7 +110,7 @@
         this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
         // console.log(datas);
         // console.log(this.exporterId);
-        this.update('./external/exporter/update', datas, () => {
+        this.update('./exporter/update', datas, () => {
           this.fire('refresh-exporter');
           this.pages = 0;
           this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
@@ -200,7 +200,7 @@
       _confirmToast:function(result,detail){
         if(result == true){
           this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.update('./external/exporter/update', detail.datas, () => {
+          this.update('./exporter/update', detail.datas, () => {
             this.fire('refresh-exporter');
             this.fire('close-toggle');
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
@@ -216,7 +216,7 @@
         }
         // console.log(datas);
         this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        this.update('./external/trader/update', datas, () => {
+        this.update('./trader/update', datas, () => {
           this.fire('refresh-exporter');
           this.fire('close-toggle');
           this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){

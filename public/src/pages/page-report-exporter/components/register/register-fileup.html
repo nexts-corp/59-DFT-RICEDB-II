@@ -1,0 +1,40 @@
+<dom-module id="register-fileup">
+  <style include="gl-size gl-color">
+    *{
+      font-size: var(--font-size-h4);
+      font-family: 'rsubold', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-decoration:underline;
+      margin: 10px 0px 10px 0px;
+    }
+  </style>
+  <template>
+    <div>หนังสือรับรอง</div>
+    <nylon-upload
+      target="/api/upload/file"
+      accept="application/pdf"
+      ref-path="exporter-certificate"
+      >
+    </nylon-upload>
+    <div>ทะเบียนการค้า</div>
+    <nylon-upload
+      target="/api/upload/file"
+      accept="application/pdf"
+      ref-path="exporter-business_registration"
+      >
+    </nylon-upload>
+    <div>ใบมอบฉันทะ</div>
+    <nylon-upload
+      target="/api/upload/file"
+      accept="application/pdf"
+      ref-path="exporter-power_of_attorney"
+      >
+    </nylon-upload>
+  </template>
+  <script>
+    Polymer({
+      is: "register-fileup",
+
+    });
+  </script>
+</dom-module>

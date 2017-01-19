@@ -455,40 +455,6 @@ exports.report5 = function (req, res) {
 exports.report6 = function (req, res) {
     var r = req._r;
 
-    var parameters = {
-        CURRENT_DATE: new Date().toISOString().slice(0, 10),
-        SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\',
-        date_start: y + "-01-01" + tz,
-        date_end: y + "-12-31" + tz
-    };
-    var q = {}, d = {};
-    for (key in req.query) {
-
-        if (req.query[key] == "true") {
-            req.query[key] = true;
-        } else if (req.query[key] == "false") {
-            req.query[key] = false;
-        } else if (req.query[key] == "null") {
-            req.query[key] = null;
-        }
-
-        if (key.indexOf('date') > -1) {
-            d[key] = req.query[key] + tz;
-        } else {
-            q[key] = req.query[key];
-        }
-    }
-    // console.log(parameters, d);
-    if (Object.getOwnPropertyNames(d).length !== 0) {
-        parameters['date_start'] = d['date_start'].split('T')[0];
-        parameters['date_end'] = d['date_end'].split('T')[0];
-        d = r.row('exporter_date_approve').gt(d.date_start).and(r.row('exporter_date_approve').lt(d.date_end));
-    } else {
-        d = r.row('exporter_date_approve').gt(parameters['date_start']).and(r.row('exporter_date_approve').lt(parameters['date_end']));
-        parameters['date_start'] = parameters['date_start'].split('T')[0];
-        parameters['date_end'] = parameters['date_end'].split('T')[0];
-    }
-
     r.db('external_f3').table('trader')
         .outerJoin(r.db('external_f3').table('exporter')
             .merge(function (m) {
@@ -540,14 +506,13 @@ exports.report6 = function (req, res) {
                 )
             }
         })
-        .filter(q)
-        .filter(d)
         .filter({export_date: null})
         .orderBy('exporter_no')
+        .run()
         .then(function (result) {
-            res.json(result);
-            // parameters = {}
-            // res._ireport("report6.jasper", req.query.export || "pdf", result, parameters);
+            // res.json(result);
+            parameters = {}
+            res._ireport("report6.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)

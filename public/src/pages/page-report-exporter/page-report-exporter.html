@@ -275,7 +275,7 @@
               this.$$('#notfound').setAttribute("hidden", "hidden");
             },
             getExporters: function() {
-              this.read('./external/exporter',(data)=>{
+              this.read('./exporter',(data)=>{
                 data.map((empty)=>{
                   if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
                     empty.exporter_no_name = '-';
@@ -288,7 +288,7 @@
             },
             getIdExporters:function(){
               this.exporter_id = this.exporter_id || this.$.exporter_id;
-              this.read('./external/exporter?exporter_status=true',(data)=>{
+              this.read('./exporter?exporter_status=true',(data)=>{
                 data.map((type)=>{
                   type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
                 });
@@ -316,7 +316,7 @@
               else if (this.dataSelected.date_end != undefined && this.dataSelected.date_end != '' && (this.dataSelected.date_start == undefined || this.dataSelected.date_start == '')) {
                 this.fire('toast',{status:'connectError',text:'กรุณาใส่วันที่เริ่มต้นค้นหา'})
               }
-              this.read('./external/exporter'+str,(data)=>{
+              this.read('./exporter'+str,(data)=>{
                 data.map((empty)=>{
                   if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
                     empty.exporter_no_name = '-';
@@ -338,7 +338,7 @@
             },
             _report:function(e) {
               var str = this._search();
-              window.open('http://localhost:8080/api/exporter/'+e.target.getAttribute('report')+(str != ''?str:''),'_blank');
+              window.open('./api/reportExporter/'+e.target.getAttribute('report')+(str != ''?str:''),'_blank');
             },
             _selectData:function(e){
               this.layerContent = "detailRegExporter";
