@@ -243,10 +243,10 @@
                 <main>
 
                     <input id="tab1" type="radio" name="tabs" checked>
-                    <label for="tab1">ยังไม่ยืนยัน</label>
+                    <label for="tab1">ยังไม่ยืนยัน [[dataCompanny.notconfirm.nc_amount]] ตัน</label>
 
                     <input id="tab2" type="radio" name="tabs">
-                    <label for="tab2">ยืนยัน</label>
+                    <label for="tab2">ยืนยัน [[dataCompanny.confirm.c_amount]] ตัน</label>
                     <section id="content1">
                         <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" status="notConfirm"></confirm-list>
                     </section>
@@ -262,7 +262,7 @@
                  <template is="dom-if" if="[[rendered]]">
                 <iron-pages selected="{{pageSelected}}">
                     <div>
-                        <confirm-allocate-edit data="{{dataSelect}}" list-company="[[dataCompanny.confirm]]" status="{{statusSelect}}" on-cancel-confirm="_cancelConfirm" on-transfer-data="_transferData" on-save-data="_saveData"></confirm-allocate-edit>
+                        <confirm-allocate-edit data="{{dataSelect}}" list-company="[[dataCompanny.confirm.data]]" status="{{statusSelect}}" on-cancel-confirm="_cancelConfirm" on-transfer-data="_transferData" on-save-data="_saveData"></confirm-allocate-edit>
                     </div>
                 </iron-pages>
                   </template>
@@ -305,7 +305,7 @@
                     this.dataSelect = e.detail.data;
                     this.$$('panel-right').open();
                    
-                    // console.log(this.dataSelect);
+                   
                    
                 },
                 _getYear: function () {

@@ -6,7 +6,7 @@
 
 <dom-module id="confirm-list">
     <template>
-        <style is="custom-style" include="gl-table">
+        <style is="custom-style" include="gl-table gl-color gl-size">
             *{
                 font-family: 'CSChatThaiUI', sans-serif !important;
                 -webkit-font-smoothing: antialiased;
@@ -23,6 +23,16 @@
             }
             .right{
                 text-align: right !important;
+            }
+            .center{
+                text-align: center !important;
+            }
+            .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
+            .content{
+                padding:0px 0px 10px 0px;
             }
         </style>
       
@@ -41,27 +51,34 @@
                 </tbody>
             </table>
         </template>
-         <template is="dom-if" if="{{!dataStat}}">
+        <template is="dom-if" if="{{!dataStat}}">
+        <div class="content flex-end-justified">
+            <paper-button class="gl-btn-primary" raised>ยืนยันส่วนจัดสรร</paper-button>
+        </div>
        <table class="gl-table-default">
            <thead>
                 <tr>
+                    <th class="left"><paper-checkbox>เลือกทั้งหมด</paper-checkbox></th>
                     <th class="left">ลำดับที่</th>
                     <th class="left">ผู้ส่งออก</th>
                     <th>ปริมาณโควตารวม</th>
-                <template is="dom-repeat" items="{{quantityForThead.quantity}}">
-                    <th>งวดที่ {{item.period}} [[getMonthName(item.month)]]</th>
-                </template>
+                    <template is="dom-repeat" items="{{quantityForThead.quantity}}">
+                        <th>งวดที่ {{item.period}} [[getMonthName(item.month)]]</th>
+                    </template>
                 </tr>
             </thead>
             <tbody>
            
-            <template is="dom-repeat" items="{{data}}">
-                <tr on-tap="_selectData" data="{{item}}">
-                    <td class="left">[[_num(index)]]</td>
-                    <td class="left">{{item.name}}</td>
+            <template is="dom-repeat" items="{{data.data}}">
+                <tr data="{{item}}">
+                    <td class="center">
+                        <paper-checkbox value="{{item}}" checked="{{item.check}}"></paper-checkbox>
+                    </td>
+                    <td on-tap="_selectData" data="{{item}}" class="left">[[_num(index)]]</td>
+                    <td on-tap="_selectData" data="{{item}}" class="left">{{item.name}}</td>
                     <td>{{formatNumber(item.amount)}}</td>
                     <template is="dom-repeat" items="{{item.quantity}}">
-                        <td>{{formatNumber(item.weigth)}}</td>
+                        <td on-tap="_selectData" data="{{item}}">{{formatNumber(item.weigth)}}</td>
                     </template>
                 </tr>
             </template>
@@ -86,11 +103,8 @@
                 return index+1;
             },
             _getData:function(){
-                // this.quantityForThead = this.data[0].map((item)=>{
-                //     return item.quantity;
-                // });
-                this.quantityForThead = this.data[0];
-                // console.log(this.data[0]);
+                this.quantityForThead = this.data.data[0];
+                console.log('data',this.data);
             },
             _selectData:function(e){
                 // console.log(this.status);
