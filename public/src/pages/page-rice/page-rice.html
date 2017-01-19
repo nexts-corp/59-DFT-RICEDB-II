@@ -29,7 +29,7 @@
         </div>
         <panel-right title="จัดการประเภทข้าว" set-width="80%">
              <template is="dom-if" if="[[rendered]]">
-                 <rice-manage data="{{riceForm}}" on-post-data="_saveData" on-update-data="_updateData" status="{{status}}"></rice-manage>
+                 <rice-manage data="{{riceForm}}" on-post-data="_saveData" on-update-data="_updateData" on-delete-data="_deleteData" status="{{status}}"></rice-manage>
              </template>
         </panel-right>
     </template>
@@ -80,9 +80,67 @@
             },
             _saveData:function(e){
                 console.log(e.detail)
+                this.fire('toast',{status:'load'});
+                axios.post('/mnrice/mnrice',e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    this.fire('toast',{
+                        status:'success',
+                        text:'บันทึกข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    console.log(response);
+                    this.getTypeRice();
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });
             },
             _updateData:function(e){
                 console.log(e.detail)
+                this.fire('toast',{status:'load'});
+                axios.put('/mnrice/mnrice',e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    this.fire('toast',{
+                        status:'success',
+                        text:'แก้ไขข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    console.log(response);
+                    this.getTypeRice();
+                })
+                .catch((error)=>{
+                console.log("error");
+                console.log(error);
+                });
+            },
+            _deleteData:function(e){
+                console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                 axios.delete('/mnrice/mnrice?id='+e.detail)
+                .then((response)=>{
+                    console.log("success");
+                    this.fire('toast',{
+                        status:'success',
+                        text:'ลบข้อมูลสำเร็จ',
+                        callback:()=>{
+                             this.$$('panel-right').close();
+                        }
+                    });
+                    console.log(response);
+                    this.getTypeRice();
+                    //el.$$('panel-right').close();
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
             }
         });
     </script>

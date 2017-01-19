@@ -1,5 +1,5 @@
 
-<dom-module id="rice-manage">
+<dom-module id="exporter-manage">
     <template>
         <style include="gl-size gl-panel gl-color">
              .flex-end-justified {
@@ -29,23 +29,10 @@
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                             <div class="header">ประเภทข้าว(ไทย) :</div>
+                             <div class="header">ชื่อบริษัท :</div>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                             <gl-form-input value="{{rice_th}}" required></gl-form-input>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                     </gl-grid-row>
-
-                     <gl-grid-row width="{{getWidth}}">
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                             <div class="header">ประเภทข้าว(อังกฤษ) :</div>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                              <gl-form-input value="{{rice_eng}}" required></gl-form-input>
+                             <gl-form-input value="{{exporterName}}" required></gl-form-input>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
@@ -61,7 +48,7 @@
     </template>
     <script>
         Polymer({
-            is: 'rice-manage',
+            is: 'exporter-manage',
             properties:{
                 status: {
                     observer: 'checkStatus'
@@ -72,17 +59,14 @@
             },
             checkStatus:function(status){
                 if(status == 'add'){
-                  this.active = true;
-                  this.rice_eng = "";
-                  this.rice_th = "";
+                  this.exporterName = "";
                 }
-                else if(status == 'update'){
+                 else if(status == 'update'){
                    this.active = false;  
                 }
             },
             checkData:function(data){
-                this.rice_eng = data.query_name;
-                this.rice_th = data.type_rice_name_th;
+                this.exporterName = data.name;
             },
             _checkform:function(){
                 var dataCheck = Polymer.dom(this.root).querySelectorAll('gl-form-input').map((item)=>{
@@ -94,37 +78,35 @@
                 if(dataCheck.every(check) == true){
                     this._getForSave();
                 }
+                // console.log(check);
             },
             _getForSave:function(){
                var get 
                if(this.status == 'add'){
                    get = {
-                       query_name: this.rice_eng,
-                       type_rice_name_th: this.rice_th
+                       name: this.exporterName
                    }
                    this.fire('post-data',get);
                }
                else if(this.status == 'update'){
                     get = {
                        id: this.data.id,
-                       query_name: this.rice_eng,
-                       type_rice_name_th: this.rice_th
+                       name: this.exporterName
                    }
                    this.fire('update-data',get);
                }
             },
             _confirmDelete:function(){
-                 this.fire('toast',{
+                this.fire('toast',{
                     status:'openDialog',
                     text:'ต้องการยกเลิกใช่หรือไม่ ?',
                     confirmed:this._delDataList.bind(this)
                 })
             },
-            _delDataList:function(result){
-                if(result == true){
-                    this.fire('delete-data',this.data.id);
-                }
-                
+             _delDataList:function(result){
+                 if(result == true){
+                     this.fire('delete-data',this.data.id)
+                 }
             }
         });
     </script>
