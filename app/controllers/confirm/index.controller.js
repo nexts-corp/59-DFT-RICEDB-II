@@ -96,23 +96,19 @@ class index {
                 params.ordinal = parseInt(params.ordinal);
             }
 
-            r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate'), function(a,c){
+            r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate').filter({ordinal:params.ordinal}), function(a,c){
                 return a('calculate_id').eq(c('id'))
             }).map(function(ml){
                 return ml('left').merge(function(mr){
                     return { ordinal: ml('right')('ordinal'), status_calculte: ml('right')('status')}
                 })
             })
-                
+            .filter({ status:'nc',status_calculte:'n'})   
             .innerJoin(r.db('eu2').table('exporter'), function(ta,e){
                 return ta('exporter_id').eq(e('id'))
-            }).map(function(ml){
-                return ml('left').merge(function(mr){
-                    return {name:ml('right')('name')}
-                })
-            })
+            }).without({right:['id']}).zip()
                 
-            .innerJoin(r.db('eu2').table('quota'), function(ta,q){
+            .innerJoin(r.db('eu2').table('quota').filter({year:params.year, type_rice_id:params.type_rice_id }), function(ta,q){
                 return ta('quota_id').eq(q('id'))
             }).map(function(ml){
                 return ml('left').merge(function(mr){
@@ -127,22 +123,18 @@ class index {
                         year:ml('right')('year')
                     }
                 })
-            })
-                
-            .filter({
-                year:params.year,
-                type_rice_id:params.type_rice_id,
-                ordinal:params.ordinal,
-                status:'nc',
-                status_calculte:'n'
             }).orderBy('name')
-                
+            .do(function(nc){
+            return { data:nc, nc_amount:nc('amount_update').sum() }
+            })  ///end not confirm
+
+
             .do(function(result){
                 return {
                 notconfirm:result ,
                 confirm : 
                     r.db('eu2').table('confirm')
-                    .innerJoin(r.db('eu2').table('quota'), function(all,q){
+                    .innerJoin(r.db('eu2').table('quota').filter({year:params.year, type_rice_id:params.type_rice_id }), function(all,q){
                             return all('quota_id').eq(q('id'))
                         }).map(function(x){
                         return x('left').merge(function(quan){
@@ -158,21 +150,10 @@ class index {
                         }
                         })
                         })
-                
-                    .filter({
-                        year:params.year,
-                        type_rice_id:params.type_rice_id
-                    })
 
                     .innerJoin(r.db('eu2').table('exporter'), function(c,e){
                     return c('exporter_id').eq(e('id'))
-                    }).map(function(ml){
-                    return ml('left').merge(function(x){
-                        return {
-                        name : ml('right')('name')
-                        }
-                    })
-                    })
+                    }).without({right:['id']}).zip()
                     
                     .innerJoin(r.db('eu2').table('allocate'), function(ta,al){
                         return ta('allocate_id').eq(al('id'))
@@ -193,16 +174,11 @@ class index {
                         }
                         })
                     })
-                    /*
-                    .filter({
-                        ordinal:params.ordinal,
-                        status:'c'
-                    }).orderBy('name')
-                    */
                     .filter(function(x){
                         return x('ordinal').eq(params.ordinal)
                         .and(x('status').eq('c').or(x('status').eq('r')))
                     }).orderBy('name')
+                    .do(function(c){return { data:c, c_amount:c('amount').sum() }})  
                 }
             }) // end do
             
@@ -376,6 +352,12 @@ class index {
             var params = req.body;
             console.log(params.allocate_id);
             
+            // let iterable = [10, 20, 30];
+
+            // for (let value of iterable) {
+            //     console.log(value);
+            // }
+
             r.db('eu2').table('allocate').get(params.allocate_id ).update({
                 status:'nc'
             }).do(function(result){
