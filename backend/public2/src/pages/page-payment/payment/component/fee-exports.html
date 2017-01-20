@@ -55,7 +55,7 @@
 
 
         <div name="feeDetail">
-          
+
           <fee-management data-for-select="[[dataForSelect.feeListinShm]]" data-shm-id="[[data.invoice.0.shm_id]]"></fee-management>
         </div>
     <div name="averagePage">
@@ -69,7 +69,7 @@
            <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" disabled label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
-           <gl-combo-box class="required" required error-message="กรุณาชื่อรอบการจ่ายเงิน" placeholder="เลือกชื่อรอบการจ่ายเงิน" label="ชื่อรอบการจ่ายเงิน"
+           <gl-combo-box class="required" required disabled="[[isInputDisabled]]" error-message="กรุณาชื่อรอบการจ่ายเงิน" placeholder="เลือกชื่อรอบการจ่ายเงิน" label="ชื่อรอบการจ่ายเงิน"
              item-label-path="fee_name" item-value-path="fee_id" value="{{data.fee_id}}" items="[[dataForSelect.feeListinShm]]" on-value-changed="_getFeeName">
            </gl-combo-box >
            <!-- <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input> -->
@@ -201,7 +201,7 @@
         // console.log(e.currentTarget.value);
         try {
           let select = e.currentTarget.value;
-          let num = this.data.feeList.filter((data) =>data.fee_id == select)[0];
+          let num = this.dataForSelect.feeListinShm.filter((data) =>data.fee_id == select)[0];
           this.data.fee_no = num.fee_no;
           this.notifyPath('data.fee_no');
         } catch (e) {
@@ -290,11 +290,12 @@
       },
       approvePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
-            data.fee_status = true;
-            data.id=this.data.fee_id;
+            data.rate_tt=12;
+            // data.fee_status = true;
+            data.id=this.data.fee_det_id;
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
-                text:'ต้องการยืนยันใช่หรือไม่ ?',
+                text:'ยืนยันใช่หรือไม่ ?',
                 confirmed:this._approveFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
                 el: this, // compontents
                 data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
@@ -303,8 +304,7 @@
       },
       _approveFee:function(result,detail){
          if (result == true) {
-          //  console.log(detail.data);
-           this.update('./g2g/fee/update',detail.data, () => {
+           this.update('./g2g/fee/detail/update',detail.data, () => {
                this.fire('refresh-contract',{detail:'refresh-contract'});
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
@@ -338,6 +338,7 @@
        }
     },
       _clearDatafee:function (data,action,callback) {
+        console.log(11);
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
