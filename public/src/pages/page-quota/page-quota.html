@@ -84,7 +84,7 @@
 
 			<div class="layout horizontal">
         <div class="container flex-equal-justified">
-          <div> <gl-combo-box label="แสดงข้อมูลรายปี" items="{{quotaYear}}" value="{{selectYear}}"></gl-combo-box></div>
+          <div> <gl-combo-box id="combo" label="แสดงข้อมูลรายปี" items="[[quotaYear]]" value="{{selectYear}}"></gl-combo-box></div>
           <div>	<paper-button raised class="font gl-btn-primary" on-tap="_insertData" id="addRedRegExporter">
           <iron-icon icon="add"></iron-icon> เพิ่มโควตา</paper-button></div>
         </div>
@@ -107,7 +107,7 @@
     Polymer({
       is: 'page-quota',
       observers:['_yearChanged(selectYear)'],
-      behaviors: [nylonBehavior],
+      behaviors: [nylonBehavior,ReduxBehavior],
       properties: {
           layerContent: {
               type: String,
@@ -126,10 +126,23 @@
           foo: {
             type: String,
             value: 'foo'
+          },
+          quotaYear:{
+            type:Object,
+            statePath:'app.year',
+            observer:'xx'
           }
+
+      },
+      xx:function(x){
+        //console.log(x);
+        console.log(typeof x,'xxxxx');
+        //this.$.combo.items = x;
       },
       nylonPageActive:function(){
-        this._getYear();
+        //this._getYear();
+
+        
       },
       attached: function(){
         this.layerContent = "addRedRegExporter";
@@ -163,23 +176,6 @@
           this.sendData = e.currentTarget.data;
           //console.log(e.currentTarget.id);
           //console.log(this.sendData);
-        },
-        _getYear:function(){
-          axios.get('./common/year')
-          .then((response)=>{
-            //console.log("success");
-              this.quotaYear = response.data.map(item=>{
-              return item.toString();
-            });
-            console.log(this.quotaYear);
-          })
-          .catch((error)=>{
-            console.log("error");
-            console.log(error.message);
-            this.fire('toast',{status:'connectError',text:error.message,
-              callback:function(){
-              }})
-          });
         },
         _getDatalist:function(year){
           this.fire('toast',{status:'load'});
@@ -220,7 +216,8 @@
             console.log("success");
             this.textToast = 'บันทึกข้อมูลสำเร็จ';
             console.log(response);
-            this._getYear();
+            //this._getYear();
+            this.fire('pull-year');
             this._getDatalist(e.detail.year);
           })
           .catch((error)=>{
@@ -268,7 +265,7 @@
                 console.log("success");
                 this.textToast = 'ลบข้อมูลสำเร็จ';
                 console.log(response);
-                this._getYear();
+                this.fire('pull-year');
                 this._getDatalist(this.selectYear);
                 //el.$$('panel-right').close();
               })

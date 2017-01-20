@@ -152,8 +152,18 @@
         Polymer({
             is: "page-amount",
             behaviors:[
-              nylonBehavior
+              nylonBehavior,
+              ReduxBehavior
             ],
+            actions:{
+              amountList:function(data){
+                return {
+                  type:'AMOUNT_LIST',
+                  payload:data
+                }
+              }
+            },
+
             observers:[
               '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
             ],  
@@ -269,7 +279,9 @@
                   }
                 })
                 .then((response)=>{
-                    this.dataAllocate = response.data;
+                    //this.dataAllocate = response.data;
+                      this.dispatch('amountList',response.data);
+
                     console.log('..',this.dataAllocate);
                     this.fire('toast',{status:'success',
                     callback:()=>{

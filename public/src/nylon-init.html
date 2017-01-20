@@ -13,8 +13,13 @@
 
 
 <link rel="import" href="./layout/layout-main.html">
-
 <link rel="import" href="./nylon-auth.html">
+
+
+<script src="pages/page-amount/reducer-amount.js"></script>
+<script src="/bower_components/redux/index.js"></script>
+<link rel="import" href="/bower_components/polymer-redux/polymer-redux.html">
+<script src="redux-init.js"></script>
 
 
 <dom-module id="nylon-init">
@@ -33,11 +38,10 @@
     
 		<layout-main path="[[selected]]">
 
-			<iron-pages role="main" selected="[[selected]]" attr-for-selected="path" selected-attribute="visible">
+			<iron-pages role="main" selected="[[selected]]" attr-for-selected="path" selected-attribute="visible" on-pull-year="onPullYear">
 			
 				<page-quota path="quota" current-path="[[selected]]"></page-quota>
 				<page-amount path="amount" current-path="[[selected]]"></page-amount>
-				<page-amount2 path="amount2" current-path="[[selected]]"></page-amount2>
 				<page-calculate path="calculate" current-path="[[selected]]"></page-calculate>
 				<page-confirm path="confirm" current-path="[[selected]]"></page-confirm>
 				<page-fee path="fee" current-path="[[selected]]"></page-fee>
@@ -65,7 +69,34 @@
 	<script>
         Polymer({
             is:'nylon-init',
+			behaviors:[ReduxBehavior],
+			actions:{
+              pullYear:function(data){
+                return {
+                  type:'PULL_YEAR',
+                  payload:data
+                }
+              }
+            },
+			pullYear:function(){
+				
+				axios.get('./common/year')
+				.then((response)=>{
+					var quotaYear = response.data.map(item=>{
+						return item.toString();
+					});
+					this.dispatch('pullYear',quotaYear)
+				})
+				.catch((error)=>{
+					console.log("error");
+				});
+            },
+			onPullYear:function(){
+				this.pullYear();
+			},
 			ready:function(){
+				this.pullYear();
+
 				this.importHref(this.resolveUrl('/src/import.html'), (e)=>{
 					this.rendered = true;
 				}, (e)=> {

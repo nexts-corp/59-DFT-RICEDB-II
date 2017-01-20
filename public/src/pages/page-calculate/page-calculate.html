@@ -121,7 +121,7 @@
     <script>
         Polymer({
             is: "page-calculate",
-            behaviors:[nylonBehavior,nylonLocalizeBehavior],
+            behaviors:[nylonBehavior,nylonLocalizeBehavior,ReduxBehavior],
             observers:[
               '_yearQuoataChaged(selectYear)'
             ],
@@ -129,6 +129,10 @@
                 layerContent: {
                     type: String,
                     value: "detailRegExporter"
+                },
+                getYear:{
+                  type: Object,
+                  statePath:'app.year'
                 }
             },
             changeLanguage:function(){
@@ -140,7 +144,7 @@
               
             },
             nylonPageActive:function(){
-                this._getYear();
+                //this._getYear();
             },
             attached: function(){
               
@@ -174,7 +178,8 @@
                 this.getYear = response.data.map((item)=>{
                   return item.toString();
                 });
-                //console.log(this.getYear);
+
+                console.log(typeof this.getYear);
               })
               .catch((error)=>{
                 console.log("error");

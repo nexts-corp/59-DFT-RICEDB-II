@@ -126,10 +126,16 @@
     <script>
         Polymer({
             is: 'allocate-list',
+            properties:{
+                dataAllocate:{
+                    statePath:'amount.list'
+                }
+            },
             behaviors: [
                 FormatNumberBehavior,
                 MonthBehavior,
-                DataManageBehavior
+                DataManageBehavior,
+                ReduxBehavior
             ],
             observers:['checkData(dataAllocate.data)'],
             _num:function(index){
