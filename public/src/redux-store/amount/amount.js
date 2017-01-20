@@ -4,7 +4,7 @@ const initialState = {
 
 
 const reducer = (state,action) => {
-    if(!state) return initialStateAmount; 
+    if(!state) return initialState; 
     switch (action.type) {
 
         case 'AMOUNT_LIST':

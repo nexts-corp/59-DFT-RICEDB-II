@@ -1,5 +1,5 @@
 import {createStore,combineReducers} from 'redux';
-import PolymerRedux from 'polymer-redux/polymer-redux'
+import PolymerRedux from 'polymer-redux'
 
 import reducerAmount from './amount/amount'
 
@@ -27,5 +27,6 @@ const rootReducer = combineReducers({
 });
 
 
-const store = Redux.createStore(reducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-const ReduxBehavior = PolymerRedux(store);
+const store = Redux.createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+window.ReduxBehavior = PolymerRedux(store);
+

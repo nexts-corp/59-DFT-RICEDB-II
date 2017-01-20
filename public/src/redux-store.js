@@ -87,8 +87,8 @@
 	    amount: _amount2.default
 	});
 
-	var store = Redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-	var ReduxBehavior = (0, _polymerRedux2.default)(store);
+	var store = Redux.createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+	window.ReduxBehavior = (0, _polymerRedux2.default)(store);
 
 /***/ },
 /* 2 */
@@ -1636,7 +1636,7 @@
 	};
 
 	var reducer = function reducer(state, action) {
-	    if (!state) return initialStateAmount;
+	    if (!state) return initialState;
 	    switch (action.type) {
 
 	        case 'AMOUNT_LIST':
