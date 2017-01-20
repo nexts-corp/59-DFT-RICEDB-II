@@ -70,19 +70,20 @@
               <div id="formData" class="bd" hidden>
                 <paper-tabs selected="{{pages}}" align-bottom no-slide>
                     <paper-tab>รายละเอียด</paper-tab>
-                    <paper-tab>ไฟล์</paper-tab>
+                    <paper-tab id="tabFile">ไฟล์</paper-tab>
                 </paper-tabs>
                 <gl-form-panel>
                   <iron-pages selected="{{pages}}">
-                      <register-member data={{trader}}></register-member>
-                      <register-fileup></register-fileup>
+                      <register-member data="{{trader}}"></register-member>
+                      <register-fileup data="{{exporterId}}"></register-fileup>
                   </iron-pages>
                 </gl-form-panel>
               </div>
 
               <div class="horizontal end-justified layout">
-                <paper-button id="removeButtomC" class="gl-btn-danger" on-tap="_cancel" raised title="ยกเลิกการสมัคร">ยกเลิก</paper-button>
+                <paper-button id="removeButtomC" class="gl-btn-danger" on-tap="_cancel" raised title="ยกเลิก">ยกเลิก</paper-button>
                 <paper-button id="removeButtom" class="gl-btn-success" on-tap="_saveData" raised title="บันทึกข้อมูลสมาชิก">บันทึก</paper-button>
+                <paper-button id="buttomF" class="gl-btn-success" on-tap="_saveFile" raised title="บันทึกไฟล์">บันทึก</paper-button>
               </div>
 
     </gl-form-panel>
@@ -103,6 +104,9 @@
         },
         trader:{
           type:Object
+        },
+        exporterId:{
+          type:Object
         }
       },
       listeners:{
@@ -112,6 +116,8 @@
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+        this.$$('#buttomF').setAttribute("hidden", "hidden");
+        this.$$('#tabFile').setAttribute("disabled", "disabled");
       },
       getTrader:function (e) {
         // console.log(e.detail.value);
@@ -127,8 +133,10 @@
             this.$$('#formData').removeAttribute("hidden");
             this.$$('#removeButtom').removeAttribute("hidden");
             this.$$('#removeButtomC').removeAttribute("hidden");
+            this.$$('#buttomF').setAttribute("hidden", "hidden");
             this.$$('#changTitle').setAttribute("hidden", "hidden");
             this.$$('#changTitle2').removeAttribute("hidden");
+            this.$$('#tabFile').setAttribute("disabled", "disabled");
             // console.log(this.trader);
           });
           }
@@ -136,45 +144,67 @@
             this.$$('#formData').setAttribute("hidden", "hidden");
             this.$$('#removeButtom').setAttribute("hidden", "hidden");
             this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+            this.$$('#buttomF').setAttribute("hidden", "hidden");
             this.$$('#changTitle').removeAttribute("hidden");
             this.$$('#changTitle2').setAttribute("hidden", "hidden");
+            this.$$('#tabFile').setAttribute("disabled", "disabled");
           }
       },
       _cancel:function() {
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+        this.$$('#buttomF').setAttribute("hidden", "hidden");
         this.$$('#formData').setAttribute("hidden", "hidden");
         this.$$('#changTitle').removeAttribute("hidden");
         this.$$('#changTitle2').setAttribute("hidden", "hidden");
+        this.$$('#tabFile').setAttribute("disabled", "disabled");
         this.dataTrader = "";
       },
       _saveData:function(e) {
         // console.log(this.trader);
         this.fire('toast',{status:'dialog',
-        text:'คุณต้องการจะยืนยันลงทะเบียนใช่หรือไม่ ?',
-        confirmed : this._confirmToast.bind(this),
-        datas: {
-          exporter_date_update:new Date,
-          trader_id:this.trader.trader_id
-        }
-      });
+          text:'คุณต้องการจะยืนยันลงทะเบียนใช่หรือไม่ ?',
+          confirmed : this._confirmToast.bind(this),
+          datas: {
+            exporter_date_update:new Date,
+            trader_id:this.trader.trader_id
+          }
+        });
       },
       _confirmToast:function(result,detail){
         if(result == true){
           this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-          this.insert('./exporter/insert', detail.datas, () => {
+          this.insert('./exporter/insert', detail.datas, (respone) => {
+            this.exporterId = respone.id[0];
             this.$$('#removeButtom').setAttribute("hidden", "hidden");
-            this.$$('#removeButtomC').setAttribute("hidden", "hidden");
-            this.$$('#formData').setAttribute("hidden", "hidden");
-            this.$$('#changTitle').removeAttribute("hidden");
-            this.$$('#changTitle2').setAttribute("hidden", "hidden");
-            this.dataTrader = "";
+            this.$$('#buttomF').removeAttribute("hidden");
+            this.$$('#tabFile').removeAttribute("disabled");
+            this.pages = 1;
             this.fire('refresh-exporter');
             this.fire('refresh-exporterTrader');
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
               console.log('success');
             }});
            });
+        }
+      },
+      _saveFile:function(){
+        this.fire('toast',{status:'dialog',
+          text:'คุณต้องการจะยืนยันการเพิ่มไฟล์ใช่หรือไม่ ?',
+          confirmed : this._confirmFile.bind(this)
+        });
+      },
+      _confirmFile:function(result,detail){
+        if(result == true){
+            this.$$('#formData').setAttribute("hidden", "hidden");
+            this.$$('#changTitle').removeAttribute("hidden");
+            this.$$('#changTitle2').setAttribute("hidden", "hidden");
+            this.$$('#buttomF').setAttribute("hidden", "hidden");
+            this.$$('#tabFile').setAttribute("disabled", "disabled");
+            this.dataTrader = "";
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
         }
       },
       attached: function() {

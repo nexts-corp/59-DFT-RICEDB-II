@@ -1,25 +1,52 @@
 <link rel="import" href="../../../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../components/dataBehavior.html">
-<link rel="import" href="renew/renew-memberShow.html">
-<link rel="import" href="renew/renew-memberEdit.html">
+<link rel="import" href="member/member-show.html">
+<link rel="import" href="member/member-fileup.html">
+<!-- <link rel="import" href="member/edit-member.html"> -->
+<!-- <link rel="import" href="member/components/member-edit.html"> -->
 <link rel="import" href="../../components/panel-right/panel-right.html">
-<dom-module id="renew-page">
+<dom-module id="member-page">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-toast">
-  .title {
-    text-align: center;
-     font-size: var(--font-size-h3);
-     font-family: 'rsuregular', sans-serif;
-       -webkit-font-smoothing: antialiased;
-      color: white;
-  }
-  .marTitle{
-    margin-left: 5em;
-  }
-  .boxNortify{
-    border: 2px solid red;
-    background-color: red;
-    padding: 5px;
-  }
+    .title {
+      text-align: center;
+       font-size: var(--font-size-h3);
+       font-family: 'rsuregular', sans-serif;
+         -webkit-font-smoothing: antialiased;
+        color: white;
+    }
+    .marTitle{
+      margin-left: 5em;
+    }
+    .boxNortify{
+      border: 2px solid red;
+      background-color: red;
+      padding: 5px;
+    }
+    paper-tabs{
+      background-color: #f7941e;
+      margin : 0px 15px 0px 15px;
+      color: #F2F2F2;
+      --paper-tabs-selection-bar:{
+        height: 5px;
+        background-color: var(--gl-info-color);
+      }
+    }
+    paper-tab:focus > div.tab-content{
+      background-color: yellow;
+      opacity: 1;
+      font-weight: 0;
+    }
+    paper-tab:not(:last-of-type) {
+      border-right: 3px solid var(--gl-gray-light-color);
+      font-size: var(--font-size-h5);
+      font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    paper-tabs paper-tab.iron-selected {
+      font-size: var(--font-size-h5);
+      color: var(--gl-white-color);
+      background-color: var(--gl-info-color);
+    }
   </style>
   <template>
 
@@ -32,14 +59,19 @@
       <div class="horizontal end-justified layout">
         <paper-button id="buttomActive" raised class="gl-btn-success button" on-tap="_dialogRemark" title="ยกเลิกการระงับ" hidden>ยกเลิกการระงับ</paper-button>
         <paper-button id="buttomTrader" raised class="gl-btn-danger button" on-tap="_dialogRemark" title="ต่ออายุ คน." hidden>ต่ออายุ คน.</paper-button>
+        <paper-icon-button icon="create" on-tap="editChange" title="แก้ไขข้อมูล"></paper-icon-button>
       </div>
-      <!-- <paper-icon-button icon="create" on-tap="editChange" title="แก้ไขข้อมูล"></paper-icon-button> -->
               <div class="bd">
                   <gl-form-panel>
-                      <iron-pages selected="{{pages}}">
-                          <renew-memberShow data="{{data}}"></renew-memberShow>
-                          <!-- <renew-memberEdit data="{{data}}"></renew-memberEdit> -->
-                      </iron-pages>
+                    <paper-tabs selected="{{pages}}" align-bottom no-slide>
+                      <paper-tab>รายละเอียด</paper-tab>
+                      <paper-tab id="tabFile">ไฟล์</paper-tab>
+                    </paper-tabs>
+                    <iron-pages selected="{{pages}}">
+                      <member-show data="{{data}}"></member-show>
+                      <member-fileup data="{{data}}"></member-fileup>
+                      <member-edit data="{{data}}"></member-edit>
+                    </iron-pages>
                   </gl-form-panel>
               </div>
               {{_checkStatus(data.exporter_active,data.exporter_status,data.trader_active)}}
@@ -67,7 +99,7 @@
   </template>
   <script>
     Polymer({
-      is: "renew-page",
+      is: "member-page",
       behaviors: [dataBehavior],
       properties: {
         pages:{
@@ -94,7 +126,8 @@
       //   }
       // },
       editChange:function(e){
-        this.pages = 1;
+        // this.$$('#buttomEdit').setAttribute("hidden", "hidden");
+        this.pages = 2;
         this.$$('#removeButtom').removeAttribute("hidden");
         this.$$('#removeButtomC').removeAttribute("hidden");
       },
@@ -119,14 +152,17 @@
          });
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+        // this.$$('#buttomEdit').removeAttribute("hidden");
       },
       _cancel:function() {
         this.$$('#removeButtom').setAttribute("hidden", "hidden");
         this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+        // this.$$('#buttomEdit').removeAttribute("hidden");
         this.pages = 0;
       },
       _checkStatus:function(ac,st,ta){
         if (ac == true && st == true && ta == true) {
+          // this.$$('#buttomEdit').removeAttribute("hidden");
           this.$$('#removeButtom').setAttribute("hidden", "hidden");
           this.$$('#removeButtomC').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
@@ -136,8 +172,10 @@
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.$$('#titleBg').setAttribute("hidden", "hidden");
           this.pages = 0;
+          this.$$('#tabFile').removeAttribute("disabled");
         }
         else if (ac == true && st == true && ta == false) {
+          // this.$$('#buttomEdit').setAttribute("hidden", "hidden");
           this.$$('#removeButtom').setAttribute("hidden", "hidden");
           this.$$('#removeButtomC').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
@@ -147,8 +185,10 @@
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.$$('#titleBg').removeAttribute("hidden");
           this.pages = 0;
+          this.$$('#tabFile').removeAttribute("disabled");
         }
         else if (ac == false && st == true && ta == false) {
+          // this.$$('#buttomEdit').setAttribute("hidden", "hidden");
           this.$$('#removeButtom').setAttribute("hidden", "hidden");
           this.$$('#removeButtomC').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
@@ -158,8 +198,10 @@
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.$$('#titleBg').removeAttribute("hidden");
           this.pages = 0;
+          this.$$('#tabFile').removeAttribute("disabled");
         }
         else if (ac == false && st == true && ta == true) {
+          // this.$$('#buttomEdit').setAttribute("hidden", "hidden");
           this.$$('#removeButtom').setAttribute("hidden", "hidden");
           this.$$('#removeButtomC').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').removeAttribute("hidden");
@@ -169,8 +211,10 @@
           this.$$('#titleSeller').setAttribute("hidden", "hidden");
           this.$$('#titleBg').removeAttribute("hidden");
           this.pages = 0;
+          this.$$('#tabFile').removeAttribute("disabled");
         }
         else if(st == false){
+          // this.$$('#buttomEdit').setAttribute("hidden", "hidden");
           this.$$('#removeButtom').setAttribute("hidden", "hidden");
           this.$$('#removeButtomC').setAttribute("hidden", "hidden");
           this.$$('#buttomActive').setAttribute("hidden", "hidden");
@@ -179,6 +223,8 @@
           this.$$('#titleExporter').setAttribute("hidden", "hidden");
           this.$$('#titleTrader').setAttribute("hidden", "hidden");
           this.$$('#titleBg').removeAttribute("hidden");
+          this.pages = 0;
+          this.$$('#tabFile').setAttribute("disabled", "disabled");
         }
       },
       _dialogRemark: function(){
