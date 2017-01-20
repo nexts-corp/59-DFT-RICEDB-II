@@ -26,8 +26,6 @@ const store = Redux.createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ 
 const ReduxBehavior = PolymerRedux(store);
 
 
-
-
 //ReduxBehavior
 
 // properties:{
