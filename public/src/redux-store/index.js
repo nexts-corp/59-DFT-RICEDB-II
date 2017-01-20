@@ -1,7 +1,7 @@
 import {createStore,combineReducers} from 'redux';
 import PolymerRedux from 'polymer-redux'
 
-import reducerAmount from './amount/amount'
+import reducerAmount from './amount'
 
 const initialState = {
     year:[]

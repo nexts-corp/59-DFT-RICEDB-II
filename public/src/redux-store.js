@@ -59,7 +59,7 @@
 
 	var _polymerRedux2 = _interopRequireDefault(_polymerRedux);
 
-	var _amount = __webpack_require__(25);
+	var _amount = __webpack_require__(26);
 
 	var _amount2 = _interopRequireDefault(_amount);
 
@@ -1623,7 +1623,8 @@
 
 
 /***/ },
-/* 25 */
+/* 25 */,
+/* 26 */
 /***/ function(module, exports) {
 
 	'use strict';
