@@ -11,77 +11,79 @@ var Ajv = require('ajv');
 var ajv = Ajv({ allErrors: true, coerceTypes: 'array' });
 var schema = {
     //'type': 'object',
-    "properties": {
-        "id": {
-            "type": "string"
-        },
-        "fee_id": {
-            "type": "string"
-        },
-        "fee_foreign": {
-            "type": "number"
-        },
-        "fee_internal": {
-            "type": "number"
-        },
-        "fee_other": {
-            "type": "number"
-        },
-        "fee_date_receipt": {
-            "type": "string",
-            "format": "date-time"
-        },
-        // "fee_no": {
-        //     "type": "number"
-        // },
-        // "fee_name": {
-        //     "type": "string"
-        // },
-        "rate_bank": {
-            "type": "number"
-        },
-        "rate_tt": {
-            "type": "number"
-        },
-        "invoice": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "invoice_id": {
-                        "type": "string"
+    "items": {
+        "properties": {
+            "id": {
+                "type": "string"
+            },
+            "fee_id": {
+                "type": "string"
+            },
+            "fee_foreign": {
+                "type": "number"
+            },
+            "fee_internal": {
+                "type": "number"
+            },
+            "fee_other": {
+                "type": "number"
+            },
+            "fee_date_receipt": {
+                "type": "string",
+                "format": "date-time"
+            },
+            // "fee_no": {
+            //     "type": "number"
+            // },
+            // "fee_name": {
+            //     "type": "string"
+            // },
+            "rate_bank": {
+                "type": "number"
+            },
+            "rate_tt": {
+                "type": "number"
+            },
+            "invoice": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "invoice_id": {
+                            "type": "string"
+                        },
+                        "invoice_detail": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "invoice_date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "invoice_fee": {
+                                        "type": "number"
+                                    },
+                                    "invoice_no": {
+                                        "type": "string"
+                                    },
+                                    "shm_det_id": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["invoice_date", "invoice_fee", "invoice_no", "shm_det_id"]
+                            }
+                        },
                     },
-                    "invoice_detail": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "invoice_date": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                },
-                                "invoice_fee": {
-                                    "type": "number"
-                                },
-                                "invoice_no": {
-                                    "type": "string"
-                                },
-                                "shm_det_id": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": ["invoice_date", "invoice_fee", "invoice_no", "shm_det_id"]
-                        }
-                    },
-                },
-                "required": ["invoice_id", "invoice_detail"]
+                    "required": ["invoice_id", "invoice_detail"]
+                }
+            },
+            "fee_det_status": {
+                "type": "boolean"
             }
         },
-        "fee_det_status": {
-            "type": "boolean"
-        }
-    },
-    "required": ["fee_id", "fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "rate_bank", "rate_tt", "invoice", "fee_det_status"]
+        "required": ["fee_id", "fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "rate_bank", "rate_tt", "invoice", "fee_det_status"]
+    }
 };
 router.get('/id/:fee_det_id', function (req, res, next) {
     db.query(function (conn) {
