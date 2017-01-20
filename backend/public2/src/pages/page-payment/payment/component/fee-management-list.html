@@ -1,0 +1,57 @@
+  <dom-module id="fee-management-list">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    table{
+      margin: 20px 0px;
+    }
+    tbody.table-body{
+      cursor: pointer;
+    }
+    thead.table-head > tr > th:nth-child(1),
+    tbody.table-body > tr > td:nth-child(1),
+    thead.table-head > tr > th:nth-child(2) {
+      text-align: center;
+    }
+    thead.table-head > tr > th:nth-child(1) {
+      width: 10%;
+    }
+    thead.table-head > tr > th:nth-child(2) {
+      width: 90%;
+    }
+  </style>
+  <template>
+    <div class="horizontal end-justified layout">
+         <paper-button raised on-tap="addFeeRound" class="gl-btn-primary" >เพิ่มรอบการจ่ายเงิน</paper-button>
+    </div>
+    <table class="gl-table-default">
+      <thead class="table-head">
+        <tr>
+          <th>ครั้งที่</th>
+          <th>ชื่อรอบการจ่ายเงิน</th>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        <template is="dom-repeat" items="[[data]]">
+          <tr data="[[item]]" on-tap="getFeeMana">
+            <td>[[item.fee_no]]</td>
+            <td>[[item.fee_name]]</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </template>
+  <script>
+    Polymer({
+      is: "fee-management-list",
+      getFeeMana:function (e) {
+        // console.log(e.currentTarget.data);
+        this.fire('_get-fee-mana',{data:e.currentTarget.data});
+      },
+      addFeeRound:function () {
+        this.fire('_get-insert-fee',{data:'insertFee'});
+      }
+    });
+  </script>
+  </dom-module>

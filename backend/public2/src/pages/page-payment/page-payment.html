@@ -127,6 +127,7 @@
               'get-invoice-detail':'_getBlInvoiceDetail',
               'get-fee-list':'_getFeeListFire',
               'get-select-draftPayment':'_getInvoiceDetail',
+              'get-fee-list-in-shm-event':'_getFeeListInShmEvent',
               'get-fee-detail':'_getFeeDetail',
               'flipDrawer':'_flipDrawer',
               'close-drawer':'_flipDrawerClose'
@@ -193,6 +194,10 @@
                 this.dataListPay.feeList=data;
                 this.notifyPath('dataListPay.feeList');
               });
+            },
+            _getFeeListInShmEvent:function (e) {
+              // console.log(e.detail.data);
+              this._getFeeListInShm(e.detail.data);
             },
             _getFeeListInShm:function (shmId) {
               this.read('./g2g/fee/shm/id/'+shmId,(data)=>{

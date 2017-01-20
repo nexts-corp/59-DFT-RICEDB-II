@@ -46,6 +46,7 @@
               <th>ชื่อสัญญาย่อย</th>
               <th>จำนวนใบกำกับสินค้า</th>
               <th>มูลค่า</th>
+              <th>วันที่รับเช็ค</th>
             </tr>
           </thead>
           <!-- <tfoot class="table-foot">
@@ -64,7 +65,8 @@
                   <td>  [[_ObcountIndex(index)]] </td>
                   <td> [[item.invoice_no]]</td>
                   <td> [[item.invoice_count]]</td>
-                  <td>มูลค่า</td>
+                  <td>[[item.usd_value]]</td>
+                  <td>[[item.fee_date_receipt]]</td>
                 </tr>
               </template>
             </template>
@@ -93,8 +95,7 @@ Polymer({
       FormatNumberBehavior
   ],
   listeners:{
-    'back-page-confirm':'_backPageConfirm',
-    'get-confirm-detail':'_getConfirmDetail'
+    'back-page-confirm':'_backPageFeedetail'
   },
   properties: {
     pageSelected: {
@@ -110,21 +111,20 @@ Polymer({
     },
   },
   getFeeDetail:function (e) {
-    console.log(this.dataForSelect);
-    console.log(e.currentTarget.data.fee_det_id);
-    this.read('./g2g/fee/detail/id/'+e.currentTarget.data.fee_det_id,(data)=>{
-      this.dataSelected=data;
-      this.notifyPath('dataSelected');
-      this.pageSelected= 'feeDetail'
-    });
-    // this.dataForSelect.contract_quantity_confirm_balance=this.data.contract_quantity_confirm_balance;
-    // // console.log(this.data);
-    // // this.dataForConfirm.package=data;
-    // this.notifyPath('dataForSelect.contract_quantity_confirm_balance');
-    // this.dataSelected = e.currentTarget.data;
-    // this.pageSelected = 'confirmDetail';
+    // console.log(this.dataForSelect);
+    // console.log(e.currentTarget.data.fee_det_id);
+    let fee_det_id = e.currentTarget.data.fee_det_id;
+    this.fire('toast',{status:'load'});
+    this.async(()=>{
+      this.read('./g2g/fee/detail/id/'+fee_det_id,(data)=>{
+        this.fire('toast',{status:'load'});
+        this.dataSelected=data;
+        this.notifyPath('dataSelected');
+        this.pageSelected='feeDetail';
+      });
+    },500);
   },
-  _backPageConfirm:function (data) {
+  _backPageFeedetail:function (data) {
     this.pageSelected='listOfFeedetail';
   }
 

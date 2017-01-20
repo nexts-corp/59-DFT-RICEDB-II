@@ -1,0 +1,114 @@
+<dom-module id="fee-management-detail">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    div.content{
+      margin: 15px 0px;
+    }
+  </style>
+  <template>
+    <template is="dom-if" if="[[isInputDisabled]]">
+      <div class="horizontal end-justified layout">
+        <div class="icon_print">
+          <paper-icon-button id="editFee" class="crud" icon="create" raised on-tap="editFee"  disabled=[[!isInputDisabled]]></paper-icon-button>
+          <paper-tooltip for="editFee" offset="0">Edit Shipment</paper-tooltip>
+          <paper-icon-button id="deleteFee" class="crud" icon="delete" raised on-tap="deleteFee" disabled=[[!isInputDisabled]]></paper-icon-button>
+          <paper-tooltip for="deleteFee" offset="0">Delete Shipment</paper-tooltip>
+        </div>
+      </div>
+    </template>
+
+    <div class="content">
+      <gl-grid-row width="{{getWidth}}">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
+          [[changeString2Num(data.*,'fee_no')]]
+          <!-- disabled="[[isInputDisabled]]" -->
+          <gl-form-input class="required" required disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on"  label="ครั้งที่" value="{{data.fee_no}}" always-float-label error-message="กรุณาใส่ครั้งที่"></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
+          <gl-form-input class="required" required disabled="[[isInputDisabled]]" label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label error-message="กรุณาใส่ชื่อรอบการจ่ายเงิน"></gl-form-input>
+        </gl-grid-col>
+      </gl-grid-row>
+    </div>
+      <div class="horizontal end-justified layout">
+        <template is="dom-if" if="[[isViewSeleted]]">
+          <paper-button raised on-tap="cancelFee" class="gl-btn-default" >ย้อนกลับ</paper-button>
+          <paper-button raised on-tap="saveFee" class="gl-btn-primary" disabled="[[isInputDisabled]]">เพิ่ม</paper-button>
+        </template>
+        <template is="dom-if" if="[[!isViewSeleted]]">
+          <paper-button raised on-tap="cancelFeede" class="gl-btn-danger" >ยกเลิก</paper-button>
+          <paper-button raised on-tap="saveFee" class="gl-btn-success" disabled="[[isInputDisabled]]">บันทึก</paper-button>
+        </template>
+
+      </div>
+  </template>
+  <script>
+  Polymer({
+    is: "fee-management-detail",
+    properties: {
+      data: {
+        type: Object,
+        value:{fee_no:1, fee_name:''},
+      },
+    },
+    behaviors: [
+        g2gModelBehavior,
+        g2gCongtroller
+    ],
+    saveFee:function () {
+      this.data.fee_status = false;
+      this.data.shm_id = this.dataShmId;
+      this._cleanDataFeeManagement(this.data,(data)=>{
+        // console.log(data);
+        this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+        this.insert('./g2g/fee/insert',data, () => {
+          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+           callback:()=>{
+              let contract_id= this._getUrl();
+              // this.fire('close-drawer',{detail:'close-drawer'});
+              this.fire('get-fee-list',{detail:contract_id});
+              this.fire('_get-list-fee',{data:'_get-list-fee'});
+              this.fire('get-fee-list-in-shm-event',{data:data.shm_id});
+              this.cancelFeeDetail();
+          }
+         });
+        });
+      });
+    },
+    editFee:function () {
+      this.isInputDisabled=false;
+    },
+    deleteFee:function () {
+
+    },
+    cancelFeeDetail:function () {
+      let el = Polymer.dom(this.root).querySelectorAll('.required');
+      el.map((el)=> {el.reset();el.value=''});
+
+    },
+    cancelFee:function () {
+      this.cancelFeeDetail();
+      this.isInputDisabled=true;
+      this.fire('_get-list-fee',{data:'_get-list-fee'});
+    },
+    cancelFeede:function () {
+      this.data = this.oldData;
+      this.isInputDisabled=true;
+      let el = Polymer.dom(this.root).querySelectorAll('.required');
+      el.map((el)=> {el.reset();});
+      this.fire('_get-list-fee',{data:'_get-list-fee'});
+    },
+    _cleanDataFeeManagement:function (data,callback) {
+      let el = Polymer.dom(this.root).querySelectorAll('.required');
+      let stat = el.map((el)=> el.validate());
+        if (stat.every(elem => elem == true)) {
+          let {fee_no,fee_name,fee_status,shm_id} = data
+          let newData ={fee_no,fee_name,fee_status,shm_id}
+            callback(newData);
+        }
+
+      }
+    });
+  </script>
+</dom-module>

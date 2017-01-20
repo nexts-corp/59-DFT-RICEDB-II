@@ -1,11 +1,18 @@
+<link rel="import" href="fee-management-list.html">
+<link rel="import" href="fee-management-detail.html">
 <dom-module id="fee-management">
-  <style include="gl-styles">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
       display: block;
     }
   </style>
   <template>
-    <gl-grid-row width="{{getWidth}}">
+    <iron-pages selected="{{pages}}" attr-for-selected="name">
+      <fee-management-list data="[[dataForSelect]]" name="fee-management-list"></fee-management-list>
+      <fee-management-detail data=[[dataSelected]] data-shm-id="[[dataShmId]]" name="fee-management-detail" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isEdit]]"></fee-management-detail>
+      <fee-management-detail data-shm-id="[[dataShmId]]" name="fee-management-detail-add" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isEdit]]"></fee-management-detail>
+    </iron-pages>
+    <!-- <gl-grid-row width="{{getWidth}}">
       <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
         [[changeString2Num(data.*,'fee_no')]]
         <gl-form-input allowed-pattern="[0-9||,||.]" format-number="on"  label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
@@ -15,7 +22,9 @@
       </gl-grid-col>
     </gl-grid-row>
 
-     <paper-button raised on-tap="saveFee" class="gl-btn-success" >บันทึก</paper-button>
+      <div class="horizontal end-justified layout">
+       <paper-button raised on-tap="saveFee" class="gl-btn-success" >บันทึก</paper-button>
+      </div> -->
   </template>
   <script>
     Polymer({
@@ -25,15 +34,33 @@
           type: Object,
           value:{fee_no:0, fee_name:'รอบการจ่ายเงินที่ 2525'},
         },
-        aaa:{
+        dataSelected:{
+          type:Object,
+        },
+        pages:{
           type:String,
-          value:'ddddd'
+          value:'fee-management-list'
         }
+      },
+      listeners:{
+        '_get-fee-mana':'_getFeeMana',
+        '_get-insert-fee':'_getInsertFee',
+        '_get-list-fee':'_getListFee'
       },
       behaviors: [
           g2gModelBehavior,
           g2gCongtroller
       ],
+      _getFeeMana:function (e) {
+        this.dataSelected = e.detail.data;
+        this.pages="fee-management-detail";
+      },
+      _getListFee:function (e) {
+        this.pages="fee-management-list";
+      },
+      _getInsertFee:function (e) {
+        this.pages="fee-management-detail-add";
+      },
       saveFee:function () {
         this.data.fee_status = false;
         this.data.shm_id = this.dataShmId;

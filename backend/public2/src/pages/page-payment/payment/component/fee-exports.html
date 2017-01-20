@@ -10,6 +10,31 @@
       font-family: 'CSChatThaiUI', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
+    paper-tabs{
+      background-color: #fff;
+      color: #808080;
+      border:1px solid #b3b3b3;
+      --paper-tabs-selection-bar:{
+        height: 5px;
+        background-color: var(--gl-info-color);
+      }
+    }
+    paper-tab:focus > div.tab-content{
+      background-color: yellow;
+      opacity: 1;
+      font-weight: 0;
+    }
+    paper-tab:not(:last-of-type) {
+      border-right: 3px solid var(--gl-gray-light-color);
+      font-size: var(--font-size-h5);
+      font-family: 'CSChatThaiUI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    paper-tabs paper-tab.iron-selected {
+      font-size: var(--font-size-h4);
+      color: var(--gl-white-color);
+      background-color: #f7941e;
+    }
   </style>
   <template>
   <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
@@ -22,9 +47,19 @@
       </template>
     </gl-form-panel-head>
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
-        <fee-management data-shm-id="[[data.invoice.0.shm_id]]"></fee-management>
+        <paper-tabs selected="{{pages}}" align-bottom no-slide attr-for-selected="name">
+          <paper-tab name="averagePage">การถัวเฉลี่ยเงิน</paper-tab>
+          <paper-tab name="feeDetail">รอบการจ่ายเงิน</paper-tab>
+        </paper-tabs>
+        <iron-pages selected="{{pages}}" align-bottom no-slide attr-for-selected="name">
 
-    <div class="header flex-center-justified">
+
+        <div name="feeDetail">
+          
+          <fee-management data-for-select="[[dataForSelect.feeListinShm]]" data-shm-id="[[data.invoice.0.shm_id]]"></fee-management>
+        </div>
+    <div name="averagePage">
+      <div class="header flex-center-justified">
        <gl-form-label-input label="" class="inputHeader" value="รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ" ></gl-form-label-input >
      </div>
      <div class="container">
@@ -117,7 +152,9 @@
          <li>FE = ค่าธรรมเนียมธนาคาร</li>
        </ul>
      </div>
-   </gl-form-panel-body>
+
+     </gl-form-panel-body>
+     <!-- <div name="averagePage"> -->
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
@@ -135,7 +172,9 @@
              </div>
            </gl-form-panel-footer>
        </gl-form-panel>
-
+  <!-- </div> -->
+    </div>
+  </iron-pages>
   </template>
   <script>
     Polymer({
@@ -145,6 +184,10 @@
           type: Object,
           value:{}
         },
+        pages:{
+          type:String,
+          value:"averagePage"
+        }
       },
       behaviors: [
           g2gModelBehavior,
