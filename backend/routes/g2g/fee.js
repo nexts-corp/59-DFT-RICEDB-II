@@ -38,9 +38,9 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             .eqJoin('shm_id', r.db('g2g').table('shipment')).pluck("left", { right: ['shm_no', 'shm_name', 'cl_id'] }).zip()
             .eqJoin('cl_id', r.db('g2g').table('confirm_letter')).pluck("left", { right: ['cl_name', 'cl_no', 'contract_id'] }).zip()
             .filter({ 'contract_id': req.params.contract_id })
-            .merge(function(m){
+            .merge(function (m) {
                 return {
-                    fee_id:m('id')
+                    fee_id: m('id')
                 }
             }).without('id')
             .run(conn, function (err, cursor) {
@@ -59,12 +59,35 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             });
     })
 })
+router.get('/shm/id/:shm_id', function (req, res, next) {
+    db.query(function (conn) {
+        r.db('g2g').table('fee')
+            .getAll(req.params.shm_id, { index: 'shm_id' })
+            .merge({ fee_id: r.row('id') })
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 router.get('/id/:id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('fee')
             .get(req.params.id)
             .merge(function (fee_merge) {
                 return {
+                    fee_id: fee_merge('id'),
                     fee_detail: r.db('g2g').table('fee_detail').getAll(fee_merge('id'), { index: 'fee_id' })
                         .coerceTo('array')
                         .merge(function (inv_merge) {
@@ -85,7 +108,7 @@ router.get('/id/:id', function (req, res, next) {
                         })
                         .without('invoice')
                 }
-            })
+            }).without('id')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     res.json(cursor);
