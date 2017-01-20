@@ -157,8 +157,10 @@
      <!-- <div name="averagePage"> -->
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
+               <paper-button raised on-tap="approvePayment" class="gl-btn-danger">ยกเลิกยืนยัน</paper-button>
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
                <paper-button raised on-tap="cancelFeeReturn" class="gl-btn-default" >ย้อนกลับ</paper-button>
+
                <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยืนยัน</paper-button>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
@@ -240,14 +242,12 @@
         // this.fire('close-drawer',{detail:'close-drawer'});
       },
       cancelFeeReturn:function () {
-        console.log(11);
         this.fire('back-page-fee-detail',{data:'_get-list-fee'});
       },
       addPayment:function () {
         this.data.fee_det_status = false;
         // fee_id
         this._clearDatafee(this.data,'insert',(data)=>{
-          console.log(data);
             // data.invoice_status = true;
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
             // console.log(11);
@@ -293,7 +293,6 @@
       },
       approvePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
-          console.log(data);
             data.fee_det_status = this.approve(data.fee_det_status);
             data.id=this.data.fee_det_id;
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
