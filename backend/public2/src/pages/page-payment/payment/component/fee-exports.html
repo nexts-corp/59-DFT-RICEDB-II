@@ -1,5 +1,6 @@
 <link rel="import" href="fee-exports-sum.html">
 <link rel="import" href="fee-exports-invoice.html">
+<link rel="import" href="fee-management.html">
 <dom-module id="fee-exports">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
@@ -21,17 +22,22 @@
       </template>
     </gl-form-panel-head>
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+        <fee-management data-shm-id="[[data.invoice.0.shm_id]]"></fee-management>
+
     <div class="header flex-center-justified">
        <gl-form-label-input label="" class="inputHeader" value="รายละเอียดค่าข้าวและค่าใช้จ่ายส่งมอบ" ></gl-form-label-input >
      </div>
      <div class="container">
        <gl-grid-row width="{{getWidth}}">
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
-           [[changeString2Num(data.*,'fee_no')]]
-           <gl-form-input class="required" required autofocus allowed-pattern="[0-9||,||.]" format-number="on" disabled="[[isInputDisabled]]" label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
+           <!-- [[changeString2Num(data.*,'fee_no')]] -->
+           <gl-form-input class="required" required allowed-pattern="[0-9||,||.]" format-number="on" disabled label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
-           <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>
+           <gl-combo-box class="required" required error-message="กรุณาชื่อรอบการจ่ายเงิน" placeholder="เลือกชื่อรอบการจ่ายเงิน" label="ชื่อรอบการจ่ายเงิน"
+             item-label-path="fee_name" item-value-path="fee_id" value="{{data.fee_id}}" items="[[data.feeList]]" on-value-changed="_getFeeName">
+           </gl-combo-box >
+           <!-- <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input> -->
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <vaadin-date-picker class="required" required  disabled="[[isInputDisabled]]"label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}" always-float-label></vaadin-date-picker>
@@ -148,6 +154,17 @@
         '_invoicePage(data.invoice)',
         '_changeDataFee(data.fee_date_receipt)'
       ],
+      _getFeeName:function (e) {
+        // console.log(e.currentTarget.value);
+        try {
+          let select = e.currentTarget.value;
+          let num = this.data.feeList.filter((data) =>data.fee_id == select)[0];
+          this.data.fee_no = num.fee_no;
+          this.notifyPath('data.fee_no');
+        } catch (e) {
+        // console.log(e);
+        }
+      },
       _changeDataFee:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.fee_date_receipt', date);
@@ -180,12 +197,13 @@
         // this.fire('close-drawer',{detail:'close-drawer'});
       },
       addPayment:function () {
+        this.data.fee_det_status = false;
         this._clearDatafee(this.data,'insert',(data)=>{
-            data.fee_status = false;
+          console.log(data);
             // data.invoice_status = true;
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
-            console.log(11);
-            this.insert('./g2g/fee/insert',data, () => {
+            // console.log(11);
+            this.insert('./g2g/feedetail/insert',data, () => {
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                   let shmid= this._getUrl();
@@ -241,7 +259,7 @@
       },
       _approveFee:function(result,detail){
          if (result == true) {
-           console.log(detail.data);
+          //  console.log(detail.data);
            this.update('./g2g/fee/update',detail.data, () => {
                this.fire('refresh-contract',{detail:'refresh-contract'});
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
@@ -279,14 +297,14 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-          let {rate_bank,rate_tt,fee_other,fee_no,fee_name,fee_internal,fee_foreign}=data;
-          let newData={rate_bank,rate_tt,fee_other,fee_no,fee_name,fee_internal,fee_foreign};
+          let {rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt}=data;
+          let newData={rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt};
           newData.invoice=[];
           this.data.invoice.map((el,indexShmid)=>{
             if (action == 'insert') {
-              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+              // this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
             } else if (action == 'delete') {
-              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+              // this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
             }
             newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
             el.invoice_detail.map((shmDet,indexshmdet)=>{
@@ -299,7 +317,7 @@
             });
           });
           el.map((el)=> {el.reset();});
-          newData.fee_date_receipt = new Date(this.data.fee_date_receipt);
+          newData.fee_date_receipt = new Date(newData.fee_date_receipt);
           callback(newData);
         }
       },
@@ -320,9 +338,9 @@
         // invoice_no:"invoice15-2"
         // invoice_status:false
         // made_out_to:"invoice15-2"
-        let shmId = this._getUrl();
+        let contractId = this._getUrl();
         this.update('./g2g/invoice/update',data, () => {
-          this.fire('get-invoice-list',{detail:shmId});
+          this.fire('get-invoice-list',{detail:contractId});
         });
       },
 

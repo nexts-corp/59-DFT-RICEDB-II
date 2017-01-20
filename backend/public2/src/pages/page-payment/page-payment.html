@@ -36,16 +36,16 @@
         <paper-material elevation="1">
           <taps-payment>
             <section-content name="bl">
-              <list-of-bl-pm data="[[dataListPay.blShipment]]" name-contract="[[nameContract]]"></list-of-bl-pm>
+              <list-of-bl-pm data="[[dataListPay.blShipment]]" name-contract="[[dataForSeleted.nameContract]]"></list-of-bl-pm>
             </section-content>
             <section-content name="invoice">
-              <list-of-invoice data="[[dataListPay.invoiceList]]" name-contract="[[nameContract]]"></list-of-invoice>
+              <list-of-invoice data="[[dataListPay.invoiceList]]" name-contract="[[dataForSeleted.nameContract]]"></list-of-invoice>
             </section-content>
             <section-content name="fee">
-              <list-of-fee data="[[dataListPay.feeList]]" name-contract="[[nameContract]]"></list-of-fee>
+              <list-of-fee data="[[dataListPay.feeList]]" name-contract="[[dataForSeleted.nameContract]]"></list-of-fee>
             </section-content>
             <section-content name="payment">
-              <payment-export name-contract="[[nameContract]]"></payment-export>
+              <payment-export name-contract="[[dataForSeleted.nameContract]]"></payment-export>
             </section-content>
           </taps-payment>
         </paper-material>
@@ -81,8 +81,9 @@
                 nylonBehavior
             ],
             properties: {
-              nameContract:{
-                type: String,
+              dataForSeleted:{
+                type: Object,
+                value:{nameContract:''}
               },
               dataListPay: {
                 type: Object,
@@ -94,7 +95,7 @@
               },
               dataSelectedfee: {
                 type: Object,
-                value:{}
+                value:{draft:{shmId:'',rate_tt:0,rate_bank:0,fee_internal:0,fee_foreign:0,fee_other:0}}
               },
               paymentsPageSeleted:{
                 type:String,
@@ -143,14 +144,20 @@
               // console.log(cookie);
               let url;
               cookie.map((ee)=>{
-                ee.charAt(0) == ' ' ? this.nameContract = ee.split('=')[1] : url = ee.split('=')[1];
-                // if (ee.charAt(0) == ' ') {
-                //   this.nameContract = ee.split('=')[1];
-                // }
-                // if (ee.indexOf("url") == 0 ) {
-                //   ee = ee.split('=')[1];
-                //   url=ee;
-                // }
+                // ee.charAt(0) == ' ' ?
+                //   this.dataForSeleted.nameContract = ee.split('=')[1]
+                //   this.notifyPath('dataForSeleted.nameContract')
+                //  : url = ee.split('=')[1];
+                if (ee.charAt(0) == ' ') {
+                  this.dataForSeleted.nameContract = ee.split('=')[1];
+                  this.notifyPath('dataForSeleted.nameContract');
+                } else if (ee.indexOf("url") == 0 ) {
+                  url = ee.split('=')[1];
+                  // this.dataSelectedfee.draft.
+                  this.dataForSeleted.shmId=url;
+                  // console.log(this.dataForSeleted.shmId);
+                  this.notifyPath('dataForSeleted.shmId');
+                }
               });
               return url;
             },
@@ -179,6 +186,9 @@
               this.read('./g2g/fee/contract/id/'+shmId,(data)=>{
                 this.dataListPay.feeList=data;
                 this.notifyPath('dataListPay.feeList');
+                this.dataForSeleted.feeList=data;
+                // console.log('fdfsd',this.dataSelectedfee.draft.feeList);
+                this.notifyPath('dataForSeleted.feeList');
               });
             },
             _getBlDetail:function (e) {
@@ -253,6 +263,8 @@
                 this.dataSelectedfee.draft.fee_internal=0;
                 this.dataSelectedfee.draft.fee_foreign=0;
                 this.dataSelectedfee.draft.fee_other=0;
+                this.dataSelectedfee.draft.shmId=this.dataForSeleted.shmId;
+                this.dataSelectedfee.draft.feeList=this.dataForSeleted.feeList;
                 this.notifyPath('dataSelectedfee.draft');
                 this.paymentsPageSeleted = 'blInvoicePage';
                 if (this.checkRenderPage.feeExports != true) {

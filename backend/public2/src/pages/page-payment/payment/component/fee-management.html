@@ -1,0 +1,62 @@
+<dom-module id="fee-management">
+  <style include="gl-styles">
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <gl-grid-row width="{{getWidth}}">
+      <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
+        [[changeString2Num(data.*,'fee_no')]]
+        <gl-form-input allowed-pattern="[0-9||,||.]" format-number="on"  label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
+      </gl-grid-col>
+      <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
+        <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>
+      </gl-grid-col>
+    </gl-grid-row>
+
+     <paper-button raised on-tap="saveFee" class="gl-btn-success" >บันทึก</paper-button>
+  </template>
+  <script>
+    Polymer({
+      is: "fee-management",
+      properties: {
+        data: {
+          type: Object,
+          value:{fee_no:0, fee_name:'รอบการจ่ายเงินที่ 2525'},
+        },
+        aaa:{
+          type:String,
+          value:'ddddd'
+        }
+      },
+      behaviors: [
+          g2gModelBehavior,
+          g2gCongtroller
+      ],
+      saveFee:function () {
+        this.data.fee_status = false;
+        this.data.shm_id = this.dataShmId;
+        this._cleanDataFeeManagement(this.data,(data)=>{
+          console.log(data);
+          this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+          this.insert('./g2g/fee/insert',data, () => {
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+             callback:()=>{
+                let contract_id= this._getUrl();
+                // this.fire('close-drawer',{detail:'close-drawer'});
+                this.fire('get-fee-list',{detail:contract_id});
+            }
+           });
+          });
+        });
+      },
+      _cleanDataFeeManagement:function (data,callback) {
+      let {fee_no,fee_name,fee_status,shm_id} = data
+      let newData ={fee_no,fee_name,fee_status,shm_id}
+      callback(newData);
+
+      }
+    });
+  </script>
+</dom-module>
