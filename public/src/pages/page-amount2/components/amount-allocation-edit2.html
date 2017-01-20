@@ -1,0 +1,260 @@
+<link rel="import" href="../../../../../bower_components/gl-form/gl-form-panel.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
+<link rel="import" href="./../../components/month-behavior.html">
+
+<dom-module id="amount-allocation-edit2">
+	<style is="custom-style" include="iron-flex iron-flex-alignment gl-color">
+		.title {
+			background-color: orange;
+			color: white;
+			padding: 10px;
+		}
+		*{
+			text-align: left;
+			font-family: 'rsuregular', sans-serif;
+			-webkit-font-smoothing: antialiased;
+		}
+		table.default {
+			border-collapse: collapse;
+			width: 100%
+		}
+		
+		table.default,
+		th,
+		td {
+			border-bottom: 1px solid #ddd;
+		}
+		
+		th,
+		td {
+			padding: 15px;
+		}
+		
+		th {
+			text-align: center;
+			background-color: #F1F1F1;
+			white-space: nowrap;
+		}
+		
+		td {
+			text-align: left;
+			white-space: nowrap;
+		}
+		
+		tr:hover {
+			background-color: #F1F1F1;
+		}
+		
+		.number {
+			text-align: right;
+		}
+		
+		.textHeader {
+			padding: 20px;
+			text-align: center;
+			font-size: 22px;
+		}
+		.right{
+			width: 70%;
+			--paper-input-container-input:{
+				text-align:right;
+			}
+		}
+		paper-button{
+			 font-family: 'CSChatThaiUI', sans-serif !important;
+      -webkit-font-smoothing: antialiased;
+		}
+	</style>
+	<template>
+		<gl-form-panel set-padding="0px 0px 20px 0px">
+			<div class="title">รายละเอียดการจัดสรรโควตา</div>
+			<gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+						<gl-form-input label="ปีโควตา" value="{{dataQuota.quota_id}}" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+						<gl-form-input label="ประเภทข้าว" value="{{dataQuota.type_rice_id}}" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+						<gl-form-input label="การคำนวณครั้งที่" value="{{dataQuota.ordinal_number}}" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+				</gl-grid-row>
+
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+						<gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="{{dataSelect.seller_tax_id}}" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+						<gl-form-input label="บริษัท" value="{{dataSelect.name}}" id="" disabled name=""></gl-form-input>
+					</gl-grid-col>
+				</gl-grid-row>
+
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+						<!--<div>ยอดปรับปรุง</div>-->
+					</gl-grid-col>
+				</gl-grid-row>
+
+			</gl-form-panel-body>
+		</gl-form-panel>
+
+			<gl-form-panel set-padding="0px 0px 20px 0px">
+					<div class="title">ดำเนินการจัดสรรโควตา</div>
+					<gl-form-panel-body set-padding="0px 0px 0px 0px" set-border="0px">
+					<template is="dom-repeat" items="{{dataSelect.quantity}}">
+         
+					<gl-grid-row width="{{getWidth}}">
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+							<gl-form-input class="right" label="งวดที่ [[item.period]] [[getMonthName(item.month)]]" value="{{formatNumber(item.weigth_cal)}}" disabled></gl-form-input>
+						</gl-grid-col>
+							<!--<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>-->
+						<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+							<gl-form-input class="saveData right" required label="ยอดปรับปรุง" allowed-pattern="[0-9||,||.]" format-number="on" error-message="กรุณาระบุยอดปรับปรุง" always-float-label value="{{item.weigth_update}}"></gl-form-input>
+						</gl-grid-col>
+						
+					</gl-grid-row>
+
+					</template>
+         
+         
+				<gl-grid-row width="{{getWidth}}">
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+						<!--<gl-form-input label="ปริมาณโควตารวม" id="" disabled name="" value="{{dataSelect.quantity}}"></gl-form-input>-->
+						<gl-form-input class="right" label="ปริมาณโควตารวม" always-float-label id="" disabled name="" value="{{formatNumber(dataSelect.amount_cal)}}"></gl-form-input>
+						<!--<div style="font-size:20px; margin-top:24px;">ปริมาณโควตารวม</div>-->
+					</gl-grid-col>
+					<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+						<gl-form-input class="saveData right" label="ยอดปรับปรุงรวม" format-number="on" always-float-label value="[[_sumAllocationUpdate(dataSelect.quantity.*,'weigth_update')]]" disabled></gl-form-input>
+					</gl-grid-col>
+				</gl-grid-row>
+					</gl-form-panel-body>
+			</gl-form-panel>
+
+		<div class="horizontal end-justified layout">
+			<paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+			<paper-button class="gl-btn-success" on-tap="_saveData" raised>บันทึก</paper-button>
+		</div>
+
+	</template>
+	<script>
+    Polymer({
+      is: "amount-allocation-edit2",
+			 behaviors: [
+        FormatNumberBehavior,
+      	MonthBehavior
+      ],
+      properties:{
+        oldAnswer:{
+          type: String
+        },
+        newAnswer:{
+          type: String
+        },
+        data:{
+          type: String
+        },
+				dataSelect:{
+					type: Array,
+					// observer: 'getDataSelect'
+				},
+				dataQuota:{
+					type: Object
+				}
+      },
+			 _num:function(index){
+        return index+1;
+      },
+			// getDataSelect:function(data){
+			// 	this.oldQuantity = data.quantity.map((item)=>{
+			// 		return item.weigth_update;
+			// 	});
+			// 		console.log('dataSelect',this.oldQuantity);
+			// },
+      _sumAllocation:function(item,key){
+        var answer = 0;
+        // console.log(item.base);
+        
+        item.base.map((data)=>{
+          // console.log(data[key]);
+          answer += parseFloat(data[key]);
+        })
+        // console.log(answer);
+				this.sumAllocation = answer;
+        return this.formatNumber(answer);
+      },
+			_sumAllocationUpdate:function(item,key){
+				// console.log(this.dataSelect);
+				var newQuantity = item.base.map((item)=>{
+					return this.unFormat(item.weigth_update) == this.unFormat(item.weigth);
+				});
+				var chkArray = function(newQuantity){
+					return newQuantity == true;
+				}
+				if(newQuantity.every(chkArray)==true){
+					this.amountUpdate = this.dataSelect.amount;
+					return this.dataSelect.amount;
+				}
+				else {
+			
+					var answer = 0;
+					item.base.map((data)=>{
+					
+						answer += parseFloat(this.unFormat(data[key]));
+					})
+					// console.log(answer);
+					this.dataSelect.quantity_update = answer;
+					// console.log(isNaN(answer));
+					if(isNaN(answer) == true){
+						return '';
+					}
+					else {
+						this.amountUpdate = answer;
+						return answer;
+					}
+				}
+      },
+			_saveData:function(){
+				// this.fire('post-data')
+				var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+        		return  item.validate();
+				});
+				var chkStat = function(stat){
+						return stat == true
+				};
+				if(stat.every(chkStat) == true){
+						// var perData = {};
+						// for(key in this.dataSelect){
+						// 	if(key!="seller_name_th" && key!="seller_tax_id"){
+						// 		perData[key] = this.dataSelect[key]
+						// 	}
+						// }
+						var saveQuantity = this.dataSelect.quantity.map((item)=>{
+							var {period,weigth,weigth_cal,weigth_update} = item;
+							var newData = {period,weigth,weigth_cal,weigth_update};
+							newData.weigth_update = this.unFormat(item.weigth_update);
+							return newData;
+						}) 
+						
+						var datas = {
+							quantity : saveQuantity,
+							id : this.dataSelect.id,
+							amount : this.dataSelect.amount,
+							amount_update : this.amountUpdate
+						}
+						// console.log('perData',datas);
+						this.fire('post-data',datas);
+						// console.log(this.dataSelect);
+				}
+			
+			}
+    });
+  </script>
+</dom-module>
