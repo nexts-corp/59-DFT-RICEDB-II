@@ -35,7 +35,7 @@
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <gl-combo-box class="required" required error-message="กรุณาชื่อรอบการจ่ายเงิน" placeholder="เลือกชื่อรอบการจ่ายเงิน" label="ชื่อรอบการจ่ายเงิน"
-             item-label-path="fee_name" item-value-path="fee_id" value="{{data.fee_id}}" items="[[data.feeList]]" on-value-changed="_getFeeName">
+             item-label-path="fee_name" item-value-path="fee_id" value="{{data.fee_id}}" items="[[dataForSelect.feeListinShm]]" on-value-changed="_getFeeName">
            </gl-combo-box >
            <!-- <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input> -->
          </gl-grid-col>
@@ -198,12 +198,13 @@
       },
       addPayment:function () {
         this.data.fee_det_status = false;
+        // fee_id
         this._clearDatafee(this.data,'insert',(data)=>{
           console.log(data);
             // data.invoice_status = true;
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
             // console.log(11);
-            this.insert('./g2g/feedetail/insert',data, () => {
+            this.insert('./g2g/fee/detail/insert',data, () => {
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                   let shmid= this._getUrl();
@@ -297,8 +298,8 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-          let {rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt}=data;
-          let newData={rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt};
+          let {rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt,fee_id}=data;
+          let newData={rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt,fee_id};
           newData.invoice=[];
           this.data.invoice.map((el,indexShmid)=>{
             if (action == 'insert') {

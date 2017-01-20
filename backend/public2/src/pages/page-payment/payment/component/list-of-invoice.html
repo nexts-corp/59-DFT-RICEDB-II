@@ -52,7 +52,7 @@
                 <template is="dom-repeat" items="{{payment.invoice_detail}}">
                   <tr >
                     <!-- disabled="[[_checkDisabled(shipid,payment.shm_id,item.invoice_id)]]" -->
-                    <td><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shm-id="{{payment.shm_id}}" on-tap="checkData" ></paper-checkbox></td>
+                    <td><paper-checkbox id="[[index]]"class="checkBox" data="{{item}}" shm-id="{{payment.shm_id}}" on-tap="checkData" ></paper-checkbox></td>
                     <td data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
                     <td data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
                     <td data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
@@ -111,7 +111,7 @@
         '_cleanCheckBox(data)'
       ],
       _cleanCheckBox:function (data) {
-        console.log(data);
+        // console.log(data);
         let checkDisabled = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-disabled="true"]');
         checkDisabled.map((el)=>{
             el.disabled=false;
@@ -152,8 +152,7 @@
       },
       payMoney:function () {
         let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
-        //adddraft.html
-        this.fire('get-select-draftPayment', {detail: check});
+        this.fire('get-select-draftPayment', {detail: check,});
       }
     });
   </script>
