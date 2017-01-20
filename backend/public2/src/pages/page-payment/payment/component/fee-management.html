@@ -30,10 +30,6 @@
     Polymer({
       is: "fee-management",
       properties: {
-        data: {
-          type: Object,
-          value:{fee_no:0, fee_name:'รอบการจ่ายเงินที่ 2525'},
-        },
         dataSelected:{
           type:Object,
         },
@@ -61,29 +57,6 @@
       _getInsertFee:function (e) {
         this.pages="fee-management-detail-add";
       },
-      saveFee:function () {
-        this.data.fee_status = false;
-        this.data.shm_id = this.dataShmId;
-        this._cleanDataFeeManagement(this.data,(data)=>{
-          console.log(data);
-          this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
-          this.insert('./g2g/fee/insert',data, () => {
-            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-             callback:()=>{
-                let contract_id= this._getUrl();
-                // this.fire('close-drawer',{detail:'close-drawer'});
-                this.fire('get-fee-list',{detail:contract_id});
-            }
-           });
-          });
-        });
-      },
-      _cleanDataFeeManagement:function (data,callback) {
-      let {fee_no,fee_name,fee_status,shm_id} = data
-      let newData ={fee_no,fee_name,fee_status,shm_id}
-      callback(newData);
-
-      }
     });
   </script>
 </dom-module>
