@@ -92,9 +92,45 @@ router.get('/id/:id', function (req, res, next) {
                         .coerceTo('array')
                         .merge(function (inv_merge) {
                             return {
-                                invoice: inv_merge('invoice').merge(function (inv_merge2) {
-                                    return r.db('g2g').table('invoice').get(inv_merge2('invoice_id'))
-                                }),
+                                invoice: inv_merge('invoice').merge(function (inv_det_merge) {
+                                    return r.db('g2g').table('invoice').get(inv_det_merge('invoice_id'))
+                                }).merge(function (inv_det_merge) {
+                                    return {
+                                        invoice_detail: inv_det_merge('invoice_detail').merge(function (shm_det_merge) {
+                                            return r.db('g2g').table('shipment_detail').get(shm_det_merge('shm_det_id'))
+                                                .pluck('package_id', 'type_rice_id', 'shm_det_quantity', 'shm_id')
+                                                .merge(function (shm_det_merge) {
+                                                    return r.db('g2g').table("shipment").get(shm_det_merge('shm_id')).pluck("cl_id")
+                                                        .do(function (cl_do) {
+                                                            return r.db('g2g').table("confirm_letter").get(cl_do('cl_id')).pluck("cl_type_rice")
+                                                        })
+                                                })
+                                                .merge(function (shm_det_merge) {
+                                                    return {
+                                                        price_per_ton: shm_det_merge('cl_type_rice')
+                                                            .filter(function (tb) {
+                                                                return tb('type_rice_id').eq(shm_det_merge('type_rice_id'))
+                                                            }).getField("package")(0)
+                                                            .filter(function (f) {
+                                                                return f('package_id').eq(shm_det_merge('package_id'))
+                                                            })(0)
+                                                            .pluck('price_per_ton')
+                                                            .values()(0)
+                                                    }
+                                                })
+                                                .merge(function (usd_merge) {
+                                                    return {
+                                                        usd_value: usd_merge('price_per_ton').mul(usd_merge('shm_det_quantity'))
+                                                    }
+                                                })
+                                                .without('cl_type_rice')
+                                        })
+                                    }
+                                })
+                                    .merge(function (inv_det_merge) {
+                                        return { usd_value: inv_det_merge('invoice_detail').sum('usd_value') }
+                                    })
+                                    .pluck('usd_value', 'invoice_no'),
                                 fee_det_id: inv_merge('id')
                             }
                         })
@@ -104,7 +140,9 @@ router.get('/id/:id', function (req, res, next) {
                                     .reduce(function (left, right) {
                                         return left.add(', ', right)
                                     }),
-                                invoice_count: inv_merge('invoice').getField('invoice_no').count()
+                                invoice_count: inv_merge('invoice').getField('invoice_no').count(),
+                                usd_value: inv_merge('invoice').sum('usd_value'),
+                                fee_date_receipt: inv_merge('fee_date_receipt').split('T')(0)
                             }
                         })
                         .without('invoice', 'id')
