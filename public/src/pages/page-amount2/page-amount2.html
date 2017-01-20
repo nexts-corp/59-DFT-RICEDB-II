@@ -113,7 +113,8 @@
             </div>
           </div>
           <div class="flex title">
-            ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท
+            ปริมาณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรปรายบริษัท <br>
+            [[testx]] &nbsp;&nbsp;&nbsp;&nbsp; <button on-tap="changeName">change</button>
           </div>
           <div class="flex searchBox searchBorder">
             <div class="layout horizontal">
@@ -158,12 +159,11 @@
         }
 
         const reducer = (state,action) => {
-          console.log(state)
+          console.log(action,'aaaaa');
           if(!state) return initialState; 
-
           switch (action.type) {
           case 'CHANGE_NAME':
-            state.testza = 'nk'
+            state.testza = action.name
             return state
           default:
             return state
@@ -171,24 +171,61 @@
 
         }
 
-        
-
-        const store = Redux.createStore(reducer);
-        
-        const action1 = function(){
-          return { type: 'CHANGE_NAME' };
+        const initialState2 = {
+          xx:'aa'
         }
 
-        store.dispatch(action1())
+        const reducer2 = (state,action) => {
+          console.log(action,'ssssss');
+          if(!state) return initialState2; 
+          switch (action.type) {
+          case 'CHANGE_NAME2':
+            state.xx = action.name
+            return state
+          default:
+            return state
+          }
+
+        }
+
+        const rootReducer = Redux.combineReducers({
+          x:reducer,
+          y:reducer2
+        });
+
+
+        const store = Redux.createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+        const ReduxBehavior = PolymerRedux(store);
 
         Polymer({
             is: "page-amount2",
             behaviors:[
-              nylonBehavior
+              nylonBehavior,
+              ReduxBehavior
             ],
             observers:[
               '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
-            ],  
+            ],
+            properties:{
+              testx:{
+                type:String,
+                statePath:'x.testza'
+              }
+            },
+            actions:{
+              change:function(name){
+                return {
+                  type:'CHANGE_NAME',
+                  name:name,
+                  x:'aaaa'
+                }
+              }
+            },
+            changeName:function(){
+              this.dispatch('change','ton')
+            },
+
+
             nylonPageActive:function(){
               this._getQuotaYear();
               this._getTypeRice();
