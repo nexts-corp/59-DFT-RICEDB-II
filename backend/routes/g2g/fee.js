@@ -94,7 +94,8 @@ router.get('/id/:id', function (req, res, next) {
                             return {
                                 invoice: inv_merge('invoice').merge(function (inv_merge2) {
                                     return r.db('g2g').table('invoice').get(inv_merge2('invoice_id'))
-                                })
+                                }),
+                                fee_det_id: inv_merge('id')
                             }
                         })
                         .merge(function (inv_merge) {
@@ -106,7 +107,7 @@ router.get('/id/:id', function (req, res, next) {
                                 invoice_count: inv_merge('invoice').getField('invoice_no').count()
                             }
                         })
-                        .without('invoice')
+                        .without('invoice', 'id')
                 }
             }).without('id')
             .run(conn, function (err, cursor) {
