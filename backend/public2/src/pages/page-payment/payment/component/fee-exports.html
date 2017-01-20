@@ -157,11 +157,16 @@
      <!-- <div name="averagePage"> -->
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
-               <paper-button raised on-tap="approvePayment" class="gl-btn-danger">ยกเลิกยืนยัน</paper-button>
+
+
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
                <paper-button raised on-tap="cancelFeeReturn" class="gl-btn-default" >ย้อนกลับ</paper-button>
-
-               <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยืนยัน</paper-button>
+               <template is="dom-if" if="[[data.fee_det_status]]">
+                  <paper-button raised on-tap="approvePayment" class="gl-btn-danger">ยกเลิกยืนยัน</paper-button>
+               </template>
+                <template is="dom-if" if="[[!data.fee_det_status]]">
+                 <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยืนยัน</paper-button>
+               </template>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
                  <paper-button raised class="gl-btn-danger" on-tap="cancelFee" hidden="[[!isViewSeleted]]">ยกเลิก</paper-button>
@@ -197,8 +202,12 @@
       ],
       observers:[
         '_invoicePage(data.invoice)',
-        '_changeDataFee(data.fee_date_receipt)'
+        '_changeDataFee(data.fee_date_receipt)',
+        '_getFeeNo(data.*)'
       ],
+      _getFeeNo:function (data) {
+        this.data.fee_no = this.data.fee_no;
+      },
       _getFeeName:function (e) {
         // console.log(e.currentTarget.value);
         try {
@@ -257,7 +266,8 @@
                   let shmid= this._getUrl();
                   this.fire('close-drawer',{detail:'close-drawer'});
                   this.fire('get-fee-list',{detail:shmid});
-                  // this.editInput();
+                  let el = Polymer.dom(this.root).querySelectorAll('.required');
+                  el.map((el)=> {el.reset();});
               }
              });
             });
@@ -285,6 +295,8 @@
              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                  this.editInput();
+                 let el = Polymer.dom(this.root).querySelectorAll('.required');
+                 el.map((el)=> {el.reset();});
                    //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
                  }
              });
@@ -307,12 +319,14 @@
       _approveFee:function(result,detail){
          if (result == true) {
            this.update('./g2g/fee/detail/update',detail.data, () => {
+             console.log(detail.data.id);
                this.fire('refresh-contract',{detail:'refresh-contract'});
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
-                    this.fire('close-drawer',{detail:'close-drawer'})
+                    // this.fire('close-drawer',{detail:'close-drawer'})
                     let contract_id= this._getUrl();
                     this.fire('get-fee-list',{detail:contract_id});
+                    this.fire('get-fee-list-detail',{detail:detail.data.id});
                   }
                 });
             });
@@ -340,13 +354,13 @@
        }
     },
       _clearDatafee:function (data,action,callback) {
-        console.log(11);
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
           let {rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt,fee_id}=data;
           let newData={rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt,fee_id};
           newData.invoice=[];
+          newData.fee_date_receipt = new Date(newData.fee_date_receipt);
           this.data.invoice.map((el,indexShmid)=>{
             if (action == 'insert') {
               this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
@@ -363,8 +377,8 @@
                                   });
             });
           });
-          el.map((el)=> {el.reset();});
-          newData.fee_date_receipt = new Date(newData.fee_date_receipt);
+          // el.map((el)=> {el.reset();});
+
           callback(newData);
         }
       },

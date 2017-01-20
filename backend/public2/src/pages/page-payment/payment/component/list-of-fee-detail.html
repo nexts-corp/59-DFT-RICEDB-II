@@ -100,6 +100,7 @@ Polymer({
   ],
   listeners:{
     'back-page-fee-detail':'_backPageFeedetail',
+    'get-fee-list-detail':'_getFeeList'
   },
   properties: {
     pageSelected: {
@@ -113,6 +114,13 @@ Polymer({
     dataSelected: {
       type: Object
     },
+  },
+  _getFeeList:function (e) {
+    this.read('./g2g/fee/detail/id/'+e.detail.detail,(data)=>{
+      this.dataSelected=data;
+      this.notifyPath('dataSelected');
+      this.pageSelected='feeDetail';
+    });
   },
   getFeeDetail:function (e) {
     // console.log(this.dataForSelect);
