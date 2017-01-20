@@ -158,7 +158,7 @@
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
-               <!-- <paper-button raised class="gl-btn-danger" on-tap="closeDrawerFee" hidden="[[isViewSeleted]]">ยกเลิก</paper-button> -->
+               <paper-button raised on-tap="cancelFeeReturn" class="gl-btn-default" >ย้อนกลับ</paper-button>
                <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยืนยัน</paper-button>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
@@ -239,6 +239,10 @@
       closeDrawerFee:function () {
         // this.fire('close-drawer',{detail:'close-drawer'});
       },
+      cancelFeeReturn:function () {
+        console.log(11);
+        this.fire('back-page-fee-detail',{data:'_get-list-fee'});
+      },
       addPayment:function () {
         this.data.fee_det_status = false;
         // fee_id
@@ -261,8 +265,7 @@
       },
       savePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
-            data.id=this.data.fee_id;
-            data.fee_status = false;
+            data.id=this.data.fee_det_id;
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
                 text:'ต้องการแก้ไขข้อมูลใช่หรือไม่ ?',
@@ -275,8 +278,8 @@
       _editFee:function (result,detail){
          if (result == true) {
           //  console.log(detail.data);
-          //  console.log(this.data);
-           this.update('./g2g/fee/update',detail.data, () => {
+          //  console.log(detail.data);
+           this.update('./g2g/fee/detail/update',detail.data, () => {
              let contract_id= this._getUrl();
              this.fire('get-fee-list',{detail:contract_id});
              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
@@ -290,8 +293,8 @@
       },
       approvePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
-            data.rate_tt=12;
-            // data.fee_status = true;
+          console.log(data);
+            data.fee_det_status = this.approve(data.fee_det_status);
             data.id=this.data.fee_det_id;
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
@@ -347,9 +350,9 @@
           newData.invoice=[];
           this.data.invoice.map((el,indexShmid)=>{
             if (action == 'insert') {
-              // this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
             } else if (action == 'delete') {
-              // this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
             }
             newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
             el.invoice_detail.map((shmDet,indexshmdet)=>{
