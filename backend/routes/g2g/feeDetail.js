@@ -85,6 +85,7 @@ var schema = {
         "required": ["fee_id", "fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "rate_bank", "rate_tt", "invoice", "fee_det_status"]
     }
 };
+var validate = ajv.compile(schema);
 router.get('/id/:fee_det_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('fee_detail')
