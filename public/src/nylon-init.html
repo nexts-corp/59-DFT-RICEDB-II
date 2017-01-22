@@ -71,30 +71,12 @@
 	<script>
         Polymer({
             is:'nylon-init',
-			behaviors:[ReduxBehavior],
-			actions:{
-              pullYear:function(data){
-                return {
-                  type:'PULL_YEAR',
-                  payload:data
-                }
-              }
-            },
+			behaviors:[ReduxBehavior,CommonActions],
 			pullYear:function(){
-				
-				axios.get('./common/year')
-				.then((response)=>{
-					var quotaYear = response.data.map(item=>{
-						return item.toString();
-					});
-					this.dispatch('pullYear',quotaYear)
-				})
-				.catch((error)=>{
-					console.log("error");
-				});
+				this.actions.pullYear();
             },
 			onPullYear:function(){
-				this.pullYear();
+				//this.pullYear();
 			},
 			ready:function(){
 				this.pullYear();

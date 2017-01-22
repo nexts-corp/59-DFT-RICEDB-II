@@ -1,32 +1,14 @@
 import {createStore,combineReducers} from 'redux';
 import PolymerRedux from 'polymer-redux'
 
-import reducerAmount from './amount'
-
-const initialState = {
-    year:[]
-}
-
-const reducer = (state,action) => {
-    if(!state) return initialState; 
-    switch (action.type) {
-
-        case 'PULL_YEAR':
-            const year = action.payload;
-            return Object.assign({},state,{year:year});
-        default:
-            return state
-
-    }
-
-}
+import reducerAmount from './reduce/amount'
+import reducerCommon from './reduce/common'
 
 const rootReducer = combineReducers({
-    app:reducer,
+    common:reducerCommon,
     amount:reducerAmount
 });
 
-
-const store = Redux.createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-window.ReduxBehavior = PolymerRedux(store);
+const storeApp = Redux.createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+window.ReduxBehavior = PolymerRedux(storeApp);
 

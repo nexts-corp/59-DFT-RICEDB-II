@@ -59,36 +59,23 @@
 
 	var _polymerRedux2 = _interopRequireDefault(_polymerRedux);
 
-	var _amount = __webpack_require__(26);
+	var _amount = __webpack_require__(25);
 
 	var _amount2 = _interopRequireDefault(_amount);
 
+	var _common = __webpack_require__(26);
+
+	var _common2 = _interopRequireDefault(_common);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var initialState = {
-	    year: []
-	};
-
-	var reducer = function reducer(state, action) {
-	    if (!state) return initialState;
-	    switch (action.type) {
-
-	        case 'PULL_YEAR':
-	            var year = action.payload;
-	            return Object.assign({}, state, { year: year });
-	        default:
-	            return state;
-
-	    }
-	};
-
 	var rootReducer = (0, _redux.combineReducers)({
-	    app: reducer,
+	    common: _common2.default,
 	    amount: _amount2.default
 	});
 
-	var store = Redux.createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-	window.ReduxBehavior = (0, _polymerRedux2.default)(store);
+	var storeApp = Redux.createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+	window.ReduxBehavior = (0, _polymerRedux2.default)(storeApp);
 
 /***/ },
 /* 2 */
@@ -1623,8 +1610,7 @@
 
 
 /***/ },
-/* 25 */,
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1647,6 +1633,58 @@
 	            return state;
 
 	    }
+	};
+
+	exports.default = reducer;
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var initialState = {
+	    year: []
+	};
+
+	var reducer = function reducer(state, action) {
+	    if (!state) return initialState;
+	    switch (action.type) {
+
+	        case 'PULL_YEAR':
+	            var year = action.payload;
+	            return Object.assign({}, state, { year: year });
+	        default:
+	            return state;
+
+	    }
+	};
+
+	window.CommonActions = {
+
+	    actions: {
+
+	        pullYear: function pullYear() {
+
+	            axios.get('./common/year').then(function (response) {
+	                var quotaYear = response.data.map(function (item) {
+	                    return item.toString();
+	                });
+
+	                ReduxBehavior.dispatch({
+	                    type: 'PULL_YEAR',
+	                    payload: quotaYear
+	                });
+	            }).catch(function (error) {
+	                console.log("error");
+	            });
+	        }
+
+	    }
+
 	};
 
 	exports.default = reducer;

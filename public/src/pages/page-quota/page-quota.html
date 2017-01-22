@@ -107,7 +107,7 @@
     Polymer({
       is: 'page-quota',
       observers:['_yearChanged(selectYear)'],
-      behaviors: [nylonBehavior,ReduxBehavior],
+      behaviors: [nylonBehavior,ReduxBehavior,CommonActions],
       properties: {
           layerContent: {
               type: String,
@@ -129,20 +129,12 @@
           },
           quotaYear:{
             type:Object,
-            statePath:'app.year',
-            observer:'xx'
+            statePath:'common.year'
           }
 
       },
-      xx:function(x){
-        //console.log(x);
-        console.log(typeof x,'xxxxx');
-        //this.$.combo.items = x;
-      },
       nylonPageActive:function(){
         //this._getYear();
-
-        
       },
       attached: function(){
         this.layerContent = "addRedRegExporter";
@@ -217,7 +209,7 @@
             this.textToast = 'บันทึกข้อมูลสำเร็จ';
             console.log(response);
             //this._getYear();
-            this.fire('pull-year');
+            this.actions.pullYear();
             this._getDatalist(e.detail.year);
           })
           .catch((error)=>{
@@ -233,7 +225,7 @@
             console.log("success");
             this.textToast = 'แก้ไขข้อมูลสำเร็จ';
             console.log(response);
-            this._getYear();
+            this.actions.pullYear();
             this._getDatalist(e.detail.year);
           })
           .catch((error)=>{
@@ -265,7 +257,7 @@
                 console.log("success");
                 this.textToast = 'ลบข้อมูลสำเร็จ';
                 console.log(response);
-                this.fire('pull-year');
+                this.actions.pullYear();
                 this._getDatalist(this.selectYear);
                 //el.$$('panel-right').close();
               })
