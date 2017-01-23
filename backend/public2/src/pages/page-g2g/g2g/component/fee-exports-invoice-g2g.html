@@ -1,0 +1,290 @@
+<dom-module id="fee-exports-invoice-g2g">
+  <style is="custom-style" include="iron-flex iron-flex-alignment">
+  .flexchild-1 {
+    @apply(--layout-flex);
+    }
+    .flexchild-2 {
+    @apply(--layout-flex-2);
+    }
+    .flexchild-5 {
+    @apply(--layout-flex-5);
+    }
+    .flex-center-justified {
+    @apply(--layout-horizontal);
+    @apply(--layout-center-justified);
+    }
+    .header {
+    text-align: center;
+    }
+    .text {
+    margin-top: 10px;
+    margin-right: 10px;
+    }
+    .setText{
+    font-weight: bold;
+    font-size: 18px;
+    color : #737373;
+    }
+    .inputHeader {
+    width: 40%;
+    }
+    .container {
+    padding: 10px;
+    }
+    table.default {
+    border-collapse: collapse;
+    width: 100%
+    }
+    table.default,
+    th,
+    td {
+    border-bottom: 1px solid #ddd;
+    }
+    th,
+    td {
+    padding: 7px;
+    }
+    th {
+    text-align: center;
+    background-color: #F1F1F1;
+    white-space: nowrap;
+    }
+    td {
+    text-align: left;
+    white-space: nowrap;
+    }
+    tr:hover {
+    background-color: #F1F1F1;
+    }
+    gl-form-input.number{
+      --paper-input-container-input:{
+        text-align: right;
+      }
+    }
+  </style>
+  <template>
+    <gl-form-panel>
+        <gl-form-panel-body set-padding="5px" set-border="0px">
+          <div class="horizontal justified layout">
+               <div>Invoice No : [[data.invoice_no]]</div>
+               <div>Vessel :
+                <template is="dom-repeat" items="[[data.ship]]">
+                  [[item.ship_name]] ,
+                </template>
+               </div>
+               <div>LotNo : [[data.ship_lot_no]]</div>
+               <div style="width:20px"></div>
+               <div>[[invoiceIndex]]/[[invoicePage]]</div>
+          </div>
+        <div style="overflow-x:auto;">
+        <table class="default" >
+          <tr>
+            <th>ผู้ส่งออก</th>
+            <th>เลขที่ใบแจ้งหนี้</th>
+            <th>วันที่ใบแจ้งหนี้</th>
+            <th>จำนวน(ตัน) <br>(1)</th>
+            <th>มูลค่าต่อตัน(USD)<br>(2)</th>
+            <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
+            <th>จำนวนเงิน(บาท)<br>(4)=(3)*[[rateBank]]</th>
+            <th>หักค่า FE (บาท)<br>(5)</th>
+            <th>หักภาษีรายได้ 1 % (บาท)<br> (6)=((4)-(5))*1%</th>
+            <th>คงเหลือ (บาท)<br> (7)=((4)-(5)-(6))</th>
+          </tr>
+          <template is="dom-repeat" items="[[data.invoice_detail]]" as="invoiceDetail">
+            <!-- [[_insertInvoiceDetail(invoiceDetail.shm_det_id)]] -->
+            <tr>
+              <td><gl-form-input disabled style="width:140px;" value="[[invoiceDetail.seller_name_en]]" ></gl-form-input></td>
+              <td>
+                <!-- [[_testArray(invoiceDetail.*)]] -->
+                <gl-form-input disabled="[[isInputDisabled]]" style="width:140px;" value="{{invoiceDetail.invoice_no}}" ></gl-form-input>
+              </td>
+              <td>
+                [[_changeDataPayrf(invoiceDetail.*,invoiceDetail.invoice_date)]]
+                <vaadin-date-picker disabled="[[isInputDisabled]]" style="width:110px;" label="" value="{{invoiceDetail.invoice_date}}" ></vaadin-date-picker>
+              </td>
+                [[_totalQuantityTons(invoiceDetail.quantity_tons,index)]]
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.quantity_tons]]" disabled ></gl-form-input></td>
+                [[_totalPricePerTon(invoiceDetail.price_per_ton,index)]]
+              <td><gl-form-input format-number="on" style="width:140px;text-align:center;" value="[[invoiceDetail.price_per_ton]]" disabled ></gl-form-input></td>
+                [[_totalAmountUsd(invoiceDetail.amount_usd,index)]]
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.amount_usd]]" disabled ></gl-form-input></td>
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalBath(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,index)]]" disabled></gl-form-input></td>
+              <td>
+                [[changeString2Num(invoiceDetail.*,'invoice_fee')]]
+                <!-- [[_averageFees(invoiceDetail.*,invoice_fee)]] -->
+                <!-- [[_averageFee(invoiceDetail.invoice_fee,index,feeTotal,invoice)]] -->
+                [[_totalfee(invoiceDetail.invoice_fee,index)]]
+                <gl-form-input disabled="[[isInputDisabled]]" class="number" format-number="on" value="{{invoiceDetail.invoice_fee}}" ></gl-form-input>
+              </td>
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_incomeTax(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled></gl-form-input></td>
+              <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalMoneyInvoice(invoiceDetail.quantity_tons,invoiceDetail.price_per_ton,rateBank,invoiceDetail.invoice_fee,index)]]" disabled></gl-form-input></td>
+            </tr>
+          </template>
+
+          <tr>
+            <td colspan="3">รวม</td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalTonInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input  format-number="on" style="width:140px;text-align:center;" value="[[_totalPricePerTonUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalAmountUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalFeeInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalIncomeTaxInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+            <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalMoneyBathInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
+          </tr>
+        </table>
+      </div>
+        </gl-form-panel-body>
+      </gl-form-panel>
+  </template>
+  <script>
+    Polymer({
+      is: "fee-exports-invoice-g2g",
+      properties: {
+        data:{
+          type:Object,
+          notify:true
+        },
+        totalInvoice: {
+          type: Array,
+          notify:true
+        }
+      },
+      behaviors: [
+          g2gCongtroller,
+          g2gModelBehavior
+      ],
+      observers:[
+        '_averageFee(feeTotal,data)',
+        '_oBcheckValue(data.invoice_detail.*)'
+        // '_changeDataPayrf(invoiceDetail.invoice_date)'
+      ],
+      _oBcheckValue:function (data) {
+        // console.log(data);
+      },
+      _changeDataPayrf:function (dateUn,index) {
+        this.getDateg2g(dateUn,(date)=>{
+          // console.log(date,index);
+            // return date;
+          // this.set('invoiceDetail.invoice_date', date);
+          // console.log(this.invoiceDetail.invoice_date);
+          // this.notifyPath('invoiceDetail.invoice_date');
+        });
+      },
+      _countPage:function (invoiceIndex) {
+        return invoiceIndex+1;
+      },
+      _totalQuantityTons:function (quantity_tons,index){
+        this.set('data.invoice_detail.'+index+'.quantity_tons',parseFloat(quantity_tons));
+      },
+      _totalPricePerTon:function (price_per_ton,index){
+        this.set('data.invoice_detail.'+index+'.price_per_ton',parseFloat(price_per_ton));
+      },
+      _totalBath:function (quantity_tons,price_per_ton,rate_bank,index) {
+        //console.log(invoiceDetail);
+        var test = (parseFloat(quantity_tons)*parseFloat(price_per_ton))*rate_bank;
+        this.set('data.invoice_detail.'+index+'.testza',test);
+        //console.log(this.data.invoice_detail[index]);
+        return test;
+      },
+      _totalAmountUsd:function (amountUsd,index) {
+        this.set('data.invoice_detail.'+index+'.amountUsd',parseFloat(amountUsd));
+      },
+      _averageFee:function (feeTotal,invoice) {
+        var invoice_fee = invoice.invoice_detail.length;
+        for (var i = 0; i < invoice.invoice_detail.length; i++) {
+          this.set('data.invoice_detail.'+i+'.invoice_fee',feeTotal/invoice_fee);
+        }
+      },
+      _totalfee:function (invoice_fee,index) {
+        this.set('data.invoice_detail.'+index+'.invoice_fee',parseFloat(invoice_fee));
+      },
+      // (6)=((4)-(5))*1%
+      _incomeTax:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
+        var incomeTax = ((((parseFloat(quantity_tons)*parseFloat(price_per_ton))*parseFloat(rate_bank))-parseFloat(invoice_fee))*1)/100;
+        this.set('data.invoice_detail.'+index+'.incomeTax',incomeTax);
+        return incomeTax;
+      },
+      // (3)*34.96
+      // (7)=((4)-(5)-(6))<
+      _totalMoneyInvoice:function (quantity_tons,price_per_ton,rate_bank,invoice_fee,index){
+        var moneyInvoice= ((parseFloat(quantity_tons)*parseFloat(price_per_ton))*parseFloat(rate_bank)-parseFloat(invoice_fee))-(((((parseFloat(quantity_tons)+parseFloat(price_per_ton))*parseFloat(rate_bank))-parseFloat(invoice_fee))*1)/100);
+        this.set('data.invoice_detail.'+index+'.moneyInvoice',moneyInvoice);
+        // console.log("moneyInvoice =>",this.data.invoice_detail[index].moneyInvoice);
+        return moneyInvoice;
+      },
+      _totalTonInvoices:function (index,test){
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.quantity_tons;
+          }.bind(this));
+          this.set('data.totalTonInvoices',result);
+          return result;
+      },
+      _totalPricePerTonUsdInvoices:function (index,test){
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.price_per_ton;
+          }.bind(this));
+          this.set('data.totalPricePerTonUsdInvoices',result);
+          return result;
+      },
+      _totalAmountUsdInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.amountUsd;
+          }.bind(this));
+          this.set('data.totalAmountUsdInvoices',result);
+          return result.toString();
+      },
+      _totalBathInvoices:function (index,test){
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.testza;
+          }.bind(this));
+            this.set('data.totalBathInvoices',result);
+            if (isNaN(result)){
+              return ''
+            }  else {
+              return result;
+            }
+      },
+      _totalFeeInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.invoice_fee;
+          }.bind(this));
+          this.set('data.totalFeeInvoices',result);
+          if (isNaN(result)){
+            return ''
+          }  else {
+            return result;
+          }
+      },
+      _totalIncomeTaxInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            result+=item.incomeTax;
+          }.bind(this));
+          this.set('data.totalIncomeTaxInvoices',result);
+          if (isNaN(result)){
+            return ''
+          }  else {
+            return result;
+          }
+      },
+      _totalMoneyBathInvoices:function (index,test) {
+        var result = 0;
+          test.base.invoice_detail.map(function(item){
+            // console.log('item.moneyInvoice  =>',item.moneyInvoice);
+            result+=item.moneyInvoice ;
+          }.bind(this));
+            this.set('data.totalMoneyBathInvoices',result);
+            if (isNaN(result)){
+              return ''
+            }  else {
+              return result;
+            }
+      },
+    });
+  </script>
+</dom-module>

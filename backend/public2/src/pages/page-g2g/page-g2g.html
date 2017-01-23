@@ -5,7 +5,7 @@
 <link rel="import" href="g2g/component/chart-bar-g2g.html">
 <link rel="import" href="g2g/component/chart-pie-g2g.html">
 <link rel="import" href="g2g/component/taps-g2g.html">
-
+<link rel="import" href="g2g/component/list-of-fee-g2g.html">
 <!-- <link rel="import" href="g2g/component/contract-detail.html">
 <link rel="import" href="g2g/component/print-files.html">
 <link rel="import" href="g2g/component/upload-files.html">
@@ -65,6 +65,11 @@
           <div class="addContract" name="listOfConfirm">
             <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm>
           </div>
+          <div class="addContract" name="listOfFee">
+            <list-of-fee-g2g data-for-select="[[dataForFee]]" data="[[dataSelected]]"></list-of-fee-g2g>
+            <!-- <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm> -->
+          </div>
+
           <div class="addContract" name="listOfShipment">
             <list-of-shipments  data-for-select="[[dataForShipment]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></list-of-shipments>
           </div>
@@ -90,7 +95,7 @@
               'get-contract-detail':'_getContractDetail',
               'get-list-confirm':'_getListConfirm',
               'get-list-shipment':'_getListShipment',
-              
+              'get-list-Fee':'_getlistFee',
               'flipDrawer':'_flipDrawer',
               'close-drawer':'_flipDrawerClose',
               'name-panel-right':'_namePanelRight'
@@ -111,6 +116,10 @@
                 value:{}
               },
               dataForShipment:{
+                type: Object,
+                value:{}
+              },
+              dataForFee:{
                 type: Object,
                 value:{}
               },
@@ -352,6 +361,40 @@
                 });
               }
             },
+            _getlistFee:function (e) {
+              try {
+                this.read('./g2g/fee/contract/id/'+e.detail.data.contract_id,(data)=>{
+                  this.dataSelected = data;
+                  console.log(this.dataSelected);
+                  this.dataForFee.feeListinShm=data;
+                  this.notifyPath('dataForFee.feeListinShm');
+                  this.g2gPageSeleted = 'listOfFee';
+                  this.fire('toast',{status:'load'});
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./g2g/component/list-of-fee-g2g.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            // console.log(this.dataForContract);
+                            this._flipDrawer();
+                            this.checkRenderPage.listOfShipment=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                });
+              } catch (e) {
+                console.log(e);
+              }
+            },
+            // _getFeeListG2g:function (contractId) {
+            //   this.read('./g2g/fee/contract/id/'+contractId,(data)=>{
+            //     this.dataSelected = data;
+            //     console.log(this.dataSelected);
+            //     // this.notifyPath('dataListPay.feeList');
+            //   });
+            // },
             okload:function(){
               this.checkLoad = true;
             },
