@@ -118,9 +118,8 @@
           <paper-button raised on-tap="contractDetail">รายละเอียดของสัญญา</paper-button>
           <paper-button raised on-tap="listConfirm">ยืนยันทำสัญญา</paper-button>
           <paper-button raised on-tap="listShipment">ส่งมอบสินค้า</paper-button>
-          <!-- <a href="/payment" tabindex="-1"> -->
-            <paper-button raised on-tap="listPayment">ด้านการเงิน</paper-button>
-          <!-- </a> -->
+          <paper-button raised on-tap="listFee">ค่าทำเนียม</paper-button>
+          <paper-button raised on-tap="listPayment">ด้านการเงิน</paper-button>
         </div>
       </paper-card>
 
@@ -241,6 +240,9 @@
       },
       listShipment:function () {
         this.fire('get-list-shipment',{detail:'list-shipment',data:this.data});
+      },
+      listFee:function () {
+        this.fire('get-list-Fee',{detail:'list-Fee',data:this.data});
       },
       listPayment:function () {
         document.cookie = "url="+this.data.contract_id;
