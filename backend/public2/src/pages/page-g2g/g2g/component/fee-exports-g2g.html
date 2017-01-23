@@ -38,12 +38,8 @@
   <template>
   <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
     <gl-form-panel-head label="" set-padding="10px" set-border="1px">
-      <template is="dom-if" if="[[!isViewSeleted]]">
         <paper-icon-button icon="create" id="editExporter" raised on-tap="editInput" title="Edit" disabled="[[!isInputDisabled]]"></paper-icon-button>
         <paper-tooltip for="editExporter" offset="0">Edit Exporter</paper-tooltip>
-        <paper-icon-button icon="delete" id="delFee" raised on-tap="deleteFee" title="Delete" disabled="[[!isInputDisabled]]"></paper-icon-button>
-        <paper-tooltip for="delFee" offset="0">Delete Exporter</paper-tooltip>
-      </template>
     </gl-form-panel-head>
       <gl-form-panel-body label="" set-padding="10px" set-border="1px">
 
@@ -121,11 +117,11 @@
      </div>
      <template is="dom-repeat" items="{{data.invoice}}" as="invoice">
        <fee-exports-invoice-g2g data="{{invoice}}"
-                            rate-bank="{{data.rate_bank}}"
-                            is-input-disabled="[[isInputDisabled]]"
-                            invoice-index="[[_ObcountIndex(index)]]"
-                            fee-total="[[_countFee(data.feeTotal)]] "
-                            invoice-page="[[data.invoicePage]]"
+                                rate-bank="{{data.rate_bank}}"
+                                is-input-disabled="[[isInputDisabled]]"
+                                invoice-index="[[_ObcountIndex(index)]]"
+                                fee-total="[[_countFee(data.feeTotal)]] "
+                                invoice-page="[[data.invoicePage]]"
        ></fee-exports-invoice-g2g>
 
      </template>
@@ -149,20 +145,13 @@
 
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
                <paper-button raised on-tap="cancelFeeReturn" class="gl-btn-default" >ย้อนกลับ</paper-button>
-               <template is="dom-if" if="[[data.fee_det_status]]">
-                  <paper-button raised on-tap="approvePayment" class="gl-btn-danger">ยกเลิกยืนยัน</paper-button>
-               </template>
                 <template is="dom-if" if="[[!data.fee_det_status]]">
-                 <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยืนยัน</paper-button>
+                 <paper-button raised on-tap="approvePayment" class="gl-btn-success" >ยืนยัน</paper-button>
                </template>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-                 <paper-button raised class="gl-btn-danger" on-tap="cancelFee" hidden="[[!isViewSeleted]]">ยกเลิก</paper-button>
-                 <paper-button raised on-tap="addPayment" class="gl-btn-success" hidden="[[!isViewSeleted]]">เพิ่ม</paper-button>
-               </template>
-               <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-                 <paper-button raised class="gl-btn-danger" on-tap="calcelContract" hidden="[[isViewSeleted]]">ยกเลิก</paper-button>
-                 <paper-button raised on-tap="savePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">บันทึก</paper-button>
+                 <paper-button raised class="gl-btn-danger" on-tap="calcelContract" >ยกเลิก</paper-button>
+                 <paper-button raised on-tap="savePayment" class="gl-btn-success" >บันทึก</paper-button>
                </template>
              </div>
            </gl-form-panel-footer>
@@ -245,29 +234,6 @@
       cancelFeeReturn:function () {
         this.fire('back-page-fee-detail',{data:'_get-list-fee'});
       },
-      addPayment:function () {
-        this.data.fee_det_status = false;
-        // fee_id
-        this._clearDatafee(this.data,'insert',(data)=>{
-            // data.invoice_status = true;
-            this.data.invoice.map((el,indexShmid)=>{
-             this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
-           });
-            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
-            // console.log(11);
-            this.insert('./g2g/fee/detail/insert',data, () => {
-              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-               callback:()=>{
-                  let shmid= this._getUrl();
-                  this.fire('close-drawer',{detail:'close-drawer'});
-                  this.fire('get-fee-list',{detail:shmid});
-                  let el = Polymer.dom(this.root).querySelectorAll('.required');
-                  el.map((el)=> {el.reset();});
-              }
-             });
-            });
-        });
-      },
       savePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
             data.id=this.data.fee_det_id;
@@ -319,35 +285,12 @@
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
                     // this.fire('close-drawer',{detail:'close-drawer'})
-                    let contract_id= this._getUrl();
-                    this.fire('get-fee-list',{detail:contract_id});
-                    this.fire('get-fee-list-detail',{detail:detail.data.id});
+                    this.fire('get-new-fee-list-and-fee-list-detail',{detail:detail.data.id});
                   }
                 });
             });
           }
      },
-     deleteFee:function () {
-       this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
-           status:'dialog',
-           text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
-           confirmed:this._deleteDataFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
-           el: this, // compontents
-           data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-       })
-     },
-     _deleteDataFee:function(result,detail){
-       if (result == true) {
-         this.data.invoice.map((el,indexShmid)=>{
-          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
-        });
-         this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
-           let contract_id= this._getUrl();
-           this.fire('get-fee-list',{detail:contract_id});
-            this.fire('close-drawer',{detail:'close-drawer'})
-         });
-       }
-    },
       _clearDatafee:function (data,action,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
@@ -368,24 +311,8 @@
             });
           });
           // el.map((el)=> {el.reset();});
-
           callback(newData);
         }
-      },
-      _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,book_id) {
-        let data = {
-          id:invoice_id,
-          bl_no:bl_no,
-          invoice_date:new Date(invoice_date),
-          invoice_no:invoice_no,
-          invoice_status:this.approve(invoice_status),
-          made_out_to:made_out_to,
-          book_id:book_id
-        };
-        let contractId = this._getUrl();
-        this.update('./g2g/invoice/update',data, () => {
-          this.fire('get-invoice-list',{detail:contractId});
-        });
       },
 
     });

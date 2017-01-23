@@ -64,7 +64,7 @@
       <list-of-fee-detail-g2g data="[[dataSelected]]"></list-of-fee-detail-g2g>
     </div>
     <div name="feeDetail">
-      <fee-exports-g2g data="[[dataSelected]]" data-for-select="[[dataForSelect]]"></fee-exports-g2g>
+      <fee-exports-g2g data="[[dataSelected]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[isInputDisabled]]"></fee-exports-g2g>
     </div>
     </iron-pages>
   </template>
@@ -113,24 +113,32 @@
           }
       },
       getFeeDetailList:function (e) {
-        console.log(e.currentTarget.data.fee_id);
         this.fire('toast',{status:'load'});
-        this.read('./g2g/fee/id/'+e.currentTarget.data.fee_id,(data)=>{
+        this._getDbFeeDetailList(e.currentTarget.data.fee_id,(data)=>{
           this.fire('toast',{status:'load'});
           this.dataSelected=data;
           this.notifyPath('dataSelected');
           this.pageSelected='feeDetailList';
-        });
-
+        })
       },
       _getFeeDetail:function (e) {
-        console.log(e.detail.data);
         this.fire('toast',{status:'load'});
-        this.read('./g2g/fee/detail/id/'+e.detail.data,(data)=>{
+        this._getDbFeeDetail(e.detail.data,(data)=>{
           this.fire('toast',{status:'load'});
           this.dataSelected=data;
           this.notifyPath('dataSelected');
           this.pageSelected='feeDetail';
+        })
+      },
+      //callback
+      _getDbFeeDetailList:function (fee_id,callback) {
+        this.read('./g2g/fee/id/'+fee_id,(data)=>{
+          callback(data);
+        });
+      },
+      _getDbFeeDetail:function (fee_det_id,callback) {
+        this.read('./g2g/fee/detail/id/'+fee_det_id,(data)=>{
+          callback(data);
         });
       }
     });

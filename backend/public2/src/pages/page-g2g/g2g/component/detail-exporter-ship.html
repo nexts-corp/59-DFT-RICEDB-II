@@ -368,10 +368,14 @@
         if (package_id) {
           let packing = this.dataForSelect.package.filter((packageing)=> packageing.package_id == package_id );
           this.price=packing[0];
+          this.data.price_per_ton = this.price.price_per_ton;
+          this.notifyPath('data.price_per_ton');
+          // console.log(this.data.price_per_ton );
           // this.data.shm_det_quantity='',
           // this.notifyPath('data.shm_det_quantity');
-          this.notifyPath('price.price_per_ton');
-          this.notifyPath('price.package_weight_bag');
+          // ใน this.price มี price.price_per_ton
+          // this.notifyPath('price.price_per_ton');
+          // this.notifyPath('price.package_weight_bag');
         }
       },
       _obCalWeight:function (shm_det_quantity,dataForSelect) {
@@ -528,8 +532,8 @@
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
             if (data.shm_det_quantity > 0) {
-              let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id} = data;
-              let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id};
+              let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id,price_per_ton} = data;
+              let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id,price_per_ton};
               // newData.ship = new Array();
               // newData.eta_date = new Date (newData.eta_date).toISOString();
               // newData.etd_date = new Date (newData.etd_date).toISOString();
