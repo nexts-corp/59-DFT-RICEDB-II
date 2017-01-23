@@ -212,7 +212,7 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                 .getAll(row('book_id'), { index: 'book_id' })
                                 .group(function (g) {
                                     return g.pluck(
-                                        "type_rice_id", "package_id"
+                                        "type_rice_id", "package_id", "price_per_ton"
                                     )
                                 })
                                 .sum("shm_det_quantity")
@@ -221,16 +221,17 @@ router.get('/id/:invoice_id', function (req, res, next) {
                                     return {
                                         type_rice_id: me2('group')('type_rice_id'),
                                         package_id: me2('group')('package_id'),
+                                        price_per_ton: me2('group')('price_per_ton'),
                                         quantity_tons: me2('reduction'),
-                                        price_per_ton: me('cl_type_rice')
-                                            .filter(function (tb) {
-                                                return tb('type_rice_id').eq(me2('group')('type_rice_id'))
-                                            }).getField("package")(0)
-                                            .filter(function (f) {
-                                                return f('package_id').eq(me2('group')('package_id'))
-                                            })(0)
-                                            .pluck('price_per_ton')
-                                            .values()(0)
+                                        // price_per_ton: me('cl_type_rice')
+                                        //     .filter(function (tb) {
+                                        //         return tb('type_rice_id').eq(me2('group')('type_rice_id'))
+                                        //     }).getField("package")(0)
+                                        //     .filter(function (f) {
+                                        //         return f('package_id').eq(me2('group')('package_id'))
+                                        //     })(0)
+                                        //     .pluck('price_per_ton')
+                                        //     .values()(0)
                                     }
                                 })
                                 .without("group", "reduction")
