@@ -66,7 +66,7 @@
             <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm>
           </div>
           <div class="addContract" name="listOfFee">
-            <list-of-fee-g2g data="[[dataSelected]]"></list-of-fee-g2g>
+            <list-of-fee-g2g data-for-select="[[dataForFee]]" data="[[dataSelected]]"></list-of-fee-g2g>
             <!-- <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm> -->
           </div>
 
@@ -116,6 +116,10 @@
                 value:{}
               },
               dataForShipment:{
+                type: Object,
+                value:{}
+              },
+              dataForFee:{
                 type: Object,
                 value:{}
               },
@@ -362,6 +366,8 @@
                 this.read('./g2g/fee/contract/id/'+e.detail.data.contract_id,(data)=>{
                   this.dataSelected = data;
                   console.log(this.dataSelected);
+                  this.dataForFee.feeListinShm=data;
+                  this.notifyPath('dataForFee.feeListinShm');
                   this.g2gPageSeleted = 'listOfFee';
                   this.fire('toast',{status:'load'});
                   this.async(()=>{
