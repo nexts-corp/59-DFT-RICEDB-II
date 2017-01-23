@@ -206,18 +206,23 @@
         '_getFeeNo(data.*)'
       ],
       _getFeeNo:function (data) {
-        this.data.fee_no = this.data.fee_no;
-      },
-      _getFeeName:function (e) {
-        // console.log(e.currentTarget.value);
         try {
-          let select = e.currentTarget.value;
-          let num = this.dataForSelect.feeListinShm.filter((data) =>data.fee_id == select)[0];
-          this.data.fee_no = num.fee_no;
-          this.notifyPath('data.fee_no');
+          this._setFee(this.data.fee_id);
         } catch (e) {
         // console.log(e);
         }
+      },
+      _getFeeName:function (e) {
+        try {
+          this._setFee(e.currentTarget.value);
+        } catch (e) {
+        // console.log(e);
+        }
+      },
+      _setFee:function (feeId) {
+        let num = this.dataForSelect.feeListinShm.filter((data) =>data.fee_id == feeId)[0];
+        this.data.fee_no = num.fee_no;
+        this.notifyPath('data.fee_no');
       },
       _changeDataFee:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
@@ -258,6 +263,9 @@
         // fee_id
         this._clearDatafee(this.data,'insert',(data)=>{
             // data.invoice_status = true;
+            this.data.invoice.map((el,indexShmid)=>{
+             this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+           });
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
             // console.log(11);
             this.insert('./g2g/fee/detail/insert',data, () => {
@@ -310,16 +318,16 @@
             this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
                 status:'dialog',
                 text:'ยืนยันใช่หรือไม่ ?',
-                confirmed:this._approveFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                confirmed:this._approvePayment.bind(this), //function ที่ใช้รับค่า ปุ่ม
                 el: this, // compontents
                 data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
             })
         });
       },
-      _approveFee:function(result,detail){
+      _approvePayment:function(result,detail){
          if (result == true) {
            this.update('./g2g/fee/detail/update',detail.data, () => {
-             console.log(detail.data.id);
+            //  console.log(detail.data.id);
                this.fire('refresh-contract',{detail:'refresh-contract'});
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
@@ -362,11 +370,6 @@
           newData.invoice=[];
           newData.fee_date_receipt = new Date(newData.fee_date_receipt);
           this.data.invoice.map((el,indexShmid)=>{
-            if (action == 'insert') {
-              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
-            } else if (action == 'delete') {
-              this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
-            }
             newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
             el.invoice_detail.map((shmDet,indexshmdet)=>{
               newData.invoice[indexShmid].invoice_detail.push({
@@ -392,13 +395,6 @@
           made_out_to:made_out_to,
           book_id:book_id
         };
-        // console.log(data);
-        // bl_no:"gggg"
-        // id:"2f2c9090-9056-4294-9c09-8d6f9d7e0d4b"
-        // invoice_date:Tue Nov 15 2016 07:00:00 GMT+0700 (Altai Standard Time)
-        // invoice_no:"invoice15-2"
-        // invoice_status:false
-        // made_out_to:"invoice15-2"
         let contractId = this._getUrl();
         this.update('./g2g/invoice/update',data, () => {
           this.fire('get-invoice-list',{detail:contractId});
