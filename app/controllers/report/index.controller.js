@@ -124,8 +124,8 @@ class index{
         var r = req._r;
         var params = req.query;
 
-        var add_first_year = 0;
-        var sub_last_year = 0;
+        var del_first_year = 0;
+        var add_last_year = 0;
 
         if(typeof params.first_year !== "undefined"){
             if(params.quota=='true'){
@@ -138,70 +138,63 @@ class index{
             params.last_year = parseInt(params.last_year);
             params.last_month = parseInt(params.last_month);
 
-            add_first_year = params.first_year-1;
-            sub_last_year = params.last_year+1;
+            del_first_year = params.first_year-1;
+            add_last_year = params.last_year+1;
         }
 
-
-
         if(params.last_year != 0){ // ถ้า !=0 แสดงว่ามีปีที่ 2 ก็ทำแบบเต็ม
-         console.log(add_first_year+"A");
-         console.log(sub_last_year+"B");
-        
-
- r.db('eu2').table('report')
-        .innerJoin(r.db('eu2').table('quota').filter(function(row){return row('year').gt(2557).and( row('year').lt(2560) )})  
-        ,function(left,right){
-            return left('quota_id').eq(right('id'))
-        }).map(function(row){
-            return row('left').merge(function(row2){
-              return {type_rice_id:row('right')('type_rice_id'),year:row('right')('year')}
+            r.db('eu2').table('report').filter({quota:params.quota})
+                .innerJoin(r.db('eu2').table('quota').filter(function(row){return row('year').gt(del_first_year).and( row('year').lt(add_last_year) )})  
+                ,function(left,right){
+                    return left('quota_id').eq(right('id'))
+                }).map(function(row){
+                    return row('left').merge(function(row2){
+                        return {type_rice_id:row('right')('type_rice_id'),year:row('right')('year')}
+                    })
+                })
+            .filter(function(row){
+                return row('year').eq(params.first_year).and(row('month').gt(0)).and(row('month').lt(params.first_month))
+                .or(row('year').eq(params.last_year).and(row('month').gt(params.last_month)).and(row('month').lt(13))).not()
             })
-        })
-    .filter(function(row){
-        return row('year').eq(2558).and(row('month').gt(0)).and(row('month').lt(7))
-        .or(row('year').eq(2559).and(row('month').gt(7)).and(row('month').lt(13))).not()
-    })
-   .group('exporter_id','type_doc','type_rice_id').sum('weigth').ungroup()
+            .group('exporter_id','type_doc','type_rice_id').sum('weigth').ungroup()
 
-        .merge(function(row){
-            return {
-              exporter_id:row('group')(0) ,
-              type_doc:row('group')(1),
-              type_rice_id:row('group')(2),
-            }
-        }).without('group')
+                .merge(function(row){
+                    return {
+                        exporter_id:row('group')(0) ,
+                        type_doc:row('group')(1),
+                        type_rice_id:row('group')(2),
+                    }
+                }).without('group')
 
-        .innerJoin(r.db('eu2').table('type_rice'),function(left,right){
-            return left('type_rice_id').eq(right('id'))
-        }).map(function(row){
-            return row('left').merge({query_name:row('right')('query_name')})
-        })
-        .group('exporter_id').ungroup()
-   
-        .merge(function(row){
-            return {
-              reduction:r.object(r.args(
-                  
-              row('reduction').concatMap(function(rowConcat){
-                  return [
-                  rowConcat('type_doc').add('_').add(rowConcat('query_name'))
-                  ,rowConcat('reduction')
-                  ]
-              })
-                  
-              ))
-           }
-        })
-        
-        .innerJoin(r.db('eu2').table('exporter'), function(a,e){
-            return a('group').eq(e('id'))
-        }).without({right:['id']}).zip()
-        .merge(function(x){return x('reduction')}).orderBy('name')
-        .without('group','reduction')
+                .innerJoin(r.db('eu2').table('type_rice'),function(left,right){
+                    return left('type_rice_id').eq(right('id'))
+                }).map(function(row){
+                    return row('left').merge({query_name:row('right')('query_name')})
+                })
+                .group('exporter_id').ungroup()
 
-        .run()
+                .merge(function(row){
+                    return {
+                        reduction:r.object(r.args(
+                            
+                        row('reduction').concatMap(function(rowConcat){
+                            return [
+                            rowConcat('type_doc').add('_').add(rowConcat('query_name'))
+                            ,rowConcat('reduction')
+                            ]
+                        })
+                            
+                        ))
+                    }
+                })
+                
+                .innerJoin(r.db('eu2').table('exporter'), function(a,e){
+                    return a('group').eq(e('id'))
+                }).without({right:['id']}).zip()
+                .merge(function(x){return x('reduction')}).orderBy('name')
+                .without('group','reduction')
 
+            .run()
             .then(function (result){
                 if(params.quota==true) params.quota="(ในโควต้า)";
                 else params.quota = "(นอกโควต้า)"
