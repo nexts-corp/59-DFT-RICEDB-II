@@ -1,0 +1,138 @@
+<link rel="import" href="fee-exports-g2g.html">
+<link rel="import" href="list-of-fee-detail-g2g.html">
+<dom-module id="list-of-fee-g2g">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .labelSearch{
+    font-size: var(--font-size-h4);
+    margin: 10px 10px 10px 10px;
+    }
+    .table-body >tr > td{
+      cursor:pointer;
+    }
+    .title {
+      margin: 16px;
+      text-align: center;
+      font-size: var(--font-size-h4);
+    }
+  </style>
+  <template>
+
+    <iron-pages selected="[[pageSelected]]" attr-for-selected="name">
+      <div name="listOfFee">
+        <div class="title">รวมค่าธรรมเนียมในสัญญา [[nameContract]]</div>
+        <div class="flex searchInput ">
+           <div class="horizontal end-justified layout">
+             <div class="labelSearch">FEE No.</div>{{_searchInArray(searchInput)}}
+             <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
+             <paper-icon-button icon="search"></paper-icon-button>
+           </div>
+        </div>
+        <table class="gl-table-default">
+              <thead class="table-head">
+                <tr>
+                  <th>ชื่อการทำสัญญา</th>
+                  <th>งวดการส่งมอบ</th>
+                  <th>ครั้งที่คิดค่าธรรมเนียม</th>
+                </tr>
+              </thead>
+              <tbody class="table-body">
+                <template is="dom-if" if="[[!_isHave(newData)]]">
+                  <template is="dom-repeat" items="[[newData]]" >
+                    <tr data="[[item]]" on-tap="getFeeDetailList">
+                      <td>[[item.cl_name]]</td>
+                      <td>[[item.shm_name]] ([[item.shm_no]])</td>
+                      <td>[[item.fee_name]] ([[item.fee_no]])</td>
+                    </tr>
+                  </template>
+                </template>
+                <template is="dom-if" if="[[_isHave(newData)]]">
+                  <tr>
+                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                  </tr>
+                </template>
+             </tbody>
+          </table>
+      </div>
+    <div name="feeDetailList">
+      <list-of-fee-detail-g2g data="[[dataSelected]]"></list-of-fee-detail-g2g>
+    </div>
+    <div name="feeDetail">
+      <fee-exports-g2g data="[[dataSelected]]"></fee-exports-g2g>
+    </div>
+    </iron-pages>
+  </template>
+  <script>
+    Polymer({
+      is: "list-of-fee-g2g",
+      observers:[
+        'initDataFee(data)'
+      ],
+      behaviors: [
+          g2gCongtroller,
+          g2gModelBehavior
+      ],
+      listeners:{
+        'get-Fee-Detail':'_getFeeDetail'
+      },
+      properties: {
+        newData:{
+          type:Object
+        },
+        pageSelected:{
+          type:String,
+          value:'listOfFee'
+        },
+        dataSelected:{
+          type:Object,
+        }
+      },
+      initDataFee:function (data) {
+        // console.log(data);
+        this.newData = this.g2gClone(data);
+      },
+      _searchInArray:function (searchInput) {
+          // console.log(searchInput == '');
+          if (searchInput != '') {
+            let arr=[];
+            this.data.map((el)=>{
+              if (el.fee_name.search(searchInput) > -1) {
+                  //  console.log('search==> ',el);
+                    arr.push(el);
+              }
+            });
+            this.newData=arr;
+          }else{
+            this.initDataFee(this.data);
+          }
+      },
+      getFeeDetailList:function (e) {
+        console.log(e.currentTarget.data.fee_id);
+        this.fire('toast',{status:'load'});
+        this.read('./g2g/fee/id/'+e.currentTarget.data.fee_id,(data)=>{
+          this.fire('toast',{status:'load'});
+          this.dataSelected=data;
+          this.notifyPath('dataSelected');
+          this.pageSelected='feeDetailList';
+        });
+
+      },
+      _getFeeDetail:function (e) {
+        console.log(e.detail.data);
+        this.fire('toast',{status:'load'});
+        this.read('./g2g/fee/detail/id/'+e.detail.data,(data)=>{
+          this.fire('toast',{status:'load'});
+          this.dataSelected=data;
+          this.notifyPath('dataSelected');
+          this.pageSelected='feeDetail';
+        });
+      }
+    });
+  </script>
+</dom-module>
