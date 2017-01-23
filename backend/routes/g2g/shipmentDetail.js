@@ -29,6 +29,9 @@ var schema = {
             "shm_det_quantity": {
                 "type": "number"
             },
+            "price_per_ton": {
+                "type": "number"
+            },
             "shm_id": {
                 "type": "string",
                 "minLength": 36
@@ -47,7 +50,8 @@ var schema = {
             "shm_det_quantity",
             "shm_id",
             "type_rice_id",
-            "num_of_container"
+            "num_of_container",
+            "price_per_ton"
         ]
     }
 };
