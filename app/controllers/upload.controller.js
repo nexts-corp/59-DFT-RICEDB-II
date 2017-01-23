@@ -65,8 +65,8 @@ exports.listFile = function (req, res) {
 exports.listFilePath = function (req, res) {
     var r = req._r;
     var params = req.params;
-
-    r.db('files').table('files').without('contents').filter({ ref_path: params.refPath })
+    r.db('external_f3').table('document_file').filter({ exporter_id: params.exporter_id, ref_path: params.refPath })
+        // r.db('files').table('files').without('contents').filter({ ref_path: params.refPath })
         .orderBy(r.desc('timestamp'))
         .map(function (row) {
             return {
@@ -123,14 +123,41 @@ exports.deleteFile = function (req, res) {
         })
 
 }
-exports.test = function (req, res) {
+exports.uploadFileExporter = function (req, res) {
     var r = req._r;
-    r.db('files').table('files').without('contents')
-        .run()
-        .then(function (result) {
-            res.json(result);
-        })
-        .catch(function (err) {
-            res.json(err);
-        })
+    var params = req.params;
+
+    var form = new multiparty.Form();
+    form.parse(req, function (err, fields, files) {
+
+        var prefile = files.file[0];
+        var doc_code = req.headers['ref-path'].split("&")[1];
+
+        fs.readFile(prefile.path, function (err, data) {
+            // console.log(r);
+            r.db('files').table('files').insert({
+                name: prefile.originalFilename,
+                type: prefile.headers['content-type'],
+                contents: data,
+                timestamp: new Date(),
+                ref_path: req.headers['ref-path']
+            })('generated_keys')(0)
+                .do(function (file_id) {
+                    return r.db('external_f3').table('document_file').insert({
+                        file_id: file_id,
+                        doc_type_id: doc_code,
+                        exporter_id: params.exporter_id,
+                        date_upload: new Date()
+                    })
+                })
+                .run().then(function (result) {
+                    res.json(result);
+                }).catch(function (err) {
+                    res.json(err);
+                })
+        });
+    });
+
+    // res.json({ec:'01252'});
+
 }
