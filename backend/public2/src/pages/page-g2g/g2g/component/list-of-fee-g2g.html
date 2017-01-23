@@ -61,10 +61,10 @@
           </table>
       </div>
     <div name="feeDetailList">
-      <list-of-fee-detail-g2g data="[[dataSelected]]"></list-of-fee-detail-g2g>
+      <list-of-fee-detail-g2g data="[[dataSelected.feeDetail]]"></list-of-fee-detail-g2g>
     </div>
     <div name="feeDetail">
-      <fee-exports-g2g data="[[dataSelected]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[isInputDisabled]]"></fee-exports-g2g>
+      <fee-exports-g2g data="[[dataSelected.fee]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[isInputDisabled]]"></fee-exports-g2g>
     </div>
     </iron-pages>
   </template>
@@ -79,9 +79,10 @@
           g2gModelBehavior
       ],
       listeners:{
+        'page-change':'_pageChange',
         'get-Fee-Detail':'_getFeeDetail',
         'get-new-fee-list':'fdff',
-        'get-new-fee-list-detail':'_getFeeDetail'
+        'get-new-fee-list-detail':'_getFeeDetail',
       },
       fdff:function (e) {
         console.log(e.detail.data);
@@ -96,6 +97,7 @@
         },
         dataSelected:{
           type:Object,
+          value:{dataSelected:'',fee:''}
         }
       },
       initDataFee:function (data) {
@@ -117,23 +119,27 @@
             this.initDataFee(this.data);
           }
       },
+      // ฟังชั่นเปลี่ยนหน้า
+      _pageChange:function (e) {
+        this.pageSelected=e.detail.page;
+      },
       getFeeDetailList:function (e) {
         this.fire('toast',{status:'load'});
         this._getDbFeeDetailList(e.currentTarget.data.fee_id,(data)=>{
           this.fire('toast',{status:'load'});
-          this.dataSelected=data;
-          this.notifyPath('dataSelected');
+          this.dataSelected.feeDetail=data;
+          this.notifyPath('dataSelected.feeDetail');
           this.pageSelected='feeDetailList';
         })
       },
       _getFeeDetail:function (e) {
-        console.log(e.detail.data);
+        // console.log(e.detail.data);
         this.fire('toast',{status:'load'});
         this._getDbFeeDetail(e.detail.data,(data)=>{
           this.fire('toast',{status:'load'});
-          this.dataSelected=data;
-          console.log(this.dataSelected);
-          this.notifyPath('dataSelected');
+          this.dataSelected.fee=data;
+          // console.log(this.dataSelected);
+          this.notifyPath('dataSelected.fee');
           this.pageSelected='feeDetail';
         })
       },

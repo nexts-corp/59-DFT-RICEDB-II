@@ -64,11 +64,16 @@
             </template>
             <template is="dom-if" if="[[_isHave(data.fee_detail)]]">
                 <tr>
-                  <td colspan="4">  ไม่มีข้อมูล</td>
+                  <td colspan="5">  ไม่มีข้อมูล</td>
                 </tr>
             </template>
           </tbody>
         </table>
+        <gl-form-panel-footer label="" set-padding="10px">
+          <div class="horizontal end-justified layout">
+            <paper-button raised on-tap="pageReturnListFee" class="gl-btn-default" >ย้อนกลับ</paper-button>
+          </div>
+        </gl-form-panel-footer>
     </gl-form-panel>
 </template>
 <script>
@@ -87,6 +92,9 @@ Polymer({
     // console.log(e.currentTarget.data.fee_det_id);
     this.fire('get-Fee-Detail',{data:e.currentTarget.data.fee_det_id});
   },
+  pageReturnListFee:function () {
+    this.fire('page-change',{page:'listOfFee'});
+  }
 
 });
 </script>

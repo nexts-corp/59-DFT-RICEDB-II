@@ -56,7 +56,6 @@
            <gl-combo-box class="required" required disabled error-message="กรุณาชื่อรอบการจ่ายเงิน" placeholder="เลือกชื่อรอบการจ่ายเงิน" label="ชื่อรอบการจ่ายเงิน"
              item-label-path="fee_name" item-value-path="fee_id" value="{{data.fee_id}}" items="[[dataForSelect.feeListinShm]]" on-value-changed="_getFeeName">
            </gl-combo-box >
-           <!-- <gl-form-input class="required" required  disabled="[[isInputDisabled]]"label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input> -->
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
            <vaadin-date-picker class="required" required  disabled label="วันที่ได้รับเงิน" value="{{data.fee_date_receipt}}" always-float-label></vaadin-date-picker>
@@ -125,7 +124,6 @@
        ></fee-exports-invoice-g2g>
 
      </template>
-
 
      <gl-form-panel>
          <fee-exports-sum-g2g total-invoice="[[data.invoice]]"></fee-exports-sum-g2g>
@@ -232,7 +230,7 @@
         // this.fire('close-drawer',{detail:'close-drawer'});
       },
       cancelFeeReturn:function () {
-        this.fire('back-page-fee-detail',{data:'_get-list-fee'});
+        this.fire('page-change',{page:'feeDetailList'});
       },
       savePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
