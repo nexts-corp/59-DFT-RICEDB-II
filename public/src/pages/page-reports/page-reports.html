@@ -52,7 +52,7 @@
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                               <gl-combo-box class="saveData" items="{{listEu}}" value="{{listEuValue}}"
-                            error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id"></gl-combo-box>
+                            error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" required></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
@@ -62,24 +62,25 @@
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                             <div class="header">ประจำเดือน :</div>
+                            <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{firstmonth}}"
+                            error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" required></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                               <gl-combo-box class="saveData" items="{{getMonth()}}" value="{{month}}"
-                            error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id"></gl-combo-box>
+                            <gl-combo-box class="saveData" label="ปี" items="{{getYear}}" value="{{firstyear}}" required></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
                      </gl-grid-row>
 
-                       <gl-grid-row width="{{getWidth}}">
+                    <gl-grid-row width="{{getWidth}}">
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                             <div class="header">ปี :</div>
+                            <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{lastmonth}}"
+                            error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id"></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                               <gl-combo-box class="saveData" items="{{getYear}}" value="{{year}}"></gl-combo-box>
+                            <gl-combo-box class="saveData" label="ปี" items="{{getYear}}" value="{{lastyear}}"></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
@@ -131,11 +132,38 @@
             _activeReports:function(){
                 var datas = {
                     quota: this.listEuValue,
-                    year: this.year,
-                    month: this.month,
-                    month_th: this.getMonthName(this.month),
+                    first_year: this.firstyear,
+                    first_month: this.firstmonth,
+                    first_month_th: this.getMonthName(this.firstmonth),
+                    last_year: this.lastyear,
+                    last_month: this.lastmonth,
+                    last_month_th: this.getMonthName(this.lastmonth)
                 }
-                window.open('/api/report/report_quota?quota='+datas.quota+'&year='+datas.year+'&month='+datas.month+'&month_th='+datas.month_th,'_blank');
+                var check = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                    return item.validate();
+                })
+                // console.log(check);
+                const checkStat = function(check) {
+                    return check == true;
+                }
+                if(check.every(checkStat) == true){
+                    if(datas.last_year == ''|| datas.last_month == ''){
+                        datas.last_year = '0';
+                        datas.last_month_th = '0';
+                        datas.last_month = '0';
+                    }
+                    console.log(datas);
+                    window.open(
+                        '/api/report/report_quota?quota='+datas.quota+
+                        '&first_year='+datas.first_year+
+                        '&first_month='+datas.first_month+
+                        '&first_month_th='+datas.first_month_th,
+                        '&last_year='+datas.last_year+
+                        '&last_month='+datas.last_month+
+                        '&last_month_th='+datas.last_month_th,
+                        '_blank'
+                    );
+                }
             }
         });
     </script>
