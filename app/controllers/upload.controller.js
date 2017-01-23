@@ -22,6 +22,11 @@ exports.uploadFile = function (req, res) {
                 timestamp: new Date(),
                 ref_path: req.headers['ref-path']
             })
+                // .do(function (d) {
+                //     r.db('external_f3').table('document_file').insert({
+                //         doc_type_id:
+                //     })
+                // })
                 .run().then(function (result) {
                     res.json(result);
                 }).catch(function (err) {
@@ -123,14 +128,14 @@ exports.deleteFile = function (req, res) {
         })
 
 }
-exports.test = function(req, res){
+exports.test = function (req, res) {
     var r = req._r;
     r.db('files').table('files').without('contents')
-    .run()
-    .then(function(result){
-        res.json(result);
-    })
-    .catch(function(err){
-        res.json(err);
-    })
+        .run()
+        .then(function (result) {
+            res.json(result);
+        })
+        .catch(function (err) {
+            res.json(err);
+        })
 }

@@ -53,7 +53,7 @@
       >
     </nylon-upload>
     <div style="margin-bottom:20px;"></div>
-    {{_dataInput(data)}}
+    <!-- {{_dataInput(data)}} -->
   </template>
   <script>
     Polymer({
@@ -89,15 +89,29 @@
           value: {}
         }
       },
+      attached: function() {
+        this._getDocument();
+      },
+      _getDocument:function(){
+        this.read('./document',(data)=>{
+          this.copy_authority = 'exporter-document='+data[0].doc_code;
+          this.dit = 'exporter-document='+data[1].doc_code;
+          this.attorney = 'exporter-document='+data[2].doc_code;
+          this.authority = 'exporter-document='+data[3].doc_code;
+          this.vat = 'exporter-document='+data[4].doc_code;
+          this.juristic_person = 'exporter-document='+data[5].doc_code;
+        })
+      }
       _dataInput:function(data) {
         // console.log(data);
-        var exporterId = data;
-        this.juristic_person = 'exporter-juristic='+exporterId;
-        this.authority = 'exporter-authority='+exporterId;
-        this.vat = 'exporter-vat='+exporterId;
-        this.dit = 'exporter-dit='+exporterId;
-        this.copy_authority = 'exporter-copyAuthority='+exporterId;
-        this.attorney = 'exporter-attorney='+exporterId;
+        this.exporterId = data;
+        // var exporterId = data;
+        // this.juristic_person = 'exporter-juristic='+exporterId;
+        // this.authority = 'exporter-authority='+exporterId;
+        // this.vat = 'exporter-vat='+exporterId;
+        // this.dit = 'exporter-dit='+exporterId;
+        // this.copy_authority = 'exporter-copyAuthority='+exporterId;
+        // this.attorney = 'exporter-attorney='+exporterId;
       }
     });
   </script>
