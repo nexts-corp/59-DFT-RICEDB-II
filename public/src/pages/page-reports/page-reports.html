@@ -14,7 +14,14 @@
                 @apply(--layout-horizontal);
                 @apply(--layout-end-justified);
             }
-            paper-button,.header{
+            .flex-center-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-center-justified);
+            }
+            .flex3child {
+                @apply(--layout-flex-3);
+            }
+            paper-button,.header,.content{
                 font-family: 'CSChatThaiUI', sans-serif !important;
                 -webkit-font-smoothing: antialiased;
             }
@@ -28,6 +35,10 @@
                 text-align: right;
                 margin-top: 26px;
                 font-size: 16px;
+            }
+            .content{
+                margin-top: 26px;
+                font-size: 16px;
             }     
             section{
                 padding: 20px;
@@ -37,58 +48,158 @@
         <div class="flex title">
             ออกรายงาน
         </div>
-
+        <gl-grid-row width="{{getWidth}}">
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+                <gl-combo-box class="saveData" label="เลือกประเภทรายงาน" items="{{reports}}" value="{{reportSelect}}"
+                error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" required></gl-combo-box>
+            </gl-grid-col>
+            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
+        </gl-grid-row>
         <section>
             <div class="flex gl-panel-default">
                 <div class="gl-panel-default-header">
                     โปรดระบบุข้อมูล
                 </div>
                 <div class="gl-panel-default-content">
-                     <gl-grid-row width="{{getWidth}}">
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                             <div class="header">สรุปรายงายงานการส่งออกข้าวไปสหภาพยุโรป :</div>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                              <gl-combo-box class="saveData" items="{{listEu}}" value="{{listEuValue}}"
-                            error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" required></gl-combo-box>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                     </gl-grid-row>
+                    <iron-pages selected="[[reportSelect]]" attr-for-selected="name">
+                        <div name="reports">
+                            
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <div class="header">สรุปรายงายงานการส่งออกข้าวไปสหภาพยุโรป :</div>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="saveData" items="{{listEu}}" value="{{listEuValue}}"
+                                    error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                            </gl-grid-row>
 
-                     <gl-grid-row width="{{getWidth}}">
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                            <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{firstmonth}}"
-                            error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" required></gl-combo-box>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                            <gl-combo-box class="saveData" label="ปี" items="{{getYear}}" value="{{firstyear}}" required></gl-combo-box>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                     </gl-grid-row>
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{firstmonth}}"
+                                    error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="saveData" label="ปี" items="{{getYear}}" value="{{firstyear}}" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                            </gl-grid-row>
 
-                    <gl-grid-row width="{{getWidth}}">
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                            <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{lastmonth}}"
-                            error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id"></gl-combo-box>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                            <gl-combo-box class="saveData" label="ปี" items="[[getLastYear(firstyear)]]" value="{{lastyear}}"></gl-combo-box>
-                        </gl-grid-col>
-                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        </gl-grid-col>
-                     </gl-grid-row>
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="saveData" label="เดือน" items="{{getMonth()}}" value="{{lastmonth}}"
+                                    error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id"></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="saveData" label="ปี" items="[[getLastYear(firstyear)]]" value="{{lastyear}}"></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                            </gl-grid-row>
+                        </div>
+                        <div name="book">
+                              <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                </gl-grid-col>
+                                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                     <div class="header">ออกประกาศ :</div>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                    <gl-combo-box class="book_saveData" label="เดือน" items="{{getMonth()}}" value="{{notifyMonth}}"
+                                    error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                    <gl-combo-box class="book_saveData" label="ปี" items="[[getYear]]" value="{{notifyYear}}" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                            </gl-grid-row>
+
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                            <div class="header">เรียน กรรมการผู้จัดการบริษัท :</div>
+                                    </gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                            <gl-combo-box class="book_saveData" items="[[exporterList]]" value="{{selectExporter}}"
+                                            item-label-path="name" item-value-path="id" required></gl-combo-box>
+                                    </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                            </gl-grid-row>
+                                
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+                                        <div class="content">แจ้งผลการตรวจสอบหลักฐานเอกสารการส่งออกข้าวไปยังสหภาพยุโรปของบริษัท</div>
+                                    </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                            </gl-grid-row>
+
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="book_saveData" label="เดือน" items="{{getMonth()}}" value="{{b_fistMonth}}"
+                                    error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="book_saveData" label="ปี" items="[[getYear]]" value="{{b_fistYear}}" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                            </gl-grid-row>
+
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="book_saveData" label="เดือน" items="{{getMonth()}}" value="{{b_lastMonth}}"
+                                    error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                    <gl-combo-box class="book_saveData" label="ปี" items="[[getLastYear(b_fistYear)]]" value="{{b_lastYear}}" required></gl-combo-box>
+                                </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                                </gl-grid-col>
+                            </gl-grid-row>
+
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                        <div class="content">ประวัติการส่งออกตามประกาศกรมการค้าต่างประเทศ</div>
+                                    </gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                        <vaadin-date-picker class="book_saveData" label="วันที่" value="{{hisDate}}" required></vaadin-date-picker>
+                                    </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                            </gl-grid-row>
+
+                            <gl-grid-row width="{{getWidth}}">
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                        <div class="content">ประกาศกรมการค้าต่างประเทศ</div>
+                                    </gl-grid-col>
+                                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                                        <vaadin-date-picker class="book_saveData" label="วันที่" value="{{notiDate}}" required></vaadin-date-picker>
+                                    </gl-grid-col>
+                                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                            </gl-grid-row>
+                        </div>
+                    </iron-pages>
                 </div>
             </div>
             <div class="flex-end-justified">
-                <paper-button raised class="gl-btn-primary" on-tap="_activeReports">ออกรายงาน</paper-button>
+                <paper-button raised class="gl-btn-primary" on-tap="_checkActive">ออกรายงาน</paper-button>
            </div>
         </section>
     </template>
@@ -109,10 +220,24 @@
                             name: 'นอกโควตา'
                         }
                     ]
+                },
+                reports:{
+                    type: Object,
+                    value:[
+                        {
+                            id:'reports',
+                            name:'สรุปรายงายงานการส่งออกข้าวไปสหภาพยุโรป'
+                        },
+                        {
+                            id:'book',
+                            name:'ขอแจ้งตัวเลขประวัติการส่งออกข้าวไปสหภาพยุโรป'
+                        }
+                    ]
                 }
             },
             nylonPageActive:function(){
                 this.fnyear();
+                this.getExporter();
             },
             fnyear: function(){
                 axios.get('./common/year')
@@ -137,6 +262,37 @@
                         return item > year;
                     })
                 }    
+            },
+            getExporter:function(){
+                axios.get('./common/exporter')
+                .then((response)=>{
+                    console.log("success!!");
+                    // console.log(response.data);
+                    this.exporterList = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error);
+                });
+            },
+            getExporterName:function(id){
+                var name; 
+                var exporter = this.exporterList;
+                var check = exporter.filter(function(item){
+                    return item.id == id
+                })
+                check.map((item)=>{
+                    name = item.name
+                })
+                return name
+            },
+            _checkActive:function(){
+                if(this.reportSelect == 'reports'){
+                    this._activeReports();
+                }
+                else if(this.reportSelect == 'book'){
+                    this._activeBook();
+                }
             },
             _activeReports:function(){
                 var datas = {
@@ -173,6 +329,49 @@
                         '_blank'
                     );
                 }
+            },
+            _activeBook:function(){
+                var datas = {
+                    notify_month : this.notifyMonth,
+                    notify_month_th: this.getMonthName(this.notifyMonth),
+                    notify_year : this.notifyYear,
+                    exporter_id : this.selectExporter,
+                    exporter_name : this.getExporterName(this.selectExporter),
+                    first_month : this.b_fistMonth,
+                    first_month_th : this.getMonthName(this.b_fistMonth),
+                    first_year : this.b_fistYear,
+                    last_month : this.b_lastMonth,
+                    last_month_th : this.getMonthName(this.b_lastMonth),
+                    last_year : this.b_lastYear,
+                    hisDate : this.hisDate,
+                    notiDate : this.notiDate
+                }
+                var check = Polymer.dom(this.root).querySelectorAll('.book_saveData').map((item)=>{
+                    return item.validate();
+                })
+                // console.log(check);
+                const checkStat = function(check) {
+                    return check == true;
+                }
+                if(check.every(checkStat) == true){
+                    console.log(datas);
+                }
+                  window.open(
+                   '?notify_month=' +datas.notify_month+
+                   '&notify_month_th='+datas.notify_month_th+
+                   '&notify_year='+datas.notify_year+
+                   '&exporter_id='+datas.exporter_id+
+                   '&exporter_name='+datas.exporter_name+
+                   '&first_month='+datas.first_month+
+                   '&first_month_th='+datas.first_month_th+
+                   '&first_year='+datas.first_year+
+                   '&last_month='+datas.last_month+
+                   '&last_month_th='+datas.last_month_th+
+                   '&last_year='+datas.last_year+
+                   '&hisDate='+datas.hisDate+
+                   '&notiDate='+datas.notiDate,
+                   '_blank'   
+                  )
             }
         });
     </script>
