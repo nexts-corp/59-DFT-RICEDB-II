@@ -144,8 +144,6 @@
                     
                 <input class="radio" id="tab2" type="radio" on-tap="checkQuota" name="tabs" value="false">
                 <label for="tab2">นอกโควตา</label>
-                <input id="tab3" type="radio" name="tabs">
-                <label for="tab3">test</label>
                     
                 <section id="content1">
                         <report-list2 data="{{dataListInQuota}}" on-data-select="getDataSelect"></report-list2>
@@ -153,19 +151,6 @@
                     
                 <section id="content2">
                         <report-list2 data="{{dataListOutQuota}}" on-data-select="getDataSelect"></report-list2>
-                </section>
-                <section id="content3">
-                    <gl-combo-box class="saveData" label="เลือกบริษัท" items="{{getCom}}" value="{{company}}"
-                    error-message="กรุณาเลือกบริษัท" item-label-path="name" item-value-path="id" required></gl-combo-box>
-
-                    <gl-form-input label="2557" value="{{year57}}" format-number="on"></gl-form-input>
-                    <gl-form-input label="2558" value="{{year58}}" format-number="on"></gl-form-input>
-                    <gl-form-input label="2559" value="{{year59}}" format-number="on"></gl-form-input>
-                    <!--<gl-form-input label="exporter_id" value="{{exporter_id}}"></gl-form-input>   -->
-                    
-                    {{count}}
-                    <paper-button on-tap="saveConfirm" raised>SAVE</paper-button>
-                    
                 </section>
             </main>
            
@@ -238,8 +223,8 @@
                 });
             },
             _toggleDrawer: function(e) {
-                this.$$('panel-right').open();
                 this.status = 'post';
+                this.$$('panel-right').open();
             },
             saveData:function(e){
                 console.log(e.detail);
