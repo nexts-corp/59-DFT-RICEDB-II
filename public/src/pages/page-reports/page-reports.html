@@ -80,7 +80,7 @@
                             error-message="กรุณาเลือกเดือน" item-label-path="name" item-value-path="id"></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                            <gl-combo-box class="saveData" label="ปี" items="{{getYear}}" value="{{lastyear}}"></gl-combo-box>
+                            <gl-combo-box class="saveData" label="ปี" items="[[getLastYear(firstyear)]]" value="{{lastyear}}"></gl-combo-box>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                         </gl-grid-col>
@@ -128,6 +128,14 @@
                     callback:function(){
                     }})
                 });
+            },
+            getLastYear:function(year){
+                var quotaYear = this.getYear;
+                if(year != ''){   
+                   return quotaYear.filter(function(item){
+                        return item > year;
+                    })
+                }    
             },
             _activeReports:function(){
                 var datas = {
