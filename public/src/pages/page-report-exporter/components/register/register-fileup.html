@@ -1,4 +1,3 @@
-<link rel="import" href="../../../components/dataBehavior.html">
 <dom-module id="register-fileup">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .title{
@@ -93,7 +92,7 @@
         this._getDocument();
       },
       _getDocument:function(){
-        this.read('./document',(data)=>{
+        this.read('./documentType',(data)=>{
           this.copy_authority = 'exporter-document='+data[0].doc_code;
           this.dit = 'exporter-document='+data[1].doc_code;
           this.attorney = 'exporter-document='+data[2].doc_code;
@@ -101,7 +100,7 @@
           this.vat = 'exporter-document='+data[4].doc_code;
           this.juristic_person = 'exporter-document='+data[5].doc_code;
         })
-      }
+      },
       _dataInput:function(data) {
         // console.log(data);
         this.exporterId = data;

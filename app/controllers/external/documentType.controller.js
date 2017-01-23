@@ -1,4 +1,4 @@
-exports.document = function (req, res) {
+exports.documentType = function (req, res) {
     var r = req._r;
     r.db('external_f3').table('document_type')
         .merge(function (row) {
@@ -13,7 +13,7 @@ exports.document = function (req, res) {
             res.json(err);
         })
 }
-exports.documentId = function (req, res) {
+exports.documentTypeId = function (req, res) {
     var r = req._r;
     r.db('external_f3').table('document_type')
         .get(req.params.doc_type_id)

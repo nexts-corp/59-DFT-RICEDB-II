@@ -14,7 +14,7 @@ exports.uploadFile = function (req, res) {
         var prefile = files.file[0];
 
         fs.readFile(prefile.path, function (err, data) {
-            //console.log(r);
+            // console.log(r);
             r.db('files').table('files').insert({
                 name: prefile.originalFilename,
                 type: prefile.headers['content-type'],
@@ -22,11 +22,6 @@ exports.uploadFile = function (req, res) {
                 timestamp: new Date(),
                 ref_path: req.headers['ref-path']
             })
-                // .do(function (d) {
-                //     r.db('external_f3').table('document_file').insert({
-                //         doc_type_id:
-                //     })
-                // })
                 .run().then(function (result) {
                     res.json(result);
                 }).catch(function (err) {
