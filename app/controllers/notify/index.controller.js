@@ -67,7 +67,8 @@ class index{
                     rule_date:result('date_moc').year().coerceTo('string').add('-').add(result('date_moc').month().coerceTo('string')).add('-').add(result('date_moc').day().coerceTo('string')),
                     rule_year:result('date_moc').year().add(543),
                     notify_date:result('date_notify').year().coerceTo('string').add('-').add(result('date_notify').month().coerceTo('string')).add('-').add(result('date_notify').day().coerceTo('string')),
-                    notify_year:result('date_notify').year().add(543)
+                    notify_year:result('date_notify').year().add(543),
+                    director_general_name:result('name')
                 }
             })
         ,
@@ -92,7 +93,7 @@ class index{
             //result.params
             var path = require('path');
             result.params['SUBREPORT_DIR'] = path.join(__dirname+"/../../reports/notify")+"\\";
-
+            //res.json({x:result});
             res._ireport("notify/notify.jasper","pdf", result.result, result.params);
         }).catch(function(err){
             res.json(err);
