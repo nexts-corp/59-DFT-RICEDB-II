@@ -79,7 +79,12 @@
           g2gModelBehavior
       ],
       listeners:{
-        'get-Fee-Detail':'_getFeeDetail'
+        'get-Fee-Detail':'_getFeeDetail',
+        'get-new-fee-list':'fdff',
+        'get-new-fee-list-detail':'_getFeeDetail'
+      },
+      fdff:function (e) {
+        console.log(e.detail.data);
       },
       properties: {
         newData:{
@@ -122,10 +127,12 @@
         })
       },
       _getFeeDetail:function (e) {
+        console.log(e.detail.data);
         this.fire('toast',{status:'load'});
         this._getDbFeeDetail(e.detail.data,(data)=>{
           this.fire('toast',{status:'load'});
           this.dataSelected=data;
+          console.log(this.dataSelected);
           this.notifyPath('dataSelected');
           this.pageSelected='feeDetail';
         })

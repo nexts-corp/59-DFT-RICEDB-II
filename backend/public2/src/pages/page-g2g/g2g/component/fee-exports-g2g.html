@@ -256,6 +256,8 @@
              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                  this.editInput();
+                 this.fire('get-new-fee-list',{data:detail.data.fee_id});
+                 this.fire('get-new-fee-list-detail',{data:detail.data.id});
                  let el = Polymer.dom(this.root).querySelectorAll('.required');
                  el.map((el)=> {el.reset();});
                    //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
@@ -285,7 +287,9 @@
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
                     // this.fire('close-drawer',{detail:'close-drawer'})
-                    this.fire('get-new-fee-list-and-fee-list-detail',{detail:detail.data.id});
+                    console.log(detail.data.id);
+                    this.fire('get-new-fee-list',{data:detail.data.fee_id});
+                    this.fire('get-new-fee-list-detail',{data:detail.data.id});
                   }
                 });
             });
