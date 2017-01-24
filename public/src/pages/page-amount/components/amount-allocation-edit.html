@@ -190,37 +190,37 @@
 				this.sumAllocation = answer;
         return this.formatNumber(answer);
       },
-			_sumAllocationUpdate:function(item,key){
-				// console.log(this.dataSelect);
-				var newQuantity = item.base.map((item)=>{
-					return this.unFormat(item.weigth_update) == this.unFormat(item.weigth);
-				});
-				var chkArray = function(newQuantity){
-					return newQuantity == true;
-				}
-				if(newQuantity.every(chkArray)==true){
-					this.amountUpdate = this.dataSelect.amount;
-					return this.dataSelect.amount;
-				}
-				else {
+	_sumAllocationUpdate:function(item,key){
+		// console.log(this.dataSelect);
+		// var newQuantity = item.base.map((item)=>{
+		// 	return this.unFormat(item.weigth_update) == this.unFormat(item.weigth);
+		// });
+		// var chkArray = function(newQuantity){
+		// 	return newQuantity == true;
+		// }
+		// if(newQuantity.every(chkArray)==true){
+		// 	this.amountUpdate = this.dataSelect.amount;
+		// 	return this.dataSelect.amount;
+		// }
+		// else {
+	
+			var answer = 0;
+			item.base.map((data)=>{
 			
-					var answer = 0;
-					item.base.map((data)=>{
-					
-						answer += parseFloat(this.unFormat(data[key]));
-					})
-					// console.log(answer);
-					this.dataSelect.quantity_update = answer;
-					// console.log(isNaN(answer));
-					if(isNaN(answer) == true){
-						return '';
-					}
-					else {
-						this.amountUpdate = answer;
-						return answer;
-					}
-				}
-      },
+				answer += parseFloat(this.unFormat(data[key]));
+			})
+			// console.log(answer);
+			this.dataSelect.quantity_update = answer;
+			// console.log(isNaN(answer));
+			if(isNaN(answer) == true){
+				return '';
+			}
+			else {
+				this.amountUpdate = answer;
+				return answer;
+			}
+		// }
+		},
 			_saveData:function(){
 				// this.fire('post-data')
 				var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
