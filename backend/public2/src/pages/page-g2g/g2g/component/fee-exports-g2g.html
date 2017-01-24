@@ -64,53 +64,62 @@
      </div>
      <div class="container">
        <gl-grid-row>
-
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-           <gl-form-input class="required" required  disabled format-number="on" label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" always-float-label></gl-form-input>
-         </gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-           <div class="setText">อัตราแลกเปลี่ยน</div>
-           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,10]]">
-             <gl-grid-row>
-               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-                 <div class="text">T/T</div>
-               </gl-grid-col>
-               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                 [[changeString2Num(data.*,'rate_tt')]]
-                 <gl-form-input class="required" required disabled allowed-pattern="[0-9||,||.]" format-number="on" style="width:60px;" value="{{data.rate_tt}}" no-label-float></gl-form-input>
-               </gl-grid-col>
-               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-                 <div class="text">ธนาคารเสนอ</div>
-               </gl-grid-col>
-               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                 [[changeString2Num(data.*,'rate_bank')]]
-                 <gl-form-input class="required" required disabled allowed-pattern="[0-9||,||.]" format-number="on" style="width:60px;" value="{{data.rate_bank}}" no-label-float></gl-form-input>
-               </gl-grid-col>
-             </gl-grid-row>
-           </gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+           <gl-form-input disabled format-number="on" label="จำนวนเงินที่ได้รับทั้งหมด (USD)" value="{{data.amount_usd}}" always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-           <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" allowed-pattern="[0-9||,||.]" format-number="on" value="{{_totalMoney(data.rate_bank,data.amount_usd)}}" placeholder="0.00"></gl-form-input>
+           [[changeString2Num(data.*,'fee_internal')]]
+           <gl-form-input class="required" required  label="ค่า FE ต่างประเทศ (USD)" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on"  value="{{data.fee_internal}}" always-float-label></gl-form-input>
+         </gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            [[changeString2Num(data.*,'balanceLessFees')]]
+           {{_balanceLessFees(data.amount_usd,data.fee_internal)}}
+           <gl-form-input disabled label="คงเหลือ (USD)" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.balanceLessFees}}" placeholder="0.00"></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
-
      <div class="container">
        <gl-grid-row>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-           [[changeString2Num(data.*,'fee_internal')]]
-           <gl-form-input class="required" required  disabled allowed-pattern="[0-9||,||.]" format-number="on" label="ค่า FE ต่างประเทศ (USD)" value="{{data.fee_internal}}" always-float-label></gl-form-input>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+           [[changeString2Num(data.*,'rate_tt')]]
+           <gl-form-input class="required" required label="อัตราแลกเปลี่ยน T/T" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.rate_tt}}" ></gl-form-input>
          </gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+           [[changeString2Num(data.*,'rate_bank')]]
+           <gl-form-input class="required" required label="อัตราแลกเปลี่ยนธนาคารเสนอ" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.rate_bank}}" ></gl-form-input>
+         </gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+           [[changeString2Num(data.*,'balanceChangeBath')]]
+           {{_balanceChangeBath(data.rate_bank,data.balanceLessFees)}}
+           <gl-form-input disabled label="จำนวนเงินหลังการเปลี่ยนอัตราแลกเปลี่ยน (บาท)" allowed-pattern="[0-9||,||.]" format-number="on" value="[[data.balanceChangeBath]]" placeholder="0.00"></gl-form-input>
+         </gl-grid-col>
+       </gl-grid-row>
+     </div>
+     <div class="container">
+       <gl-grid-row>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
            [[changeString2Num(data.*,'fee_foreign')]]
-           <gl-form-input class="required" required  disabled allowed-pattern="[0-9||,||.]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"  always-float-label></gl-form-input>
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" label="ค่า FE ในประเทศ (บาท)" value="{{data.fee_foreign}}"  always-float-label></gl-form-input>
+         </gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+           [[changeString2Num(data.*,'fee_other')]]
+           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-           [[changeString2Num(data.*,'fee_other')]]
-           <gl-form-input class="required" required  disabled allowed-pattern="[0-9||,||.]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"  always-float-label></gl-form-input>
+           {{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
+           [[changeString2Num(data.*,'feeTotalWithOutUsd')]]
+           <gl-form-input label="FEE/ ใช้จ่ายทั้งหมด (บาท)" readonly value="[[data.feeTotalWithOutUsd]]" allowed-pattern="[0-9||,||.]" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">{{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
-           <gl-form-input disabled label=" FE/ ใช้จ่ายทั้งหมด (บาท)" value="{{data.feeTotal}}" allowed-pattern="[0-9||,||.]" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
+       </gl-grid-row>
+     </div>
+     <div class="container">
+       <gl-grid-row>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+           [[changeString2Num(data.*,'totalbath')]]
+           [[_balanceBath(data.balanceChangeBath,data.feeTotalWithOutUsd)]]
+           <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="[[data.totalbath]]" allowed-pattern="[0-9||,||.]" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -121,7 +130,7 @@
                                 invoice-index="[[_ObcountIndex(index)]]"
                                 fee-total="[[_countFee(data.feeTotal)]] "
                                 invoice-page="[[data.invoicePage]]"
-       ></fee-exports-invoice-g2g>
+       id="dcxxx"></fee-exports-invoice-g2g>
 
      </template>
 
@@ -140,7 +149,7 @@
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
 
-
+                <paper-button raised class="gl-btn-danger" on-tap="cancelFee" >ffff</paper-button>
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
                <paper-button raised on-tap="cancelFeeReturn" class="gl-btn-default" >ย้อนกลับ</paper-button>
                 <template is="dom-if" if="[[!data.fee_det_status]]">
@@ -198,6 +207,10 @@
         this.data.fee_no = num.fee_no;
         this.notifyPath('data.fee_no');
       },
+      _balanceLessFees(amount_usd,fee_internal){
+        this.data.balanceLessFees = amount_usd-fee_internal
+        this.notifyPath('data.balanceLessFees');
+      },
       _changeDataFee:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.fee_date_receipt', date);
@@ -208,15 +221,23 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         el.map((el)=> {el.reset();el.value=''});
       },
-      _totalMoney:function (rate_bank,amount_usd) {
-        return rate_bank*amount_usd;
+      _balanceChangeBath:function (rate_bank,balanceLessFees) {
+        this.data.balanceChangeBath = rate_bank*balanceLessFees;
+        this.notifyPath('data.balanceChangeBath');
       },
       _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
         this.data.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
+        this.data.feeTotalWithOutUsd = parseFloat(feBath)+parseFloat(fee_other);
+        console.log(this.data.feeTotalWithOutUsd);
         // console.log(this.data.feeTotal);
         // this.data.feeTotal = ((fee_internal)*rate_bank)+(feBath)+(fee_other);
 
         this.notifyPath('data.feeTotal');
+        this.notifyPath('data.feeTotalWithOutUsd');
+      },
+      _balanceBath(balanceChangeBath,feeTotalWithOutUsd){
+        this.data.totalbath = balanceChangeBath-feeTotalWithOutUsd;
+        this.notifyPath('data.totalbath');
       },
       //นับหน้า
       _invoicePage:function (invoice=1) {
@@ -230,7 +251,30 @@
         // this.fire('close-drawer',{detail:'close-drawer'});
       },
       cancelFeeReturn:function () {
-        this.fire('page-change',{page:'feeDetailList'});
+        this.fire('back-page-fee-detail',{data:'_get-list-fee'});
+      },
+      addPayment:function () {
+        this.data.fee_det_status = false;
+        // fee_id
+        this._clearDatafee(this.data,'insert',(data)=>{
+            // data.invoice_status = true;
+            this.data.invoice.map((el,indexShmid)=>{
+             this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+           });
+            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+            // console.log(11);
+            this.insert('./g2g/fee/detail/insert',data, () => {
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+               callback:()=>{
+                  let shmid= this._getUrl();
+                  this.fire('close-drawer',{detail:'close-drawer'});
+                  this.fire('get-fee-list',{detail:shmid});
+                  let el = Polymer.dom(this.root).querySelectorAll('.required');
+                  el.map((el)=> {el.reset();});
+              }
+             });
+            });
+        });
       },
       savePayment:function () {
         this._clearDatafee(this.data,'update',(data)=>{
@@ -254,8 +298,6 @@
              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
                  this.editInput();
-                 this.fire('get-new-fee-list',{data:detail.data.fee_id});
-                 this.fire('get-new-fee-list-detail',{data:detail.data.id});
                  let el = Polymer.dom(this.root).querySelectorAll('.required');
                  el.map((el)=> {el.reset();});
                    //  detail.el.fire('get-contract-detail',{contractId:detail.data.id});
@@ -285,14 +327,35 @@
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
                     // this.fire('close-drawer',{detail:'close-drawer'})
-                    console.log(detail.data.id);
-                    this.fire('get-new-fee-list',{data:detail.data.fee_id});
-                    this.fire('get-new-fee-list-detail',{data:detail.data.id});
+                    let contract_id= this._getUrl();
+                    this.fire('get-fee-list',{detail:contract_id});
+                    this.fire('get-fee-list-detail',{detail:detail.data.id});
                   }
                 });
             });
           }
      },
+     deleteFee:function () {
+       this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+           status:'dialog',
+           text:'ต้องการลบข้อมูลใช่หรือไม่ ?',
+           confirmed:this._deleteDataFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
+           el: this, // compontents
+           data:this.data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+       })
+     },
+     _deleteDataFee:function(result,detail){
+       if (result == true) {
+         this.data.invoice.map((el,indexShmid)=>{
+          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+        });
+         this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
+           let contract_id= this._getUrl();
+           this.fire('get-fee-list',{detail:contract_id});
+            this.fire('close-drawer',{detail:'close-drawer'})
+         });
+       }
+    },
       _clearDatafee:function (data,action,callback) {
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
@@ -313,8 +376,24 @@
             });
           });
           // el.map((el)=> {el.reset();});
+
           callback(newData);
         }
+      },
+      _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,book_id) {
+        let data = {
+          id:invoice_id,
+          bl_no:bl_no,
+          invoice_date:new Date(invoice_date),
+          invoice_no:invoice_no,
+          invoice_status:this.approve(invoice_status),
+          made_out_to:made_out_to,
+          book_id:book_id
+        };
+        let contractId = this._getUrl();
+        this.update('./g2g/invoice/update',data, () => {
+          this.fire('get-invoice-list',{detail:contractId});
+        });
       },
 
     });

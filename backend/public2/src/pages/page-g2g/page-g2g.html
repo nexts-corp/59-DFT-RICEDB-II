@@ -349,8 +349,12 @@
                   this.fire('toast',{status:'load'});
                   this._flipDrawer();
                 }
+
+                this.dataSelected='';
+                console.log(e.detail.data);
                 this.dataSelected = e.detail.data;
-                this.dataForShipment.country_id = e.detail.data.country_id;
+                // ,y
+                // this.dataForShipment.country_id = e.detail.data.country_id;
                 this.notifyPath('dataForShipment.country_id');
                 // console.log(this.dataSelected);
               } else {
@@ -365,6 +369,7 @@
               try {
                 this.read('./g2g/fee/contract/id/'+e.detail.data.contract_id,(data)=>{
                   this.dataSelected = data;
+                  this.titlePanelRight = 'การถัวเงิน';
                   this.dataForFee.feeListinShm=data;
                   this.notifyPath('dataForFee.feeListinShm');
                   this.g2gPageSeleted = 'listOfFee';
