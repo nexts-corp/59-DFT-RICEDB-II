@@ -149,7 +149,7 @@
            <gl-form-panel-footer label="" set-padding="10px">
              <div class="horizontal end-justified layout">
 
-                <paper-button raised class="gl-btn-danger" on-tap="cancelFee" >ffff</paper-button>
+                <!-- <paper-button raised class="gl-btn-danger" on-tap="cancelFee" >ffff</paper-button> -->
                <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
                <paper-button raised on-tap="cancelFeeReturn" class="gl-btn-default" >ย้อนกลับ</paper-button>
                 <template is="dom-if" if="[[!data.fee_det_status]]">
@@ -157,7 +157,7 @@
                </template>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
-                 <paper-button raised class="gl-btn-danger" on-tap="calcelContract" >ยกเลิก</paper-button>
+                 <paper-button raised on-tap="calcelContract"class="gl-btn-danger"  >ยกเลิก</paper-button>
                  <paper-button raised on-tap="savePayment" class="gl-btn-success" >บันทึก</paper-button>
                </template>
              </div>
@@ -228,7 +228,7 @@
       _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
         this.data.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
         this.data.feeTotalWithOutUsd = parseFloat(feBath)+parseFloat(fee_other);
-        console.log(this.data.feeTotalWithOutUsd);
+        // console.log(this.data.feeTotalWithOutUsd);
         // console.log(this.data.feeTotal);
         // this.data.feeTotal = ((fee_internal)*rate_bank)+(feBath)+(fee_other);
 
@@ -251,7 +251,7 @@
         // this.fire('close-drawer',{detail:'close-drawer'});
       },
       cancelFeeReturn:function () {
-        this.fire('back-page-fee-detail',{data:'_get-list-fee'});
+        this.fire('page-change',{page:'feeDetailList'});
       },
       addPayment:function () {
         this.data.fee_det_status = false;
@@ -321,6 +321,9 @@
       },
       _approvePayment:function(result,detail){
          if (result == true) {
+           let contract_id= this._getUrl();
+          //  console.log(contract_id);
+          //  console.log(detail.data.id);
            this.update('./g2g/fee/detail/update',detail.data, () => {
             //  console.log(detail.data.id);
                this.fire('refresh-contract',{detail:'refresh-contract'});
@@ -329,7 +332,8 @@
                     // this.fire('close-drawer',{detail:'close-drawer'})
                     let contract_id= this._getUrl();
                     this.fire('get-fee-list',{detail:contract_id});
-                    this.fire('get-fee-list-detail',{detail:detail.data.id});
+                    // console.log(detail.data.id);
+                    this.fire('get-new-fee-list-detail',{data:detail.data.id});
                   }
                 });
             });
