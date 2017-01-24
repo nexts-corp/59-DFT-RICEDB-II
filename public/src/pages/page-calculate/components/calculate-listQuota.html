@@ -130,7 +130,7 @@
                                    <td class="right">[[formatNumber(item.div)]]</td>
                                    <td class="right">[[formatNumber(item.div_round)]]</td>
                                    <td class="right">[[formatNumber(item.amount_cal)]]</td> 
-                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" allowed-pattern="[0-9||,||.]" value="[[item.amount_update]]" key="{{index}}" on-input="_setAmount"></gl-form-input></td>
+                                   <td><gl-form-input style="margin-top: -22px" width="100%" format-number="on" allowed-pattern="[0-9||,||.]" value="{{item.amount_update}}" key="{{index}}" on-input="_setAmount"></gl-form-input></td>
                                 </tr>
                             </template>
                             <tr>
@@ -148,7 +148,7 @@
                                  <td class="right">[[formatNumber(data.calculate)]]</td>
                                  <td class="right"></td>
                                  <td class="right">[[formatNumber(data.amount_cal)]]</td>
-                                 <td class="right">[[formatNumber(resault)]]</td>
+                                 <td class="right">{{formatNumber(resault)}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -176,7 +176,7 @@
                 }
             },
             set:function(){
-                this.setFormat('0,0.00000')
+                // this.setFormat('0,0.00000')
             },
             _num:function(num){
                 return parseInt(num)+1;
