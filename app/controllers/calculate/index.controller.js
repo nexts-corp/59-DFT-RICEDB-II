@@ -230,7 +230,6 @@ class index {
                     return {
                         exporter_id:row('exporter_id'),
                         amount:row('amount_update'),
-                        amount_update:row('amount_update'),
                         calculate_id:result('id'),
                         quota_id:result('quota_id'),
                         quantity:result('quantity')
@@ -251,6 +250,8 @@ class index {
                     }
                     
             })
+        }).merge(function(row){
+            return { amount_update:row('quantity').sum('weigth_update') }
         })
         .do(function(result){
             return r.db('eu2').table('allocate').insert(result)
