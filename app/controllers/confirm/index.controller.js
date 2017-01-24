@@ -96,6 +96,98 @@ class index {
                 params.ordinal = parseInt(params.ordinal);
             }
 
+            r.db('eu2').table('confirm')
+            .innerJoin(r.db('eu2').table('quota').filter({year:params.year, type_rice_id:params.type_rice_id}), function(all,q){
+                return all('quota_id').eq(q('id'))
+                }).map(function(x){
+                return x('left').merge(function(quan){
+                return {
+                    year:x('right')('year'),
+                    type_rice_id:x('right')('type_rice_id'),
+                    quantity:x('left')('quantity').merge(function(xx){
+                        return {
+                        month: x('right')('quantity').filter({period:xx('period')})(0)('month'),
+                        percent: x('right')('quantity').filter({period:xx('period')})(0)('percent')
+                        }
+                    })
+                }
+                })
+                })
+
+            .innerJoin(r.db('eu2').table('exporter'), function(c,e){
+            return c('exporter_id').eq(e('id'))
+            }).without({right:['id']}).zip()
+            
+            .innerJoin(r.db('eu2').table('allocate'), function(ta,al){
+                return ta('allocate_id').eq(al('id'))
+            }).map(function(ml){
+                return ml('left').merge(function(x){
+                    return {
+                        calculate_id:ml('right')('calculate_id')
+                    }
+                })
+            })
+            
+            .innerJoin(r.db('eu2').table('calculate'), function(ta,ca){
+                return ta('calculate_id').eq(ca('id'))
+            }).map(function(ml){
+                return ml('left').merge(function(x){
+                    return {
+                        ordinal:ml('right')('ordinal')
+                    }
+                })
+            })
+            .filter(function(x){
+                return x('ordinal').eq(params.ordinal)
+                .and(x('status').eq('c').or(x('status').eq('r')))
+            }).orderBy('name')
+            .do(function(c){return { data:c, c_amount:c('amount').sum(),people:c.group('exporter_id').ungroup().count() }})        
+////
+            .do(function(result){
+                return {
+                confirm:result ,
+                notconfirm : 
+                   
+                r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate').filter({ordinal:params.ordinal}), function(a,c){
+                    return a('calculate_id').eq(c('id'))
+                }).map(function(ml){
+                return ml('left').merge(function(mr){
+                    return { ordinal: ml('right')('ordinal'), status_calculte: ml('right')('status')}
+                })
+                })
+            .filter({ status:'nc',status_calculte:'n'})   
+            .innerJoin(r.db('eu2').table('exporter'), function(ta,e){
+                return ta('exporter_id').eq(e('id'))
+            }).without({right:['id']}).zip()
+                
+            .innerJoin(r.db('eu2').table('quota').filter({year:params.year, type_rice_id:params.type_rice_id }), function(ta,q){
+                return ta('quota_id').eq(q('id'))
+            }).map(function(ml){
+                return ml('left').merge(function(mr){
+                    return {
+                        type_rice_id: ml('right')('type_rice_id'),
+                        quantity: ml('left')('quantity').merge(function(m){
+                        return {
+                            month: ml('right')('quantity').filter({period:m('period')})(0)('month'),
+                            percent: ml('right')('quantity').filter({period:m('period')})(0)('percent')
+                        }
+                    }),
+                        year:ml('right')('year')
+                    }
+                })
+            }).orderBy('name')
+            .do(function(nc){return { 
+                data:nc, 
+                nc_amount: 
+                      r.db('eu2').table('calculate').filter({ordinal:params.ordinal})
+                      .innerJoin(r.db('eu2').table('quota').filter({year:params.year,type_rice_id:params.type_rice_id}), function(c,q){
+                          return c('quota_id').eq(q('id'))
+                      }).map(function(x){ return x('left')('amount')}).coerceTo('array')(0).sub(result('c_amount'))
+                }
+              })
+       }//end return do
+}) // end do
+/*
             r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate').filter({ordinal:params.ordinal}), function(a,c){
                 return a('calculate_id').eq(c('id'))
             }).map(function(ml){
@@ -179,7 +271,7 @@ class index {
                     .do(function(c){return { data:c, c_amount:c('amount').sum() }})  
                 }
             }) // end do
-            
+*/
                 .run().then(function(result){
                     res.json(result);
                 })
@@ -197,6 +289,99 @@ class index {
                 params.ordinal = parseInt(params.ordinal);
             }
 
+            r.db('eu2').table('confirm')
+            .innerJoin(r.db('eu2').table('quota').filter({year:params.year, type_rice_id:params.type_rice_id}), function(all,q){
+                return all('quota_id').eq(q('id'))
+                }).map(function(x){
+                return x('left').merge(function(quan){
+                return {
+                    year:x('right')('year'),
+                    type_rice_id:x('right')('type_rice_id'),
+                    quantity:x('left')('quantity').merge(function(xx){
+                        return {
+                        month: x('right')('quantity').filter({period:xx('period')})(0)('month'),
+                        percent: x('right')('quantity').filter({period:xx('period')})(0)('percent')
+                        }
+                    })
+                }
+                })
+                })
+
+            .innerJoin(r.db('eu2').table('exporter').filter({id:params.exporter_id}), function(c,e){
+            return c('exporter_id').eq(e('id'))
+            }).without({right:['id']}).zip()
+            
+            .innerJoin(r.db('eu2').table('allocate'), function(ta,al){
+                return ta('allocate_id').eq(al('id'))
+            }).map(function(ml){
+                return ml('left').merge(function(x){
+                    return {
+                        calculate_id:ml('right')('calculate_id')
+                    }
+                })
+            })
+            
+            .innerJoin(r.db('eu2').table('calculate'), function(ta,ca){
+                return ta('calculate_id').eq(ca('id'))
+            }).map(function(ml){
+                return ml('left').merge(function(x){
+                    return {
+                        ordinal:ml('right')('ordinal')
+                    }
+                })
+            })
+            .filter(function(x){
+                return x('ordinal').eq(params.ordinal)
+                .and(x('status').eq('c').or(x('status').eq('r')))
+            }).orderBy('name')
+            .do(function(c){return { data:c, c_amount:c('amount').sum(),people:c.group('exporter_id').ungroup().count() }})        
+////
+            .do(function(result){
+                return {
+                confirm:result ,
+                notconfirm : 
+                   
+                r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate').filter({ordinal:params.ordinal}), function(a,c){
+                    return a('calculate_id').eq(c('id'))
+                }).map(function(ml){
+                return ml('left').merge(function(mr){
+                    return { ordinal: ml('right')('ordinal'), status_calculte: ml('right')('status')}
+                })
+                })
+            .filter({ status:'nc',status_calculte:'n'})   
+            .innerJoin(r.db('eu2').table('exporter').filter({id:params.exporter_id}), function(ta,e){
+                return ta('exporter_id').eq(e('id'))
+            }).without({right:['id']}).zip()
+                
+            .innerJoin(r.db('eu2').table('quota').filter({year:params.year, type_rice_id:params.type_rice_id }), function(ta,q){
+                return ta('quota_id').eq(q('id'))
+            }).map(function(ml){
+                return ml('left').merge(function(mr){
+                    return {
+                        type_rice_id: ml('right')('type_rice_id'),
+                        quantity: ml('left')('quantity').merge(function(m){
+                        return {
+                            month: ml('right')('quantity').filter({period:m('period')})(0)('month'),
+                            percent: ml('right')('quantity').filter({period:m('period')})(0)('percent')
+                        }
+                    }),
+                        year:ml('right')('year')
+                    }
+                })
+            }).orderBy('name')
+            .do(function(nc){return { 
+                data:nc, 
+                nc_amount: 
+                      r.db('eu2').table('calculate').filter({ordinal:params.ordinal})
+                      .innerJoin(r.db('eu2').table('quota').filter({year:params.year,type_rice_id:params.type_rice_id}), function(c,q){
+                          return c('quota_id').eq(q('id'))
+                      }).map(function(x){ return x('left')('amount')}).coerceTo('array')(0).sub(result('c_amount'))
+                }
+              })
+       }//end return do
+}) // end do
+
+/*
             r.db('eu2').table('allocate').innerJoin(r.db('eu2').table('calculate').filter({ordinal:params.ordinal}), function(a,c){
                 return a('calculate_id').eq(c('id'))
             }).map(function(ml){
@@ -280,7 +465,7 @@ class index {
                     .do(function(c){return { data:c, c_amount:c('amount').sum() }})  
                 }
             }) // end do
-
+*/
                 .run().then(function(result){
                     res.json(result);
                 })

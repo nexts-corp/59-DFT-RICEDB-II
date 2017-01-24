@@ -78,7 +78,6 @@
                 visibility: visible;
                 border: 4px solid #979A9A;
             }
-
             input[type='radio']:checked:after {
                 width: 15px;
                 height: 15px;
@@ -142,7 +141,7 @@
                                     <td class="right"  on-tap="_selectData" key="[[item]]">[[formatNumber(item.amount_update)]]</td>
                                     <td class="right"  on-tap="_selectData" key="[[item]]">[[item.status_th]]</td>
                                 </tr>
-                                
+ 
                             </template>
                     </tbody>
                 
@@ -157,8 +156,12 @@
             is: 'notice-list',
             behaviors:[FormatNumberBehavior,DataManageBehavior],
             observers:[
-                'checkData(dataList)'
+                'checkData(dataList)',
+                'clear(dataList)'
             ],
+            clear:function(data){
+               console.log(this.$$('#typeRice'));
+            },
             _selectData:function(e){
                 console.log(e.currentTarget.key);
                 this.fire('data-select',e.currentTarget.key)
