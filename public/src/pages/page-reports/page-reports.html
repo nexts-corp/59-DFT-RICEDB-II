@@ -347,23 +347,6 @@
                 }
             },
             _activeBook:function(){
-                var datas = {
-                    notify_month : this.notifyMonth,
-                    notify_month_th: this.getMonthName(this.notifyMonth),
-                    notify_year : this.notifyYear,
-                    exporter_id : this.selectExporter,
-                    exporter_name : this.getExporterName(this.selectExporter),
-                    first_month : this.b_fistMonth,
-                    first_month_th : this.getMonthName(this.b_fistMonth),
-                    first_year : this.b_fistYear,
-                    last_month : this.b_lastMonth,
-                    last_month_th : this.getMonthName(this.b_lastMonth),
-                    last_year : this.b_lastYear,
-                    hisDate : this.hisDate,
-                    hisDate_year : this.fillterYearVaddinDate(this.hisDate),
-                    notiDate : this.notiDate,
-                    notiDate_year : this.fillterYearVaddinDate(this.notiDate),
-                }
                 var check = Polymer.dom(this.root).querySelectorAll('.book_saveData').map((item)=>{
                     return item.validate();
                 })
@@ -372,6 +355,27 @@
                     return check == true;
                 }
                 if(check.every(checkStat) == true){
+                    var shortFirst = this.getMonthShortName(this.b_fistMonth)+this.b_fistYear.slice(2,5);
+                    var shortLast = this.getMonthShortName(this.b_lastMonth)+this.b_lastYear.slice(2,5);
+                    var short = shortFirst+' - '+shortLast;
+                    var datas = {
+                        notify_month : this.notifyMonth,
+                        notify_month_th: this.getMonthName(this.notifyMonth),
+                        notify_year : this.notifyYear,
+                        exporter_id : this.selectExporter,
+                        exporter_name : this.getExporterName(this.selectExporter),
+                        first_month : this.b_fistMonth,
+                        first_month_th : this.getMonthName(this.b_fistMonth),
+                        first_year : this.b_fistYear,
+                        last_month : this.b_lastMonth,
+                        last_month_th : this.getMonthName(this.b_lastMonth),
+                        last_year : this.b_lastYear,
+                        hisDate : this.hisDate,
+                        hisDate_year : this.fillterYearVaddinDate(this.hisDate),
+                        notiDate : this.notiDate,
+                        notiDate_year : this.fillterYearVaddinDate(this.notiDate),
+                        fl : short,
+                    }
                     console.log(datas);
                     window.open(
                    '/api/report/report_alert?notify_month=' +datas.notify_month+
@@ -388,7 +392,8 @@
                    '&hisDate='+datas.hisDate+
                    '&hisDate_year='+datas.hisDate_year+
                    '&notiDate='+datas.notiDate+
-                   '&notiDate_year='+datas.notiDate_year,
+                   '&notiDate_year='+datas.notiDate_year+
+                   '&fl='+datas.fl,
                    '_blank'   
                   )
                 } 
