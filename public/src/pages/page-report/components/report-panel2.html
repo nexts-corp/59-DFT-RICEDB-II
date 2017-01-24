@@ -2,6 +2,8 @@
 <link rel="import" href="./../../components/month-behavior.html">
 <link rel="import" href="./../../components/format-number-behavior.html">
 
+<link rel="import" href="/bower_components/nylon-upload/nylon-upload.html">
+
 <dom-module id="report-panel2">
     <template>
         <style is="custom-style" include="gl-table gl-panel gl-color">
@@ -45,10 +47,69 @@
             gl-grid-row{
                 padding: 10px;
             }
-        
+               /*----------------*/
+            main {
+                min-width: 320px;
+                max-width: 1000px;
+                padding: 5px;
+                margin: 0 auto;
+                background: #fff;
+            }
+
+            section {
+                display: none;
+                padding: 20px 0 0;
+                border-top: 1px solid #ddd;
+            }
+
+            input {
+                display: none;
+            }
+
+            label {
+                display: inline-block;
+                margin: 0 0 -1px;
+                padding: 15px 25px;
+                font-weight: 600;
+                text-align: center;
+                color: #bbb;
+                border: 1px solid transparent;
+            }
+
+            label:before {
+                font-family: fontawesome;
+                font-weight: normal;
+                margin-right: 10px;
+            }
+            label:hover {
+                color: #888;
+                cursor: pointer;
+            }
+
+            input:checked + label {
+                color: #555;
+                border: 1px solid #ddd;
+                border-top: 3px solid orange;
+                border-bottom: 1px solid #fff;
+            }
+
+            #tab1:checked ~ #content1,
+            #tab2:checked ~ #content2,
+            #tab3:checked ~ #content3 {
+                display: block;
+            }
+            /*---------------------------------*/
         </style>
         <div class="container">
-           <gl-grid-row width="{{getWidth}}">
+                <main>
+                <input class="radio" id="tab1" type="radio" name="tabs" value="true" checked>
+                <label for="tab1">ป้อนข้อมูล</label>
+                    
+                <input class="radio" id="tab2" type="radio" name="tabs" value="false">
+                <label for="tab2">อัพโหลดไฟล์</label>
+                    
+                <section id="content1">
+                     <gl-grid-row width="{{getWidth}}">
                  <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                       <gl-combo-box class="saveData" label="รายงานการส่งออกข้าวไป EU" items="{{listEu}}" value="{{listEuValue}}"
                       error-message="กรุณาเลือกรายการ" item-label-path="name" item-value-path="id" always-float-label required></gl-combo-box>
@@ -87,6 +148,13 @@
                     <paper-button raised class="gl-btn-danger btn">ยกเลิก</paper-button>
                     <paper-button on-tap="saveData" raised class="gl-btn-success btn">บันทึก</paper-button>
                 </div>
+                </section>
+                    
+                <section id="content2">
+                    <nylon-upload target="/api/upload/file" accept="application/pdf" ref-path="{{setRefpath(id)}}"></nylon-upload>
+                </section>
+            </main>
+               
         </div>
 
     </template>
@@ -136,6 +204,14 @@
                  status:{
                      observer: 'checkStatus'
                  }
+            },
+            setRefpath:function(id){
+                if(id == ''){
+                    return ''
+                }
+                else {
+                    return 'eu-report-'+id;
+                }
             },
             getData:function(){
                this.saveEuValue = this.data.quota;
@@ -204,6 +280,7 @@
                     this.checkDocValue = '';
                     this.getTypeRice = '';
                     this.getWeigth = '';
+                    this.id = '';
                 }
                 else if (this.status == 'update'){
                     console.log(this.data);
@@ -214,6 +291,7 @@
                     this.checkDocValue = this.data.type_doc;
                     this.getTypeRice = this.data.type_rice_id;
                     this.getWeigth = this.data.weigth.toString();
+                    this.id = this.data.id;
                 }
             },
             confirmData:function(){
