@@ -79,13 +79,13 @@
                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                 <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYearFirst}}"></gl-combo-box>
+                 <gl-combo-box label="แสดงข้อมูลรายปี(เริ่มต้น)" items="{{getYear}}" value="{{selectYearFirst}}"></gl-combo-box>
                	
               </gl-grid-col>
               <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
               </gl-grid-col>
              <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-              <gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYearLast}}"></gl-combo-box> 
+              <gl-combo-box label="แสดงข้อมูลรายปี(สิ้นสุด)" items="{{getLastYear(selectYearFirst)}}" value="{{selectYearLast}}"></gl-combo-box> 
                 
               </gl-grid-col>
              
@@ -124,22 +124,22 @@
            <div class="vertical layout flex marginTL">
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมการส่งออกที่ผ่านมา</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_export}}" readonly></gl-form-input></div>
+            <div class="flex-2"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_export}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมประวัติการส่งออกเพื่อคำนวณส่วนจัดสรร</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_for_cal}}" readonly></gl-form-input></div>
+            <div class="flex-2"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_for_cal}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
           <div class="horizontal layout">
             <div class="flex-3 textcontent">ยอดรวมโควตาที่เคยได้รับ</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_quota}}" readonly></gl-form-input></div>
+            <div class="flex-2"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.sum_quota}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
            <div class="horizontal layout">
             <div class="flex-3 textcontent">ปริมาณโควตา 100%</div>
-            <div class="flex"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.quota_amount}}" readonly></gl-form-input></div>
+            <div class="flex-2"><gl-form-input class="saveData" allowed-pattern="[0-9||,||.]" format-number="on" no-label-float value="{{sumAnswer.quota_amount}}" readonly></gl-form-input></div>
             <div class="flex"></div>
           </div>
           </div>
@@ -226,6 +226,14 @@
         if(data.quota_amount == 0 || data.sum_export == 0 || data.sum_for_cal == 0 || data.sum_quota == 0){
           this.activeSave = true;
         }
+      },
+      getLastYear:function(year){
+        if(year != ''){
+            return this.getYear.filter((item)=>{
+              return year <= item;
+            })
+        }
+        
       },
       _selectAllChanged:function(val){ 
         this.companyName.map((item,index)=>{
