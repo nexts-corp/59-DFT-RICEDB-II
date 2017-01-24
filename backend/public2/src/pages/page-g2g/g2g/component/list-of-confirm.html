@@ -126,14 +126,19 @@ Polymer({
   },
   _insertRiceType:function (data) {
     //เพิ่มชนิดข้าวลงไป
-    this.dataForSelect.contract_type_rice=this.data.contract_type_rice;
-    this.notifyPath('dataForSelect.contract_type_rice');
-    this.dataForSelect.contract_id=this.data.contract_id;
-    this.notifyPath('dataForSelect.contract_id');
-    this.dataForSelect.contract_quantity_confirm_balance=this.data.contract_quantity_confirm_balance;
-    this.notifyPath('dataForSelect.contract_quantity_confirm_balance');
-    let dataContract = this.data.confirm_letter.filter((confirmList)=> confirmList.cl_id == this.clId );
-    this.dataSelected=dataContract[0];
+
+    try {
+      this.dataForSelect.contract_type_rice=this.data.contract_type_rice;
+      this.notifyPath('dataForSelect.contract_type_rice');
+      this.dataForSelect.contract_id=this.data.contract_id;
+      this.notifyPath('dataForSelect.contract_id');
+      this.dataForSelect.contract_quantity_confirm_balance=this.data.contract_quantity_confirm_balance;
+      this.notifyPath('dataForSelect.contract_quantity_confirm_balance');
+      let dataContract = this.data.confirm_letter.filter((confirmList)=> confirmList.cl_id == this.clId );
+      this.dataSelected=dataContract[0];
+    } catch (e) {
+      console.log(e);
+    }
   },
   createConfirm:function () {
     this.pageSelected = 'addConfirm';
