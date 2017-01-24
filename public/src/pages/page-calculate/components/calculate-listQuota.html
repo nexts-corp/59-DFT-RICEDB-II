@@ -69,7 +69,8 @@
                 </div>
                 <div class="gl-panel-default-content">
                     <div class="right" style="padding-bottom:5px;">
-                    ยอดรวมส่งออก {{countYear}} ปี เพื่อการคำนวณ: {{formatNumber(data.calculate)}} ยอดรวมการส่งออก [[formatNumber(data.report)]]
+                    [[set()]]
+                    ยอดรวมส่งออก {{countYear}} ปี เพื่อการคำนวณ: {{newFormat(data.calculate)}} ยอดรวมการส่งออก [[formatNumber(data.report)]]
                     ยอดรวมโควตา [[formatNumber(data.confirm)]]</div>
                     <div style="overflow-x:auto;">
                     <table class="gl-table-default" width="100%" style="border: 1px solid #ddd;">
@@ -173,6 +174,9 @@
                     type: Array,
                     observer: '_getYear'
                 }
+            },
+            set:function(){
+                this.setFormat('0,0.00000')
             },
             _num:function(num){
                 return parseInt(num)+1;
