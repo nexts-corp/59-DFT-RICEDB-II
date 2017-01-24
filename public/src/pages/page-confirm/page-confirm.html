@@ -192,6 +192,9 @@
                 display: block;
             }
 
+            .header{
+
+            }
     </style>
     <template>
     <div class="layout vertical registor">
@@ -246,12 +249,14 @@
                     <label for="tab1">ยังไม่ยืนยัน [[dataCompanny.notconfirm.data.length]] รายการ</label>
 
                     <input id="tab2" type="radio" name="tabs">
-                    <label for="tab2">ยืนยัน [[dataCompanny.confirm.c_amount]] รายการ</label>
+                    <label for="tab2">ยืนยัน [[dataCompanny.confirm.people]] รายการ</label>
                     <section id="content1">
+                        <div class="contentHeader">ปริมาณยันไม่ยืนยัน [[dataCompanny.notconfirm.nc_amount]] ตัน ปริมาณที่ยืนยัน  [[dataCompanny.confirm.c_amount]] ตัน</div>
                         <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" on-confirm-exporter="_saveData" status="notConfirm"></confirm-list>
                     </section>
-
+    
                     <section id="content2">
+                        <div class="contentHeader">ปริมาณยันไม่ยืนยัน [[dataCompanny.notconfirm.nc_amount]] ตัน ปริมาณที่ยืนยัน  [[dataCompanny.confirm.c_amount]] ตัน</div>
                         <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" on-cancel-exporter="_cancelConfirm" status="confirm"></confirm-list>
                     </section>
                 </main>
