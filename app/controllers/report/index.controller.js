@@ -380,7 +380,7 @@ class index{
                     fl:params.fl
                 }
                 //res.json(result);
-                res._ireport("report_test/report_alert.jasper","pdf", result,parameters);
+                res._ireport("report_test/report_alert2.jasper","pdf", result,parameters);
             }).error(function(err) {
                 res.json(err);
             });
@@ -462,7 +462,7 @@ class index{
                     fl:params.fl
                 }
                 //res.json(result);
-                res._ireport("report_test/report_alert.jasper","pdf", result,parameters);
+                res._ireport("report_test/report_alert2.jasper","pdf", result,parameters);
             }).error(function(err) {
                 res.json(err);
             });
