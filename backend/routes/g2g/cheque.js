@@ -81,21 +81,27 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                                             })
                                                 .merge(function (shm_det_merge) {
                                                     return {
-                                                        pay_bath: shm_det_merge('value_bath').sub(shm_det_merge('invoice_fee'))
+                                                        amount: shm_det_merge('value_bath').sub(shm_det_merge('invoice_fee'))
                                                     }
                                                 })
-                                                .group('exporter_id').sum('pay_bath').ungroup()
+                                                .group('exporter_id').sum('amount').ungroup()
                                                 .map(function (inv_det_map) {
                                                     return {
                                                         exporter_id: inv_det_map('group'),
-                                                        pay_bath: inv_det_map('reduction')
+                                                        amount: inv_det_map('reduction').sub(inv_det_map('reduction').mul(0.01)),
+                                                        exporter_name: r.db('external_f3').table('exporter').get(inv_det_map('group'))
+                                                            .getField('trader_id').do(function (trader_do) {
+                                                                return r.db('external_f3').table('trader').get(trader_do).getField('seller_id').do(function (seller_do) {
+                                                                    return r.db('external_f3').table('seller').get(seller_do).getField('seller_name_th')
+                                                                })
+                                                            })
                                                     }
                                                 })
                                         }
                                     })
                                     .merge(function (invoice_merge) {
                                         return {
-                                            pay_bath: invoice_merge('invoice_detail').sum('pay_bath'),
+                                            amount: invoice_merge('invoice_detail').sum('amount'),
                                             fee_date_receipt: fee_det_merge('fee_date_receipt').split('T')(0)
                                         }
                                     })
