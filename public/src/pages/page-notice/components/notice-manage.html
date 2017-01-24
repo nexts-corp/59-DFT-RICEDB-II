@@ -39,18 +39,18 @@
             <gl-form-panel-body set-padding = "0px 0px 0px 0px" set-border="0px">
                 <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-form-input label="ชื่อ" value="{{name.firstName}}"></gl-form-input>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+                        <gl-form-input label="ชื่อ - นามสกุล(ผู้ลงนาม)" value="{{fullname}}"></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <gl-form-input label="สกุล" value="{{name.lastName}}"></gl-form-input>
-                    </gl-grid-col>
+                    <!--<gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                        <gl-form-input label="สกุลผู้ลงนาม" value="{{name.lastName}}"></gl-form-input>
+                    </gl-grid-col>-->
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                 </gl-grid-row>
                 <gl-grid-row width="{{getWidth}}">
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                        <vaadin-date-picker label="วันที่" value="{{data.date_moc}}"></vaadin-date-picker>
+                        <vaadin-date-picker label="วันที่ระเบียบ" value="{{data.date_moc}}"></vaadin-date-picker>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
                         <vaadin-date-picker label="วันที่ประกาศ" value="{{data.date_notify}}"></vaadin-date-picker>
@@ -134,9 +134,10 @@
             },
             manageData:function(){
                 console.log(this.dataList);
-                var name  = this.dataList.name.split(" ");
-                this.set('name.firstName',name[0]);
-                this.set('name.lastName',name[1]);
+                this.fullname = this.dataList.name;
+                // var name  = this.dataList.name.split(" ");
+                // this.set('name.firstName',name[0]);
+                // this.set('name.lastName',name[1]);
                 var myDate = this.dataList.date_moc.split("T");
                 var myDateNotify = this.dataList.date_notify.split("T");
                 this.set('data.date_notify',myDateNotify[0]);
@@ -152,7 +153,7 @@
             },
             saveData:function(){
                 this.data.calculate_id = this.dataList.data[0].calculate_id;
-                this.data.name = this.name.firstName+' '+this.name.lastName; 
+                this.data.name = this.fullname; 
                 console.log(this.data);
                 this.fire('post-data',this.data);
             }
