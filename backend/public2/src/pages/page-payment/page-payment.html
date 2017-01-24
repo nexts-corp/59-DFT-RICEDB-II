@@ -89,7 +89,7 @@
             properties: {
               dataForSeleted:{
                 type: Object,
-                value:{nameContract:''}
+                value:{nameContract:'',contract_id:''}
               },
               dataListPay: {
                 type: Object,
@@ -152,21 +152,14 @@
             _getUrl:function () {
               // get cookie
               let cookie = document.cookie.split(';');
-              console.log(cookie);
               let contract_id;
               cookie.map((ee)=>{
-                // ee.charAt(0) == ' ' ?
-                //   this.dataForSeleted.nameContract = ee.split('=')[1]
-                //   this.notifyPath('dataForSeleted.nameContract')
-                //  : url = ee.split('=')[1];
                 if (ee.charAt(0) == ' ') {
                   this.dataForSeleted.nameContract = ee.split('=')[1];
                   this.notifyPath('dataForSeleted.nameContract');
                 } else if (ee.indexOf("contract_id") == 0 ) {
                   contract_id = ee.split('=')[1];
-                  // this.dataSelectedfee.draft.
                   this.dataForSeleted.contract_id=contract_id;
-                  // console.log(this.dataForSeleted.contract_id);
                   this.notifyPath('dataForSeleted.contract_id');
                 }
               });

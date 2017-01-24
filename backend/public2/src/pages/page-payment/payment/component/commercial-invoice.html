@@ -356,6 +356,7 @@
       },
       createInvoice:function () {
         let  book_id = this.data.book_id;
+        let contract_id = this._getUrl();
         this._cleanDataBl(this.data,(data)=>{
           data.book_status=true;
           data.id=book_id;
@@ -363,7 +364,6 @@
             this.fire('get-bl-list',{detail:contract_id});
           });
         });
-        let contract_id = this._getUrl();
         this.data.invoice_status=false;
         this._cleanDataInvoice(this.data,(data)=>{
           this.insert('./g2g/invoice/insert',data, () => {
@@ -388,7 +388,7 @@
       _saveInvoice:function (result,detail) {
         if (result == true) {
           this.update('./g2g/invoice/update',detail.data, () => {
-            // console.log(detail.data);
+            console.log('=>',detail.data);
             this.fire('get-invoice-list',{detail:detail.data.contract_id});
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
               callback:()=>{

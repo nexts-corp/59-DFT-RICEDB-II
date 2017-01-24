@@ -126,14 +126,18 @@
     _getUrl:function () {
       // get cookie
       let cookie = document.cookie.split(';');
-      let url;
+      let contract_id;
       cookie.map((ee)=>{
-        ee = ee.replace(' ', '');
-        if (ee.indexOf("url") == 0 ) {
-          url=ee.split('=')[1];
+        if (ee.charAt(0) == ' ') {
+          // this.dataForSeleted.nameContract = ee.split('=')[1];
+          // this.notifyPath('dataForSeleted.nameContract');
+        } else if (ee.indexOf("contract_id") == 0 ) {
+          contract_id = ee.split('=')[1];
+          // this.dataForSeleted.contract_id=contract_id;
+          // this.notifyPath('dataForSeleted.contract_id');
         }
       });
-      return url;
+      return contract_id;
     },
     getDateg2g:function (date,callback) {
       // ex
