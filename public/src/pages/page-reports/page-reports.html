@@ -43,6 +43,9 @@
             section{
                 padding: 20px;
             }
+            .article{
+                padding: 10px;
+            }
         </style>
 
         <div class="flex title">
@@ -64,7 +67,7 @@
                 <div class="gl-panel-default-content">
                     <iron-pages selected="[[reportSelect]]" attr-for-selected="name">
                         <div name="reports">
-                            
+
                             <gl-grid-row width="{{getWidth}}">
                                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
                                 </gl-grid-col>
@@ -136,7 +139,7 @@
                                     </gl-grid-col>
                                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                             </gl-grid-row>
-                                
+                            
                             <gl-grid-row width="{{getWidth}}">
                                 <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
                                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
@@ -199,7 +202,7 @@
                 </div>
             </div>
             <div class="flex-end-justified">
-                <paper-button raised class="gl-btn-primary" on-tap="_checkActive">ออกรายงาน</paper-button>
+                <paper-button raised class="gl-btn-primary" on-tap="_checkActive" hidden$="[[checkType(reportSelect)]]">ออกรายงาน</paper-button>
            </div>
         </section>
     </template>
@@ -286,6 +289,19 @@
                 })
                 return name
             },
+            fillterYearVaddinDate:function(date){
+                var get = date.split('-');
+                var year = parseInt(get[0]) + 543;
+                return year.toString();
+            },
+            checkType:function(type){
+                if(type == ''){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            },
             _checkActive:function(){
                 if(this.reportSelect == 'reports'){
                     this._activeReports();
@@ -344,7 +360,9 @@
                     last_month_th : this.getMonthName(this.b_lastMonth),
                     last_year : this.b_lastYear,
                     hisDate : this.hisDate,
-                    notiDate : this.notiDate
+                    hisDate_year : this.fillterYearVaddinDate(this.hisDate),
+                    notiDate : this.notiDate,
+                    notiDate_year : this.fillterYearVaddinDate(this.notiDate),
                 }
                 var check = Polymer.dom(this.root).querySelectorAll('.book_saveData').map((item)=>{
                     return item.validate();
@@ -355,9 +373,8 @@
                 }
                 if(check.every(checkStat) == true){
                     console.log(datas);
-                }
-                  window.open(
-                   '?notify_month=' +datas.notify_month+
+                    window.open(
+                   '/api/report/report_alert?notify_month=' +datas.notify_month+
                    '&notify_month_th='+datas.notify_month_th+
                    '&notify_year='+datas.notify_year+
                    '&exporter_id='+datas.exporter_id+
@@ -369,9 +386,12 @@
                    '&last_month_th='+datas.last_month_th+
                    '&last_year='+datas.last_year+
                    '&hisDate='+datas.hisDate+
-                   '&notiDate='+datas.notiDate,
+                   '&hisDate_year='+datas.hisDate_year+
+                   '&notiDate='+datas.notiDate+
+                   '&notiDate_year='+datas.notiDate_year,
                    '_blank'   
                   )
+                } 
             }
         });
     </script>
