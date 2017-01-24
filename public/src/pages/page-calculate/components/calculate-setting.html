@@ -95,7 +95,7 @@
         <paper-listbox class="panel">
             <div class="bg"> 
               <div class="flex-equal-justified">
-                <paper-checkbox checked="{{selectAll}}" style="padding:10px">เลือกทั้งหมด</paper-checkbox>       
+                <paper-checkbox id="mainCheck" checked="{{selectAll}}" style="padding:10px">เลือกทั้งหมด</paper-checkbox>       
               </div>
             </div> 
             <div>
@@ -283,6 +283,13 @@
         },
         _getlistCompany:function(fistYear,lastYear,typeRice){
         if(fistYear != ''&& lastYear != ''&& typeRice != ''){
+          if(this.companyName != ''){
+              this.companyName.map((item,index)=>{
+                this.set('companyName.'+index+'.check',false);
+              });
+              this.set('sumAnswer','');
+          }
+          this.$$('#mainCheck').checked = false;
           this.active = false;
           this.firstYear = fistYear;
           this.lastYear = lastYear; 
