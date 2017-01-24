@@ -376,7 +376,8 @@ class index{
                     hisDate_year : params.hisDate_year,
                     hisDate: params.hisDate,
                     notiDate_year : params.notiDate_year,
-                    notiDate: params.notiDate
+                    notiDate: params.notiDate,
+                    fl:params.fl
                 }
                 //res.json(result);
                 res._ireport("report_test/report_alert.jasper","pdf", result,parameters);
@@ -457,7 +458,8 @@ class index{
                     hisDate_year : params.hisDate_year,
                     hisDate: params.hisDate,
                     notiDate_year : params.notiDate_year,
-                    notiDate: params.notiDate
+                    notiDate: params.notiDate,
+                    fl:params.fl
                 }
                 //res.json(result);
                 res._ireport("report_test/report_alert.jasper","pdf", result,parameters);
