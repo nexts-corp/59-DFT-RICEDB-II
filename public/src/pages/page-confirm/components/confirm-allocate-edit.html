@@ -172,6 +172,7 @@
                  
       <div class="horizontal end-justified layout">
           <paper-button class$="{{setClass}}" on-tap="_saveData" raised>{{btnName}}</paper-button>
+          <paper-button class="gl-btn-danger" on-tap="_notSaveData" hidden="{{!active}}" raised>ไม่รับส่วนจัดสรร</paper-button>
       </div>
 
       <!-- โอนส่วนจัดสรร -->
@@ -334,6 +335,25 @@
           // var cancelConfirm = this.data.id;
           this.fire('cancel-confirm',cancelConfirm);
         }
+      },
+      _notSaveData:function(){
+            var quantityUpdate = this.data.quantity.map((item)=>{
+            var {period,weigth} = item;
+            var newitem = {period,weigth};
+            newitem.weigth = 0;
+            return newitem;
+          });
+          var datas = [
+              {
+              amount : 0,
+              exporter_id: this.data.exporter_id,
+              quantity: quantityUpdate,
+              quota_id: this.data.quota_id,
+              allocate_id: this.data.id
+            }
+          ]
+          console.log(datas);
+          this.fire('save-data',datas);
       }
     });
   </script>
