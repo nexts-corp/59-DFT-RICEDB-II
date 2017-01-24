@@ -65,27 +65,47 @@ exports.listFile = function (req, res) {
 exports.listFilePath = function (req, res) {
     var r = req._r;
     var params = req.params;
-    r.db('external_f3').table('document_file').filter({ exporter_id: params.exporter_id, ref_path: params.refPath })
-        // r.db('files').table('files').without('contents').filter({ ref_path: params.refPath })
-        .orderBy(r.desc('timestamp'))
-        .map(function (row) {
-            return {
-                name: row('name').add(' -->> ')
-                    .add(row('timestamp').year().coerceTo('string'))
-                    .add('-')
-                    .add(row('timestamp').month().coerceTo('string'))
-                    .add('-')
-                    .add(row('timestamp').day().coerceTo('string'))
-                ,
-                progress: 100, complete: true,
-                file_id: row('id')
-            }
+    r.db('external_f3').table('document_file')
+        .innerJoin(r.db('external_f3').table('document_type'),
+        function (file, type) {
+            return file('doc_type_id').eq(type('doc_code'))
         })
-        .run().then(function (result) {
+        .map(function (m) {
+            return m('left').merge(function () {
+                return { doc_type_id: m('right')('id') }
+            })
+        })
+        .eqJoin('file_id', r.db('files').table('files')).without({ right: ["id", "contents"] }).zip()
+        .eqJoin('exporter_id', r.db('external_f3').table('exporter')).pluck('left', { right: 'exporter_id' }).zip()
+        .merge({ progress: 100, complete: true })
+        .filter({ exporter_id: params.exporter_id, ref_path: params.refPath })
+        .run()
+        .then(function (result) {
             res.json(result);
-        }).catch(function (err) {
+        })
+        .error(function (err) {
             res.json(err);
         })
+    //     r.db('files').table('files').without('contents').filter({ ref_path: params.refPath })
+    //     .orderBy(r.desc('timestamp'))
+    //     .map(function (row) {
+    //         return {
+    //             name: row('name').add(' -->> ')
+    //                 .add(row('timestamp').year().coerceTo('string'))
+    //                 .add('-')
+    //                 .add(row('timestamp').month().coerceTo('string'))
+    //                 .add('-')
+    //                 .add(row('timestamp').day().coerceTo('string'))
+    //             ,
+    //             progress: 100, complete: true,
+    //             file_id: row('id')
+    //         }
+    //     })
+    //     .run().then(function (result) {
+    //         res.json(result);
+    //     }).catch(function (err) {
+    //         res.json(err);
+    //     })
 }
 exports.downloadFile = function (req, res) {
     var r = req._r;

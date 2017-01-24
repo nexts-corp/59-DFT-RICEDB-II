@@ -11,48 +11,53 @@
   <template>
     <div class="title">นิติบุคคล</div>
     <nylon-upload
-      target="/api/upload/exporter/file"
+      target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[juristic_person]"
+      ref-path="[[juristic_person]]"
+      exporter-id="[[exporterId]]"
       >
     </nylon-upload>
-    <!-- <div class="title">ผู้มีอำนาจ บจ.5</div>
+    <div class="title">ผู้มีอำนาจ บจ.5</div>
     <nylon-upload
-      target="/api/upload/file"
+      target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
       ref-path="[[authority]]"
+      exporter-id="[[exporterId]]"
       >
     </nylon-upload>
     <div class="title">ภพ 01/20</div>
     <nylon-upload
-      target="/api/upload/file"
+      target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
       ref-path="[[vat]]"
+      exporter-id="[[exporterId]]"
       >
     </nylon-upload>
     <div class="title">คน.</div>
     <nylon-upload
-      target="/api/upload/file"
+      target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
       ref-path="[[dit]]"
+      exporter-id="[[exporterId]]"
       >
     </nylon-upload>
     <div class="title">สำเนาบัตรผู้มีอำนาจ</div>
     <nylon-upload
-      target="/api/upload/file"
+      target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
       ref-path="[[copy_authority]]"
+      exporter-id="[[exporterId]]"
       >
     </nylon-upload>
     <div class="title">หนังสือผู้รับมอบ</div>
     <nylon-upload
-      target="/api/upload/file"
+      target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
       ref-path="[[attorney]]"
+      exporter-id="[[exporterId]]"
       >
-    </nylon-upload> -->
+    </nylon-upload>
     <div style="margin-bottom:20px;"></div>
-    <!-- {{_dataInput(data)}} -->
   </template>
   <script>
     Polymer({
@@ -61,7 +66,8 @@
       properties: {
         data:{
           type:Object,
-          value:{}
+          value:{},
+          observer: "_dataInput"
         },
         juristic_person:{
           type:Object,
@@ -88,29 +94,20 @@
           value: {}
         }
       },
-      attached: function() {
-        this._getDocument();
-      },
-      _getDocument:function(){
-        this.read('./documentType',(data)=>{
-          this.copy_authority = 'exporter-document='+data[0].doc_code;
-          this.dit = 'exporter-document='+data[1].doc_code;
-          this.attorney = 'exporter-document='+data[2].doc_code;
-          this.authority = 'exporter-document='+data[3].doc_code;
-          this.vat = 'exporter-document='+data[4].doc_code;
-          this.juristic_person = 'exporter-document='+data[5].doc_code;
-        })
+      observers: [
+        'checkDocType(docType)'
+      ],
+      checkDocType:function(docType) {
+        this.copy_authority = 'exporter-document&'+docType[0].doc_code;
+        this.dit = 'exporter-document&'+docType[1].doc_code;
+        this.attorney = 'exporter-document&'+docType[2].doc_code;
+        this.authority = 'exporter-document&'+docType[3].doc_code;
+        this.vat = 'exporter-document&'+docType[4].doc_code;
+        this.juristic_person = 'exporter-document&'+docType[5].doc_code;
       },
       _dataInput:function(data) {
-        // console.log(data);
         this.exporterId = data;
-        // var exporterId = data;
-        // this.juristic_person = 'exporter-juristic='+exporterId;
-        // this.authority = 'exporter-authority='+exporterId;
-        // this.vat = 'exporter-vat='+exporterId;
-        // this.dit = 'exporter-dit='+exporterId;
-        // this.copy_authority = 'exporter-copyAuthority='+exporterId;
-        // this.attorney = 'exporter-attorney='+exporterId;
+        // console.log(this.exporterId);
       }
     });
   </script>

@@ -5,6 +5,6 @@ module.exports = function (app) {
     app.route('/file/:id').delete(upload.deleteFile);
     app.route('/file/:id').get(upload.downloadFile);
     app.route('/list').get(upload.listFile);
-    app.route('/list/:refPath').get(upload.listFilePath);
+    app.route('/list/:refPath/:exporter_id').get(upload.listFilePath);
     app.route('/exporter/file/:exporter_id').post(upload.uploadFileExporter);
 }
