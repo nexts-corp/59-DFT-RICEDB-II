@@ -80,8 +80,8 @@
         <table class="default" >
           <tr>
             <th>ผู้ส่งออก</th>
-            <th>เลขที่ใบแจ้งหนี้</th>
-            <th>วันที่ใบแจ้งหนี้</th>
+            <!-- <th>เลขที่ใบแจ้งหนี้</th> -->
+            <!-- <th>วันที่ใบแจ้งหนี้</th> -->
             <th>จำนวน(ตัน) <br>(1)</th>
             <th>มูลค่าต่อตัน(USD)<br>(2)</th>
             <th>รวมเงิน(USD)<br>(3)=(1)*2</th>
@@ -94,14 +94,6 @@
             <!-- [[_insertInvoiceDetail(invoiceDetail.shm_det_id)]] -->
             <tr>
               <td><gl-form-input disabled style="width:140px;" value="[[invoiceDetail.seller_name_en]]" ></gl-form-input></td>
-              <td>
-                <!-- [[_testArray(invoiceDetail.*)]] -->
-                <gl-form-input disabled="[[isInputDisabled]]" style="width:140px;" value="{{invoiceDetail.invoice_no}}" ></gl-form-input>
-              </td>
-              <td>
-                [[_changeDataPayrf(invoiceDetail.*,invoiceDetail.invoice_date)]]
-                <vaadin-date-picker disabled="[[isInputDisabled]]" style="width:110px;" label="" value="{{invoiceDetail.invoice_date}}" ></vaadin-date-picker>
-              </td>
                 [[_totalQuantityTons(invoiceDetail.quantity_tons,index)]]
               <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[invoiceDetail.quantity_tons]]" disabled ></gl-form-input></td>
                 [[_totalPricePerTon(invoiceDetail.price_per_ton,index)]]
@@ -122,7 +114,7 @@
           </template>
 
           <tr>
-            <td colspan="3">รวม</td>
+            <td>รวม</td>
             <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalTonInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
             <td><gl-form-input  format-number="on" style="width:140px;text-align:center;" value="[[_totalPricePerTonUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>
             <td><gl-form-input class="number" format-number="on" style="width:140px;" value="[[_totalAmountUsdInvoices(invoiceIndex,data.*)]]" disabled ></gl-form-input></td>

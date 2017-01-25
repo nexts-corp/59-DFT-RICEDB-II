@@ -64,7 +64,7 @@
     <gl-form-panel-body>
 
     <div class="text">COMMERCIAL INVOICE</div>
-
+[[data.tags]]
       <gl-grid-row width="{{getWidth}}">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
           <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" value="{{data.invoice_no}}"></gl-form-input>
@@ -353,21 +353,25 @@
       createInvoice:function () {
         let  book_id = this.data.book_id;
         let contract_id = this._getUrl();
-        // console.log(this.data);
-
+        console.log(this.data);
+        console.log(this.data.tags);
         this._cleanDataBl(this.data,(data)=>{
           data.book_status=true;
           data.id=book_id;
-          this.update('./g2g/book/update',data,() => {
-            this.fire('get-bl-list',{detail:contract_id});
-          });
+          console.log(data);
+          // this.update('./g2g/book/update',data,() => {
+          //   this.fire('get-bl-list',{detail:contract_id});
+          // });
         });
+        this.set('data.tags',[]);
+        this.push('data.tags',this.data.cl_id ,this.data.contract_id);
         this.data.invoice_status=false;
         this._cleanDataInvoice(this.data,(data)=>{
-          this.insert('./g2g/invoice/insert',data, () => {
-            this.fire('close-drawer',{detail:'close-drawer'})
-            this.fire('get-invoice-list',{detail:contract_id});
-         });
+          console.log(data);
+        //   this.insert('./g2g/invoice/insert',data, () => {
+        //     this.fire('close-drawer',{detail:'close-drawer'})
+        //     this.fire('get-invoice-list',{detail:contract_id});
+        //  });
         });
       },
       saveInvoice:function(){
@@ -510,7 +514,9 @@
             let newData = {bl_no,invoice_no,invoice_date,invoice_status,made_out_to,book_id};
             newData.tags = new Array();
             newData.invoice_date = new Date(newData.invoice_date);
-            newData.tags.push(data.contract_id,data.cl_id,data.shm_id);
+            data.tags.map((tag)=>{
+              newData.tags.push(tag);
+            });
             el.map((el)=> {el.reset();});
             callback(newData);
         }
@@ -519,15 +525,16 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-            let { book_id,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+            let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
                   load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
-                  ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id} = data;
-            let newData ={ book_id,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
+                  ship_lot_no,shipline_id,weight_per_container,book_status,shm_id,book_remark} = data;
+            let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
                             load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
-                            ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id};
+                            ship_lot_no,shipline_id,weight_per_container,book_status,shm_id,book_remark};
+            // console.log('newData.book_remark',newData.book_remark);
             newData.ship = new Array();
             newData.surveyor = new Array();
-            newData.tags = new Array();
+            // newData.tags = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();
             newData.etd_date = new Date (newData.etd_date).toISOString();
             newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
@@ -539,7 +546,12 @@
             data.surveyor.map((surveyors)=>{
               newData.surveyor.push({surveyor_id:surveyors.surveyor_id});
             });
-            newData.tags.push(data.contract_id,data.cl_id);
+            // console.log(data);
+            // console.log(data.tags);
+            // data.tags.map((tag)=>{
+            //   console.log(tag);
+            //   // newData.tags.push(tag);
+            // });
             el.map((el)=> {el.reset();});
             callback(newData)
           } else {
