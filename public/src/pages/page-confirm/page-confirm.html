@@ -1,6 +1,8 @@
 <link rel="import" href="./components/confirm-list.html">
 <link rel="import" href="./../components/panel-right/panel-right.html">
 <link rel="import" href="./../components/data-manage-behavior.html">
+<link rel="import" href="./../components/format-number-behavior.html">
+
 
 <dom-module id="page-confirm">
     <style is="custom-style" include="iron-flex iron-flex-factors gl-table iron-flex-alignment gl-size gl-color">
@@ -251,12 +253,12 @@
                     <input id="tab2" type="radio" name="tabs">
                     <label for="tab2">ยืนยัน [[dataCompanny.confirm.people]] รายการ</label>
                     <section id="content1">
-                        <div class="contentHeader">ปริมาณยันไม่ยืนยัน [[dataCompanny.notconfirm.nc_amount]] ตัน ปริมาณที่ยืนยัน  [[dataCompanny.confirm.c_amount]] ตัน</div>
+                        <div class="contentHeader">ปริมาณคงเหลือรับคืน [[formatNumber(dataCompanny.notconfirm.nc_amount)]] ตัน ปริมาณที่ยืนยันแล้ว  [[formatNumber(dataCompanny.confirm.c_amount)]] ตัน</div>
                         <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" on-confirm-exporter="_saveData" status="notConfirm"></confirm-list>
                     </section>
     
                     <section id="content2">
-                        <div class="contentHeader">ปริมาณยันไม่ยืนยัน [[dataCompanny.notconfirm.nc_amount]] ตัน ปริมาณที่ยืนยัน  [[dataCompanny.confirm.c_amount]] ตัน</div>
+                        <div class="contentHeader">ปริมาณคงเหลือรับคืน [[formatNumber(dataCompanny.notconfirm.nc_amount)]] ตัน ปริมาณที่ยืนยันแล้ว  [[formatNumber(dataCompanny.confirm.c_amount)]] ตัน</div>
                         <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" on-cancel-exporter="_cancelConfirm" status="confirm"></confirm-list>
                     </section>
                 </main>
@@ -277,7 +279,7 @@
         <script>
             Polymer({
                 is: "page-confirm",
-                behaviors: [nylonBehavior,DataManageBehavior],
+                behaviors: [nylonBehavior,DataManageBehavior,FormatNumberBehavior],
                 observers: [
                     '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)',
                     '_yearQuoataAndTypeRiceChangedAndOrdinal(selectYear,typeRice,selectQuotaOrdinal)',
