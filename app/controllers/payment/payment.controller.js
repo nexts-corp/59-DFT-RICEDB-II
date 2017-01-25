@@ -82,8 +82,15 @@ class Payment{
                 ecSelect:ecSelect,
                 ecList:
                 r.db('eu2').table('ec').filter(function(row){
-                    return row('exporter_id').eq(ecSelect('exporter_id'))
-                    .and(ecSelect('status').eq('np'))
+                    return row('year').eq(ecSelect('year'))
+                    .and(
+                        row('exporter_id').eq(ecSelect('exporter_id'))
+                    )
+                    .and(
+                        row('status').eq('c')
+                    )
+                }).filter(function(row){
+                    return row('balance').ne(0);
                 })
                 .merge({exporter_name:ecSelect('exporter_name')})
                 .coerceTo('array')
