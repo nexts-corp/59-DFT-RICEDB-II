@@ -101,25 +101,9 @@
     Polymer({
       is: "member-show",
       properties:{
-        exporterId:{
-          type:String,
-          observer:'_exporterIdChanged'
-        },
         data:{
           type:Object,
           value:{}
-        }
-      },
-      _exporterIdChanged:function(val){
-        if(val!=""){
-          axios.get('./external/exporter/id/'+val)
-          .then( (response)=>{
-            this.data = response.data;
-            // this.glQuery('contentPanel').changDrawer();
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
         }
       }
     });
