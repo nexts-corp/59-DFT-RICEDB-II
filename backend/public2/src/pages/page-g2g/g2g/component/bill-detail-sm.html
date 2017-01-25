@@ -468,6 +468,7 @@
             // console.log('newData.book_remark',newData.book_remark);
             newData.ship = new Array();
             newData.surveyor = new Array();
+            newData.tags = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();
             newData.etd_date = new Date (newData.etd_date).toISOString();
             newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
@@ -479,6 +480,7 @@
             data.surveyor.map((surveyors)=>{
               newData.surveyor.push({surveyor_id:surveyors.surveyor_id});
             });
+            newData.tags.push(data.contract_id,data.cl_id);
             el.map((el)=> {el.reset();});
             callback(newData)
           } else {

@@ -159,6 +159,9 @@
         if (stat.every(elem => elem == true)) {
           let {fee_no,fee_name,fee_status,shm_id} = data
           let newData ={fee_no,fee_name,fee_status,shm_id}
+          console.log(data);
+          newData.tags = new Array();
+          newData.tags.push(data.contract_id,data.cl_id);
             callback(newData);
         }
 

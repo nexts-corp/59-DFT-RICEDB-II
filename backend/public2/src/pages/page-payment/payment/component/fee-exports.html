@@ -340,9 +340,9 @@
             this.insert('./g2g/fee/detail/insert',data, () => {
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
-                  let shmid= this._getUrl();
+                  let contract_id= this._getUrl();
                   this.fire('close-drawer',{detail:'close-drawer'});
-                  this.fire('get-fee-list',{detail:shmid});
+                  this.fire('get-fee-list',{detail:contract_id});
                   let el = Polymer.dom(this.root).querySelectorAll('.required');
                   el.map((el)=> {el.reset();});
               }

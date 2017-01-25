@@ -242,11 +242,13 @@
       _getBuyerAddress:function (e) {
         if (e.detail.value) {
             this._getAddCondation(e.detail.value);
+
         }
       },
       _getAddCondation:function (buyerId) {
         let buyer_id = this.dataForSelect.buyer.filter((buyer)=> buyer.buyer_id == buyerId);
             this.data.buyerAddress=buyer_id[0].buyer_address;
+            this.data.country_id = buyer_id[0].country_id;
             this.notifyPath('data.buyerAddress');
       },
       _getBuyerAddressFromData:function (data) {
@@ -266,6 +268,8 @@
         this.splice('data.contract_type_rice', e.currentTarget.id, 1);
       },
       insertContract:function () {
+        this.set('data.tags',[])
+        this.push('data.tags',this.data.country_id);
         this._clearnData(this.data,(data)=>{
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
             data.contract_status=false;
@@ -382,15 +386,21 @@
           if (stat.every(elem => elem == true)) {
             let {buyer_id,contract_date,contract_desc,contract_name,contract_status,tolerance_rate}=data;
             let {contract_quantity}=data;
-            let news = {buyer_id,contract_date,contract_desc,contract_name,contract_quantity,contract_status,tolerance_rate};
-            news.contract_type_rice=[];
-            news.contract_date= new Date(news.contract_date);
+            let newData = {buyer_id,contract_date,contract_desc,contract_name,contract_quantity,contract_status,tolerance_rate};
+            newData.contract_type_rice=[];
+            newData.tags = new Array();
+            newData.contract_date= new Date(newData.contract_date);
             data.contract_type_rice.map((riceCode)=>{
-              news.contract_type_rice.push({type_rice_id:riceCode.type_rice_id});
+              newData.contract_type_rice.push({type_rice_id:riceCode.type_rice_id});
             });
+            data.tags.map((tag)=>{
+              newData.tags.push(tag);
+            });
+            // newData.tags.push(data.country_id);
+            // console.log(newData);
           el.map((el)=> {el.reset();});
-          callback(news);
-        }else {
+          callback(newData);
+        } else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error
           callback:function(){
           }})

@@ -139,7 +139,6 @@
                     <tr style="font-size:14px">
                         <td>[[data.buyer_masks]]</td>
                         <td>[[formatNumberNoZero(item.quantity_bags)]] BAGS</td>
-                        <!-- [[_countBag(item.quantity_bags)]] -->
                         <td>
                           [[item.type_rice_desc_en]] CURRENT NEW CROP,DOUBLE POLISHED AND SORTEXED QUALITY.<br>
                           PACKING: INSTRONG EXPORT SEA WORTHY NEWSINGLE PP BAGS OF [[item.package_kg_per_bag]] KILOGRAMS NET WITH MINIMUM TARE WEIGHT TO BE AT [[item.package_weight_bag]] GRAM/BAG.
@@ -329,9 +328,6 @@
           return data.map((e)=> e.ship_name).join(", ");
         }
       },
-      _countBag:function (data) {
-        console.log(data);
-      },
       _changeDataCommercial:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
           this.set('data.invoice_date', date);
@@ -357,6 +353,8 @@
       createInvoice:function () {
         let  book_id = this.data.book_id;
         let contract_id = this._getUrl();
+        // console.log(this.data);
+
         this._cleanDataBl(this.data,(data)=>{
           data.book_status=true;
           data.id=book_id;
@@ -509,10 +507,12 @@
         let stat = el.map((el)=> el.validate());
         if (stat.every(elem => elem == true)) {
             let {bl_no,invoice_no,invoice_date,invoice_status,made_out_to,book_id}=data;
-            let newDate = {bl_no,invoice_no,invoice_date,invoice_status,made_out_to,book_id};
-            newDate.invoice_date = new Date(newDate.invoice_date);
+            let newData = {bl_no,invoice_no,invoice_date,invoice_status,made_out_to,book_id};
+            newData.tags = new Array();
+            newData.invoice_date = new Date(newData.invoice_date);
+            newData.tags.push(data.contract_id,data.cl_id,data.shm_id);
             el.map((el)=> {el.reset();});
-            callback(newDate);
+            callback(newData);
         }
       },
       _cleanDataBl:function (data,callback) {
@@ -526,6 +526,8 @@
                             load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
                             ship_lot_no,shipline_id,surveyor_id,weight_per_container,book_status,shm_id};
             newData.ship = new Array();
+            newData.surveyor = new Array();
+            newData.tags = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();
             newData.etd_date = new Date (newData.etd_date).toISOString();
             newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
@@ -534,6 +536,10 @@
             data.ship.map((ships)=>{
               newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
             });
+            data.surveyor.map((surveyors)=>{
+              newData.surveyor.push({surveyor_id:surveyors.surveyor_id});
+            });
+            newData.tags.push(data.contract_id,data.cl_id);
             el.map((el)=> {el.reset();});
             callback(newData)
           } else {
