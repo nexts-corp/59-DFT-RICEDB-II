@@ -38,7 +38,13 @@ class Payment{
             status:'np'
         })
         .merge(function(row){
-            return {amount:row('price').sub(row('quantity'))}
+            return {
+                amount:row('price').sub(row('quantity')),
+                delivery_date:
+                row('delivery_date').day().coerceTo('string').add('/')
+                .add(row('delivery_date').month().coerceTo('string')).add('/')
+                .add(row('delivery_date').year().coerceTo('string'))
+            }
         })
         .innerJoin(r.db('eu2').table('exporter'),function(left,right){
             return left('exporter_id').eq(right('id'))
