@@ -1,0 +1,81 @@
+
+<link rel="import" href="./over-pay.html">
+
+<dom-module id="fee-manage">
+	<style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
+		*{
+			text-align: left;
+		}
+		.container {
+			padding: 20px;
+		}
+		
+		.frame {
+			border: 1px solid #ddd;
+			border-radius: 5px;
+		}
+		
+		header>div {
+			text-align: center;
+			font-size: 22px;
+			margin-top: 20px;
+		}
+		.headerContent {
+			padding: 10px;
+			font-size: 20px;
+			color: white;
+			background-color: orange;
+		}
+		.searchBorder {
+			border: 1px solid #ddd;
+			margin: 15px;
+			border-radius: 3px
+		}
+        .flex-end-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-end-justified);
+        }
+		paper-button,table{
+            font-family: 'CSChatThaiUI', sans-serif !important;
+            -webkit-font-smoothing: antialiased;	
+		}
+	</style>
+	<template>
+		<section class="container">
+			<div class="frame">
+				<div class="headerContent">
+					รายการออกใบเสร็จ
+				</div>
+				<div class="container">
+					<div style="overflow-x:auto;">
+						<fee-list data="[[selectedEC]]"></fee-list>
+					</div>
+				</div>
+			</div>
+		</section>
+        <section class="container">
+            <div class="frame">
+                <div class="headerContent">
+					ชำระเงิน
+				</div>
+                <div class="container">
+                    <over-pay data="[[data]]" list-bank="[[listBank]]"></over-pay>
+                </div>
+            </div>
+        </section>
+	</template>
+	<script>
+        Polymer({
+            is: 'fee-manage',
+            properties:{
+                data:{
+                    observer: 'checkDataSelected'
+                }
+            },
+			checkDataSelected:function(data){
+				console.log('checkDataSelected: ',data);
+                this.selectedEC = [data.ecSelect];
+			}
+        });
+    </script>
+</dom-module>

@@ -1,160 +1,211 @@
 
-<link rel="import" href="./normal-pay.html">
-
 <dom-module id="over-pay">
-	<style>
-    
+	<style include="gl-color gl-size">
         .container{
             padding: 10px;
         }
 		.header {
-			font-size: 22px;
+			font-size:  22px;
 		}
-		
-		table.gl-table-default {
-			border-collapse: collapse;
-			width: 100%;
-			overflow-x: auto;
-			white-space: nowrap;
-		}
-		
-		table.gl-table-default,
-		th,
-		td {
-			border-bottom: 1px solid #ddd;
-             font-family: 'CSChatThaiUI', sans-serif !important;
-                -webkit-font-smoothing: antialiased;
-		}
-		
-		th,
-		td {
-			padding: 15px;
-		}
-		
-		th {
-			text-align: center;
-			background-color: #F1F1F1;
-		}
-		
-		td {
-			text-align: center;
-		}
-		
-		tr:hover {
-			background-color: #F1F1F1;
-		}
-		
-		.searchBorder {
-			border: 1px solid var(--gl-gray-light-color);
+	    .searchBorder {
+			border: 1px solid #ddd;
 			margin: 15px;
 			border-radius: 3px
 		}
         .left{
             text-align: left !important;
         }
+        paper-button{
+            font-family: 'CSChatThaiUI', sans-serif !important;
+            -webkit-font-smoothing: antialiased;
+            font-size: 18px;
+        }
 	</style>
 	<template>
 		<div class="content">
-			<div class="flex searchBorder">
+			<div class="flex">
 				<div style="overflow-x:auto;">
-					<table class="gl-table-default">
-						<tr>
-                            <th></th>
-							<template is="dom-repeat" items="{{dataAmount.header}}">
-								<th>{{item}}</th>
-							</template>
-						</tr>
-                        <tr>
-                            <td class="left" colspan="7"> ไม่พบข้อมูล</td>
-                        </tr>
-						<!--<tr>
-                            <td><paper-checkbox></paper-checkbox></td>
-							<template is="dom-repeat" items={{dataAmount.row1}}>
-								<td id="addRedRegExporter">{{item}}</td>
-							</template>
-						</tr>
-						<tr>
-                            <td><paper-checkbox></paper-checkbox></td>
-							<template is="dom-repeat" items={{dataAmount.row2}}>
-								<td id="addRedRegExporter">{{item}}</td>
-							</template>
-						</tr>-->
-					</table>
+					<fee-list data="{{data.ecList}}" check-box="true"></fee-list>
 				</div>
 			</div>
 		</div>
-        <div class="container">
-        <div class="header" style="padding: 0px 0px 10px 0px; font-size: 18px">
-			ชำระแบบจ่ายเงินเกิน (ออกใบเสร็จ)
-		</div>
-            <gl-grid-row width="{{getWidth}}">
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-input label="จำนวนเงินตามคำขอ EC : " disabled></gl-form-label-input>
-                </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-input label="เงินคงเหลือจาก EC ที่ยกเลิก: " disabled></gl-form-label-input>
-                </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                </gl-grid-col>
-            </gl-grid-row>
+        <section>
+            <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+                <gl-form-panel-body label="Quota(EC)" set-padding="10px 10px 20px 10px" set-border="1px">
+                    <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                            <gl-form-input label="จำนวนเงินตามคำขอ EC : " value="{{bringForward.amount}}"></gl-form-label-input>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                            <gl-form-input label="เงินคงเหลือจาก EC ที่ยกเลิก: " value="{{bringForward.balance}}"></gl-form-label-input>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                        </gl-grid-col>
+                    </gl-grid-row>
 
-             <gl-grid-row width="{{getWidth}}">
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-input label="จำนวนเงินที่ต้องการใช้จากใบเสร็จ/ EC ที่ยกเลิก" allowed-pattern="[0-9||,||.]" format-number="on"></gl-form-input>
-                </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-                    <gl-form-input label="จำนวนเงินที่ต้องชำระ: " disabled></gl-form-label-input>
-                </gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                </gl-grid-col>
-            </gl-grid-row>
-        </div>
-        <hr>
-        <div>
-            <normal-pay></normal-pay>
-        </div>
+                    <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                            <gl-form-input label="จำนวนเงินที่ต้องการใช้จากใบเสร็จ/ EC ที่ยกเลิก" allowed-pattern="[0-9||,||.]" format-number="on" value="{{bringForward.pay_balance}}"></gl-form-input>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                            <gl-form-input label="จำนวนเงินที่ต้องชำระ: " value="{{bringForward.pay}}"></gl-form-label-input>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                        </gl-grid-col>
+                    </gl-grid-row>
+                </gl-form-panel-body>
+                <template is="dom-if" if="{{!check(bringForward.pay)}}">
+                    <gl-form-panel-body label="Check" set-padding="10px" set-border="1px">
+                        <gl-grid-row width="{{getWidth}}">
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                                <gl-combo-box class="saveData" label="เลือกธนาคาร" items="{{listBank}}" value="{{datas.bank_id}}" item-label-path="name" item-value-path="id"
+                                error-message="กรุณาเลือกบริษัท" disabled$="{{check(bringForward.pay)}}"></gl-combo-box>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                                <gl-form-input label="สาขา"  value="" disabled$="{{check(bringForward.pay)}}" value="{{datas.branch}}"></gl-form-input>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                        </gl-grid-row>
+
+                        <gl-grid-row width="{{getWidth}}">
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                                <gl-form-input label="เลขที่เช็ค"  value="{{datas.check_number}}" disabled$="{{check(bringForward.pay)}}"></gl-form-input>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                                <vaadin-date-picker label="วันที่เช็ค" value="{{datas.check_date}}" disabled$="{{check(bringForward.pay)}}"></vaadin-date-picker>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                        </gl-grid-row>
+
+                        <gl-grid-row width="{{getWidth}}">
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                                <gl-form-input label="จำนวนเงินที่ต้องชำระ" value="{{datas.amount}}" format-number="on" disabled$="{{check(bringForward.pay)}}"></gl-form-label-input>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
+                                <gl-form-input label="จำนวนเงินที่ชำระจริงตามเช็ค" value="{{datas.check_amount}}" allowed-pattern="[0-9||,||.]" format-number="on" value="" disabled$="{{check(bringForward.pay)}}"></gl-form-input>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                        </gl-grid-row>
+                        
+                        <gl-grid-row width="{{getWidth}}">
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,10]]">
+                                <gl-form-textarea label="หมายเหตุ" value="{{datas.note}}"></gl-form-textarea>
+                            </gl-grid-col>
+                            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            </gl-grid-col>
+                        </gl-grid-row>
+                    </gl-form-panel-body>
+                </template>
+                <gl-form-panel-footer set-padding="10px">
+                    <!--<paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>-->
+                    <paper-button class="gl-btn-primary" on-tap="saveData" raised>ชำระเงิน</paper-button>
+                </gl-form-panel-footer>
+            </gl-form-panel>
+
+        </section>
 	</template>
 	<script>
         Polymer({
             is: 'over-pay',
-             properties:{
-                  dataAmount:{
+            observers:['setPay(bringForward.pay)'],
+            properties:{
+                bringForward:{
                     type: Object,
-                    value:
-                      {
-                        header:[
-                          'ชื่อฟอร์ม',
-                          'เลขที่คำขอ EC',
-                          'เลขที่หนังสือรับรอง',
-                          'ผู้รับมอบ',
-                          'ปริมาณ (ตัน)',
-                          'จำนวนเงินต่อตัน',
-                          'รวมเงินทั้งหมด (บาท)'
-                        ],
-                        row1:[
-                            'EC ข้าวในโควตา EU',
-                            '20160701-0001',
-                            '012/2016',
-                            'นายสมพร มานะ',
-                            '120.00',
-                            '2,500.00',
-                            '300,000.00'
-                          ],
-                          row2:[
-                            'EC ข้าวในโควตา EU',
-                            '20160701-0002',
-                            '013/2016',
-                            'นายสมพร มานะ',
-                            '100.00',
-                            '2,500.00',
-                            '250,000.00'
-                          ]  
-                      }
+                    computed: 'checkData(data.ecList.*)'
                 },
+                datas:{
+                    type: Object,
+                    value:{}
+                }
+            },
+            setPay:function(pay){
+                console.log('pay',pay);
+                // this.datas.amount = pay;
+                this.set('datas.amount',pay);
+                    // this.$$('#payCheck').value = pay;
+                // console.log(pay);
+            },
+            check:function(data){
+                return data==0;
+            },
+            checkData:function(data){
+                var ec = this.data.ecSelect.quantity;
+                var sum = data.base;
+                if(sum.length!=0){
+                    sum = sum.reduce(function(total, num) {
+                        return {balance:total.balance + num.balance}
+                    }).balance
+                }
+                var select = data.base.filter(function(row){
+                    return (row.check||false) == true
+                })
+                if(select.length!=0){
+                    select = select.reduce(function(total, num) {
+                        return {balance:total.balance + num.balance}
+                    }).balance
+                }else{
+                    select = 0;
+                }
+
+                var balance =  ((select-ec)<0?0:(select-ec))+(sum-select);
+                var pay_balance = select>this.data.ecSelect.quantity?this.data.ecSelect.quantity:select;
+                var pay = this.data.ecSelect.quantity - pay_balance;
+                return {
+                    amount: this.data.ecSelect.quantity,
+                    balance: balance,
+                    pay_balance: pay_balance,
+                    pay: pay
+                }
+            },
+            saveData:function(){
+                var amount = this.data.ecSelect.quantity;
+                var select = this.data.ecList.filter(function(item){
+                    return item.check == true;
+                })
+                var old = [];
+                var result = {};
+
+                for(var i = 0; i< select.length; i++){
+                    var check = select[i].balance - amount;
+                    
+                    if(check >= 0){
+                        old.push({
+                            ec_id: select[i].id,
+                            quantity: amount
+                        })
+                        break; 
+                    }
+                    else {
+                        old.push({
+                            ec_id: select[i].id,
+                            quantity: select[i].balance
+                        })
+                        amount = amount - select[i].balance;
+                    }   
+                }
+                
+
+                if(old.length!=0)
+                result.ec = old;
+                if(!this.check(this.bringForward.pay))
+                result.check = this.datas;
+                // console.log(result);
+                this.fire('save-data',result);
             }
         });
     </script>

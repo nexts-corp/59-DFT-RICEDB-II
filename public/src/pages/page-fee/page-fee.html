@@ -1,4 +1,9 @@
 <link rel="import" href="./../components/panel-right/panel-right.html">
+<link rel="import" href="./../components/data-manage-behavior.html">
+<link rel="import" href="./../components/format-number-behavior.html">
+<link rel="import" href="./components/fee-list.html">
+<link rel="import" href="./components/fee-manage.html">
+
 
 <dom-module id="page-fee">
     <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
@@ -42,7 +47,7 @@
           padding: 5px;
         }
         .searchBorder{
-          border: 1px solid var(--gl-gray-light-color);
+          border: 1px solid #ddd;
           margin: 15px;
           border-radius: 3px
         }
@@ -52,28 +57,7 @@
         gl-search-input{
           margin: 30px 0px 0px 0px;
         }
-        table.gl-table-default{
-          border-collapse: collapse;
-          width: 100%;
-          overflow-x:auto;
-          white-space: nowrap;
-        }
-        table.gl-table-default,th,td{
-          border-bottom: 1px solid #ddd;
-        }
-        th,td{
-          padding: 15px;
-        }
-        th{
-          text-align: center;
-          background-color: #F1F1F1;
-        }
-        td{
-          text-align: center;
-        }
-        tr:hover{
-          background-color: #F1F1F1;
-        }
+       
         .contentHeader{
           font-size: 22px;
           text-align: center;
@@ -108,178 +92,166 @@
         <div class="flex searchBox searchBorder" style="margin:20px">
             <!--<div class="titleContent">ค้นหาข้อมูล</div> -->
             <gl-grid-row width="{{getWidth}}">
-            <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
-            </gl-grid-col>
-             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-                <gl-form-dropdown-menu label="กรุณาเลือกบริษัท" style="width: 100%">
-                    <paper-listbox class="dropdown-content">
-                        <paper-item>บริษัท พงษ์ลาภ จำกัด</paper-item>
-                    </paper-listbox>
-                </gl-form-dropdown-menu>
-             </gl-grid-col>
-             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]" style="margin-top: 10px;">
-                 <paper-button class="gl-btn-primary" on-tap="showData" raised>ค้นหา</paper-button>
-            </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    <div>
+                    <gl-combo-box class="saveData" label="ปี" items="{{quotaYear}}" value="{{yearValue}}"
+                    error-message="กรุณาเลือกปี" ></gl-combo-box>
+                    </div>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <div>
+                        <gl-combo-box class="saveData" label="ชื่อบริษัท" placeholder="จำนวนบริษัท [[getListCompany.length]] รายการ" items="{{getListCompany}}" value="{{selectExporter}}" item-label-path="name" item-value-path="id"
+                        error-message="กรุณาเลือกบริษัท"></gl-combo-box>
+                    </div>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]" style="margin-top: 10px;">
+                    <paper-button class="gl-btn-primary" on-tap="searchData" raised>ค้นหา</paper-button>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
             </gl-grid-row>
         </div>
-    
-        <div class="flex searchBorder">
-            <div class="titleContent">ข้อมูลส่งออก</div> 
-            <template is="dom-if" if="{{dataCheck}}">
-                <div style="padding : 20px;">
-                    ไม่พบข้อมูล
-                </div>
-            </template>
-            <template is="dom-if" if="{{dataStat}}">
-            <div>
-                 <gl-grid-row width="{{getWidth}}">
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-label-input label="บริษัท" value="บริษัท พงษ์ลาภ จำกัด"></gl-form-label-input>
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-label-input label="เลขประจำตัวผู้เสียภาษี" value="034490290"></gl-form-label-input>
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                    </gl-grid-col>
-                </gl-grid-row>
-                 <gl-grid-row width="{{getWidth}}">
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                    </gl-grid-col>
-                   <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-label-textarea label="ที่อยู่" value="3 หมู่ 3 ตำบลบางคูวัด อำเภอเมืองปทุมธานี จังหวัดปทุมธานี 12000"></gl-form-label-textarea>
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                    </gl-grid-col>
-                </gl-grid-row>
-                 <gl-grid-row width="{{getWidth}}">
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                    </gl-grid-col>
-                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-label-input label="โทร" value="0982769513"></gl-form-label-input>
-                    </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-label-input label="โทรสาร" value="029766191"></gl-form-label-input>
-                    </gl-grid-col>
-                </gl-grid-row>
-            </div>
-            </template>
-        </div>
+
 
         <div class="flex searchBorder">
             <div class="titleContent">ข้อมูลรายการ EC</div> 
-            <!--<div class="container">จำนวนรายการทั้งหมด 4 รายการ</div>-->
             <template is="dom-if" if="{{dataCheck}}">
-            <div style="padding : 20px;">
-                    ไม่พบข้อมูล
-                </div>
+                <div style="padding : 20px;">ไม่พบข้อมูล</div>
             </template>
             <template is="dom-if" if="{{dataStat}}">
-            <div class="flex searchBorder">
-             
-          <div style="overflow-x:auto;">
-          <table class="gl-table-default">
-              <tr>
-                <template is="dom-repeat" items="{{dataAmount.header}}">
-                    <th>{{item}}</th>
-                </template>
-              </tr>
-              <tr>
-                  <td><paper-checkbox></paper-checkbox></td>
-                <template is="dom-repeat" items={{dataAmount.row1}}>
-                    <td id="addRedRegExporter">{{item}}</td>
-                </template>
-              </tr>
-          </table>
-          </div>
-          </div>
-            </template>
-            <div class="container flex-end-justified">
-                <div>
-                <paper-button class="gl-btn-primary" on-tap="_toggleDrawer" style="font-family: 'rsuregular', sans-serif;
-            -webkit-font-smoothing: antialiased;" hidden="{{active}}" raised>ออกใบเสร็จ</paper-button>
+                <div class="flex" style="margin: 20px">
+                    <div style="overflow-x:auto;">
+                        <fee-list data="{{dataList}}" on-data-select="dataSelected"></fee-list>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
     </div>
-          <!--<div class="contentHeader">สรุปการคำนวณส่วนจัดสรรข้าวภายใต้โควตาสหภาพยุโรป</div>-->
-        
-        </div>
-        <!-- </paper-material> -->
-
-        <panel-right title="พิมพ์ใบเสร็จ">
-            <template is="dom-if" if="[[rendered]]">
-               <print-recipt></print-recipt>
-            </template>
-		</panel-right>
+    <panel-right title="พิมพ์ใบเสร็จ">
+           <fee-manage data="[[listSelected]]" list-bank="[[listBank]]"></fee-manage>
+    </panel-right>
     </template>
     <script>
         Polymer({
             is: "page-fee",
-            listeners: {
-                'nx-grid-tap': 'nxGridTap'
+            listeners:{
+                'save-data': '_saveData'
             },
-            properties: {
-                layerContent: {
-                    type: String,
-                    value: "detailRegExporter"
-                },
-                dataAmount:{
-                    type: Object,
-                    value:
-                      {
-                        header:[
-                          '',
-                          'ชื่อฟอร์ม',
-                          'เลขที่คำขอ EC',
-                          'เลขที่หนังสือรับรอง',
-                          'ผู้รับมอบ',
-                          'วันที่ส่ง',
-                          'ปริมาณ (ตัน)'
-                        ],
-                        row1:[
-                            'EC ข้าวในโควตา EU',
-                            '20151225-0001',
-                            '0102/2015',
-                            'นายสมพร มานะ',
-                            '25/12/2015',
-                            '786.00'
-                          ]
-                      }
-                },
-
-                searchType: {
-                    type: Object,
-                    value: [{
-                        id: 1,
-                        name: 'ทั้งหมด'
-                    }, {
-                        id: 2,
-                        name: 'ผู้ส่งออกที่ถูกระงับ'
-                    } ]
+            behaviors:[DataManageBehavior,FormatNumberBehavior,nylonBehavior],
+            observers:['checkData()','_getExporter(yearValue)'],
+             nylonPageActive:function(){
+                this._getYear();
+                this._getBanklist();
+            },
+            _getYear:function(){
+                axios.get('./common/year')
+                .then((response)=>{
+                    console.log("success");
+                    this.quotaYear = response.data.map(item=>{
+                        return item.toString();
+                    });
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.response.data.message);
+                });
+            },
+            _getExporter:function(year){
+                if(year != ''){
+                    this.selectExporter = 'เลือกบริษัทด้วย',
+                    axios.get('./payment/exporterEcList?year='+year)
+                    .then((response)=>{
+                        console.log("success");
+                        console.log(response.data);
+                        this.getListCompany =  response.data;
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error.response.data.message);
+                    });
                 }
             },
-            ready:function(){
-                this.dataCheck = true;
-                this.dataStat = false;
-                this.active = true;
-                Polymer.RenderStatus.afterNextRender(this,function(){
-                this.importHref(this.resolveUrl('./components/print-recipt.html'), (e)=>{
-                    this.rendered = true;
-                }, (e)=> {
-                    console.log('error')
-                });
+            _getBanklist:function(){
+                axios.get('./payment/selectbank')
+                .then((response)=>{
+                    console.log("success");
+                    console.log(response.data);
+                    this.listBank = response.data;
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.response.data.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
                 });
             },
-            _toggleDrawer: function(e) {
-                this.$$('panel-right').open();
+            searchData:function(){
+                if(this.yearValue != ''){
+                    console.log(this.selectExporter);
+                    this.fire('toast',{status:'load'});
+                    var param = '?year='+this.yearValue+'&exporter_id='+this.selectExporter; 
+                    if(this.selectExporter == 'เลือกบริษัทด้วย' || this.selectExporter == ''){
+                        console.log('1234');
+                        param = '?year='+this.yearValue;
+                    }               
+                    axios.get('./payment/reqEcList'+param)
+                    .then((response)=>{
+                        console.log("success");
+                        console.log(response.data);
+                        this.dataList = response.data;
+                        this.fire('toast', {
+                            status: 'success',
+                            callback:()=>{
+                            
+                            }
+                        })
+                    })
+                    .catch((error)=>{
+                        console.log("error");
+                        console.log(error.response.data.message);
+                        this.fire('toast',{status:'connectError',text:error.response.data.msg,
+                        callback:function(){
+                        }})
+                    });
+                }
             },
-            showData:function(){
-                 this.dataCheck = false;
-                this.dataStat = true;
-                 this.active = false;
+            dataSelected:function(e){
+                // console.log('dataSelected :',e.detail.id);
+                this.fire('toast',{status:'load'});
+                axios.get('./payment/paymentDetail?ec_id='+e.detail.id)
+                .then((response)=>{
+                    console.log(response.data);
+                    this.fire('toast',{
+                        status: 'success',
+                        callback:()=>{
+                            this.listSelected = response.data;  
+                            this.$$('panel-right').open();  
+                        }
+                    })
+                    
+                })
+                .catch((error)=>{
+                    console.log(error.response.data.message);
+                    this.fire('toast',{status:'connectError',text:error.response.data.msg,
+                    callback:function(){
+                    }})
+                })
+            },
+            _saveData:function(e){
+                console.log(e.detail);
             }
+            // ready:function(){
+            //     axios.get('./payment/reqEcList?year=2560&exporter_id=e193502a-936d-4aff-bf4d-5a1e2dd77621')
+            //     .then((response)=>{
+            //         console.log("success");
+            //         console.log(response.data);
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.response.data.message);
+            //     });
+            // }
         });
     </script>
 </dom-module>
