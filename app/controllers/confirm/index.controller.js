@@ -141,6 +141,26 @@ class index {
                 return x('ordinal').eq(params.ordinal)
                 .and(x('status').eq('c').or(x('status').eq('r')))
             }).orderBy('name')
+//new//
+            .innerJoin(r.db('eu2').table('allocate'), function(all,a){
+                return all('allocate_id').eq(a('id'))
+                }).map(function(result){
+                return result('left').merge(function(ex){
+                    return {id_tranfer:result('right')('exporter_id')}
+                })
+                })
+                
+            .innerJoin(r.db('eu2').table('exporter'), function(all,e){
+                return all('id_tranfer').eq(e('id'))
+            }).map(function(x){return x('left').merge(function(xx){return {name_tranfer:x('right')('name')} }) })
+                
+            .merge(function(name){
+                return {
+                    name_tranfer: r.branch( 
+                    name('status').eq('r'),name('name_tranfer') ,'-')
+                }
+            })
+////
             .do(function(c){return { data:c, c_amount:c('amount').sum(),people:c.group('exporter_id').ungroup().count() }})        
 ////
             .do(function(result){
@@ -276,7 +296,7 @@ class index {
                     res.json(result);
                 })
                 .catch(function(err){
-                    res.json(err);
+                    res.status(500).json(err);
                 })
             }
 
@@ -334,6 +354,27 @@ class index {
                 return x('ordinal').eq(params.ordinal)
                 .and(x('status').eq('c').or(x('status').eq('r')))
             }).orderBy('name')
+
+//new//
+            .innerJoin(r.db('eu2').table('allocate'), function(all,a){
+                return all('allocate_id').eq(a('id'))
+                }).map(function(result){
+                return result('left').merge(function(ex){
+                    return {id_tranfer:result('right')('exporter_id')}
+                })
+                })
+                
+            .innerJoin(r.db('eu2').table('exporter'), function(all,e){
+                return all('id_tranfer').eq(e('id'))
+            }).map(function(x){return x('left').merge(function(xx){return {name_tranfer:x('right')('name')} }) })
+                
+            .merge(function(name){
+                return {
+                    name_tranfer: r.branch( 
+                    name('status').eq('r'),name('name_tranfer') ,'-')
+                }
+            })
+////
             .do(function(c){return { data:c, c_amount:c('amount').sum(),people:c.group('exporter_id').ungroup().count() }})        
 ////
             .do(function(result){
@@ -470,7 +511,7 @@ class index {
                     res.json(result);
                 })
                 .catch(function(err){
-                    res.json(err);
+                    res.status(500).json(err);
                 }) 
         }
 
@@ -516,8 +557,7 @@ class index {
                 console.log(value.id);
 
                 r.db('eu2').table('allocate').get(value.allocate_id ).update({
-                    status:'nc'  // เช็คค่า 0 ตรงนี้ก่อนอัพเดท ถ้าเป็นศูนย์ ก็ให้สถานะ เป็น n เหมือนเดิม 
-                    //ถ้าไม่เวิคก็ให้เพิ่มสถานะอีกว่าเป็น z ไว้ เวลาคำนวณก็เอา z มาคำนวณด้วย แต่แสดงแค่ nc
+                    status:'nc'
                 }).do(function(result){
                     return r.db('eu2').table('confirm').filter({allocate_id:value.allocate_id }).delete()
                 })
