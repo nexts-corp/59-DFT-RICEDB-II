@@ -43,7 +43,8 @@
   </style>
 
   <template>
-    <div class="layout vertical">
+    <nylon-upload target="localhost:8080/api/upload/list" ref-path="xx-xx-xx"></nylon-upload>
+    <!-- <div class="layout vertical">
       <div class="layout horizontal top">
           <div class="flexchild-1">
             <div class="content">ชื่อไฟล์</div>
@@ -53,7 +54,7 @@
 
       <div>
         <div id="dropzone" class="dropzone">
-            <!-- dropfile -->
+            dropfile
             <template is="dom-if" if="{{!seleted}}">
               <div class="zone">
                 <div class="text" style="margin-top:50px;"><iron-icon icon="icons:description"></iron-icon></div>
@@ -66,11 +67,10 @@
             <template is="dom-if" if="{{seleted}}">
               <paper-menu multi>
                  <template is="dom-repeat" items="{{files}}">
-                    <!-- <paper-item>{{item.name}}</paper-item> -->
                     <paper-item class="flex-horizontal bd">
                           <div class="flexchild-1">{{item.name}}</div>
                           <div class="flexchild-1">
-                            <div class="content2">29/01/2558</div>
+                            <div class="content2">{{item.lastModifiedDate}}</div>
                           </div>
                           <paper-icon-button id="[[index]]" icon="icons:delete" style="color: gray;" on-tap="del"></paper-icon-button>
                     </paper-item>
@@ -86,64 +86,67 @@
           <input id="dropSelect" type="file" id="input" multiple>
           <paper-button class="gl-btn-primary" raised>เพิ่มไฟล์</paper-button>
         </label>
-    </div>
+    </div> -->
   </template>
   <script>
   Polymer({
     is: "register-fileup",
-    properties:{
-      seleted:{
-        type:Boolean,
-        value:false
-      },
-      files:{
-        type:Object,
-        value:function(){
-          return [];
-        },
-        notify:true
-      }
-    },
-    observers:['checkSeleted(files.*)'],
-    ready:function(){
-      this.testza = this;
-      var dropzone = this.$.dropzone;
-      dropzone.ondragover = dropzone.ondragenter = function(event) {
-        event.stopPropagation();
-        event.preventDefault();
-      }
-      var rootDom = this;
-      dropzone.ondrop = function(event){
-        event.stopPropagation();
-        event.preventDefault();
-
-        var files = event.dataTransfer.files;
-        for (var i=0; i<files.length; i++) {
-          //console.log(files[i]);
-          rootDom.push('files',files[i]);
-        }
-      }
-      this.$.dropSelect.onchange = function(){
-        var files = this.files;
-        for (var i = 0; i < files.length; i++) {
-          //console.log(files[i]);
-          rootDom.push('files',files[i]);
-        }
-      }
-    },
-    checkSeleted:function(arr){
-      if(this.files.length!=0){
-        this.seleted = true;
-      }
-    },
-    del:function(e){
-      // console.log(e.currentTarget.id);
-      var dele = this.files;
-      this.splice('files',e.currentTarget.id, 1);
-      if(dele.length==0){
-        this.seleted = false;
-      }
-    }
+    // properties:{
+    //   seleted:{
+    //     type:Boolean,
+    //     value:false
+    //   },
+    //   files:{
+    //     type:Object,
+    //     value:function(){
+    //       return [];
+    //     },
+    //     notify:true
+    //   }
+    // },
+    // observers:['checkSeleted(files.*)','updateDate(files.*,date)'],
+    // ready:function(){
+    //   this.testza = this;
+    //   var dropzone = this.$.dropzone;
+    //   dropzone.ondragover = dropzone.ondragenter = function(event) {
+    //     event.stopPropagation();
+    //     event.preventDefault();
+    //   }
+    //   var rootDom = this;
+    //   dropzone.ondrop = function(event){
+    //     event.stopPropagation();
+    //     event.preventDefault();
+    //
+    //     var files = event.dataTransfer.files;
+    //     for (var i=0; i<files.length; i++) {
+    //       // console.log(files[i]);
+    //       rootDom.push('files',files[i]);
+    //     }
+    //   }
+    //   this.$.dropSelect.onchange = function(){
+    //     var files = this.files;
+    //     for (var i = 0; i < files.length; i++) {
+    //       // console.log(files[i]);
+    //       rootDom.push('files',files[i]);
+    //     }
+    //   }
+    // },
+    // checkSeleted:function(arr){
+    //   if(this.files.length!=0){
+    //     this.seleted = true;
+    //   }
+    // },
+    // updateDate:function(date) {
+    //
+    // },
+    // del:function(e){
+    //   // console.log(e.currentTarget.id);
+    //   var dele = this.files;
+    //   this.splice('files',e.currentTarget.id, 1);
+    //   if(dele.length==0){
+    //     this.seleted = false;
+    //   }
+    // }
   });
   </script>
 </dom-module>
