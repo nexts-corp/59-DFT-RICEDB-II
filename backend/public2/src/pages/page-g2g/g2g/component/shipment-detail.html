@@ -109,7 +109,7 @@
              </gl-grid-col>
            </gl-grid-row>
             <div class="buttons">
-              <paper-button class="gl-btn-defalse" dialog-confirm raised>ปิด</paper-button>
+              <paper-button class="gl-btn-default" dialog-confirm raised>ปิด</paper-button>
                <paper-button  class="gl-btn-primary" on-tap="printShipmentReports" dialog-confirm autofocus raised>ออกรายงาน</paper-button>
               <!-- <paper-button dialog-confirm autofocus>ออกรายงาน</paper-button> -->
 
@@ -117,13 +117,12 @@
           </paper-dialog>
       <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
         <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
-
+            <div class="icon_print">
               <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment"  hidden="[[data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
               <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment" hidden="[[data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
-
-
+            </div>
         </template>
       </template>
        </div>
@@ -141,13 +140,13 @@
     </gl-grid-row>
     <gl-grid-row width="{{getWidth}}">
      <gl-grid-col width="[[getWidth]]" grid="[[500,4],[700,8]]">
-       <gl-combo-box class="required insetShipment" required id="confirmLetterTrue" disabled="[[!isInputDisabled]]" always-float-label label="กรุณาเลือกชื่อสัญญา" placeholder="ชื่อสัญญา" value="{{data.cl_id}}" >
+       <gl-combo-box class="required insetShipment" required id="confirmLetterTrue" disabled="[[checkShipmentDetail(isInputDisabled,data.shipment_detail)]]" always-float-label label="กรุณาเลือกชื่อสัญญา" placeholder="ชื่อสัญญา" value="{{data.cl_id}}" >
      </gl-grid-col>
      </gl-grid-row>
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
       <template is="dom-if" if="[[!_isViewing(insertData)]]">
          <div class="horizontal end-justified layout">
-           <paper-button class="gl-btn-defalse" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
+           <paper-button class="gl-btn-default" on-tap="backPageShipmentList" raised>ย้อนกลับ</paper-button>
            <!-- <paper-button class="gl-btn-danger" on-tap="calcelContract" raised >ยกเลิก</paper-button> -->
            <paper-button  class="gl-btn-primary" on-tap="addShimpent" raised>เพิ่ม</paper-button>
          </div>
@@ -156,7 +155,7 @@
      <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
        <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
           <div class="horizontal end-justified layout">
-              <paper-button class="gl-btn-defalse" on-tap="backPageShipmentDetail" raised>ย้อนกลับ</paper-button>
+              <paper-button class="gl-btn-default" on-tap="backPageShipmentDetail" raised>ย้อนกลับ</paper-button>
               <paper-button class="gl-btn-danger" on-tap="calcelShipmentIn" raised >ยกเลิก</paper-button>
              <paper-button  class="gl-btn-success" on-tap="editShimpent" raised>บันทึก</paper-button>
           </div>
@@ -228,7 +227,7 @@
                        <paper-button  class="gl-btn-primary" raised on-tap="addExporter" name="addShmdt" hidden="[[data.shm_status]]">เพิ่มผู้ส่งออก</paper-button>
                      </div>
                  <div class="horizontal end-justified layout">
-                     <paper-button class="gl-btn-defalse" raised on-tap="backPageShipmentList" >ย้อนกลับ</paper-button>
+                     <paper-button class="gl-btn-default" raised on-tap="backPageShipmentList" >ย้อนกลับ</paper-button>
                        <paper-button class="gl-btn-info" raised on-tap="approveShipment" hidden="[[data.shm_status]]">ยืนยันผู้ส่งออก</paper-button>
                  </div>
                    </gl-form-panel-footer>
@@ -410,6 +409,19 @@
           this.$$('#'+icon).icon = 'expand-more'
         }
         this.$$('#'+targetAttribute).toggle();
+      },
+      checkShipmentDetail:function (boo,arr) {
+        // console.log(boo);
+        // console.log(arr.length);
+        if (boo == false) {
+          return true;
+        } else {
+          if (arr.length > 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
       },
       printShipment:function () {
         if (this.printReport.typeReport == '0') {

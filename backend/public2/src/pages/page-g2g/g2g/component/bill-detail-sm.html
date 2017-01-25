@@ -22,15 +22,15 @@
   </style>
   <template>
     <template is="dom-if" if="[[!checkBtnView(shmStatus)]]">
-    <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
-      <div class="horizontal end-justified layout">
-        <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
-        <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
-        <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteBooking" hidden="[[data.shm_status]]"></paper-icon-button>
-        <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
-       </div>
-    </template>
+      <template is="dom-if" if="[[_isViewing(isInputDisabled)]]">
+        <div class="horizontal end-justified layout">
+          <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editInput"  ></paper-icon-button>
+          <paper-tooltip for="editConfirm" offset="0">Edit Booking</paper-tooltip>
+          <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteBooking" hidden="[[data.shm_status]]"></paper-icon-button>
+          <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
+         </div>
       </template>
+    </template>
       <gl-form-panel-body>
         <div class="title">Booking</div>
       </gl-form-panel-body>
@@ -73,16 +73,16 @@
       </template>
       <!-- <template is="dom-if" if="[[inserVessel(index)]]"> -->
 
-        <template is="dom-if" if="[[!isInputDisabled]]">
+        <!-- <template is="dom-if" if="[[!isInputDisabled]]"> -->
           <div class="horizontal end-justified layout">
-            <template is="dom-if" if="[[_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)]]">
-              <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip">
+            <!-- <template is="dom-if" if="[[_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)]]"> -->
+              <paper-button raised class="gl-btn-primary btnVessel" on-tap="addShip" hidden="[[isInputDisabled]]" disabled="[[!_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)]]">
               <iron-icon icon="add"></iron-icon>เพิ่มเรือ</paper-button>
-            </template>
-            <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteShip">
+            <!-- </template> -->
+            <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteShip" hidden="[[isInputDisabled]]" disabled="[[_isHaveForDelete(data.ship,data.ship.*)]]">
               <iron-icon icon="remove"></iron-icon>ลบเรือ</paper-button>
           </div>
-        </template>
+        <!-- </template> -->
 
       <!-- </template> -->
 
@@ -90,25 +90,25 @@
     <gl-grid-row width="{{getWidth}}">
       <template is="dom-repeat" items="[[data.surveyor]]">
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-          [[_getSurveyor(item.surveyor_id,dataForSelect)]]
+          [[_getSurveyor(item.surveyor_id,dataForSelect,data.surveyor.*)]]
            <!-- items="{{dataForSelect.surveyor}}" -->
           <gl-combo-box required class="required" id="surveyor-[[index]]" label="Surveyor [[_ObcountIndex(index)]]" always-float-label disabled="[[isInputDisabled]]" item-label-path="surveyor_name"
-            item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"></gl-combo-box>
+            item-value-path="surveyor_id" items="{{dataForSelect.surveyor}}" value="{{item.surveyor_id}}"  on-value-changed="_getResetSurveyor"></gl-combo-box>
         </gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
       </template>
 
-      <template is="dom-if" if="[[!isInputDisabled]]">
+      <!-- <template is="dom-if" if="[[!isInputDisabled]]"> -->
         <div class="horizontal end-justified layout">
-            <template is="dom-if" if="[[_isHaveForUse(data.surveyor,dataForSelect.surveyor,data.surveyor.*)]]">
-        <paper-button raised class="gl-btn-primary btnVessel" on-tap="addSurveyor">
-          <iron-icon icon="add"></iron-icon>เพิ่ม Surveyor</paper-button>
-          </template>
-          <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteSurveyor">
+          <!-- <template is="dom-if" if="[[_isHaveForUse(data.surveyor,dataForSelect.surveyor,data.surveyor.*)]]"> -->
+            <paper-button raised class="gl-btn-primary btnVessel" on-tap="addSurveyor" hidden="[[isInputDisabled]]" disabled="[[!_isHaveForUse(data.surveyor,dataForSelect.surveyor,data.surveyor.*)]]">
+            <iron-icon icon="add"></iron-icon>เพิ่ม Surveyor</paper-button>
+          <!-- </template> -->
+          <paper-button raised class="gl-btn-danger btnVessel" on-tap="deleteSurveyor" hidden="[[isInputDisabled]]" disabled="[[_isHaveForDelete(data.surveyor,data.surveyor.*)]]">
             <iron-icon icon="remove"></iron-icon>ลบ Surveyor</paper-button>
         </div>
-      </template>
+      <!-- </template> -->
     </gl-grid-row>
 
     <gl-grid-row width="{{getWidth}}">
@@ -178,13 +178,13 @@
 
     <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
-      <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment">     ย้อนกลับ</paper-button>
+      <paper-button class="gl-btn-default" raised on-tap="cancelInsertShipment">     ย้อนกลับ</paper-button>
       <paper-button class="gl-btn-primary" raised on-tap="addBl">  เพิ่ม</paper-button>
     </gl-form-panel-footer>
     </template>
     <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
     <gl-form-panel-footer>
-      <paper-button class="gl-btn-defalse" raised on-tap="cancelInsertShipment" hidden="[[!isInputDisabled]]">
+      <paper-button class="gl-btn-default" raised on-tap="cancelInsertShipment" hidden="[[!isInputDisabled]]">
         ย้อนกลับ</paper-button>
       <paper-button class="gl-btn-danger" on-tap="calcelBl" raised hidden="[[isInputDisabled]]">ยกเลิก</paper-button>
       <paper-button class="gl-btn-success" raised on-tap="editBl" hidden="[[isInputDisabled]]">  บันทึก</paper-button>
@@ -209,10 +209,10 @@
           type: Object,
           notify: true
         },
-        hiddenInsertVessel:{
-          type:Boolean,
-          value:false
-        },
+        // hiddenInsertVessel:{
+        //   type:Boolean,
+        //   value:false
+        // },
         blNoOld:{
           type:String,
         }
@@ -221,10 +221,10 @@
         '_oBChangeBooking(data.book_no)',
         '_oBChangePod(data.dest_port_id)',
         '_getPod(dataForSelect)',
-        '_oBCheckVessel(data.ship.*)',
+        // '_oBCheckVessel(data.ship.*)',
         '_changeDataBl(data.etd_date)',
         // '_getShip(data.shipline_id,dataForSelect)',
-        '_getSurveyor(data,dataForSelect)',
+        // '_getSurveyor(data,dataForSelect)',
         // '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)',
         // '_oBcheckCarrier(dataForSelect.carrier)'
         // '_foredit(data)'
@@ -235,7 +235,7 @@
       // },
       _changeDataBl:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
-          // console.log(date);
+        //   console.log('date',date);
           this.set('data.etd_date', date);
           this.notifyPath('data.etd_date');
           this.set('data.eta_date', date);
@@ -250,7 +250,7 @@
         // console.log(this.dataForSelect.carrier);
       },
       _oBcheckCarrier:function (carrier) {
-        console.log('carrier',carrier);
+        // console.log('carrier',carrier);
       },
       addBl:function () {
         this.data.book_status = false;
@@ -268,6 +268,8 @@
                   this.cancelInsertShipment();
                   let el = Polymer.dom(this.root).querySelectorAll('.required');
                   el.map((el)=> {el.value='';});
+                  //ใส่วันปัจจุบันลงไป
+                  this._changeDataBl('undefined');
                 }
             });
           });
@@ -434,15 +436,15 @@
         this.notifyPath('dataForSelect.pod');
         // console.log(pod[0].ship);
       },
-      _oBCheckVessel:function (shipMany) {
-        // set btnvessel
-        // console.log(shipMany.value);
-        if (shipMany.value < 3) {
-          this.hiddenInsertVessel = true;
-        }else {
-          this.hiddenInsertVessel = false;
-        }
-      },
+      // _oBCheckVessel:function (shipMany) {
+      //   // set btnvessel
+      //   // console.log(shipMany.value);
+      //   if (shipMany.value < 3) {
+      //     this.hiddenInsertVessel = true;
+      //   }else {
+      //     this.hiddenInsertVessel = false;
+      //   }
+      // },
       _checkCarrierIsBlank:function () {
         var carrierSelete;
         this.dataForSelect.carrier.map((carrier)=>{
@@ -463,6 +465,7 @@
             let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
                             load_port_id,packing_date,cut_of_time,cut_of_date,product_date,
                             ship_lot_no,shipline_id,weight_per_container,book_status,shm_id,book_remark};
+            // console.log('newData.book_remark',newData.book_remark);
             newData.ship = new Array();
             newData.surveyor = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();

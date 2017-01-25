@@ -15,141 +15,98 @@ var schema = {
         "id": {
             "type": "string"
         },
-        "fee_foreign": {
-            "type": "number"
-        },
-        "fee_internal": {
-            "type": "number"
-        },
-        "fee_other": {
-            "type": "number"
-        },
-        "fee_date_receipt": {
-            "type": "string",
-            "format": "date-time"
-        },
         "fee_no": {
             "type": "number"
         },
         "fee_name": {
             "type": "string"
         },
-        "rate_bank": {
-            "type": "number"
-        },
-        "rate_tt": {
-            "type": "number"
-        },
-        "invoice": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "invoice_id": {
-                        "type": "string"
-                    },
-                    "invoice_detail": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "invoice_date": {
-                                    "type": "string",
-                                    "format": "date-time"
-                                },
-                                "invoice_fee": {
-                                    "type": "number"
-                                },
-                                "invoice_no": {
-                                    "type": "string"
-                                },
-                                "shm_det_id": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": ["invoice_date", "invoice_fee", "invoice_no", "shm_det_id"]
-                        }
-                    },
-                },
-                "required": ["invoice_id", "invoice_detail"]
-            }
-        },
         "fee_status": {
             "type": "boolean"
+        },
+        "shm_id": {
+            "type": "string"
         }
     },
-    "required": ["fee_foreign", "fee_internal", "fee_other", "fee_date_receipt", "fee_no", "fee_name", "rate_bank", "rate_tt", "invoice", "fee_status"]
+    "required": ["fee_no", "fee_name", "fee_status", "shm_id"]
 };
 var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('fee')
-            .filter({ fee_status: false })
+            .getAll(false, { index: 'fee_status' })
+            .eqJoin('shm_id', r.db('g2g').table('shipment')).pluck("left", { right: ['shm_no', 'shm_name', 'cl_id'] }).zip()
+            .eqJoin('cl_id', r.db('g2g').table('confirm_letter')).pluck("left", { right: ['cl_name', 'cl_no', 'contract_id'] }).zip()
+            .filter({ 'contract_id': req.params.contract_id })
             .merge(function (m) {
                 return {
                     fee_id: m('id'),
-                    invoice: m('invoice').merge(function (inv_mer) {
-                        return {
-                            invoice_detail: inv_mer('invoice_detail').merge(function (det_map) {
-                                return r.db('g2g').table('shipment_detail').get(det_map('shm_det_id'))
-                                    .merge(function (shm_det_mer) {
-                                        return r.db('g2g').table('shipment').get(shm_det_mer('shm_id'))
+                    fee_detail: r.db('g2g').table('fee_detail').getAll(m('id'), { index: 'fee_id' })
+                        .coerceTo('array')
+                        .merge(function (inv_merge) {
+                            return {
+                                invoice: inv_merge('invoice').merge(function (inv_det_merge) {
+                                    return r.db('g2g').table('invoice').get(inv_det_merge('invoice_id'))
+                                }).merge(function (inv_det_merge) {
+                                    return {
+                                        invoice_detail: inv_det_merge('invoice_detail').merge(function (shm_det_merge) {
+                                            return r.db('g2g').table('shipment_detail').get(shm_det_merge('shm_det_id'))
+                                                .pluck('package_id', 'type_rice_id', 'price_per_ton', 'shm_det_quantity', 'shm_id')
+                                                // .merge(function (shm_det_merge) {
+                                                //     return r.db('g2g').table("shipment").get(shm_det_merge('shm_id')).pluck("cl_id")
+                                                //         .do(function (cl_do) {
+                                                //             return r.db('g2g').table("confirm_letter").get(cl_do('cl_id')).pluck("cl_type_rice")
+                                                //         })
+                                                // })
+                                                // .merge(function (shm_det_merge) {
+                                                //     return {
+                                                //         price_per_ton: shm_det_merge('cl_type_rice')
+                                                //             .filter(function (tb) {
+                                                //                 return tb('type_rice_id').eq(shm_det_merge('type_rice_id'))
+                                                //             }).getField("package")(0)
+                                                //             .filter(function (f) {
+                                                //                 return f('package_id').eq(shm_det_merge('package_id'))
+                                                //             })(0)
+                                                //             .pluck('price_per_ton')
+                                                //             .values()(0)
+                                                //     }
+                                                // })
+                                                .merge(function (usd_merge) {
+                                                    return {
+                                                        usd_value: usd_merge('price_per_ton').mul(usd_merge('shm_det_quantity'))
+                                                    }
+                                                })
+                                            //.without('cl_type_rice')
+                                        })
+                                    }
+                                })
+                                    .merge(function (inv_det_merge) {
+                                        return { usd_value: inv_det_merge('invoice_detail').sum('usd_value') }
                                     })
-                                    .merge(function (shm_det_mer) {
-                                        return r.db('g2g').table('confirm_letter').get(shm_det_mer('cl_id'))
-                                    })
-                                    .pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
-                            })
-                        }
-                    })
-                        .merge(function (inv_mer) {
-                            return inv_mer('invoice_detail')(0)
+                                    .pluck('usd_value', 'invoice_no'),
+                                fee_det_id: inv_merge('id')
+                            }
                         })
-                        .group(function (g) {
-                            return g.pluck('cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status')
+                        .merge(function (inv_merge) {
+                            return {
+                                invoice_no: inv_merge('invoice').getField('invoice_no')
+                                    .reduce(function (left, right) {
+                                        return left.add(', ', right)
+                                    }),
+                                invoice_count: inv_merge('invoice').getField('invoice_no').count(),
+                                usd_value: inv_merge('invoice').sum('usd_value'),
+                                fee_date_receipt: inv_merge('fee_date_receipt').split('T')(0)
+                            }
                         })
-                        .ungroup()
-                        .without('reduction')
-                        .getField('group')(0)
+                        .without('invoice', 'id')
                 }
             })
-            .merge(function (m) {
-                return m('invoice')
-            })
-            .without('id', 'invoice')
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice"] }).zip()
-            .filter(
-            r.row('contract_id').eq(req.params.contract_id)
-                .and(r.row('fee_status').eq(false))
-            )
             .merge(function (m) {
                 return {
-                    cl_date: m('cl_date').split('T')(0),
-                    fee_date_receipt: m('fee_date_receipt').split('T')(0)
+                    usd_value: m('fee_detail').sum('usd_value')
                 }
             })
-            // .group(function (g) {
-            //     return g.pluck(
-            //         'contract_id', 'cl_id', 'cl_no', 'cl_name', 'cl_status', 'shm_id', 'shm_no', 'shm_name', 'shm_status'
-            //     )
-            // })
-            // .ungroup()
-            // .merge(function (me) {
-            //     return {
-            //         contract_id: me('group')('contract_id'),
-            //         cl_id: me('group')('cl_id'),
-            //         cl_no: me('group')('cl_no'),
-            //         cl_name: me('group')('cl_name'),
-            //         cl_status: me('group')('cl_status'),
-            //         shm_id: me('group')('shm_id'),
-            //         shm_no: me('group')('shm_no'),
-            //         shm_name: me('group')('shm_name'),
-            //         shm_status: me('group')('shm_status'),
-            //         fee_detail: me('reduction')
-            //     }
-            // })
-            // .without("group", "reduction")
-            .orderBy('cl_no', 'shm_no', 'fee_no')
+            .without('id', 'fee_detail')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     cursor.toArray(function (err, result) {
@@ -166,117 +123,95 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             });
     })
 })
+router.get('/shm/id/:shm_id', function (req, res, next) {
+    db.query(function (conn) {
+        r.db('g2g').table('fee')
+            .getAll(req.params.shm_id, { index: 'shm_id' })
+            .merge({ fee_id: r.row('id') })
+            .without('id')
+            .run(conn, function (err, cursor) {
+                if (!err) {
+                    cursor.toArray(function (err, result) {
+                        if (!err) {
+                            //console.log(JSON.stringify(result, null, 2));
+                            res.json(result);
+                        } else {
+                            res.json(null);
+                        }
+                    });
+                } else {
+                    res.json(null);
+                }
+            });
+    })
+});
 router.get('/id/:id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('fee')
             .get(req.params.id)
             .merge(function (fee_merge) {
                 return {
-                    invoice: fee_merge('invoice').map(function (fee_map) {
-                        return fee_map.merge(function (fee_merge1) {
-                            return r.db('g2g').table('invoice')
-                                .get(fee_merge1('invoice_id'))
-                                .merge(function (m) {
+                    fee_id: fee_merge('id'),
+                    fee_detail: r.db('g2g').table('fee_detail').getAll(fee_merge('id'), { index: 'fee_id' })
+                        .coerceTo('array')
+                        .merge(function (inv_merge) {
+                            return {
+                                invoice: inv_merge('invoice').merge(function (inv_det_merge) {
+                                    return r.db('g2g').table('invoice').get(inv_det_merge('invoice_id'))
+                                }).merge(function (inv_det_merge) {
                                     return {
-                                        shipment_detail: r.db('g2g').table('shipment_detail')
-                                            .getAll(m('book_id'), { index: 'book_id' })
-                                            .coerceTo('array')
-                                            .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
-                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "cl_date", "cl_name", "cl_quality"] }).zip()
-                                            .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                            .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                            .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                                            .eqJoin("seller_id", r.db('external_f3').table("seller")).without({ right: ['id', 'date_created', 'date_updated', 'creater', 'updater', "country_id"] }).zip()
-                                            .merge(function (m1) {
-                                                return {
-                                                    shm_det_id: m1('id'),
-                                                    price_per_ton: m1('cl_type_rice')
-                                                        .filter(function (tb) {
-                                                            return tb('type_rice_id').eq(m1('type_rice_id'))
-                                                        }).getField("package")(0)
-                                                        .filter(function (f) {
-                                                            return f('package_id').eq(m1('package_id'))
-                                                        })(0)
-                                                        .pluck('price_per_ton')
-                                                        .values()(0),
-                                                    quantity_tons: m1('shm_det_quantity'),
-                                                    quantity_bags: m1('shm_det_quantity').mul(1000).div(m1('package_kg_per_bag'))
-
-                                                }
-                                            })
-                                            .merge(function (m1) {
-                                                return {
-                                                    weight_gross: m1('quantity_bags').mul(m1('package_kg_per_bag').add(m1('package_weight_bag').div(1000))).div(1000),
-                                                    weight_net: m1('quantity_bags').mul(m1('package_kg_per_bag')).div(1000),
-                                                    weight_tare: m1('quantity_bags').mul(m1('package_weight_bag').div(1000)).div(1000)
-                                                }
-                                            })
-                                            .merge(function (m1) {
-                                                return {
-                                                    amount_usd: m1('price_per_ton').mul(m1('weight_net'))
-                                                }
-                                            })
-                                            .without('id', 'cl_type_rice', 'shm_det_quantity')
-                                    }
-                                })
-                                .merge(function (m) {
-                                    return r.db('g2g').table('book').get(m('book_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-                                })
-                                .merge(function (m) {
-                                    return {
-                                        invoice_id: m('id'),
-                                        // ship: m('group_ship')('ship')(0),
-                                        // shipline_id: m('group_ship')('shipline_id')(0),
-                                        // ship_lot_no: m('group_ship')('ship_lot_no')(0),
-                                        //  ship_voy_no: m('group_ship')('ship_voy_no')(0),
-                                        weight_gross: m('shipment_detail').sum('weight_gross'),
-                                        weight_net: m('shipment_detail').sum('weight_net'),
-                                        weight_tare: m('shipment_detail').sum('weight_tare'),
-                                        amount_usd: m('shipment_detail').sum('amount_usd'),
-                                        invoice_date: m('invoice_date').split('T')(0),
-                                        invoice_detail: fee_merge1('invoice_detail').map(function (map1) {
-                                            return m('shipment_detail').filter({ shm_det_id: map1('shm_det_id') })(0).merge(map1)
-                                                .merge(function (m2) {
+                                        invoice_detail: inv_det_merge('invoice_detail').merge(function (shm_det_merge) {
+                                            return r.db('g2g').table('shipment_detail').get(shm_det_merge('shm_det_id'))
+                                                .pluck('package_id', 'type_rice_id', 'price_per_ton', 'shm_det_quantity', 'shm_id')
+                                                // .merge(function (shm_det_merge) {
+                                                //     return r.db('g2g').table("shipment").get(shm_det_merge('shm_id')).pluck("cl_id")
+                                                //         .do(function (cl_do) {
+                                                //             return r.db('g2g').table("confirm_letter").get(cl_do('cl_id')).pluck("cl_type_rice")
+                                                //         })
+                                                // })
+                                                // .merge(function (shm_det_merge) {
+                                                //     return {
+                                                //         price_per_ton: shm_det_merge('cl_type_rice')
+                                                //             .filter(function (tb) {
+                                                //                 return tb('type_rice_id').eq(shm_det_merge('type_rice_id'))
+                                                //             }).getField("package")(0)
+                                                //             .filter(function (f) {
+                                                //                 return f('package_id').eq(shm_det_merge('package_id'))
+                                                //             })(0)
+                                                //             .pluck('price_per_ton')
+                                                //             .values()(0)
+                                                //     }
+                                                // })
+                                                .merge(function (usd_merge) {
                                                     return {
-                                                        exporter_date_approve: m2('exporter_date_approve').split('T')(0),
-                                                        exporter_date_update: m2('exporter_date_update').split('T')(0),
-                                                        invoice_date: m2('invoice_date').split('T')(0),
-                                                        trader_date_approve: m2('trader_date_approve').split('T')(0)
+                                                        usd_value: usd_merge('price_per_ton').mul(usd_merge('shm_det_quantity'))
                                                     }
                                                 })
+                                            //.without('cl_type_rice')
                                         })
                                     }
                                 })
-                                .without("id", "shipment_detail")
-                                .merge(function (m) {
-                                    return r.db('common').table("shipline").get(m('shipline_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-                                    // r.db('common').table("ship").get(m('ship_id')).without('id'),
-                                })
-                                .merge(function (m) {
-                                    return {
-                                        ship: m('ship').map(function (arr_ship) {
-                                            return arr_ship.merge(function (row_ship) {
-                                                return r.db('common').table('ship').get(row_ship('ship_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
-                                            })
-                                        })
-                                    }
-                                })
+                                    .merge(function (inv_det_merge) {
+                                        return { usd_value: inv_det_merge('invoice_detail').sum('usd_value') }
+                                    })
+                                    .pluck('usd_value', 'invoice_no'),
+                                fee_det_id: inv_merge('id')
+                            }
                         })
-                    })
+                        .merge(function (inv_merge) {
+                            return {
+                                invoice_no: inv_merge('invoice').getField('invoice_no')
+                                    .reduce(function (left, right) {
+                                        return left.add(', ', right)
+                                    }),
+                                invoice_count: inv_merge('invoice').getField('invoice_no').count(),
+                                usd_value: inv_merge('invoice').sum('usd_value'),
+                                fee_date_receipt: inv_merge('fee_date_receipt').split('T')(0)
+                            }
+                        })
+                        .without('invoice', 'id')
                 }
-            })
-            .merge(function (fee_merge) {
-                return {
-                    fee_id: fee_merge('id'),
-                    fee_date_receipt: fee_merge('fee_date_receipt').split('T')(0),
-                    amount_usd: fee_merge('invoice').sum('amount_usd'),
-                    weight_gross: fee_merge('invoice').sum('weight_gross'),
-                    weight_net: fee_merge('invoice').sum('weight_net'),
-                    weight_tare: fee_merge('invoice').sum('weight_tare')
-                }
-            })
-            .without('id')
+            }).without('id')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     res.json(cursor);
@@ -286,7 +221,6 @@ router.get('/id/:id', function (req, res, next) {
             });
     })
 });
-
 router.get('/invoice/id/:invoice_id', function (req, res, next) {
     var d = {};
     db.query(function (conn) {
@@ -300,9 +234,9 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                     invoice_detail: r.db('g2g').table('shipment_detail')
                         .getAll(m('book_id'), { index: 'book_id' })
                         .coerceTo('array')
-                        .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id")
+                        .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id","price_per_ton")
                         .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "cl_date", "cl_name", "cl_quality"] }).zip()
+                        // .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "cl_date", "cl_name", "cl_quality"] }).zip()
                         .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("exporter_id", r.db('external_f3').table("exporter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         .eqJoin("trader_id", r.db('external_f3').table("trader")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
@@ -313,15 +247,15 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                                 exporter_date_approve: m1('exporter_date_approve').split('T')(0),
                                 exporter_date_update: m1('exporter_date_update').split('T')(0),
                                 trader_date_approve: m1('trader_date_approve').split('T')(0),
-                                price_per_ton: m1('cl_type_rice')
-                                    .filter(function (tb) {
-                                        return tb('type_rice_id').eq(m1('type_rice_id'))
-                                    }).getField("package")(0)
-                                    .filter(function (f) {
-                                        return f('package_id').eq(m1('package_id'))
-                                    })(0)
-                                    .pluck('price_per_ton')
-                                    .values()(0),
+                                // price_per_ton: m1('cl_type_rice')
+                                //     .filter(function (tb) {
+                                //         return tb('type_rice_id').eq(m1('type_rice_id'))
+                                //     }).getField("package")(0)
+                                //     .filter(function (f) {
+                                //         return f('package_id').eq(m1('package_id'))
+                                //     })(0)
+                                //     .pluck('price_per_ton')
+                                //     .values()(0),
                                 quantity_tons: m1('shm_det_quantity'),
                                 quantity_bags: m1('shm_det_quantity').mul(1000).div(m1('package_kg_per_bag'))
                             }

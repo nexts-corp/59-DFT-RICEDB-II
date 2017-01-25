@@ -5,7 +5,7 @@
 <link rel="import" href="g2g/component/chart-bar-g2g.html">
 <link rel="import" href="g2g/component/chart-pie-g2g.html">
 <link rel="import" href="g2g/component/taps-g2g.html">
-
+<!-- <link rel="import" href="g2g/component/list-of-fee-g2g.html"> -->
 <!-- <link rel="import" href="g2g/component/contract-detail.html">
 <link rel="import" href="g2g/component/print-files.html">
 <link rel="import" href="g2g/component/upload-files.html">
@@ -57,16 +57,19 @@
             <div class="rightdata" align="left" >
         <iron-pages selected="{{g2gPageSeleted}}" attr-for-selected="name">
           <div class="addContract" name="addContract">
-            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[!isViewSeleted]]" is-edit="[[!isEdit]]" is-input-disabled="[[!isInputDisabled]]"></contract-detail>
+            <contract-detail data-for-select="[[dataForSelected.dataForContract]]" is-view-seleted="[[!isViewSeleted]]" is-edit="[[!isEdit]]" is-input-disabled="[[!isInputDisabled]]"></contract-detail>
           </div>
           <div class="addContract" name="contractDetail">
-            <contract-detail data-for-select="[[dataForContract]]" is-view-seleted="[[isViewSeleted]]" is-edit="[[isEdit]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></contract-detail>
+            <contract-detail data-for-select="[[dataForSelected.dataForContract]]" data="[[dataSelected]]" is-view-seleted="[[isViewSeleted]]" is-edit="[[isEdit]]" is-input-disabled="[[isInputDisabled]]"></contract-detail>
           </div>
           <div class="addContract" name="listOfConfirm">
-            <list-of-confirm data-for-select="[[dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm>
+            <list-of-confirm data-for-select="[[dataForSelected.dataForConfirm]]" data="[[dataSelected]]" is-input-disabled="[[!isInputDisabled]]"> </list-of-confirm>
           </div>
           <div class="addContract" name="listOfShipment">
-            <list-of-shipments  data-for-select="[[dataForShipment]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></list-of-shipments>
+            <list-of-shipments  data-for-select="[[dataForSelected.dataForShipment]]" data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]"></list-of-shipments>
+          </div>
+          <div class="addContract" name="listOfFee">
+            <list-of-fee-g2g data-for-select="[[dataForSelected.dataForFee]]" data="[[feeList]]"></list-of-fee-g2g>
           </div>
         </iron-pages>
       </div>
@@ -90,6 +93,7 @@
               'get-contract-detail':'_getContractDetail',
               'get-list-confirm':'_getListConfirm',
               'get-list-shipment':'_getListShipment',
+              'get-list-Fee':'_getlistFee',
               'flipDrawer':'_flipDrawer',
               'close-drawer':'_flipDrawerClose',
               'name-panel-right':'_namePanelRight'
@@ -98,21 +102,32 @@
               contractList: {
                 type: Object
               },
-              dataSelected: {
+              feeList: {
                 type: Object
               },
-              dataForContract:{
+              dataSelected: {
                 type: Object,
-                value:{}
               },
-              dataForConfirm:{
+              dataForSelected:{
                 type: Object,
-                value:{}
+                value:{dataForContract:{},dataForConfirm:{},dataForShipment:{},dataForFee:{}}
               },
-              dataForShipment:{
-                type: Object,
-                value:{}
-              },
+              // dataForContract:{
+              //   type: Object,
+              //   value:{}
+              // },
+              // dataForConfirm:{
+              //   type: Object,
+              //   value:{}
+              // },
+              // dataForShipment:{
+              //   type: Object,
+              //   value:{}
+              // },
+              // dataForFee:{
+              //   type: Object,
+              //   value:{}
+              // },
               g2gPageSeleted:{
                 type:String,
                 value:'addContract'
@@ -123,15 +138,14 @@
                 {
                   contractDetail:false,
                   listOfConfirm:false,
-                  listOfShipments:false,
-                  listOfShipment:false
+                  listOfShipment:false,
+                  listOfFee:false
                 }
               },
               titlePanelRight:{
                 type:String,
                 value:'การซื้อขายข้าวระหว่างประเทศ'
               },
-
               pageInConponents:{
                 type: Object,
                 value:{listOfConfirm:'listOfConfirm',listOfShipment:'listOfShipment'}
@@ -147,9 +161,10 @@
             },
             // _getContractList
             _getContractList:function () {
-              console.log('re');
+              // console.log('re');
               this.read('./g2g/contract/list',(data)=>{
                 this.contractList=data;
+                // console.log(data[0].confirm_letter);
               });
             },
             // attached: function() {
@@ -164,62 +179,62 @@
             _getDataForContract:function () {
               //use data for contract
               this.read('./common/buyer',(data)=>{
-                this.dataForContract.buyer=data;
-                this.notifyPath('dataForContract.buyer');
+                this.dataForSelected.dataForContract.buyer=data;
+                this.notifyPath('dataForSelected.dataForContract.buyer');
               });
               this.read('./common/typeRice',(data)=>{
-                this.dataForContract.typeRice=data;
-                this.notifyPath('dataForContract.typeRice');
+                this.dataForSelected.dataForContract.typeRice=data;
+                this.notifyPath('dataForSelected.dataForContract.typeRice');
               });
               this.read('./common/incoterms',(data)=>{
-                this.dataForContract.incoterms=data;
-                this.notifyPath('dataForContract.incoterms');
+                this.dataForSelected.dataForContract.incoterms=data;
+                this.notifyPath('dataForSelected.dataForContract.incoterms');
               });
               //end use data for contract
             },
             _getDataForShipment:function () {
               // call data
               this.read('./external/exporter?exporter_active=true&trader_active=true&type_lic_id=KK6',(data)=>{
-                this.dataForShipment.seller= data;
-                this.notifyPath('dataForShipment.seller');
+                this.dataForSelected.dataForShipment.seller= data;
+                this.notifyPath('dataForSelected.dataForShipment.seller');
                 // console.log(this.common.seller);
               });
               this.read('./common/carrier',(data)=>{
-                this.dataForShipment.carrier= data;
-                this.notifyPath('dataForShipment.carrier');
+                this.dataForSelected.dataForShipment.carrier= data;
+                this.notifyPath('dataForSelected.dataForShipment.carrier');
               });
               //shipline_id
               this.read('./common/shipline/',(data)=>{
-                this.dataForShipment.shipline = data;
-                this.notifyPath('dataForShipment.shipline');
+                this.dataForSelected.dataForShipment.shipline = data;
+                this.notifyPath('dataForSelected.dataForShipment.shipline');
               });
               //ship in shipline
               this.read('./common/shipline/ship',(data)=>{
-                this.dataForShipment.shipInShipline = data;
-                this.notifyPath('dataForShipment.shipInShipline');
+                this.dataForSelected.dataForShipment.shipInShipline = data;
+                this.notifyPath('dataForSelected.dataForShipment.shipInShipline');
               });
               //get surveyor_id
               this.read('./common/surveyor',(data)=>{
-                this.dataForShipment.surveyor = data;
-                this.notifyPath('dataForShipment.surveyor');
+                this.dataForSelected.dataForShipment.surveyor = data;
+                this.notifyPath('dataForSelected.dataForShipment.surveyor');
               });
               // list port
               this.read('./common/port/',(data)=>{
-                this.dataForShipment.countryPort =  data;
-                this.notifyPath('dataForShipment.countryport');
+                this.dataForSelected.dataForShipment.countryPort =  data;
+                this.notifyPath('dataForSelected.dataForShipment.countryport');
               });
-              // console.log(this.dataForShipment);
+              // console.log(this.dataForSelected.dataForShipment);
             },
             // end_getContractList
             _getDataForConfirm:function () {
               //ชนิดข้าวเอามาจากสัญญา
               this.read('./common/package',(data)=>{
-                this.dataForConfirm.package=data;
-                this.notifyPath('dataForConfirm.package');
+                this.dataForSelected.dataForConfirm.package=data;
+                this.notifyPath('dataForSelected.dataForConfirm.package');
               });
               this.read('./common/incoterms',(data)=>{
-                this.dataForConfirm.incoterms=data;
-                this.notifyPath('dataForConfirm.incoterms');
+                this.dataForSelected.dataForConfirm.incoterms=data;
+                this.notifyPath('dataForSelected.dataForConfirm.incoterms');
               });
             },
             //addContract
@@ -234,7 +249,7 @@
                       ()=>{
                         this.async(()=>{
                           this.fire('toast',{status:'load'});
-                          // console.log(this.dataForContract);
+                          // console.log(this.dataForSelected.dataForContract);
                           this._flipDrawer();
                           this.checkRenderPage.contractDetail=true;
                         },500)
@@ -258,7 +273,7 @@
                         ()=>{
                           this.async(()=>{
                             this.fire('toast',{status:'load'});
-                            // console.log(this.dataForContract);
+                            // console.log(this.dataForSelected.dataForContract);
                             this._flipDrawer();
                             this.checkRenderPage.contractDetail=true;
                           },500)
@@ -278,7 +293,7 @@
             },
             _getListConfirm:function (e) {
               // listOfConfirm
-              console.log('1212=>',e.detail);
+              // console.log('1212=>',e.detail);
               this.titlePanelRight = 'การยืนยันทำสัญญา'
               this.g2gPageSeleted = 'listOfConfirm';
               if(typeof e.detail.contractId == "undefined") {
@@ -290,7 +305,7 @@
                         ()=>{
                           this.async(()=>{
                             this.fire('toast',{status:'load'});
-                            // console.log(this.dataForContract);
+                            // console.log(this.dataForSelected.dataForContract);
                             this._flipDrawer();
                             this.checkRenderPage.listOfConfirm=true;
                           },500)
@@ -301,7 +316,11 @@
                   this.fire('toast',{status:'load'});
                   this._flipDrawer();
                 }
+
                 this.dataSelected = e.detail.data;
+                // contract_quantity_confirm_balance
+                // this.dataForSelected.dataForConfirm.package=data;
+                // this.notifyPath('dataForSelected.dataForConfirm.package');
                 // console.log(  this.dataSelected);
               } else {
                 this._getContractList();
@@ -325,7 +344,7 @@
                         ()=>{
                           this.async(()=>{
                             this.fire('toast',{status:'load'});
-                            // console.log(this.dataForContract);
+                            // console.log(this.dataForSelected.dataForContract);
                             this._flipDrawer();
                             this.checkRenderPage.listOfShipment=true;
                           },500)
@@ -336,16 +355,54 @@
                   this.fire('toast',{status:'load'});
                   this._flipDrawer();
                 }
+
                 this.dataSelected = e.detail.data;
-                this.dataForShipment.country_id = e.detail.data.country_id;
-                this.notifyPath('dataForShipment.country_id');
-                console.log(this.dataSelected);
+                // ,y
+                // console.log(e.detail.data);
+                this.dataForSelected.dataForShipment.contract_id = e.detail.data.contract_id;
+                this.notifyPath('dataForSelected.dataForShipment.contract_id');
+                this.dataForSelected.dataForShipment.country_id = e.detail.data.country_id;
+                this.notifyPath('dataForSelected.dataForShipment.country_id');
+                // console.log(this.dataSelected);
               } else {
                 let contractId = e.detail.contractId;
                 this.read('./g2g/contract/list',(data)=>{
                   let dataContract = data.filter((contractList)=> contractList.contract_id == contractId );
                       this.dataSelected = dataContract[0];
                 });
+              }
+            },
+            _getlistFee:function (e) {
+              try {
+                this.read('./g2g/fee/contract/id/'+e.detail.data.contract_id,(data)=>{
+                  //ปัญหาตรงนี้
+                  this.feeList = data;
+                  this.titlePanelRight = 'การถัวเงิน';
+                  this.dataForSelected.dataForFee.feeListinShm=data;
+                  this.notifyPath('dataForSelected.dataForFee.feeListinShm');
+                  this.g2gPageSeleted = 'listOfFee';
+                  if (this.checkRenderPage.listOfFee != true) {
+                    this.fire('toast',{status:'load'});
+                    this.async(()=>{
+                      this.importHref(
+                          this.resolveUrl('./g2g/component/list-of-fee-g2g.html'),
+                          ()=>{
+                            this.async(()=>{
+                              this.fire('toast',{status:'load'});
+                              // console.log(this.dataForSelected.dataForContract);
+                              this._flipDrawer();
+                              this.checkRenderPage.listOfFee=true;
+                            },500)
+                          }, null, true
+                      );
+                    },1000);
+                  }else {
+                    this._flipDrawer();
+                  }
+
+                });
+              } catch (e) {
+                console.log(e);
               }
             },
             okload:function(){

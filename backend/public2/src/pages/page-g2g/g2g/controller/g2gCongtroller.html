@@ -17,10 +17,10 @@
         type: Object,
         // readOnly: true,
       },
-      btnCheckDis:{
-        type:Boolean,
-        value:false
-      },
+      // btnCheckDis:{
+      //   type:Boolean,
+      //   value:false
+      // },
     },
     observers:[
       '_cloneData(data)'
@@ -46,6 +46,15 @@
     },
     _isViewing:function (data) {
       return data == true;
+    },
+    _isNan:function (num) {
+      if (isNaN(num)) {
+        // console.log(num);
+        return 0;
+      }else {
+        // console.log(num);
+        return num;
+      }
     },
     // _isEditing:function (data) {
     //   return data == true;
@@ -92,13 +101,23 @@
       }
     },
     _isHaveForUse:function(arr1,arr2){
+      // [[!_isHaveForUse(data.incoterms,dataForSelect.incoterms,data.incoterms.*)]]
       // console.log(arr1.length,arr2.length);
-      if ((arr1.length) < arr2.length) {
-        this.btnCheckDis=true;
+      if (arr1.length < arr2.length) {
+        // this.btnCheckDis=true;
+        // console.log('true');
         return true;
       }else {
-        this.btnCheckDis=false;
+        // console.log('false');
+        // this.btnCheckDis=false;
         return false;
+      }
+    },
+    _isHaveForDelete:function(arr1){
+      // [[_isHaveForDelete(data.incoterms,data.incoterms.*)]]
+      // console.log(arr1.length,arr2.length);
+      if (arr1.length < 2) {
+        return true;
       }
     },
     _ObcountIndex:function (index) {
@@ -107,17 +126,26 @@
     _getUrl:function () {
       // get cookie
       let cookie = document.cookie.split(';');
-      let url;
+      let contract_id;
       cookie.map((ee)=>{
-        ee = ee.replace(' ', '');
-        if (ee.indexOf("url") == 0 ) {
-          url=ee.substring(4, 40);
+        if (ee.charAt(0) == ' ') {
+          // this.dataForSeleted.nameContract = ee.split('=')[1];
+          // this.notifyPath('dataForSeleted.nameContract');
+        } else if (ee.indexOf("contract_id") == 0 ) {
+          contract_id = ee.split('=')[1];
+          // this.dataForSeleted.contract_id=contract_id;
+          // this.notifyPath('dataForSeleted.contract_id');
         }
       });
-      return url;
+      return contract_id;
     },
     getDateg2g:function (date,callback) {
-      if (date == undefined) {
+      // ex
+      // this.getDateg2g(dateUn,(date)=>{
+      //   //   console.log('date',date);
+      // });
+      // console.log('gggg=',date);
+      if (date == undefined || date == 'undefined') {
         let date = new Date;
         let dateNow = date.toISOString().split("T");
         callback(dateNow[0]);

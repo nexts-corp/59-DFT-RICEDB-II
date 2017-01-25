@@ -9,6 +9,8 @@
 <!-- <link rel="import" href="payment/component/commercial-invoice.html"> -->
 <!-- <link rel="import" href="payment/component/fee-exports.html"> -->
 <link rel="import" href="payment/component/payment-export.html">
+<link rel="import" href="payment/component/list-of-fee-detail.html">
+<link rel="import" href="payment/component/cheque-register.html">
 <dom-module id="page-payment">
     <style media="screen" include="iron-flex gl-styles">
       :host{
@@ -36,16 +38,19 @@
         <paper-material elevation="1">
           <taps-payment>
             <section-content name="bl">
-              <list-of-bl-pm data="[[dataListPay.blShipment]]"></list-of-bl-pm>
+              <list-of-bl-pm data="[[dataListPay.blShipment]]" name-contract="[[dataForSeleted.nameContract]]"></list-of-bl-pm>
             </section-content>
             <section-content name="invoice">
-              <list-of-invoice data="[[dataListPay.invoiceList]]"></list-of-invoice>
+              <list-of-invoice data="[[dataListPay.invoiceList]]" name-contract="[[dataForSeleted.nameContract]]"></list-of-invoice>
             </section-content>
             <section-content name="fee">
-              <list-of-fee data="[[dataListPay.feeList]]"></list-of-fee>
+              <list-of-fee data="[[dataListPay.feeList]]" name-contract="[[dataForSeleted.nameContract]]"></list-of-fee>
+            </section-content>
+            <section-content name="cheque">
+              <cheque-register name-contract="[[dataForSeleted.nameContract]]"></cheque-register>
             </section-content>
             <section-content name="payment">
-              <payment-export></payment-export>
+              <payment-export name-contract="[[dataForSeleted.nameContract]]"></payment-export>
             </section-content>
           </taps-payment>
         </paper-material>
@@ -60,10 +65,11 @@
             <commercial-invoice data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></commercial-invoice>
           </div>
           <div name="blInvoicePage">
-            <fee-exports data="[[dataSelectedfee.draft]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
+            <fee-exports data="[[dataSelectedfee.draft]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
           </div>
           <div name="feePage">
-            <fee-exports data="[[dataSelectedfee.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports>
+            <list-of-fee-detail data="[[dataSelectedfee.fee]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></list-of-fee-detail>
+            <!-- <fee-exports data="[[dataSelectedfee.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports> -->
           </div>
         </iron-pages>
       </div>
@@ -81,6 +87,10 @@
                 nylonBehavior
             ],
             properties: {
+              dataForSeleted:{
+                type: Object,
+                value:{nameContract:'',contract_id:''}
+              },
               dataListPay: {
                 type: Object,
                 value:{}
@@ -91,7 +101,7 @@
               },
               dataSelectedfee: {
                 type: Object,
-                value:{}
+                value:{draft:{shmId:'',rate_tt:0,rate_bank:0,fee_internal:0,fee_foreign:0,fee_other:0}}
               },
               paymentsPageSeleted:{
                 type:String,
@@ -109,6 +119,10 @@
                 type:String,
                 value:'การซื้อขายข้าวระหว่างประเทศ'
               },
+              dataForSelect:{
+                type:Object,
+                value:{feeListinShm:''}
+              }
             },
             listeners: {
               'get-bl-list':'_getBlListFire',
@@ -117,34 +131,39 @@
               'get-invoice-detail':'_getBlInvoiceDetail',
               'get-fee-list':'_getFeeListFire',
               'get-select-draftPayment':'_getInvoiceDetail',
+              'get-fee-list-in-shm-event':'_getFeeListInShmEvent',
               'get-fee-detail':'_getFeeDetail',
               'flipDrawer':'_flipDrawer',
               'close-drawer':'_flipDrawerClose'
             },
             ready: function() {
-              let shmId = this._getUrl();
-              this._getBlList(shmId);
-              this._getInvoiceList(shmId);
-              this._getFeeList(shmId);
+              let contract_id = this._getUrl();
+              this._getBlList(contract_id);
+              this._getInvoiceList(contract_id);
+              this._getFeeList(contract_id);
             },
-            nylonPageActive:function() {
-              // console.log(111);
-              let shmId = this._getUrl();
-              this._getBlList(shmId);
-              this._getInvoiceList(shmId);
-              this._getFeeList(shmId);
-            },
+            // nylonPageActive:function() {
+            //   // console.log(111);
+            //   let shmId = this._getUrl();
+            //   this._getBlList(shmId);
+            //   this._getInvoiceList(shmId);
+            //   this._getFeeList(shmId);
+            // },
             _getUrl:function () {
               // get cookie
               let cookie = document.cookie.split(';');
-              let url;
+              let contract_id;
               cookie.map((ee)=>{
-                ee = ee.replace(' ', '');
-                if (ee.indexOf("url") == 0 ) {
-                  url=ee.substring(4, 40);
+                if (ee.charAt(0) == ' ') {
+                  this.dataForSeleted.nameContract = ee.split('=')[1];
+                  this.notifyPath('dataForSeleted.nameContract');
+                } else if (ee.indexOf("contract_id") == 0 ) {
+                  contract_id = ee.split('=')[1];
+                  this.dataForSeleted.contract_id=contract_id;
+                  this.notifyPath('dataForSeleted.contract_id');
                 }
               });
-              return url;
+              return contract_id;
             },
             _getBlListFire:function (e) {
               this._getBlList(e.detail.detail);
@@ -167,15 +186,27 @@
             _getFeeListFire:function (e) {
                 this._getFeeList(e.detail.detail);
             },
-            _getFeeList:function (shmId) {
-              this.read('./g2g/fee/contract/id/'+shmId,(data)=>{
+            _getFeeList:function (contractId) {
+              this.read('./g2g/fee/contract/id/'+contractId,(data)=>{
                 this.dataListPay.feeList=data;
                 this.notifyPath('dataListPay.feeList');
               });
             },
+            _getFeeListInShmEvent:function (e) {
+              // console.log(e.detail.data);
+              this._getFeeListInShm(e.detail.data);
+            },
+            _getFeeListInShm:function (shmId) {
+              this.read('./g2g/fee/shm/id/'+shmId,(data)=>{
+                this.dataForSelect.feeListinShm=data;
+                this.notifyPath('dataForSelect.feeListinShm');
+                // console.log(this.dataForSelect.feeListinShm);
+                this._getFeeList(this._getUrl());
+              });
+            },
             _getBlDetail:function (e) {
               let book_id = e.detail.detail.book_id;
-              this.titlePanelRight = 'รายละเอียด Bl'
+              this.titlePanelRight = 'รายละเอียดใบตราส่งสินค้าทางทะเล'
               this.fire('toast',{status:'load'});
               this.read('./g2g/book/id/'+book_id,(data)=>{
                     this.dataSelected = data;
@@ -202,7 +233,7 @@
 
             },
             _getBlInvoiceDetail:function (e) {
-              this.titlePanelRight = 'รายละเอียด Invoice'
+              this.titlePanelRight = 'รายละเอียดใบกำกับสินค้า'
               this.fire('toast',{status:'load'});
               this.read('./g2g/invoice/id/'+e.detail.detail.invoice_id,(data)=>{
                 this.dataSelected = data;
@@ -229,14 +260,18 @@
             },
             _getInvoiceDetail:function (e) {
               // this.dataSelected = e.detail.detail;
-              let url='';
+              let url='',shmId;
               e.detail.detail.map((el,index)=>{
+                shmId =el.data.shm_id;
                 if (index == 0) {
-                  url = url +el.data;
+                  url = url +el.data.invoice_id;
                 }else {
-                  url = url+'_' +el.data;
+                  url = url+'_' +el.data.invoice_id;
                 }
               });
+              //เรียกให้อัพเดตรายชื่อ fee ที่อยู่ใน contract
+              this._getFeeListInShm(shmId);
+              //
               this.fire('toast',{status:'load'});
               this.read('./g2g/fee/invoice/id/'+url,(data)=>{
                 this.dataSelectedfee.draft = data;
@@ -245,6 +280,8 @@
                 this.dataSelectedfee.draft.fee_internal=0;
                 this.dataSelectedfee.draft.fee_foreign=0;
                 this.dataSelectedfee.draft.fee_other=0;
+                this.dataSelectedfee.draft.shmId=this.dataForSeleted.contract_id;
+                this.dataSelectedfee.draft.feeList=this.dataForSeleted.feeList;
                 this.notifyPath('dataSelectedfee.draft');
                 this.paymentsPageSeleted = 'blInvoicePage';
                 if (this.checkRenderPage.feeExports != true) {
@@ -269,14 +306,18 @@
             },
             _getFeeDetail:function (e) {
               this.fire('toast',{status:'load'});
-              this.read('./g2g/fee/id/'+e.detail.detail,(data)=>{
+              // console.log(e.detail.detail.shm_id);
+              //เรียกให้อัพเดตรายชื่อ fee ที่อยู่ใน contract
+              this._getFeeListInShm(e.detail.detail.shm_id);
+              //
+              this.read('./g2g/fee/id/'+e.detail.detail.fee_id,(data)=>{
                   this.dataSelectedfee.fee = data;
                   this.notifyPath('dataSelectedfee.fee');
                   this.paymentsPageSeleted = 'feePage';
                   if (this.checkRenderPage.feeExports != true) {
                     this.async(()=>{
                       this.importHref(
-                          this.resolveUrl('./payment/component/fee-exports.html'),
+                          this.resolveUrl('./payment/component/list-of-fee-detail.html'),
                           ()=>{
                             this.async(()=>{
                               this.fire('toast',{status:'load'});
@@ -296,7 +337,7 @@
               Polymer.dom(this.root).querySelector('#test').open();
             },
             _flipDrawerClose:function () {
-              console.log(111);
+              // console.log(111);
               Polymer.dom(this.root).querySelector('#test').close();
             }
         });

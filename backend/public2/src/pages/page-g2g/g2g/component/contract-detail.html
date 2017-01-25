@@ -120,7 +120,7 @@
      <gl-grid-row>
 
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-             <gl-form-textarea rows="2"class="required" disabled label="ที่อยู่ผู้สั่งซื้อ" placeholder="ใส่รายละเอียด" value="{{data.buyerAddress}}" name="buyer_address"></gl-form-textarea>
+             <gl-form-textarea rows="2"  disabled label="ที่อยู่ผู้สั่งซื้อ" placeholder="ที่อยู่" value="{{data.buyerAddress}}" name="buyer_address"></gl-form-textarea>
          </gl-grid-col>
      </gl-grid-row>
 
@@ -183,7 +183,7 @@
 
  <gl-grid-row>
      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
-         <gl-form-textarea class="required" required  disabled="[[_checkArrayTrue(isInputDisabled,data.contract_status)]]" rows="2" label="รายละเอียดเพิ่มเติม" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" required value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
+         <gl-form-textarea disabled="[[_checkArrayTrue(isInputDisabled,data.contract_status)]]" rows="2" label="รายละเอียดเพิ่มเติม" placeholder="รายละเอียดเพิ่มเติม" value="{{data.contract_desc}}" name="contract_desc"></gl-form-textarea>
      </gl-grid-col>
  </gl-grid-row>
  </gl-form-panel-body>
@@ -240,13 +240,12 @@
         elements.items = buyer;
       },
       _getBuyerAddress:function (e) {
-        let selectedItem = e.detail.value;
-            if (selectedItem) {
-                this._getAddCondation(selectedItem);
-            }
+        if (e.detail.value) {
+            this._getAddCondation(e.detail.value);
+        }
       },
-      _getAddCondation:function (selectedItem) {
-        let buyer_id = this.dataForSelect.buyer.filter(function (buyer) { return buyer.buyer_id == selectedItem });
+      _getAddCondation:function (buyerId) {
+        let buyer_id = this.dataForSelect.buyer.filter((buyer)=> buyer.buyer_id == buyerId);
             this.data.buyerAddress=buyer_id[0].buyer_address;
             this.notifyPath('data.buyerAddress');
       },
@@ -254,8 +253,8 @@
         this.data.buyerAddress=data.buyer_address;
         this.notifyPath('data.buyerAddress');
       },
-      _changeDataContract:function (dateUn) {
-        this.getDateg2g(dateUn,(date)=>{
+      _changeDataContract:function (contract_date) {
+        this.getDateg2g(contract_date,(date)=>{
           this.set('data.contract_date', date);
           this.notifyPath('data.contract_date');
         });

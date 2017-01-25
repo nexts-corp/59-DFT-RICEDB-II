@@ -118,9 +118,8 @@
           <paper-button raised on-tap="contractDetail">รายละเอียดของสัญญา</paper-button>
           <paper-button raised on-tap="listConfirm">ยืนยันทำสัญญา</paper-button>
           <paper-button raised on-tap="listShipment">ส่งมอบสินค้า</paper-button>
-          <!-- <a href="/payment" tabindex="-1"> -->
-            <paper-button raised on-tap="listPayment">ชำระเงิน</paper-button>
-          <!-- </a> -->
+          <paper-button raised on-tap="listFee">ค่าทำเนียม</paper-button>
+          <paper-button raised on-tap="listPayment">ด้านการเงิน</paper-button>
         </div>
       </paper-card>
 
@@ -242,9 +241,14 @@
       listShipment:function () {
         this.fire('get-list-shipment',{detail:'list-shipment',data:this.data});
       },
+      listFee:function () {
+        this.fire('get-list-Fee',{detail:'list-Fee',data:this.data});
+      },
       listPayment:function () {
-        document.cookie = "url="+this.data.contract_id;
-        // console.log(this.data.contract_id);
+        document.cookie = "contract_id="+this.data.contract_id;
+        document.cookie = "contractName="+this.data.contract_name;
+        // console.log(this.data.contract_name);
+        // console.log(document.cookie);
         this.fire('nylon-change-page',{path:'/payment'})
               // console.log(x.indexOf("url"));
         // this.glChangePath('/g2g/add-draft/');

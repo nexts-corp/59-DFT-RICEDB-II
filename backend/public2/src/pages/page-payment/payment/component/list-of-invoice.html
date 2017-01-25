@@ -20,9 +20,12 @@
       text-align: center;
       font-size: var(--font-size-h4);
     }
+    .worrne{
+      padding: 15px;
+    }
   </style>
   <template>
-    <div class="title">ใบแจ้งหนี้</div>
+    <div class="title">รวมใบกำกับสินค้าของสัญญา [[nameContract]]</div>
     <div class="flex searchInput ">
        <!-- <div class="horizontal end-justified layout">
          <div class="labelSearch">Invoice No.</div>{{searchInput}}
@@ -41,19 +44,21 @@
               <th>Port of Destination </th>
               <th style="width:3%">Print</th>
             </tr>
+
           </thead>
           <tbody class="table-body">
             <template is="dom-if" if="[[!_isHave(data)]]">
               <template is="dom-repeat" items="{{data}}" as="payment">
                 <template is="dom-repeat" items="{{payment.invoice_detail}}">
                   <tr >
-                    <td class="item"><paper-checkbox id="[[index]]"class="checkBox" data="{{item.invoice_id}}" shmId$="{{payment.shm_id}}"></paper-checkbox></td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
-                    <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.deli_port_name]]</td>
-                   <td class="item" data="[[item]]" on-tap="getInvoiceDetail">[[item.dest_port_name]]</td>
-                   <td class="item"  >
+                    <!-- disabled="[[_checkDisabled(shipid,payment.shm_id,item.invoice_id)]]" -->
+                    <td><paper-checkbox id="[[index]]"class="checkBox" data="{{item}}" shm-id="{{payment.shm_id}}" on-tap="checkData" ></paper-checkbox></td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[item.cl_name]]</td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[payment.shm_no]]</td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[item.invoice_no]]</td>
+                    <td data="[[item]]" on-tap="getInvoiceDetail">[[item.deli_port_name]]</td>
+                   <td data="[[item]]" on-tap="getInvoiceDetail">[[item.dest_port_name]]</td>
+                   <td>
                      <paper-icon-button id="printShipment" data="[[item]]" class="crud" icon="print" raised on-tap="getInvoiceid"  hidden="[[!data.shm_status]]"></paper-icon-button>
                      <paper-tooltip for="printShipment" offset="0">Print Shipment</paper-tooltip>
                    </td>
@@ -73,6 +78,8 @@
                 </td>
                 </tr>
           </template>
+
+
         </template>
         <template is="dom-if" if="[[_isHave(data)]]">
             <tr >
@@ -81,6 +88,9 @@
         </template>
          </tbody>
       </table>
+      <div class="worrne">
+        *กรุณาติ้กเครื่องถูกที่งวดเดียวกัน
+      </div>
   </template>
   <script>
     Polymer({
@@ -88,15 +98,51 @@
       behaviors: [
           g2gCongtroller
       ],
-      // observers:[
-      //   'initDatabl(data)'
-      // ],
-      // initDatabl:function (data) {
-      //   // console.log(data);
-      //   // this.newData = this.g2gClone(data);
-      //   // console.log('clone new==>',this.newData);
-      //   // console.log('org==>',this.data);
-      // },
+      properties: {
+        data: {
+          type: Object,
+        },
+        shipid:{
+          type: String,
+          value:''
+        }
+      },
+      observers:[
+        '_cleanCheckBox(data)'
+      ],
+      _cleanCheckBox:function (data) {
+        // console.log(data);
+        let checkDisabled = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-disabled="true"]');
+        checkDisabled.map((el)=>{
+            el.disabled=false;
+        });
+        let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
+        check.map((el)=>{
+            el.ariaChecked=false;
+        });
+      },
+      checkData:function (e){
+        // console.log(e.currentTarget.shmId);
+        this.shipid = e.currentTarget.shmId;
+        // console.log('กดสิ');
+        // console.log(this.shipid);
+        let notCheck = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="false"]');
+        // console.log(notCheck);
+        notCheck.map((el)=>{
+          if (this.shipid != el.shmId){
+            el.disabled=true;
+          }
+          // console.log(el.disabled);
+        })
+        let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
+        // console.log(check);
+        if (check.length < 1) {
+          let checkDisabled = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-disabled="true"]');
+          checkDisabled.map((el)=>{
+              el.disabled=false;
+            })
+        }
+      },
       getInvoiceDetail:function (e) {
         this.fire('get-invoice-detail',{detail:e.currentTarget.data});
       },
@@ -106,8 +152,7 @@
       },
       payMoney:function () {
         let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
-        //adddraft.html
-        this.fire('get-select-draftPayment', {detail: check});
+        this.fire('get-select-draftPayment', {detail: check,});
       }
     });
   </script>

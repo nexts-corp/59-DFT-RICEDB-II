@@ -26,83 +26,83 @@
     }
   </style>*/ -->
   <style include="iron-flex iron-flex-alignment iron-flex-factors">
-.heading{
-  margin-top: 10px;
-  margin-left: 10px;
-}
-.nev{
-  width: 100%;
-}
-a{
-  text-decoration: none;
-  border-top:1px solid #1D864A;
-  border-bottom:1px solid #1D864A;
-  border-right: 1px solid #1D864A;
-  text-align: center;
-  height: 40px;
-  line-height: 40px;
-  color: white;
-  background-color: #27AE60;
-}
-a::before{
-  content: '';
-  float: left;
-  position: relative;
-  right: 20;
-  width: 0;
-  height: 0;
-  border-top: 20px inset transparent;
-  border-bottom: 20px inset transparent;
-  border-left: 20px solid white;
-}
-a:first-child::before{
-  border-top: 20px solid #1D864A;
-  border-bottom: 20px solid #1D864A;
-  border-left: 1px solid #1D864A;
-}
-a::after{
-  content: '';
-  float: right;
-  width: 0;
-  height: 0;
-  position: relative;
-  left: 20px;
-  border-top: 20px inset transparent;
-  border-bottom: 20px inset transparent;
-  border-left: 20px solid #27AE60;
-  z-index: 1;
-}
-a:hover::after{
-  width: 0;
-  height: 0;
-  border-top: 20px inset transparent;
-  border-bottom: 20px inset transparent;
-  border-left: 20px solid white;
-}
-a:last-of-type::after{
-  left: 21px;
-  width: 0;
-  height: 0;
-  border-top: 0px inset transparent;
-  border-bottom: 0px inset transparent;
-  border-left: 0px solid white;
-}
-a:hover{
-  background-color: white;
-  color: #27AE60;
-}
-.selected{
-  color: #27AE60;
-  background-color: white;
-}
-.selected:after{
-  width: 0;
-  height: 0;
-  border-top: 20px inset transparent;
-  border-bottom: 20px inset transparent;
-  border-left: 20px solid white;
-}
-</style>
+  .heading{
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .nev{
+    width: 100%;
+  }
+  a{
+    text-decoration: none;
+    border-top:1px solid #1D864A;
+    border-bottom:1px solid #1D864A;
+    border-right: 1px solid #1D864A;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    color: white;
+    background-color: #27AE60;
+  }
+  a::before{
+    content: '';
+    float: left;
+    position: relative;
+    right: 20;
+    width: 0;
+    height: 0;
+    border-top: 20px inset transparent;
+    border-bottom: 20px inset transparent;
+    border-left: 20px solid white;
+  }
+  a:first-child::before{
+    border-top: 20px solid #1D864A;
+    border-bottom: 20px solid #1D864A;
+    border-left: 1px solid #1D864A;
+  }
+  a::after{
+    content: '';
+    float: right;
+    width: 0;
+    height: 0;
+    position: relative;
+    left: 20px;
+    border-top: 20px inset transparent;
+    border-bottom: 20px inset transparent;
+    border-left: 20px solid #27AE60;
+    z-index: 1;
+  }
+  a:hover::after{
+    width: 0;
+    height: 0;
+    border-top: 20px inset transparent;
+    border-bottom: 20px inset transparent;
+    border-left: 20px solid white;
+  }
+  a:last-of-type::after{
+    left: 21px;
+    width: 0;
+    height: 0;
+    border-top: 0px inset transparent;
+    border-bottom: 0px inset transparent;
+    border-left: 0px solid white;
+  }
+  a:hover{
+    background-color: white;
+    color: #27AE60;
+  }
+  .selected{
+    color: #27AE60;
+    background-color: white;
+  }
+  .selected:after{
+    width: 0;
+    height: 0;
+    border-top: 20px inset transparent;
+    border-bottom: 20px inset transparent;
+    border-left: 20px solid white;
+  }
+  </style>
   <template>
 
     <!-- <paper-tabs selected="{{selected}}" align-bottom no-slide>
@@ -114,9 +114,10 @@ a:hover{
     <!-- 2112151 -->
     <div class="nev layout horizontal">
         <a id="0" href="#" class="flex selected" on-tap="changestep">1 ใบตราส่งสินค้าทางทะเล</a>
-        <a id="1" href="#" class="flex" on-tap="changestep">2 ใบแจ้งหนี้</a>
+        <a id="1" href="#" class="flex" on-tap="changestep">2 ใบกำกับสินค้า</a>
         <a id="2" href="#" class="flex" on-tap="changestep">3 ค่าธรรมเนียม</a>
-        <a id="3" href="#" class="flex" on-tap="changestep">4 จ่ายเงิน</a>
+        <a id="3" href="#" class="flex" on-tap="changestep">4 เลขที่เช็ค</a>
+        <a id="4" href="#" class="flex" on-tap="changestep">5 จ่ายเงิน</a>
     </div>
     <!-- <template is="dom-repeat" items="[[menu]]"> -->
       <!-- [[index]] -->
@@ -126,6 +127,7 @@ a:hover{
       <content select="section-content[name=bl]"></content>
       <content select="section-content[name=invoice]"></content>
       <content select="section-content[name=fee]"></content>
+      <content select="section-content[name=cheque]"></content>
       <content select="section-content[name=payment]"></content>
     </iron-pages>
   </template>

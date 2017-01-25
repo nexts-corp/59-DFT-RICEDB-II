@@ -1,0 +1,101 @@
+<!-- <link rel="import" href="fee-exports.html"> -->
+<dom-module id="list-of-fee-detail-g2g">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+  *{
+    font-family: 'CSChatThaiUI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .table-body > tr > td{
+    cursor:pointer
+  }
+
+  .table-head > tr > th:nth-child(1),
+  .table-body > tr > td:nth-child(1) {
+    text-align: center;
+    width: 10%;
+  }
+  .table-head > tr > th:nth-child(3),
+  .table-body > tr > td:nth-child(3),
+  .table-head > tr > th:nth-child(4),
+  .table-head > tr > th:nth-child(5),
+  .table-body > tr > td:nth-child(5)    {
+    width: 20%;
+    text-align: center;
+  }
+  .table-head > tr > th:nth-child(2),
+  .table-body > tr > th:nth-child(2){
+    width: 30%;
+  }
+  .table-body > tr > td:nth-child(4) {
+    text-align: right;
+  }
+  .table-foot > tr > td {
+    padding: 16px;
+  }
+  .addconfirm{
+    margin-bottom: 16px;
+  }
+  </style>
+<template>
+  <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+    <gl-form-panel-head label="" set-padding="10px" set-border="1px">
+    </gl-form-panel-head>
+        <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>ลำดับที่</th>
+              <th>ชื่อสัญญาย่อย</th>
+              <th>จำนวนใบกำกับสินค้า</th>
+              <th>มูลค่า</th>
+              <th>วันที่รับเช็ค</th>
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <template is="dom-if" if="[[!_isHave(data.fee_detail)]]">
+              <template is="dom-repeat" items="[[data.fee_detail]]">
+                <tr on-tap="getFeeDetail" data="[[item]]">
+                  <td>[[_ObcountIndex(index)]] </td>
+                  <td>[[item.invoice_no]]</td>
+                  <td>[[item.invoice_count]]</td>
+                  <td>[[item.usd_value]]</td>
+                  <td>[[item.fee_date_receipt]]</td>
+                </tr>
+              </template>
+            </template>
+            <template is="dom-if" if="[[_isHave(data.fee_detail)]]">
+                <tr>
+                  <td colspan="5">  ไม่มีข้อมูล</td>
+                </tr>
+            </template>
+          </tbody>
+        </table>
+        <gl-form-panel-footer label="" set-padding="10px">
+          <div class="horizontal end-justified layout">
+            <paper-button raised on-tap="pageReturnListFee" class="gl-btn-default" >ย้อนกลับ</paper-button>
+          </div>
+        </gl-form-panel-footer>
+    </gl-form-panel>
+</template>
+<script>
+Polymer({
+  is: "list-of-fee-detail-g2g",
+  behaviors: [
+      g2gCongtroller,
+      FormatNumberBehavior
+  ],
+  properties: {
+    dataSelected: {
+      type: Object
+    },
+  },
+  getFeeDetail:function (e) {
+    // console.log(e.currentTarget.data.fee_det_id);
+    this.fire('get-Fee-Detail',{data:e.currentTarget.data.fee_det_id});
+  },
+  pageReturnListFee:function () {
+    this.fire('page-change',{page:'listOfFee'});
+  }
+
+});
+</script>
+</dom-module>

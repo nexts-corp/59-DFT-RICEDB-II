@@ -228,7 +228,7 @@
   </template>
 
   <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
-    <paper-button class="gl-btn-defalse" raised on-tap="cancelEditShipment">
+    <paper-button class="gl-btn-default" raised on-tap="cancelEditShipment">
           ย้อนกลับ</paper-button>
     <paper-button class="gl-btn-danger" on-tap="calcelShipmentInsert" raised >ยกเลิก</paper-button>
     <paper-button class="gl-btn-success" raised on-tap="addExporter">
@@ -267,7 +267,7 @@
       },
       observers:[
         '_oBcheckBl(data.book_no,dataForSelect)',
-        '_obCalWeight(data.shm_det_quantity,dataForSelect)',
+        '_obCalWeight(data.shm_det_quantity,dataForSelect,data.*)',
         'check(data)',
         '_dataSelected(dataForSelect)',
         '_checkpol(pol)',
@@ -350,13 +350,17 @@
             // let type_rice_id = e.detail.value;
             let typeRice = this.dataForSelect.cl_type_rice.filter((typeRices)=> typeRices.type_rice_id == type_rice_id );
             this.dataForSelect.package = typeRice[0].package;
-            console.log(typeRice);
-            console.log('this.dataForSelect.package=>',this.dataForSelect.package);
+            // console.log(typeRice);
+            // data.shm_det_quantity
+            //เซ็นลิมิตข้าวลงใน data.shm_det_quantity
+            this.set('dataForSelect.type_rice_quantity_limit_max',typeRice[0].type_rice_quantity_limit_max);
+            this.notifyPath('dataForSelect.type_rice_quantity_limit_max')
+            // console.log('dataForSelect.type_rice_quantity_limit_max=>',this.dataForSelect.type_rice_quantity_limit_max);
             this.notifyPath('dataForSelect.package');
             // this.data.package_id='',
             // this.data.shm_det_quantity='',
-            this.notifyPath('data.package_id');
-            this.notifyPath('data.shm_det_quantity');
+            // this.notifyPath('data.package_id');
+            // this.notifyPath('data.shm_det_quantity');
             return typeRice[0].package;
         }
       },
@@ -364,10 +368,14 @@
         if (package_id) {
           let packing = this.dataForSelect.package.filter((packageing)=> packageing.package_id == package_id );
           this.price=packing[0];
+          this.data.price_per_ton = this.price.price_per_ton;
+          this.notifyPath('data.price_per_ton');
+          // console.log(this.data.price_per_ton );
           // this.data.shm_det_quantity='',
-          this.notifyPath('data.shm_det_quantity');
-          this.notifyPath('price.price_per_ton');
-          this.notifyPath('price.package_weight_bag');
+          // this.notifyPath('data.shm_det_quantity');
+          // ใน this.price มี price.price_per_ton
+          // this.notifyPath('price.price_per_ton');
+          // this.notifyPath('price.package_weight_bag');
         }
       },
       _obCalWeight:function (shm_det_quantity,dataForSelect) {
@@ -375,55 +383,70 @@
         if (typeof pack != 'undefined') {
              shm_det_quantity = numeral().unformat(shm_det_quantity);
              let quantityBag = ((parseFloat(shm_det_quantity) * parseFloat(1000)) / parseFloat(pack.package_kg_per_bag));
-             this.price.quantityBag =numeral(quantityBag).format('0,0');
+             this.price.quantityBag =numeral(this._isNan(quantityBag)).format('0,0');
              this.notifyPath('price.quantityBag');
-             this.price.sumGW = ((parseFloat(quantityBag) * (parseFloat(pack.package_kg_per_bag) + (parseFloat(pack.package_weight_bag) / parseFloat(1000))) / parseFloat(1000)));
-             this.notifyPath('price.sumGW');
-             this.price.gw = numeral(this.price.sumGW).format('0,0.00');
+             let sumGW = ((parseFloat(quantityBag) * (parseFloat(pack.package_kg_per_bag) + (parseFloat(pack.package_weight_bag) / parseFloat(1000))) / parseFloat(1000)));
+            //  this.notifyPath('price.sumGW');
+             this.price.gw = numeral(this._isNan(sumGW)).format('0,0.00');
              this.notifyPath('price.gw');
              this.price.nw = numeral(parseFloat(shm_det_quantity)).format('0,0.00');
              this.notifyPath('price.nw');
-             this.price.tw = numeral(((parseFloat(quantityBag)*(parseFloat(pack.package_weight_bag)/parseFloat(1000)))/parseFloat(1000))).format('0,0.00');
+             this.price.tw = numeral(this._isNan(((parseFloat(quantityBag)*(parseFloat(pack.package_weight_bag)/parseFloat(1000)))/parseFloat(1000)))).format('0,0.00');
              this.notifyPath('price.tw');
         }
       },
       addExporter:function () {
         // console.log(this.data);
         this.data.shm_id=this.dataForSelect.shm_id;
-        this._cleanShipmentData(this.data,(data)=>{
-          this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
-          this.insert('./g2g/shipment/detail/insert',data, () => {
-            this.fire('refresh-contract',{detail:'refresh-contract'});
-            this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
-            this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
-            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-              callback:()=>{
-                  this.cancelInsertShipment();
-                }
+        if (this.data.shm_det_quantity <=this.dataForSelect.type_rice_quantity_limit_max) {
+          this._cleanShipmentData(this.data,(data)=>{
+            this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
+            this.insert('./g2g/shipment/detail/insert',data, () => {
+              this.fire('refresh-contract',{detail:'refresh-contract'});
+              this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
+              this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
+              this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                callback:()=>{
+                    this.cancelInsertShipment();
+                  }
+              });
             });
+            let el = Polymer.dom(this.root).querySelectorAll('.required');
+            el.map((el)=> {el.reset();el.value=''});
           });
-          let el = Polymer.dom(this.root).querySelectorAll('.required');
-          el.map((el)=> {el.reset();el.value=''});
-        })
+        }else {
+          this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินกำหนด', //คำสั่งสำหรับเปิด toast error
+            callback:function(){
+          }})
+        }
       },
       editExporter:function () {
-        this._cleanShipmentData(this.data,(data)=>{
-            data.shm_id = this.data.shm_id;
-            data.id = this.data.shm_det_id;
-            this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
-                status:'dialog',
-                text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
-                confirmed:this._saveExporter.bind(this), //function ที่ใช้รับค่า ปุ่ม
-                el: this, // compontents
-                data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
-            })
-        });
+        let sum = this.oldData.shm_det_quantity +this.dataForSelect.type_rice_quantity_limit_max;
+        // console.log(sum);
+        if (this.data.shm_det_quantity <= sum) {
+          this._cleanShipmentData(this.data,(data)=>{
+              data.shm_id = this.data.shm_id;
+              data.id = this.data.shm_det_id;
+              this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+                  status:'dialog',
+                  text:'ต้องการแก้ข้อมูลใช่หรือไม่ ?',
+                  confirmed:this._saveExporter.bind(this), //function ที่ใช้รับค่า ปุ่ม
+                  el: this, // compontents
+                  data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+              })
+          });
+      } else {
+        this.fire('toast',{status:'connectError',text:'ปริมาณข้าวเกินกำหนด', //คำสั่งสำหรับเปิด toast error
+          callback:function(){
+        }})
+      }
       },
       _saveExporter:function(result,detail){
          if (result == true) {
               this.update('./g2g/shipment/detail/update', detail.data,() => {
                 //  this.fire('get-shipMentDetail',{shm_id :data.shm_id,refresh:false ,action:'put'})
                 this.fire('refresh-contract',{detail:'refresh-contract'});
+                console.log(this.dataForSelect);
                 this.fire('get-list-shipment',{contractId:this.dataForSelect.contract_id});
                 this.fire('get-list-shipment-detail',{sm_id:this.dataForSelect.shm_id});
                 this.editInput();
@@ -509,20 +532,27 @@
         let el = Polymer.dom(this.root).querySelectorAll('.required');
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
-            let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id} = data;
-            let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id};
-            // newData.ship = new Array();
-            // newData.eta_date = new Date (newData.eta_date).toISOString();
-            // newData.etd_date = new Date (newData.etd_date).toISOString();
-            // newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
-            // newData.packing_date = new Date (newData.packing_date).toISOString();
-            // newData.product_date = new Date (newData.product_date).toISOString();
-            // data.ship.map((ships)=>{
-            //   newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
-            // });
-            el.map((el)=> {el.reset();});
-            // console.log(newData);
-            callback(newData)
+            if (data.shm_det_quantity > 0) {
+              let { book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id,price_per_ton} = data;
+              let newData ={ book_id,num_of_container,type_rice_id,package_id,shm_det_quantity,exporter_id,shm_id,price_per_ton};
+              // newData.ship = new Array();
+              // newData.eta_date = new Date (newData.eta_date).toISOString();
+              // newData.etd_date = new Date (newData.etd_date).toISOString();
+              // newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
+              // newData.packing_date = new Date (newData.packing_date).toISOString();
+              // newData.product_date = new Date (newData.product_date).toISOString();
+              // data.ship.map((ships)=>{
+              //   newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
+              // });
+              el.map((el)=> {el.reset();});
+              // console.log(newData);
+              callback(newData)
+            } else {
+              this.fire('toast',{status:'connectError',text:'กรุณาใส่ปริมาณข้าวมากกว่า 0 ', //คำสั่งสำหรับเปิด toast error
+              callback:function(){
+              }})
+            }
+
           } else {
             this.fire('toast',{status:'connectError',text:'กรุณากรอกให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error
             callback:function(){

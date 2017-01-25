@@ -37,8 +37,8 @@ var schema = {
                     "type_rice_quantity": { "type": "number" },
                     "project_th": { "type": "string" },
                     "project_en": { "type": "string" },
-                    "description_th": { "type": "string" },
-                    "description_en": { "type": "string" },
+                    // "description_th": { "type": "string" },
+                    // "description_en": { "type": "string" },
                     "tolerance_rate": { "type": "number" },
                     "package": {
                         "type": "array",
@@ -52,17 +52,29 @@ var schema = {
                         }
                     }
                 },
-                "required": ["type_rice_id", "type_rice_quantity", "package", "project_th", "project_en", "description_th", "description_en", "tolerance_rate"]
+                "required": ["type_rice_id", "type_rice_quantity", "package", "project_th", "project_en", "tolerance_rate"]
             }
         },
-        "inct_id": {
-            "type": "string"
+        // "inct_id": {
+        //     "type": "string"
+        // },
+        "incoterms": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "inct_id": {
+                        "type": "string"
+                    }
+                },
+                "required": ["inct_id"]
+            }
         },
         "cl_status": {
             "type": "boolean"
         }
     },
-    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "inct_id", "cl_status"]
+    "required": ["cl_name", "cl_no", "cl_date", "cl_type_rice", "incoterms", "cl_status"]
 };
 var validate = ajv.compile(schema);
 

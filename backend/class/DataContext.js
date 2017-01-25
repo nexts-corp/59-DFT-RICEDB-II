@@ -55,10 +55,13 @@ DataContext.prototype.update = function (dbname, tbname, obj, res) {
                             date_created: new Date(),
                             actor: 'admin'
                         };
-                        if (response.changes != [] && response.unchanged != 1 || response.replaced == 1) {
+                        //console.log(response);
+                        if (response.skipped !=1 && response.changes != [] && response.unchanged != 1 || response.replaced == 1) {
                             // console.log(history.old_value);
+                            //console.log('<=====change===>');
                             history.old_value = response.changes[0].old_val;
-                            //console.log(history.old_value);
+                        }else{
+                          //console.log('======unchange=====');
                         }
 
                         r.db(dbname).table('history').insert(history).run(conn).then()

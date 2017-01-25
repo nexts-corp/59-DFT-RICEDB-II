@@ -137,7 +137,7 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
             .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "date_created", "date_updated", "contract_type_rice", "creater", "updater"] }).zip()
             .filter({ contract_id: req.params.contract_id })
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-            .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            // .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('shipline_id', r.db('common').table('shipline')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             // .eqJoin('surveyor_id', r.db('common').table('surveyor')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
@@ -175,6 +175,11 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                     surveyor: m('surveyor').map(function (arr_surveyor) {
                         return arr_surveyor.merge(function (row_surveyor) {
                             return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        })
+                    }),
+                    incoterms: m('incoterms').map(function (arr_inct) {
+                        return arr_inct.merge(function (row_inct) {
+                            return r.db('common').table('incoterms').get(row_inct('inct_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                         })
                     }),
                     etd_date: m('etd_date').split('T')(0),
@@ -215,7 +220,7 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
             //.filter({ book_status: false })
             .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice"] }).zip()
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-            .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            // .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('shipline_id', r.db('common').table('shipline')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             // .eqJoin('surveyor_id', r.db('common').table('surveyor')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
@@ -253,6 +258,11 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
                     surveyor: m('surveyor').map(function (arr_surveyor) {
                         return arr_surveyor.merge(function (row_surveyor) {
                             return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        })
+                    }),
+                    incoterms: m('incoterms').map(function (arr_inct) {
+                        return arr_inct.merge(function (row_inct) {
+                            return r.db('common').table('incoterms').get(row_inct('inct_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                         })
                     }),
                     etd_date: m('etd_date').split('T')(0),
@@ -304,7 +314,7 @@ router.get('/id/:book_id', function (req, res, next) {
                         .getAll(req.params.book_id, { index: 'book_id' })
                         .group(function (g) {
                             return g.pluck(
-                                "type_rice_id", "package_id"
+                                "type_rice_id", "package_id", "price_per_ton"
                             )
                         })
                         .sum("shm_det_quantity")
@@ -313,16 +323,17 @@ router.get('/id/:book_id', function (req, res, next) {
                             return {
                                 type_rice_id: me2('group')('type_rice_id'),
                                 package_id: me2('group')('package_id'),
+                                price_per_ton: me2('group')('price_per_ton'),
                                 quantity_tons: me2('reduction'),
-                                price_per_ton: me('cl_type_rice')
-                                    .filter(function (tb) {
-                                        return tb('type_rice_id').eq(me2('group')('type_rice_id'))
-                                    }).getField("package")(0)
-                                    .filter(function (f) {
-                                        return f('package_id').eq(me2('group')('package_id'))
-                                    })(0)
-                                    .pluck('price_per_ton')
-                                    .values()(0)
+                                // price_per_ton: me('cl_type_rice')
+                                //     .filter(function (tb) {
+                                //         return tb('type_rice_id').eq(me2('group')('type_rice_id'))
+                                //     }).getField("package")(0)
+                                //     .filter(function (f) {
+                                //         return f('package_id').eq(me2('group')('package_id'))
+                                //     })(0)
+                                //     .pluck('price_per_ton')
+                                //     .values()(0)
                             }
                         })
                         .without("group", "reduction")
@@ -372,6 +383,11 @@ router.get('/id/:book_id', function (req, res, next) {
                         return arr_surveyor.merge(function (row_surveyor) {
                             return r.db('common').table('surveyor').get(row_surveyor('surveyor_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
                         })
+                    }),
+                    incoterms: me('incoterms').map(function (arr_inct) {
+                        return arr_inct.merge(function (row_inct) {
+                            return r.db('common').table('incoterms').get(row_inct('inct_id')).without('id', 'date_created', 'date_updated', 'creater', 'updater')
+                        })
                     })
                 }
             })
@@ -417,9 +433,10 @@ router.get('/id/:book_id', function (req, res, next) {
             .merge(function (m) {
                 return r.db('common').table("carrier").get(m('carrier_id')).pluck('carrier_name')
             })
-            .merge(function (m) {
-                return r.db('common').table("incoterms").get(m('inct_id')).pluck('inct_name')
-            }).without('id')
+            // .merge(function (m) {
+            //     return r.db('common').table("incoterms").get(m('inct_id')).pluck('inct_name')
+            // })
+            .without('id')
             .run(conn, function (err, cursor) {
                 //console.log(err);
                 if (!err) {
