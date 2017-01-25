@@ -62,5 +62,40 @@ class Payment{
         });
     }
 
+    getPaymentDetail(req,res){
+        var r = req._r;
+        var params = req.query;
+        var quotaYear = parseInt(params.year);
+
+        r.db('eu2').table('ec').get(params.ec_id)
+        .merge(function(row){
+            return {
+                amount:row('price').sub(row('quantity')),
+                delivery_date:
+                row('delivery_date').day().coerceTo('string').add('/')
+                .add(row('delivery_date').month().coerceTo('string')).add('/')
+                .add(row('delivery_date').year().coerceTo('string')),
+                exporter_name:r.db('eu2').table('exporter').get(row('exporter_id'))('name')
+            }
+        }).do(function(ecSelect){
+            return {
+                ecSelect:ecSelect,
+                ecList:
+                r.db('eu2').table('ec').filter(function(row){
+                    return row('exporter_id').eq(ecSelect('exporter_id'))
+                    .and(ecSelect('status').eq('np'))
+                })
+                .merge({exporter_name:ecSelect('exporter_name')})
+                .coerceTo('array')
+            }
+        })
+        .run().then(function(result){
+            res.json(result);
+        })
+        .catch(function(err){
+            res.status(500).json(err);
+        });
+    }
+
 }
 module.exports = new Payment();
