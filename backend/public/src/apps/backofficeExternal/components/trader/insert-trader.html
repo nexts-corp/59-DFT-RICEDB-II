@@ -153,16 +153,19 @@
       },
       _typeLicName:function (data) {
         var newType = [];
+        let comboboxs = Polymer.dom(this.root).querySelector('#typeID');
         if (typeof this.typelics !== undefined && this.typelics !== undefined) {
-          this.typelics.map((val,index)=>{
-            // console.log(data[index]);
-            if (data[index] == undefined) {
-              newType.push(val)
-            }
+          this.typelics.map((val)=>{
+            // console.log(val);
+            data.map((item)=>{
+              // console.log(item);
+              if (val.type_lic_id != item.type_lic_id) {
+                newType.push(val)
+              }
+            })
           })
         }
         // console.log(newType);
-        let comboboxs = Polymer.dom(this.root).querySelector('#typeID');
         comboboxs.items = newType;
       }
     });
