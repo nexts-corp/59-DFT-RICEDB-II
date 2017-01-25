@@ -77,8 +77,23 @@ exports.listFilePath = function (req, res) {
         })
         .eqJoin('file_id', r.db('files').table('files')).without({ right: ["id", "contents"] }).zip()
         .eqJoin('exporter_id', r.db('external_f3').table('exporter')).pluck('left', { right: 'exporter_id' }).zip()
-        .merge({ progress: 100, complete: true })
+        .merge(function (m) {
+            return { timestamp: m('timestamp').toISO8601().split("T")(0) }
+        })
+        .merge(function (row) {
+            return {
+                name: row('name').add('  -->>  ')
+                .add(row('timestamp'))
+                // .add('-')
+                // .add(row('date_upload').month().coerceTo('string'))
+                // .add('-')
+                // .add(row('date_upload').year().coerceTo('string'))
+                ,
+                progress: 100, complete: true
+            }
+        })
         .filter({ exporter_id: params.exporter_id, ref_path: params.refPath })
+        .orderBy(r.desc('date_upload'))
         .run()
         .then(function (result) {
             res.json(result);

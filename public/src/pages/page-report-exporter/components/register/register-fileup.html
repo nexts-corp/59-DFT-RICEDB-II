@@ -1,14 +1,30 @@
 <dom-module id="register-fileup">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color">
     .title{
+      font-size: 17px;
+      font-family: 'rsubold', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      /*text-decoration:underline;*/
+      margin: 10px 0px 10px 5px;
+    }
+    nylon-upload{
+      --divider-color: white;
+      --primary-color: #339933;
+      --vaadin-upload-drag-ripple: {
+        border: 2px solid #ddd;
+      }
+    }
+    .title-head{
+      text-align: center;
       font-size: var(--font-size-h4);
       font-family: 'rsubold', sans-serif;
       -webkit-font-smoothing: antialiased;
-      text-decoration:underline;
-      margin: 10px 0px 0px 5px;
+      /*text-decoration:underline;*/
+      margin: 30px 0px 20px 0px;
     }
   </style>
   <template>
+    <div class="title-head">แนบไฟล์เอกสารผู้ส่งออก</div>
     <div class="title">นิติบุคคล</div>
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
