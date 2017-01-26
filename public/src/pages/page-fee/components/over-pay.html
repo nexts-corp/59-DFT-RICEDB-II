@@ -25,7 +25,7 @@
 		<div class="content">
 			<div class="flex">
 				<div style="overflow-x:auto;">
-					<fee-list data="{{data.ecList}}" check-box="true"></fee-list>
+					<fee-list data="{{data.ecList}}" data-pay="[[mathDataPay(data.ecList.*)]]" check-box="true" data-overplay='true'></fee-list>
 				</div>
 			</div>
 		</div>
@@ -123,6 +123,11 @@
         Polymer({
             is: 'over-pay',
             observers:['setPay(bringForward.pay)'],
+            ready:function(){
+                if(false) return;
+                
+                console.log('ddd')
+            },
             properties:{
                 bringForward:{
                     type: Object,
@@ -134,18 +139,49 @@
                 }
             },
             setPay:function(pay){
-                console.log('pay',pay);
-                // this.datas.amount = pay;
                 this.set('datas.amount',pay);
-                    // this.$$('#payCheck').value = pay;
-                // console.log(pay);
             },
             check:function(data){
                 return data==0;
             },
+            mathDataPay:function(data){
+                var amount = 0;
+                var select = this.data.ecList.filter(function(item){
+                    return item.check == true;
+                })
+                this.data.ecSelect.map((item)=>{
+                    amount += item.amount;
+                })
+                var old = [];
+                var result = {};
+
+                for(var i = 0; i< select.length; i++){
+                    var check = select[i].balance - amount;
+                    if(check >= 0){
+                        this.set('data.ecList'+[i]+'balance_s',amount)
+                        // this.data.ecList[i].balance_s = amount;
+                        break; 
+                    }
+                    else {
+                        this.set('data.ecList'+[i]+'balance_s',select[i].balance)
+                        // this.data.ecList[i].balance_s = select[i].balance;
+                        amount = amount - select[i].balance;
+                    }   
+                }
+                return this.data.ecList;
+            
+            },
             checkData:function(data){
-                var ec = this.data.ecSelect.amount;
+                
+                if(!((data.value === true || data.value === false)||data.path==='data.ecList'))
+                return;
+
+                var ec = 0;
                 var sum = data.base;
+                this.data.ecSelect.map((item)=>{
+                    ec += item.amount;
+                })
+                
                 if(sum.length!=0){
                     sum = sum.reduce(function(total, num) {
                         return {balance:total.balance + num.balance}
@@ -165,6 +201,41 @@
                 var balance =  ((select-ec)<0?0:(select-ec))+(sum-select);
                 var pay_balance = select>ec?ec:select;
                 var pay = ec - pay_balance;
+
+
+
+
+                var old = [];
+                var amount = ec;
+                var select_ec = this.data.ecList.filter(function(item){
+                    return item.check == true;
+                })
+                console.log(amount);
+                for(var i = 0; i< select_ec.length; i++){
+                    var check = select_ec[i].balance - amount;
+                    
+                    if(check >= 0){
+                        old.push({
+                            ec_id: select_ec[i].id,
+                            quantity: amount
+                        })
+                        break; 
+                    }
+                    else {
+                        old.push({
+                            ec_id: select_ec[i].id,
+                            quantity: select_ec[i].balance
+                        })
+                        amount = amount - select_ec[i].balance;
+                    }   
+                }
+
+
+                
+
+                console.log(old);
+
+
                 return {
                     amount: ec,
                     balance: balance,
@@ -173,10 +244,13 @@
                 }
             },
             saveData:function(){
-                var amount = this.data.ecSelect.quantity;
+                var amount = 0;
                 var select = this.data.ecList.filter(function(item){
                     return item.check == true;
                 })
+                 this.data.ecSelect.map((item)=>{
+                     amount += item.amount;
+                 })
                 var old = [];
                 var result = {};
 
@@ -201,9 +275,9 @@
                 
 
                 if(old.length!=0)
-                result.ec = old;
+                    result.ec = old;
                 if(!this.check(this.bringForward.pay))
-                result.check = this.datas;
+                    result.check = this.datas;
                 // console.log(result);
                 this.fire('save-data',result);
             }
