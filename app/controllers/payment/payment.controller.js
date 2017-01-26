@@ -99,7 +99,9 @@ class Payment{
                         row('req_date').day().coerceTo('string').add('/')
                         .add(row('req_date').month().coerceTo('string')).add('/')
                         .add(row('req_date').year().coerceTo('string')),
-                        exporter_name:ecSelect(0)('exporter_name')
+                        exporter_name:ecSelect(0)('exporter_name'),
+                        useBalance:0,
+                        totalBalance:row('balance')
                     }
                 })
                 .coerceTo('array')

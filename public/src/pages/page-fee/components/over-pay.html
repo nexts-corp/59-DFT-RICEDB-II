@@ -239,13 +239,20 @@
                     if(row.check){
                         allEcList[i] = ecUpdate[iEcUpdate];
                         iEcUpdate++;
+                    }else{
+                        allEcList[i].useBalance = 0; 
+                        allEcList[i].totalBalance = allEcList[i].balance;
                     }
                 });
                 
-                this.data.ecList = allEcList
+                this.data.ecList = allEcList;
                 
+                this.data.ecList.map((row,i)=>{
+                    this.notifyPath(`data.ecList.${i}.useBalance`);
+                    this.notifyPath(`data.ecList.${i}.totalBalance`);
+                })
 
-                this.notifyPath('data.ecList.0.useBalance');
+                
                 //console.log(ecUpdate);
 
 
