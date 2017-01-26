@@ -132,9 +132,10 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('book')
             .getAll(false, { index: 'book_status' })
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "creater", "updater"] }).zip()
-            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "date_created", "date_updated", "contract_type_rice", "creater", "updater"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "tags"] }).zip()
+            .filter({ shm_status: true })
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "creater", "updater", "tags"] }).zip()
+            .eqJoin("contract_id", r.db('g2g').table("contract")).without({ right: ["id", "date_created", "date_updated", "contract_type_rice", "creater", "updater", "tags"] }).zip()
             .filter({ contract_id: req.params.contract_id })
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             // .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
@@ -216,9 +217,9 @@ router.get('/shipment/id/:shm_id', function (req, res, next) {
     db.query(function (conn) {
         r.db('g2g').table('book')
             .getAll(req.params.shm_id, { index: 'shm_id' })
-            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "tags"] }).zip()
             //.filter({ book_status: false })
-            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice"] }).zip()
+            .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "tags"] }).zip()
             .eqJoin('carrier_id', r.db('common').table('carrier')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             // .eqJoin('inct_id', r.db('common').table('incoterms')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
             .eqJoin('shipline_id', r.db('common').table('shipline')).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
@@ -299,13 +300,13 @@ router.get('/id/:book_id', function (req, res, next) {
         r.db('g2g').table('book')
             .get(req.params.book_id)
             .merge(function (m) {
-                return r.db('g2g').table("shipment").get(m('shm_id')).without("id", "date_created", "date_updated", "creater", "updater")
+                return r.db('g2g').table("shipment").get(m('shm_id')).without("id", "date_created", "date_updated", "creater", "updater", "tags")
             })
             .merge(function (m) {
-                return r.db('g2g').table("confirm_letter").get(m('cl_id')).without("id", "date_created", "date_updated", "creater", "updater")
+                return r.db('g2g').table("confirm_letter").get(m('cl_id')).without("id", "date_created", "date_updated", "creater", "updater", "tags")
             })
             .merge(function (m) {
-                return r.db('g2g').table("contract").get(m('contract_id')).without("id", "date_created", "date_updated", "creater", "updater", "contract_type_rice")
+                return r.db('g2g').table("contract").get(m('contract_id')).without("id", "date_created", "date_updated", "creater", "updater", "contract_type_rice", "tags")
             })
             .merge(function (me) {
                 return {

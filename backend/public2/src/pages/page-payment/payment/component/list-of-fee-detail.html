@@ -54,14 +54,6 @@
               <th>วันที่รับเช็ค</th>
             </tr>
           </thead>
-          <!-- <tfoot class="table-foot">
-            <tr>
-              <td></td>
-              <td>รวม</td>
-              <td>[[data.contract_quantity_confirm]]</td>
-              <td></td>
-            </tr>
-          </tfoot> -->
           <tbody class="table-body">
             <template is="dom-if" if="[[!_isHave(data.fee_detail)]]">
               <template is="dom-repeat" items="[[data.fee_detail]]">
@@ -81,6 +73,9 @@
             </template>
           </tbody>
         </table>
+        <div class="layout horizontal end-justified">
+          <paper-button class="gl-btn-info" raised on-tap="approveFee" >ยืนยันถัวเฉลี่ยเงิน</paper-button>
+        </div>
         <!-- </gl-form-panel-body> -->
     </gl-form-panel>
     </div>
@@ -138,7 +133,40 @@ Polymer({
   },
   _backPageFeedetail:function (data) {
     this.pageSelected='listOfFeedetail';
-  }
+  },
+  approveFee:function () {
+    this._cleanDataFee(this.data,(data)=>{
+      data.id = this.data.fee_id
+      data.fee_status = this.approve(data.fee_status);
+      this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
+          status:'dialog',
+          text:'ต้องยืนยันข้อมูลใช่หรือไม่ ?',
+          confirmed:this._approveFee.bind(this), //function ที่ใช้รับค่า ปุ่ม
+          el: this, // compontents
+          data:data // ข้อมูลที่ส่งไป เช่น id ที่จะใช้ลบข้อมูล ใน db
+      });
+    })
+
+  },
+  _approveFee:function (result,detail) {
+    if (result == true) {
+      // console.log(detail.data);
+      this.update('./g2g/fee/update',detail.data, () => {
+        this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+         callback:()=>{
+            this.fire('close-drawer',{detail:'close-drawer'});
+            let contract_id= this._getUrl();
+              this.fire('get-fee-list',{detail:contract_id});
+          }
+        });
+       });
+     }
+  },
+  _cleanDataFee:function (data,callback) {
+    let {fee_no,fee_name,fee_status,shm_id} = data
+    let newData = {fee_no,fee_name,fee_status,shm_id}
+      callback(newData);
+  },
 
 });
 </script>

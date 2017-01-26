@@ -56,7 +56,7 @@
 
         <div name="feeDetail">
 
-          <fee-management data-for-select="[[dataForSelect.feeListinShm]]" data-shm-id="[[data.invoice.0.shm_id]]"></fee-management>
+          <fee-management data-for-select="[[dataForSelect]]" data-shm-id="[[data.invoice.0.shm_id]]"></fee-management>
         </div>
     <div name="averagePage">
       <div class="header flex-center-justified">
@@ -224,9 +224,6 @@
                <template is="dom-if" if="[[data.fee_det_status]]">
                   <paper-button raised on-tap="approvePayment" class="gl-btn-danger">ยกเลิกยืนยัน</paper-button>
                </template>
-                <template is="dom-if" if="[[!data.fee_det_status]]">
-                 <paper-button raised on-tap="approvePayment" class="gl-btn-success" hidden="[[isViewSeleted]]">ยืนยัน</paper-button>
-               </template>
                 </template>
                <template is="dom-if" if="[[!_isViewing(isInputDisabled)]]">
                  <paper-button raised class="gl-btn-danger" on-tap="cancelFee" hidden="[[!isViewSeleted]]">ยกเลิก</paper-button>
@@ -333,19 +330,20 @@
       addPayment:function () {
         this.data.fee_det_status = false;
         // fee_id
+        this.set('data.tags',[this.dataForSelect.shm_id,this.dataForSelect.cl_id,this.dataForSelect.contract_id]);
         this._clearDatafee(this.data,'insert',(data)=>{
             // data.invoice_status = true;
             this.data.invoice.map((el,indexShmid)=>{
-             this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+             this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id,el.tags);
            });
             this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
             // console.log(11);
             this.insert('./g2g/fee/detail/insert',data, () => {
               this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                callback:()=>{
-                  let shmid= this._getUrl();
+                  let contract_id= this._getUrl();
                   this.fire('close-drawer',{detail:'close-drawer'});
-                  this.fire('get-fee-list',{detail:shmid});
+                  this.fire('get-fee-list',{detail:contract_id});
                   let el = Polymer.dom(this.root).querySelectorAll('.required');
                   el.map((el)=> {el.reset();});
               }
@@ -424,7 +422,7 @@
      _deleteDataFee:function(result,detail){
        if (result == true) {
          this.data.invoice.map((el,indexShmid)=>{
-          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id);
+          this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id,el.tags);
         });
          this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
            let contract_id= this._getUrl();
@@ -440,14 +438,18 @@
           let {rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt,fee_id}=data;
           let newData={rate_bank,rate_tt,fee_other,fee_internal,fee_foreign,fee_det_status,fee_date_receipt,fee_id};
           newData.invoice=[];
+          newData.tags = new Array();
+          data.tags.map((tag)=>{
+            newData.tags.push(tag);
+          });
           newData.fee_date_receipt = new Date(newData.fee_date_receipt);
           this.data.invoice.map((el,indexShmid)=>{
             newData.invoice.push({invoice_id:el.invoice_id,invoice_detail:[]});
             el.invoice_detail.map((shmDet,indexshmdet)=>{
               newData.invoice[indexShmid].invoice_detail.push({
                                     shm_det_id:shmDet.shm_det_id,
-                                    invoice_no:shmDet.invoice_no,
-                                    invoice_date:new Date (shmDet.invoice_date),
+                                    // invoice_no:shmDet.invoice_no,
+                                    // invoice_date:new Date (shmDet.invoice_date),
                                     invoice_fee:shmDet.invoice_fee,
                                   });
             });
@@ -457,7 +459,7 @@
           callback(newData);
         }
       },
-      _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,book_id) {
+      _changeStatusInvoice:function (invoice_id,bl_no,invoice_date,invoice_no,invoice_status,made_out_to,book_id,tags) {
         let data = {
           id:invoice_id,
           bl_no:bl_no,
@@ -465,7 +467,8 @@
           invoice_no:invoice_no,
           invoice_status:this.approve(invoice_status),
           made_out_to:made_out_to,
-          book_id:book_id
+          book_id:book_id,
+          tags:tags
         };
         let contractId = this._getUrl();
         this.update('./g2g/invoice/update',data, () => {

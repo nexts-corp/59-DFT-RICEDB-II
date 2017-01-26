@@ -9,22 +9,9 @@
   <template>
     <iron-pages selected="{{pages}}" attr-for-selected="name">
       <fee-management-list data="[[dataForSelect]]" name="fee-management-list"></fee-management-list>
-      <fee-management-detail data=[[dataSelected]] data-shm-id="[[dataShmId]]" name="fee-management-detail" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isEdit]]"></fee-management-detail>
-      <fee-management-detail data-shm-id="[[dataShmId]]" name="fee-management-detail-add" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isEdit]]"></fee-management-detail>
+      <fee-management-detail data=[[dataSelected]] data-shm-id="[[dataShmId]]" data-for-select="[[dataForSelect]]" name="fee-management-detail" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isEdit]]"></fee-management-detail>
+      <fee-management-detail data-shm-id="[[dataShmId]]" data-for-select="[[dataForSelect]]" name="fee-management-detail-add" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isEdit]]"></fee-management-detail>
     </iron-pages>
-    <!-- <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,2]]">
-        [[changeString2Num(data.*,'fee_no')]]
-        <gl-form-input allowed-pattern="[0-9||,||.]" format-number="on"  label="ครั้งที่" value="{{data.fee_no}}" always-float-label></gl-form-input>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,6],[500,3]]">
-        <gl-form-input label="ชื่อรอบการจ่ายเงิน" value="{{data.fee_name}}" always-float-label></gl-form-input>
-      </gl-grid-col>
-    </gl-grid-row>
-
-      <div class="horizontal end-justified layout">
-       <paper-button raised on-tap="saveFee" class="gl-btn-success" >บันทึก</paper-button>
-      </div> -->
   </template>
   <script>
     Polymer({
@@ -52,7 +39,7 @@
         this.pages="fee-management-detail";
       },
       _getListFee:function (e) {
-        console.log(11);
+        // console.log(11);
         this.pages="fee-management-list";
       },
       _getInsertFee:function (e) {
