@@ -3,6 +3,9 @@ module.exports=function(app){
     app.get('/reqEcList',payment.getReqEcList);
     app.get('/exporterEcList',payment.getExporterEcList);
     app.post('/paymentDetail',payment.getPaymentDetail);
+    
+    //ออกใบเสร็จ
+    app.post('/receipt',payment.insertReceipt);
 
     var payment2=require('../controllers/payment/payment2.controller');
     app.get('/selectbank',payment2.selectBank);

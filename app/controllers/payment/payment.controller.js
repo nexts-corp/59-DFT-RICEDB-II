@@ -115,5 +115,18 @@ class Payment{
         });
     }
 
+
+    insertReceipt(req,res){
+        var r = req._r;
+        var params = req.body;
+
+        //เช็คประเภทใบเสร็จรับเงิน N=จ่ายปกติ  O=จ่ายยอดเดิม A=จ่ายเพิ่ม
+        var typeReceipt = (typeof params.list_old=='undefined')?'N':(typeof params.check_number == "undefined")?'O':'A'
+
+
+
+        res.json({typeReceipt:typeReceipt});
+    }
+
 }
 module.exports = new Payment();
