@@ -209,10 +209,6 @@
           type: Object,
           notify: true
         },
-        // hiddenInsertVessel:{
-        //   type:Boolean,
-        //   value:false
-        // },
         blNoOld:{
           type:String,
         }
@@ -221,18 +217,8 @@
         '_oBChangeBooking(data.book_no)',
         '_oBChangePod(data.dest_port_id)',
         '_getPod(dataForSelect)',
-        // '_oBCheckVessel(data.ship.*)',
         '_changeDataBl(data.etd_date)',
-        // '_getShip(data.shipline_id,dataForSelect)',
-        // '_getSurveyor(data,dataForSelect)',
-        // '_isHaveForUse(data.ship,dataForSelect.ships,data.ship.*)',
-        // '_oBcheckCarrier(dataForSelect.carrier)'
-        // '_foredit(data)'
       ],
-      // _foredit:function (data) {
-      //     this.blNoOld = JSON.parse(JSON.stringify(data));
-      //     // console.log('this.blNoOld',this.blNoOld);
-      // },
       _changeDataBl:function (dateUn) {
         this.getDateg2g(dateUn,(date)=>{
         //   console.log('date',date);
@@ -255,6 +241,11 @@
       addBl:function () {
         this.data.book_status = false;
         this.data.shm_id = this.dataForSelect.shm_id;
+        // console.log(this.dataForSelect.cl_id ,this.dataForSelect.contract_id);
+        // console.log(this.data);
+        this.set('data.tags',[])
+        this.push('data.tags',this.dataForSelect.cl_id ,this.dataForSelect.contract_id);
+        // console.log(this.data);
         this._cleanDataBl(this.data,(data)=>{
           // console.log(data);
           if (data.carrier_id == '' || data.carrier_id == undefined) {
@@ -323,13 +314,6 @@
         // el.map((el)=> {el.reset();});
         this.calcelContract();
       },
-      // inserVessel:function (index) {
-      //   if (index < 3) {
-      //     return false;
-      //   } else {
-      //     return true;
-      //   }
-      // },
       deleteShip:function () {
         if (this.data.ship.length > 1) {
           this.pop('data.ship');
@@ -341,6 +325,8 @@
       editBl:function () {
         // let blNo = this.data.bl_no;
         let book_id = this.data.book_id;
+        this.set('data.tags',[])
+        this.push('data.tags',this.dataForSelect.cl_id ,this.dataForSelect.contract_id);
         this._cleanDataBl(this.data,(data)=>{
           // console.log(this.dataForSelect.carrier);
           if (data.carrier_id == '' || data.carrier_id == undefined) {
@@ -372,29 +358,6 @@
                 }
             });
           });
-          // let data = detail.data;
-          // console.log('this.dataBlDetail.shipment_detail=>',this.dataBlDetail.shipment_detail.length);
-          // console.log(this.dataBlDetail.shipment_detail);
-          // let listShipmentdetails = this.dataBlDetail.shipment_detail;
-          // let blNo = this.oldData.bl_no;
-          // let shipmentDetail = listShipmentdetails.filter((blDetail)=> blDetail.bl_no == blNo );
-          // console.log('shipmentDetail=>',shipmentDetail.length);
-          // let newShipment=[];
-
-          // console.log('this.blNoOld',this.blNoOld.bl_no);
-          // if (shipmentDetail.length > 0) {
-          //   shipmentDetail.map((shipDetail,index)=>{
-          //     shipDetail[index]= Object.assign(shipDetail,data)
-          //     this._cleanShipmentData(shipDetail[index],(data)=>{
-          //         data.id = shipDetail[index].shm_det_id;
-          //         data.shm_id = shipDetail[index].shm_id;
-          //         newShipment.push(data);
-          //     });
-          //   });
-          //   this._changeShipment(newShipment);
-          // }else {
-          //   this.fire('editing-bl-detail',{shm_id:this.blNoOld.shm_id});
-          // }
         }
       },
       _changeShipment:function (shipmentDetail) {
@@ -436,15 +399,6 @@
         this.notifyPath('dataForSelect.pod');
         // console.log(pod[0].ship);
       },
-      // _oBCheckVessel:function (shipMany) {
-      //   // set btnvessel
-      //   // console.log(shipMany.value);
-      //   if (shipMany.value < 3) {
-      //     this.hiddenInsertVessel = true;
-      //   }else {
-      //     this.hiddenInsertVessel = false;
-      //   }
-      // },
       _checkCarrierIsBlank:function () {
         var carrierSelete;
         this.dataForSelect.carrier.map((carrier)=>{
@@ -468,6 +422,7 @@
             // console.log('newData.book_remark',newData.book_remark);
             newData.ship = new Array();
             newData.surveyor = new Array();
+            newData.tags = new Array();
             newData.eta_date = new Date (newData.eta_date).toISOString();
             newData.etd_date = new Date (newData.etd_date).toISOString();
             newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
@@ -479,6 +434,9 @@
             data.surveyor.map((surveyors)=>{
               newData.surveyor.push({surveyor_id:surveyors.surveyor_id});
             });
+            data.tags.map((tag)=>{
+              newData.tags.push(tag);
+            });
             el.map((el)=> {el.reset();});
             callback(newData)
           } else {
@@ -487,32 +445,6 @@
             }})
           }
       },
-      // _cleanShipmentData:function (data,callback) {
-      //   let el = Polymer.dom(this.root).querySelectorAll('.required');
-      //   let stat = el.map((el)=> el.validate());
-      //     if (stat.every(elem => elem == true)) {
-      //       let { bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-      //             load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-      //             ship_lot_no,shipline_id,surveyor_id,weight_per_container,
-      //             type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,
-      //             exporter_id} = data;
-      //       let newData ={ bl_no,book_no,carrier_id,deli_port_id,dest_port_id,eta_date,etd_date,
-      //                       load_port_id,num_of_container,packing_date,cut_of_time,cut_of_date,product_date,
-      //                       ship_lot_no,shipline_id,surveyor_id,weight_per_container,
-      //                       type_rice_id,package_id,shm_det_quantity,origin_page,nn_page,exporter_id};
-      //       newData.ship = new Array();
-      //       newData.eta_date = new Date (newData.eta_date).toISOString();
-      //       newData.etd_date = new Date (newData.etd_date).toISOString();
-      //       newData.cut_of_date= new Date (newData.cut_of_date).toISOString();
-      //       newData.packing_date = new Date (newData.packing_date).toISOString();
-      //       newData.product_date = new Date (newData.product_date).toISOString();
-      //       // console.log(newData.cut_of_date);
-      //       data.ship.map((ships)=>{
-      //         newData.ship.push({ship_id:ships.ship_id,ship_voy_no:ships.ship_voy_no});
-      //       });
-      //       callback(newData)
-      //     }
-      // },
     });
   </script>
 </dom-module>

@@ -156,8 +156,8 @@
         // console.log(this.trader);
         this.fire('toast',{status:'dialog',
           text:'คุณต้องการจะยืนยันลงทะเบียนใช่หรือไม่ ?',
-          confirmed : this._confirmToast,
-          el: this,
+          confirmed : this._confirmToast
+          .bind(this),
           datas: {
             exporter_date_update:new Date,
             trader_id:this.trader.trader_id
@@ -166,22 +166,23 @@
       },
       _confirmToast:function(result,detail){
         if(result == true){
-          detail.el.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
           axios.post('./external/exporter/insert', detail.datas)
                     .then(function (response) {
                       console.log("success");
                       console.log(response);
-                      detail.el.$$('#removeButtom').setAttribute("hidden", "hidden");
-                      detail.el.$$('#removeButtomC').setAttribute("hidden", "hidden");
-                      detail.el.$$('#formData').setAttribute("hidden", "hidden");
-                      detail.el.$$('#changTitle').removeAttribute("hidden");
-                      detail.el.$$('#changTitle2').setAttribute("hidden", "hidden");
-                      detail.el.dataTrader = "";
-                      detail.el.glQuery('reExporter').getExporters();
-                      detail.el.glQuery('reTrader').getExporterTrader();
-                      detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+                      this.$$('#removeButtom').setAttribute("hidden", "hidden");
+                      this.$$('#removeButtomC').setAttribute("hidden", "hidden");
+                      this.$$('#formData').setAttribute("hidden", "hidden");
+                      this.$$('#changTitle').removeAttribute("hidden");
+                      this.$$('#changTitle2').setAttribute("hidden", "hidden");
+                      this.dataTrader = "";
+                      this.glQuery('reExporter').getExporters();
+                      this.glQuery('reTrader').getExporterTrader();
+                      this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
                         console.log('success');
                       }});
+                      this.pages = 1;
                     }.bind(this))
                     .catch(function (error) {
                       console.log("error");

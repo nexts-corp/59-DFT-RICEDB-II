@@ -59,6 +59,7 @@
     addFee:function () {
       this.data.fee_status = false;
       this.data.shm_id = this.dataShmId;
+      this.set('data.tags',[this.dataForSelect.cl_id,this.dataForSelect.contract_id]);
       this._cleanDataFeeManagement(this.data,(data)=>{
         // console.log(data);
         this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
@@ -159,6 +160,11 @@
         if (stat.every(elem => elem == true)) {
           let {fee_no,fee_name,fee_status,shm_id} = data
           let newData ={fee_no,fee_name,fee_status,shm_id}
+          // console.log(data);
+          newData.tags = new Array();
+          data.tags.map((tag)=>{
+            newData.tags.push(tag);
+          });
             callback(newData);
         }
 

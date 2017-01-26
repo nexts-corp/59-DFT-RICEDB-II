@@ -362,7 +362,9 @@
       },
       insertConfirm:function () {
         this.data.cl_status=false;
-
+        // console.log(this.dataForSelect);
+        this.set('data.tags',[this.dataForSelect.buyer_id,this.dataForSelect.country_id]);
+        // console.log(this.data);
             this._clearnDataConfirm(this.data,(data)=>{
               if (this.dataForSelect.cl_total_quantity<= this.dataForSelect.contract_quantity_confirm_balance) {
                 data.contract_id=this.dataForSelect.contract_id;
@@ -558,12 +560,16 @@
         let stat = el.map((el)=> el.validate());
           if (stat.every(elem => elem == true)) {
             let {cl_date,cl_name,cl_no,cl_quality,cl_status} = data;
-            let news = {cl_date,cl_name,cl_no,cl_quality,cl_status};
-            news.cl_type_rice=[];
-            news.incoterms=[];
-            news.cl_date= new Date(news.cl_date);
+            let newData = {cl_date,cl_name,cl_no,cl_quality,cl_status};
+            newData.cl_type_rice=[];
+            newData.incoterms=[];
+            newData.tags = new Array();
+            newData.cl_date= new Date(newData.cl_date);
+            data.tags.map((tag)=>{
+              newData.tags.push(tag);
+            });
             data.cl_type_rice.map((cl_type_rice,index)=>{
-              news.cl_type_rice.push({type_rice_id:cl_type_rice.type_rice_id,
+              newData.cl_type_rice.push({type_rice_id:cl_type_rice.type_rice_id,
                                       type_rice_quantity:cl_type_rice.type_rice_quantity,
                                       tolerance_rate:cl_type_rice.tolerance_rate,
                                       project_th:cl_type_rice.project_th,
@@ -574,18 +580,18 @@
                                       //description_en:cl_type_rice.description_en,
                                       package:[]});
               cl_type_rice.package.map((packages)=>{
-                  news.cl_type_rice[index].package.push({
+                  newData.cl_type_rice[index].package.push({
                                       package_id :packages.package_id,
                                       price_per_ton :packages.price_per_ton}
                             );
               });
             });
             data.incoterms.map((incoterm)=>{
-              news.incoterms.push({inct_id:incoterm.inct_id});
+              newData.incoterms.push({inct_id:incoterm.inct_id});
             });
             // el.map((el)=> console.log(el));
           el.map((el)=> el.reset());
-          callback(news);
+          callback(newData);
         }else {
           this.fire('toast',{status:'connectError',text:'กรุณากรอกข้อมูลให้ครบทุกช่อง', //คำสั่งสำหรับเปิด toast error
           callback:function(){
