@@ -1,41 +1,43 @@
 <link rel="import" href="fee-exports.html">
 <dom-module id="list-of-fee-detail">
-<style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
-*{
-  font-family: 'CSChatThaiUI', sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-.table-body > tr > td{
-  cursor:pointer
-}
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+  *{
+    font-family: 'CSChatThaiUI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .table-body > tr > td{
+    cursor:pointer
+  }
 
-.table-head > tr > th:nth-child(1),
-.table-body > tr > td:nth-child(1) {
-  text-align: center;
-  width: 10%;
-}
-.table-head > tr > th:nth-child(3),
-.table-body > tr > td:nth-child(3),
-.table-head > tr > th:nth-child(4),
-.table-head > tr > th:nth-child(5),
-.table-body > tr > td:nth-child(5)    {
-  width: 20%;
-  text-align: center;
-}
-.table-head > tr > th:nth-child(2),
-.table-body > tr > th:nth-child(2){
-  width: 30%;
-}
-.table-body > tr > td:nth-child(4) {
-  text-align: right;
-}
-.table-foot > tr > td {
-  padding: 16px;
-}
-.addconfirm{
-  margin-bottom: 16px;
-}
-</style>
+  .table-head > tr > th:nth-child(1),
+  .table-body > tr > td:nth-child(1) {
+    text-align: center;
+    width: 10%;
+  }
+  .table-head > tr > th:nth-child(3),
+  .table-body > tr > td:nth-child(3),
+  .table-head > tr > th:nth-child(4),
+  .table-head > tr > th:nth-child(5),
+  .table-body > tr > td:nth-child(5),
+  .table-head > tr > th:nth-child(6),
+  .table-body > tr > td:nth-child(6) {
+      width: 17.5%;
+      text-align: center;
+    }
+  .table-head > tr > th:nth-child(2),
+  .table-body > tr > th:nth-child(2){
+    width: 20%;
+  }
+  .table-body > tr > td:nth-child(4) {
+    text-align: right;
+  }
+  .table-foot > tr > td {
+    padding: 16px;
+  }
+  .addconfirm{
+    margin-bottom: 16px;
+  }
+  </style>
 <template>
   <iron-pages selected="{{pageSelected}}" attr-for-selected="name">
     <div name="listOfFeedetail">
@@ -52,6 +54,7 @@
               <th>จำนวนใบกำกับสินค้า</th>
               <th>มูลค่า</th>
               <th>วันที่รับเช็ค</th>
+              <th>สถานะ</th>
             </tr>
           </thead>
           <tbody class="table-body">
@@ -63,6 +66,7 @@
                   <td> [[item.invoice_count]]</td>
                   <td>[[item.usd_value]]</td>
                   <td>[[item.fee_date_receipt]]</td>
+                  <td>[[item.fee_det_status_name]]</td>
                 </tr>
               </template>
             </template>
