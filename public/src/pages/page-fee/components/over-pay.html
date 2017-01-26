@@ -31,15 +31,15 @@
 		</div>
         <section>
             <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
-                <gl-form-panel-body label="Quota(EC)" set-padding="10px 10px 20px 10px" set-border="1px">
+                <gl-form-panel-body label="คำนวณเงินที่ต้องชำระ" set-padding="10px 10px 20px 10px" set-border="1px">
                     <gl-grid-row width="{{getWidth}}">
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                            <gl-form-input label="จำนวนเงินตามคำขอ EC : " value="{{bringForward.amount}}"></gl-form-label-input>
+                            <gl-form-input label="จำนวนเงินตามคำขอ EC : " format-number="on" value="{{bringForward.amount}}" disabled></gl-form-label-input>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                            <gl-form-input label="เงินคงเหลือจาก EC ที่ยกเลิก: " value="{{bringForward.balance}}"></gl-form-label-input>
+                            <gl-form-input label="เงินคงเหลือจาก EC ที่ยกเลิก: " format-number="on" value="{{bringForward.balance}}" disabled></gl-form-label-input>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                         </gl-grid-col>
@@ -49,17 +49,17 @@
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                            <gl-form-input label="จำนวนเงินที่ต้องการใช้จากใบเสร็จ/ EC ที่ยกเลิก" allowed-pattern="[0-9||,||.]" format-number="on" value="{{bringForward.pay_balance}}"></gl-form-input>
+                            <gl-form-input label="จำนวนเงินที่ต้องการใช้จากใบเสร็จ/ EC ที่ยกเลิก" format-number="on" allowed-pattern="[0-9||,||.]" format-number="on" value="{{bringForward.pay_balance}}" disabled></gl-form-input>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                            <gl-form-input label="จำนวนเงินที่ต้องชำระ: " value="{{bringForward.pay}}"></gl-form-label-input>
+                            <gl-form-input label="จำนวนเงินที่ต้องชำระ: " format-number="on" allowed-pattern="[0-9||,||.]" value="{{bringForward.pay}}"></gl-form-label-input>
                         </gl-grid-col>
                         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                         </gl-grid-col>
                     </gl-grid-row>
                 </gl-form-panel-body>
                 <template is="dom-if" if="{{!check(bringForward.pay)}}">
-                    <gl-form-panel-body label="Check" set-padding="10px" set-border="1px">
+                    <gl-form-panel-body label="รายละเอียดการจ่ายเงิน" set-padding="10px" set-border="1px">
                         <gl-grid-row width="{{getWidth}}">
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                             </gl-grid-col>
@@ -144,7 +144,7 @@
                 return data==0;
             },
             checkData:function(data){
-                var ec = this.data.ecSelect.quantity;
+                var ec = this.data.ecSelect.amount;
                 var sum = data.base;
                 if(sum.length!=0){
                     sum = sum.reduce(function(total, num) {
@@ -163,10 +163,10 @@
                 }
 
                 var balance =  ((select-ec)<0?0:(select-ec))+(sum-select);
-                var pay_balance = select>this.data.ecSelect.quantity?this.data.ecSelect.quantity:select;
-                var pay = this.data.ecSelect.quantity - pay_balance;
+                var pay_balance = select>ec?ec:select;
+                var pay = ec - pay_balance;
                 return {
-                    amount: this.data.ecSelect.quantity,
+                    amount: ec,
                     balance: balance,
                     pay_balance: pay_balance,
                     pay: pay
