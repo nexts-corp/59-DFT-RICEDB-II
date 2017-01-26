@@ -57,21 +57,21 @@ var schema = {
                             "items": {
                                 "type": "object",
                                 "properties": {
-                                    "invoice_date": {
-                                        "type": "string",
-                                        "format": "date-time"
-                                    },
+                                    // "invoice_date": {
+                                    //     "type": "string",
+                                    //     "format": "date-time"
+                                    // },
                                     "invoice_fee": {
                                         "type": "number"
                                     },
-                                    "invoice_no": {
-                                        "type": "string"
-                                    },
+                                    // "invoice_no": {
+                                    //     "type": "string"
+                                    // },
                                     "shm_det_id": {
                                         "type": "string"
                                     }
                                 },
-                                "required": ["invoice_date", "invoice_fee", "invoice_no", "shm_det_id"]
+                                "required": ["invoice_fee", "shm_det_id"]
                             }
                         },
                     },
@@ -161,7 +161,7 @@ router.get('/id/:fee_det_id', function (req, res, next) {
                                                     return {
                                                         exporter_date_approve: m2('exporter_date_approve').split('T')(0),
                                                         exporter_date_update: m2('exporter_date_update').split('T')(0),
-                                                        invoice_date: m2('invoice_date').split('T')(0),
+                                                        //invoice_date: m2('invoice_date').split('T')(0),
                                                         trader_date_approve: m2('trader_date_approve').split('T')(0)
                                                     }
                                                 })
