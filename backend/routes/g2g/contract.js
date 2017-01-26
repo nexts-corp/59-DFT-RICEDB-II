@@ -91,9 +91,9 @@ router.get(['/', '/list'], function (req, res, next) {
                             }
                         })
                         .orderBy('shm_no')
-                        .without('id')
+                        .without('id',"tags")
                         .coerceTo('array')
-                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "cl_quality"] }).zip()
+                        .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "cl_type_rice", "cl_quality","tags"] }).zip()
                 }
             })
             .merge(function (row) {
