@@ -40,10 +40,10 @@ class Payment{
         .merge(function(row){
             return {
                 amount:row('price').sub(row('quantity')),
-                delivery_date:
-                row('delivery_date').day().coerceTo('string').add('/')
-                .add(row('delivery_date').month().coerceTo('string')).add('/')
-                .add(row('delivery_date').year().coerceTo('string'))
+                req_date:
+                row('req_date').day().coerceTo('string').add('/')
+                .add(row('req_date').month().coerceTo('string')).add('/')
+                .add(row('req_date').year().coerceTo('string'))
             }
         })
         .innerJoin(r.db('eu2').table('exporter'),function(left,right){
@@ -72,10 +72,10 @@ class Payment{
         }).coerceTo('array')
         .merge(function(row){
             return {
-                delivery_date:
-                row('delivery_date').day().coerceTo('string').add('/')
-                .add(row('delivery_date').month().coerceTo('string')).add('/')
-                .add(row('delivery_date').year().coerceTo('string')),
+                req_date:
+                row('req_date').day().coerceTo('string').add('/')
+                .add(row('req_date').month().coerceTo('string')).add('/')
+                .add(row('req_date').year().coerceTo('string')),
                 exporter_name:r.db('eu2').table('exporter').get(row('exporter_id'))('name')
             }
         }).do(function(ecSelect){
@@ -95,10 +95,10 @@ class Payment{
                 })
                 .merge(function(row){
                     return {
-                        delivery_date:
-                        row('delivery_date').day().coerceTo('string').add('/')
-                        .add(row('delivery_date').month().coerceTo('string')).add('/')
-                        .add(row('delivery_date').year().coerceTo('string')),
+                        req_date:
+                        row('req_date').day().coerceTo('string').add('/')
+                        .add(row('req_date').month().coerceTo('string')).add('/')
+                        .add(row('req_date').year().coerceTo('string')),
                         exporter_name:ecSelect(0)('exporter_name')
                     }
                 })
