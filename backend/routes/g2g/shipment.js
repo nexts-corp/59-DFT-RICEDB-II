@@ -46,7 +46,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                     shipment_detail: r.db('g2g').table("shipment_detail")
                         .getAll(row('id'), { index: "shm_id" })
                         .orderBy(r.desc('shm_det_quantity'))
-                        .eqJoin("book_id", r.db('g2g').table("book")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                        .eqJoin("book_id", r.db('g2g').table("book")).without({ right: ["id", "date_created", "date_updated", "creater", "updater","tags"] }).zip()
                         .eqJoin("load_port_id", r.db('common').table("port")).map(function (port) {
                             return port.merge({
                                 right: {
@@ -109,7 +109,7 @@ router.get('/id/:shm_id', function (req, res, next) {
             })
             .without('id')
             .merge(function (m) {
-                return r.db('g2g').table("confirm_letter").get(m('cl_id')).without('id')
+                return r.db('g2g').table("confirm_letter").get(m('cl_id')).without('id',"tags")
                     .merge(function (mm) {
                         return {
                             cl_type_rice: mm('cl_type_rice')
@@ -119,7 +119,7 @@ router.get('/id/:shm_id', function (req, res, next) {
                                 .merge(function (limit) {
                                     return {
                                         type_rice_quantity_confirm: r.db('g2g').table('shipment_detail')
-                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
+                                            .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater","tags"] }).zip()
                                             .filter({
                                                 cl_id: m('cl_id'),
                                                 //shm_id: m('shm_id'),
