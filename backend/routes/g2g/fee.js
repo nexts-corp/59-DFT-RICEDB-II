@@ -163,31 +163,11 @@ router.get('/id/:id', function (req, res, next) {
                                         invoice_detail: inv_det_merge('invoice_detail').merge(function (shm_det_merge) {
                                             return r.db('g2g').table('shipment_detail').get(shm_det_merge('shm_det_id'))
                                                 .pluck('package_id', 'type_rice_id', 'price_per_ton', 'shm_det_quantity', 'shm_id')
-                                                // .merge(function (shm_det_merge) {
-                                                //     return r.db('g2g').table("shipment").get(shm_det_merge('shm_id')).pluck("cl_id")
-                                                //         .do(function (cl_do) {
-                                                //             return r.db('g2g').table("confirm_letter").get(cl_do('cl_id')).pluck("cl_type_rice")
-                                                //         })
-                                                // })
-                                                // .merge(function (shm_det_merge) {
-                                                //     return {
-                                                //         price_per_ton: shm_det_merge('cl_type_rice')
-                                                //             .filter(function (tb) {
-                                                //                 return tb('type_rice_id').eq(shm_det_merge('type_rice_id'))
-                                                //             }).getField("package")(0)
-                                                //             .filter(function (f) {
-                                                //                 return f('package_id').eq(shm_det_merge('package_id'))
-                                                //             })(0)
-                                                //             .pluck('price_per_ton')
-                                                //             .values()(0)
-                                                //     }
-                                                // })
                                                 .merge(function (usd_merge) {
                                                     return {
                                                         usd_value: usd_merge('price_per_ton').mul(usd_merge('shm_det_quantity'))
                                                     }
                                                 })
-                                            //.without('cl_type_rice')
                                         })
                                     }
                                 })
@@ -206,12 +186,13 @@ router.get('/id/:id', function (req, res, next) {
                                     }),
                                 invoice_count: inv_merge('invoice').getField('invoice_no').count(),
                                 usd_value: inv_merge('invoice').sum('usd_value'),
-                                fee_date_receipt: inv_merge('fee_date_receipt').split('T')(0)
+                                fee_date_receipt: inv_merge('fee_date_receipt').split('T')(0),
+                                fee_det_status_name: r.branch(inv_merge('fee_det_status').eq(true), 'อนุมัติ', 'ยังไม่อนุมัติ')
                             }
                         })
-                        .without('invoice', 'id')
+                        .without('invoice', 'id', 'tags')
                 }
-            }).without('id')
+            }).without('id', 'tags')
             .run(conn, function (err, cursor) {
                 if (!err) {
                     res.json(cursor);
@@ -234,7 +215,7 @@ router.get('/invoice/id/:invoice_id', function (req, res, next) {
                     invoice_detail: r.db('g2g').table('shipment_detail')
                         .getAll(m('book_id'), { index: 'book_id' })
                         .coerceTo('array')
-                        .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id","price_per_ton")
+                        .pluck("id", "shm_id", "package_id", "exporter_id", "shm_det_quantity", "type_rice_id", "price_per_ton")
                         .eqJoin("shm_id", r.db('g2g').table("shipment")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
                         // .eqJoin("cl_id", r.db('g2g').table("confirm_letter")).without({ right: ["id", "date_created", "date_updated", "creater", "updater", "cl_date", "cl_name", "cl_quality"] }).zip()
                         .eqJoin("package_id", r.db('common').table("package")).without({ right: ["id", "date_created", "date_updated", "creater", "updater"] }).zip()
