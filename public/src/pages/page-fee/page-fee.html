@@ -252,6 +252,26 @@
             },
             _saveData:function(e){
                 console.log(e.detail);
+                this.fire('toast',{status:'load'});
+                axios.post('/payment/receipt',e.detail)
+                .then((response)=>{
+                    console.log('success');
+                    console.log(response.data);
+                    this.fire('toast',{
+                        status: 'success',
+                        callback:()=>{
+                            // this.listSelected = response.data;  
+                            // this.$$('panel-right').close();  
+                        }
+                    })
+                    
+                })
+                .catch((error)=>{
+                    console.log(error.response.data.message);
+                    this.fire('toast',{status:'connectError',text:error.response.data.msg,
+                    callback:function(){
+                    }})
+                })
             }
         });
     </script>

@@ -91,10 +91,10 @@
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                                <gl-form-input label="จำนวนเงินที่ต้องชำระ" value="{{datas.amount}}" format-number="on" disabled$="{{check(bringForward.pay)}}"></gl-form-label-input>
+                                <gl-form-input label="จำนวนเงินที่ต้องชำระ" value="{{datas.total}}" format-number="on" disabled$="{{check(bringForward.pay)}}"></gl-form-label-input>
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                                <gl-form-input label="จำนวนเงินที่ชำระจริงตามเช็ค" value="{{datas.check_amount}}" allowed-pattern="[0-9||,||.]" format-number="on" value="" disabled$="{{check(bringForward.pay)}}"></gl-form-input>
+                                <gl-form-input label="จำนวนเงินที่ชำระจริงตามเช็ค" value="{{datas.check_sum}}" allowed-pattern="[0-9||,||.]" format-number="on" value="" disabled$="{{check(bringForward.pay)}}"></gl-form-input>
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                             </gl-grid-col>
@@ -137,7 +137,7 @@
                 }
             },
             setPay:function(pay){
-                this.set('datas.amount',pay);
+                this.set('datas.total',pay);
             },
             check:function(data){
                 return data==0;
@@ -272,7 +272,7 @@
                      amount += item.amount;
                  })
                 var old = [];
-                var result = {};
+               
 
                 for(var i = 0; i< select.length; i++){
                     var check = select[i].balance - amount;
@@ -280,24 +280,40 @@
                     if(check >= 0){
                         old.push({
                             ec_id: select[i].id,
-                            quantity: amount
+                            amount: amount
                         })
                         break; 
                     }
                     else {
                         old.push({
                             ec_id: select[i].id,
-                            quantity: select[i].balance
+                            amount: select[i].balance
                         })
                         amount = amount - select[i].balance;
                     }   
                 }
-                
-
+                var result = {};
+                var ecSelect = this.data.ecList.map((item)=>{
+                    var {quantity,price} = item;
+                    var newData = {quantity,price}
+                    newData.ec_id = item.id;
+                    newData.amount = newData.quantity * newData.price;
+                    return newData;
+                })
+                console.log(ecSelect);
                 if(old.length!=0)
-                    result.ec = old;
-                if(!this.check(this.bringForward.pay))
-                    result.check = this.datas;
+                    result.list_old = old;
+                if(!this.check(this.bringForward.pay)){
+                    // result.check = this.datas;
+                    result.bank_id = this.datas.bank_id || '';
+                    result.check_date = this.datas.check_date || '';
+                    result.check_number = this.datas.check_number || '';
+                    result.check_sum  = parseInt(this.datas.check_sum);
+                    result.note = this.datas.note || '';
+                    result.total = this.datas.total || '';
+                }
+                result.list = ecSelect;
+                console.log(JSON.stringify(result));
                 // console.log(result);
                 this.fire('save-data',result);
             }
