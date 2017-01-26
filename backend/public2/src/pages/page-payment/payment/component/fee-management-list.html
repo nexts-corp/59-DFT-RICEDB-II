@@ -39,12 +39,20 @@
             <td>[[item.fee_name]]</td>
           </tr>
         </template>
+        <template is="dom-if" if="[[_isHave(data.feeListinShm)]]">
+          <tr>
+            <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+          </tr>
+        </template>
       </tbody>
     </table>
   </template>
   <script>
     Polymer({
       is: "fee-management-list",
+      behaviors: [
+          g2gCongtroller
+      ],
       getFeeMana:function (e) {
         // console.log(e.currentTarget.data);
         this.fire('_get-fee-mana',{data:e.currentTarget.data});
