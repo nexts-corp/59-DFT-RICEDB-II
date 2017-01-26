@@ -64,10 +64,12 @@ class Payment{
 
     getPaymentDetail(req,res){
         var r = req._r;
-        var params = req.query;
-        var quotaYear = parseInt(params.year);
+        var params = req.body;
 
-        r.db('eu2').table('ec').get(params.ec_id)
+        r.db('eu2').table('ec')
+        .filter(function(row){
+            return r.expr(params.ec_id).contains(row('id'))
+        }).coerceTo('array')
         .merge(function(row){
             return {
                 delivery_date:
@@ -81,9 +83,9 @@ class Payment{
                 ecSelect:ecSelect,
                 ecList:
                 r.db('eu2').table('ec').filter(function(row){
-                    return row('year').eq(ecSelect('year'))
+                    return row('year').eq(ecSelect(0)('year'))
                     .and(
-                        row('exporter_id').eq(ecSelect('exporter_id'))
+                        row('exporter_id').eq(ecSelect(0)('exporter_id'))
                     )
                     .and(
                         row('status').eq('c')
@@ -97,7 +99,7 @@ class Payment{
                         row('delivery_date').day().coerceTo('string').add('/')
                         .add(row('delivery_date').month().coerceTo('string')).add('/')
                         .add(row('delivery_date').year().coerceTo('string')),
-                        exporter_name:ecSelect('exporter_name')
+                        exporter_name:ecSelect(0)('exporter_name')
                     }
                 })
                 .coerceTo('array')
