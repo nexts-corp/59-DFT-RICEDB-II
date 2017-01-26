@@ -21,15 +21,13 @@
     <paper-menu>
       <template is="dom-repeat" items="[[menuData]]">
         <!-- <paper-submenu> -->
-        <paper-icon-item class="menu-trigger" style="padding:0px;">
+        <paper-icon-item class="menu-trigger" style="padding:0px;" on-tap="getUrl" url$="[[item.url]]">
           <iron-image style="margin-right:5px;" src="{{item.img}}"></iron-image>
           <!-- <template is="dom-if" if="[[item.subMenu]]">
             <paper-icon-button icon="chevron-right" item-icon  on-tap="_getSub"></paper-icon-button>
           </template> -->
-          <div on-tap="getUrl" url$="[[item.url]]">
                 [[item.nameMenu]]
           </div>
-        </paper-icon-item>
         <!-- <template is="dom-if" if="[[item.subMenu]]">
           <paper-menu class="menu-content">
             <template is="dom-repeat" items="[[item.subMenu]]">
