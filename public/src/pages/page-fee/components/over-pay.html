@@ -1,4 +1,6 @@
 
+<link rel="import" href="./../../components/format-number-behavior.html">
+
 <dom-module id="over-pay">
 	<style include="gl-color gl-size">
         .container{
@@ -123,6 +125,7 @@
         Polymer({
             is: 'over-pay',
             observers:['setPay(bringForward.pay)'],
+             behaviors:[FormatNumberBehavior],
             ready:function(){
                 window.$ = this;
             },
@@ -308,7 +311,7 @@
                     result.bank_id = this.datas.bank_id || '';
                     result.check_date = this.datas.check_date || '';
                     result.check_number = this.datas.check_number || '';
-                    result.check_sum  = parseInt(this.datas.check_sum);
+                    result.check_sum  = this.unFormat(this.datas.check_sum);
                     result.note = this.datas.note || '';
                     result.total = this.datas.total || '';
                 }
