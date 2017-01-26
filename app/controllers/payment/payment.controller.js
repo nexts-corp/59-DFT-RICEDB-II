@@ -91,7 +91,15 @@ class Payment{
                 }).filter(function(row){
                     return row('balance').ne(0);
                 })
-                .merge({exporter_name:ecSelect('exporter_name')})
+                .merge(function(row){
+                    return {
+                        delivery_date:
+                        row('delivery_date').day().coerceTo('string').add('/')
+                        .add(row('delivery_date').month().coerceTo('string')).add('/')
+                        .add(row('delivery_date').year().coerceTo('string')),
+                        exporter_name:ecSelect('exporter_name')
+                    }
+                })
                 .coerceTo('array')
             }
         })
