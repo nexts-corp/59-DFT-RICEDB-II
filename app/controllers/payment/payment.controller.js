@@ -70,7 +70,6 @@ class Payment{
         r.db('eu2').table('ec').get(params.ec_id)
         .merge(function(row){
             return {
-                amount:row('price').sub(row('quantity')),
                 delivery_date:
                 row('delivery_date').day().coerceTo('string').add('/')
                 .add(row('delivery_date').month().coerceTo('string')).add('/')
