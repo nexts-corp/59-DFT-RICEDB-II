@@ -40,10 +40,10 @@ class Payment{
         .merge(function(row){
             return {
                 amount:row('price').sub(row('quantity')),
-                delivery_date:
-                row('delivery_date').day().coerceTo('string').add('/')
-                .add(row('delivery_date').month().coerceTo('string')).add('/')
-                .add(row('delivery_date').year().coerceTo('string'))
+                req_date:
+                row('req_date').day().coerceTo('string').add('/')
+                .add(row('req_date').month().coerceTo('string')).add('/')
+                .add(row('req_date').year().coerceTo('string'))
             }
         })
         .innerJoin(r.db('eu2').table('exporter'),function(left,right){
@@ -64,16 +64,18 @@ class Payment{
 
     getPaymentDetail(req,res){
         var r = req._r;
-        var params = req.query;
-        var quotaYear = parseInt(params.year);
+        var params = req.body;
 
-        r.db('eu2').table('ec').get(params.ec_id)
+        r.db('eu2').table('ec')
+        .filter(function(row){
+            return r.expr(params.ec_id).contains(row('id'))
+        }).coerceTo('array')
         .merge(function(row){
             return {
-                delivery_date:
-                row('delivery_date').day().coerceTo('string').add('/')
-                .add(row('delivery_date').month().coerceTo('string')).add('/')
-                .add(row('delivery_date').year().coerceTo('string')),
+                req_date:
+                row('req_date').day().coerceTo('string').add('/')
+                .add(row('req_date').month().coerceTo('string')).add('/')
+                .add(row('req_date').year().coerceTo('string')),
                 exporter_name:r.db('eu2').table('exporter').get(row('exporter_id'))('name')
             }
         }).do(function(ecSelect){
@@ -81,9 +83,9 @@ class Payment{
                 ecSelect:ecSelect,
                 ecList:
                 r.db('eu2').table('ec').filter(function(row){
-                    return row('year').eq(ecSelect('year'))
+                    return row('year').eq(ecSelect(0)('year'))
                     .and(
-                        row('exporter_id').eq(ecSelect('exporter_id'))
+                        row('exporter_id').eq(ecSelect(0)('exporter_id'))
                     )
                     .and(
                         row('status').eq('c')
@@ -93,11 +95,13 @@ class Payment{
                 })
                 .merge(function(row){
                     return {
-                        delivery_date:
-                        row('delivery_date').day().coerceTo('string').add('/')
-                        .add(row('delivery_date').month().coerceTo('string')).add('/')
-                        .add(row('delivery_date').year().coerceTo('string')),
-                        exporter_name:ecSelect('exporter_name')
+                        req_date:
+                        row('req_date').day().coerceTo('string').add('/')
+                        .add(row('req_date').month().coerceTo('string')).add('/')
+                        .add(row('req_date').year().coerceTo('string')),
+                        exporter_name:ecSelect(0)('exporter_name'),
+                        useBalance:0,
+                        totalBalance:row('balance')
                     }
                 })
                 .coerceTo('array')
@@ -109,6 +113,19 @@ class Payment{
         .catch(function(err){
             res.status(500).json(err);
         });
+    }
+
+
+    insertReceipt(req,res){
+        var r = req._r;
+        var params = req.body;
+
+        //เช็คประเภทใบเสร็จรับเงิน N=จ่ายปกติ  O=จ่ายยอดเดิม A=จ่ายเพิ่ม
+        var typeReceipt = (typeof params.list_old=='undefined')?'N':(typeof params.check_number == "undefined")?'O':'A'
+
+
+
+        res.json({typeReceipt:typeReceipt});
     }
 
 }

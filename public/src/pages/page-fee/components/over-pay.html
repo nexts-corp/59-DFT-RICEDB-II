@@ -1,4 +1,6 @@
 
+<link rel="import" href="./../../components/format-number-behavior.html">
+
 <dom-module id="over-pay">
 	<style include="gl-color gl-size">
         .container{
@@ -25,7 +27,7 @@
 		<div class="content">
 			<div class="flex">
 				<div style="overflow-x:auto;">
-					<fee-list data="{{data.ecList}}" check-box="true"></fee-list>
+					<fee-list data="{{data.ecList}}" data-pay="[[mathDataPay(data.ecList.*)]]" check-box="true" data-overplay='true'></fee-list>
 				</div>
 			</div>
 		</div>
@@ -91,10 +93,10 @@
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                                <gl-form-input label="จำนวนเงินที่ต้องชำระ" value="{{datas.amount}}" format-number="on" disabled$="{{check(bringForward.pay)}}"></gl-form-label-input>
+                                <gl-form-input label="จำนวนเงินที่ต้องชำระ" value="{{datas.total}}" format-number="on" disabled$="{{check(bringForward.pay)}}"></gl-form-label-input>
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,5]]">
-                                <gl-form-input label="จำนวนเงินที่ชำระจริงตามเช็ค" value="{{datas.check_amount}}" allowed-pattern="[0-9||,||.]" format-number="on" value="" disabled$="{{check(bringForward.pay)}}"></gl-form-input>
+                                <gl-form-input label="จำนวนเงินที่ชำระจริงตามเช็ค" value="{{datas.check_sum}}" allowed-pattern="[0-9||,||.]" format-number="on" value="" disabled$="{{check(bringForward.pay)}}"></gl-form-input>
                             </gl-grid-col>
                             <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
                             </gl-grid-col>
@@ -123,6 +125,10 @@
         Polymer({
             is: 'over-pay',
             observers:['setPay(bringForward.pay)'],
+             behaviors:[FormatNumberBehavior],
+            ready:function(){
+                window.$ = this;
+            },
             properties:{
                 bringForward:{
                     type: Object,
@@ -134,18 +140,52 @@
                 }
             },
             setPay:function(pay){
-                console.log('pay',pay);
-                // this.datas.amount = pay;
-                this.set('datas.amount',pay);
-                    // this.$$('#payCheck').value = pay;
-                // console.log(pay);
+                this.set('datas.total',pay);
             },
             check:function(data){
                 return data==0;
             },
+            mathDataPay:function(data){
+                var amount = 0;
+                var select = this.data.ecList.filter(function(item){
+                    return item.check == true;
+                })
+                this.data.ecSelect.map((item)=>{
+                    amount += item.amount;
+                })
+                var old = [];
+                var result = {};
+
+                for(var i = 0; i< select.length; i++){
+                    var check = select[i].balance - amount;
+                    if(check >= 0){
+                        this.set('data.ecList'+[i]+'balance_s',amount)
+                        // this.data.ecList[i].balance_s = amount;
+                        break; 
+                    }
+                    else {
+                        this.set('data.ecList'+[i]+'balance_s',select[i].balance)
+                        // this.data.ecList[i].balance_s = select[i].balance;
+                        amount = amount - select[i].balance;
+                    }   
+                }
+                return this.data.ecList;
+            
+            },
             checkData:function(data){
-                var ec = this.data.ecSelect.amount;
+
+                console.log(data.path);
+                this.dataList = this.data.ecList;
+                //if(!((data.value === true || data.value === false)||data.path==='data.ecList'))
+                if(!((data.value === true || data.value === false)))
+                return;
+
+                var ec = 0;
                 var sum = data.base;
+                this.data.ecSelect.map((item)=>{
+                    ec += item.amount;
+                })
+                
                 if(sum.length!=0){
                     sum = sum.reduce(function(total, num) {
                         return {balance:total.balance + num.balance}
@@ -165,6 +205,60 @@
                 var balance =  ((select-ec)<0?0:(select-ec))+(sum-select);
                 var pay_balance = select>ec?ec:select;
                 var pay = ec - pay_balance;
+
+
+
+                
+                var ecUpdate = [];
+                var amount = ec;
+                var select_ec = this.data.ecList.filter(function(item){
+                    return item.check == true;
+                })
+
+                for(var i = 0; i< select_ec.length; i++){
+                    var check = select_ec[i].balance - amount;
+                    
+                    if(check >= 0){
+                        //amount
+                        
+                        select_ec[i].useBalance = amount;
+                        select_ec[i].totalBalance = select_ec[i].balance-amount;
+                        ecUpdate.push(select_ec[i])
+                        break; 
+                    }
+                    else {
+                        //select_ec[i].balance
+                        select_ec[i].useBalance = select_ec[i].balance;
+                        select_ec[i].totalBalance = select_ec[i].balance-select_ec[i].balance;
+                        ecUpdate.push(select_ec[i])
+
+                        amount = amount - select_ec[i].balance;
+                    }   
+                }
+
+                var iEcUpdate = 0;
+                var allEcList = this.data.ecList;
+                allEcList.map(function(row,i){
+                    if(row.check){
+                        allEcList[i] = ecUpdate[iEcUpdate];
+                        iEcUpdate++;
+                    }else{
+                        allEcList[i].useBalance = 0; 
+                        allEcList[i].totalBalance = allEcList[i].balance;
+                    }
+                });
+                
+                this.data.ecList = allEcList;
+                
+                this.data.ecList.map((row,i)=>{
+                    this.notifyPath(`data.ecList.${i}.useBalance`);
+                    this.notifyPath(`data.ecList.${i}.totalBalance`);
+                })
+
+                
+                //console.log(ecUpdate);
+
+
                 return {
                     amount: ec,
                     balance: balance,
@@ -173,12 +267,15 @@
                 }
             },
             saveData:function(){
-                var amount = this.data.ecSelect.quantity;
+                var amount = 0;
                 var select = this.data.ecList.filter(function(item){
                     return item.check == true;
                 })
+                 this.data.ecSelect.map((item)=>{
+                     amount += item.amount;
+                 })
                 var old = [];
-                var result = {};
+               
 
                 for(var i = 0; i< select.length; i++){
                     var check = select[i].balance - amount;
@@ -186,24 +283,40 @@
                     if(check >= 0){
                         old.push({
                             ec_id: select[i].id,
-                            quantity: amount
+                            amount: amount
                         })
                         break; 
                     }
                     else {
                         old.push({
                             ec_id: select[i].id,
-                            quantity: select[i].balance
+                            amount: select[i].balance
                         })
                         amount = amount - select[i].balance;
                     }   
                 }
-                
-
+                var result = {};
+                var ecSelect = this.data.ecList.map((item)=>{
+                    var {quantity,price} = item;
+                    var newData = {quantity,price}
+                    newData.ec_id = item.id;
+                    newData.amount = newData.quantity * newData.price;
+                    return newData;
+                })
+                console.log(ecSelect);
                 if(old.length!=0)
-                result.ec = old;
-                if(!this.check(this.bringForward.pay))
-                result.check = this.datas;
+                    result.list_old = old;
+                if(!this.check(this.bringForward.pay)){
+                    // result.check = this.datas;
+                    result.bank_id = this.datas.bank_id || '';
+                    result.check_date = this.datas.check_date || '';
+                    result.check_number = this.datas.check_number || '';
+                    result.check_sum  = this.unFormat(this.datas.check_sum);
+                    result.note = this.datas.note || '';
+                    result.total = this.datas.total || '';
+                }
+                result.list = ecSelect;
+                console.log(JSON.stringify(result));
                 // console.log(result);
                 this.fire('save-data',result);
             }
