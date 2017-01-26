@@ -119,13 +119,32 @@ class Payment{
     insertReceipt(req,res){
         var r = req._r;
         var params = req.body;
+        var data = req.body;
 
         //เช็คประเภทใบเสร็จรับเงิน N=จ่ายปกติ  O=จ่ายยอดเดิม A=จ่ายเพิ่ม
-        var typeReceipt = (typeof params.list_old=='undefined')?'N':(typeof params.check_number == "undefined")?'O':'A'
+        var typeReceipt = (typeof params.list_old=='undefined')?'N':(typeof params.check_number == "undefined")?'O':'A';
+
+        var sumSelect = params.list.reduce(function(a,b){
+            return {amount:a.amount+b.amount}
+        })
+        
+        if(typeReceipt!='N'){
+
+            var sumOld = params.list_old.reduce(function(a,b){
+                return {amount:a.amount+b.amount}
+            })
+
+            data.total = data.total-sumOld.amount;
+            
+
+        }
+        
+        
+        //r.db('eu')
 
 
 
-        res.json({typeReceipt:typeReceipt});
+        res.json(data);
     }
 
 }
