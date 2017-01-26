@@ -201,7 +201,7 @@
                 this.dataForSelect.feeListinShm=data;
                 this.notifyPath('dataForSelect.feeListinShm');
                 // console.log(this.dataForSelect.feeListinShm);
-                this._getFeeList(this._getUrl());
+                // this._getFeeList(this._getUrl());
               });
             },
             _getBlDetail:function (e) {
@@ -275,7 +275,7 @@
               //
               this.fire('toast',{status:'load'});
               this.read('./g2g/fee/invoice/id/'+url,(data)=>{
-                console.log(this.dataListPay.feeList);
+                // console.log(this.dataListPay.feeList);
                 this.set('dataForSelect.shm_id',this.dataListPay.feeList[0].shm_id);
                 this.set('dataForSelect.cl_id',this.dataListPay.feeList[0].cl_id);
                 // console.log(this.dataForSelect);
@@ -311,11 +311,12 @@
             },
             _getFeeDetail:function (e) {
               this.fire('toast',{status:'load'});
-              // console.log(e.detail.detail.shm_id);
+              console.log(e.detail.detail.fee_id);
               //เรียกให้อัพเดตรายชื่อ fee ที่อยู่ใน contract
               this._getFeeListInShm(e.detail.detail.shm_id);
               //
               this.read('./g2g/fee/id/'+e.detail.detail.fee_id,(data)=>{
+
                   this.dataSelectedfee.fee = data;
                   this.notifyPath('dataSelectedfee.fee');
                   this.paymentsPageSeleted = 'feePage';

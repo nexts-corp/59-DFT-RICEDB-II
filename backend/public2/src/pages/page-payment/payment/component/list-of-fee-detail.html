@@ -77,8 +77,9 @@
             </template>
           </tbody>
         </table>
+        <!-- [[_confirmFee(data.fee_detail)]] -->
         <div class="layout horizontal end-justified">
-          <paper-button class="gl-btn-info" raised on-tap="approveFee" >ยืนยันถัวเฉลี่ยเงิน</paper-button>
+          <paper-button class="gl-btn-info" raised on-tap="approveFee" disabled="[[_confirmFee(data.fee_detail)]]">ยืนยันถัวเฉลี่ยเงิน</paper-button>
         </div>
         <!-- </gl-form-panel-body> -->
     </gl-form-panel>
@@ -120,6 +121,13 @@ Polymer({
       this.notifyPath('dataSelected');
       this.pageSelected='feeDetail';
     });
+  },
+  _confirmFee:function (data) {
+    if (data.every(status => status.fee_det_status == true)) {
+        return false;
+    }else {
+        return true;
+    }
   },
   getFeeDetail:function (e) {
     // console.log(this.dataForSelect);
