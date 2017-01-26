@@ -17,30 +17,31 @@ class Payment{
     saverc(req,res){
         var r = req._r;
         var params = req.body;
- /*
-        r.db('eu2').table('rc').insert({
-            receipt_number:params.receipt_number,
-            amount:params.amount,
-            bank_id:params.bank_id,
-            check_number:params.check_number,
-            check_date:r.ISO8601(params.check_date+'T00:00:00+07:00'),
-            check_amount:params.check_amount,
-            note:params.note,
-            branch:params.branch
-        })
-        .do(function(x){
-            return r.db('eu2').table('ec').get.update({
-                rc_id:x('generated_keys')(0)
-            })
-        })
-
-        .run().then(function(result){
-            res.json(result);
-        })
-        .catch(function(err){
-            res.status(500).json(err);
-        });
-    */
     }
+
+    report1(req,res){
+        var r = req._r;
+        var params = req.body;
+          
+            r.db('eu2').table('rc').filter({id:'8c6131ea-e00f-48ec-b256-61006be8eed3'})
+                .innerJoin(r.db('eu2').table('bank'),function(r,b){
+                return r('bank_id').eq(b('id'))
+            }).without({right:['id']}).zip()
+            .merge(function(x){
+                return {
+                    amount: x('list')('amount')(0),
+                    ec_id: x('list')('ec_id')(0),
+                    price: x('list')('price')(0),
+                    quantity: x('list')('quantity')(0)
+                }
+            })
+            .run()
+            .then(function (result){
+                var parameters = {a:'a'};
+                res._ireport("receipt/reportR1.jasper","pdf", result, parameters);
+            }).error(function(err) {
+                res.json(err);
+            })
+        }
 }
 module.exports = new Payment();
