@@ -45,18 +45,14 @@
                 <th>เลขที่หนังสือรับรอง</th>
                 <th>วันที่ส่ง</th>
                 <template is="dom-if" if="{{showData}}">
+                     <th>ปริมาณ(ตัน)</th>
                      <th>จำนวนเงิน</th>
+                     <th>ราคาต่อหน่วย</th>
                 </template>
                 <template is="dom-if" if="{{dataOverplay}}">
                     <th>ยอดเงินสุทธิ</th>
                     <th>ยอดเงินที่ใช้</th>
                     <th>คงเหลือ</th>
-                </template>
-                <template is="dom-if" if="{{showData}}">
-                    <th>ปริมาณ(ตัน)</th>
-                </template>   
-                <template is="dom-if" if="{{showData}}">
-                    <th>ราคาต่อหน่วย</th>
                 </template>
             </tr>
             <template is="dom-if" if={{dataStat}}>
@@ -76,18 +72,14 @@
                     <td>[[item.ec_number]]</td>
                     <td>[[item.req_date]]</td>
                     <template is="dom-if" if="{{showData}}">
-                        <td>[[formatNumber(item.amount)]]</td>
+                        <td>[[formatNumber(item.quantity)]]</td>
+                        <td>[[formatNumber(item.amount)]]</td>                    
+                        <td>[[formatNumber(item.price)]]</td>
                     </template>
                     <template is="dom-if" if="{{dataOverplay}}">
                         <td>[[formatNumber(item.balance)]]</td>
                         <td>[[formatNumber(item.useBalance)]]</td>
                         <td>[[formatNumber(item.totalBalance)]]</td>
-                    </template>
-                    <template is="dom-if" if="{{showData}}">
-                        <td>[[formatNumber(item.quantity)]]</td>
-                    </template>
-                    <template is="dom-if" if="{{showData}}">
-                        <td>[[formatNumber(item.price)]]</td>
                     </template>
                 </tr>
                 </template>
