@@ -124,9 +124,7 @@
             is: 'over-pay',
             observers:['setPay(bringForward.pay)'],
             ready:function(){
-                if(false) return;
-                
-                console.log('ddd')
+                window.$ = this;
             },
             properties:{
                 bringForward:{
@@ -172,8 +170,11 @@
             
             },
             checkData:function(data){
-                
-                if(!((data.value === true || data.value === false)||data.path==='data.ecList'))
+
+                console.log(data.path);
+                this.dataList = this.data.ecList;
+                //if(!((data.value === true || data.value === false)||data.path==='data.ecList'))
+                if(!((data.value === true || data.value === false)))
                 return;
 
                 var ec = 0;
@@ -204,36 +205,48 @@
 
 
 
-
-                var old = [];
+                
+                var ecUpdate = [];
                 var amount = ec;
                 var select_ec = this.data.ecList.filter(function(item){
                     return item.check == true;
                 })
-                console.log(amount);
+
                 for(var i = 0; i< select_ec.length; i++){
                     var check = select_ec[i].balance - amount;
                     
                     if(check >= 0){
-                        old.push({
-                            ec_id: select_ec[i].id,
-                            quantity: amount
-                        })
+                        //amount
+                        
+                        select_ec[i].useBalance = amount;
+                        select_ec[i].totalBalance = select_ec[i].balance-amount;
+                        ecUpdate.push(select_ec[i])
                         break; 
                     }
                     else {
-                        old.push({
-                            ec_id: select_ec[i].id,
-                            quantity: select_ec[i].balance
-                        })
+                        //select_ec[i].balance
+                        select_ec[i].useBalance = select_ec[i].balance;
+                        select_ec[i].totalBalance = select_ec[i].balance-select_ec[i].balance;
+                        ecUpdate.push(select_ec[i])
+
                         amount = amount - select_ec[i].balance;
                     }   
                 }
 
-
+                var iEcUpdate = 0;
+                var allEcList = this.data.ecList;
+                allEcList.map(function(row,i){
+                    if(row.check){
+                        allEcList[i] = ecUpdate[iEcUpdate];
+                        iEcUpdate++;
+                    }
+                });
+                
+                this.data.ecList = allEcList
                 
 
-                console.log(old);
+                this.notifyPath('data.ecList.0.useBalance');
+                //console.log(ecUpdate);
 
 
                 return {
