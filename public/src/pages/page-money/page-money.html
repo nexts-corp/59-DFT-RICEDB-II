@@ -43,10 +43,10 @@
             <div class="layout horizontal">
               <div class="flex"></div>
               <div class="flex-2 layout horizontal">
-                <vaadin-date-picker label="วันที่เริ่มต้น" value="{{data.date_fist}}"></vaadin-date-picker>
+                <vaadin-date-picker label="วันที่เริ่มต้น" value="{{get.date_fist}}"></vaadin-date-picker>
               </div>
               <div class="flex-2 layout horizontal">
-                <vaadin-date-picker label="วันที่สิ้นสุด" value="{{data.date_fist}}"></vaadin-date-picker>
+                <vaadin-date-picker label="วันที่สิ้นสุด" value="{{get.date_last}}"></vaadin-date-picker>
               </div>
               <div class="flex-2 layout horizontal">
                 <paper-button class="gl-btn-primary" on-tap="showData"raised >ค้นหา</paper-button>
@@ -60,7 +60,7 @@
             </div>
             <div class="gl-panel-default-content">  
                 <div style="overflow-x:auto;">
-                    <money-list></money-list>
+                    <money-list data="[[listData]]"></money-list>
                 </div>
                 <div class="flex-end-justified" style="padding:10px;">
                     <paper-button class="gl-btn-primary" on-tap="activeReports" raised >ออกรายงาน</paper-button>
@@ -72,8 +72,31 @@
     <script>
         Polymer({
             is: 'page-money',
+            properties:{
+                get : {
+                    type: Object,
+                    value:{}
+                }
+            },
             showData:function(){
-                console.log(data);
+                console.log(this.get);
+                axios.get('./payment/report')
+                .then((response)=>{
+                    console.log("success");
+                    console.log(response.data);
+                    this.listData = response.data;
+                    // this.quotaYear = response.data.map(item=>{
+                    // return item.toString();
+                    // });
+                    // console.log(this.quotaYear);
+                })
+                .catch((error)=>{
+                    console.log("error");
+                    console.log(error.message);
+                    this.fire('toast',{status:'connectError',text:error.message,
+                    callback:function(){
+                    }})
+                });
             },
             activeReports:function(){
                 console.log('activeReports');
