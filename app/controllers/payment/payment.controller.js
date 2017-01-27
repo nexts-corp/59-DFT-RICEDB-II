@@ -131,7 +131,7 @@ class Payment{
         .merge({
             check_date:
                 r.time(
-                    r.expr(2018).coerceTo('number'),r.expr(check_date[1]).coerceTo('number'),r.expr(check_date[2]).coerceTo('number')
+                    r.expr(check_date[0]).coerceTo('number'),r.expr(check_date[1]).coerceTo('number'),r.expr(check_date[2]).coerceTo('number')
                 , "Z"),
             pay_date:new Date()
         })

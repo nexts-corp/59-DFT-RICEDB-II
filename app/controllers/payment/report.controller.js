@@ -2,11 +2,16 @@ class Report{
 
     getFeeReport(req,res){
         var r = req._r;
-        //var params = req.query;
-        //var quotaYear = parseInt(params.year);
+        var params = req.query;
+        var frist_date = params.frist_date.split("-");
+        var last_date = params.last_date.split("-");
 
         r.db('eu2').table('receipt')
-        .filter(r.row('pay_date').during(r.time(2017,1,1, "Z"), r.time(2017, 1, 28, "Z")))
+        .filter(r.row('pay_date').during(
+            r.time(r.expr(frist_date[0]).coerceTo('number'),r.expr(frist_date[1]).coerceTo('number'),r.expr(frist_date[2]).coerceTo('number'), "Z"),
+            r.time(r.expr(last_date[0]).coerceTo('number'),r.expr(last_date[1]).coerceTo('number'),r.expr(last_date[2]).coerceTo('number'), "Z")
+        ))
+        //.filter(r.row('pay_date').during(r.time(2017,1,1, "Z"), r.time(2017, 1, 28, "Z")))
         .merge(function(row){
             return {
                 list:
