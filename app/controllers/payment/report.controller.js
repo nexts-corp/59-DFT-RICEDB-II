@@ -20,7 +20,7 @@ class Report{
                     .add(row('pay_date').day().coerceTo('string')),
                 type_name:
                     r.branch(
-                        row('type').eq('A'),"ปกติ",
+                        row('type').eq('N'),"ปกติ",
                         r.branch(row('type').eq('O'),"จ่ายยอดเดิม","จ่ายเกิน")
                     )
                 ,

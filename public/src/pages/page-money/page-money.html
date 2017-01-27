@@ -40,18 +40,24 @@
             รายงานการรับเงินค่าธรรมเนียมพิเศษ
         </div>
             <div class="flex searchBox searchBorder">
-            <div class="layout horizontal">
-              <div class="flex"></div>
-              <div class="flex-2 layout horizontal">
-                <vaadin-date-picker label="วันที่เริ่มต้น" value="{{get.date_fist}}"></vaadin-date-picker>
-              </div>
-              <div class="flex-2 layout horizontal">
-                <vaadin-date-picker label="วันที่สิ้นสุด" value="{{get.date_last}}"></vaadin-date-picker>
-              </div>
-              <div class="flex-2 layout horizontal">
-                <paper-button class="gl-btn-primary" on-tap="showData"raised >ค้นหา</paper-button>
-              </div>
-            </div>
+            <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <div>
+                        <vaadin-date-picker label="วันที่เริ่มต้น" value="{{get.first_date}}"></vaadin-date-picker>
+                    </div>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                    <div>
+                       <vaadin-date-picker label="วันที่สิ้นสุด" value="{{get.last_date}}"></vaadin-date-picker>
+                    </div>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]" style="margin-top: 10px;">
+                    <paper-button class="gl-btn-primary" on-tap="searchData" raised>ค้นหา</paper-button>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+            </gl-grid-row>
+
             <div class="flex"></div>
           </div>
           <div class="gl-panel-default">
@@ -72,15 +78,23 @@
     <script>
         Polymer({
             is: 'page-money',
+            listeners:{
+                'data-select' : 'listReports_Active'
+            },
             properties:{
                 get : {
                     type: Object,
                     value:{}
                 }
             },
-            showData:function(){
+            searchData:function(){
                 console.log(this.get);
-                axios.get('./payment/report')
+                axios.get('./payment/report',{
+                    params:{
+                        frist_date : this.get.first_date,
+                        last_date : this.get.last_date
+                    }
+                })
                 .then((response)=>{
                     console.log("success");
                     console.log(response.data);
@@ -92,7 +106,7 @@
                 })
                 .catch((error)=>{
                     console.log("error");
-                    console.log(error.message);
+                    console.log(error.response.data.message);
                     this.fire('toast',{status:'connectError',text:error.message,
                     callback:function(){
                     }})
@@ -100,6 +114,10 @@
             },
             activeReports:function(){
                 console.log('activeReports');
+            },
+            listReports_Active:function(e){
+                console.log(e.detail);
+                window.open('/api/payment/report1?id='+e.detail,'_blank');
             }
             // downloadFile:function(){
             //    window.open('/report/report.pdf','_blank');
