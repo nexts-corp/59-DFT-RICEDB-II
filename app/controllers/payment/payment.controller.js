@@ -126,8 +126,9 @@ class Payment{
         params.type = typeReceipt;
 
         r.expr(params)
-        .merge({pay_date:new Date()}).do(function(data){
-            return r.db('eu2').table('receipt').insert(params);
+        .merge({pay_date:new Date()})
+        .do(function(data){
+            return r.db('eu2').table('receipt').insert(data);
         })
         .run().then(function(result){
             res.json(result);
