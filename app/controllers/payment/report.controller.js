@@ -36,13 +36,18 @@ class Report{
             .merge(function(row){
                 return r.branch(
                     row.hasFields('bank_id'),
-                    {bank_name:r.db('eu2').table('bank').get(row('bank_id'))('name')},
+                        r.branch(row('bank_id').ne(''),
+                            {bank_name:r.db('eu2').table('bank').get(row('bank_id'))('name')}
+                        ,
+                            {}
+                        )
+                    ,
                     {}
                 )
             })
-            .concatMap(function(rootRow){
-                return rootRow('list').merge(rootRow.without('list','list_old'))
-            })
+            // .concatMap(function(rootRow){
+            //     return rootRow('list').merge(rootRow.without('list','list_old'))
+            // })
             
         })
         .run().then(function(result){
