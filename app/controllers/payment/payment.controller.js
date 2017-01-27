@@ -125,8 +125,16 @@ class Payment{
         params.id = params.year+'-'+Math.floor(Math.random()*90000);
         params.type = typeReceipt;
 
+        var check_date = params.check_date.split("-");
+
         r.expr(params)
-        .merge({pay_date:new Date()})
+        .merge({
+            check_date:
+                r.time(
+                    r.expr(2018).coerceTo('number'),r.expr(check_date[1]).coerceTo('number'),r.expr(check_date[2]).coerceTo('number')
+                , "Z"),
+            pay_date:new Date()
+        })
         .do(function(data){
             return r.db('eu2').table('receipt').insert(data);
         })
