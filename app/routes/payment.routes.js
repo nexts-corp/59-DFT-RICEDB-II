@@ -9,6 +9,7 @@ module.exports=function(app){
     //รายงานรับค่าธรรมเนียม
     var report=require('../controllers/payment/report.controller');
     app.get('/report',report.getFeeReport);
+    app.get('/reports',report.feeReport);
 
     var payment2=require('../controllers/payment/payment2.controller');
     app.get('/selectbank',payment2.selectBank);
