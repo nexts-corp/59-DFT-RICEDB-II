@@ -8,7 +8,7 @@ module.exports=function(app){
     app.post('/receipt',payment.insertReceipt);
     //รายงานรับค่าธรรมเนียม
     var report=require('../controllers/payment/report.controller');
-    app.get('/report',report.getBank);
+    app.get('/report',report.getFeeReport);
 
     var payment2=require('../controllers/payment/payment2.controller');
     app.get('/selectbank',payment2.selectBank);

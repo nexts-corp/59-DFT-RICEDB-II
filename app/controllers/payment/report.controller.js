@@ -1,6 +1,6 @@
 class Report{
 
-    getBank(req,res){
+    getFeeReport(req,res){
         var r = req._r;
         //var params = req.query;
         //var quotaYear = parseInt(params.year);
@@ -30,12 +30,8 @@ class Report{
         }).coerceTo('array')
         .do(function(result){
 
-           
             return result.merge(function(row){
                 return {list_count:row('list').count()}
-            })
-            return result.concatMap(function(rootRow){
-                return rootRow('list').merge(rootRow.without('list','list_old'))
             })
             .merge(function(row){
                 return r.branch(
@@ -44,16 +40,10 @@ class Report{
                     {}
                 )
             })
-            .innerJoin(r.db('eu2').table('bank'),function(left,right){
-                return left('bank_id').eq(right('id'))
+            .concatMap(function(rootRow){
+                return rootRow('list').merge(rootRow.without('list','list_old'))
             })
             
-
-
-
-        })
-        .concatMap(function(rootRow){
-            return rootRow('list').merge(rootRow.without('list','list_old'))
         })
         .run().then(function(result){
             res.json(result);
