@@ -1,5 +1,6 @@
 
 <link rel="import" href="./../../components/data-manage-behavior.html">
+<link rel="import" href="./../../components/format-number-behavior.html">
 
 <dom-module id="money-list">
     <template>
@@ -22,15 +23,19 @@
     .center{
         text-align: center !important;
     }
+    .left{
+        text-align: left !important;
+    }
     table > tbody > tr{
         cursor:pointer;
     }
+
     </style>
    
     <table class="gl-table-default">
         <thead class="table-head">
             <tr>
-                <th rowspan="2">ที่</th>
+                <th class="center" rowspan="2">ลำดับที่</th>
                 <th class="center" rowspan="2">ว/ด/ป ที่รับเงิน</th>
                 <th class="center" rowspan="2">เลขที่ใบเสร็จ</th>
                 <th class="center" rowspan="2">บริษัท</th>
@@ -39,6 +44,7 @@
                 <th rowspan="2">ราคา/ตัน (*2500)</th>
                 <th class="center" colspan="4">เช็คค่าธรรมเนียม</th>
                 <th rowspan="2">จำนวนเงิน</th>
+                <th rowspan="2">ประเภท</th>
                 <th class="center" rowspan="2">หมายเหตุ</th>
                 <th class="center" rowspan="2">ออกใบเสร็จ</th>
             </tr>
@@ -54,28 +60,30 @@
         <template is="dom-if" if="{{dataStat}}">
             <tbody>
                 <tr>
-                    <td colspan="15">ไม่พบข้อมูล</td>
+                    <td class="left" colspan="15">ไม่พบข้อมูล</td>
                 </tr>
             </tbody>
         </template>
         <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]">
-                <tr>
-                    <td>[[num(index)]]</td>
-                    <td class="center">[[item.pay_date]]</td>
-                    <td class="center">[[item.req_number]]</td>
-                    <td class="center">[[item.exporter_name]]</td>
-                    <td class="center">[[item.ec_number]]</td>
-                    <td class="center">[[item.req_date]]</td>
-                    <td>[[item.amount]]</td>
-                    <td>[[mathData(item.price,item.amount)]]</td>
-                    <td>ธนาคาร</td>
-                    <td>สาขา</td>
-                    <td class="center">[[item.check_number]]</td>
-                    <td class="center">[[item.pay_date]]</td>
-                    <td>[[item.price]]</td>
-                    <td class="center">[[item.note]]</td>
-                    <td class="center"><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
+                <tr value="[[item.id]]" on-tap="listReports_Active">
+                    <td class="center">[[num(index)]]</td> <!-- ลำดับที่ -->
+                    <td class="center">[[item.pay_date]]</td><!-- ว/ด/ป ที่รับเงิน -->
+                    <td class="center">[[item.req_number]]</td><!-- เลขที่ใบเสร็จ -->
+                    <td class="center">[[item.exporter_name]]</td><!-- บริษัท -->
+                    <td class="center">[[item.ec_number]]</td><!-- เลขที่ EC -->
+                    <td class="center">[[item.req_date]]</td><!-- วันที่ EC -->
+                    <td>[[formatNumber(item.amount)]]</td><!-- ปริมาณ (ตัน) -->
+                    <td>[[mathData(item.price,item.amount)]]</td><!-- ราคา/ตัน (*2500) -->
+                    <td>[[item.bank_name]]</td><!-- ธนาคาร -->
+                    <td>[[item.bank_branch]]</td><!-- สาขา -->
+                    <td class="center">[[item.check_number]]</td><!-- เลขที่ check -->
+                    <td class="center">[[item.pay_date]]</td><!-- วันที่ check -->
+                    <td>[[fillter_list_count(item.total,item.list_count)]]</td><!-- จำนวนเงิน -->
+                    <td class="center">[[item.type_name]]</td>
+                    <td class="center">[[item.note]]</td><!-- หมายเหตุ -->
+                    <td class="center"><iron-icon icon="icons:content-paste"></iron-icon></td>
+                    <!-- ออกใบเสร็จ -->
                 </tr>
             </template>
         </tbody>
@@ -85,7 +93,7 @@
     <script>
         Polymer({
             is: 'money-list',
-            behaviors:[DataManageBehavior],
+            behaviors:[DataManageBehavior,FormatNumberBehavior],
             observers:['checkData(data)'],
             _selectData: function(e) {
                 console.log("pageReport:: "+e.currentTarget.data2);
@@ -95,7 +103,19 @@
                 return index+1;
             },
             mathData:function(price,amount){
-                return (price/amount)*2500;
+                return this.formatNumber(price*amount);
+            },
+            fillter_list_count:function(total,list){
+                if(list == 1){
+                     return this.formatNumber(total);
+                }
+                else {
+                    return '-'
+                }
+            },
+            listReports_Active:function(e){
+               this.fire('data-select',e.currentTarget.value)
+            //    window.open('/report/receipt.pdf','_blank');
             },
             downloadFile:function(){
                window.open('/report/receipt.pdf','_blank');
