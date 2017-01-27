@@ -18,6 +18,12 @@ class Report{
                     row('pay_date').year().coerceTo('string').add('-')
                     .add(row('pay_date').month().coerceTo('string')).add('-')
                     .add(row('pay_date').day().coerceTo('string')),
+                type_name:
+                    r.branch(
+                        row('type').eq('A'),"ปกติ",
+                        r.branch(row('type').eq('O'),"จ่ายยอดเดิม","จ่ายเกิน")
+                    )
+                ,
                 list:
                 row('list').innerJoin(r.db('eu2').table('ec'),function(left,right){
                     return left('ec_id').eq(right('id'))
