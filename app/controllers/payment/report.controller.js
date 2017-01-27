@@ -50,9 +50,9 @@ class Report{
                     {}
                 )
             })
-            // .concatMap(function(rootRow){
-            //     return rootRow('list').merge(rootRow.without('list','list_old'))
-            // })
+            .concatMap(function(rootRow){
+                return rootRow('list').merge(rootRow.without('list','list_old'))
+            })
             
         })
         .run().then(function(result){
