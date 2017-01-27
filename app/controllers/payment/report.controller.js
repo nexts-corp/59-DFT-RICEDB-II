@@ -14,6 +14,10 @@ class Report{
         //.filter(r.row('pay_date').during(r.time(2017,1,1, "Z"), r.time(2017, 1, 28, "Z")))
         .merge(function(row){
             return {
+                pay_date:
+                    row('pay_date').year().coerceTo('string').add('-')
+                    .add(row('pay_date').month().coerceTo('string')).add('-')
+                    .add(row('pay_date').day().coerceTo('string')),
                 list:
                 row('list').innerJoin(r.db('eu2').table('ec'),function(left,right){
                     return left('ec_id').eq(right('id'))
@@ -28,7 +32,13 @@ class Report{
                 })
                 .map(function(row2){
                     return row2('left').merge(function(row3){
-                        return { exporter_name:row2('right')('name') }
+                        return {
+                            exporter_name:row2('right')('name'),
+                            req_date:
+                            row3('req_date').year().coerceTo('string').add('-')
+                            .add(row3('req_date').month().coerceTo('string')).add('-')
+                            .add(row3('req_date').day().coerceTo('string')),
+                        }
                     })
                 })
             }
@@ -36,7 +46,9 @@ class Report{
         .do(function(result){
 
             return result.merge(function(row){
-                return {list_count:row('list').count()}
+                return {
+                    list_count:row('list').count()
+                }
             })
             .merge(function(row){
                 return r.branch(
