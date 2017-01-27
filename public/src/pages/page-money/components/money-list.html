@@ -1,4 +1,6 @@
 
+<link rel="import" href="./../../components/data-manage-behavior.html">
+
 <dom-module id="money-list">
     <template>
     <style is="custom-style" include="gl-table">
@@ -46,24 +48,20 @@
                 <th>วันที่</th>
             </tr>
         </thead>
+        <template is="dom-if" if="{{dataStat}}">
+            <tbody>
+                <tr>
+                    <td style="text-align: left" colspan="15">ไม่พบข้อมูล</td>
+                </tr>
+            </tbody>
+        </template>
         <tbody class="table-body">
-            <tr>
-                <td>1</td>
-                <td>25-ธ.ค.-58</td>
-                <td>2558-0223</td>
-                <td>พงษ์ลาภ จำกัด</td>
-                <td>0102/2015</td>
-                <td>25-ธ.ค.-58</td>
-                <td>786.00</td>
-                <td>1,965,000.00</td>
-                <td>ยุบีโอ</td>
-                <td>กรุงธนบุรี</td>
-                <td>10225523</td>
-                <td>25-ธ.ค.-58</td>
-                <td></td>
-                <td></td>
-                <td><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
-            </tr>
+            <template is="dom-repeat" items="[[data]]">
+                <tr>
+                    <td></td>
+                    <td><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
+                </tr>
+            </template>
         </tbody>
     </table>
 
@@ -71,25 +69,8 @@
     <script>
         Polymer({
             is: 'money-list',
-            properties:{
-                data:{
-                    type:Array,
-                    value:[
-                        {
-                            "month":"มกราคม",
-                            "company":"กรุงเทพสตาชอินดาสเทรี่ยล",
-                            "type_rice11":"100.12",
-                            "type_rice12":"100.12",
-                            "type_rice21":"100.12",
-                            "type_rice22":"100.12",
-                            "type_rice31":"100.12",
-                            "type_rice32":"100.12",
-                            "type_rice41":"300.37",
-                            "type_rice42":"300.37"
-                        }
-                    ]
-                }
-            },
+            behaviors:[DataManageBehavior],
+            observers:['checkData(data)'],
             _selectData: function(e) {
                 console.log("pageReport:: "+e.currentTarget.data2);
                 this.fire("data-select",e.currentTarget.data2);
