@@ -121,23 +121,6 @@
              padding:20px;
         }
         
-        paper-tabs{
-            font-size: 19px;
-            font-weight: bold;
-            --paper-tab-content-unselected:{
-                background-color: orange !important;
-                color: white;
-            }
-           --paper-tabs-selection-bar:{
-             border: 2px solid #feff3b;
-             border-radius: 10px;
-           } 
-           --paper-tabs-selection-bar-color: #feff3b;; 
-        }
-            /*paper-tab:hover{
-                border-radius: 6px;
-                background-color: white !important;
-            }*/
         /*--------------------------------------*/
             main {
                 min-width: 320px;
@@ -159,7 +142,7 @@
 
             label {
                 display: inline-block;
-                margin: 0 0 -1px;
+                /*margin: 0 0 -1px;*/
                 padding: 15px 25px;
                 font-weight: 600;
                 text-align: center;
@@ -192,10 +175,6 @@
             #tab1:checked ~ #content1,
             #tab2:checked ~ #content2 {
                 display: block;
-            }
-
-            .header{
-
             }
     </style>
     <template>
@@ -243,26 +222,26 @@
                 </div>
                 <!--<div class="contentHeader">สรุปผลการยืนยันปริมาณจัดสรร</div>-->
 
-                <div>
+        <div>
                     <!--   -->
-                <main>
+            <main>
 
-                    <input id="tab1" type="radio" name="tabs" checked>
-                    <label for="tab1">ยังไม่ยืนยัน [[dataCompanny.notconfirm.data.length]] รายการ</label>
+                <input id="tab1" type="radio" name="tabs" checked>
+                <label for="tab1">ยังไม่ยืนยัน [[dataCompanny.notconfirm.data.length]] รายการ</label>
 
-                    <input id="tab2" type="radio" name="tabs">
-                    <label for="tab2">ยืนยัน [[dataCompanny.confirm.people]] รายการ</label>
-                    <section id="content1">
-                        <div class="contentHeader">ปริมาณคงเหลือรับคืน [[formatNumber(dataCompanny.notconfirm.nc_amount)]] ตัน ปริมาณที่ยืนยันแล้ว  [[formatNumber(dataCompanny.confirm.c_amount)]] ตัน</div>
-                        <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" on-confirm-exporter="_saveData" status="notConfirm"></confirm-list>
-                    </section>
-    
-                    <section id="content2">
-                        <div class="contentHeader">ปริมาณคงเหลือรับคืน [[formatNumber(dataCompanny.notconfirm.nc_amount)]] ตัน ปริมาณที่ยืนยันแล้ว  [[formatNumber(dataCompanny.confirm.c_amount)]] ตัน</div>
-                        <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" on-cancel-exporter="_cancelConfirm" status="confirm"></confirm-list>
-                    </section>
-                </main>
-            
+                <input id="tab2" type="radio" name="tabs">
+                <label for="tab2">ยืนยัน [[dataCompanny.confirm.people]] รายการ</label>
+                <section id="content1">
+                    <div class="contentHeader">ปริมาณคงเหลือรับคืน [[formatNumber(dataCompanny.notconfirm.nc_amount)]] ตัน ปริมาณที่ยืนยันแล้ว  [[formatNumber(dataCompanny.confirm.c_amount)]] ตัน</div>
+                    <confirm-list data="[[dataCompanny.notconfirm]]" on-data-select="_onDataSelect" on-confirm-exporter="_saveData" status="notConfirm"></confirm-list>
+                </section>
+
+                <section id="content2">
+                    <div class="contentHeader">ปริมาณคงเหลือรับคืน [[formatNumber(dataCompanny.notconfirm.nc_amount)]] ตัน ปริมาณที่ยืนยันแล้ว  [[formatNumber(dataCompanny.confirm.c_amount)]] ตัน</div>
+                    <confirm-list data="[[dataCompanny.confirm]]" on-data-select="_onDataSelect" on-cancel-exporter="_cancelConfirm" status="confirm"></confirm-list>
+                </section>
+            </main>
+        
             </div>
 
             <panel-right title="จัดการส่วนจัดสรร">
@@ -410,7 +389,6 @@
                             console.log(response.data);
                             this.fire('toast', {
                                 status: 'success',
-                                text: 'บันทึกสำเร็จ',
                                 callback:()=>{
                                 
                                 }
@@ -442,7 +420,6 @@
                             console.log(response.data);
                             this.fire('toast', {
                                 status: 'success',
-                                text: 'บันทึกสำเร็จ',
                                 callback:()=>{
                                 
                                 }
