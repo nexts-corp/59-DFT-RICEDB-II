@@ -125,15 +125,31 @@ class Payment{
         params.id = params.year+'-'+Math.floor(Math.random()*90000);
         params.type = typeReceipt;
 
-        var check_date = params.check_date.split("-");
+        var check_date;
+        if(typeReceipt!='O'){
+            check_date = params.check_date.split("-");
+        }else{
+            check_date = ['0','0','0'];
+        }
+        
 
         r.expr(params)
-        .merge({
-            check_date:
+        .merge(function(row){
+            return r.branch(row('type').ne('O'),
+            {
+                check_date:
                 r.time(
                     r.expr(check_date[0]).coerceTo('number'),r.expr(check_date[1]).coerceTo('number'),r.expr(check_date[2]).coerceTo('number')
-                , "Z"),
-            pay_date:new Date()
+                , "Z")
+            }
+            ,
+            {}
+            )
+        })
+        .merge(function(row){
+            return {
+                pay_date:new Date()
+            }
         })
         .do(function(data){
             return r.db('eu2').table('receipt').insert(data);
