@@ -66,9 +66,9 @@
           font-family: 'CSChatThaiUI', sans-serif !important;
           -webkit-font-smoothing: antialiased;
         }
-        .flex-equal-justified {
-          @apply(--layout-horizontal);
-          @apply(--layout-justified);
+        .flex-end-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-end-justified);
         }
     </style>
     <template>
@@ -88,7 +88,11 @@
           <div style="overflow-x:auto; padding:20px;">
             <notice-list data-list="{{listNotice}}" on-select-rice="selectedRice" on-data-select="_getDataSelect"></notice-list>
           </div>
-          <paper-button class="gl-btn-primary" hidden="{{active}}" on-tap="noticeReport" raised>ออกประกาศ</paper-button>    
+          <div class="flex-end-justified ">
+              <div>
+                  <paper-button class="gl-btn-primary" on-tap="noticeReport" raised>ออกประกาศ</paper-button>
+              </div>
+          </div>    
         </div>
 
       <panel-right title="การคำนวณส่วนจัดสรร">

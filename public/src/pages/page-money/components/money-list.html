@@ -11,13 +11,16 @@
     table{
         border: 1px solid #ddd;
     }
-    table > thead > tr > th{
-        text-align: center !important;
+    .gl-table-default > thead > tr > th{
+        text-align: right;
         white-space: nowrap;
     }
-    table > tbody > tr > td{
-        text-align: center !important;
+    .gl-table-default > tbody > tr > td{
+        text-align: right;
         white-space: nowrap;
+    }
+    .center{
+        text-align: center !important;
     }
     table > tbody > tr{
         cursor:pointer;
@@ -28,38 +31,51 @@
         <thead class="table-head">
             <tr>
                 <th rowspan="2">ที่</th>
-                <th rowspan="2">ว/ด/ป ที่รับเงิน</th>
-                <th rowspan="2">เลขที่ใบเสร็จ</th>
-                <th rowspan="2">บริษัท</th>
-                <th colspan="2">EC</th>
+                <th class="center" rowspan="2">ว/ด/ป ที่รับเงิน</th>
+                <th class="center" rowspan="2">เลขที่ใบเสร็จ</th>
+                <th class="center" rowspan="2">บริษัท</th>
+                <th class="center" colspan="2">EC</th>
                 <th rowspan="2">ปริมาณ (ตัน)</th>
                 <th rowspan="2">ราคา/ตัน (*2500)</th>
-                <th colspan="4">เช็คค่าธรรมเนียม</th>
+                <th class="center" colspan="4">เช็คค่าธรรมเนียม</th>
                 <th rowspan="2">จำนวนเงิน</th>
-                <th rowspan="2">หมายเหตุ</th>
-                <th rowspan="2">ออกใบเสร็จ</th>
+                <th class="center" rowspan="2">หมายเหตุ</th>
+                <th class="center" rowspan="2">ออกใบเสร็จ</th>
             </tr>
             <tr>
-                <th>เลขที่</th>
-                <th>วันที่</th>
+                <th class="center">เลขที่</th>
+                <th class="center">วันที่</th>
                 <th>ธนาคาร</th>
                 <th>สาขา</th>
-                <th>เลขที่</th>
-                <th>วันที่</th>
+                <th class="center">เลขที่</th>
+                <th class="center">วันที่</th>
             </tr>
         </thead>
         <template is="dom-if" if="{{dataStat}}">
             <tbody>
                 <tr>
-                    <td style="text-align: left" colspan="15">ไม่พบข้อมูล</td>
+                    <td colspan="15">ไม่พบข้อมูล</td>
                 </tr>
             </tbody>
         </template>
         <tbody class="table-body">
             <template is="dom-repeat" items="[[data]]">
                 <tr>
-                    <td></td>
-                    <td><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
+                    <td>[[num(index)]]</td>
+                    <td class="center">[[item.pay_date]]</td>
+                    <td class="center">[[item.req_number]]</td>
+                    <td class="center">[[item.exporter_name]]</td>
+                    <td class="center">[[item.ec_number]]</td>
+                    <td class="center">[[item.req_date]]</td>
+                    <td>[[item.amount]]</td>
+                    <td>[[mathData(item.price,item.amount)]]</td>
+                    <td>ธนาคาร</td>
+                    <td>สาขา</td>
+                    <td class="center">[[item.check_number]]</td>
+                    <td class="center">[[item.pay_date]]</td>
+                    <td>[[item.price]]</td>
+                    <td class="center">[[item.note]]</td>
+                    <td class="center"><iron-icon icon="icons:content-paste" on-tap="downloadFile"></iron-icon></td>
                 </tr>
             </template>
         </tbody>
@@ -74,8 +90,13 @@
             _selectData: function(e) {
                 console.log("pageReport:: "+e.currentTarget.data2);
                 this.fire("data-select",e.currentTarget.data2);
-            }
-            ,
+            },
+            num:function(index){
+                return index+1;
+            },
+            mathData:function(price,amount){
+                return (price/amount)*2500;
+            },
             downloadFile:function(){
                window.open('/report/receipt.pdf','_blank');
              }
