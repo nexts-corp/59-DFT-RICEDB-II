@@ -7,33 +7,43 @@ class Report{
 
         r.db('eu2').table('receipt')
         .filter(r.row('pay_date').during(r.time(2017,1,1, "Z"), r.time(2017, 1, 28, "Z")))
-        .filter(function(row){
-            return row('type').ne('O')
-        })
         .merge(function(row){
-        return {
-            list:
-            row('list').innerJoin(r.db('eu2').table('ec'),function(left,right){
-            return left('ec_id').eq(right('id'))
-            })
-            .map(function(row2){
-            return row2('left')
-            .merge(function(row3){
-                return row2('right').pluck('ec_number','req_number','exporter_id','req_date')
-            })
-            }).innerJoin(r.db('eu2').table('exporter'),function(left,right){
-            return left('exporter_id').eq(right('id'))
-            })
-            .map(function(row2){
-            return row2('left').merge(function(row3){
-                return { exporter_name:row2('right')('name') }
-            })
-            })
-        }
+            return {
+                list:
+                row('list').innerJoin(r.db('eu2').table('ec'),function(left,right){
+                    return left('ec_id').eq(right('id'))
+                })
+                .map(function(row2){
+                    return row2('left')
+                    .merge(function(row3){
+                        return row2('right').pluck('ec_number','req_number','exporter_id','req_date')
+                    })
+                }).innerJoin(r.db('eu2').table('exporter'),function(left,right){
+                    return left('exporter_id').eq(right('id'))
+                })
+                .map(function(row2){
+                    return row2('left').merge(function(row3){
+                        return { exporter_name:row2('right')('name') }
+                    })
+                })
+            }
         }).coerceTo('array')
         .do(function(result){
+            return result.merge(function(row){
+                return {list_count:row('list').count()}
+            })
             return result.concatMap(function(rootRow){
-            return rootRow('list').merge(rootRow.without('list','list_old'))
+                return rootRow('list').merge(rootRow.without('list','list_old'))
+            })
+            .merge(function(row){
+                return r.branch(
+                    row.hasFields('bank_id'),
+                    {bank_name:r.db('eu2').table('bank').get(row('bank_id'))('name')},
+                    {}
+                )
+            })
+            .innerJoin(r.db('eu2').table('bank'),function(left,right){
+                return left('bank_id').eq(right('id'))
             })
         })
         .run().then(function(result){
