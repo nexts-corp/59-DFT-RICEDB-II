@@ -152,7 +152,27 @@ class Payment{
             }
         })
         .do(function(data){
-            return r.db('eu2').table('receipt').insert(data);
+            
+            return r.db('eu2').table('receipt').insert(data).do(function(resultInsert){
+                return data('list').forEach(function(row){
+                    return r.db('eu2').table('ec').get(row('ec_id')).update({status:'p'})
+                })
+                .do(function(x){
+                    return r.branch(r.expr(typeReceipt).ne('N'),
+                    data('list_old').forEach(function(row){
+                        return r.db('eu2').table('ec').get(row('ec_id')).do(function(rowOld){
+                            return r.db('eu2').table('ec').get(rowOld('id'))
+                            .update({balance:rowOld('balance').sub(row('amount'))})
+                        })
+                    })
+                    .do(function(x){
+                        return {receipt_id:params.id}
+                    })
+                    ,
+                    {receipt_id:params.id})
+                })
+            })
+            
         })
         .run().then(function(result){
             res.json(result);
