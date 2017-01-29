@@ -11,10 +11,12 @@ class Report{
     }
 
     feeReport(req,res){
-        //FEE_DATA(req)
-        r.expr([{a:'x'}])
+        var params = req.query;
+
+
+        FEE_DATA(req)
         .run().then(function(result){
-            res._ireport("receipt/fee.jasper","pdf", result, {x:'x'});
+            res._ireport("receipt/fee.jasper","pdf", result, {frist_date:params.frist_date,last_date:params.last_date});
             //res.json(result);
         })
         .catch(function(err){
