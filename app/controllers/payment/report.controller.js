@@ -12,10 +12,10 @@ class Report{
 
     feeReport(req,res){
         //FEE_DATA(req)
-        r.expr({a:'x'})
+        r.expr([{a:'x'}])
         .run().then(function(result){
-            //res._ireport("receipt/fee.jasper","pdf", result, {x:'x'});
-            res.json(result);
+            res._ireport("receipt/fee.jasper","pdf", result, {x:'x'});
+            //res.json(result);
         })
         .catch(function(err){
             res.status(500).json(err);
