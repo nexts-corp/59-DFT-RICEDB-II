@@ -16,7 +16,7 @@ var schema = {
             "type": "string"
         },
         "pay_no": {
-            "type": "string"
+            "type": "number"
         },
         "pay_amount": {
             "type": "number"
@@ -169,7 +169,8 @@ router.get('/fee/id/:fee_id', function (req, res, next) {
                                         return r.db('external_f3').table('trader').get(trader_do).getField('seller_id').do(function (seller_do) {
                                             return r.db('external_f3').table('seller').get(seller_do).getField('seller_name_th')
                                         })
-                                    })
+                                    }),
+                                pay_det_status_name: r.branch(fee_det_merge('pay_det_status').eq(true), 'จ่ายแล้ว', 'ยังไม่ได้จ่าย')
                             }
                         })
                 }
@@ -197,6 +198,7 @@ router.get('/fee/id/:fee_id', function (req, res, next) {
             });
     })
 })
+
 router.post('/insert', function (req, res, next) {
     //console.log(req.body);
     var valid = validate(req.body);

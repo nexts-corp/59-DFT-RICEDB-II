@@ -335,7 +335,8 @@ router.get('/approve/id/:fee_id', function (req, res, next) {
                                             invoice_id: invoice_merge('invoice_id'),
                                             shm_det_id: inv_det_map('shm_det_id'),
                                             exporter_id: inv_det_map('exporter_id'),
-                                            pay_amount: inv_det_map('amount').sub(inv_det_map('amount').mul(0.01))
+                                            pay_amount: inv_det_map('amount').sub(inv_det_map('amount').mul(0.01)),
+                                            pay_det_status: false
                                         }
                                     })
                             }
