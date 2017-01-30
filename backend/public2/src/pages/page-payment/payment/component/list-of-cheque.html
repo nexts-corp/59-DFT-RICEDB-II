@@ -1,0 +1,106 @@
+<dom-module id="list-of-cheque">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .labelSearch{
+    font-size: var(--font-size-h4);
+    margin: 10px 10px 10px 10px;
+    }
+    .table-body >tr > td{
+      cursor:pointer;
+    }
+    .title {
+      margin: 16px;
+      text-align: center;
+      font-size: var(--font-size-h4);
+    }
+  </style>
+  <template>
+    <div class="title">ใส่เลขที่เช็คของสัญญา [[dataForSelect.nameContract]]</div>
+    <div class="flex searchInput ">
+       <div class="horizontal end-justified layout">
+         <div class="labelSearch">รอบการจ่ายเงิน.</div>{{_searchInArray(searchInput)}}
+         <paper-input label=" " no-label-float value="{{searchInput}}">
+           <iron-icon icon="search" prefix></iron-icon>
+         </paper-input>
+         <!-- <paper-icon-button icon="search"></paper-icon-button> -->
+       </div>
+   </div>
+
+    <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>รอบการส่งมอบ</th>
+              <th>งวดการส่งมอบ</th>
+              <th>รอบการจ่าย</th>
+              <th>ชื่อรอบการจ่ายเงิน</th>
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
+            <template is="dom-if" if="[[!_isHave(newData)]]">
+              <template is="dom-repeat" items="[[newData]]" >
+                <tr data="[[item]]" on-tap="getChequeDetail" level="primary" >
+                  <td>[[item.shm_no]]</td>
+                  <td>[[item.shm_name]]</td>
+                  <td>[[item.fee_no]]</td>
+                  <td>[[item.fee_name]]</td>
+                </tr>
+              </template>
+              </template>
+              <template is="dom-if" if="[[_isHave(newData)]]">
+                  <tr >
+                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                  </tr>
+              </template>
+            <!-- </template> -->
+         </tbody>
+      </table>
+  </template>
+  <script>
+    Polymer({
+      is: "list-of-cheque",
+      observers:[
+        'initDatabl(data)'
+      ],
+      behaviors: [
+          g2gCongtroller
+      ],
+      properties: {
+        newData:{
+          type:Object
+        }
+      },
+      initDatabl:function (data) {
+        // console.log(data);
+        this.newData = this.g2gClone(data);
+        // console.log('clone new==>',this.newData);
+        // console.log('org==>',this.data);
+      },
+      _searchInArray:function (searchInput) {
+          // console.log(searchInput == '');
+          if (searchInput != '') {
+            let arr=[];
+            this.data.map((el)=>{
+              if (el.fee_no.search(searchInput) > -1) {
+                  //  console.log('search==> ',el);
+                    arr.push(el);
+              }
+            });
+            this.newData=arr;
+          }else{
+            this.initDatabl(this.data);
+          }
+      },
+      getChequeDetail:function (e) {
+        // console.log(e.currentTarget.data);
+        this.fire('get-cheque-detail',{detail:e.currentTarget.data});
+      }
+    });
+  </script>
+</dom-module>

@@ -162,16 +162,22 @@ Polymer({
   },
   _approveFee:function (result,detail) {
     if (result == true) {
-      // console.log(detail.data);
-      this.update('./g2g/fee/update',detail.data, () => {
-        this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
-         callback:()=>{
-            this.fire('close-drawer',{detail:'close-drawer'});
-            let contract_id= this._getUrl();
-              this.fire('get-fee-list',{detail:contract_id});
-          }
-        });
-       });
+      // console.log(detail.data.id);
+      this.read('./g2g/fee/approve/id/'+detail.data.id,(data)=>{
+        // console.log(data);
+        this.fire('close-drawer',{detail:'close-drawer'});
+        let contract_id= this._getUrl();
+        this.fire('get-fee-list',{detail:contract_id});
+      });
+      // this.update('./g2g/fee/approve/id/',detail.data, () => {
+      //   this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+      //    callback:()=>{
+      //       this.fire('close-drawer',{detail:'close-drawer'});
+      //       let contract_id= this._getUrl();
+      //         this.fire('get-fee-list',{detail:contract_id});
+      //     }
+      //   });
+      //  });
      }
   },
   _cleanDataFee:function (data,callback) {
