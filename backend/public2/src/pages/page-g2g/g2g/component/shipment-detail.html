@@ -116,14 +116,14 @@
             </div>
           </paper-dialog>
       <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
-        <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]">
+        <!-- <template is="dom-if" if="[[!checkBtnView(data.shm_status)]]"> -->
             <div class="icon_print">
               <paper-icon-button id="editConfirm" class="crud" icon="create" raised on-tap="editShipment"  hidden="[[data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="editConfirm" offset="0">Edit Shipment</paper-tooltip>
               <paper-icon-button id="deleteConfirm" class="crud" icon="delete" raised on-tap="deleteShipment" hidden="[[data.shm_status]]"></paper-icon-button>
               <paper-tooltip for="deleteConfirm" offset="0">Delete Shipment</paper-tooltip>
             </div>
-        </template>
+        <!-- </template> -->
       </template>
        </div>
         </gl-form-panel-head>
@@ -470,7 +470,7 @@
         this.data.shm_status = false;
         this.set('data.tags',[])
         // console.log(this.dataForSelect);
-        this.push('data.tags',this.dataForSelect.buyer_id,this.dataForSelect.country_id);
+        this.push('data.tags',this.dataForSelect.buyer_id,this.dataForSelect.country_id,this.dataForSelect.contract_id);
         this._cleanDataInsertShimment(this.data,(data)=>{
           // data.shm_status = false;
           this.fire('toast',{status:'load'}); //คำสั่งสำหรับเปิด toast load
@@ -478,6 +478,8 @@
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
              callback:()=>{
                 this.fire('get-list-shipment',{contractId:data.contract_id});
+                let el = Polymer.dom(this.root).querySelectorAll('.insetShipment');
+                el.map((el)=> {el.reset();el.value=''});
                 this.backPageShipmentList();
               }
             });
@@ -485,7 +487,9 @@
         });
       },
       editShimpent:function () {
-
+        // this.set('data.tags',[])
+        // this.push('data.tags',this.dataForSelect.buyer_id,this.dataForSelect.country_id,this.dataForSelect.contract_id);
+        // console.log(this.data);
         // this.data.shm_status = this.el.data.shm_status;
         this._cleanDataInsertShimment(this.data,(data)=>{
           data.id = this.data.shm_id;
@@ -501,8 +505,6 @@
       },
       _editData:function (result,detail) {
         if (result == true) {
-
-          // console.log(detail.data);
           this.update('./g2g/shipment/update',detail.data, () => {
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
              callback:()=>{
@@ -593,7 +595,7 @@
           let {cl_id,shm_name,shm_no,contract_id,shm_status} = data;
           let newData = {cl_id,shm_name,shm_no,contract_id,shm_status};
           newData.tags = new Array();
-          el.map((el)=> {el.reset();el.value=''});
+          el.map((el)=> {el.reset();});
           data.tags.map((tag)=>{
             newData.tags.push(tag);
           });
