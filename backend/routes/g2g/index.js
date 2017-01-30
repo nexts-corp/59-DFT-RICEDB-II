@@ -10,9 +10,8 @@ var book = require('./book');
 var invoice = require('./invoice');
 var fee = require('./fee');
 var feeDetail = require('./feeDetail');
-var cheque = require('./cheque');
 var payment = require('./payment');
-
+var paymentDetail = require('./paymentDetail');
 app.use('/contract', contract);
 app.use('/confirm', confirmLetter);
 app.use('/shipment', shipment);
@@ -22,7 +21,6 @@ app.use('/book', book);
 app.use('/invoice', invoice);
 app.use('/fee', fee);
 app.use('/fee/detail', feeDetail);
-app.use('/cheque', cheque);
 app.use('/payment', payment);
-
+app.use('/payment/detail', paymentDetail);
 module.exports = app;
