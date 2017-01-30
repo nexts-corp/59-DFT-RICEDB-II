@@ -58,21 +58,21 @@
             </tr>
           </thead>
           <tbody class="table-body">
-            <template is="dom-if" if="[[!_isHave(data.fee_detail)]]">
+            <!-- <template is="dom-if" if="[[!_isHave(data.fee_detail)]]"> -->
               <template is="dom-repeat" items="[[data.fee_detail]]">
                 <tr on-tap="getFeeDetail" data="[[item]]">
-                  <td>  [[_ObcountIndex(index)]] </td>
-                  <td> [[item.invoice_no]]</td>
-                  <td> [[item.invoice_count]]</td>
+                  <td>[[_ObcountIndex(index)]] </td>
+                  <td>[[item.invoice_no]]</td>
+                  <td>[[item.invoice_count]]</td>
                   <td>[[item.usd_value]]</td>
                   <td>[[changeDateCC(item.fee_date_receipt)]]</td>
                   <td>[[item.fee_det_status_name]]</td>
                 </tr>
               </template>
-            </template>
+            <!-- </template> -->
             <template is="dom-if" if="[[_isHave(data.fee_detail)]]">
                 <tr >
-                  <td colspan="4">  ไม่มีข้อมูล</td>
+                  <td colspan="6">  ไม่มีข้อมูล</td>
                 </tr>
             </template>
           </tbody>
