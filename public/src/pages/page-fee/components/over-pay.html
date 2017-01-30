@@ -116,6 +116,8 @@
                 <gl-form-panel-footer set-padding="10px">
                     <!--<paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>-->
                     <paper-button class="gl-btn-primary" on-tap="saveData" raised>ชำระเงิน</paper-button>
+                    <paper-button class="gl-btn-success" on-tap="openReceipt" receipt-id"{{receiptId}}" raised>ออกใบเสร็จ</paper-button>
+                    
                 </gl-form-panel-footer>
             </gl-form-panel>
 
@@ -319,7 +321,10 @@
                 result.list = ecSelect;
                 console.log(JSON.stringify(result));
                 // console.log(result);
-                this.fire('save-data',result);
+                this.fire('save-data',{result:result,el:this});
+            },
+            openReceipt:function(){
+                window.open('/api/payment/report1?id='+this.receiptId,'_blank'); 
             }
         });
     </script>

@@ -80,7 +80,7 @@
                     <template is="dom-if" if="{{showData}}">
                         <td>[[formatNumber(item.quantity)]]</td>                    
                         <td>[[formatNumber(item.price)]]</td>
-                        <td>[[formatNumber(item.amount)]]</td>
+                        <td>[[mathMoney(item.quantity,item.price)]]</td>
                     </template>
                     <template is="dom-if" if="{{dataOverplay}}">
                         <td>[[formatNumber(item.balance)]]</td>
@@ -135,6 +135,11 @@
                         this.set('data.'+index+'.class',false);
                     })
                 }
+            },
+            mathMoney:function(quantity,price){
+                console.log(quantity,price);
+                var answer = quantity * price;
+                return this.formatNumber(answer)
             },
             setDataForCheckBox:function(){
                 this.data.map((item)=>{

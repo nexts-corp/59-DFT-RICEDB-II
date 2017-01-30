@@ -251,18 +251,18 @@
                 
             },
             _saveData:function(e){
-                e.detail.year = parseInt(this.yearValue);
-                // console.log(e.detail);
+                e.detail.result.year = parseInt(this.yearValue);
                 this.fire('toast',{status:'load'});
-                axios.post('/payment/receipt',e.detail)
+                axios.post('/payment/receipt',e.detail.result)
                 .then((response)=>{
                     console.log('success');
                     console.log(response.data);
                     this.fire('toast',{
                         status: 'success',
                         callback:()=>{
-                            // this.listSelected = response.data;  
-                            // this.$$('panel-right').close();  
+                            //this.$$('panel-right').close(); 
+                            e.detail.el.receiptId = response.data.receipt_id;
+                            this.searchData();
                         }
                     })
                     
@@ -273,6 +273,7 @@
                     callback:function(){
                     }})
                 })
+                
             }
         });
     </script>
