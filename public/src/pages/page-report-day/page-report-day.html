@@ -1,0 +1,116 @@
+<link rel="import" href="../components/dataBehavior.html">
+<link rel="import" href="../../nylon-behavior.html">
+<link rel="import" href="../components/card-menu.html">
+<link rel="import" href="../components/card-search.html">
+<link rel="import" href="../components/panel-right/panel-right.html">
+<link rel="import" href="components/list-exporter.html">
+<link rel="import" href="components/list-banExporter.html">
+<dom-module id="page-report-day">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment">
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <div class="layout horizontal center-justified wrap">
+        <card-search>
+          <div class="title-head">
+            เลือกวันที่ต้องการดูรายงาน
+          </div>
+          <div class="layout horizontal center-justified">
+            <div class="menu">
+              วันที่
+            </div>
+            <div class="layout horizontal center-justified">
+              <vaadin-date-picker always-float-label style="width:210px;" label="" value="{{date}}"></vaadin-date-picker>
+            </div>
+          </div>
+        </card-search>
+      </div>
+
+    <div class="layout horizontal center-justified">
+      <template is="dom-repeat" items="[[listMenu]]">
+        <card-menu data="{{item}}" on-tap="report" id={{index}}></card-menu>
+      </template>
+    </div>
+
+    <panel-right title="{{titlePanelRight}}" id="drawerRight" set-width="95%">
+      <div class="rightdata" align="left">
+        <iron-pages selected="{{pages}}">
+          <list-exporter data="[[exporter]]" date-sent="[[date_sent]]"></list-exporter>
+          <list-banExporter data="[[exporterBan]]" date-sent="[[date_sent]]"></list-banExporter>
+        </iron-pages>
+      </div>
+    </panel-right>
+  </template>
+  <script>
+    Polymer({
+      is: "page-report-day",
+      properties: {
+        pages:{
+          type:Number,
+          value:0
+        },
+        date:{
+          type:String,
+        },
+        date_start:{
+          type:String,
+        },
+        date_sent:{
+          type:Object,
+          value:{
+            date_start:'',
+            date_end:''
+          }
+        },
+        listMenu: {
+          type: Array,
+          value: [
+            {path:'',nameMenu:'รายชื่อผู้ส่งออก',img:'/img/report/01/192.png'},
+            {path:'',nameMenu:'รายชื่อผู้ส่งออกที่หมดอายุ',img:'/img/report/03/192.png'}
+          ]
+        }
+      },
+      observers:['_changeDate(date)'],
+      behaviors: [dataBehavior,nylonBehavior],
+      ready: function() {
+        let date = new Date;
+        let dateNow = date.toISOString().split("T");
+        this.date = dateNow[0];
+      },
+      _changeDate:function(date) {
+        let date_start = new Date(date);
+        if (date_start != 'Invalid Date') {
+          date_start.setDate(date_start.getDate() - 1);
+          let yesterday = date_start.toISOString().split("T");
+          this.date_start = yesterday[0];
+        }
+      },
+      report:function (e) {
+        // console.log(e.target.id);
+        this.pages=e.target.id;
+        this._flipDrawerOpen();
+        this._getExporter();
+      },
+      _flipDrawerOpen:function () {
+        // this.$.drawerRight.actionDrawer();
+        Polymer.dom(this.root).querySelector('#drawerRight').open();
+      },
+      _flipDrawerClose:function () {
+        Polymer.dom(this.root).querySelector('#drawerRight').close();
+      },
+      _getExporter:function(){
+        this.read('/exporter?date_start='+this.date_start+'&date_end='+this.date,(data)=>{
+          this.exporter = data;
+          this.date_sent.date_start = this.date_start;
+          this.date_sent.date_end = this.date;
+        });
+
+        this.read('/exporter?exporter_active=false',(data)=>{
+          this.exporterBan = data;
+        });
+      }
+    });
+  </script>
+</dom-module>

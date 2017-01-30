@@ -1,0 +1,91 @@
+<dom-module id="list-banExporter">
+<style include="iron-flex iron-flex-factors iron-flex-alignment gl-table gl-size gl-color">
+  * {
+      font-family: 'rsuregular', sans-serif;
+      -webkit-font-smoothing: antialiased;
+  }
+  .searchBorder{
+    border: 1px solid var(--gl-gray-light-color);
+    margin: 15px;
+    border-radius: 3px;
+  }
+  .gl-table-default{
+       border-collapse: collapse;
+       width: 100%;
+       white-space: nowrap;
+   }
+   .text-table{
+     text-align: center;
+      font-size: var(--font-size-h4);
+   }
+   .title {
+    text-align: center;
+    font-size: var(--font-size-h3);
+   }
+   .tab-button{
+     margin: 20px;
+     font-size: 18px;
+   }
+</style>
+  <template>
+    <div class="horizontal end-justified layout tab-button">
+      <paper-button on-tap="_report" report="report1" raised>WORD</paper-button>
+      <paper-button on-tap="_report" report="report2" raised>EXCEL</paper-button>
+      <paper-button on-tap="_report" report="report3" raised>PDF</paper-button>
+    </div>
+    <div class="searchBorder" style="overflow-x:auto;">
+      <table class="gl-table-default">
+        <thead class="table-head">
+          <tr>
+            <th><div class="text-table">เลข ข.</div></th>
+            <th><div class="text-table">เลขที่ผู้เสียภาษี</div></th>
+            <th><div class="text-table">ชื่อบริษัท</div></th>
+            <th><div class="text-table">ประเภทใบอนุญาต</div></th>
+            <th><div class="text-table">สถานะสมาชิกสมาคมฯ</div></th>
+            <th><div class="text-table">สถานะ คน.</div></th>
+            <th><div class="text-table">สถานะเลข ข.</div></th>
+            <th><div class="text-table">วันที่ลงทะเบียน</div></th>
+          </tr>
+        </thead>
+
+        <template is="dom-repeat" items="{{data}}">
+          <tbody>
+            <tr>
+              <td><div class="text-table">{{item.exporter_no_name}}</div></td>
+              <td><div class="text-table">{{item.seller_tax_id}}</div></td>
+              <td><div class="text-table">{{item.seller_name_th}}</div></td>
+              <td><div class="text-table">{{item.type_lic_name}}</div></td>
+              <td><div class="text-table">{{item.exporter_status_name}}</div></td>
+              <td><div class="text-table">{{item.trader_active_name}}</div></td>
+              <td><div class="text-table">{{item.exporter_active_name}}</div></td>
+              <td><div class="text-table">{{item.exporter_date_approve}}</div></td>
+            </tr>
+          </tbody>
+        </template>
+      </table>
+    </div>
+
+    <template is="dom-if" if="[[checkData(data)]]">
+        <div class="horizontal center-justified layout searchBorder">
+          <div class="title" style="margin:20px">ไม่พบข้อมูลที่ค้นหา</div>
+        </div>
+    </template>
+  </template>
+  <script>
+    Polymer({
+      is: "list-banExporter",
+      checkData:function(data) {
+        if (data.length < 1) {
+          return true
+        }
+      },
+      _report:function(e) {
+        console.log(this.data);
+        console.log(this.dateSent);
+        // var start = this.dateSent.date_start;
+        // var end = this.dateSent.date_end;
+        // window.open('./api/reportExporter/'+e.target.getAttribute('report')+'?date_start='+start+'&date_end='+end,'_blank');
+      }
+    });
+  </script>
+</dom-module>

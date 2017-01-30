@@ -40,9 +40,6 @@
       margin: 15px;
       border-radius: 3px
     }
-    gl-combo-box{
-      width: 70%;
-    }
     .iconSearch{
       margin-top: 25px;
       margin-left: 40px;
@@ -68,7 +65,7 @@
 
       <div class="layout vertical registor">
         <div class="flex title">
-          ทะเบียนผู้ส่งออกข้าวที่ถูกระงับ
+          ทะเบียนผู้ส่งออกข้าวที่หมดอายุ
         </div>
         <div class="flex searchBox searchBorder">
           <gl-grid-row width="{{getWidth}}">
@@ -96,10 +93,6 @@
                   type: String,
                   value: "detailRegExporter"
               },
-              // exporterId:{
-              //   type: String,
-              //   observer: '_exporterIdChanged'
-              // },
               exporters:{
                 type: Array,
                 value: []
@@ -126,12 +119,9 @@
               this.set('exporters.'+index+'.check',val);
             });
           },
-          attached: function() {
-              this._getExporters();
-          },
           _getExporters: function(){
             this.exporter_id = this.exporter_id || this.$.exporter_id;
-            this.read('./exporter/?exporter_active=false',(data)=>{
+            this.read('./exporter/?export_status=false',(data)=>{
                 this.exporters = data;
                 for (var i = 0; i < this.exporters.length; i++) {
                   this.exporters[i]['check'] = false;

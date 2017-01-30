@@ -29,7 +29,7 @@
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[[juristic_person]]"
+      ref-path="exporter-document&juristic"
       exporter-id="[[exporterId]]"
       >
     </nylon-upload>
@@ -37,7 +37,7 @@
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[[authority]]"
+      ref-path="exporter-document&authority"
       exporter-id="[[exporterId]]"
       >
     </nylon-upload>
@@ -45,7 +45,7 @@
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[[vat]]"
+      ref-path="exporter-document&vat"
       exporter-id="[[exporterId]]"
       >
     </nylon-upload>
@@ -53,7 +53,7 @@
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[[dit]]"
+      ref-path="exporter-document&dit"
       exporter-id="[[exporterId]]"
       >
     </nylon-upload>
@@ -61,7 +61,7 @@
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[[copy_authority]]"
+      ref-path="exporter-document&copy_authority"
       exporter-id="[[exporterId]]"
       >
     </nylon-upload>
@@ -69,7 +69,7 @@
     <nylon-upload
       target="/api/upload/exporter/file/[[exporterId]]"
       accept="application/pdf"
-      ref-path="[[attorney]]"
+      ref-path="exporter-document&attorney"
       exporter-id="[[exporterId]]"
       >
     </nylon-upload>
@@ -80,47 +80,11 @@
     Polymer({
       is: "member-fileup",
       behaviors: [dataBehavior],
-      properties: {
-        juristic_person:{
-          type:Object,
-          value: {}
-        },
-        authority:{
-          type:Object,
-          value: {}
-        },
-        vat:{
-          type:Object,
-          value: {}
-        },
-        dit:{
-          type:Object,
-          value: {}
-        },
-        copy_authority:{
-          type:Object,
-          value: {}
-        },
-        attorney:{
-          type:Object,
-          value: {}
-        }
-      },
       observers: [
-        'checkDocType(docType)',
         '_dataInput(data)'
       ],
-      checkDocType:function(docType) {
-        this.copy_authority = 'exporter-document&'+docType[0].doc_code;
-        this.dit = 'exporter-document&'+docType[1].doc_code;
-        this.attorney = 'exporter-document&'+docType[2].doc_code;
-        this.authority = 'exporter-document&'+docType[3].doc_code;
-        this.vat = 'exporter-document&'+docType[4].doc_code;
-        this.juristic_person = 'exporter-document&'+docType[5].doc_code;
-      },
       _dataInput:function(data) {
         this.exporterId = data.exporter_id;
-        // console.log(this.exporterId);
       }
     });
   </script>

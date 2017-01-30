@@ -80,8 +80,8 @@
                 <gl-form-dropdown-menu style="width:100%;" placeholder="เลือกประเภทรายงาน" name="report">
                   <paper-menu class="dropdown-content" attr-for-selected="report" selected="{{report}}">
                     <paper-item on-tap="_report" report="report1">รายชื่อผู้ได้รับหนังสืออนุญาต</paper-item>
-                    <paper-item on-tap="_report" report="report2">รายชื่อคณะกรรมการบริษัท</paper-item>
-                    <paper-item on-tap="_report" report="report3">รายชื่อและที่อยู่ของผู้ส่งออกข้าว</paper-item>
+                    <paper-item on-tap="_report" report="report4">รายชื่อคณะกรรมการบริษัท</paper-item>
+                    <paper-item on-tap="_report" report="report5">รายชื่อและที่อยู่ของผู้ส่งออกข้าว</paper-item>
                     <!--<paper-item id="reName" on-tap="_print" report="reportNameExporter" src="/report/reportNameExporter.pdf">รายชื่อบริษัทผู้ส่งออกข้าวประเภทค้าข้าวฯ</paper-item>-->
                   </paper-menu>
                 </gl-form-dropdown-menu>
@@ -128,7 +128,7 @@
                   <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.trader_active}}" name="trader_active">
                     <paper-item>ทั้งหมด</paper-item>
                     <paper-item value="true">ปกติ</paper-item>
-                    <paper-item value="false">ถูกระงับ</paper-item>
+                    <paper-item value="false">หมดอายุ</paper-item>
                   </paper-menu>
                 </gl-form-dropdown-menu>
               </gl-grid-col>
@@ -137,7 +137,7 @@
                   <paper-menu class="dropdown-content" attr-for-selected="value" selected="{{dataSelected.exporter_active}}" name="exporter_active">
                     <paper-item>ทั้งหมด</paper-item>
                     <paper-item value="true">ปกติ</paper-item>
-                    <paper-item value="false">ถูกระงับ</paper-item>
+                    <paper-item value="false">หมดอายุ</paper-item>
                   </paper-menu>
                 </gl-form-dropdown-menu>
               </gl-grid-col>
@@ -191,7 +191,7 @@
                       <td><div class="text-table">{{item.type_lic_name}}</div></td>
                       <td><div class="text-table">{{item.exporter_status_name}}</div></td>
                       <td><div class="text-table">{{item.trader_active_name}}</div></td>
-                      <td><div class="text-table">{{item.exporter_active_name}}</div></td>
+                      <td><div class="text-table">{{item.export_status_name}}</div></td>
                       <td><div class="text-table">{{item.exporter_date_approve}}</div></td>
                     </tr>
                   </tbody>
@@ -213,9 +213,9 @@
         <panel-right title="{{titleName}}">
           <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]" doc-type="[[docType]]"></register-pageRegister></div>
+              <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]"></register-pageRegister></div>
               <div name="detailRegExporter">
-                <member-page data={{dataSelect}} doc-type="[[docType]]"></member-page>
+                <member-page data={{dataSelect}}></member-page>
               </div>
             </iron-pages>
           </div>
@@ -266,9 +266,7 @@
               this.$$('panel-right').open();
             },
             attached: function() {
-              this.getExporters();
               this.getIdExporters();
-              this._getDocument();
               // this._dateEnd();
             },
             ready: function() {
@@ -278,9 +276,9 @@
             getExporters: function() {
               this.read('./exporter',(data)=>{
                 data.map((empty)=>{
-                  if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
+                  if (empty.exporter_no_name == undefined || empty.export_status_name == null || empty.exporter_date_approve == null) {
                     empty.exporter_no_name = '-';
-                    empty.exporter_active_name = '-';
+                    empty.export_status_name = '-';
                     empty.exporter_date_approve = '-';
                   }
                 });
@@ -295,11 +293,6 @@
                 });
                 this.exporter_id.items = data;
               });
-            },
-            _getDocument:function(){
-              this.read('./documentType',(data)=>{
-                this.docType = data;
-              })
             },
             // _dateEnd:function() {
             //   if (this.dataSelected.date_end == undefined || this.dataSelected.date_end == '') {
@@ -324,9 +317,9 @@
               }
               this.read('./exporter'+str,(data)=>{
                 data.map((empty)=>{
-                  if (empty.exporter_no_name == undefined || empty.exporter_active_name == null || empty.exporter_date_approve == null) {
+                  if (empty.exporter_no_name == undefined || empty.export_status_name == null || empty.exporter_date_approve == null) {
                     empty.exporter_no_name = '-';
-                    empty.exporter_active_name = '-';
+                    empty.export_status_name = '-';
                     empty.exporter_date_approve = '-';
                   }
                 });

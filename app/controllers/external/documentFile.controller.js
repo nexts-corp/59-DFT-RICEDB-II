@@ -20,3 +20,19 @@ exports.documentFile = function (req, res) {
             res.json(err);
         })
 }
+exports.documentFileId = function (req, res) {
+    var r = req._r;
+    r.db('external_f3').table('document_file')
+        .get(req.params.id)
+        .merge({
+            doc_id: r.row('id')
+        })
+        .without('id')
+        .run()
+        .then(function (result) {
+            res.json(result);
+        })
+        .error(function (err) {
+            res.json(err);
+        })
+}

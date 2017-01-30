@@ -2,8 +2,7 @@
 <link rel="import" href="../../components/dataBehavior.html">
 <link rel="import" href="member/member-show.html">
 <link rel="import" href="member/member-fileup.html">
-<!-- <link rel="import" href="member/edit-member.html"> -->
-<!-- <link rel="import" href="member/components/member-edit.html"> -->
+<!-- <link rel="import" href="member/member-edit.html"> -->
 <link rel="import" href="../../components/panel-right/panel-right.html">
 <dom-module id="member-page">
   <style is="custom-style" include="iron-flex iron-flex-factors iron-flex-alignment gl-size gl-color gl-toast">
@@ -56,7 +55,7 @@
   <template>
     <gl-form-panel set-border="0px">
       <div id="titleBg" class="boxNortify" hidden>
-        <div id="titleExporter" class="title"><iron-icon icon="icons:info"></iron-icon>  ผู้ส่งออกถูกระงับ</div>
+        <div id="titleExporter" class="title"><iron-icon icon="icons:info"></iron-icon>  ผู้ส่งออกหมดอายุ</div>
         <div id="titleTrader" class="title"><iron-icon icon="icons:info"></iron-icon>  คน. หมดอายุ</div>
         <div id="titleSeller" class="title"><iron-icon icon="icons:info"></iron-icon>  ยังไม่ลงทะเบียนเป็นผู้ส่งออก</div>
       </div>
@@ -78,7 +77,7 @@
                     </iron-pages>
                   </gl-form-panel>
               </div>
-              {{_checkStatus(data.exporter_active,data.exporter_status,data.trader_active)}}
+              {{_checkStatus(data.export_status,data.exporter_status,data.trader_active)}}
 
         <gl-form-panel-footer>
           <paper-button id="removeButtomC" class="gl-btn-danger" on-tap="_cancel" raised title="ยกเลิกการแก้ไข">ยกเลิก</paper-button>

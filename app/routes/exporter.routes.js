@@ -6,4 +6,5 @@ module.exports = function (app) {
     app.route('/insert').post(exporter.insert);
     app.route('/update').put(exporter.update);
     app.route('/delete/id/:id').delete(exporter.delete);
+    app.route('/test').get(exporter.exporterTest);
 }

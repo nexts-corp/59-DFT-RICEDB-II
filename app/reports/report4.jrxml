@@ -2,7 +2,12 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ab00411-f197-4f02-9091-e25ab6106afe">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="139"/>
+	<parameter name="date_start" class="java.lang.String" isForPrompting="false">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{date_start}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date_end" class="java.lang.String"/>
 	<field name="exporter_no_name" class="java.lang.String"/>
 	<field name="seller_name_th" class="java.lang.String"/>
 	<field name="type_lic_name" class="java.lang.String"/>
@@ -30,15 +35,25 @@
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<pageHeader>
-		<band height="72" splitType="Stretch">
+		<band height="88" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="802" height="64" uuid="cf3a3f11-54f6-4ece-a5c1-70a99cdecbfe"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="0" y="0" width="802" height="50" uuid="cf3a3f11-54f6-4ece-a5c1-70a99cdecbfe"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[รายชื่อผู้ได้รับหนังสืออนุญาตให้ประกอบการค้าข้าว
-ประเภท (ทั่วไป,ไม่เกิน 12 ก.ก,ชายแดน) ส่งไปจำหน่ายต่างประเทศ]]></text>
+ส่งไปจำหน่ายต่างประเทศ]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="0" y="50" width="802" height="25" uuid="76112054-e1c9-47b9-8241-8d2ed442ecd5"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ระหว่างวันที่ "+
+new nylon.utility.NumberFormat().toThaiDate($P{date_start})+
+" ถึง "+
+new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -52,7 +67,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[ลำดับ]]></text>
 			</staticText>
@@ -65,7 +80,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[เลขที่ผู้ส่งออก]]></text>
 			</staticText>
@@ -78,7 +93,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[ชื่อผู้ส่งออก]]></text>
 			</staticText>
@@ -91,7 +106,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[ประเภทการค้าข้าว]]></text>
 			</staticText>
@@ -104,7 +119,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[วันที่หมดอายุ]]></text>
 			</staticText>
@@ -117,7 +132,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[วันที่ขึ้นทะเบียน / ต่ออายุ]]></text>
 			</staticText>
@@ -130,7 +145,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[ที่อยู่]]></text>
 			</staticText>
@@ -346,12 +361,12 @@
 				<text><![CDATA[ไม่มีข้อมูล]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="31" width="802" height="64" uuid="a3d22ee8-c78d-4979-af13-9c131ac50384"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="0" y="31" width="802" height="50" uuid="a3d22ee8-c78d-4979-af13-9c131ac50384"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[รายชื่อผู้ได้รับหนังสืออนุญาตให้ประกอบการค้าข้าว
-ประเภท (ทั่วไป,ไม่เกิน 12 ก.ก,ชายแดน) ส่งไปจำหน่ายต่างประเทศ ]]></text>
+ส่งไปจำหน่ายต่างประเทศ ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="400" y="124" width="211" height="50" uuid="0df238f0-9405-4ee2-bf10-144b92ff63d6"/>
@@ -444,6 +459,16 @@
 				</textElement>
 				<text><![CDATA[ลำดับ]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="0" y="81" width="802" height="25" uuid="4718a858-d4c3-4e3b-bc70-6ba83bdc15e1"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ระหว่างวันที่ "+
+new nylon.utility.NumberFormat().toThaiDate($P{date_start})+
+" ถึง "+
+new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpression>
+			</textField>
 		</band>
 	</noData>
 </jasperReport>

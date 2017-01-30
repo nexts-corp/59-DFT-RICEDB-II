@@ -1,0 +1,90 @@
+<dom-module id="card-menu">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment">
+    :host {
+      display: block;
+    }
+    *{
+      font-family: 'CSChatThaiUI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card{
+      width: 300px;
+      height: 300px;
+      margin: 10px;
+      background-color: #FFF;
+       box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
+      border-radius: 25px;
+      cursor: pointer;
+      display: inline-block;
+
+      -webkit-transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+      user-drag: none;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+
+    .card:hover {
+       -webkit-transform: scale(1.05, 1.05);
+        transform: scale(1.05, 1.05);
+    }
+    .heading{
+      padding-left: 20px;
+      padding-top: 15px;
+    }
+    .title{
+      padding: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      max-height: 20px;
+      font-family: 'rsuregular', sans-serif;
+        -webkit-font-smoothing: antialiased;
+    }
+    .card-content {
+      text-align: center;
+    }
+  </style>
+  <template>
+    <div class="card" on-tap="clickChangeUrl">
+      <div class="flex">
+        <div>
+          <div class="heading">
+            <div class="layout horizontal">
+              <div class="flex title">[[data.nameMenu]]</div>
+            </div>
+          </div>
+          <div class="card-content"><br>
+            <iron-image src="[[data.img]]"></iron-image>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: "card-menu",
+      properties: {
+        data: {
+          type: Object,
+          value:{path:'/',nameMenu:'ชื่อเมนู',img:'/im.jpg'}
+        }
+      },
+      clickChangeUrl:function () {
+        if (this.data.path.substring(0, 1) == '/') {
+          this.fire('nylon-change-page',{path:this.data.path})
+        }else {
+          // console.log(11);
+        }
+
+      }
+
+    });
+  </script>
+</dom-module>

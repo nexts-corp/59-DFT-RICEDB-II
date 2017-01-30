@@ -37,7 +37,6 @@ exports.uploadFile = function (req, res) {
 exports.listFile = function (req, res) {
 
     var r = req._r;
-    var params = req.params;
     r.db('files').table('files').without('contents')
         .orderBy(r.desc('timestamp'))
         .map(function (row) {
@@ -83,7 +82,7 @@ exports.listFilePath = function (req, res) {
         .merge(function (row) {
             return {
                 name: row('name').add('  -->>  ')
-                .add(row('timestamp'))
+                    .add(row('timestamp'))
                 // .add('-')
                 // .add(row('date_upload').month().coerceTo('string'))
                 // .add('-')
@@ -101,26 +100,6 @@ exports.listFilePath = function (req, res) {
         .error(function (err) {
             res.json(err);
         })
-    //     r.db('files').table('files').without('contents').filter({ ref_path: params.refPath })
-    //     .orderBy(r.desc('timestamp'))
-    //     .map(function (row) {
-    //         return {
-    //             name: row('name').add(' -->> ')
-    //                 .add(row('timestamp').year().coerceTo('string'))
-    //                 .add('-')
-    //                 .add(row('timestamp').month().coerceTo('string'))
-    //                 .add('-')
-    //                 .add(row('timestamp').day().coerceTo('string'))
-    //             ,
-    //             progress: 100, complete: true,
-    //             file_id: row('id')
-    //         }
-    //     })
-    //     .run().then(function (result) {
-    //         res.json(result);
-    //     }).catch(function (err) {
-    //         res.json(err);
-    //     })
 }
 exports.downloadFile = function (req, res) {
     var r = req._r;
@@ -151,6 +130,11 @@ exports.deleteFile = function (req, res) {
     // console.log(params)
 
     r.db('files').table('files').get(params.id).delete()
+    .do(
+        function(d){
+            return r.db('external_f3').table('document_file').getAll(params.id, {index:'file_id'}).delete()
+        }
+    )
         .run().then(function (result) {
             res.json(result);
         }).catch(function (err) {
