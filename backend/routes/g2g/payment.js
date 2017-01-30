@@ -150,7 +150,7 @@ router.get('/fee/id/:fee_id', function (req, res, next) {
                         .eqJoin('package_id', r.db('common').table('package'))
                         .pluck("left", { right: 'package_kg_per_bag' }).zip()
                         .eqJoin('fee_det_id', r.db('g2g').table('fee_detail'))
-                        .pluck("left", { right: ['fee_foreign', 'rate_tt', 'rate_bank', 'fee_internal', 'fee_other', 'fee_date_receipt'] }).zip()
+                        .pluck("left", { right: ['rate_tt', 'rate_bank', 'fee_date_receipt'] }).zip()
                         .merge(fee_det_merge => {
                             return {
                                 amount_usd: fee_det_merge('shm_det_quantity').mul(fee_det_merge('price_per_ton')),
