@@ -6,6 +6,7 @@
 <link rel="import" href="payment/component/list-of-bl-pm.html">
 <link rel="import" href="payment/component/list-of-invoice.html">
 <link rel="import" href="payment/component/list-of-fee.html">
+<link rel="import" href="payment/component/list-of-cheque.html">
 <!-- <link rel="import" href="payment/component/commercial-invoice.html"> -->
 <!-- <link rel="import" href="payment/component/fee-exports.html"> -->
 <link rel="import" href="payment/component/payment-export.html">
@@ -45,11 +46,13 @@
               <list-of-fee data="[[dataListPay.feeList]]" data-for-select="[[dataForSelect]]"></list-of-fee>
             </section-content>
             <section-content name="cheque">
-              <cheque-register data-for-select="[[dataForSelect]]"></cheque-register>
+              <list-of-cheque data="[[dataListPay.chequeList]]"></list-of-cheque>
+              <!-- <cheque-register data-for-select="[[dataForSelect]]"></cheque-register> -->
             </section-content>
             <section-content name="payment">
               <payment-export data-for-select="[[dataForSelect]]"></payment-export>
             </section-content>
+
           </taps-payment>
         </paper-material>
 
@@ -63,11 +66,14 @@
             <commercial-invoice data="[[dataSelected]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></commercial-invoice>
           </div>
           <div name="blInvoicePage">
-            <fee-exports data="[[dataSelectedfee.draft]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
+            <fee-exports data="[[dataSelected.draft]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[!isInputDisabled]]" is-view-seleted="[[isViewSeleted]]"></fee-exports>
           </div>
           <div name="feePage">
-            <list-of-fee-detail data="[[dataSelectedfee.fee]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></list-of-fee-detail>
-            <!-- <fee-exports data="[[dataSelectedfee.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports> -->
+            <list-of-fee-detail data="[[dataSelected.fee]]" data-for-select="[[dataForSelect]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></list-of-fee-detail>
+            <!-- <fee-exports data="[[dataSelected.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports> -->
+          </div>
+          <div name="chequePage">
+            <cheque-detail></cheque-detail>
           </div>
         </iron-pages>
       </div>
@@ -97,7 +103,7 @@
                 type: Object,
                 // value:{}
               },
-              dataSelectedfee: {
+              dataSelected: {
                 type: Object,
                 value:{draft:{shmId:'',rate_tt:0,rate_bank:0,fee_internal:0,fee_foreign:0,fee_other:0}}
               },
@@ -111,6 +117,7 @@
                   {
                     commercialInvoice:false,
                     feeExports:false,
+                    chequeDetail:false
                   }
               },
               titlePanelRight:{
@@ -131,6 +138,7 @@
               'get-select-draftPayment':'_getInvoiceDetail',
               'get-fee-list-in-shm-event':'_getFeeListInShmEvent',
               'get-fee-detail':'_getFeeDetail',
+              'get-cheque-detail':'_getChequeDetail',
               'flipDrawer':'_flipDrawer',
               'close-drawer':'_flipDrawerClose'
             },
@@ -139,6 +147,7 @@
               this._getBlList(contract_id);
               this._getInvoiceList(contract_id);
               this._getFeeList(contract_id);
+              this._getChequeList(contract_id);
             },
             // nylonPageActive:function() {
             //   // console.log(111);
@@ -190,6 +199,13 @@
               this.read('./g2g/fee/contract/id/'+contractId,(data)=>{
                 this.dataListPay.feeList=data;
                 this.notifyPath('dataListPay.feeList');
+              });
+            },
+            _getChequeList:function (contractId) {
+              this.read('./g2g/fee/payment/contract/id/'+contractId,(data)=>{
+                this.dataListPay.chequeList=data;
+                this.notifyPath('dataListPay.chequeList');
+                console.log(this.dataListPay.chequeList);
               });
             },
             _getFeeListInShmEvent:function (e) {
@@ -280,15 +296,15 @@
                 this.set('dataForSelect.shm_id',data.shm_id);
                 this.set('dataForSelect.cl_id',data.cl_id);
                 // console.log(this.dataForSelect);
-                this.dataSelectedfee.draft = data;
-                this.dataSelectedfee.draft.rate_tt =0;
-                this.dataSelectedfee.draft.rate_bank  =0;
-                this.dataSelectedfee.draft.fee_internal=0;
-                this.dataSelectedfee.draft.fee_foreign=0;
-                this.dataSelectedfee.draft.fee_other=0;
-                this.dataSelectedfee.draft.shmId=this.dataForSelect.contract_id;
-                this.dataSelectedfee.draft.feeList=this.dataForSelect.feeList;
-                this.notifyPath('dataSelectedfee.draft');
+                this.dataSelected.draft = data;
+                this.dataSelected.draft.rate_tt =0;
+                this.dataSelected.draft.rate_bank  =0;
+                this.dataSelected.draft.fee_internal=0;
+                this.dataSelected.draft.fee_foreign=0;
+                this.dataSelected.draft.fee_other=0;
+                this.dataSelected.draft.shmId=this.dataForSelect.contract_id;
+                this.dataSelected.draft.feeList=this.dataForSelect.feeList;
+                this.notifyPath('dataSelected.draft');
                 this.paymentsPageSeleted = 'blInvoicePage';
                 if (this.checkRenderPage.feeExports != true) {
                   this.async(()=>{
@@ -318,8 +334,8 @@
               //
               this.read('./g2g/fee/id/'+e.detail.detail.fee_id,(data)=>{
 
-                  this.dataSelectedfee.fee = data;
-                  this.notifyPath('dataSelectedfee.fee');
+                  this.dataSelected.fee = data;
+                  this.notifyPath('dataSelected.fee');
                   this.paymentsPageSeleted = 'feePage';
                   if (this.checkRenderPage.feeExports != true) {
                     this.async(()=>{
@@ -338,6 +354,31 @@
                     this.fire('toast',{status:'load'});
                     this._flipDrawer();
                   }
+              });
+            },
+            _getChequeDetail:function (e) {
+              // console.log(e.detail.detail);
+              this.fire('toast',{status:'load'});
+              this.read('./g2g/payment/fee/id/'+e.detail.detail.fee_id,(data)=>{
+                console.log(data);
+                this.paymentsPageSeleted = 'chequePage';
+                if (this.checkRenderPage.chequeDetail != true) {
+                  this.async(()=>{
+                    this.importHref(
+                        this.resolveUrl('./payment/component/cheque-detail.html'),
+                        ()=>{
+                          this.async(()=>{
+                            this.fire('toast',{status:'load'});
+                            this._flipDrawer();
+                            this.checkRenderPage.chequeDetail=true;
+                          },500)
+                        }, null, true
+                    );
+                  },1000);
+                } else {
+                  this.fire('toast',{status:'load'});
+                  this._flipDrawer();
+                }
               });
             },
             _flipDrawer:function () {

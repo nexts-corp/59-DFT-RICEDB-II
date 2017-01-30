@@ -431,7 +431,7 @@
          this.data.invoice.map((el,indexShmid)=>{
           this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id,el.tags);
         });
-         this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
+         this.delete('./g2g/fee/detail/delete/id/',detail.data.fee_id, () => {
            let contract_id= this._getUrl();
            this.fire('get-fee-list',{detail:contract_id});
             this.fire('close-drawer',{detail:'close-drawer'})
