@@ -73,7 +73,7 @@
             <!-- <fee-exports data="[[dataSelected.fee]]" is-input-disabled="[[isInputDisabled]]" is-view-seleted="[[!isViewSeleted]]"></fee-exports> -->
           </div>
           <div name="chequePage">
-            <cheque-detail></cheque-detail>
+            <cheque-detail data="[[dataSelected.cheque]]"></cheque-detail>
           </div>
         </iron-pages>
       </div>
@@ -360,7 +360,9 @@
               // console.log(e.detail.detail);
               this.fire('toast',{status:'load'});
               this.read('./g2g/payment/fee/id/'+e.detail.detail.fee_id,(data)=>{
-                console.log(data);
+                // console.log(data);
+                this.set('dataSelected.cheque',data);
+                console.log('lll=>',this.dataSelected.cheque);
                 this.paymentsPageSeleted = 'chequePage';
                 if (this.checkRenderPage.chequeDetail != true) {
                   this.async(()=>{

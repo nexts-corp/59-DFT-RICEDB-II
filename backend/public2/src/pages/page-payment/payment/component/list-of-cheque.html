@@ -86,10 +86,12 @@
           // console.log(searchInput == '');
           if (searchInput != '') {
             let arr=[];
+            console.log(this.data);
             this.data.map((el)=>{
-              if (el.fee_no.search(searchInput) > -1) {
-                  //  console.log('search==> ',el);
-                    arr.push(el);
+              console.log(el.fee_no);
+              if (String(el.fee_no).search(searchInput) > -1) {
+                  console.log('search==> ',el);
+                  arr.push(el);
               }
             });
             this.newData=arr;
