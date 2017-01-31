@@ -34,6 +34,9 @@
             tr[check-group]{
                 color: #B6B6B6;
             }
+            .right{
+                text-align: right;
+            }
             /*.activeColor{
                 color : #ddd;
             }   */
@@ -51,14 +54,14 @@
                 <th>เลขที่หนังสือรับรอง</th>
                 <th>วันที่ส่ง</th>
                 <template is="dom-if" if="{{showData}}">
-                     <th>ปริมาณ(ตัน)</th>
-                     <th>ราคาต่อหน่วย</th>
-                     <th>จำนวนเงิน</th>
+                     <th class="right">ปริมาณ(ตัน)</th>
+                     <th class="right">ราคาต่อหน่วย</th>
+                     <th class="right">จำนวนเงิน</th>
                 </template>
                 <template is="dom-if" if="{{dataOverplay}}">
-                    <th>ยอดเงินสุทธิ</th>
-                    <th>ยอดเงินที่ใช้</th>
-                    <th>คงเหลือ</th>
+                    <th class="right">ยอดเงินสุทธิ</th>
+                    <th class="right">ยอดเงินที่ใช้</th>
+                    <th class="right">คงเหลือ</th>
                 </template>
             </tr>
             <template is="dom-if" if={{dataStat}}>
@@ -78,14 +81,14 @@
                     <td>[[item.ec_number]]</td>
                     <td>[[item.req_date]]</td>
                     <template is="dom-if" if="{{showData}}">
-                        <td>[[formatNumber(item.quantity)]]</td>                    
-                        <td>[[formatNumber(item.price)]]</td>
-                        <td>[[mathMoney(item.quantity,item.price)]]</td>
+                        <td class="right">[[formatNumber(item.quantity)]]</td>                    
+                        <td class="right">[[formatNumber(item.price)]]</td>
+                        <td class="right">[[mathMoney(item.quantity,item.price)]]</td>
                     </template>
                     <template is="dom-if" if="{{dataOverplay}}">
-                        <td>[[formatNumber(item.balance)]]</td>
-                        <td>[[formatNumber(item.useBalance)]]</td>
-                        <td>[[formatNumber(item.totalBalance)]]</td>
+                        <td class="right">[[formatNumber(item.balance)]]</td>
+                        <td class="right">[[formatNumber(item.useBalance)]]</td>
+                        <td class="right">[[formatNumber(item.totalBalance)]]</td>
                     </template>
                 </tr>
                 </template>
