@@ -23,7 +23,7 @@ var schema = {
         },
         "pay_date": {
             "type": "string",
-            "format": "date"
+            "format": "date-time"
         },
         "bank_id": {
             "type": "string"

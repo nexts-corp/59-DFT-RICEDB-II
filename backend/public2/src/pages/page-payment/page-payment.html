@@ -7,9 +7,10 @@
 <link rel="import" href="payment/component/list-of-invoice.html">
 <link rel="import" href="payment/component/list-of-fee.html">
 <link rel="import" href="payment/component/list-of-cheque.html">
+<link rel="import" href="payment/component/list-of-payments.html">
 <!-- <link rel="import" href="payment/component/commercial-invoice.html"> -->
 <!-- <link rel="import" href="payment/component/fee-exports.html"> -->
-<link rel="import" href="payment/component/payment-export.html">
+<!-- <link rel="import" href="payment/component/payment-export.html"> -->
 <link rel="import" href="payment/component/list-of-fee-detail.html">
 <link rel="import" href="payment/component/cheque-register.html">
 <dom-module id="page-payment">
@@ -46,12 +47,13 @@
               <list-of-fee data="[[dataListPay.feeList]]" data-for-select="[[dataForSelect]]"></list-of-fee>
             </section-content>
             <section-content name="cheque">
-              <list-of-cheque data="[[dataListPay.chequeList]]"></list-of-cheque>
+              <list-of-cheque data="[[dataListPay.chequeList]]" data-for-select="[[dataForSelect]]"></list-of-cheque>
               <!-- <cheque-register data-for-select="[[dataForSelect]]"></cheque-register> -->
             </section-content>
             <section-content name="payment">
-              <payment-export data-for-select="[[dataForSelect]]"></payment-export>
+              <list-of-payments data="[[dataListPay.payments]]" data-for-select="[[dataForSelect]]"></list-of-payments>
             </section-content>
+
 
           </taps-payment>
         </paper-material>
@@ -74,6 +76,9 @@
           </div>
           <div name="chequePage">
             <cheque-detail data="[[dataSelected.cheque]]"></cheque-detail>
+          </div>
+          <div name="paymentDetail">
+            <payment-detail data="[[dataSelected.paymentDetail]]" data-for-select="[[dataForSelect]]"></payment-detail>
           </div>
         </iron-pages>
       </div>
@@ -117,7 +122,8 @@
                   {
                     commercialInvoice:false,
                     feeExports:false,
-                    chequeDetail:false
+                    chequeDetail:false,
+                    paymentDetail:false,
                   }
               },
               titlePanelRight:{
@@ -139,6 +145,8 @@
               'get-fee-list-in-shm-event':'_getFeeListInShmEvent',
               'get-fee-detail':'_getFeeDetail',
               'get-cheque-detail':'_getChequeDetail',
+              'get-payment-list':'_getPaymentsFire'
+              'get-payment-detail':'_getPaymentDetail',
               'flipDrawer':'_flipDrawer',
               'close-drawer':'_flipDrawerClose'
             },
@@ -148,6 +156,7 @@
               this._getInvoiceList(contract_id);
               this._getFeeList(contract_id);
               this._getChequeList(contract_id);
+              this._getPaymentsList(contract_id);
             },
             // nylonPageActive:function() {
             //   // console.log(111);
@@ -205,7 +214,17 @@
               this.read('./g2g/fee/payment/contract/id/'+contractId,(data)=>{
                 this.dataListPay.chequeList=data;
                 this.notifyPath('dataListPay.chequeList');
-                console.log(this.dataListPay.chequeList);
+                // console.log(this.dataListPay.chequeList);
+              });
+            },
+            _getPaymentsFire:function (e) {
+                this._getPaymentsList(e.detail.detail);
+            },
+            _getPaymentsList:function (contractId) {
+              this.read('./g2g/payment/contract/id/'+contractId,(data)=>{
+                this.dataListPay.payments=data;
+                this.notifyPath('dataListPay.payments');
+                // console.log(this.dataListPay.chequeList);
               });
             },
             _getFeeListInShmEvent:function (e) {
@@ -218,6 +237,13 @@
                 this.notifyPath('dataForSelect.feeListinShm');
                 // console.log(this.dataForSelect.feeListinShm);
                 // this._getFeeList(this._getUrl());
+              });
+            },
+            _getBank: function(){
+              this.read('./common/bank',(data)=>{
+                this.dataForSelect.dataBank = data;
+                this.notifyPath('dataForSelect.dataBank');
+                // console.log(this.dataForSelect.dataBank);
               });
             },
             _getBlDetail:function (e) {
@@ -362,7 +388,7 @@
               this.read('./g2g/payment/fee/id/'+e.detail.detail.fee_id,(data)=>{
                 // console.log(data);
                 this.set('dataSelected.cheque',data);
-                console.log('lll=>',this.dataSelected.cheque);
+                // console.log('lll=>',this.dataSelected.cheque);
                 this.paymentsPageSeleted = 'chequePage';
                 if (this.checkRenderPage.chequeDetail != true) {
                   this.async(()=>{
@@ -382,6 +408,33 @@
                   this._flipDrawer();
                 }
               });
+            },
+            _getPaymentDetail:function (e) {
+              // console.log(e.detail.detail);
+              this.fire('toast',{status:'load'});
+                // this.dataSelected.paymentDetail = e.detail.detail;
+                this.set('dataSelected.paymentDetail',e.detail.detail);
+                // console.log(this.dataSelected.paymentDetail);
+                this._getBank();
+                this.paymentsPageSeleted = 'paymentDetail';
+              if (this.checkRenderPage.paymentDetail != true) {
+                this.async(()=>{
+                  this.importHref(
+                      this.resolveUrl('./payment/component/payment-detail.html'),
+                      ()=>{
+                        this.async(()=>{
+                          this.fire('toast',{status:'load'});
+
+                          this._flipDrawer();
+                          this.checkRenderPage.paymentDetail=true;
+                        },500)
+                      }, null, true
+                  );
+                },1000);
+              } else {
+                this.fire('toast',{status:'load'});
+                this._flipDrawer();
+              }
             },
             _flipDrawer:function () {
               Polymer.dom(this.root).querySelector('#test').open();

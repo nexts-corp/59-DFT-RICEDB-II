@@ -1,4 +1,4 @@
-<dom-module id="list-of-cheque">
+<dom-module id="list-of-payments">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
       display: block;
@@ -19,9 +19,19 @@
       text-align: center;
       font-size: var(--font-size-h4);
     }
+    table.gl-table-default > thead.table-head > tr > th,
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(2) {
+      text-align: center;
+    }
+    table.gl-table-default > thead.table-head > tr > th:nth-child(1) {
+      width: 80%;
+    }
+    table.gl-table-default > thead.table-head > tr > th:nth-child(2) {
+      width: 20%;
+    }
   </style>
   <template>
-    <div class="title">ใส่เลขที่เช็คของสัญญา [[dataForSelect.nameContract]]</div>
+    <div class="title">การจ่ายเงินให้ผู้ประกอบการในสัญญา [[dataForSelect.nameContract]]</div>
     <div class="flex searchInput ">
        <div class="horizontal end-justified layout">
          <div class="labelSearch">รอบการจ่ายเงิน.</div>{{_searchInArray(searchInput)}}
@@ -35,27 +45,23 @@
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
-              <th>รอบการส่งมอบ</th>
-              <th>งวดการส่งมอบ</th>
-              <th>รอบการจ่าย</th>
-              <th>ชื่อรอบการจ่ายเงิน</th>
+              <th>เลขที่ใบแจ้งหนี้</th>
+              <th>วันที่</th>
             </tr>
           </thead>
           <tbody class="table-body">
             <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
-            <template is="dom-if" if="[[!_isHave(newData)]]">
+            <!-- <template is="dom-if" if="[[!_isHave(newData)]]"> -->
               <template is="dom-repeat" items="[[newData]]" >
                 <tr data="[[item]]" on-tap="getChequeDetail" level="primary" >
-                  <td>[[item.shm_no]]</td>
-                  <td>[[item.shm_name]]</td>
-                  <td>[[item.fee_no]]</td>
-                  <td>[[item.fee_name]]</td>
+                  <td>[[item.invoice_no]]</td>
+                  <td>[[changeDateCC(item.invoice_date)]]</td>
                 </tr>
               </template>
-              </template>
+              <!-- </template> -->
               <template is="dom-if" if="[[_isHave(newData)]]">
                   <tr >
-                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                    <td colspan="2" style="text-align:center">  ไม่มีข้อมูล</td>
                   </tr>
               </template>
             <!-- </template> -->
@@ -64,7 +70,7 @@
   </template>
   <script>
     Polymer({
-      is: "list-of-cheque",
+      is: "list-of-payments",
       observers:[
         'initDatabl(data)'
       ],
@@ -87,7 +93,7 @@
           if (searchInput != '') {
             let arr=[];
             this.data.map((el)=>{
-              if (String(el.fee_no).search(searchInput) > -1) {
+              if (String(el.invoice_no).search(searchInput) > -1) {
                   arr.push(el);
               }
             });
@@ -98,7 +104,7 @@
       },
       getChequeDetail:function (e) {
         // console.log(e.currentTarget.data);
-        this.fire('get-cheque-detail',{detail:e.currentTarget.data});
+        this.fire('get-payment-detail',{detail:e.currentTarget.data});
       }
     });
   </script>
