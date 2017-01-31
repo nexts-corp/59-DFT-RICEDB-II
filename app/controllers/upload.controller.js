@@ -65,15 +65,6 @@ exports.listFilePath = function (req, res) {
     var r = req._r;
     var params = req.params;
     r.db('external_f3').table('document_file')
-        .innerJoin(r.db('external_f3').table('document_type'),
-        function (file, type) {
-            return file('doc_type_id').eq(type('doc_code'))
-        })
-        .map(function (m) {
-            return m('left').merge(function () {
-                return { doc_type_id: m('right')('id') }
-            })
-        })
         .eqJoin('file_id', r.db('files').table('files')).without({ right: ["id", "contents"] }).zip()
         .eqJoin('exporter_id', r.db('external_f3').table('exporter')).pluck('left', { right: 'exporter_id' }).zip()
         .merge(function (m) {
@@ -91,7 +82,7 @@ exports.listFilePath = function (req, res) {
                 progress: 100, complete: true
             }
         })
-        .filter({ exporter_id: params.exporter_id, ref_path: params.refPath })
+        .filter({ exporter_id: params.exporter_id, ref_path: params.refPath, file_status: true })
         .orderBy(r.desc('date_upload'))
         .run()
         .then(function (result) {
@@ -130,11 +121,11 @@ exports.deleteFile = function (req, res) {
     // console.log(params)
 
     r.db('files').table('files').get(params.id).delete()
-    .do(
-        function(d){
-            return r.db('external_f3').table('document_file').getAll(params.id, {index:'file_id'}).delete()
+        .do(
+        function (d) {
+            return r.db('external_f3').table('document_file').getAll(params.id, { index: 'file_id' }).delete()
         }
-    )
+        )
         .run().then(function (result) {
             res.json(result);
         }).catch(function (err) {
@@ -150,7 +141,9 @@ exports.uploadFileExporter = function (req, res) {
     form.parse(req, function (err, fields, files) {
 
         var prefile = files.file[0];
-        var doc_code = req.headers['ref-path'].split("&")[1];
+        // var doc_code = req.headers['ref-path'].split(".")[2];
+        var doc_type_id = req.headers['doc-type-id'];
+        console.log(doc_type_id);
 
         fs.readFile(prefile.path, function (err, data) {
             // console.log(r);
@@ -164,7 +157,8 @@ exports.uploadFileExporter = function (req, res) {
                 .do(function (file_id) {
                     return r.db('external_f3').table('document_file').insert({
                         file_id: file_id,
-                        doc_type_id: doc_code,
+                        file_status: true,
+                        doc_type_id: doc_type_id,
                         exporter_id: params.exporter_id,
                         date_upload: new Date()
                     })
