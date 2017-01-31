@@ -22,8 +22,7 @@ var schema = {
             "type": "string"
         },
         "invoice_exporter_date": {
-            "type": "string",
-            "format": "date-time"
+            "type": "string"
         },
         "invoice_exporter_no": {
             "type": "string"
