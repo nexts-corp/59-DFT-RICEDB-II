@@ -41,8 +41,8 @@ var schema = {
         "shm_det_id": {
             "type": "string"
         }
-    },
-    "required": ["invoice_exporter_date", "invoice_exporter_no"]
+    }
+    // "required": ["invoice_exporter_date", "invoice_exporter_no"]
 };
 var validate = ajv.compile(schema);
 
