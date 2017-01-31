@@ -16,7 +16,7 @@ var schema = {
             "type": "string"
         },
         "pay_no": {
-            "type": "number"
+            "type": "string"
         },
         "pay_amount": {
             "type": "number"
@@ -30,9 +30,21 @@ var schema = {
         },
         "bank_branch": {
             "type": "string"
+        },
+        "payment_detail": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "pay_det_id": {
+                        "type": "string"
+                    }
+                },
+                "required": ["pay_det_id"]
+            }
         }
     },
-    "required": ["pay_no", "pay_amount", "pay_date", "bank_id", "bank_branch"]
+    "required": ["pay_no", "pay_amount", "pay_date", "bank_id", "bank_branch", "payment_detail"]
 };
 var validate = ajv.compile(schema);
 router.get('/contract/id/:contract_id', function (req, res, next) {
@@ -181,7 +193,35 @@ router.post('/insert', function (req, res, next) {
     if (valid) {
         //console.log(req.body);
         if (req.body.id == null) {
-            datacontext.insert("g2g", "payment", req.body, res);
+            // datacontext.insert("g2g", "payment", req.body, res);
+            db.query(function (conn) {
+                r.db('g2g').table('payment')
+                    .insert(req.body)
+                    .do(after_insert_do => {
+                        return r.db('g2g').table('payment').get(after_insert_do('generated_keys')(0))
+                            .do(after_get_do => {
+                                return after_get_do('payment_detail').forEach(pay_det_each => {
+                                    return r.db('g2g').table('payment_detail').get(pay_det_each('pay_det_id')).update({ pay_det_status: true })
+                                })
+                            })
+                            .do(return_id => {
+                                return after_insert_do
+                            })
+                    })
+                    .run(conn)
+                    .then(function (response) {
+                        result.message = response;
+                        if (response.errors == 0) {
+                            result.result = true;
+                            result.id = response.generated_keys[0];
+                        }
+                        res.json(result);
+                    })
+                    .error(function (err) {
+                        result.message = err;
+                        res.json(result);
+                    })
+            })
         } else {
             result.message = 'field "id" must do not have data';
             res.json(result);
