@@ -144,6 +144,7 @@ router.get('/fee/id/:fee_id', function (req, res, next) {
                                 amount_bath: fee_det_merge('shm_det_quantity').mul(fee_det_merge('price_per_ton')).mul(fee_det_merge('rate_bank')),
                                 amount_bath_fee: fee_det_merge('pay_amount').mul(100).div(99),
                                 fee_date_receipt: fee_det_merge('fee_date_receipt').split('T')(0),
+                                invoice_exporter_date: fee_det_merge('invoice_exporter_date').split('T')(0),
                                 ship: fee_det_merge('ship').map(ship_map => {
                                     return r.db('common').table('ship').get(ship_map('ship_id')).getField('ship_name')
                                         .add(' V.', ship_map('ship_voy_no'))
