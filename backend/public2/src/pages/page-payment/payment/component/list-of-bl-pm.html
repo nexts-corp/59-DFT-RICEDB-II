@@ -19,6 +19,11 @@
       text-align: center;
       font-size: var(--font-size-h4);
     }
+    table.gl-table-default {
+      width: 98%;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
   </style>
   <template>
     <div class="title">รวมใบตราส่งสินค้าทางทะเลของสัญญา [[dataForSelect.nameContract]]</div>
@@ -31,7 +36,7 @@
          <!-- <paper-icon-button icon="search"></paper-icon-button> -->
        </div>
    </div>
-
+  <div class="horizontal center-justified layout">
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
@@ -45,7 +50,7 @@
           </thead>
           <tbody class="table-body">
             <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
-            <template is="dom-if" if="[[!_isHave(newData)]]">
+            <!-- <template is="dom-if" if="[[!_isHave(newData)]]"> -->
               <template is="dom-repeat" items="[[newData]]" >
                 <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
                   <td>[[item.cl_name]]</td>
@@ -55,16 +60,17 @@
                  <td>[[item.dest_port_name]]</td>
                  <td>[[item.ship_lot_no]]</td>
                 </tr>
-              </template>
+              <!-- </template> -->
               </template>
               <template is="dom-if" if="[[_isHave(newData)]]">
                   <tr >
-                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                    <td colspan="6" style="text-align:center">  ไม่มีข้อมูล</td>
                   </tr>
               </template>
             <!-- </template> -->
          </tbody>
       </table>
+  </div>
   </template>
   <script>
     Polymer({
