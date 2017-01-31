@@ -69,7 +69,6 @@
                <td>[[item.exporter_name]]</td>
                <td>[[item.invoice_exporter_no]]</td>
                <td>[[formatNumber(item.pay_amount)]]</td>
-               [[_calAmount(index,item.pay_amount)]]
               </tr>
             </template>
          </tbody>
@@ -171,12 +170,12 @@
         // console.log(12);
         this._cleanDataPayment(this.data,(data)=>{
           console.log(data);
+          let contract_id= this._getUrl();
           this.insert('./g2g/payment/insert',data, () => {
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
               callback:()=>{
-                    let contract_id= this._getUrl();
                     this.fire('close-drawer',{detail:'close-drawer'});
-                    this.fire('get-fee-list',{detail:contract_id});
+                    this.fire('get-payment-list',{detail:contract_id});
                     let el = Polymer.dom(this.root).querySelectorAll('.required');
                     el.map((el)=> {el.reset();});
                 }
