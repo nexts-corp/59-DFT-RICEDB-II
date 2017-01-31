@@ -61,7 +61,9 @@ router.get('/contract/id/:contract_id', function (req, res, next) {
                     invoice_id: det_map('group'),
                     payment_detail: det_map('reduction')
                         .eqJoin('shm_det_id', r.db('g2g').table('shipment_detail'))
-                        .pluck("left", { right: ['book_id', 'type_rice_id', 'package_id', 'price_per_ton', 'shm_det_quantity'] }).zip()
+                        .pluck("left", { right: ['shm_id', 'book_id', 'type_rice_id', 'package_id', 'price_per_ton', 'shm_det_quantity'] }).zip()
+                        .eqJoin('shm_id', r.db('g2g').table('shipment'))
+                        .pluck("left", { right: ['cl_id', 'contract_id'] }).zip()
                         .eqJoin('book_id', r.db('g2g').table('book'))
                         .pluck("left", { right: ['ship', 'ship_lot_no'] }).zip()
                         .eqJoin('type_rice_id', r.db('common').table('type_rice'))
