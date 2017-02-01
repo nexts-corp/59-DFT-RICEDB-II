@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7ab00411-f197-4f02-9091-e25ab6106afe">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="35"/>
+	<property name="ireport.y" value="34"/>
 	<parameter name="date_start" class="java.lang.String"/>
 	<parameter name="date_end" class="java.lang.String"/>
 	<field name="exporter_no_name" class="java.lang.String"/>
@@ -13,6 +13,7 @@
 	<field name="trader_date_approve" class="java.lang.String"/>
 	<field name="trader_no" class="java.lang.String"/>
 	<field name="seller_agent" class="java.util.Collection"/>
+	<field name="count_exporter" class="java.lang.String"/>
 	<variable name="ROW" class="java.lang.Integer" calculation="Count">
 		<variableExpression><![CDATA[($F{exporter_no_name}?true:false)]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
@@ -42,9 +43,9 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="50" splitType="Stretch">
+		<band height="83" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="30" height="50" uuid="e019646d-d4ab-4c2c-8eef-11e785572e57"/>
+				<reportElement x="0" y="33" width="30" height="50" uuid="e019646d-d4ab-4c2c-8eef-11e785572e57"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -57,7 +58,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[ลำดับ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="30" y="0" width="60" height="50" uuid="0c826f1c-6e1f-4de4-8a15-9117bb5a9fb2"/>
+				<reportElement x="30" y="33" width="60" height="50" uuid="0c826f1c-6e1f-4de4-8a15-9117bb5a9fb2"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -70,7 +71,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[เลขที่ผู้ส่งออก]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="90" y="0" width="150" height="50" uuid="da4ccedf-bd72-4f44-b2cb-1bb24062e08b"/>
+				<reportElement x="90" y="33" width="150" height="50" uuid="da4ccedf-bd72-4f44-b2cb-1bb24062e08b"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -83,7 +84,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[ชื่อผู้ส่งออก]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="240" y="0" width="140" height="50" uuid="7439733e-7ab1-4f1c-b8d6-b6845b8d42c6"/>
+				<reportElement x="240" y="33" width="140" height="50" uuid="7439733e-7ab1-4f1c-b8d6-b6845b8d42c6"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -96,7 +97,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[คณะกรรมการ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="380" y="0" width="80" height="50" uuid="ccb2c16d-76bf-44e5-879f-8848e2e02720"/>
+				<reportElement x="380" y="33" width="80" height="50" uuid="ccb2c16d-76bf-44e5-879f-8848e2e02720"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -109,7 +110,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[ประเภทการค้าข้าว]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="460" y="0" width="120" height="50" uuid="52661573-db88-4ccd-98df-6b8fce9f5a9a"/>
+				<reportElement x="460" y="33" width="120" height="50" uuid="52661573-db88-4ccd-98df-6b8fce9f5a9a"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -122,7 +123,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[สมาชิกสมาคมผู้ส่งออกฯ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="580" y="0" width="120" height="50" uuid="2f9086d7-e3f4-41df-9859-615b25354826"/>
+				<reportElement x="580" y="33" width="120" height="50" uuid="2f9086d7-e3f4-41df-9859-615b25354826"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -135,7 +136,7 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				<text><![CDATA[วันที่กรมอนุมัติฯ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="700" y="0" width="102" height="50" uuid="7b306155-0b5a-46ff-a81c-534ac12d0652"/>
+				<reportElement x="700" y="33" width="102" height="50" uuid="7b306155-0b5a-46ff-a81c-534ac12d0652"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -147,6 +148,30 @@ new nylon.utility.NumberFormat().toThaiDate($P{date_end})]]></textFieldExpressio
 				</textElement>
 				<text><![CDATA[เลขที่หนังสือ
 ปกข.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="164" y="0" width="30" height="25" uuid="a936ac6c-b665-4bd5-adbc-1d0d3d00ff1a"/>
+				<box topPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[คน]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="114" y="0" width="50" height="25" uuid="f620c8fa-af77-4ff7-873e-08fd24c4a099"/>
+				<box topPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{count_exporter}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="14" y="0" width="100" height="25" uuid="8a43b5a7-cdd6-442f-89ba-628ac547e523"/>
+				<box topPadding="0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="14" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[จำนวนผู้ส่งออกทั้งหมด]]></text>
 			</staticText>
 		</band>
 	</columnHeader>

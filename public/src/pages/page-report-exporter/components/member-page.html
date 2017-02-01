@@ -93,7 +93,7 @@
       </gl-grid-row>
       <div>
         <paper-button class="gl-btn-danger button-size" raised on-tap="_dialogcancle">ยกเลิก</paper-button>
-        <paper-button class="gl-btn-primary button-size" raised on-tap="_active" hidden="{{data.exporter_active}}">บันทึก</paper-button>
+        <paper-button class="gl-btn-primary button-size" raised on-tap="_active" hidden="{{data.exporter_status}}">บันทึก</paper-button>
         <paper-button class="gl-btn-primary button-size" raised on-tap="_retrader" hidden="{{data.trader_active}}">บันทึก</paper-button>
       </div>
     </paper-dialog>
@@ -257,34 +257,26 @@
         }
       },
       _retrader:function(){
-        var datas= {
+        this.fire('toast',{status:'dialog',
+        text:'คุณต้องการจะต่ออายุกรมการค้าภายในใช่หรือไม่ ?',
+        confirmed : this._confirmTrader.bind(this),
+        datas: {
           id: this.data.trader_id,
           trader_date_approve: new Date
+          }
+        });
+      },
+      _confirmTrader:function(result,detail){
+        if(result == true){
+          this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
+          this.update('./trader/update', detail.datas, () => {
+            this.fire('refresh-exporter');
+            this.fire('close-toggle');
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
+              console.log('success');
+            }});
+           });
         }
-        // console.log(datas);
-        this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
-        this.update('./trader/update', datas, () => {
-          this.fire('refresh-exporter');
-          this.fire('close-toggle');
-          this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-            console.log('success');
-          }});
-         });
-        // this.glQuery('layoutRegistion').openToastSaveing();
-        // axios.put('./external/trader/update', datas)
-        //           .then(function (response) {
-        //             console.log("success");
-        //             console.log(response);
-        //             this.fire('refresh-exporter');
-        //             this.fire('close-toggle');
-        //             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
-        //               console.log('success');
-        //             }});
-        //           }.bind(this))
-        //           .catch(function (error) {
-        //             console.log("error");
-        //             console.log(error);
-        //           })
       },
       _dialogcancle:function() {
         this.$.dialog.toggle();

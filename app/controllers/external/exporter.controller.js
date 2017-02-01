@@ -246,7 +246,7 @@ exports.exporter = function (req, res) {
                 return {
                     exporter_id: m('id'),
                     book: r.db('g2g').table('shipment_detail')
-                        .filter({ exporter_id: m('id') })
+                        .getAll(m('id'), { index: 'exporter_id' })
                         .pluck('book_id')
                         .distinct()
                         .coerceTo('array')
