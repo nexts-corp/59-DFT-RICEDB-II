@@ -16,10 +16,6 @@ var schema = {
             "type": "string",
             "format": "date-time"
         },
-        "exporter_date_update": {
-            "type": "string",
-            "format": "date-time"
-        },
         "exporter_remark": {
             "type": "string"
         },
@@ -27,7 +23,7 @@ var schema = {
             "type": "string"
         }
     },
-    "required": ["exporter_date_update", "trader_id"]
+    "required": ["exporter_date_approve", "trader_id"]
 };
 var validate = ajv.compile(schema);
 
@@ -133,9 +129,8 @@ exports.exporterId = function (req, res) {
         .get(req.params.exporter_id)
         .merge({
             exporter_id: r.row('id'),
-            exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_update')).toEpochTime()),
+            exporter_active: r.ISO8601(d1y).toEpochTime().lt(r.ISO8601(r.row('exporter_date_approve')).toEpochTime()),
             exporter_date_approve: r.row('exporter_date_approve').split('T')(0),
-            exporter_date_update: r.row('exporter_date_update').split('T')(0),
             exporter_status: r.row.hasFields('exporter_no'),
             exporter_status_name: r.branch(r.row.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก'),
             exporter_no_name: r.branch(
@@ -192,9 +187,10 @@ exports.insert = function (req, res) {
                 .run()
                 .then(function (response) {
                     // console.log('new exporter_no >' + response);
+                    console.log(req.body);
                     if (response > 0) {
                         req.body.exporter_no = response;
-                        req.body.exporter_date_approve = req.body.exporter_date_update;
+                        req.body.exporter_date_approve = req.body.exporter_date_approve;
                         datacontext.insert("external_f3", "exporter", req.body, res, req);
                     }
                 })
@@ -281,21 +277,21 @@ exports.exporter = function (req, res) {
                     //     false,
                     //     r.ISO8601(m('book')(0)).add(31449600).gt(r.now())
                     // ),
-                    exporter_date_approve: r.ISO8601(m('exporter_date_approve')).add(31449600)
+                    exporter_date_expire: r.ISO8601(m('exporter_date_approve')).add(31449600)
                 }
             })
             .merge(function (mm) {
                 return {
-                    export_date_expire: r.branch(mm('export_date_expire').gt(mm('exporter_date_approve')),
+                    export_date_expire: r.branch(mm('export_date_expire').gt(mm('exporter_date_expire')),
                         mm('export_date_expire'),
-                        mm('exporter_date_approve'))
+                        mm('exporter_date_expire'))
                 }
             })
             .merge(function (mmm) {
                 return {
                     export_status: r.branch(mmm('export_date_expire').gt(r.now()), true, false),
                     export_date_expire: mmm('export_date_expire').toISO8601(),
-                    exporter_date_approve: mmm('exporter_date_approve').toISO8601()
+                    exporter_date_expire: mmm('exporter_date_expire').toISO8601()
                 }
             })
             .without('book'),
@@ -319,7 +315,7 @@ exports.exporter = function (req, res) {
                 exporter_status: m.hasFields('exporter_no'),
                 exporter_status_name: r.branch(m.hasFields('exporter_no'), 'เป็นสมาชิก', 'ไม่เป็นสมาชิก'),
                 exporter_date_approve: r.branch(m.hasFields('exporter_date_approve'), m('exporter_date_approve').split('T')(0), null),
-                exporter_date_update: r.branch(m.hasFields('exporter_date_update'), m('exporter_date_update').split('T')(0), null),
+                exporter_date_expire: r.branch(m.hasFields('exporter_date_expire'), m('exporter_date_expire').split('T')(0), null),
                 exporter_no_name: r.branch(
                     m.hasFields('exporter_no'),
                     r.branch(

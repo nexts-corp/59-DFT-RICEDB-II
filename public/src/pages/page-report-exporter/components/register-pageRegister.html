@@ -166,7 +166,7 @@
           text:'คุณต้องการจะยืนยันการลงทะเบียนใช่หรือไม่ ?',
           confirmed : this._confirmToast.bind(this),
           datas: {
-            exporter_date_update:new Date,
+            exporter_date_approve:new Date,
             trader_id:this.trader.trader_id
           }
         });
@@ -213,7 +213,7 @@
       getExporterTrader:function() {
         this.trader_id = this.trader_id || this.$.trader_id;
         // console.log(this.seller_id);
-        this.read('./exporter/?exporter_status=false',(data)=>{
+        this.read('./exporter/?exporter_status=false&type_lic_id=KK6',(data)=>{
           data.map((type)=>{
             type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
           });

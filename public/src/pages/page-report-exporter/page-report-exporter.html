@@ -213,9 +213,9 @@
         <panel-right title="{{titleName}}">
           <div class="left">
             <iron-pages selected="{{layerContent}}" attr-for-selected="name">
-              <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]"></register-pageRegister></div>
+              <div name="addRedRegExporter"><register-pageRegister trader-id="[[traderId]]" doc-type="[[docType]]"></register-pageRegister></div>
               <div name="detailRegExporter">
-                <member-page data={{dataSelect}}></member-page>
+                <member-page data={{dataSelect}} doc-type="[[docType]]"></member-page>
               </div>
             </iron-pages>
           </div>
@@ -267,6 +267,7 @@
             },
             attached: function() {
               this.getIdExporters();
+              this.getDocType();
               // this._dateEnd();
             },
             ready: function() {
@@ -293,6 +294,11 @@
                 });
                 this.exporter_id.items = data;
               });
+            },
+            getDocType: function(){
+              this.read('./documentType',(data)=>{
+                this.docType = data;
+              })
             },
             // _dateEnd:function() {
             //   if (this.dataSelected.date_end == undefined || this.dataSelected.date_end == '') {
