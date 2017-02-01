@@ -25,54 +25,17 @@
   </style>
   <template>
     <div class="title-head">แนบไฟล์เอกสารผู้ส่งออก</div>
-    <div class="title">นิติบุคคล</div>
-    <nylon-upload
-      target="/api/upload/exporter/file/[[exporterId]]"
-      accept="application/pdf"
-      ref-path="exporter-document&juristic"
-      exporter-id="[[exporterId]]"
-      >
-    </nylon-upload>
-    <div class="title">ผู้มีอำนาจ บจ.5</div>
-    <nylon-upload
-      target="/api/upload/exporter/file/[[exporterId]]"
-      accept="application/pdf"
-      ref-path="exporter-document&authority"
-      exporter-id="[[exporterId]]"
-      >
-    </nylon-upload>
-    <div class="title">ภพ 01/20</div>
-    <nylon-upload
-      target="/api/upload/exporter/file/[[exporterId]]"
-      accept="application/pdf"
-      ref-path="exporter-document&vat"
-      exporter-id="[[exporterId]]"
-      >
-    </nylon-upload>
-    <div class="title">คน.</div>
-    <nylon-upload
-      target="/api/upload/exporter/file/[[exporterId]]"
-      accept="application/pdf"
-      ref-path="exporter-document&dit"
-      exporter-id="[[exporterId]]"
-      >
-    </nylon-upload>
-    <div class="title">สำเนาบัตรผู้มีอำนาจ</div>
-    <nylon-upload
-      target="/api/upload/exporter/file/[[exporterId]]"
-      accept="application/pdf"
-      ref-path="exporter-document&copy_authority"
-      exporter-id="[[exporterId]]"
-      >
-    </nylon-upload>
-    <div class="title">หนังสือผู้รับมอบ</div>
-    <nylon-upload
-      target="/api/upload/exporter/file/[[exporterId]]"
-      accept="application/pdf"
-      ref-path="exporter-document&attorney"
-      exporter-id="[[exporterId]]"
-      >
-    </nylon-upload>
+    <template is="dom-repeat" items="[[docType]]">
+      <div class="title">[[item.doc_name_th]]</div>
+      <nylon-upload
+        target="/api/upload/exporter/file/[[exporterId]]"
+        accept="application/pdf"
+        ref-path="exporter.document.[[item.doc_code]]"
+        doc-type-id="[[item.doc_type_id]]"
+        exporter-id="[[exporterId]]"
+        >
+      </nylon-upload>
+    </template>
     <div style="margin-bottom:20px;"></div>
   </template>
   <script>

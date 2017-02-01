@@ -72,7 +72,7 @@ exports.listFilePath = function (req, res) {
         })
         .merge(function (row) {
             return {
-                name: row('name').add('  -->>  ')
+                name: row('name').add(' | ')
                     .add(row('timestamp'))
                 // .add('-')
                 // .add(row('date_upload').month().coerceTo('string'))
@@ -118,14 +118,14 @@ exports.downloadFile = function (req, res) {
 exports.deleteFile = function (req, res) {
     var r = req._r;
     var params = req.params;
-    // console.log(params)
+    r.db('external_f3').table('document_file').getAll(params.id, { index: 'file_id' }).update({ file_status: false })
 
-    r.db('files').table('files').get(params.id).delete()
-        .do(
-        function (d) {
-            return r.db('external_f3').table('document_file').getAll(params.id, { index: 'file_id' }).delete()
-        }
-        )
+        // r.db('files').table('files').get(params.id).delete()
+        //     .do(
+        //     function (d) {
+        //         return r.db('external_f3').table('document_file').getAll(params.id, { index: 'file_id' }).delete()
+        //     }
+        //     )
         .run().then(function (result) {
             res.json(result);
         }).catch(function (err) {
@@ -143,12 +143,12 @@ exports.uploadFileExporter = function (req, res) {
         var prefile = files.file[0];
         // var doc_code = req.headers['ref-path'].split(".")[2];
         var doc_type_id = req.headers['doc-type-id'];
-        console.log(doc_type_id);
+        // console.log(doc_type_id);
 
         fs.readFile(prefile.path, function (err, data) {
             // console.log(r);
             r.db('files').table('files').insert({
-                name: prefile.originalFilename,
+                name: prefile.originalFilename.split('.')[0] + '_' + new Date().getTime() + "." + prefile.originalFilename.split('.')[1],
                 type: prefile.headers['content-type'],
                 contents: data,
                 timestamp: new Date(),
