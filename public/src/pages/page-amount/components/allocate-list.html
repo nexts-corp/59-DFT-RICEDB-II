@@ -10,7 +10,7 @@
                 border-collapse: collapse;
                 width: 100%;
                 overflow-x: auto;
-                white-space: nowrap;
+                /*white-space: nowrap;*/
             }
             *{
                 font-family: 'CSChatThaiUI', sans-serif !important;
@@ -25,16 +25,19 @@
             th,
             td {
                 padding: 15px;
-              
+                font-size: 14px;
+                height: 10px;
             }
             
             th {
                 text-align: right;
                 background-color: #F1F1F1;
+                white-space: nowrap;
             }
             
             td {
                 text-align: right;
+                white-space: normal;
             }
             
             tr:hover {
@@ -54,6 +57,12 @@
             .default{
                 color:#979A9A;
             }
+            gl-form-input{
+              
+              --paper-input-container-input:{
+                   font-size:14px;
+               }
+            }
         </style>
         <div style="overflow-x:auto;">
             
@@ -63,7 +72,7 @@
                 <th class="left">ลำดับที่</th>
                 <th class="left">ผู้ส่งออก</th>
                 <th>งวดที่</th>
-                <th>ยอดปรับปรุงงวดที่</th>
+                <th>ปรับปรุงงวดที่</th>
                 <th>ปริมาณโควตารวม</th>
                 <th>รวมยอดปรับปรุง</th>
               </tr>
@@ -79,11 +88,12 @@
                 <th class="left">ผู้ส่งออก</th>
                 <template is="dom-repeat" items="[[dataAllocate.data.0.quantity]]">
                     <th>งวดที่ [[item.period]] [[getMonthName(item.month)]]</th>
-                    <th>ยอดปรับปรุงงวดที่ [[item.period]]</th>
+                    <th>ปรับปรุงงวดที่ [[item.period]]</th>
                 </template>
                 {{test(dataAllocate)}}
                 <th>ปริมาณโควตารวม</th>
                 <th>รวมยอดปรับปรุง</th>
+                <th>ปริมาณโควตารวม<br> - รวมยอดปรับปรุง</th>
               </tr>
               
                 <template is="dom-repeat" items="[[dataAllocate.data]]">
@@ -92,10 +102,13 @@
                         <td class="left">[[item.name]]</td>
                         <template is="dom-repeat" as="period" items="[[item.quantity]]">
                             <td class="default">[[formatNumber(period.weigth_cal)]]</td>
-                            <td>[[formatNumber(period.weigth_update)]]</td>
+                            <td>
+                                <gl-form-input value="[[period.weigth_update]]" no-label-float format-number="on"></gl-form-input>
+                            </td>
                         </template>
                         <td class="default">[[formatNumber(item.amount_cal)]]</td>
                         <td>[[formatNumber(item.amount_update)]]</td>
+                        <td>[[mathAmount(item.amount_cal,item.amount_update)]]</td>
                     </tr>
                     [[sumAll(item.amount)]]
                 </template>
@@ -108,6 +121,7 @@
                     </template>
                     <th class="default">[[formatNumber(dataAllocate.sum.sum_amount_cal)]]</th>
                     <th>[[formatNumber(dataAllocate.sum.sum_amount_update)]]</th>
+                    <th></th>
                 </tr>
 
                 <tr>
@@ -118,6 +132,7 @@
                     </template>
                     <th class="default"></th>
                     <th>[[_sumQuantity_balance(dataAllocate.quantity_balance)]]</th>
+                    <th></th>
                 </tr>
             </table>
             </template>
@@ -150,6 +165,10 @@
                     sum += this.unFormat(item.period[index][key]);
                 });
                  return this.formatNumber(sum);
+            },
+            mathAmount:function(cal,update){
+                // console.log(cal);
+                return cal - update;
             },
             _sumQuantity_balance:function(item){
                 var sum = 0;
