@@ -622,7 +622,7 @@ var parameters = {
     };
  var q = {}, d = {};
     for (key in req.query) {
-
+console.log('kkkkkkk',req.query[key]== "true")
         if (req.query[key] == "true") {
             req.query[key] = true;
         } else if (req.query[key] == "false") {
@@ -647,7 +647,7 @@ var parameters = {
         parameters['date_start'] = parameters['date_start'].split('T')[0];
         parameters['date_end'] = parameters['date_end'].split('T')[0];
     }
-    console.log(parameters);
+    // console.log(parameters);
     date_start = parameters.date_start;
     date_end = parameters.date_end;
 r.db('external_f3').table("exporter").between(date_start,date_end,{index:'exporter_date_approve'})
@@ -702,7 +702,7 @@ r.db('external_f3').table("exporter").between(date_start,date_end,{index:'export
     .orderBy('exporter_date_approve')
         .run()
         .then(function (result) {
-             // res.json(result);
+            //   res.json(result);
           //  parameters = {}
             res._ireport("report10.jasper", req.query.export || "pdf", result, parameters);
         })
