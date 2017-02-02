@@ -32,14 +32,35 @@
 
   <gl-form-panel-body>
     <gl-grid-row width="{{getWidth}}">
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
-        <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" always-float-label item-label-path="seller_name_en" disabled="[[!isInputDisabled]]"
-         item-value-path="exporter_id"  items="{{dataForSelect.seller}}" value="{{data.exporter_id}}" ></gl-combo-box>
-      </gl-grid-col>
-      <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
-        <gl-form-input disabled label="Tel."  value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
-      </gl-grid-col>
-      <!-- 121 -->
+      {{_getdata(dataForSelect)}}
+      <template is="dom-if" if="[[!_isViewing(isViewSeleted)]]">
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+          <gl-form-input disabled label="ผู้ส่งออก"  value="{{data.seller_name_en}}" always-float-label></gl-form-input>
+        </gl-grid-col>
+        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+          <gl-form-input disabled label="Tel."  value="{{data.seller_phone}}" always-float-label></gl-form-input>
+        </gl-grid-col>
+      </template>
+      <template is="dom-if" if="[[_isViewing(isViewSeleted)]]">
+        <template is="dom-if" if="[[!isInputDisabled]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input disabled label="ผู้ส่งออก"  value="{{data.seller_name_en}}" always-float-label></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+            <gl-form-input disabled label="Tel."  value="{{data.seller_phone}}" always-float-label></gl-form-input>
+          </gl-grid-col>
+        </template>
+        <template is="dom-if" if="[[isInputDisabled]]">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-combo-box class="required" required  id="exporter_id" label="ผู้ส่งออก" always-float-label item-label-path="seller_name_en" disabled="[[!isInputDisabled]]"
+             item-value-path="exporter_id"  items="{{dataForSelect.seller}}" value="{{data.exporter_id}}" ></gl-combo-box>
+          </gl-grid-col>
+           <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
+            <gl-form-input disabled label="Tel."  value="{{_getSellerPhone(data.exporter_id,dataForSelect)}}" always-float-label></gl-form-input>
+          </gl-grid-col>
+        </template>
+      </template>
+
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
         <gl-combo-box  required class="required" label="Booking No." always-float-label item-label-path="book_no" disabled="[[!isInputDisabled]]"
            item-value-path="book_no" items="{{blNos}}" value="{{data.book_no}}"></gl-combo-box>
@@ -270,10 +291,10 @@
         '_obCalWeight(data.shm_det_quantity,dataForSelect,data.*)',
         'check(data)',
         '_dataSelected(dataForSelect)',
-        '_checkpol(pol)',
+        // '_checkpol(pol)',
         '_getShip(data.shipline_id,dataForSelect)'
       ],
-      _checkpol:function (pol) {
+      _getdata:function (pol) {
         // console.log('pol',pol);
       },
       calcelShipmentInsert:function () {
@@ -368,6 +389,7 @@
       },
       _getPackageForPrice:function (package_id,dataForSelect) {
         if (package_id) {
+          console.log(this.dataForSelect);
           let packing = this.dataForSelect.package.filter((packageing)=> packageing.package_id == package_id );
           this.price=packing[0];
           this.data.price_per_ton = this.price.price_per_ton;
