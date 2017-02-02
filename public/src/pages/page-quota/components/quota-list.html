@@ -45,7 +45,7 @@
                 </thead>
                 <tbody>
                     <template is="dom-repeat" items="[[data]]">
-                        <tr>
+                        <tr on-tap="_selectData" data="[[item]]">
                             <td>{{item.nameTH}}</td>
                             <td>{{item.nameEN}}</td>
                         </tr>
@@ -62,7 +62,11 @@
                     statePath:'report.data_list'
                 }
             },
+             _selectData:function(){
+                this.fire('select-data',this.data);
+            },
             behaviors: [ReduxBehavior]
+           
         });
     </script>
 </dom-module>

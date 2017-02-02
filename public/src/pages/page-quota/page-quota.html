@@ -105,7 +105,14 @@
     Polymer({
       is: 'page-quota',
       behaviors: [nylonBehavior,ReduxBehavior],
+			listeners:{
+				'save-data':'_insertData',
+				'select-data' : '_selectData'
+			},
 			_insertData:function(){
+				this.$$('panel-right').open();
+			},
+			_selectData:function(){
 				this.$$('panel-right').open();
 			}
 			

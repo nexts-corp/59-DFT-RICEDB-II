@@ -7,16 +7,26 @@
             }
         </style>
         <div>
-            <paper-input label="name(th)"></paper-input>
-            <paper-input label="name(eng)"></paper-input>
+            <paper-input label="name(th)" value="{{name.th}}"></paper-input>
+            <paper-input label="name(eng)" value="{{name.eng}}"></paper-input>
             <paper-button on-tap="saveData" raised>Save</paper-button>
         </div>
     </template>
     <script>
         Polymer({
             is: 'data-manage',
+            properties:{
+                name:{
+                    type: Object,
+                    value:{
+                        th:'',
+                        eng:''
+                    }
+                }
+            },
             saveData:function(){
-                this.fire('save-data');
+                console.log(this.name);
+                this.fire('save-data',this.name);
             }
         });
     </script>
