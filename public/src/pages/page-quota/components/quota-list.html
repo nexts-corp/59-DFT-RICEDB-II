@@ -40,34 +40,16 @@
         <div>
             <table class="gl-table-default" style="border: 1px solid #ddd;">
                 <thead>
-                    <th class="center">ประเภทข้าว</th>
-                    <th class="left">งวดที่/เดือน</th>
-                    <th class="right">ปริมาณโควตา</th>
-                    <th class="right">ปริมาณโควตารวม</th>
+                    <th>ชื่อไทย</th>
+                    <th>ชื่ออังกฤษ</th>
                 </thead>
                 <tbody>
-                     <template is="dom-if" if="{{dataStat}}">
+                    <template is="dom-repeat" items="[[data]]">
                         <tr>
-                            <td colspan="4">ไม่พบข้อมูล</td>
+                            <td>{{item.nameTH}}</td>
+                            <td>{{item.nameEN}}</td>
                         </tr>
                     </template>
-                        <template is="dom-repeat" items="{{data.type_rice}}">
-                            <tr on-tap="_selectData" id="detailRegExporter" data="[[item]]" style="cursor:pointer;">
-                                <td class="center">{{item.type_rice_name_th}}</td>
-                                <td>
-                                    <template is="dom-repeat" items="{{item.quantity}}">
-                                        <div class="left">งวดที่ [[_setIndex(index)]] เดือน [[getMonthName(item.month)]]</div>    
-                                    </template>
-                                </td>
-                                <td>
-                                    <template is="dom-repeat" items="{{item.quantity}}">
-                                        <div class="right">[[formatNumber(item.weigth)]]</div>
-                                    </template> 
-                                </td>
-                                <td class="right">[[formatNumber(item.amount)]]</td>
-                            </tr>
-                        </template>
-                     
                 </tbody>
             </table>
         </div>
@@ -75,22 +57,12 @@
     <script>
         Polymer({
             is: 'quota-list',
-            behaviors: [FormatNumberBehavior,MonthBehavior,DataManageBehavior],
-            observers:['checkData(data.type_rice)'],
-            _setIndex:function(item){
-                return item = item+1;
+            properties:{
+                data:{
+                    statePath:'report.data_list'
+                }
             },
-            getMonth:function(month){
-                // console.log(month);
-                month.type_rice.map((item)=>{
-                    this.quaotaMonth = item.period;
-                });
-            },
-            _selectData:function(e){
-                console.log('return',e.currentTarget.data);
-                this.fire('data-select',e.currentTarget.data);
-                
-            }
+            behaviors: [ReduxBehavior]
         });
     </script>
 </dom-module>

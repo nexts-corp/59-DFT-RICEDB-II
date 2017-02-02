@@ -5,16 +5,27 @@ module.exports = {
     output: {
         filename: './public/src/redux-store.js'
     },
-    module: {
-        loaders: [
-            {
-                exclude: /node_modules/,
-                loader: 'babel',
-                query: {
-                    presets: ['es2015']
-                }
-            }
-        ]
-    },
     watch: true
 };
+
+
+// module.exports = {
+//     entry: [
+//         './public/src/redux-store/index.js'
+//     ],
+//     output: {
+//         filename: './public/src/redux-store.js'
+//     },
+//     module: {
+//         loaders: [
+//             {
+//                 exclude: /node_modules/,
+//                 loader: 'babel',
+//                 query: {
+//                     presets: ['es2015']
+//                 }
+//             }
+//         ]
+//     },
+//     watch: true
+// };

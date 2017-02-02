@@ -59,23 +59,26 @@
 
 	var _polymerRedux2 = _interopRequireDefault(_polymerRedux);
 
-	var _amount = __webpack_require__(25);
+	var _report = __webpack_require__(29);
 
-	var _amount2 = _interopRequireDefault(_amount);
+	var _report2 = _interopRequireDefault(_report);
 
-	var _common = __webpack_require__(26);
+	var _export = __webpack_require__(28);
 
-	var _common2 = _interopRequireDefault(_common);
+	var _export2 = _interopRequireDefault(_export);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var rootReducer = (0, _redux.combineReducers)({
-	    common: _common2.default,
-	    amount: _amount2.default
+	    report: _report2.default.reducer,
+	    export: _export2.default.reducer
 	});
 
-	var storeApp = Redux.createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+	var storeApp = (0, _redux.createStore)(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
 	window.ReduxBehavior = (0, _polymerRedux2.default)(storeApp);
+
+	window.reportAction = _report2.default.action(storeApp);
 
 /***/ },
 /* 2 */
@@ -920,11 +923,23 @@
 			module.deprecate = function() {};
 			module.paths = [];
 			// module.parent = undefined by default
-			module.children = [];
+			if(!module.children) module.children = [];
+			Object.defineProperty(module, "loaded", {
+				enumerable: true,
+				get: function() {
+					return module.l;
+				}
+			});
+			Object.defineProperty(module, "id", {
+				enumerable: true,
+				get: function() {
+					return module.i;
+				}
+			});
 			module.webpackPolyfill = 1;
 		}
 		return module;
-	}
+	};
 
 
 /***/ },
@@ -1299,14 +1314,14 @@
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	(function(root, factory) {
+	(function(global, factory) {
 	    /* istanbul ignore next */
 	    if (true) {
 	        module.exports = factory();
 	    } else if (typeof define === 'function' && define.amd) {
 	        define(factory);
 	    } else {
-	        root['PolymerRedux'] = factory();
+	        global['PolymerRedux'] = factory();
 	    }
 	})(this, function() {
 	    var warning = 'Polymer Redux: <%s>.%s has "notify" enabled, two-way bindings goes against Redux\'s paradigm';
@@ -1474,12 +1489,12 @@
 	        // add behavior actions first, in reverse order so we keep priority
 	        if (Array.isArray(behaviors)) {
 	            for (var i = behaviors.length - 1; i >= 0; i--) {
-	                Object.assign(actions, behaviors[i].actions);
+	                objectAssign(actions, behaviors[i].actions);
 	            }
 	        }
 
 	        // element actions have priority
-	        element._reduxActions = Object.assign(actions, element.actions);
+	        element._reduxActions = objectAssign(actions, element.actions);
 	    }
 
 	    /**
@@ -1542,6 +1557,37 @@
 	     */
 	    function castArgumentsToArray(args) {
 	        return Array.prototype.slice.call(args, 0);
+	    }
+
+	    /**
+	     * Object.assign()
+	     *
+	     * @param {Object} target
+	     * @param {Object} [...obj]
+	     * @return {Object} The target.
+	     */
+	    function objectAssign(target) {
+	        // use browser
+	        if (typeof Object.assign === 'function') {
+	            return Object.assign.apply(Object, arguments);
+	        }
+
+	        var hasOwn = Object.prototype.hasOwnProperty;
+	        var argc = arguments.length;
+	        var obj;
+
+	        for (var i = 1; i < argc; ++i) {
+	            obj = arguments[i];
+	            if (obj != null) {
+	                for (var k in obj) {
+	                    if (hasOwn.call(obj, k)) {
+	                        target[k] = obj[k];
+	                    }
+	                }
+	            }
+	        }
+
+	        return target;
 	    }
 
 	    /**
@@ -1610,84 +1656,61 @@
 
 
 /***/ },
-/* 25 */
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var initialState = {
-	    list: []
-	};
+	var initialState = { a: 'foo', b: 'bar' };
 
-	var reducer = function reducer(state, action) {
-	    if (!state) return initialState;
+	exports.reducer = function () {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	    var action = arguments[1];
+
+
 	    switch (action.type) {
-
 	        case 'AMOUNT_LIST':
-	            var data = action.payload;
-	            return Object.assign({}, state, { list: data });
+	        //const data = action.payload;
+	        //return Object.assign({},state,{list:data});
 	        default:
 	            return state;
-
 	    }
 	};
 
-	exports.default = reducer;
+	exports.action = function (store) {
+	    return {};
+	};
 
 /***/ },
-/* 26 */
+/* 29 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
 	var initialState = {
-	    year: []
+	    data_list: [{ nameTH: 'ชล', nameEN: 'chon' }, { nameTH: 'กิต', nameEN: 'kit' }]
 	};
 
-	var reducer = function reducer(state, action) {
-	    if (!state) return initialState;
-	    switch (action.type) {
+	exports.reducer = function () {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	    var action = arguments[1];
 
-	        case 'PULL_YEAR':
-	            var year = action.payload;
-	            return Object.assign({}, state, { year: year });
+
+	    switch (action.type) {
+	        case 'AMOUNT_LIST':
+	        //const data = action.payload;
+	        //return Object.assign({},state,{list:data});
 	        default:
 	            return state;
-
 	    }
 	};
 
-	window.CommonActions = {
-
-	    actions: {
-
-	        pullYear: function pullYear() {
-
-	            axios.get('./common/year').then(function (response) {
-	                var quotaYear = response.data.map(function (item) {
-	                    return item.toString();
-	                });
-
-	                ReduxBehavior.dispatch({
-	                    type: 'PULL_YEAR',
-	                    payload: quotaYear
-	                });
-	            }).catch(function (error) {
-	                console.log("error");
-	            });
-	        }
-
-	    }
-
+	exports.action = function (store) {
+	    return {};
 	};
-
-	exports.default = reducer;
 
 /***/ }
 /******/ ]);
