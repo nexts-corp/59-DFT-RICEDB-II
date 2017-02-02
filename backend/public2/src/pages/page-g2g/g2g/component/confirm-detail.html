@@ -453,6 +453,21 @@
          }
        });
      },
+     _confirmData:function(result,detail){
+        if (result == true) {
+          detail.el.update('./g2g/confirm/update',detail.data, () => {
+              detail.el.fire('refresh-contract',{detail:'refresh-contract'});
+              detail.el.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+                  callback:function(){
+                   //  detail.el.editInput();
+                   detail.el.fire('get-confirm-detail',{clId:detail.data.id});
+                   // detail.el.data = detail.data;
+                   detail.el.fire('get-list-confirm',{contractId:detail.data.contract_id});
+                 }
+               });
+           });
+         }
+    },
      deleteConfirm:function () {
        this.fire('toast',{  //คำสั่งสำหรับเปิด toast dialog
            status:'dialog',
