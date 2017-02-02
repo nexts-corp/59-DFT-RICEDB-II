@@ -1,6 +1,6 @@
 const initialState = {a:'foo',b:'bar'}
 
-exports.reducer = function (state = initialState,action){
+exports.exportReducer = function (state = initialState,action){
 
     switch (action.type) {
         case 'EXPORT_SAVE_NAME':
@@ -12,7 +12,7 @@ exports.reducer = function (state = initialState,action){
 
 }
 
-exports.action = function(store){
+exports.exportAction = function(store){
     return {
         
     }

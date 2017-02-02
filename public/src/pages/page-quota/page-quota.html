@@ -98,7 +98,7 @@
 		</div>
 
 		<panel-right title="การกำหนดปีโควตา">
-				<data-manage></data-manage>
+				<data-manage name="[[name]]"></data-manage>
 		</panel-right>
 	</template>
 	<script>
@@ -106,13 +106,19 @@
       is: 'page-quota',
       behaviors: [nylonBehavior,ReduxBehavior],
 			listeners:{
-				'save-data':'_insertData',
-				'select-data' : '_selectData'
+				'select-data' : '_selectData',
+				'close' : '_close'
+			},
+			_close:function(){
+				console.log('1234');
+				this.$$('panel-right').close();
 			},
 			_insertData:function(){
 				this.$$('panel-right').open();
 			},
-			_selectData:function(){
+			_selectData:function(e){
+				console.log(e.detail);
+				this.name = e.detail;
 				this.$$('panel-right').open();
 			}
 			

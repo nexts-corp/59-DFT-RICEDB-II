@@ -1,12 +1,12 @@
 import {createStore,combineReducers} from 'redux';
 import PolymerRedux from 'polymer-redux'
 
-import reportReducer from './reducer/report'
-import exportReducer from './reducer/export'
+import {reportReducer,reportAction} from './reducer/report'
+import {exportReducer,exportAction} from './reducer/export'
 
 const rootReducer = combineReducers({
-    report:reportReducer.reducer,
-    export:exportReducer.reducer
+    report:reportReducer,
+    export:exportReducer
 });
 
 const storeApp = createStore(
@@ -16,5 +16,4 @@ const storeApp = createStore(
 
 window.ReduxBehavior = PolymerRedux(storeApp);
 
-window.reportAction = reportReducer.action(storeApp);
-
+window.reportAction = reportAction(storeApp);

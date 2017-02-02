@@ -57,15 +57,16 @@
     <script>
         Polymer({
             is: 'quota-list',
+            behaviors: [ReduxBehavior],
             properties:{
                 data:{
                     statePath:'report.data_list'
                 }
             },
-             _selectData:function(){
-                this.fire('select-data',this.data);
-            },
-            behaviors: [ReduxBehavior]
+             _selectData:function(e){
+                // console.log(e.currentTarget.data);
+                this.fire('select-data',e.currentTarget.data);
+            }
            
         });
     </script>
