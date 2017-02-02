@@ -57,8 +57,8 @@
         <div id="changTitle2" class="title" hidden>ขึ้นทะเบียนผู้ส่งออกข้าวส่งออกไปจำหน่ายต่างประเทศ</div>
             <div class="searchBox searchBorder">
               <gl-grid-row width="{{getWidth}}">
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]"></gl-grid-col>
-                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,6]]">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]">
                 <gl-combo-box style="margin-left:2em;" id="trader_id" label="ชื่อบริษัท" item-label-path="seller_name_th"
                     item-value-path="trader_id" value="{{dataTrader}}" on-value-changed="getTrader"></gl-combo-box>
                 </gl-grid-col>
@@ -70,7 +70,7 @@
               <div id="formData" class="bd" hidden>
                 <paper-tabs selected="{{pages}}" align-bottom no-slide>
                     <paper-tab>รายละเอียด</paper-tab>
-                    <paper-tab id="tabFile">ไฟล์</paper-tab>
+                    <paper-tab id="tabFile">เอกสารหลักฐาน</paper-tab>
                 </paper-tabs>
                 <gl-form-panel>
                   <iron-pages selected="{{pages}}">
@@ -215,7 +215,7 @@
         // console.log(this.seller_id);
         this.read('./exporter/?exporter_status=false&type_lic_id=KK6',(data)=>{
           data.map((type)=>{
-            type.seller_name_th = type.seller_name_th+" ("+type.type_lic_name+")";
+            type.seller_name_th = type.seller_tax_id+" ("+type.seller_name_th+")"+" ("+type.type_lic_name+")";
           });
           this.trader_id.items = data;
           // console.log(this.seller_id.items);

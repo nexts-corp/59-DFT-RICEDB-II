@@ -8,4 +8,5 @@ module.exports = function (app) {
     app.route('/report5').get(reportExporter.report5);
     app.route('/report6').get(reportExporter.report6);
     app.route('/report10').get(reportExporter.report10);
+    app.route('/report11/:trader_id').get(reportExporter.report11);
 }

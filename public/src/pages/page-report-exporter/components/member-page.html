@@ -68,7 +68,7 @@
                   <gl-form-panel>
                     <paper-tabs selected="{{pages}}" align-bottom no-slide>
                       <paper-tab>รายละเอียด</paper-tab>
-                      <paper-tab id="tabFile" class="title-paper">ไฟล์</paper-tab>
+                      <paper-tab id="tabFile" class="title-paper">เอกสารหลักฐาน</paper-tab>
                     </paper-tabs>
                     <iron-pages selected="{{pages}}">
                       <member-show data="{{data}}"></member-show>
@@ -80,6 +80,7 @@
               {{_checkStatus(data.export_status,data.exporter_status,data.trader_active)}}
 
         <gl-form-panel-footer>
+          พิมพ์ข้อมูลผู้ส่งออก<paper-icon-button icon="print" on-tap="print" title="พิมพ์ข้อมูลผู้ส่งออก"></paper-icon-button>
           <paper-button id="removeButtomC" class="gl-btn-danger" on-tap="_cancel" raised title="ยกเลิกการแก้ไข">ยกเลิก</paper-button>
           <paper-button id="removeButtom" class="gl-btn-success" on-tap="save" raised title="บันทึกข้อมูล">บันทึก</paper-button>
         </gl-form-panel-footer>
@@ -93,8 +94,8 @@
       </gl-grid-row>
       <div>
         <paper-button class="gl-btn-danger button-size" raised on-tap="_dialogcancle">ยกเลิก</paper-button>
-        <paper-button id="active" class="gl-btn-primary button-size" raised on-tap="_active">บันทึก</paper-button>
-        <paper-button id="retrader" class="gl-btn-primary button-size" raised on-tap="_retrader">บันทึก</paper-button>
+        <paper-button id="active" class="gl-btn-primary button-size" raised on-tap="_active" hidden>บันทึก</paper-button>
+        <paper-button id="retrader" class="gl-btn-primary button-size" raised on-tap="_retrader" hidden>บันทึก</paper-button>
       </div>
     </paper-dialog>
 
@@ -128,6 +129,9 @@
       //     });
       //   }
       // },
+      print:function() {
+        console.log(this.data.trader_id);
+      },
       editChange:function(e){
         // this.$$('#buttomEdit').setAttribute("hidden", "hidden");
         this.pages = 2;
@@ -258,6 +262,7 @@
         if(result == true){
           this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
           this.update('./exporter/update', detail.datas, () => {
+            this.$.dialog.toggle();
             this.fire('refresh-exporter');
             this.fire('close-toggle');
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
@@ -280,6 +285,7 @@
         if(result == true){
           this.fire('toast',{status:'load',text:'กำลังบันทึกข้อมูล...'})
           this.update('./trader/update', detail.datas, () => {
+            this.$.dialog.toggle();
             this.fire('refresh-exporter');
             this.fire('close-toggle');
             this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',callback:function(){
