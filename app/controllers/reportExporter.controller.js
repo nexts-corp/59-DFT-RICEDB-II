@@ -80,7 +80,7 @@ exports.report1 = function (req, res, next) {
                     ).add(m('exporter_no').coerceTo('string'))
                     , null
                 ),
-                exporter_date_update: r.branch(m.hasFields('exporter_date_update'), m('exporter_date_update').split('T')(0), null),
+                //exporter_date_update: r.branch(m.hasFields('exporter_date_update'), m('exporter_date_update').split('T')(0), null),
                 trader_date_approve: m('trader_date_approve').split('T')(0),
                 trader_date_expire: m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31"),
                 trader_active: r.now().toISO8601().lt(m('trader_date_approve').split('T')(0).split('-')(0).add("-12-31T00:00:00.000Z"))
