@@ -3,7 +3,7 @@ const initialState = {a:'foo',b:'bar'}
 exports.reducer = function (state = initialState,action){
 
     switch (action.type) {
-        case 'AMOUNT_LIST':
+        case 'EXPORT_SAVE_NAME':
             //const data = action.payload;
             //return Object.assign({},state,{list:data});
         default:
@@ -13,5 +13,7 @@ exports.reducer = function (state = initialState,action){
 }
 
 exports.action = function(store){
-    return {}
+    return {
+        
+    }
 };

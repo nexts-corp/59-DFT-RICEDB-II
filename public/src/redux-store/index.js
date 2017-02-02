@@ -6,7 +6,7 @@ import exportReducer from './reducer/export'
 
 const rootReducer = combineReducers({
     report:reportReducer.reducer,
-    export:exportReducer.reducer,
+    export:exportReducer.reducer
 });
 
 const storeApp = createStore(
