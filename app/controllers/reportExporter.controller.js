@@ -609,37 +609,36 @@ exports.report6 = function (req, res) {
 exports.report10 = function (req, res) {
         var r = req._r;
         var  date_start , date_end; 
+        var _nextDay = new Date();
+        _nextDay.setDate(_nextDay.getDate() + 1);
+        var nextDays = _nextDay.toISOString().slice(0, 10);
         var parameters = {
                 CURRENT_DATE: new Date().toISOString().slice(0, 10),
                 SUBREPORT_DIR: __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\',
-                date_start: y + "-01-01" + tz,
-                date_end: y + "-12-31" + tz
+                date_start: new Date().toISOString().slice(0, 10),
+                date_end: nextDays
             };
         var  d = {};
+        // console.log('ddd',req.query['date_start']);
+        // parameters['date_end'].setDate(parameters['date_end'].getDate() + 1)
+        // console.log('dddxxxx',parameters['date_end']);
         //ถ้าไม่ส่งอะไรมาเลย
-        if(Object.getOwnPropertyNames(req.query).length == 0){
-            d['date_start'] = "2000-01-01T00:00:00.000Z";
-            d['date_end'] = parameters['CURRENT_DATE'];
-        }else if(Object.getOwnPropertyNames(req.query).length == 1){
-            if(req.query['date_start'] !== undefined){
-                d['date_start'] = req.query['date_start']
-                d['date_end'] = parameters['CURRENT_DATE'];
-            } else {
-                d['date_start'] = "2000-01-01T00:00:00.000Z";
-                d['date_end'] = req.query['date_end']
-            } 
-        }else {
-            d['date_start'] = req.query['date_start']
-            d['date_end'] = req.query['date_end']
-        }
-
-        if (Object.getOwnPropertyNames(d).length !== 0) {
-            parameters['date_start'] = d['date_start'].split('T')[0];
-            parameters['date_end'] = d['date_end'].split('T')[0];
-        } else {
-            parameters['date_start'] = parameters['date_start'].split('T')[0];
-            parameters['date_end'] = parameters['date_end'].split('T')[0];
-        }
+        // if(Object.getOwnPropertyNames(req.query).length == 0){
+            d['date_start'] = parameters['date_start']
+            d['date_end'] = parameters['date_end'];
+        // }else {
+            // d['date_start'] = req.query['date_start']
+            // d['date_end'] = parameters['date_end'];
+            // d['date_end'] = req.query['date_end']
+        // }
+        //  console.log('ddd',d);   
+        // if (Object.getOwnPropertyNames(d).length !== 0) {
+        //     parameters['date_start'] = d['date_start'].split('T')[0];
+        //     parameters['date_end'] = d['date_end'].split('T')[0];
+        // } else {
+            parameters['date_start'] = parameters['date_start'];
+            parameters['date_end'] = parameters['date_end'];
+        // }
         // console.log('parameters=>',parameters)
         // date_start = "2016-12-01T00:00:00.000Z";
         // date_end = "2016-12-31T00:00:00.000Z";
