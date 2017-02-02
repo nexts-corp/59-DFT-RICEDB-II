@@ -1,5 +1,6 @@
 <link rel="import" href="./../components/panel-right/panel-right.html">
 <link rel="import" href="./components/quota-list.html">
+<link rel="import" href="./components/data-manage.html">
 
 
 <dom-module id="page-quota">
@@ -97,16 +98,17 @@
 		</div>
 
 		<panel-right title="การกำหนดปีโควตา">
-      <template is="dom-if" if="[[rendered]]">
-        <quota-manage data="{{dataSelect}}" status="{{status}}" on-post-data="_postData" on-put-data="_putData"
-        on-delete-data="_confirmData" on-cancel-data="_confirmCancel"></quota-manage>
-      </template>
+				<data-manage></data-manage>
 		</panel-right>
 	</template>
 	<script>
     Polymer({
       is: 'page-quota',
-      behaviors: [nylonBehavior,ReduxBehavior]
+      behaviors: [nylonBehavior,ReduxBehavior],
+			_insertData:function(){
+				this.$$('panel-right').open();
+			}
+			
     });
   </script>
 </dom-module>
