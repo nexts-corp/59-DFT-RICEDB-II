@@ -317,8 +317,13 @@
       },
       //นับหน้า
       _invoicePage:function (invoice=1) {
-        this.data.invoicePage = invoice.length;
-        this.notifyPath('data.invoicePage');
+        try {
+          this.data.invoicePage = invoice.length;
+          this.notifyPath('data.invoicePage');
+        } catch (e) {
+          console.log();
+        }
+
       },
       _countFee:function (fee) {
         return fee/this.data.invoice.length;
