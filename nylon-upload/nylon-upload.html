@@ -1,0 +1,141 @@
+<link rel="import" href="../vaadin-upload/vaadin-upload.html">
+<dom-module id="nylon-upload">
+    <style>
+        .borderDrop{
+            border: 1px dashed;
+            border-color: #dbdbdb;
+            border-radius: 3px;
+            overflow: hidden;
+            padding: 16px;
+            color:#AAA;
+        }
+    </style>
+    <template>
+        <template is="dom-if" if="[[checkRefPath(refPath)]]">
+            <vaadin-upload
+            id="preFill"
+            target="[[target]]"
+            files="{{listFiles}}"
+            method="POST"
+            timeout="300000"
+            accept="[[accept]]"
+            on-upload-request="_addHeader"
+            disabled
+            >
+                <div class="drop-label">
+                    <iron-icon icon="description"></iron-icon>
+                    [[dropName]]
+                </div>
+                <div id="fileList" class="file-list">
+                    <div id="fileList">
+                        <template is="dom-repeat" items="[[listFiles]]" as="file">
+                            <vaadin-upload-file
+                            file="[[file]]"
+                            on-tap="downloadFile"
+                            style="cursor:pointer"
+                            file-id-upload="[[fileChanged(file.*)]]"
+                            file-id="[[file.file_id]]"
+                            on-file-abort="_deleteFile"
+                            ></vaadin-upload-file>
+                        </template>
+                    </div>
+                </div>
+            </vaadin-upload>
+        </template>
+        <template is="dom-if" if="[[!checkRefPath(refPath)]]">
+            <div class="borderDrop"><iron-icon icon="description"></iron-icon>&nbsp;&nbsp;Upload Disabled.</div>
+        </template>
+
+    </template>
+    <script>
+        Polymer({
+            is: 'nylon-upload',
+            properties:{
+                target:{
+                    type:String
+                },
+                accept:{
+                    type:String
+                },
+                dropName:{
+                    type:String,
+                    value:"วางไฟล์ที่นี่"
+                },
+                refPath:{
+                    type:String,
+                    value:"",
+                    observer:'getList'
+                },
+                docTypeId:{
+                    type:String
+                },
+                exporterId:{
+                  type:String,
+                  value:"",
+                  observer:'getList'
+                }
+            },
+            checkRefPath:function(refPath){
+                return (refPath!="")
+            },
+            fileChanged:function(fileChange){
+              if(fileChange.path=='file.complete'){
+                if(fileChange.base.xhr){
+                  var res = JSON.parse(fileChange.base.xhr.response);
+                  axios.get('/documentFile/id/'+res.generated_keys[0])
+                  .then((response)=>{
+                    this.fileIdUpload = response.data.file_id;
+                    // console.log(response.data.file_id);
+                  })
+                  // return res.generated_keys[0];
+                }
+              }
+            },
+            getList:function(){
+              if (this.refPath != {} && this.exporterId != '' && this.exporterId != undefined) {
+                axios.get('/upload/list/'+this.refPath+'/'+this.exporterId)
+                .then( (response)=>{
+                    this.listFiles = response.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+              }
+            },
+            _addHeader:function(e){
+                event.detail.xhr.setRequestHeader('ref-path', this.refPath);
+                event.detail.xhr.setRequestHeader('doc-type-id', this.docTypeId);
+            },
+            downloadFile:function(e){
+                //console.log(e.target.getAttribute('class'));
+                if(e.target.getAttribute('class')===null){
+                    var idFile;
+                    if(typeof e.currentTarget.fileId=="undefined"){
+                        // idFile = e.currentTarget.fileIdUpload
+                        idFile = this.fileIdUpload
+                    }else{
+                        idFile = e.currentTarget.fileId
+                    }
+                    window.location = '/api/upload/file/'+idFile;
+                }
+            },
+            _deleteFile:function(e){
+                var idFile;
+                if(typeof e.target.fileId=="undefined"){
+                  // console.log(e.target.fileIdUpload);
+                  idFile = this.fileIdUpload
+                }else{
+                  idFile = e.target.fileId
+                  // console.log("ID File = "+idFile);
+                }
+                axios.delete('/upload/file/'+idFile)
+                .then( (response)=>{
+                    //console.log(response);
+                })
+                .catch(function (error) {
+                    //console.log(error);
+                });
+            }
+        });
+    </script>
+</dom-module>

@@ -702,13 +702,8 @@ console.log('kkkkkkk',req.query[key]== "true")
         .orderBy('exporter_date_approve')
         .run()
         .then(function (result) {
-<<<<<<< HEAD
             // res.json(result);
             //  parameters = {}
-=======
-            //   res.json(result);
-          //  parameters = {}
->>>>>>> 6e44878ebdc27d44a82924c0836ddd58bd449a91
             res._ireport("report10.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
@@ -718,6 +713,11 @@ console.log('kkkkkkk',req.query[key]== "true")
 exports.report11 = function (req, res) {
     var r = req._r;
     var params = req.params;
+    var parameters = {
+        CURRENT_DATE: new Date().toISOString().slice(0, 10),
+        SUBREPORT_DIR:"E:\\Polymer\\Project_Rice\\report-exporter\\app\\reports\\exporter\\"
+        // __dirname.replace('controller', 'report') + '\\' + req.baseUrl.replace("/api/", "") + '\\'
+    };
     r.db('external_f3').table("trader").outerJoin(
         r.db('external_f3').table("exporter")
             .merge(function (m) {
@@ -831,7 +831,8 @@ exports.report11 = function (req, res) {
         .orderBy('exporter_no')
         .run()
         .then(function (result) {
-            res.json(result);
+            // res.json(result);
+            res._ireport("exporter/report_Exporter.jasper", req.query.export || "pdf", result, parameters);
         })
         .error(function (err) {
             res.json(err)
