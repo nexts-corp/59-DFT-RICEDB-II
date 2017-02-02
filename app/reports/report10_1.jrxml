@@ -30,8 +30,11 @@
 					<font fontName="TH SarabunPSK" size="24" isBold="true" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["รายงานผู้ส่งออกที่ลงทะเบียน"+
-"\nประจำเดือน "+
-new nylon.utility.NumberFormat().toThaiDate($P{date_end}).split(" ")[0]]]></textFieldExpression>
+"\nประจำเดือน "
++new nylon.utility.NumberFormat().toThaiDate($P{date_start}).split( " " )[0] +
+new nylon.utility.NumberFormat().toThaiDate($P{date_start}).split( " " )[1] + " - "
++ new nylon.utility.NumberFormat().toThaiDate($P{date_end}).split( " " )[0] +
+new nylon.utility.NumberFormat().toThaiDate($P{date_end}).split( " " )[1]]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
