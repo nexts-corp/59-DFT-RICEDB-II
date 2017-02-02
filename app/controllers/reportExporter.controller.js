@@ -181,8 +181,8 @@ exports.report2 = function (req, res, next) {
         .orderBy('exporter_no')
         .run()
         .then(function (result) {
-            res.json(result);
-            // res._ireport("report2.jasper", "pdf", result, parameters);
+            // res.json(result);
+            res._ireport("report2.jasper", "pdf", result, parameters);
         });
 }
 exports.report3 = function (req, res, next) {
