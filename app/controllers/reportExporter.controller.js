@@ -621,7 +621,6 @@ exports.report10 = function (req, res) {
             d['date_start'] = "2000-01-01T00:00:00.000Z";
             d['date_end'] = parameters['CURRENT_DATE'];
         }else if(Object.getOwnPropertyNames(req.query).length == 1){
-            // log
             if(req.query['date_start'] !== undefined){
                 d['date_start'] = req.query['date_start']
                 d['date_end'] = parameters['CURRENT_DATE'];
@@ -641,7 +640,7 @@ exports.report10 = function (req, res) {
             parameters['date_start'] = parameters['date_start'].split('T')[0];
             parameters['date_end'] = parameters['date_end'].split('T')[0];
         }
-        console.log('parameters=>',parameters)
+        // console.log('parameters=>',parameters)
         // date_start = "2016-12-01T00:00:00.000Z";
         // date_end = "2016-12-31T00:00:00.000Z";
         date_start = parameters.date_start;
