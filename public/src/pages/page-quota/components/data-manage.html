@@ -5,18 +5,21 @@
             .content{
                 padding: 20px;
             }
-            .flex-end-justified {
+           .flex-equal-justified {
                 @apply(--layout-horizontal);
-                @apply(--layout-end-justified);
+                @apply(--layout-justified);
             }
         </style>
         <div class="content">
             <paper-input label="name(th)" value="{{name.nameTH}}"></paper-input>
             <paper-input label="name(eng)" value="{{name.nameEN}}"></paper-input>
             
-            <div class="container flex-end-justified">
+            <div class="content flex-equal-justified">
                 <div>
-                    <paper-button class="gl-bg-success" on-tap="saveData" raised>Save</paper-button>
+                    <paper-button class="gl-bg-danger" on-tap="deleteData" raised>Delete</paper-button>
+                </div>
+                <div>
+                    <paper-button class="gl-bg-success" on-tap="controller" raised>Save</paper-button>
                 </div>
             </div>
             
@@ -33,15 +36,37 @@
                         nameTH:'',
                         nameEN:''
                     }
+                },
+                status:{
+                    type:String,
+                    value:'insert',
+                }
+            },
+            controller:function(){
+                switch(this.status){
+                  case  'insert' : this.saveData();
+                  case 'update' : this.updateData();
+                //   default : console.log('status error');
                 }
             },
             saveData:function(){
-                
                 this.EXPORT_SAVE_NAME(this.name)
                 .then(()=>{
                     this.fire('close');
                 });
-                
+            },
+            updateData:function(){
+                 this.EXPORT_EDIT_NAME(this.name)
+                .then(()=>{
+                    this.fire('close');
+                });
+            },
+            deleteData:function(){
+                console.log(this.name.id);
+                this.EXPORT_DELETE_LIST(this.name.id)
+                .then(()=>{
+                    this.fire('close');
+                });
             }
         });
     </script>
