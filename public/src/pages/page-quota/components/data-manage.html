@@ -1,15 +1,25 @@
 
 <dom-module id="data-manage">
     <template>
-        <style>
-            div{
+        <style include="gl-size gl-color">
+            .content{
                 padding: 20px;
             }
+            .flex-end-justified {
+                @apply(--layout-horizontal);
+                @apply(--layout-end-justified);
+            }
         </style>
-        <div>
+        <div class="content">
             <paper-input label="name(th)" value="{{name.nameTH}}"></paper-input>
             <paper-input label="name(eng)" value="{{name.nameEN}}"></paper-input>
-            <paper-button on-tap="saveData" raised>Save</paper-button>
+            
+            <div class="container flex-end-justified">
+                <div>
+                    <paper-button class="gl-bg-success" on-tap="saveData" raised>Save</paper-button>
+                </div>
+            </div>
+            
         </div>
     </template>
     <script>
