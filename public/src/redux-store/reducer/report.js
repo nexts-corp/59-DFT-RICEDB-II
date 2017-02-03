@@ -1,14 +1,16 @@
+import axios from '../axios'
+
 const initialState = {
     data_list:[]
 }
 
-exports.reportReducer = function (state = initialState,action){
+export function reportReducer(state = initialState,action){
 
     switch (action.type) {
-        case 'EXPORT_SAVE_NAME':
-            const data = state.data_list.slice(0);
-            data.push(action.payload)
-            return Object.assign({},state,{data_list:data});
+        // case 'EXPORT_SAVE_NAME':
+        //     const data = state.data_list.slice(0);
+        //     data.push(action.payload)
+        //     return Object.assign({},state,{data_list:data});
         case 'EXPORT_GET_LIST':
             return Object.assign({},state,{data_list:action.payload});
         default:
@@ -17,7 +19,7 @@ exports.reportReducer = function (state = initialState,action){
 
 }
 
-exports.reportAction = function(store){
+export function reportAction(store){
     return {
         EXPORT_SAVE_NAME:function(name){
             // axios.get('https://httpbin.org/get').then(()=>{

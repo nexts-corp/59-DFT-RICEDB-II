@@ -22,7 +22,7 @@
                     <paper-button class="gl-bg-success" on-tap="controller" raised>Save</paper-button>
                 </div>
             </div>
-            
+        
         </div>
     </template>
     <script>
@@ -44,12 +44,13 @@
             },
             controller:function(){
                 switch(this.status){
-                  case  'insert' : this.saveData();
+                  case 'insert' : this.saveData();
                   case 'update' : this.updateData();
                 //   default : console.log('status error');
                 }
             },
             saveData:function(){
+                console.log(this.name);
                 this.EXPORT_SAVE_NAME(this.name)
                 .then(()=>{
                     this.fire('close');
