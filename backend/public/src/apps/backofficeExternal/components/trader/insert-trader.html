@@ -61,7 +61,6 @@
         <vaadin-date-picker class="margin-top checkData" label="วันที่อนุมัติ" value="{{data.trader_date_approve}}"></vaadin-date-picker>
       </gl-grid-col>
     </gl-grid-row>
-
     <gl-grid-row>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
@@ -142,32 +141,34 @@
         this.glQuery('panelRight').changDrawer();
         this.data = {};
       },
+      _dif:function(a){
+
+      },
       _checkSeller:function(val){
         if (val !== '') {
           // console.log(val);
-          this.read('./external/trader?seller_id='+val, (data) => {
-            // console.log(data);
-            this._typeLicName(data);
-          });
+          if (typeof this.traders != 'undefined') {
+            var newType = [];
+            let comboboxs = Polymer.dom(this.root).querySelector('#typeID');
+            var seller = this.traders.filter(function(sellers) {
+              return sellers.seller_id == val
+            })
+            var type = this.typelics.map((type)=>{
+              return type
+            })
+            var item = seller.map((item)=>{
+              return item.type_lic_id
+            })
+
+            newType = type.filter(function(i) {
+              var val = i.type_lic_id;
+              return item.indexOf(val) < 0;
+            })
+            comboboxs.items = newType;
+          }
         }
       },
-      _typeLicName:function (data) {
-        var newType = [];
-        let comboboxs = Polymer.dom(this.root).querySelector('#typeID');
-        if (typeof this.typelics !== undefined && this.typelics !== undefined) {
-          this.typelics.map((val)=>{
-            // console.log(val);
-            data.map((item)=>{
-              // console.log(item);
-              if (val.type_lic_id != item.type_lic_id) {
-                newType.push(val)
-              }
-            })
-          })
-        }
-        // console.log(newType);
-        comboboxs.items = newType;
-      }
+
     });
   </script>
 </dom-module>
