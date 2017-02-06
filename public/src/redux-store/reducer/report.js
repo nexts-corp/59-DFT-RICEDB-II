@@ -91,6 +91,7 @@ export function reportAction(store){
         },
         EXPORT_GET_LIST:function(){
             axios.get('./new/new')
+            
             .then((response)=>{
                 console.log('success!!');
                 console.log(response.data);

@@ -1,0 +1,48 @@
+
+<dom-module id="import-list">
+    <template>
+        <style include="page-style"></style>
+        <table class="gl-table-default">
+            <thead>
+                <tr>
+                    <th>เลขที่หนังสือรับรอง</th>
+                    <th>ผู้นำเข้า</th>
+                    <th>เลขประจำตัวผู้เสียภาษี</th>
+                    <th>ประเภทการนำเข้า</th>
+                    <th>วันที่ออกหนังสือ</th>
+                    <th>วันที่หนังสือหมดอายุ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template is="dom-repeat" items="[[data]]">
+                    <tr on-tap="selected" data="[[item]]" style="cursor: pointer">
+                        <td>[[item.no_book]]</td>
+                        <td>[[item.import_name]]</td>
+                        <td>[[item.no_person]]</td>
+                        <td>[[item.type_import]]</td>
+                        <td>[[item.date_start]]</td>
+                        <td>[[item.date_end]]</td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </template>
+    <script>
+        Polymer({
+            is: 'import-list',
+            behaviors: [ReduxBehavior,importAction],
+            properties:{
+                data:{
+                     statePath:'import.data_list'
+                }
+            },
+            ready:function(){
+                this.IMPORT_GET_LIST();
+            },
+            selected:function(e){
+                // console.log(e.currentTarget.data);
+                this.fire('select-data',e.currentTarget.data);
+            }
+        });
+    </script>
+</dom-module>

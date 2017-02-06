@@ -1,14 +1,52 @@
-<link rel="stylesheet" type="text/css" href="./../../../css/page.css">
+<link rel="import" href="./components/import-list.html">
+<link rel="import" href="./components/import-manage.html">
+
 <dom-module id="page-import">
     <template>
-         
-        <div class="header">
-            รายการนำเข้าภายใต้พันธกรณี WTO
+        <style is="custom-style" include="page-style"></style>
+        <div class="container">
+            <div class="header gl-large">
+                การนำเข้าข้าวภายใต้พันธกรณี WTO
+            </div>
+            <div class="content">
+                <div class="searchBox searchBorder">
+                   <gl-grid-row width="{{getWidth}}">
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                            <vaadin-date-picker label="วันที่(เริ่มต้น)" value="1999-12-31"></vaadin-date-picker>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+                             <vaadin-date-picker label="วันที่(สิ้นสุด)" value="1999-12-31"></vaadin-date-picker>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]">
+                            <paper-button class="gl-btn-primary" raised>ค้นหา</paper-button>
+                        </gl-grid-col>
+                        <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                   </gl-grid-row>
+                </div>
+                <div>
+                    <import-list></import-list>
+                </div>
+                <panel-right title="การนำเข้าข้าวภายใต้พันธกรณี">
+                    <import-manage data="[[data]]"></import-manage>
+                </panel-right>
+            </div>
         </div>
     </template>
     <script>
         Polymer({
-            is: 'page-import'
+            is: 'page-import',
+            listeners:{
+                'select-data': '_selectData'
+            },
+            _selectData:function(e){
+                this.data = e.detail;
+                // console.log(e.detail);
+                this.$$('panel-right').open();
+            }
         });
     </script>
 </dom-module>

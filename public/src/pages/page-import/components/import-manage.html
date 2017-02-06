@@ -1,0 +1,33 @@
+
+<link rel="import" href="manage-detail.html">
+
+<dom-module id="import-manage">
+   
+    <template>
+        <style include="page-style">
+            #tab1:checked ~ #content1,
+            #tab2:checked ~ #content2 {
+                display: block;
+            }
+        </style>
+        <main>
+            <input id="tab1" type="radio" name="tabs" checked>
+            <label for="tab1">รายละเอียด</label>
+
+            <input id="tab2" type="radio" name="tabs">
+            <label for="tab2" style="width:70px;">ไฟล์</label>
+            <section id="content1">
+                <manage-detail data="[[data]]"></manage-detail>
+            </section>
+
+            <section id="content2">
+               
+            </section>
+        </main>
+    </template>
+    <script>
+        Polymer({
+            is: 'import-manage'
+        });
+    </script>
+</dom-module>
