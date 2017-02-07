@@ -2,86 +2,93 @@
 <dom-module id="manage-detail">
     <template>
         <style include="page-style">
-            gl-form-input{
+            gl-form-input[left]{
                 --paper-input-container-input:{
-                     text-align:left;
+                     text-align:right;
                 }
+            }
+            gl-form-input,vaadin-date-picker,gl-combo-box{
+                width:70%;
+            }
+            gl-grid-row{
+                margin:5px 0px 5px 0px;
             }
         </style>
         <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
-            <gl-form-panel-body set-padding="10px" set-border="1px">
+            <gl-form-panel-body set-padding="20px 0px 20px 40px" set-border="1px">
                <gl-grid-row width="{{getWidth}}">
-                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                   
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-input label="เลขประจำตัวผู้เสียภาษี" value="[[data.no_person]]" disabled></gl-form-input>
+                        <gl-form-input label="เลขประจำตัวผู้เสียภาษี" left value="[[data.no_person]]" disabled></gl-form-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                         <gl-form-input label="ผู้นำเข้า" value="[[data.import_name]]" disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-input label="วันที่ขอหนังสือ" value="[[data.date_start]]" disabled></gl-form-input>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-input label="วันที่ขอหนังสือ" value="[[data.date_start]]" left disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-input label="วันที่หนังสือหมดอายุ" value="[[data.date_end]]" disabled></gl-form-input>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-input label="วันที่หนังสือหมดอายุ" value="[[data.date_end]]" left disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                </gl-grid-row>
 
                 <gl-grid-row width="{{getWidth}}">
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-input label="ปริมาณ" value="52.92" disabled></gl-form-input>
+                        <gl-form-input label="ปริมาณ" value="52.92" left disabled></gl-form-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                         <gl-combo-box label="ชนิดข้าว" items="[[typeRice]]" always-float-label item-label-path="name" item-value-path="id" value=""></gl-combo-box>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-input label="ประเภทถิ่นกำเนิดสินค้า" value="ญี่ปุ่น" disabled></gl-form-input>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-input label="ประเภทถิ่นกำเนิดสินค้า" value="ญี่ปุ่น" left disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-input label="ประเภทการนำเข้า" value="ในโควตา" disabled></gl-form-input>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-input label="ประเภทการนำเข้า" value="ในโควตา" left disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                </gl-grid-row>
 
                 <gl-grid-row width="{{getWidth}}">
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
-                        <gl-form-input label="ราคาต่อตัน" format-number="on" value="100000" disabled>
-                             <div suffix>JPY</div>
+                        <gl-form-input label="ราคาต่อตัน" format-number="on" left value="100000" disabled>
+                             <div suffix>&nbsp;&nbsp;JPY</div>
                         </gl-form-input>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                         <gl-form-input label="เป็นเงินบาท" format-number="on" value="1557790.1" disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                         <gl-combo-box label="หน่วย" items="[[typeRice]]" always-float-label item-label-path="name" item-value-path="id" value=""></gl-combo-box>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
-                        <gl-form-input label="วันที่ครบกำหนด" value="[[data.date_end]]" disabled></gl-form-input>
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+                        <gl-form-input label="วันที่ครบกำหนด" value="[[data.date_end]]" left disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                </gl-grid-row>
 
                 <gl-grid-row width="{{getWidth}}">
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                       <vaadin-date-picker label="วันที่รายงาน" value="1999-12-31"></vaadin-date-picker>
                     </gl-grid-col>
                     <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                         <gl-form-input label="สถานะรายงาน" value="ยังไม่รายงาน" disabled></gl-form-input>
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                         
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
                     
                     </gl-grid-col>
-                    <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,1]]"></gl-grid-col>
+                  
                </gl-grid-row>
             </gl-form-panel-body>
             <gl-form-panel-footer set-padding="10px">
-                <paper-button class="gl-btn-success" raised>Save</paper-button>
+                <paper-button class="gl-btn-danger" raised>ยกเลิก</paper-button>
+                <paper-button class="gl-btn-success" raised>บันทึก</paper-button>
             </gl-form-panel-footer>
         </gl-form-panel>
     </template>
