@@ -225,15 +225,17 @@
         this.data.balanceChangeBath = rate_bank*balanceLessFees;
         this.notifyPath('data.balanceChangeBath');
       },
-      _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
-        this.data.feeTotal = (parseFloat(fee_internal)*rate_bank)+parseFloat(feBath)+parseFloat(fee_other);
-        this.data.feeTotalWithOutUsd = parseFloat(feBath)+parseFloat(fee_other);
-        // console.log(this.data.feeTotalWithOutUsd);
-        // console.log(this.data.feeTotal);
-        // this.data.feeTotal = ((fee_internal)*rate_bank)+(feBath)+(fee_other);
-
-        this.notifyPath('data.feeTotal');
-        this.notifyPath('data.feeTotalWithOutUsd');
+      _feTotal:function (fee_internal,fee_foreign,fee_other,rate_bank){
+        fee_internal = numeral().unformat(fee_internal);
+        fee_foreign  = numeral().unformat(fee_foreign);
+        fee_other    = numeral().unformat(fee_other);
+        rate_bank    = numeral().unformat(rate_bank);
+        // this.data.feeTotal = (fee_internal*rate_bank)+fee_foreign+fee_other;
+        // this.data.feeTotalWithOutUsd = fee_foreign+fee_other;
+        // this.notifyPath('data.feeTotal');
+        // this.notifyPath('data.feeTotalWithOutUsd');
+        this.set('data.feeTotal',(fee_internal*rate_bank)+fee_foreign+fee_other);
+        this.set('data.feeTotalWithOutUsd',fee_foreign+fee_other);
       },
       _balanceBath(balanceChangeBath,feeTotalWithOutUsd){
         this.data.totalbath = balanceChangeBath-feeTotalWithOutUsd;
@@ -330,8 +332,8 @@
             el.invoice_detail.map((shmDet,indexshmdet)=>{
               newData.invoice[indexShmid].invoice_detail.push({
                                     shm_det_id:shmDet.shm_det_id,
-                                    invoice_no:shmDet.invoice_no,
-                                    invoice_date:new Date (shmDet.invoice_date),
+                                    // invoice_no:shmDet.invoice_no,
+                                    // invoice_date:new Date (shmDet.invoice_date),
                                     invoice_fee:shmDet.invoice_fee,
                                   });
             });

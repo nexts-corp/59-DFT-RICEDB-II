@@ -1,4 +1,4 @@
-<dom-module id="list-of-bl-pm">
+<dom-module id="list-of-payments">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
       display: block;
@@ -24,57 +24,60 @@
       border: 1px solid #ddd;
       margin-bottom: 15px;
     }
+    table.gl-table-default > thead.table-head > tr > th,
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(2) {
+      text-align: center;
+    }
+    table.gl-table-default > thead.table-head > tr > th:nth-child(1) {
+      width: 80%;
+    }
+    table.gl-table-default > thead.table-head > tr > th:nth-child(2) {
+      width: 20%;
+    }
   </style>
   <template>
-    <div class="title">รวมใบตราส่งสินค้าทางทะเลของสัญญา [[dataForSelect.nameContract]]</div>
+    <div class="title">การจ่ายเงินให้ผู้ประกอบการในสัญญา [[dataForSelect.nameContract]]</div>
     <div class="flex searchInput ">
        <div class="horizontal end-justified layout">
-         <div class="labelSearch">Lot No.</div>{{_searchInArray(searchInput)}}
+         <div class="labelSearch">เลขใบแจ้งหนี้.</div>{{_searchInArray(searchInput)}}
          <paper-input label=" " no-label-float value="{{searchInput}}">
            <iron-icon icon="search" prefix></iron-icon>
          </paper-input>
          <!-- <paper-icon-button icon="search"></paper-icon-button> -->
        </div>
    </div>
-  <div class="horizontal center-justified layout">
+
+<div class="horizontal center-justified layout">
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
-              <th>ชื่อการทำสัญญา</th>
-              <th>งวดการส่งมอบ</th>
-              <th>B/L No.</th>
-              <th>Port of Delivery </th>
-              <th>Port of Destination </th>
-              <th>Lot </th>
+              <th>เลขที่ใบแจ้งหนี้</th>
+              <th>วันที่</th>
             </tr>
           </thead>
           <tbody class="table-body">
             <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
             <!-- <template is="dom-if" if="[[!_isHave(newData)]]"> -->
               <template is="dom-repeat" items="[[newData]]" >
-                <tr data="[[item]]" on-tap="getBlDetail" level="primary" >
-                  <td>[[item.cl_name]]</td>
-                  <td>[[item.shm_name]] ([[item.shm_no]])</td>
-                  <td>[[item.bl_no]]</td>
-                  <td>[[item.deli_port_name]]</td>
-                 <td>[[item.dest_port_name]]</td>
-                 <td>[[item.ship_lot_no]]</td>
+                <tr data="[[item]]" on-tap="getChequeDetail" level="primary" >
+                  <td>[[item.invoice_no]]</td>
+                  <td>[[changeDateCC(item.invoice_date)]]</td>
                 </tr>
-              <!-- </template> -->
               </template>
-              <!-- //[[_isHave(newData)]]// -->
+              <!-- </template> -->
               <template is="dom-if" if="[[_isHave(newData)]]">
                   <tr >
-                    <td colspan="6" style="text-align:center">  ไม่มีข้อมูล</td>
+                    <td colspan="2" style="text-align:center">  ไม่มีข้อมูล</td>
                   </tr>
               </template>
+            <!-- </template> -->
          </tbody>
       </table>
-  </div>
+      </div>
   </template>
   <script>
     Polymer({
-      is: "list-of-bl-pm",
+      is: "list-of-payments",
       observers:[
         'initDatabl(data)'
       ],
@@ -83,7 +86,7 @@
       ],
       properties: {
         newData:{
-          type:Object,
+          type:Object
         }
       },
       initDatabl:function (data) {
@@ -97,9 +100,8 @@
           if (searchInput != '') {
             let arr=[];
             this.data.map((el)=>{
-              if (el.ship_lot_no.search(searchInput) > -1) {
-                  //  console.log('search==> ',el);
-                    arr.push(el);
+              if (String(el.invoice_no).search(searchInput) > -1) {
+                  arr.push(el);
               }
             });
             this.newData=arr;
@@ -107,9 +109,9 @@
             this.initDatabl(this.data);
           }
       },
-      getBlDetail:function (e) {
+      getChequeDetail:function (e) {
         // console.log(e.currentTarget.data);
-        this.fire('get-bl-detail',{detail:e.currentTarget.data});
+        this.fire('get-payment-detail',{detail:e.currentTarget.data});
       }
     });
   </script>

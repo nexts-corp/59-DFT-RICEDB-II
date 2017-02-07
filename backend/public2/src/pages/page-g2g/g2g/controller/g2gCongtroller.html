@@ -80,13 +80,27 @@
     },
     //เช็คว่ามีข้อมูลในอาเรย์ไหม
     _isHave:function (data) {
-      if (typeof data !== 'undefined' && data !== 'undefined') {
-        if (data.length < 1) {
-          return true;
-        }
+      // console.log(typeof data == 'object');
+      if ((typeof data == 'object') && (data !== null)) {
+
+        console.log('fffff',data);
+          if (data.length < 1) {
+            return true;
+          }else {
+            return false
+          }
+
       }else {
-        return 0;
+        console.log('aaaaa',data);
+        return true
       }
+      // if (typeof data !== 'undefined' && data !== 'undefined') {
+      //   if (data.length < 1) {
+      //     return true;
+      //   }
+      // }else {
+      //   return 0;
+      // }
 
     },
     _checkUndefined:function (data) {

@@ -9,6 +9,11 @@
       font-family: 'CSChatThaiUI', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
+    table.gl-table-default {
+      width: 98%;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
     .labelSearch{
     font-size: var(--font-size-h4);
     margin: 10px 10px 10px 10px;
@@ -26,10 +31,11 @@
 
     <iron-pages selected="[[pageSelected]]" attr-for-selected="name">
       <div name="listOfFee">
+        <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
         <div class="title">รวมค่าธรรมเนียมในสัญญา [[nameContract]]</div>
         <div class="flex searchInput ">
            <div class="horizontal end-justified layout">
-             <div class="labelSearch">FEE No.</div>{{_searchInArray(searchInput)}}
+             <div class="labelSearch">ครั้งที่คิดธรรมเนียม</div>{{_searchInArray(searchInput)}}
              <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
              <paper-icon-button icon="search"></paper-icon-button>
            </div>
@@ -59,6 +65,7 @@
                 </template>
              </tbody>
           </table>
+            </gl-form-panel>
       </div>
     <div name="feeDetailList">
       <list-of-fee-detail-g2g data="[[dataSelected.feeDetail]]"></list-of-fee-detail-g2g>

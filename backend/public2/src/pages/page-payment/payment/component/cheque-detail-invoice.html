@@ -1,0 +1,118 @@
+<dom-module id="cheque-detail-invoice">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    table.gl-table-default {
+      width: 98%;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
+    table.gl-table-default > thead.table-head > tr > th,
+    table.gl-table-default > tbody.table-body > tr > td,
+    table.gl-table-default > thead.table-head > tr > th {
+      text-align: center;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(2),
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(3) {
+      text-align: left;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(1) {
+      width: 5%;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(2),
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(3) {
+      width: 20%;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(4) {
+      width: 15%;
+    }
+    vaadin-date-picker{
+      margin-top:-27px;
+    }
+  </style>
+  <template>
+    <div class="horizontal center-justified layout">
+    <table class="gl-table-default">
+      <thead class="table-head">
+        <tr>
+          <th>ลำดับ</th>
+          <th>ชื่อเรื่อ</th>
+          <th>ชื่อบริษัท</th>
+          <th>ชนิดข้าว</th>
+          <th>ขนาดแพคเกจ</th>
+          <th>เลขใบแจ้งหนี้</th>
+          <th>วันที่</th>
+        </tr>
+        </tr>
+      </thead>
+      <tbody class="table-body">
+        <template is="dom-repeat" items="[[data]]">
+          <tr>
+           <td>[[_ObcountIndex(index)]]</td>
+           <td>[[item.ship]]</td>
+           <td>[[item.exporter_name]]</td>
+           <td>[[item.type_rice_name_th]]</td>
+           <td>[[item.package_kg_per_bag]]  กก.</td>
+           <td><gl-form-input placeholder="เลขใบแจ้งหนี้" no-label-float  value="{{item.invoice_exporter_no}}" data="[[item]]"on-blur="updateCheque"></gl-form-input></td>
+           <td><vaadin-date-picker no-label-float value="{{item.invoice_exporter_date}}" data="[[item]]"on-blur="updateCheque"></vaadin-date-picker></td>
+          </tr>
+          <!-- <tr>
+           <td>[[index]]</td>
+           <td>[[item.ship]]</td>
+           <td>[[item.exporter_name]]</td>
+           <td>[[item.type_rice_name_th]]</td>
+           <td>[[item.price_per_ton]]</td>
+           <td>[[item.shm_det_quantity]]</td>
+           <td>[[item.amount_usd]]</td>
+           <td>[[item.rate_tt]]</td>
+           <td>[[item.rate_bank]]</td>
+           <td>[[item.amount_bath]]</td>
+           <td>[[item.invoice_fee]]</td>
+           <td>[[item.amount_bath_fee]]</td>
+           <td>[[item.invoice_exporter_no]]</td>
+          </tr> -->
+        </template>
+     </tbody>
+  </table>
+</div>
+  </template>
+  <script>
+    Polymer({
+      is: "cheque-detail-invoice",
+      behaviors: [
+          g2gModelBehavior,
+          g2gCongtroller,
+      ],
+      updateCheque:function (e) {
+        // console.log(1111);
+        let dataOld = e.currentTarget.data;
+        this._clearChequeDetailData(dataOld,(data)=>{
+          data.id = dataOld.pay_det_id;
+          console.log(data);
+         this.fire('toast',{status:'load'});
+          this.update('./g2g/payment/detail/update',data, () => {
+            console.log(data);
+            this.fire('toast',{status:'load'});
+            // this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+            //   callback:()=>{}
+            // });
+           });
+
+        })
+      },
+      _clearChequeDetailData(data,callback){
+        let {invoice_exporter_date,invoice_exporter_no}=data;
+        let newData={invoice_exporter_date,invoice_exporter_no};
+        if (newData.invoice_exporter_date.length < 1) {
+
+        }else {
+          newData.invoice_exporter_date = new Date (newData.invoice_exporter_date).toISOString();
+        }
+        // newData.invoice_exporter_date = new Date (newData.invoice_exporter_date).toISOString();
+        console.log(newData.invoice_exporter_date);
+        callback(newData)
+      }
+    });
+  </script>
+</dom-module>

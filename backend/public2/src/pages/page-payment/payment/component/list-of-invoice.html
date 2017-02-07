@@ -23,6 +23,11 @@
     .worrne{
       padding: 15px;
     }
+    table.gl-table-default {
+      width: 98%;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
   </style>
   <template>
     <div class="title">รวมใบกำกับสินค้าของสัญญา [[dataForSelect.nameContract]]</div>
@@ -33,6 +38,8 @@
          <paper-icon-button icon="search"></paper-icon-button>
        </div> -->
    </div>
+
+   <div class="horizontal center-justified layout">
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
@@ -88,6 +95,7 @@
         </template>
          </tbody>
       </table>
+      </div>
       <div class="worrne">
         *กรุณาติ้กเครื่องถูกที่งวดเดียวกัน
       </div>
@@ -108,7 +116,7 @@
         }
       },
       observers:[
-        '_cleanCheckBox(data)'
+        '_cleanCheckBox(data.*)'
       ],
       _cleanCheckBox:function (data) {
         // console.log(data);
@@ -118,7 +126,7 @@
         });
         let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
         check.map((el)=>{
-            el.ariaChecked=false;
+            el.checked=false;
         });
       },
       checkData:function (e){

@@ -1,4 +1,4 @@
-<dom-module id="list-of-fee">
+<dom-module id="list-of-cheque">
   <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
     :host {
       display: block;
@@ -26,50 +26,54 @@
     }
   </style>
   <template>
-    <div class="title">รวมค่าธรรมเนียมในสัญญา [[dataForSelect.nameContract]]</div>
+    <div class="title">ใส่เลขที่เช็คของสัญญา [[dataForSelect.nameContract]]</div>
     <div class="flex searchInput ">
        <div class="horizontal end-justified layout">
-         <div class="labelSearch">ครั้งที่คิดธรรมเนียม</div>{{_searchInArray(searchInput)}}
-         <paper-input label=" " no-label-float value="{{searchInput}}"></paper-input>
-         <paper-icon-button icon="search"></paper-icon-button>
+         <div class="labelSearch">รอบการจ่ายเงิน.</div>{{_searchInArray(searchInput)}}
+         <paper-input label=" " no-label-float value="{{searchInput}}">
+           <iron-icon icon="search" prefix></iron-icon>
+         </paper-input>
+         <!-- <paper-icon-button icon="search"></paper-icon-button> -->
        </div>
    </div>
+
    <div class="horizontal center-justified layout">
     <table class="gl-table-default">
           <thead class="table-head">
             <tr>
-              <th>ชื่อการทำสัญญา</th>
+              <th>รอบการส่งมอบ</th>
               <th>งวดการส่งมอบ</th>
-              <th>ครั้งที่คิดค่าธรรมเนียม</th>
-
+              <th>รอบการจ่าย</th>
+              <th>ชื่อรอบการจ่ายเงิน</th>
             </tr>
           </thead>
           <tbody class="table-body">
             <!-- <template is="dom-repeat" items="[[data]]" as="contract"> -->
-            <!-- <template is="dom-if" if="[[!_isHave(newData)]]"> -->
+            <template is="dom-if" if="[[!_isHave(newData)]]">
               <template is="dom-repeat" items="[[newData]]" >
-                <tr data="[[item]]" on-tap="getFeeDetail">
-                  <td>[[item.cl_name]]</td>
-                  <td>[[item.shm_name]] ([[item.shm_no]])</td>
-                  <td>[[item.fee_name]] ([[item.fee_no]])</td>
+                <tr data="[[item]]" on-tap="getChequeDetail" level="primary" >
+                  <td>[[item.shm_no]]</td>
+                  <td>[[item.shm_name]]</td>
+                  <td>[[item.fee_no]]</td>
+                  <td>[[item.fee_name]]</td>
                 </tr>
               </template>
-            <!-- </template> -->
-            <template is="dom-if" if="[[_isHave(newData)]]">
-              <tr>
-                <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
-              </tr>
-            </template>
+              </template>
+              <template is="dom-if" if="[[_isHave(newData)]]">
+                  <tr >
+                    <td colspan="5" style="text-align:center">  ไม่มีข้อมูล</td>
+                  </tr>
+              </template>
             <!-- </template> -->
          </tbody>
       </table>
-      </div>
+    </div>
   </template>
   <script>
     Polymer({
-      is: "list-of-fee",
+      is: "list-of-cheque",
       observers:[
-        'initDataFee(data)'
+        'initDatabl(data)'
       ],
       behaviors: [
           g2gCongtroller
@@ -79,27 +83,29 @@
           type:Object
         }
       },
-      initDataFee:function (data) {
+      initDatabl:function (data) {
         // console.log(data);
         this.newData = this.g2gClone(data);
+        // console.log('clone new==>',this.newData);
+        // console.log('org==>',this.data);
       },
       _searchInArray:function (searchInput) {
           // console.log(searchInput == '');
           if (searchInput != '') {
             let arr=[];
             this.data.map((el)=>{
-              if (el.fee_name.search(searchInput) > -1) {
-                  //  console.log('search==> ',el);
-                    arr.push(el);
+              if (String(el.fee_no).search(searchInput) > -1) {
+                  arr.push(el);
               }
             });
             this.newData=arr;
           }else{
-            this.initDataFee(this.data);
+            this.initDatabl(this.data);
           }
       },
-      getFeeDetail:function (e) {
-        this.fire('get-fee-detail',{detail:e.currentTarget.data});
+      getChequeDetail:function (e) {
+        // console.log(e.currentTarget.data);
+        this.fire('get-cheque-detail',{detail:e.currentTarget.data});
       }
     });
   </script>

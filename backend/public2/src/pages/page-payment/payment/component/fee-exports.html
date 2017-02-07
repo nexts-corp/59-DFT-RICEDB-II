@@ -91,7 +91,7 @@
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
             [[changeString2Num(data.*,'balanceLessFees')]]
            {{_balanceLessFees(data.amount_usd,data.fee_internal)}}
-           <gl-form-input disabled label="คงเหลือ (USD)" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.balanceLessFees}}" placeholder="0.00"></gl-form-input>
+           <gl-form-input disabled label="คงเหลือ (USD)" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.balanceLessFees}}" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -99,16 +99,16 @@
        <gl-grid-row>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
            [[changeString2Num(data.*,'rate_tt')]]
-           <gl-form-input class="required" required label="อัตราแลกเปลี่ยน T/T" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.rate_tt}}" ></gl-form-input>
+           <gl-form-input class="required" required label="อัตราแลกเปลี่ยน T/T" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.rate_tt}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
            [[changeString2Num(data.*,'rate_bank')]]
-           <gl-form-input class="required" required label="อัตราแลกเปลี่ยนธนาคารเสนอ" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.rate_bank}}" ></gl-form-input>
+           <gl-form-input class="required" required label="อัตราแลกเปลี่ยนธนาคารเสนอ" disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" value="{{data.rate_bank}}"  always-float-label></gl-form-input>
          </gl-grid-col>
          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
            [[changeString2Num(data.*,'balanceChangeBath')]]
            {{_balanceChangeBath(data.rate_bank,data.balanceLessFees)}}
-           <gl-form-input disabled label="จำนวนเงินหลังการเปลี่ยนอัตราแลกเปลี่ยน (บาท)" allowed-pattern="[0-9||,||.]" format-number="on" value="[[data.balanceChangeBath]]" placeholder="0.00"></gl-form-input>
+           <gl-form-input disabled label="จำนวนเงินหลังการเปลี่ยนอัตราแลกเปลี่ยน (บาท)" allowed-pattern="[0-9||,||.]" format-number="on" value="[[data.balanceChangeBath]]" placeholder="0.00" always-float-label></gl-form-input>
          </gl-grid-col>
        </gl-grid-row>
      </div>
@@ -122,7 +122,7 @@
            [[changeString2Num(data.*,'fee_other')]]
            <gl-form-input class="required" required  disabled="[[isInputDisabled]]" allowed-pattern="[0-9||,||.]" format-number="on" label="ค่าใช้จ่ายอื่นๆ (บาท)" value="{{data.fee_other}}"  always-float-label></gl-form-input>
          </gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
            {{_feTotal(data.fee_internal,data.fee_foreign,data.fee_other,data.rate_bank)}}
            [[changeString2Num(data.*,'feeTotalWithOutUsd')]]
            <gl-form-input label="FEE/ ใช้จ่ายทั้งหมด (บาท)" readonly value="[[data.feeTotalWithOutUsd]]" allowed-pattern="[0-9||,||.]" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
@@ -131,9 +131,8 @@
      </div>
      <div class="container">
        <gl-grid-row>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]"></gl-grid-col>
-         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,3]]">
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,8]]"></gl-grid-col>
+         <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
            [[changeString2Num(data.*,'totalbath')]]
            [[_balanceBath(data.balanceChangeBath,data.feeTotalWithOutUsd)]]
            <gl-form-input disabled label="จำนวนเงินที่ได้รับทั้งหมด (บาท)" value="[[data.totalbath]]" allowed-pattern="[0-9||,||.]" format-number="on" placeholder="0.00" always-float-label></gl-form-input>
@@ -299,15 +298,18 @@
         this.data.balanceChangeBath = rate_bank*balanceLessFees;
         this.notifyPath('data.balanceChangeBath');
       },
-      _feTotal:function (fee_internal,feBath,fee_other,rate_bank){
-        this.data.feeTotal = (Number(fee_internal)*rate_bank)+Number(feBath)+Number(fee_other);
-        this.data.feeTotalWithOutUsd = Number(feBath)+Number(fee_other);
-        console.log(Number(feBath));
-        // console.log(this.data.feeTotal);
-        // this.data.feeTotal = ((fee_internal)*rate_bank)+(feBath)+(fee_other);
 
-        this.notifyPath('data.feeTotal');
-        this.notifyPath('data.feeTotalWithOutUsd');
+      _feTotal:function (fee_internal,fee_foreign,fee_other,rate_bank){
+        fee_internal = numeral().unformat(fee_internal);
+        fee_foreign  = numeral().unformat(fee_foreign);
+        fee_other    = numeral().unformat(fee_other);
+        rate_bank    = numeral().unformat(rate_bank);
+        // this.data.feeTotal = (fee_internal*rate_bank)+fee_foreign+fee_other;
+        // this.data.feeTotalWithOutUsd = fee_foreign+fee_other;
+        // this.notifyPath('data.feeTotal');
+        // this.notifyPath('data.feeTotalWithOutUsd');
+        this.set('data.feeTotal',(fee_internal*rate_bank)+fee_foreign+fee_other);
+        this.set('data.feeTotalWithOutUsd',fee_foreign+fee_other);
       },
       _balanceBath(balanceChangeBath,feeTotalWithOutUsd){
         this.data.totalbath = balanceChangeBath-feeTotalWithOutUsd;
@@ -315,8 +317,13 @@
       },
       //นับหน้า
       _invoicePage:function (invoice=1) {
-        this.data.invoicePage = invoice.length;
-        this.notifyPath('data.invoicePage');
+        try {
+          this.data.invoicePage = invoice.length;
+          this.notifyPath('data.invoicePage');
+        } catch (e) {
+          console.log();
+        }
+
       },
       _countFee:function (fee) {
         return fee/this.data.invoice.length;
@@ -396,14 +403,19 @@
       },
       _approvePayment:function(result,detail){
          if (result == true) {
+          //  console.log(detail.data.fee_id);
+
            this.update('./g2g/fee/detail/update',detail.data, () => {
             //  console.log(detail.data.id);
                this.fire('refresh-contract',{detail:'refresh-contract'});
                this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
                    callback:()=>{
                     // this.fire('close-drawer',{detail:'close-drawer'})
-                    let contract_id= this._getUrl();
-                    this.fire('get-fee-list',{detail:contract_id});
+                    // let contract_id= this._getUrl();
+                    // this.fire('get-fee-list',{detail:contract_id});
+                    // ไปหน้า page-payment
+                    this.fire('get-fee-detail',{detail:{fee_id:detail.data.fee_id}})
+                    //ไปหน้า list-of-fee-detail
                     this.fire('get-fee-list-detail',{detail:detail.data.id});
                   }
                 });
@@ -424,7 +436,7 @@
          this.data.invoice.map((el,indexShmid)=>{
           this._changeStatusInvoice(el.invoice_id,el.bl_no,el.invoice_date,el.invoice_no,el.invoice_status,el.made_out_to,el.book_id,el.tags);
         });
-         this.delete('./g2g/fee/delete/id/',detail.data.fee_id, () => {
+         this.delete('./g2g/fee/detail/delete/id/',detail.data.fee_id, () => {
            let contract_id= this._getUrl();
            this.fire('get-fee-list',{detail:contract_id});
             this.fire('close-drawer',{detail:'close-drawer'})

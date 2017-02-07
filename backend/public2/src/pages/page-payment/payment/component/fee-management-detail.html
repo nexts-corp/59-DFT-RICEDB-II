@@ -37,8 +37,12 @@
           <paper-button raised on-tap="addFee" class="gl-btn-primary" disabled="[[isInputDisabled]]">เพิ่ม</paper-button>
         </template>
         <template is="dom-if" if="[[!isViewSeleted]]">
-          <paper-button raised on-tap="cancelFeede" class="gl-btn-danger" >ยกเลิก</paper-button>
-          <paper-button raised on-tap="saveFee" class="gl-btn-success" disabled="[[isInputDisabled]]">บันทึก</paper-button>
+          <paper-button raised on-tap="cancelFee" class="gl-btn-default" >ย้อนกลับ</paper-button>
+          <template is="dom-if" if="[[!isInputDisabled]]">
+            <paper-button raised on-tap="cancelFeede" class="gl-btn-danger" >ยกเลิก</paper-button>
+            <paper-button raised on-tap="saveFee" class="gl-btn-success" >บันทึก</paper-button>
+          </template>
+
         </template>
 
       </div>

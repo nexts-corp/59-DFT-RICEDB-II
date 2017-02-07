@@ -1,0 +1,214 @@
+<dom-module id="payment-detail">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+    .textheader-center {
+      margin: 25px;
+      text-align: center;
+      font-size: var(--font-size-large);
+    }
+    table.gl-table-default {
+      width: 98%;
+      border: 1px solid #ddd;
+      margin-bottom: 15px;
+    }
+    table.gl-table-default > thead.table-head > tr > th,
+    table.gl-table-default > tbody.table-body > tr > td,
+    table.gl-table-default > thead.table-head > tr > th {
+      text-align: center;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(3) {
+      text-align: left;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(1),
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(2) {
+      width: 5%;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(3),
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(4) {
+      width: 20%;
+    }
+    table.gl-table-default > tbody.table-body > tr > td:nth-child(5),
+    table.gl-table-default > tfoot.table-foot > tr > td:nth-child(3){
+      text-align: right;
+      width: 15%;
+    }
+  </style>
+  <template>
+    <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+        <div class="textheader-center">เลือกบริษัทที่ต้องการจ่ายเงิน</div>
+      </gl-form-panel-body>
+
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+        <table class="gl-table-default">
+          <thead class="table-head">
+            <tr>
+              <th>เลือก</th>
+              <th>ลำดับ</th>
+              <th>ชื่อบริษัท</th>
+              <th>เลขใบแจ้งหนี้</th>
+              <th>จำนวนเงิน</th>
+            </tr>
+            </tr>
+          </thead>
+          <!-- <tfoot class="table-foot">
+            <tr>
+              <td colspan="4"></td>
+              <td>[[data.pay_amount]]</td>
+            </tr>
+          </tfoot> -->
+          <tbody class="table-body">
+            <template is="dom-repeat" items="[[data.payment_detail]]">
+              <tr>
+               <td>
+                 <paper-checkbox id="[[index]]"class="checkBox" data="{{item}}" exporter-id="{{item.exporter_id}}" on-tap="checkData" checked="{{item.status}}"></paper-checkbox>
+               </td>
+               <td>[[_ObcountIndex(index)]]</td>
+               <td>[[item.exporter_name]]</td>
+               <td>[[item.invoice_exporter_no]]</td>
+               <td>[[formatNumber(item.pay_amount)]]</td>
+              </tr>
+            </template>
+         </tbody>
+      </table>
+      </gl-form-panel-body>
+
+      <gl-form-panel-body label="" set-padding="10px" set-border="1px">
+        รายละเอียดเช็ค
+        <gl-grid-row width="{{getWidth}}">
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input  class="required" required label="จำนวนเงิน :" placeholder="จำนวนเงิน" value="{{data.pay_amount}}" name="pay_times"></gl-form-input>
+          </gl-grid-col>
+          <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+            <gl-form-input  class="required" required label="ครั้งที่ :" placeholder="ครั้งที่จ่ายเงิน" value="{{data.pay_times}}" name="pay_times"></gl-form-input>
+          </gl-grid-col>
+        </gl-grid-row>
+      <gl-grid-row >
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+         <gl-combo-box class="required" required id="bank" label="ธนาคาร" item-label-path="bank_name_th"
+             item-value-path="bank_id" items="[[dataForSelect.dataBank]]" value="{{data.bank_id}}" ></gl-combo-box>
+       </gl-grid-col>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+         <gl-form-input  class="required" required label="สาขา :" placeholder="กรุณาใส่ชื่อสาขา" value="{{data.bank_branch}}" name="bank_branch"></gl-form-input>
+       </gl-grid-col>
+     </gl-grid-row>
+     <gl-grid-row>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]"></gl-grid-col>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+         <gl-form-input  class="required" required label="เลขที่เช็ค :" allowed-pattern="[0-9||,||.]" placeholder="กรุณาใส่เลขที่เช็ค" value="{{data.pay_no}}" name="pay_no"></gl-form-input>
+       </gl-grid-col>
+       <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,4]]">
+         <vaadin-date-picker class="required" required label="วันที่เช็ค" value="{{data.pay_date}}" name="pay_date"></vaadin-date-picker>
+       </gl-grid-col>
+     </gl-grid-row>
+
+    </gl-form-panel-body>
+
+      <gl-form-panel-footer label="" set-padding="10px">
+         <paper-button class="gl-btn-success" raised on-tap="addPayment">จ่ายเงิน</paper-button>
+      </gl-form-panel-footer>
+  </gl-form-panel>
+
+
+
+  </template>
+  <script>
+    Polymer({
+      is: "payment-detail",
+      properties: {
+        data: {
+          type: Object,
+          value:{}
+        },
+      },
+      behaviors: [
+          g2gModelBehavior,
+          g2gCongtroller,
+          FormatNumberBehavior
+      ],
+      checkData:function (e){
+          let exporter_id = e.currentTarget.exporterId;
+          let notCheck = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="false"]');
+          notCheck.map((el)=>{
+            if (exporter_id != el.exporterId){
+              el.disabled=true;
+            }
+          })
+          let check = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-checked="true"]');
+          // console.log(check);
+          this.set('data.pay_amount',0);
+          let pay_amount=0;
+          check.map((el)=>{
+            pay_amount = pay_amount + el.data.pay_amount;
+          })
+          this.set('data.pay_amount',pay_amount);
+          if (check.length < 1) {
+            let checkDisabled = Polymer.dom(this.root).querySelectorAll('paper-checkbox[aria-disabled="true"]');
+            checkDisabled.map((el)=>{
+                el.disabled=false;
+              })
+          }
+      },
+      attached: function() {
+        this.set('data.bank_id','KTB');
+        this.set('data.bank_branch','กระทรวงพาณิชย์');
+        this.set('data.pay_amount',0);
+      },
+      addPayment:function () {
+        this.fire('toast',{status:'load'});
+        this.set('data.tags',[]);
+        this.data.payment_detail.map((payDetId)=>{
+          if (payDetId.status) {
+            this.push('data.tags',payDetId.contract_id,payDetId.invoice_id,payDetId.shm_id,payDetId.cl_id);
+          }
+        });
+        // console.log(12);
+        this._cleanDataPayment(this.data,(data)=>{
+          // console.log(data);
+          let contract_id= this._getUrl();
+          this.insert('./g2g/payment/insert',data, () => {
+            this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',  // คำสั่งสำหรับเปิด toast success
+              callback:()=>{
+                    this.fire('close-drawer',{detail:'close-drawer'});
+                    this.fire('get-payment-list',{detail:contract_id});
+                    let el = Polymer.dom(this.root).querySelectorAll('.required');
+                    el.map((el)=> {el.reset();});
+                }
+            });
+          });
+        });
+        // console.log(this.data.pay_amounts.reduce((previous, current) => previous+current , 0));
+      },
+      _cleanDataPayment:function (data,callback) {
+        let el = Polymer.dom(this.root).querySelectorAll('.required');
+        let stat = el.map((el)=> el.validate());
+          if (stat.every(elem => elem == true)) {
+            let {bank_branch,bank_id,exporter_id,fee_id,pay_amount,pay_date,pay_no,pay_times} = data;
+            let newData = {bank_branch,bank_id,exporter_id,fee_id,pay_amount,pay_date,pay_no,pay_times};
+            newData.payment_detail = new Array();
+            newData.tags = new Array();
+            data.payment_detail.map((payDetId)=>{
+              if (payDetId.status) {
+                newData.exporter_id = payDetId.exporter_id;
+                newData.fee_id = payDetId.fee_id;
+                newData.payment_detail.push({
+                  pay_det_id:payDetId.pay_det_id,
+                  // status:payDetId.status
+                });
+              }
+            });
+            newData.pay_date = new Date(newData.pay_date).toISOString();
+            data.tags.map((tag)=>{
+              newData.tags.push(tag);
+            });
+            callback(newData)
+          }
+      //
+      }
+    });
+  </script>
+</dom-module>

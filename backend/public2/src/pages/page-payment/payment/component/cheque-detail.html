@@ -1,0 +1,40 @@
+<link rel="import" href="cheque-detail-invoice.html">
+<dom-module id="cheque-detail">
+  <style include="iron-flex iron-flex-factors iron-flex-alignment gl-styles">
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <gl-form-panel set-padding="10px 20px 10px 20px" set-border="1px">
+      <template is="dom-repeat" items="[[data]]">
+        <div class="gl-panel-default">
+            <div class="gl-panel-default-header">
+                [[item.invoice_no]]
+            </div>
+            <div class="gl-panel-default-content">
+              <gl-grid-row width="{{getWidth}}">
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                  <gl-form-input class="required" required  disabled="[[isInputDisabled]]" label="NO :" placeholder="ใส่รายละเอียด" error-message="กรุณาใส่รายละเอียด" value="{{item.invoice_no}}"></gl-form-input>
+                </gl-grid-col>
+                <gl-grid-col width="[[getWidth]]" grid="[[300,12],[500,2]]">
+                  <vaadin-date-picker class="required" required   disabled="[[isInputDisabled]]" label="Date" value="{{item.invoice_date}}"></vaadin-date-picker>
+                </gl-grid-col>
+              </gl-grid-row>
+            </div>
+            <cheque-detail-invoice data="[[item.payment_detail]]"></cheque-detail-invoice>
+        </div>
+        <br />
+      </template>
+    </gl-form-panel>
+  </template>
+  <script>
+    Polymer({
+      is: "cheque-detail",
+      behaviors: [
+          g2gModelBehavior,
+          g2gCongtroller,
+      ],
+    });
+  </script>
+</dom-module>
