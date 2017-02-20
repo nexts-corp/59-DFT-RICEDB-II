@@ -1,129 +1,31 @@
-<link rel="import" href="./../components/panel-right/panel-right.html">
-<link rel="import" href="./components/quota-list.html">
-<link rel="import" href="./components/data-manage.html">
-
-
 <dom-module id="page-quota">
 	<template>
-		<style is="custom-style" include="gl-size gl-color gl-table">
-			* {
-				font-family: 'rsuregular', sans-serif;
-				-webkit-font-smoothing: antialiased;
-			}
-			
-			.header {
-				padding: 10px 0px 10px 10px;
-				background-color: var(--paper-grey-100);
-				color: var(--paper-grey-600);
-				font-size: var(--font-size-h4);
-				font-family: 'rsuregular', sans-serif;
-				-webkit-font-smoothing: antialiased;
-			}
-			
-			.registor {
-				margin: 20px;
-			}
-			
-			.title {
-				text-align: center;
-				font-size: var(--font-size-h3);
-				font-family: 'rsuregular', sans-serif;
-				-webkit-font-smoothing: antialiased;
-        padding: 10px;
-			}
-			
-			.searchBox {
-				padding: 5px;
-				background-color: var(--gl-gray-lighter-color);
-			}
-			
-			.elevation {
-				border-radius: 5px;
-				margin: 10px;
-				padding: 5px;
-			}
-			
-			.searchBorder {
-				border: 1px solid var(--gl-gray-light-color);
-				margin: 15px;
-				border-radius: 3px
-			}
-			
-			paper-material {
-				background-color: var(--gl-white-color);
-			}
-			
-			gl-search-input {
-				margin: 30px 0px 0px 0px;
-			}
-			
-			.container {
-				padding : 10px;
-			}
-      .font{
-        font-family: 'CSChatThaiUI', sans-serif !important;
-        -webkit-font-smoothing: antialiased;
-      }
-      .flex-equal-justified {
-        @apply(--layout-horizontal);
-        @apply(--layout-justified);
-      }
-		</style>
-
-		<div class="layout vertical registor">
-
-			<div class="flex">
-				<div class="layout horizontal">
-				
-				</div>
-			</div>
-
-			<div class="flex title">
-				จัดการข้อมูล 
-			</div>
-
-			<div class="layout horizontal">
-        <div class="container flex-equal-justified">
-          <div></div>
-          <div>	<paper-button raised class="font gl-btn-primary" on-tap="_insertData" id="addRedRegExporter">
-          <iron-icon icon="add"></iron-icon> เพิ่มข้อมูล</paper-button></div>
-        </div>
-			</div>
-
-			<div class="container">
-				<quota-list data="{{dataList}}" on-data-select="_onDataSelect"></quota-list>
-			</div>
-
-		</div>
-
-		<panel-right title="จัดการข้อมูล" set-width="70%">
-				<data-manage name="[[name]]" status="[[status]]"></data-manage>
-		</panel-right>
+		<template is="dom-repeat" items="[[list]]">
+			[[item.fname]] - [[item.lname]]<br>
+		</template>
+		<br><br>
+		<!--[[data.fname]] - [[data.lname]]<br>-->
+		fname
+		<input type="text" value="{{data.fname::input}}">
+		lname
+		<input type="text" value="{{data.lname::input}}">
+		<button on-tap="sendData">send</button>
 	</template>
 	<script>
     Polymer({
       is: 'page-quota',
-      behaviors: [nylonBehavior,ReduxBehavior],
-			listeners:{
-				'select-data' : '_selectData',
-				'close' : '_close'
-			},
-			_close:function(){
-				// console.log('1234');
-				this.$$('panel-right').close();
-			},
-			_insertData:function(){
-				this.status = 'insert';
-				this.name = {};
-				this.$$('panel-right').open();
-			},
-			_selectData:function(e){
-				console.log(e.detail);
-				this.name = e.detail;
-				this.status = 'update'
-				this.$$('panel-right').open();
-			}
-			
+	  behaviors:[ReduxBehavior,exampleAction],
+	  properties:{
+		  list:{
+			  statePath:'example.list'
+		  },
+		  data:{
+			  value:{}
+		  }
+	  },
+	  sendData:function(){
+		  this.dispatchAction('EXAMPLE_INSERT',this.data);
+	  }
     });
   </script>
 </dom-module>

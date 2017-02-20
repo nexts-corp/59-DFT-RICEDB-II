@@ -5,7 +5,8 @@ module.exports = {
     output: {
         filename: './public/src/redux-store.js'
     },
-    watch: true
+    watch: true,
+    devtool:"inline-source-map"
 };
 
 
