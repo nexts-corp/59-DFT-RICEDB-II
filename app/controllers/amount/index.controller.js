@@ -1,7 +1,7 @@
 class index{
 
     selectAmount(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         if(typeof params.ordinal !== "undefined"){
@@ -84,7 +84,7 @@ class index{
     }
 
     selectOrinal(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         if(typeof params.year !== "undefined"){
@@ -107,7 +107,7 @@ class index{
     }
 
     updateAmount(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('allocate').get(params.id).update({

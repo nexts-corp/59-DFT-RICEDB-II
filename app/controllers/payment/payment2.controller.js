@@ -1,7 +1,7 @@
 class Payment{
 
     selectBank(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
         var quotaYear = parseInt(params.year);
 
@@ -15,12 +15,12 @@ class Payment{
     }
 
     saverc(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
     }
 
     report1(req,res){
-        var r = req._r;
+        var r = req.r;
         var parameters = req.query;
  
         r.db('eu2').table('receipt').filter({id:parameters.id}) //  2560-75361  2560-57440 2560-67954

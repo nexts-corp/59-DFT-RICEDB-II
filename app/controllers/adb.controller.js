@@ -1,5 +1,5 @@
 exports.table_byId=function(req,res){
-    var r = req._r;
+    var r = req.r;
     r.db('adb').table('student').get(req.params.id).run().then(function (result){
         //res.json(result);
         var parameters={year:'2559'};
@@ -8,7 +8,7 @@ exports.table_byId=function(req,res){
 }
 
 exports.table=function(req,res){
-    var r = req._r;
+    var r = req.r;
     r.db('adb').table('student').run().then(function (result){
         //res.json(result);
         var parameters={year:'2559'};
@@ -19,7 +19,7 @@ exports.table=function(req,res){
 }
 
 exports.tableQuery=function(req,res){
-    var r = req._r;
+    var r = req.r;
     // res.json(req.query);
 
     if(typeof req.query.age !== "undefined"){
@@ -39,7 +39,7 @@ exports.tableQuery=function(req,res){
 }
 
 exports.join = function (req, res) {
-    var r = req._r; //rethink   
+    var r = req.r; //rethink   
     r.db('adb').table('student')
         .eqJoin('gender', r.db('adb').table('gender')).without({ right: ["id"] }).zip()
         .merge(function (row) {

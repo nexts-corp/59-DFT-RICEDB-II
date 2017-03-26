@@ -1,7 +1,7 @@
 class index{
 
     selectnotify(req,res){ 
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         if(typeof params.year !== "undefined"){
@@ -35,7 +35,7 @@ class index{
 
 
     selectnotifyAll(req,res){ 
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         if(typeof params.year !== "undefined"){
@@ -110,7 +110,7 @@ class index{
 
 
     saveOrdinal(req,res){ 
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('calculate').get(params.calculate_id)

@@ -3,7 +3,7 @@ class index {
 
 
     getYearReport(req, res) {
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         r.db('eu2').table('report')
@@ -25,7 +25,7 @@ class index {
     }
 
     getExporter(req, res) {
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
 
@@ -111,7 +111,7 @@ class index {
 
 
     insertCalculate(req, res) {
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
         var yearFilter = parseInt(params.year);
 
@@ -152,7 +152,7 @@ class index {
  
 
     getList(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         r.db('eu2').table('calculate').innerJoin(r.db('eu2').table('quota'),function(calRow,quotaRow){
@@ -177,7 +177,7 @@ class index {
 
 
     getSpreadsheet(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         STM_PREADSHEET(r,params)
@@ -194,7 +194,7 @@ class index {
     }
 
     updateSpreadsheet(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.expr(params.amount_update).forEach(function(quotaUpdateRow){
@@ -217,7 +217,7 @@ class index {
 
 
     insertAllocate(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         STM_PREADSHEET(r,params)
@@ -285,7 +285,7 @@ const STM_PREADSHEET = (r,params) => {
 const FORMULA_FOR_CAL = (req) => {
     //caculate quota
 
-    var r = req._r;
+    var r = req.r;
     var params = req.body;
 
     var duringYear = [];

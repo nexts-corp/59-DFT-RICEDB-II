@@ -2,7 +2,7 @@
 class index{
 
     insertReport(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         if(typeof params.year !== "undefined"){
@@ -39,7 +39,7 @@ class index{
     }
     
     deleteReport(req,res){
-        var r = req._r;
+        var r = req.r;
         console.log(req.params.id);
         r.db('eu2').table('report').get(req.params.id).delete().run().then(function(result){
             res.json(result);
@@ -47,7 +47,7 @@ class index{
     }
 
     selectReport(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         console.log(params.type_rice_id);
@@ -95,7 +95,7 @@ class index{
     }
 
     updateReport(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('quota').filter({
@@ -121,7 +121,7 @@ class index{
     }
 
     report(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         var del_first_year = 0;
@@ -270,7 +270,7 @@ class index{
     }
 
     reportAlert(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         var del_first_year = 0;

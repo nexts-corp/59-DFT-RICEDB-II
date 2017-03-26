@@ -2,7 +2,7 @@
 class index{
 
     getExporter(req,res){
-        var r = req._r;
+        var r = req.r;
         r.db('eu2').table('exporter').run().then(function(result) {
             res.json(result);
         }).catch(function(err){
@@ -10,7 +10,7 @@ class index{
         });
     }
     getYear(req,res){
-        var r = req._r;
+        var r = req.r;
         r.db('eu2').table('quota').pluck('year').distinct().orderBy(r.desc('year'))('year')
         .run().then(function(result) {
             res.json(result);
@@ -19,7 +19,7 @@ class index{
         });
     }
     getTypeRice(req,res){
-        var r = req._r;
+        var r = req.r;
         r.db('eu2').table('type_rice').run().then(function(result) {
             res.json(result);
         }).catch(function(err){

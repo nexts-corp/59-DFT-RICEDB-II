@@ -2,7 +2,7 @@ class index{
 
     selectExporter(req,res){
         
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         r.db('eu2').table('exporter')
@@ -12,7 +12,7 @@ class index{
     } //end function
 
     insertExporter(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('exporter').insert(params)
@@ -23,7 +23,7 @@ class index{
     } //end function
 
     updateExporter(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
         r.db('eu2').table('exporter').get(params.id).update(params)
         .run().then(function(result){
@@ -33,7 +33,7 @@ class index{
     } //end function
 
     deleteExporter(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
         console.log(params.id)
         r.db('eu2').table('exporter').get(params.id).delete()

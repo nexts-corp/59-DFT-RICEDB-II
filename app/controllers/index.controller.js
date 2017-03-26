@@ -26,7 +26,7 @@ exports.db=function(req,res){
     var valid = req._validator.validate('user', u);
     if (!valid) console.log(req._validator.errorsText());
 
-    req._r.table('session').coerceTo('array').run().then(function(result) {
+    req.r.table('session').coerceTo('array').run().then(function(result) {
          console.log(result);
          res.json(result);
     });

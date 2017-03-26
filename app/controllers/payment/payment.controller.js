@@ -1,7 +1,7 @@
 class Payment{
 
     getExporterEcList(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
         var quotaYear = parseInt(params.year);
 
@@ -27,7 +27,7 @@ class Payment{
     }
 
     getReqEcList(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
         var quotaYear = parseInt(params.year);
 
@@ -63,7 +63,7 @@ class Payment{
     }
 
     getPaymentDetail(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('ec')
@@ -117,7 +117,7 @@ class Payment{
 
 
     insertReceipt(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         //เช็คประเภทใบเสร็จรับเงิน N=จ่ายปกติ  O=จ่ายยอดเดิม A=จ่ายเพิ่ม

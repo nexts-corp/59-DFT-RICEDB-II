@@ -1,7 +1,7 @@
 class index{
 
     getQuota(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
         console.log(params.year);
         // r.db('eu2').table('quota').filter({year:2559}).without('year')
@@ -25,7 +25,7 @@ class index{
     }
 
     insertQuota(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('quota').filter({year:params.year,type_rice_id:params.type_rice_id}).count().do(
@@ -46,7 +46,7 @@ class index{
 
 
     updateQuota(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('quota').update(params).run().then(function(result) {
@@ -55,7 +55,7 @@ class index{
     }
 
     deleteQuota(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         if(params.id != undefined && params.id.trim() != ""){
@@ -68,7 +68,7 @@ class index{
     }
 
     selectQuota(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         r.db('eu2').table('quota').get(params.id).run().then(function(result) {

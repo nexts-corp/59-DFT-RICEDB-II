@@ -1,7 +1,7 @@
 class index {
 
         selectOrinal(req,res){
-            var r = req._r;
+            var r = req.r;
             var params = req.query;
 
             if(typeof params.year !== "undefined"){
@@ -27,7 +27,7 @@ class index {
         }
 
         selectexporter(req,res){ 
-            var r = req._r;
+            var r = req.r;
             var params = req.query;
 
             if(typeof params.year !== "undefined"){
@@ -88,7 +88,7 @@ class index {
         }
 
         selectall_noexporter(req,res){ 
-            var r = req._r;
+            var r = req.r;
             var params = req.query;
 
             if(typeof params.year !== "undefined"){
@@ -217,7 +217,7 @@ class index {
     }//end function
 
         selectall(req,res){ 
-            var r = req._r;
+            var r = req.r;
             var params = req.query;
 
             if(typeof params.year !== "undefined"){
@@ -347,7 +347,7 @@ class index {
 
 
         updateconfirm(req,res){
-            var r = req._r;
+            var r = req.r;
             var params = req.body;          
 
             console.log(params[0].id);
@@ -380,7 +380,7 @@ class index {
 
 
         deleteconfirm(req,res){
-            var r = req._r;
+            var r = req.r;
             var params = req.body;
 
             for (let value of params) {
@@ -403,7 +403,7 @@ class index {
 
 
         tranfer(req,res){
-            var r = req._r;
+            var r = req.r;
             var params = req.body;
             console.log(params.id+""+params.exporter_id);
             

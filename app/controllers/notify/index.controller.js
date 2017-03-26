@@ -1,7 +1,7 @@
 class index{
 
     getNotify(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         var calculate_id = params.calculate_id.split(',')

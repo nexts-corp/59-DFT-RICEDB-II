@@ -1,7 +1,7 @@
 class index{
 
     insertConfirm(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
         // var params = {
         //     exporter_id:"xxxxxxx",
@@ -47,7 +47,7 @@ class index{
     }
 
     insertReport(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         var insertData = function(year,save){

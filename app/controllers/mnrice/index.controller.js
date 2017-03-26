@@ -1,7 +1,7 @@
 class index{
 
     selectRice(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
 
         r.db('eu2').table('type_rice')
@@ -11,7 +11,7 @@ class index{
     } //end function
 
     insertRice(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
 
         r.db('eu2').table('type_rice').insert(params)
@@ -22,7 +22,7 @@ class index{
     } //end function
 
     updateRice(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.body;
         r.db('eu2').table('type_rice').get(params.id).update(params)
         .run().then(function(result){
@@ -32,7 +32,7 @@ class index{
     } //end function
 
     deleteRice(req,res){
-        var r = req._r;
+        var r = req.r;
         var params = req.query;
         console.log(params.id)
         r.db('eu2').table('type_rice').get(params.id).delete()

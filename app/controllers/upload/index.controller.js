@@ -7,7 +7,7 @@ class index {
 
     uploadFile(req, res) {
 
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         var form = new multiparty.Form();
@@ -40,7 +40,7 @@ class index {
 
     listFile(req, res) {
 
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
         r.db('files').table('files').without('contents')
         .orderBy(r.desc('timestamp'))
@@ -66,7 +66,7 @@ class index {
     }
 
     listFilePath(req, res){
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
 
         r.db('files').table('files').without('contents').filter({ref_path:params.refPath})
@@ -92,7 +92,7 @@ class index {
     }
 
     downloadFile(req, res) {
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
         // console.log(params)
 
@@ -117,7 +117,7 @@ class index {
 
 
     deleteFile(req, res) {
-        var r = req._r;
+        var r = req.r;
         var params = req.params;
         // console.log(params)
 

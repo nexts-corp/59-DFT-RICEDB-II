@@ -27,7 +27,7 @@ class Report{
 }
 
 const FEE_DATA = (req) => {
-    var r = req._r;
+    var r = req.r;
     var params = req.query;
     var frist_date = params.frist_date.split("-");
     var last_date = params.last_date.split("-");
