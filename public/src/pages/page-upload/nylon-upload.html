@@ -81,15 +81,15 @@
                 }
                 
             },
-            getList:function(){
-                axios.get('/upload/list/'+this.refPath)
-                .then( (response)=>{
-                    this.listFiles = response.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            },
+            // getList:function(){
+            //     axios.get('/upload/list/'+this.refPath)
+            //     .then( (response)=>{
+            //         this.listFiles = response.data;
+            //     })
+            //     .catch(function (error) {
+            //         console.log(error);
+            //     });
+            // },
             _addHeader:function(e){
                 event.detail.xhr.setRequestHeader('ref-path', this.refPath);
             },
@@ -107,26 +107,26 @@
                 }
                 
             },
-            _deleteFile:function(e){
+            // _deleteFile:function(e){
 
-                var idFile;
-                if(typeof e.target.fileId=="undefined"){
-                    idFile = e.target.fileIdUpload
-                }else{
-                    idFile = e.target.fileId
-                    //console.log(idFile);
-                }
+            //     var idFile;
+            //     if(typeof e.target.fileId=="undefined"){
+            //         idFile = e.target.fileIdUpload
+            //     }else{
+            //         idFile = e.target.fileId
+            //         //console.log(idFile);
+            //     }
                     
 
-                axios.delete('/upload/file/'+idFile)
-                .then( (response)=>{
-                    //console.log(response);
-                })
-                .catch(function (error) {
-                    //console.log(error);
-                });
+            //     axios.delete('/upload/file/'+idFile)
+            //     .then( (response)=>{
+            //         //console.log(response);
+            //     })
+            //     .catch(function (error) {
+            //         //console.log(error);
+            //     });
 
-            }
+            // }
         });
     </script>
 </dom-module>

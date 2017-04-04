@@ -180,115 +180,115 @@
                 this.fncompany();
                 this.fntype_rice();
             },
-            fnyear: function(){
-                axios.get('./common/year')
-                .then((response)=>{
-                    this.getYear = response.data.map((item)=>{
-                        return item.toString();
-                    });
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
-            fncompany: function(){
-                axios.get('./common/exporter')
-                .then((response)=>{
-                    this.getCom = response.data;
-                    console.log(this.getCom);
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
-            fntype_rice: function(){
-                axios.get('./common/type_rice')
-                .then((response)=>{
-                    this.getRice = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
-            _toggleDrawer: function(e) {
-                this.status = 'post';
-                this.$$('panel-right').open();
-            },
-            saveData:function(e){
-                console.log(e.detail);
-                this.fire('toast',{status:'load'});
-                axios.post('/report/report',e.detail)
-                .then((response)=>{
-                    console.log("success");
-                    console.log(response);
-                    this.fire('toast',{
-                        status:'success',
-                        text:'บันทึกสำเร็จ',
-                        callback:()=>{
-                             this.$$('panel-right').close();
-                        }
-                    });
-                    this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
-                })
-                .catch((error)=>{
-                console.log("error");
-                console.log(error);
-                });
-            },
-             updateData:function(e){
-                console.log('update-data: ',e.detail);
-                this.fire('toast',{status:'load'});
-                axios.put('/report/report',e.detail)
-                .then((response)=>{
-                console.log("success");
-                 this.fire('toast',{
-                        status:'success',
-                        text:'แก้ไขข้อมูลสำเร็จ',
-                        callback:()=>{
-                             this.$$('panel-right').close();
-                        }
-                    });
-                console.log(response.data);
-                this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
-                })
-                .catch((error)=>{
-                console.log("error");
-                console.log(error);
-                });
-            },
-            deleteData:function(e){
-                console.log(e.detail);
-                axios.delete('/report/report/'+e.detail)
-                .then((response)=>{
-                    console.log("success");
-                    console.log(response);
-                    this.fire('toast',{
-                        status:'success',
-                        text:'ลบข้อมูลสำเร็จ',
-                        callback:()=>{
-                             this.$$('panel-right').close();
-                        }
-                    });
-                    this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
-                    //el.$$('panel-right').close();
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            },
+            // fnyear: function(){
+            //     axios.get('./common/year')
+            //     .then((response)=>{
+            //         this.getYear = response.data.map((item)=>{
+            //             return item.toString();
+            //         });
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
+            // fncompany: function(){
+            //     axios.get('./common/exporter')
+            //     .then((response)=>{
+            //         this.getCom = response.data;
+            //         console.log(this.getCom);
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
+            // fntype_rice: function(){
+            //     axios.get('./common/type_rice')
+            //     .then((response)=>{
+            //         this.getRice = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
+            // _toggleDrawer: function(e) {
+            //     this.status = 'post';
+            //     this.$$('panel-right').open();
+            // },
+            // saveData:function(e){
+            //     console.log(e.detail);
+            //     this.fire('toast',{status:'load'});
+            //     axios.post('/report/report',e.detail)
+            //     .then((response)=>{
+            //         console.log("success");
+            //         console.log(response);
+            //         this.fire('toast',{
+            //             status:'success',
+            //             text:'บันทึกสำเร็จ',
+            //             callback:()=>{
+            //                  this.$$('panel-right').close();
+            //             }
+            //         });
+            //         this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
+            //     })
+            //     .catch((error)=>{
+            //     console.log("error");
+            //     console.log(error);
+            //     });
+            // },
+            //  updateData:function(e){
+            //     console.log('update-data: ',e.detail);
+            //     this.fire('toast',{status:'load'});
+            //     axios.put('/report/report',e.detail)
+            //     .then((response)=>{
+            //     console.log("success");
+            //      this.fire('toast',{
+            //             status:'success',
+            //             text:'แก้ไขข้อมูลสำเร็จ',
+            //             callback:()=>{
+            //                  this.$$('panel-right').close();
+            //             }
+            //         });
+            //     console.log(response.data);
+            //     this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
+            //     })
+            //     .catch((error)=>{
+            //     console.log("error");
+            //     console.log(error);
+            //     });
+            // },
+            // deleteData:function(e){
+            //     console.log(e.detail);
+            //     axios.delete('/report/report/'+e.detail)
+            //     .then((response)=>{
+            //         console.log("success");
+            //         console.log(response);
+            //         this.fire('toast',{
+            //             status:'success',
+            //             text:'ลบข้อมูลสำเร็จ',
+            //             callback:()=>{
+            //                  this.$$('panel-right').close();
+            //             }
+            //         });
+            //         this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
+            //         //el.$$('panel-right').close();
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //     });
+            // },
             getValue:function(year,com,rice){
                 this.data = {
                     year : year,
@@ -301,51 +301,51 @@
                 // console.log(month,year,quota);
                 this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
             },
-            getDatalist:function(month,year,quota,riceId){
-                console.log(month,year,quota,riceId);
-                if(month != '' && year != ''){
-                     this.fire('toast',{status:'load'});
-                    axios.get('./report/report',{
-                        params:{
-                            month : month,
-                            year : year,
-                            quota : quota,
-                            type_rice_id : riceId
-                        }
-                    })
-                    .then((response)=>{
-                        console.log("success!!");
-                        //this.fire('toast',{status:'loadSuccess'});
-                        this.fire('toast',{
-                        status:'success',
-                        text:'โหลดข้อมูลสำเร็จ',
-                        callback:function(){
-                        }
-                        });
-                        this.dataList = response.data;
-                        console.log('res',response.data);
-                        response.data.map((item)=>{
-                            this.stat = item.quota;
-                        })
-                        if(this.stat == true){
-                            console.log('1234');
-                           this.dataListInQuota = response.data
-                        }
-                        else if(this.stat == false){
-                            this.dataListOutQuota = response.data
-                        }
+            // getDatalist:function(month,year,quota,riceId){
+            //     console.log(month,year,quota,riceId);
+            //     if(month != '' && year != ''){
+            //          this.fire('toast',{status:'load'});
+            //         axios.get('./report/report',{
+            //             params:{
+            //                 month : month,
+            //                 year : year,
+            //                 quota : quota,
+            //                 type_rice_id : riceId
+            //             }
+            //         })
+            //         .then((response)=>{
+            //             console.log("success!!");
+            //             //this.fire('toast',{status:'loadSuccess'});
+            //             this.fire('toast',{
+            //             status:'success',
+            //             text:'โหลดข้อมูลสำเร็จ',
+            //             callback:function(){
+            //             }
+            //             });
+            //             this.dataList = response.data;
+            //             console.log('res',response.data);
+            //             response.data.map((item)=>{
+            //                 this.stat = item.quota;
+            //             })
+            //             if(this.stat == true){
+            //                 console.log('1234');
+            //                this.dataListInQuota = response.data
+            //             }
+            //             else if(this.stat == false){
+            //                 this.dataListOutQuota = response.data
+            //             }
                         
-                        // this.dataList = response.data;
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error);
-                        this.fire('toast',{status:'connectError',text:error.message,
-                        callback:function(){
-                        }})
-                    });
-                }
-            },
+            //             // this.dataList = response.data;
+            //         })
+            //         .catch((error)=>{
+            //             console.log("error");
+            //             console.log(error);
+            //             this.fire('toast',{status:'connectError',text:error.message,
+            //             callback:function(){
+            //             }})
+            //         });
+            //     }
+            // },
             getDataSelect:function(e){
                 this.dataSelect = e.detail;
                 this.status = 'update';
@@ -358,44 +358,44 @@
                 this.quota = e.target.value;
                 this.getDatalist(this.monthValue,this.yearValue,this.quota,this.riceValue);
             },
-            saveConfirm:function(){
-                if(this.year57 == "-"){
-                    this.year57 = 0;
-                }
-                if(this.year58 == "-"){
-                    this.year58 = 0;
-                }
-                if(this.year59 == "-"){
-                    this.year59 = 0;
-                }
-                else {
-                    this.dataConfirm = {
-                        exporter_id : this.company,
-                        year_2557 : this.unFormat(this.year57),
-                        year_2558 : this.unFormat(this.year58),
-                        year_2559 : this.unFormat(this.year59),
-                    }
-                    this.count++;
-                    console.log(this.dataConfirm);
+        //     saveConfirm:function(){
+        //         if(this.year57 == "-"){
+        //             this.year57 = 0;
+        //         }
+        //         if(this.year58 == "-"){
+        //             this.year58 = 0;
+        //         }
+        //         if(this.year59 == "-"){
+        //             this.year59 = 0;
+        //         }
+        //         else {
+        //             this.dataConfirm = {
+        //                 exporter_id : this.company,
+        //                 year_2557 : this.unFormat(this.year57),
+        //                 year_2558 : this.unFormat(this.year58),
+        //                 year_2559 : this.unFormat(this.year59),
+        //             }
+        //             this.count++;
+        //             console.log(this.dataConfirm);
                     
-                    this.fire('toast',{status:'load'});
-                    axios.post('/dump/report',this.dataConfirm)
-                    .then((response)=>{
-                        console.log("success");
-                        console.log(response);
-                        this.fire('toast',{
-                        status:'success',
-                        text:'บันทึกสำเร็จ',
-                        callback:function(){
-                        }
-                        });
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error);
-                    });
-                }                
-        }
+        //             this.fire('toast',{status:'load'});
+        //             axios.post('/dump/report',this.dataConfirm)
+        //             .then((response)=>{
+        //                 console.log("success");
+        //                 console.log(response);
+        //                 this.fire('toast',{
+        //                 status:'success',
+        //                 text:'บันทึกสำเร็จ',
+        //                 callback:function(){
+        //                 }
+        //                 });
+        //             })
+        //             .catch((error)=>{
+        //                 console.log("error");
+        //                 console.log(error);
+        //             });
+        //         }                
+        // }
         });
     </script>
 </dom-module>

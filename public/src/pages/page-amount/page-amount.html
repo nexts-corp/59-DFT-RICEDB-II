@@ -174,28 +174,28 @@
                 });
               }); 
             },
-            _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
-              this.selectQuotaOrdinal = "";
-              if(yearQuoata != '' && typeRice != ''){
-                axios.get('./amount/amountorinal',{
-                  params:{
-                    year:yearQuoata,
-                    type_rice_id:typeRice
-                  }
-                })
-                  .then((response)=>{
-                      console.log("success!!");
-                      console.log(response.data);
-                      this.getQuotaOrdinal = response.data.map((item)=>{
-                        return item.toString();
-                      });
-                  })
-                  .catch((error)=>{
-                      console.log("error");
-                      console.log(error);
-                  });
-              }
-            },
+            // _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
+            //   this.selectQuotaOrdinal = "";
+            //   if(yearQuoata != '' && typeRice != ''){
+            //     axios.get('./amount/amountorinal',{
+            //       params:{
+            //         year:yearQuoata,
+            //         type_rice_id:typeRice
+            //       }
+            //     })
+            //       .then((response)=>{
+            //           console.log("success!!");
+            //           console.log(response.data);
+            //           this.getQuotaOrdinal = response.data.map((item)=>{
+            //             return item.toString();
+            //           });
+            //       })
+            //       .catch((error)=>{
+            //           console.log("error");
+            //           console.log(error);
+            //       });
+            //   }
+            // },
             _typeRiceName_th:function(e){
              //console.log(e.target.textContent);
              this.getTypeRiceName = e.target.textContent;
@@ -204,34 +204,34 @@
             _toggleDrawer: function(e) {
                this.$$("panel-right").open();
             },
-            _getQuotaYear: function(){
-              axios.get('./common/year')
-              .then((response)=>{
-                console.log("success");
-                this.getQuotaYear = response.data.map((item)=>{
-                  return item.toString();
-                });
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error.message);
-                this.fire('toast',{status:'connectError',text:error.message,
-                  callback:function(){
-                  }})
-              });
-            },
-            _getTypeRice:function(){
-                axios.get('./common/type_rice')
-                .then((response)=>{
-                    console.log("success!!");
-                    console.log(response.data);
-                    this.getTypeRice = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            },
+            // _getQuotaYear: function(){
+            //   axios.get('./common/year')
+            //   .then((response)=>{
+            //     console.log("success");
+            //     this.getQuotaYear = response.data.map((item)=>{
+            //       return item.toString();
+            //     });
+            //   })
+            //   .catch((error)=>{
+            //     console.log("error");
+            //     console.log(error.message);
+            //     this.fire('toast',{status:'connectError',text:error.message,
+            //       callback:function(){
+            //       }})
+            //   });
+            // },
+            // _getTypeRice:function(){
+            //     axios.get('./common/type_rice')
+            //     .then((response)=>{
+            //         console.log("success!!");
+            //         console.log(response.data);
+            //         this.getTypeRice = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //     });
+            // },
             _onDataSelect:function(e){
               // console.log(e.detail);
               this.fire('toast',{status:'load'});
@@ -251,64 +251,64 @@
                 }
               });
             },
-            _getAllocate:function(){
-              // console.log(this.selectQuotaYear,this.selectTypeRice,this.selectQuotaOrdinal)
-              var stat = Polymer.dom(this.root).querySelectorAll('.searchAllocate').map((item)=>{
-                return item.validate();
-              });
-              const chkStat = function(stat){
-                return stat == true;
-              }
-              if(stat.every(chkStat) == true){
-                 this.fire('toast',{status:'load'});
-                axios.get('./amount/amount',{
-                  params:{
-                    year:this.selectQuotaYear,
-                    type_rice_id:this.selectTypeRice,
-                    ordinal:this.selectQuotaOrdinal
-                  }
-                })
-                .then((response)=>{
-                    this.dataAllocate = response.data;
-                    console.log('..',this.dataAllocate);
-                    this.fire('toast',{status:'success',
-                    callback:()=>{
-                      this.active = false;
-                    }});
+            // _getAllocate:function(){
+            //   // console.log(this.selectQuotaYear,this.selectTypeRice,this.selectQuotaOrdinal)
+            //   var stat = Polymer.dom(this.root).querySelectorAll('.searchAllocate').map((item)=>{
+            //     return item.validate();
+            //   });
+            //   const chkStat = function(stat){
+            //     return stat == true;
+            //   }
+            //   if(stat.every(chkStat) == true){
+            //      this.fire('toast',{status:'load'});
+            //     axios.get('./amount/amount',{
+            //       params:{
+            //         year:this.selectQuotaYear,
+            //         type_rice_id:this.selectTypeRice,
+            //         ordinal:this.selectQuotaOrdinal
+            //       }
+            //     })
+            //     .then((response)=>{
+            //         this.dataAllocate = response.data;
+            //         console.log('..',this.dataAllocate);
+            //         this.fire('toast',{status:'success',
+            //         callback:()=>{
+            //           this.active = false;
+            //         }});
                     
-                })
-                .catch((error)=>{
-                    console.log(error);
-                });
-              }
+            //     })
+            //     .catch((error)=>{
+            //         console.log(error);
+            //     });
+            //   }
                
-             },
+            //  },
              _disableSearch:function(quota_id,type_rice_id,ordinal_number){
                console.log(quota_id,type_rice_id,ordinal_number);
              },
-             _putData:function(e){
-                this.fire('toast',{status:'load'});
-                axios.put('/amount/amount',e.detail)
-                .then((response)=>{
-                  console.log("success");
-                  // this.textToast = 'แก้ไขข้อมูลสำเร็จ';
-                  console.log(response);
-                  this.fire('toast',{status:'success',
-                  text:'แก้ไขข้อมูลสำเร็จ',
-                  callback:function(){
+            //  _putData:function(e){
+            //     this.fire('toast',{status:'load'});
+            //     axios.put('/amount/amount',e.detail)
+            //     .then((response)=>{
+            //       console.log("success");
+            //       // this.textToast = 'แก้ไขข้อมูลสำเร็จ';
+            //       console.log(response);
+            //       this.fire('toast',{status:'success',
+            //       text:'แก้ไขข้อมูลสำเร็จ',
+            //       callback:function(){
                     
-                  }
-                  });
-                   this.$$("panel-right").close();
-                  //this._getYear();
-                  this._getAllocate();
-                  // this._getDatalist(this.selectYear);
-                })
-                .catch((error)=>{
-                  console.log("error");
-                  console.log(error);
-                });
-             }
+            //       }
+            //       });
+            //        this.$$("panel-right").close();
+            //       //this._getYear();
+            //       this._getAllocate();
+            //       // this._getDatalist(this.selectYear);
+            //     })
+            //     .catch((error)=>{
+            //       console.log("error");
+            //       console.log(error);
+            //     });
+            //  }
         });
     </script>
 </dom-module>

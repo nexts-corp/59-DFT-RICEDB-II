@@ -249,28 +249,28 @@
                 }   
                 
             },
-            getQuotaID:function(year,typeRice){
-                if(year != '' && typeRice != ''){
-                    console.log(year,typeRice);
-                     axios.get('./report/report_quotaid',{
-                          params:{
-                            year : year,
-                            type_rice_id : typeRice
-                        }
-                     })
-                    .then((response)=>{
-                    //   console.log(response.data[0].quota_id)
-                      this.idQuota = response.data[0].quota_id;
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error.message);
-                        this.fire('toast',{status:'connectError',text:error.message,
-                        callback:function(){
-                        }})
-                    });
-                    }
-            },
+            // getQuotaID:function(year,typeRice){
+            //     if(year != '' && typeRice != ''){
+            //         console.log(year,typeRice);
+            //          axios.get('./report/report_quotaid',{
+            //               params:{
+            //                 year : year,
+            //                 type_rice_id : typeRice
+            //             }
+            //          })
+            //         .then((response)=>{
+            //         //   console.log(response.data[0].quota_id)
+            //           this.idQuota = response.data[0].quota_id;
+            //         })
+            //         .catch((error)=>{
+            //             console.log("error");
+            //             console.log(error.message);
+            //             this.fire('toast',{status:'connectError',text:error.message,
+            //             callback:function(){
+            //             }})
+            //         });
+            //         }
+            // },
             checkStatus:function(){
                 if(this.status == 'post'){
                     this.listEuValue = '';

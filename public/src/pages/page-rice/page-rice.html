@@ -57,18 +57,18 @@
                     });
                 });
             },
-            getTypeRice:function(){
-                axios.get('./common/type_rice')
-                .then((response)=>{
-                    console.log("success!!");
-                    console.log(response.data);
-                    this.riceList = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            },
+            // getTypeRice:function(){
+            //     axios.get('./common/type_rice')
+            //     .then((response)=>{
+            //         console.log("success!!");
+            //         console.log(response.data);
+            //         this.riceList = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //     });
+            // },
             _dataSelect:function(e){
                 this.riceForm = e.detail;
                 this.status = 'update';
@@ -78,70 +78,70 @@
                 this.status = 'add';
                 this.$$('panel-right').open();
             },
-            _saveData:function(e){
-                console.log(e.detail)
-                this.fire('toast',{status:'load'});
-                axios.post('/mnrice/mnrice',e.detail)
-                .then((response)=>{
-                    console.log("success");
-                    this.fire('toast',{
-                        status:'success',
-                        text:'บันทึกข้อมูลสำเร็จ',
-                        callback:()=>{
-                             this.$$('panel-right').close();
-                        }
-                    });
-                    console.log(response);
-                    this.getTypeRice();
-                })
-                .catch((error)=>{
-                console.log("error");
-                console.log(error);
-                });
-            },
-            _updateData:function(e){
-                console.log(e.detail)
-                this.fire('toast',{status:'load'});
-                axios.put('/mnrice/mnrice',e.detail)
-                .then((response)=>{
-                    console.log("success");
-                    this.fire('toast',{
-                        status:'success',
-                        text:'แก้ไขข้อมูลสำเร็จ',
-                        callback:()=>{
-                             this.$$('panel-right').close();
-                        }
-                    });
-                    console.log(response);
-                    this.getTypeRice();
-                })
-                .catch((error)=>{
-                console.log("error");
-                console.log(error);
-                });
-            },
-            _deleteData:function(e){
-                console.log(e.detail);
-                this.fire('toast',{status:'load'});
-                 axios.delete('/mnrice/mnrice?id='+e.detail)
-                .then((response)=>{
-                    console.log("success");
-                    this.fire('toast',{
-                        status:'success',
-                        text:'ลบข้อมูลสำเร็จ',
-                        callback:()=>{
-                             this.$$('panel-right').close();
-                        }
-                    });
-                    console.log(response);
-                    this.getTypeRice();
-                    //el.$$('panel-right').close();
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            }
+            // _saveData:function(e){
+            //     console.log(e.detail)
+            //     this.fire('toast',{status:'load'});
+            //     axios.post('/mnrice/mnrice',e.detail)
+            //     .then((response)=>{
+            //         console.log("success");
+            //         this.fire('toast',{
+            //             status:'success',
+            //             text:'บันทึกข้อมูลสำเร็จ',
+            //             callback:()=>{
+            //                  this.$$('panel-right').close();
+            //             }
+            //         });
+            //         console.log(response);
+            //         this.getTypeRice();
+            //     })
+            //     .catch((error)=>{
+            //     console.log("error");
+            //     console.log(error);
+            //     });
+            // },
+            // _updateData:function(e){
+            //     console.log(e.detail)
+            //     this.fire('toast',{status:'load'});
+            //     axios.put('/mnrice/mnrice',e.detail)
+            //     .then((response)=>{
+            //         console.log("success");
+            //         this.fire('toast',{
+            //             status:'success',
+            //             text:'แก้ไขข้อมูลสำเร็จ',
+            //             callback:()=>{
+            //                  this.$$('panel-right').close();
+            //             }
+            //         });
+            //         console.log(response);
+            //         this.getTypeRice();
+            //     })
+            //     .catch((error)=>{
+            //     console.log("error");
+            //     console.log(error);
+            //     });
+            // },
+            // _deleteData:function(e){
+            //     console.log(e.detail);
+            //     this.fire('toast',{status:'load'});
+            //      axios.delete('/mnrice/mnrice?id='+e.detail)
+            //     .then((response)=>{
+            //         console.log("success");
+            //         this.fire('toast',{
+            //             status:'success',
+            //             text:'ลบข้อมูลสำเร็จ',
+            //             callback:()=>{
+            //                  this.$$('panel-right').close();
+            //             }
+            //         });
+            //         console.log(response);
+            //         this.getTypeRice();
+            //         //el.$$('panel-right').close();
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //     });
+            // }
         });
     </script>
 </dom-module>

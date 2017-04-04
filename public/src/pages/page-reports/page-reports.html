@@ -242,21 +242,21 @@
                 this.fnyear();
                 this.getExporter();
             },
-            fnyear: function(){
-                axios.get('./common/year')
-                .then((response)=>{
-                    this.getYear = response.data.map((item)=>{
-                        return item.toString();
-                    });
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
+            // fnyear: function(){
+            //     axios.get('./common/year')
+            //     .then((response)=>{
+            //         this.getYear = response.data.map((item)=>{
+            //             return item.toString();
+            //         });
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
             getLastYear:function(year){
                 var quotaYear = this.getYear;
                 this.lastyear = '';
@@ -266,18 +266,18 @@
                     })
                 }    
             },
-            getExporter:function(){
-                axios.get('./common/exporter')
-                .then((response)=>{
-                    console.log("success!!");
-                    // console.log(response.data);
-                    this.exporterList = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            },
+            // getExporter:function(){
+            //     axios.get('./common/exporter')
+            //     .then((response)=>{
+            //         console.log("success!!");
+            //         // console.log(response.data);
+            //         this.exporterList = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //     });
+            // },
             getExporterName:function(id){
                 var name; 
                 var exporter = this.exporterList;

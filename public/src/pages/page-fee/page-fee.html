@@ -146,135 +146,135 @@
                 this._getYear();
                 this._getBanklist();
             },
-            _getYear:function(){
-                axios.get('./common/year')
-                .then((response)=>{
-                    console.log("success");
-                    this.quotaYear = response.data.map(item=>{
-                        return item.toString();
-                    });
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.response.data.message);
-                });
-            },
-            _getExporter:function(year){
-                if(year != ''){
-                    this.selectExporter = 'เลือกบริษัทด้วย',
-                    axios.get('./payment/exporterEcList?year='+year)
-                    .then((response)=>{
-                        console.log("success");
-                        console.log(response.data);
-                        this.getListCompany =  response.data;
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error.response.data.message);
-                    });
-                }
-            },
-            _getBanklist:function(){
-                axios.get('./payment/selectbank')
-                .then((response)=>{
-                    console.log("success");
-                    console.log(response.data);
-                    this.listBank = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.response.data.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
-            searchData:function(){
-                if(this.yearValue != ''){
-                    console.log(this.selectExporter);
-                    this.fire('toast',{status:'load'});
-                    var param = '?year='+this.yearValue+'&exporter_id='+this.selectExporter; 
-                    if(this.selectExporter == 'เลือกบริษัทด้วย' || this.selectExporter == ''){
-                        console.log('1234');
-                        param = '?year='+this.yearValue;
-                    }               
-                    axios.get('./payment/reqEcList'+param)
-                    .then((response)=>{
-                        console.log("success");
-                        console.log(response.data);
-                        this.dataList = response.data;
-                        this.fire('toast', {
-                            status: 'success',
-                            callback:()=>{
+            // _getYear:function(){
+            //     axios.get('./common/year')
+            //     .then((response)=>{
+            //         console.log("success");
+            //         this.quotaYear = response.data.map(item=>{
+            //             return item.toString();
+            //         });
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.response.data.message);
+            //     });
+            // },
+            // _getExporter:function(year){
+            //     if(year != ''){
+            //         this.selectExporter = 'เลือกบริษัทด้วย',
+            //         axios.get('./payment/exporterEcList?year='+year)
+            //         .then((response)=>{
+            //             console.log("success");
+            //             console.log(response.data);
+            //             this.getListCompany =  response.data;
+            //         })
+            //         .catch((error)=>{
+            //             console.log("error");
+            //             console.log(error.response.data.message);
+            //         });
+            //     }
+            // },
+            // _getBanklist:function(){
+            //     axios.get('./payment/selectbank')
+            //     .then((response)=>{
+            //         console.log("success");
+            //         console.log(response.data);
+            //         this.listBank = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.response.data.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
+            // searchData:function(){
+            //     if(this.yearValue != ''){
+            //         console.log(this.selectExporter);
+            //         this.fire('toast',{status:'load'});
+            //         var param = '?year='+this.yearValue+'&exporter_id='+this.selectExporter; 
+            //         if(this.selectExporter == 'เลือกบริษัทด้วย' || this.selectExporter == ''){
+            //             console.log('1234');
+            //             param = '?year='+this.yearValue;
+            //         }               
+            //         axios.get('./payment/reqEcList'+param)
+            //         .then((response)=>{
+            //             console.log("success");
+            //             console.log(response.data);
+            //             this.dataList = response.data;
+            //             this.fire('toast', {
+            //                 status: 'success',
+            //                 callback:()=>{
                             
-                            }
-                        })
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error.response.data.message);
-                        this.fire('toast',{status:'connectError',text:error.response.data.msg,
-                        callback:function(){
-                        }})
-                    });
-                }
-            },
-            dataSelected:function(e){
-                var select = this.$$('fee-list').getDataCheckBox();
-                var id = select.map((item)=>{
-                    return item.id; 
-                })
-                var data = {
-                    ec_id : id
-                }
-                console.log(data);
-                this.fire('toast',{status:'load'});
-                axios.post('/payment/paymentDetail',data)
-                .then((response)=>{
-                    console.log(response.data);
-                    this.fire('toast',{
-                        status: 'success',
-                        callback:()=>{
-                            this.listSelected = response.data;  
-                            this.$$('panel-right').open();  
-                        }
-                    })
+            //                 }
+            //             })
+            //         })
+            //         .catch((error)=>{
+            //             console.log("error");
+            //             console.log(error.response.data.message);
+            //             this.fire('toast',{status:'connectError',text:error.response.data.msg,
+            //             callback:function(){
+            //             }})
+            //         });
+            //     }
+            // },
+            // dataSelected:function(e){
+            //     var select = this.$$('fee-list').getDataCheckBox();
+            //     var id = select.map((item)=>{
+            //         return item.id; 
+            //     })
+            //     var data = {
+            //         ec_id : id
+            //     }
+            //     console.log(data);
+            //     this.fire('toast',{status:'load'});
+            //     axios.post('/payment/paymentDetail',data)
+            //     .then((response)=>{
+            //         console.log(response.data);
+            //         this.fire('toast',{
+            //             status: 'success',
+            //             callback:()=>{
+            //                 this.listSelected = response.data;  
+            //                 this.$$('panel-right').open();  
+            //             }
+            //         })
                     
-                })
-                .catch((error)=>{
-                    console.log(error.response.data.message);
-                    this.fire('toast',{status:'connectError',text:error.response.data.msg,
-                    callback:function(){
-                    }})
-                })
-                // console.log('dataSelected :',e.detail.id);
+            //     })
+            //     .catch((error)=>{
+            //         console.log(error.response.data.message);
+            //         this.fire('toast',{status:'connectError',text:error.response.data.msg,
+            //         callback:function(){
+            //         }})
+            //     })
+            //     // console.log('dataSelected :',e.detail.id);
                 
-            },
-            _saveData:function(e){
-                e.detail.result.year = parseInt(this.yearValue);
-                this.fire('toast',{status:'load'});
-                axios.post('/payment/receipt',e.detail.result)
-                .then((response)=>{
-                    console.log('success');
-                    console.log(response.data);
-                    this.fire('toast',{
-                        status: 'success',
-                        callback:()=>{
-                            //this.$$('panel-right').close(); 
-                            e.detail.el.receiptId = response.data.receipt_id;
-                            this.searchData();
-                        }
-                    })
+            // },
+            // _saveData:function(e){
+            //     e.detail.result.year = parseInt(this.yearValue);
+            //     this.fire('toast',{status:'load'});
+            //     axios.post('/payment/receipt',e.detail.result)
+            //     .then((response)=>{
+            //         console.log('success');
+            //         console.log(response.data);
+            //         this.fire('toast',{
+            //             status: 'success',
+            //             callback:()=>{
+            //                 //this.$$('panel-right').close(); 
+            //                 e.detail.el.receiptId = response.data.receipt_id;
+            //                 this.searchData();
+            //             }
+            //         })
                     
-                })
-                .catch((error)=>{
-                    console.log(error.response.data.message);
-                    this.fire('toast',{status:'connectError',text:error.response.data.msg,
-                    callback:function(){
-                    }})
-                })
+            //     })
+            //     .catch((error)=>{
+            //         console.log(error.response.data.message);
+            //         this.fire('toast',{status:'connectError',text:error.response.data.msg,
+            //         callback:function(){
+            //         }})
+            //     })
                 
-            }
+            // }
         });
     </script>
 </dom-module>

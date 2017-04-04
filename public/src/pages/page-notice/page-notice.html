@@ -129,98 +129,98 @@
                 });
               }); 
             },
-            _getListQuotaYear:function(){
-                axios.get('./common/year')
-                .then((response)=>{
-                    //console.log("success");
-                    this.quotaYear = response.data.map(item=>{
-                        return item.toString();
-                    });
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
-            _getDatalist:function(year){
-                // console.log('year',year);
-                if(year != ''){
-                    this.active = true;
-                    this.fire('toast',{status:'load'});
-                    axios.get('./notify/noti?year='+year)
-                    .then((response)=>{
-                        console.log("success!!");
-                        this.fire('toast',{
-                            status:'success',
-                            callback:function(){
-                            }
-                        });
+            // _getListQuotaYear:function(){
+            //     axios.get('./common/year')
+            //     .then((response)=>{
+            //         //console.log("success");
+            //         this.quotaYear = response.data.map(item=>{
+            //             return item.toString();
+            //         });
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
+            // _getDatalist:function(year){
+            //     // console.log('year',year);
+            //     if(year != ''){
+            //         this.active = true;
+            //         this.fire('toast',{status:'load'});
+            //         axios.get('./notify/noti?year='+year)
+            //         .then((response)=>{
+            //             console.log("success!!");
+            //             this.fire('toast',{
+            //                 status:'success',
+            //                 callback:function(){
+            //                 }
+            //             });
                        
-                        console.log(response.data);
-                        this.listNotice = response.data;
-                        // this.dataList = response.data;
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error);
-                        this.fire('toast',{status:'connectError',text:error.message,
-                        callback:function(){
-                        }})
-                    })
-                }  
-            },
-            _getDataSelect:function(e){
-                console.log(e.detail.id,e.detail.year,e.detail.type_rice_id);
-                this.fire('toast',{status:'load'});
-                axios.get('./notify/notiall',{
-                    params:{
-                        id:e.detail.id,
-                        year:e.detail.year,
-                        type_rice_id:e.detail.type_rice_id
-                    }
-                })
-                .then((response)=>{
-                    console.log("success!!");
-                    this.fire('toast',{
-                        status:'success',
-                        callback:function(){
-                        }
-                    });
-                    this.pageSelect = 0;
-                    this.$$('panel-right').open();
-                    console.log(response.data);
-                    this.listNoticeManage = response.data;
-                    // this.listNotice = response.data;
-                    // this.dataList = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                })
-            },
-            saveData:function(e){
-                console.log(e.detail);
-                this.fire('toast',{status:'load'});
-                axios.put('/notify/noti',e.detail)
-                .then((response)=>{
-                    console.log('sucess!!')
-                    console.log(response.data);
-                    this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',
-                    callback:()=>{
-                        // this.$$('panel-right').close();
-                    }})
-                    this._getDatalist(this.selectYear);
-                })
-                .catch((error)=>{
-                    console.log(error);
-                })
-            },
+            //             console.log(response.data);
+            //             this.listNotice = response.data;
+            //             // this.dataList = response.data;
+            //         })
+            //         .catch((error)=>{
+            //             console.log("error");
+            //             console.log(error);
+            //             this.fire('toast',{status:'connectError',text:error.message,
+            //             callback:function(){
+            //             }})
+            //         })
+            //     }  
+            // },
+            // _getDataSelect:function(e){
+            //     console.log(e.detail.id,e.detail.year,e.detail.type_rice_id);
+            //     this.fire('toast',{status:'load'});
+            //     axios.get('./notify/notiall',{
+            //         params:{
+            //             id:e.detail.id,
+            //             year:e.detail.year,
+            //             type_rice_id:e.detail.type_rice_id
+            //         }
+            //     })
+            //     .then((response)=>{
+            //         console.log("success!!");
+            //         this.fire('toast',{
+            //             status:'success',
+            //             callback:function(){
+            //             }
+            //         });
+            //         this.pageSelect = 0;
+            //         this.$$('panel-right').open();
+            //         console.log(response.data);
+            //         this.listNoticeManage = response.data;
+            //         // this.listNotice = response.data;
+            //         // this.dataList = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     })
+            // },
+            // saveData:function(e){
+            //     console.log(e.detail);
+            //     this.fire('toast',{status:'load'});
+            //     axios.put('/notify/noti',e.detail)
+            //     .then((response)=>{
+            //         console.log('sucess!!')
+            //         console.log(response.data);
+            //         this.fire('toast',{status:'success',text:'บันทึกสำเร็จ',
+            //         callback:()=>{
+            //             // this.$$('panel-right').close();
+            //         }})
+            //         this._getDatalist(this.selectYear);
+            //     })
+            //     .catch((error)=>{
+            //         console.log(error);
+            //     })
+            // },
             selectedRice:function(){
                 this.active = false;
             },

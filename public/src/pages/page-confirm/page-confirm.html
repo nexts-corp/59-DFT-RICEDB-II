@@ -291,223 +291,223 @@
                     this.dataSelect = e.detail.data;
                     this.$$('panel-right').open();
                 },
-                _getYear: function () {
-                    axios.get('./common/year')
-                        .then((response) => {
-                            console.log("success");
-                            this.getYear = response.data.map((item)=>{
-                                return item.toString();
-                            });
+                // _getYear: function () {
+                //     axios.get('./common/year')
+                //         .then((response) => {
+                //             console.log("success");
+                //             this.getYear = response.data.map((item)=>{
+                //                 return item.toString();
+                //             });
                         
-                        })
-                        .catch((error) => {
-                            console.log("error");
-                            console.log(error.message);
-                            this.fire('toast', {
-                                status: 'connectError', text: error.message,
-                                callback: function () {
-                                    //console.log('test');
-                                }
-                            })
-                        });
-                },
-                _getTypeRice: function () {
-                    axios.get('./common/type_rice')
-                        .then((response) => {
-                            //console.log("success!!");
+                //         })
+                //         .catch((error) => {
+                //             console.log("error");
+                //             console.log(error.message);
+                //             this.fire('toast', {
+                //                 status: 'connectError', text: error.message,
+                //                 callback: function () {
+                //                     //console.log('test');
+                //                 }
+                //             })
+                //         });
+                // },
+                // _getTypeRice: function () {
+                //     axios.get('./common/type_rice')
+                //         .then((response) => {
+                //             //console.log("success!!");
                         
-                            this.getTypeRice = response.data;
-                        })
-                        .catch((error) => {
-                            console.log("error");
-                            console.log(error);
-                        });
-                },
-                _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice) {
-                    // console.log(yearQuoata,typeRice);
-                    // this.selectQuotaOrdinal = "";
-                    if(yearQuoata != '' && typeRice != ''){
-                        axios.get('./confirm/confirmordinal', {
-                            params: {
-                                year: yearQuoata,
-                                type_rice_id: typeRice
-                            }
-                        })
-                            .then((response) => {
-                                console.log("success!!");
-                                console.log(response.data);
-                                this.ordinalNumber = response.data.map((item)=>{
-                                    return item.toString();
-                                })
-                                // this.getQuotaOrdinal = response.data;
-                            })
-                            .catch((error) => {
-                                console.log("error");
-                                console.log(error);
-                            });
-                    }
-                },
-                _yearQuoataAndTypeRiceChangedAndOrdinal:function(year,type_rice,ordinal){
-                    if(year != '' && type_rice != '' && ordinal != ''){
-                        axios.get('./confirm/confirmexporter', {
-                            params: {
-                                year: year,
-                                type_rice_id: type_rice,
-                                ordinal : ordinal
-                            }
-                        })
-                            .then((response) => {
-                                console.log("success!!");
-                                console.log(response.data);
-                                this.exporterData = response.data.data;
-                                console.log(this.exporterData);
-                                // this.exporterData = response.data.map((item)=>{
-                                //     return item.toString();
-                                // })
-                                // this.getQuotaOrdinal = response.data;
-                            })
-                            .catch((error) => {
-                                console.log("error");
-                                console.log(error);
-                            });
-                    }
-                },
-                _getDataCompanny:function(){
-                    // this.$$('confirm-list')._setData();
-                    // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
-                    this.fire('toast',{status:'load'});
-                    if(this.selectExporter == ''){
-                        axios.get('./confirm/confirmnoexport', {
-                            params: {
-                                year: this.selectYear,
-                                type_rice_id: this.typeRice,
-                                ordinal:this.selectQuotaOrdinal
-                            }
-                        })
-                        .then((response) => {
-                            console.log("success!!");
-                            console.log(response.data);
-                            this.fire('toast', {
-                                status: 'success',
-                                callback:()=>{
+                //             this.getTypeRice = response.data;
+                //         })
+                //         .catch((error) => {
+                //             console.log("error");
+                //             console.log(error);
+                //         });
+                // },
+                // _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice) {
+                //     // console.log(yearQuoata,typeRice);
+                //     // this.selectQuotaOrdinal = "";
+                //     if(yearQuoata != '' && typeRice != ''){
+                //         axios.get('./confirm/confirmordinal', {
+                //             params: {
+                //                 year: yearQuoata,
+                //                 type_rice_id: typeRice
+                //             }
+                //         })
+                //             .then((response) => {
+                //                 console.log("success!!");
+                //                 console.log(response.data);
+                //                 this.ordinalNumber = response.data.map((item)=>{
+                //                     return item.toString();
+                //                 })
+                //                 // this.getQuotaOrdinal = response.data;
+                //             })
+                //             .catch((error) => {
+                //                 console.log("error");
+                //                 console.log(error);
+                //             });
+                //     }
+                // },
+                // _yearQuoataAndTypeRiceChangedAndOrdinal:function(year,type_rice,ordinal){
+                //     if(year != '' && type_rice != '' && ordinal != ''){
+                //         axios.get('./confirm/confirmexporter', {
+                //             params: {
+                //                 year: year,
+                //                 type_rice_id: type_rice,
+                //                 ordinal : ordinal
+                //             }
+                //         })
+                //             .then((response) => {
+                //                 console.log("success!!");
+                //                 console.log(response.data);
+                //                 this.exporterData = response.data.data;
+                //                 console.log(this.exporterData);
+                //                 // this.exporterData = response.data.map((item)=>{
+                //                 //     return item.toString();
+                //                 // })
+                //                 // this.getQuotaOrdinal = response.data;
+                //             })
+                //             .catch((error) => {
+                //                 console.log("error");
+                //                 console.log(error);
+                //             });
+                //     }
+                // },
+                // _getDataCompanny:function(){
+                //     // this.$$('confirm-list')._setData();
+                //     // console.log(this.selectYear,this.typeRice,this.selectQuotaOrdinal,this.selectExporter)
+                //     this.fire('toast',{status:'load'});
+                //     if(this.selectExporter == ''){
+                //         axios.get('./confirm/confirmnoexport', {
+                //             params: {
+                //                 year: this.selectYear,
+                //                 type_rice_id: this.typeRice,
+                //                 ordinal:this.selectQuotaOrdinal
+                //             }
+                //         })
+                //         .then((response) => {
+                //             console.log("success!!");
+                //             console.log(response.data);
+                //             this.fire('toast', {
+                //                 status: 'success',
+                //                 callback:()=>{
                                 
-                                }
-                            })
-                            this.dataCompanny = response.data;
-                            console.log(this.dataCompanny);
-                            this.checkData(this.dataCompanny.notconfirm);
-                            // this.dataCheck = false;
-                            // this.dataStat = true;
-                            // this.dataNonConfirm = response.data;
-                            // this.getQuotaOrdinal = response.data;
-                        })
-                        .catch((error) => {
-                            console.log("error");
-                            console.log(error);
-                        });
-                    }
-                    else if(this.selectExporter != ''){
-                        axios.get('./confirm/confirm', {
-                            params: {
-                                year: this.selectYear,
-                                type_rice_id: this.typeRice,
-                                ordinal:this.selectQuotaOrdinal,
-                                exporter_id:this.selectExporter
-                            }
-                        })
-                        .then((response) => {
-                            console.log("success!!");
-                            console.log(response.data);
-                            this.fire('toast', {
-                                status: 'success',
-                                callback:()=>{
+                //                 }
+                //             })
+                //             this.dataCompanny = response.data;
+                //             console.log(this.dataCompanny);
+                //             this.checkData(this.dataCompanny.notconfirm);
+                //             // this.dataCheck = false;
+                //             // this.dataStat = true;
+                //             // this.dataNonConfirm = response.data;
+                //             // this.getQuotaOrdinal = response.data;
+                //         })
+                //         .catch((error) => {
+                //             console.log("error");
+                //             console.log(error);
+                //         });
+                //     }
+                //     else if(this.selectExporter != ''){
+                //         axios.get('./confirm/confirm', {
+                //             params: {
+                //                 year: this.selectYear,
+                //                 type_rice_id: this.typeRice,
+                //                 ordinal:this.selectQuotaOrdinal,
+                //                 exporter_id:this.selectExporter
+                //             }
+                //         })
+                //         .then((response) => {
+                //             console.log("success!!");
+                //             console.log(response.data);
+                //             this.fire('toast', {
+                //                 status: 'success',
+                //                 callback:()=>{
                                 
-                                }
-                            })
-                            this.dataCompanny = response.data;
-                            console.log(this.dataCompanny.notconfirm);
-                            this.checkData(this.dataCompanny.notconfirm);
-                            // this.dataCheck = false;
-                            // this.dataStat = true;
-                            // this.dataNonConfirm = response.data;
-                            // this.getQuotaOrdinal = response.data;
-                        })
-                        .catch((error) => {
-                            console.log("error");
-                            console.log(error);
-                        });
-                    }
-                },
-                _transferData:function(e){
-                    console.log(e.detail);
-                    this.fire('toast',{status:'load'});
-                    axios.put('/confirm/confirmtranfer',e.detail)
-                    .then((response)=>{
-                        console.log("success");
-                        console.log(response.data);
-                        this.fire('toast', {
-                            status: 'success',
-                            text: 'โอนส่วนจัดสรรสำเร็จ',
-                            callback:()=>{
-                                this.$$("panel-right").close();
-                                this._getDataCompanny();
-                                this.checkData(this.dataCompanny.confirm);
-                            }
-                        })
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error);
-                    });
-                },
-                _saveData: function(e){
-                    console.log('save!!',e.detail);
-                    this.fire('toast',{status:'load'});
-                    axios.put('/confirm/confirm',e.detail)
-                    .then((response)=>{
-                        console.log("success");
-                        console.log(response);
-                        this.fire('toast', {
-                            status: 'success',
-                            text: 'บันทึกสำเร็จ',
-                            callback:()=>{
-                                this.$$("panel-right").close();
-                                this._getDataCompanny();
-                                 this.checkData(this.dataCompanny.confirm);
-                            }
-                        })
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error);
-                    });
+                //                 }
+                //             })
+                //             this.dataCompanny = response.data;
+                //             console.log(this.dataCompanny.notconfirm);
+                //             this.checkData(this.dataCompanny.notconfirm);
+                //             // this.dataCheck = false;
+                //             // this.dataStat = true;
+                //             // this.dataNonConfirm = response.data;
+                //             // this.getQuotaOrdinal = response.data;
+                //         })
+                //         .catch((error) => {
+                //             console.log("error");
+                //             console.log(error);
+                //         });
+                //     }
+                // },
+                // _transferData:function(e){
+                //     console.log(e.detail);
+                //     this.fire('toast',{status:'load'});
+                //     axios.put('/confirm/confirmtranfer',e.detail)
+                //     .then((response)=>{
+                //         console.log("success");
+                //         console.log(response.data);
+                //         this.fire('toast', {
+                //             status: 'success',
+                //             text: 'โอนส่วนจัดสรรสำเร็จ',
+                //             callback:()=>{
+                //                 this.$$("panel-right").close();
+                //                 this._getDataCompanny();
+                //                 this.checkData(this.dataCompanny.confirm);
+                //             }
+                //         })
+                //     })
+                //     .catch((error)=>{
+                //         console.log("error");
+                //         console.log(error);
+                //     });
+                // },
+                // _saveData: function(e){
+                //     console.log('save!!',e.detail);
+                //     this.fire('toast',{status:'load'});
+                //     axios.put('/confirm/confirm',e.detail)
+                //     .then((response)=>{
+                //         console.log("success");
+                //         console.log(response);
+                //         this.fire('toast', {
+                //             status: 'success',
+                //             text: 'บันทึกสำเร็จ',
+                //             callback:()=>{
+                //                 this.$$("panel-right").close();
+                //                 this._getDataCompanny();
+                //                  this.checkData(this.dataCompanny.confirm);
+                //             }
+                //         })
+                //     })
+                //     .catch((error)=>{
+                //         console.log("error");
+                //         console.log(error);
+                //     });
             
-                },
+                // },
                 _getDatalistTransfer:function(e){
                     console.log(e.detail);
                 },  
-                _cancelConfirm:function(e){
-                    console.log(e.detail);
-                    this.fire('toast',{status:'load'});
-                    axios.put('/confirm/confirmdelete',e.detail)
-                    .then((response)=>{
-                        console.log("success");
-                        console.log(response);
-                        this.fire('toast', {
-                            status: 'success',
-                            text: 'ยกเลิกการยืนยัน',
-                            callback:()=>{
-                                this.$$("panel-right").close();
-                                this._getDataCompanny();
-                                this.checkData(this.dataCompanny.confirm);
-                            }
-                        })
-                    })
-                    .catch((error)=>{
-                        console.log("error");
-                        console.log(error);
-                    });
-                }
+                // _cancelConfirm:function(e){
+                //     console.log(e.detail);
+                //     this.fire('toast',{status:'load'});
+                //     axios.put('/confirm/confirmdelete',e.detail)
+                //     .then((response)=>{
+                //         console.log("success");
+                //         console.log(response);
+                //         this.fire('toast', {
+                //             status: 'success',
+                //             text: 'ยกเลิกการยืนยัน',
+                //             callback:()=>{
+                //                 this.$$("panel-right").close();
+                //                 this._getDataCompanny();
+                //                 this.checkData(this.dataCompanny.confirm);
+                //             }
+                //         })
+                //     })
+                //     .catch((error)=>{
+                //         console.log("error");
+                //         console.log(error);
+                //     });
+                // }
             });
         </script>
         </dom-module>

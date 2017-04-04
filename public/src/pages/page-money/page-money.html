@@ -87,31 +87,31 @@
                     value:{}
                 }
             },
-            searchData:function(){
-                console.log(this.get);
-                axios.get('./payment/report',{
-                    params:{
-                        frist_date : this.get.first_date,
-                        last_date : this.get.last_date
-                    }
-                })
-                .then((response)=>{
-                    console.log("success");
-                    console.log(response.data);
-                    this.listData = response.data;
-                    // this.quotaYear = response.data.map(item=>{
-                    // return item.toString();
-                    // });
-                    // console.log(this.quotaYear);
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error.response.data.message);
-                    this.fire('toast',{status:'connectError',text:error.message,
-                    callback:function(){
-                    }})
-                });
-            },
+            // searchData:function(){
+            //     console.log(this.get);
+            //     axios.get('./payment/report',{
+            //         params:{
+            //             frist_date : this.get.first_date,
+            //             last_date : this.get.last_date
+            //         }
+            //     })
+            //     .then((response)=>{
+            //         console.log("success");
+            //         console.log(response.data);
+            //         this.listData = response.data;
+            //         // this.quotaYear = response.data.map(item=>{
+            //         // return item.toString();
+            //         // });
+            //         // console.log(this.quotaYear);
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error.response.data.message);
+            //         this.fire('toast',{status:'connectError',text:error.message,
+            //         callback:function(){
+            //         }})
+            //     });
+            // },
             activeReports:function(){
                  window.open('/api/payment/reports?frist_date='+this.get.first_date+'&last_date='+this.get.last_date,'_blank');
             },

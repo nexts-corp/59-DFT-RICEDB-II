@@ -161,86 +161,86 @@
           //console.log(e.currentTarget.id);
           //console.log(this.sendData);
         },
-        _getYear:function(){
-          axios.get('./common/year')
-          .then((response)=>{
-            //console.log("success");
-              this.quotaYear = response.data.map(item=>{
-              return item.toString();
-            });
-            console.log(this.quotaYear);
-          })
-          .catch((error)=>{
-            console.log("error");
-            console.log(error.message);
-            this.fire('toast',{status:'connectError',text:error.message,
-              callback:function(){
-              }})
-          });
-        },
-        _getDatalist:function(year){
-          this.fire('toast',{status:'load'});
-          axios.get('./quota/quota/'+year)
-          .then((response)=>{
-            console.log("success!!");
-            //this.fire('toast',{status:'loadSuccess'});
-            this.fire('toast',{
-              status:'success',
-              text:this.textToast,
-              callback:function(){
-              }
-            });
-            this.$$('panel-right').close();
-            console.log('res',response.data);
-            this.dataList = response.data;
+        // _getYear:function(){
+        //   axios.get('./common/year')
+        //   .then((response)=>{
+        //     //console.log("success");
+        //       this.quotaYear = response.data.map(item=>{
+        //       return item.toString();
+        //     });
+        //     console.log(this.quotaYear);
+        //   })
+        //   .catch((error)=>{
+        //     console.log("error");
+        //     console.log(error.message);
+        //     this.fire('toast',{status:'connectError',text:error.message,
+        //       callback:function(){
+        //       }})
+        //   });
+        // },
+        // _getDatalist:function(year){
+        //   this.fire('toast',{status:'load'});
+        //   axios.get('./quota/quota/'+year)
+        //   .then((response)=>{
+        //     console.log("success!!");
+        //     //this.fire('toast',{status:'loadSuccess'});
+        //     this.fire('toast',{
+        //       status:'success',
+        //       text:this.textToast,
+        //       callback:function(){
+        //       }
+        //     });
+        //     this.$$('panel-right').close();
+        //     console.log('res',response.data);
+        //     this.dataList = response.data;
             
-          })
-          .catch((error)=>{
-            console.log("error");
-            console.log(error);
-            this.fire('toast',{status:'connectError',text:error.message,
-              callback:function(){
-              }})
-          });
-        },
+        //   })
+        //   .catch((error)=>{
+        //     console.log("error");
+        //     console.log(error);
+        //     this.fire('toast',{status:'connectError',text:error.message,
+        //       callback:function(){
+        //       }})
+        //   });
+        // },
         _yearChanged:function(val){
           if(val != ''){
             this._getDatalist(val);
             // this.sendYear = val;
           }
         },
-        _postData:function(e){
-          //console.log('post-data:',e.detail);
-          this.fire('toast',{status:'load'});
-          axios.post('/quota/quota',e.detail)
-          .then((response)=>{
-            console.log("success");
-            this.textToast = 'บันทึกข้อมูลสำเร็จ';
-            console.log(response);
-            this._getYear();
-            this._getDatalist(e.detail.year);
-          })
-          .catch((error)=>{
-          console.log("error");
-          console.log(error);
-          });
-        },
-        _putData:function(e){
-         console.log('put-data: ',e.detail);
-         this.fire('toast',{status:'load'});
-          axios.put('/quota/quota',e.detail)
-          .then((response)=>{
-            console.log("success");
-            this.textToast = 'แก้ไขข้อมูลสำเร็จ';
-            console.log(response);
-            this._getYear();
-            this._getDatalist(e.detail.year);
-          })
-          .catch((error)=>{
-            console.log("error");
-            console.log(error);
-          });
-        },
+        // _postData:function(e){
+        //   //console.log('post-data:',e.detail);
+        //   this.fire('toast',{status:'load'});
+        //   axios.post('/quota/quota',e.detail)
+        //   .then((response)=>{
+        //     console.log("success");
+        //     this.textToast = 'บันทึกข้อมูลสำเร็จ';
+        //     console.log(response);
+        //     this._getYear();
+        //     this._getDatalist(e.detail.year);
+        //   })
+        //   .catch((error)=>{
+        //   console.log("error");
+        //   console.log(error);
+        //   });
+        // },
+        // _putData:function(e){
+        //  console.log('put-data: ',e.detail);
+        //  this.fire('toast',{status:'load'});
+        //   axios.put('/quota/quota',e.detail)
+        //   .then((response)=>{
+        //     console.log("success");
+        //     this.textToast = 'แก้ไขข้อมูลสำเร็จ';
+        //     console.log(response);
+        //     this._getYear();
+        //     this._getDatalist(e.detail.year);
+        //   })
+        //   .catch((error)=>{
+        //     console.log("error");
+        //     console.log(error);
+        //   });
+        // },
         _confirmData:function(e){
           this.fire('toast',{
             status:'openDialog',
@@ -256,25 +256,25 @@
             confirmed:this._cancelData.bind(this)
           })
         },    
-        _deleteData:function(result,detail){
-          var data = detail.data;
-          if(result == true){
-              //this.fire('toast',{status:'load'});
-              axios.delete('/quota/quota/'+data)
-              .then((response)=>{
-                console.log("success");
-                this.textToast = 'ลบข้อมูลสำเร็จ';
-                console.log(response);
-                this._getYear();
-                this._getDatalist(this.selectYear);
-                //el.$$('panel-right').close();
-              })
-              .catch((error)=>{
-                console.log("error");
-                console.log(error);
-              });
-          }
-        },
+        // _deleteData:function(result,detail){
+        //   var data = detail.data;
+        //   if(result == true){
+        //       //this.fire('toast',{status:'load'});
+        //       axios.delete('/quota/quota/'+data)
+        //       .then((response)=>{
+        //         console.log("success");
+        //         this.textToast = 'ลบข้อมูลสำเร็จ';
+        //         console.log(response);
+        //         this._getYear();
+        //         this._getDatalist(this.selectYear);
+        //         //el.$$('panel-right').close();
+        //       })
+        //       .catch((error)=>{
+        //         console.log("error");
+        //         console.log(error);
+        //       });
+        //   }
+        // },
         _cancelData:function(result){
           if(result == true){
             this.$$('quota-manage')._resetData();

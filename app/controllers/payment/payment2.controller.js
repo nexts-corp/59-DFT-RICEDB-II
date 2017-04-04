@@ -41,6 +41,7 @@ class Payment{
                     .add(r.now().month().coerceTo('string')).add("-").add(r.now().day().coerceTo('string'))
                 ),
                 check_number: r.branch( x('type').eq('O'),'NO', x('check_number') ),
+                //check_sum: r.branch( x('type').eq('O'),0, x('check_sum') ),
                 check_sum: r.branch( x('type').eq('O'),0, x('check_sum') ),
                 total:x('total'),
                 id:x('id'),
@@ -111,7 +112,7 @@ class Payment{
         .then(function (result){
             var parameters = result.params
             //res.json(result);
-            res._ireport("receipt/reportR1.jasper","pdf", result.list, parameters);
+            res._ireport("receipt/reportR2.jasper","pdf", result.list, parameters);
         }).error(function(err) {
             res.status(500).json(err);
         })
