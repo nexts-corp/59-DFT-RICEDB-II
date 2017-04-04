@@ -176,11 +176,11 @@
                this.fire('select-rice',e.target.value);
             },
             getValueForReport:function(e){
-                var checkSelect =  Polymer.dom(this.root).querySelectorAll('#typeRice').map((item)=>{
+                var checkSelect =  Polymer.dom(this.root).querySelectorAll('#typeRice').map(function(item){
                     if(item.checked == true){
                         return item.value
                     }  
-                });
+                }.bind(this));
                 var queryString = "";
                 checkSelect.map(function(id){
                     if(id){

@@ -91,7 +91,7 @@
           <div class="layout horizontal">
             <div class="container flex-equal-justified">
               <div><gl-combo-box label="แสดงข้อมูลรายปี" items="{{getYear}}" value="{{selectYear}}"></gl-combo-box></div>
-              <div><paper-button hidden="{{hide}}" raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"> 
+              <div><paper-button raised class="gl-btn-primary"on-tap="_toggleDrawer" id="addRedRegExporter"> 
               <iron-icon icon="settings"></iron-icon>&nbsp;ตั้งค่า</paper-button></div>
 
             </div>
@@ -122,9 +122,9 @@
         Polymer({
             is: "page-calculate",
             behaviors:[nylonBehavior,nylonLocalizeBehavior],
-            observers:[
-              '_yearQuoataChaged(selectYear)'
-            ],
+            // observers:[
+            //   '_yearQuoataChaged(selectYear)'
+            // ],
             properties: {
                 layerContent: {
                     type: String,
@@ -140,7 +140,7 @@
               
             },
             nylonPageActive:function(){
-                this._getYear();
+                // this._getYear();
             },
             attached: function(){
               
@@ -148,9 +148,9 @@
 
               this.hide = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
-                this.importHref(this.resolveUrl('./components/calculate-setting.html'), (e)=>{
+                this.importHref(this.resolveUrl('./components/calculate-setting.html'), function(e){
                     this.rendered = true;
-                }, (e)=> {
+                }.bind(this), (e)=> {
                     console.log('error')
                 });
                  this.importHref(this.resolveUrl('./components/calculate-listQuota.html'), (e)=>{

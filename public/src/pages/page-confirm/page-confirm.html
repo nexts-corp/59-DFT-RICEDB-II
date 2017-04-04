@@ -259,10 +259,10 @@
             Polymer({
                 is: "page-confirm",
                 behaviors: [nylonBehavior,DataManageBehavior,FormatNumberBehavior],
-                observers: [
-                    '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)',
-                    '_yearQuoataAndTypeRiceChangedAndOrdinal(selectYear,typeRice,selectQuotaOrdinal)',
-                ],
+                // observers: [
+                //     '_yearQuoataAndTypeRiceChanged(selectYear,typeRice)',
+                //     '_yearQuoataAndTypeRiceChangedAndOrdinal(selectYear,typeRice,selectQuotaOrdinal)',
+                // ],
                 properties: {
                     layerContent: {
                         type: String,
@@ -271,14 +271,14 @@
 
                 },
                 nylonPageActive: function () {
-                    this._getYear();
-                    this._getTypeRice();
+                    // this._getYear();
+                    // this._getTypeRice();
                 },
                 ready: function () {
                     this.dataStat = true;
                     this.btnName = 'ค้นหา';
                     Polymer.RenderStatus.afterNextRender(this, function () {
-                        this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'), (e) => {
+                        this.importHref(this.resolveUrl('./components/confirm-allocate-edit.html'),function (e){
                             this.rendered = true;
                         }, (e) => {
                             console.log('error')

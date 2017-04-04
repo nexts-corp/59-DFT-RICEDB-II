@@ -218,7 +218,7 @@
             ready:function(){
                 document.xxx = this;
                 console.log(this.quantity,'c')
-                this._getTypeRice();
+                // this._getTypeRice();
                 this.period = 1;
             },
             getIndex:function(index){
@@ -276,24 +276,24 @@
                 //         });
                 // }   
                 this.$$('.mathData').validate();
-                var stat = Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
+                var stat = Polymer.dom(this.root).querySelectorAll('.mathData').map(function(item){
                     return  item.validate();
-                });
+                }.bind(this));
                 var chkStat = function(stat){
                     return stat == true
                 };
                 if(stat.every(chkStat) == true){
                     var sum =  this.$$('#sum').value;            
-                    this.quantity.map((data,i)=>{
+                    this.quantity.map(function(data,i){
                     this.set('quantity.'+ i +'.weigth',(parseFloat(this.unFormat(sum))*parseFloat(data.percent))/100);
-                })
+                }.bind(this))
                 }
               
             },
             _saveData:function(){
-                var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map(function(item){
                     return  item.validate();
-                });
+                }.bind(this));
                 var chkStat = function(stat){
                     return stat == true
                 };
@@ -314,11 +314,11 @@
                         quantity:this.quantity,
                         type_rice_id:this.typeRice,   
                     }
-                    console.log(datas);
+                    // console.log(datas);
                     var num = 0;
-                    this.quantity.map((item)=>{
+                    this.quantity.map(function(item){
                         num += item.percent;
-                    });
+                    }.bind(this));
                     if(num == 100){
                         if(this.status == 'post')
                             this.fire('post-data',datas); 
@@ -353,27 +353,27 @@
             },
             _getData:function(data){
                 //console.log(data);
-                Polymer.dom(this.root).querySelectorAll('.mathData').map((item)=>{
+                Polymer.dom(this.root).querySelectorAll('.mathData').map(function(item){
                     item.reset();
-                });
+                }.bind(this));
                 console.log(data);
                 this.quantity = data.quantity;
                 this.year = data.year;
                 this.sum = data.amount;
                 this.typeRice = data.type_rice_id;
             },
-            _getTypeRice:function(){
-                axios.get('./common/type_rice')
-                .then((response)=>{
-                    //console.log("success!!");
-                    //console.log(response.data);
-                    this.getTypeRice = response.data;
-                })
-                .catch((error)=>{
-                    console.log("error");
-                    console.log(error);
-                });
-            },
+            // _getTypeRice:function(){
+            //     axios.get('./common/type_rice')
+            //     .then((response)=>{
+            //         //console.log("success!!");
+            //         //console.log(response.data);
+            //         this.getTypeRice = response.data;
+            //     })
+            //     .catch((error)=>{
+            //         console.log("error");
+            //         console.log(error);
+            //     });
+            // },
             _deleteData:function(){
                 // console.log(this.$$('gl-combo-box').value);
                 if(this.$$('gl-combo-box').value != ''){
@@ -394,19 +394,19 @@
             },
             checkStatus:function(status){
                 console.log(status);
-                 Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                 Polymer.dom(this.root).querySelectorAll('.saveData').map(function(item){
                     item.reset();
-                });
+                }.bind(this));
                 return status=='update';
             },
             confirmClose:function(){
                 this.fire('cancel-data');
             },
             _resetData:function(){
-                 Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                 Polymer.dom(this.root).querySelectorAll('.saveData').map(function(item){
                     item.value = '';
                     item.reset();
-                });
+                }.bind(this));
                 this.quantity = [];
             }
         });

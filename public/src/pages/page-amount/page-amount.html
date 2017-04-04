@@ -154,12 +154,12 @@
             behaviors:[
               nylonBehavior
             ],
-            observers:[
-              '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
-            ],  
+            // observers:[
+            //   '_yearQuoataAndTypeRiceChanged(selectQuotaYear,selectTypeRice)'
+            // ],  
             nylonPageActive:function(){
-              this._getQuotaYear();
-              this._getTypeRice();
+              // this._getQuotaYear();
+              // this._getTypeRice();
               
             },
             ready:function(){
@@ -167,11 +167,11 @@
               //console.log(number);
               this.active = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
-                this.importHref(this.resolveUrl('./components/amount-allocation-edit.html'), (e)=>{
+                this.importHref(this.resolveUrl('./components/amount-allocation-edit.html'),function(e){
                     this.rendered = true;
-                }, (e)=> {
+                }.bind(this),function(e){
                     console.log('error')
-                });
+                }.bind(this));
               }); 
             },
             // _yearQuoataAndTypeRiceChanged:function(yearQuoata,typeRice){
@@ -246,9 +246,9 @@
               console.log('dataQuota',this.$$('#typeRiceName').selectedItem.type_rice_name_th);
               this.fire('toast',{
                 status:'success',
-                callback:()=>{
+                callback:function(){
                    this.$$("panel-right").open();
-                }
+                }.bind(this)
               });
             },
             // _getAllocate:function(){

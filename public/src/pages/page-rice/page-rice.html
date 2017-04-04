@@ -38,23 +38,23 @@
             is: 'page-rice',
             behaviors:[nylonBehavior],
             nylonPageActive:function(){
-                this.getTypeRice();
+                // this.getTypeRice();
             },
             attached:function(){
                 Polymer.RenderStatus.afterNextRender(this,function(){
-                    this.importHref(this.resolveUrl('components/rice-list.html'), (e)=>{
+                    this.importHref(this.resolveUrl('components/rice-list.html'), function(e){
                         this.rendered = true;
-                    }, (e)=> {
+                    }.bind(this),function (e){
                         console.log('error')
-                    });
+                    }.bind(this));
                 });
 
                  Polymer.RenderStatus.afterNextRender(this,function(){
-                    this.importHref(this.resolveUrl('components/rice-manage.html'), (e)=>{
+                    this.importHref(this.resolveUrl('components/rice-manage.html'), function(e){
                         this.rendered = true;
-                    }, (e)=> {
+                    }.bind(this),function (e){
                         console.log('error')
-                    });
+                    }.bind(this));
                 });
             },
             // getTypeRice:function(){

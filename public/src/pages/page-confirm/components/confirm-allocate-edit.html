@@ -287,12 +287,12 @@
         }
       },
       _transferData:function(){
-        var quantitTransfer = this.data.quantity.map((item)=>{
+        var quantitTransfer = this.data.quantity.map(function(item){
             var {period,weigth} = item;
             var newitem = {period,weigth};
             newitem.weigth = this.unFormat(item.weigth_update);
             return newitem;
-        });
+        }.bind(this));
         var transfer = {
           id : this.data.id,
           amount : this.unFormat(this.amount_update),
@@ -306,12 +306,12 @@
       },
       _saveData:function(){
         if(this.status == 'notConfirm'){
-          var quantityUpdate = this.data.quantity.map((item)=>{
+          var quantityUpdate = this.data.quantity.map(function(item){
             var {period,weigth} = item;
             var newitem = {period,weigth};
             newitem.weigth = this.unFormat(item.weigth_update);
             return newitem;
-          });
+          }.bind(this));
           var datas = [
               {
               amount : this.unFormat(this.amount_update),
@@ -331,18 +331,18 @@
               allocate_id : this.data.allocate_id
             }
           ]
-          console.log(cancelConfirm);
+          // console.log(cancelConfirm);
           // var cancelConfirm = this.data.id;
           this.fire('cancel-confirm',cancelConfirm);
         }
       },
       _notSaveData:function(){
-            var quantityUpdate = this.data.quantity.map((item)=>{
+            var quantityUpdate = this.data.quantity.map(function(item){
             var {period,weigth} = item;
             var newitem = {period,weigth};
             newitem.weigth = 0;
             return newitem;
-          });
+          }.bind(this));
           var datas = [
               {
               amount : 0,
@@ -352,7 +352,7 @@
               allocate_id: this.data.id
             }
           ]
-          console.log(datas);
+          // console.log(datas);
           this.fire('save-data',datas);
       }
     });

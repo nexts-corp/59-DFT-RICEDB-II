@@ -239,8 +239,8 @@
                 }
             },
             nylonPageActive:function(){
-                this.fnyear();
-                this.getExporter();
+                // this.fnyear();
+                // this.getExporter();
             },
             // fnyear: function(){
             //     axios.get('./common/year')
@@ -320,9 +320,9 @@
                     last_month: this.lastmonth,
                     last_month_th: this.getMonthName(this.lastmonth)
                 }
-                var check = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
+                var check = Polymer.dom(this.root).querySelectorAll('.saveData').map(function(item){
                     return item.validate();
-                })
+                }.bind(this))
                 // console.log(check);
                 const checkStat = function(check) {
                     return check == true;
@@ -347,9 +347,9 @@
                 }
             },
             _activeBook:function(){
-                var check = Polymer.dom(this.root).querySelectorAll('.book_saveData').map((item)=>{
+                var check = Polymer.dom(this.root).querySelectorAll('.book_saveData').map(function(item){
                     return item.validate();
-                })
+                }.bind(this))
                 // console.log(check);
                 const checkStat = function(check) {
                     return check == true;

@@ -161,15 +161,15 @@
         data:{
           type: String
         },
-				dataSelect:{
-					type: Array,
-					// observer: 'getDataSelect'
-				},
-				dataQuota:{
-					type: Object
-				}
+		dataSelect:{
+			type: Array,
+			// observer: 'getDataSelect'
+		},
+		dataQuota:{
+			type: Object
+		}
       },
-			 _num:function(index){
+	  _num:function(index){
         return index+1;
       },
 			// getDataSelect:function(data){
@@ -182,10 +182,10 @@
         var answer = 0;
         // console.log(item.base);
         
-        item.base.map((data)=>{
+        item.base.map(function(data){
           // console.log(data[key]);
           answer += parseFloat(data[key]);
-        })
+        }.bind(this))
         // console.log(answer);
 				this.sumAllocation = answer;
         return this.formatNumber(answer);
@@ -221,40 +221,40 @@
 			}
 		// }
 		},
-			_saveData:function(){
-				// this.fire('post-data')
-				var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map((item)=>{
-        		return  item.validate();
-				});
-				var chkStat = function(stat){
-						return stat == true
-				};
-				if(stat.every(chkStat) == true){
-						// var perData = {};
-						// for(key in this.dataSelect){
-						// 	if(key!="seller_name_th" && key!="seller_tax_id"){
-						// 		perData[key] = this.dataSelect[key]
-						// 	}
-						// }
-						var saveQuantity = this.dataSelect.quantity.map((item)=>{
-							var {period,weigth,weigth_cal,weigth_update} = item;
-							var newData = {period,weigth,weigth_cal,weigth_update};
-							newData.weigth_update = this.unFormat(item.weigth_update);
-							return newData;
-						}) 
-						
-						var datas = {
-							quantity : saveQuantity,
-							id : this.dataSelect.id,
-							amount : this.dataSelect.amount,
-							amount_update : this.amountUpdate
-						}
-						// console.log('perData',datas);
-						this.fire('post-data',datas);
-						// console.log(this.dataSelect);
-				}
-			
+		_saveData:function(){
+			// this.fire('post-data')
+			var stat = Polymer.dom(this.root).querySelectorAll('.saveData').map(function(item){
+				return  item.validate();
+			}.bind(this));
+			var chkStat = function(stat){
+					return stat == true
+			};
+			if(stat.every(chkStat) == true){
+					// var perData = {};
+					// for(key in this.dataSelect){
+					// 	if(key!="seller_name_th" && key!="seller_tax_id"){
+					// 		perData[key] = this.dataSelect[key]
+					// 	}
+					// }
+					var saveQuantity = this.dataSelect.quantity.map((item)=>{
+						var {period,weigth,weigth_cal,weigth_update} = item;
+						var newData = {period,weigth,weigth_cal,weigth_update};
+						newData.weigth_update = this.unFormat(item.weigth_update);
+						return newData;
+					}) 
+					
+					var datas = {
+						quantity : saveQuantity,
+						id : this.dataSelect.id,
+						amount : this.dataSelect.amount,
+						amount_update : this.amountUpdate
+					}
+					// console.log('perData',datas);
+					this.fire('post-data',datas);
+					// console.log(this.dataSelect);
 			}
+		
+		}
     });
   </script>
 </dom-module>

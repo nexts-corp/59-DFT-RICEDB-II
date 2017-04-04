@@ -125,18 +125,18 @@
         Polymer({
             is: 'quota-list-status',
             behaviors: [FormatNumberBehavior,MonthBehavior,DataManageBehavior],
-            observers:['checkData(data.type_rice)'],
+            // observers:['checkData(data.type_rice)'],
             _setIndex:function(item){
                 return item = item+1;
             },
             getMonth:function(month){
                 // console.log(month);
-                month.type_rice.map((item)=>{
+                month.type_rice.map(function(item){
                     this.quaotaMonth = item.period;
-                });
+                }.bind(this));
             },
             _selectData:function(e){
-                console.log('return',e.currentTarget.data);
+                // console.log('return',e.currentTarget.data);
                 this.fire('data-select',e.currentTarget.data);
                 
             }

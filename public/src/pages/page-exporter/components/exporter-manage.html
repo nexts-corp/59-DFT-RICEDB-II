@@ -69,9 +69,9 @@
                 this.exporterName = data.name;
             },
             _checkform:function(){
-                var dataCheck = Polymer.dom(this.root).querySelectorAll('gl-form-input').map((item)=>{
+                var dataCheck = Polymer.dom(this.root).querySelectorAll('gl-form-input').map(function(item){
                     return item.validate();
-                });
+                }.bind(this));
                 const check = function(dataCheck){
                     return dataCheck == true;
                 }

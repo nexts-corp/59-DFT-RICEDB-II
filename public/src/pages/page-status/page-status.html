@@ -126,7 +126,7 @@
           }
       },
       nylonPageActive:function(){
-        this._getYear();
+        // this._getYear();
       },
       attached: function(){
         this.layerContent = "addRedRegExporter";
@@ -134,11 +134,11 @@
 
 
         Polymer.RenderStatus.afterNextRender(this,function(){
-          this.importHref(this.resolveUrl('./components/quota-manage.html'), (e)=>{
+          this.importHref(this.resolveUrl('./components/quota-manage.html'), function(e){
               this.rendered = true;
-          }, (e)=> {
+          }.bind(this),function (e){
               console.log('error')
-          });
+          }.bind(this));
         });
       },
       _insertData:function(){
@@ -205,7 +205,7 @@
         // },
         _yearChanged:function(val){
           if(val != ''){
-            this._getDatalist(val);
+            // this._getDatalist(val);
             // this.sendYear = val;
           }
         },

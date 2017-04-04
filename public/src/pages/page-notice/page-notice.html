@@ -110,23 +110,23 @@
             behaviors:[nylonBehavior],
             observers:['_getDatalist(selectYear)'],
             nylonPageActive:function(){
-              this._getListQuotaYear();
+              // this._getListQuotaYear();
             },
             attached: function(){
                this.active = true;
                Polymer.RenderStatus.afterNextRender(this,function(){
-                this.importHref(this.resolveUrl('./components/notice-list.html'), (e)=>{
+                this.importHref(this.resolveUrl('./components/notice-list.html'),function (e){
                     this.rendered = true;
-                }, (e)=> {
+                }.bind(this),function (e){
                     console.log('error')
-                });
+                }.bind(this));
               }); 
                 Polymer.RenderStatus.afterNextRender(this,function(){
-                this.importHref(this.resolveUrl('./components/notice-manage.html'), (e)=>{
+                this.importHref(this.resolveUrl('./components/notice-manage.html'), function(e){
                     this.rendered = true;
-                }, (e)=> {
+                }.bind(this),function (e){
                     console.log('error')
-                });
+                }.bind(this));
               }); 
             },
             // _getListQuotaYear:function(){

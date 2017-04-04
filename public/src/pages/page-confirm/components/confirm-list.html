@@ -112,19 +112,19 @@
             },
             _getData:function(){
                 this.quantityForThead = this.data.data[0];
-                this.data.data.map((item)=>{
+                this.data.data.map(function(item){
                     item.check = false;
-                })
+                }.bind(this))
                 // console.log('data',this.data);
             },
             _selectAllData:function(e){
-                console.log('1234');
+                // console.log('1234');
                 var val = e.target.checked;
                 // console.log(e.target.checked)
                 if(typeof this.data.data != 'undefined'){
-                    this.data.data.map((item,index)=>{
+                    this.data.data.map(function(item,index){
                         this.set('data.data.'+index+'.check',val);
-                    })
+                    }.bind(this))
                     // console.log('select',this.data);
                 }
             },
@@ -148,7 +148,7 @@
                 var get = this.data.data.filter(function(item){
                     return item.check == true;
                 });
-                var datas = get.map((item)=>{
+                var datas = get.map(function(item){
                     var {allocate_id,amount,exporter_id,quantity,quota_id} = item;
                     var newItem = {allocate_id,amount,exporter_id,quantity,quota_id};
                     newItem.allocate_id = item.id;
@@ -159,7 +159,7 @@
                         return newGet;
                     })
                     return newItem;
-                });
+                }.bind(this));
                 console.log(datas);
                 this.fire('confirm-exporter',datas);
             },
